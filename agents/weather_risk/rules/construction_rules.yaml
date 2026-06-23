@@ -1,0 +1,68 @@
+# 공종별 리스크 룰
+#
+# rule_source: PROJECT_ASSUMPTION  -> 아직 시방서 근거를 못 찾아 프로젝트 가정값으로 명시한 것
+#                                      RAG에서 실제 기준을 찾으면 아래처럼 교체:
+#                                      rule_source:
+#                                        document_id: spec-001
+#                                        page: 42
+#                                        section: 콘크리트 타설 조건
+#
+# operator: not_in / gte / lt / gt / lte / eq
+# action:   STOP_WORK (작업 중단 필요) / REVIEW_REQUIRED (검토 필요, 중단까지는 아님)
+
+concrete_pouring:
+  display_name: 콘크리트 타설
+  work_type: CONCRETE_POURING
+  rules:
+    - rule_id: CONCRETE_RAIN_001
+      field: pty            # 강수형태 코드
+      operator: not_in
+      value: ["0"]          # 0 = 없음
+      severity: HIGH
+      action: STOP_WORK
+      rule_source: PROJECT_ASSUMPTION
+    - rule_id: CONCRETE_COLD_001
+      field: tmp
+      operator: lt
+      value: 4               # ℃
+      severity: HIGH
+      action: REVIEW_REQUIRED
+      rule_source: PROJECT_ASSUMPTION
+
+steel_erection:
+  display_name: 철골 세우기
+  work_type: STEEL_ERECTION
+  rules:
+    - rule_id: STEEL_WIND_001
+      field: wsd
+      operator: gte
+      value: 10               # m/s
+      severity: HIGH
+      action: STOP_WORK
+      rule_source: PROJECT_ASSUMPTION
+    - rule_id: STEEL_RAIN_001
+      field: pty
+      operator: not_in
+      value: ["0"]
+      severity: HIGH
+      action: STOP_WORK
+      rule_source: PROJECT_ASSUMPTION
+
+waterproofing:
+  display_name: 방수공사
+  work_type: WATERPROOFING
+  rules:
+    - rule_id: WATERPROOF_RAIN_001
+      field: pty
+      operator: not_in
+      value: ["0"]
+      severity: HIGH
+      action: STOP_WORK
+      rule_source: PROJECT_ASSUMPTION
+    - rule_id: WATERPROOF_HUMID_001
+      field: reh
+      operator: gte
+      value: 80               # %
+      severity: MEDIUM
+      action: REVIEW_REQUIRED
+      rule_source: PROJECT_ASSUMPTION

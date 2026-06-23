@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+.venv311/
+*.egg-info/
+
+# 환경변수
+.env
+
+# Airflow
+airflow/logs/
+
+
+
+# SQLite DB
+db/*.db
+
+# Node
+frontend/client/node_modules/
+frontend/client/build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+agents/router/logs/
+# Logs
+agents/router/logs/
+
+accounts.txt

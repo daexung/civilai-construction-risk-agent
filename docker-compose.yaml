@@ -1,0 +1,115 @@
+version: '3.8'
+
+# ── 공통 설정 (airflow 서비스들이 공유) ──────────────────────────
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.9.0-python3.11
+  env_file:
+    - .env                              # 프로젝트 .env 그대로 전달 (DB_*, AWS_*, GONGGONG_*)
+  environment:
+    # Airflow 내부 메타데이터 DB (자재 DB와 별개)
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${AIRFLOW_POSTGRES_PASSWORD}@airflow-postgres:5432/airflow
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__WEBSERVER__SECRET_KEY: '${AIRFLOW_SECRET_KEY}'
+    PYTHONPATH: '/opt/airflow'
+    # 프로젝트 패키지 자동 설치
+    _PIP_ADDITIONAL_REQUIREMENTS: >-
+      psycopg2-binary sqlalchemy pandas python-dotenv requests
+      langchain-core langchain-aws langchain-community
+      langgraph boto3
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./scripts:/opt/airflow/scripts
+    - ./agents:/opt/airflow/agents
+    - ./db:/opt/airflow/db
+    - ./data:/opt/airflow/data
+    - airflow-logs:/opt/airflow/logs
+  depends_on:
+    airflow-postgres:
+      condition: service_healthy
+
+services:
+
+  # ── Airflow 메타데이터 전용 PostgreSQL ──────────────────────────
+  # (자재 단가 DB가 아님 — 자재 DB는 .env의 DB_HOST가 가리키는 RDS)
+  airflow-postgres:
+    image: postgres:15
+    container_name: airflow-postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: '${AIRFLOW_POSTGRES_PASSWORD}'
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── Airflow 초기화 (최초 1회만 실행됨) ─────────────────────────
+  airflow-init:
+    <<: *airflow-common
+    container_name: airflow-init
+    command: >
+      bash -c "
+        airflow db migrate &&
+        airflow users create
+          --username admin
+          --password ${AIRFLOW_ADMIN_PASSWORD}
+          --firstname Admin
+          --lastname User
+          --role Admin
+          --email admin@example.com
+        && echo '✅ Airflow 초기화 완료'
+      "
+    restart: on-failure
+
+  # ── Airflow 스케줄러 (DAG 실행 담당) ───────────────────────────
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: airflow-scheduler
+    command: airflow scheduler
+    restart: always
+    healthcheck:
+      test: ["CMD", "airflow", "jobs", "check", "--job-type", "SchedulerJob"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ── Airflow 웹서버 (모니터링 UI) ────────────────────────────────
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: airflow-webserver
+    command: airflow webserver
+    ports:
+      - "8080:8080"
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ── FastAPI 에이전트 서버 ────────────────────────────────────────
+  material-api:
+    image: python:3.11-slim
+    container_name: material-api
+    working_dir: /app
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        pip install -r requirements.txt --quiet &&
+        python api/material_api.py
+      "
+    ports:
+      - "8001:8001"
+    restart: always
+
+volumes:
+  airflow-postgres-data:
+  airflow-logs:

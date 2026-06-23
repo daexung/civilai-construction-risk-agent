@@ -1,0 +1,25 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Layer cache: copy dependency manifest first
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Root-level modules: project_store.py is imported by agents/router/nodes/weather_node.py
+# via sys.path manipulation (_ROOT = /app). sample_projects.json is the DB fallback
+# loaded via Path(__file__).resolve().parent / "sample_projects.json".
+COPY project_store.py   .
+COPY sample_projects.json .
+
+# Backend source directories
+COPY api/        ./api/
+COPY agents/     ./agents/
+COPY common/     ./common/
+COPY rag/        ./rag/
+COPY db/         ./db/
+COPY data/       ./data/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

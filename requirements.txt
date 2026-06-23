@@ -1,0 +1,24 @@
+bcrypt
+boto3
+fastapi
+httpx
+langchain
+langchain-aws
+langchain-community
+langchain-core
+langgraph
+openpyxl
+pandas
+pdfplumber
+pgvector
+psycopg2-binary
+pydantic
+PyJWT
+python-docx
+python-dotenv
+pyyaml
+SQLAlchemy
+uvicorn[standard]
+
+# Optional: required only when running dags/material_price_dag.py with Airflow.
+# apache-airflow

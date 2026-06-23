@@ -1,0 +1,206 @@
+/* ── 사용자 영역 클릭 스타일 ── */
+.user-info-btn {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  transition: background-color 0.15s;
+  outline: none;
+}
+.user-info-btn:hover  { background-color: var(--bg-tertiary); }
+.user-info-btn:focus-visible { box-shadow: 0 0 0 2px #3a7d44; }
+
+/* ── 드롭다운 앵커 ── */
+.sidebar-footer {
+  position: relative;
+}
+
+/* ── 드롭다운 메뉴 ── */
+.user-dropdown {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 8px;
+  right: 8px;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  padding: 4px;
+  z-index: 200;
+}
+
+.user-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 10px;
+  background: none;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background-color 0.12s;
+}
+.user-dropdown-item:hover { background-color: var(--bg-tertiary); }
+.user-dropdown-item svg   { color: var(--text-muted); flex-shrink: 0; }
+
+/* ── 모달 오버레이 ── */
+.um-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* ── 모달 카드 ── */
+.um-modal {
+  background: var(--modal-bg);
+  border-radius: 16px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* ── 모달 헤더 ── */
+.um-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+}
+
+.um-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.um-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s, background-color 0.15s;
+}
+.um-modal-close:hover { color: var(--text-primary); background-color: var(--bg-tertiary); }
+
+/* ── 프로필: 아바타 ── */
+.um-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 20px 16px;
+  gap: 8px;
+}
+
+.um-big-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #3a7d44;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.um-avatar-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ── 필드 공통 ── */
+.um-fields {
+  padding: 0 20px 8px;
+}
+
+.um-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ── 내 정보 필드 ── */
+.um-field {
+  display: flex;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-light);
+  gap: 12px;
+}
+.um-field:last-child { border-bottom: none; }
+
+.um-field .um-label { width: 56px; }
+
+.um-value {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ── 설정 필드 ── */
+.um-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.um-setting-row:last-child { border-bottom: none; }
+
+.um-select {
+  padding: 5px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+.um-select:focus { border-color: #3a7d44; }
+
+/* ── 설정 저장 버튼 ── */
+.um-save-btn {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 8px 20px 18px;
+  padding: 9px;
+  background: #3a7d44;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.um-save-btn:hover { background: #14532d; }
+
+/* ── 하단 안내 문구 ── */
+.um-notice {
+  margin: 0;
+  padding: 12px 20px 18px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  border-top: 1px solid var(--border-light);
+}

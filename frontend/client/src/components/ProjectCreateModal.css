@@ -1,0 +1,165 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s, background 0.15s;
+}
+.modal-close:hover { color: #444; background: #f0f0f0; }
+
+.modal-form {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #3a7d44;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal-field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.required {
+  color: #e55;
+}
+
+.modal-field input,
+.modal-field select,
+.modal-field textarea {
+  padding: 9px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal-field input:focus,
+.modal-field select:focus,
+.modal-field textarea:focus {
+  border-color: #3a7d44;
+  box-shadow: 0 0 0 3px rgba(58, 125, 68, 0.1);
+}
+
+.modal-field textarea {
+  resize: none;
+  line-height: 1.5;
+}
+
+.modal-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.modal-btn-cancel {
+  flex: 1;
+  height: 42px;
+  background: #f3f4f6;
+  color: #555;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.modal-btn-cancel:hover { background: #e5e7eb; }
+
+.modal-btn-confirm {
+  flex: 2;
+  height: 42px;
+  background: #3a7d44;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.modal-btn-confirm:hover:not(:disabled) { background: #14532d; }
+.modal-btn-confirm:disabled {
+  background: #86b993;
+  cursor: not-allowed;
+}
+
+.modal-field-error {
+  font-size: 12px;
+  color: #dc2626;
+  margin: -4px 0 4px;
+  padding: 0;
+}

@@ -1,0 +1,29 @@
+{
+  "PJT-001": {
+    "project_id": "PJT-001",
+    "site_name": "서울 A현장",
+    "latitude": 37.5665,
+    "longitude": 126.9780,
+    "work_type": "CONCRETE_POURING",
+    "scheduled_start_time": "08:00",
+    "scheduled_end_time": "16:00"
+  },
+  "PJT-002": {
+    "project_id": "PJT-002",
+    "site_name": "부산 B현장",
+    "latitude": 35.1796,
+    "longitude": 129.0756,
+    "work_type": "STEEL_ERECTION",
+    "scheduled_start_time": "08:00",
+    "scheduled_end_time": "16:00"
+  },
+  "PJT-003": {
+    "project_id": "PJT-003",
+    "site_name": "제주 C현장",
+    "latitude": 33.4890,
+    "longitude": 126.4983,
+    "work_type": "WATERPROOFING",
+    "scheduled_start_time": "08:00",
+    "scheduled_end_time": "16:00"
+  }
+}
