@@ -15,7 +15,7 @@ SK플래닛 생성형 AI 활용 데이터 엔지니어 부트캠프 · 팀 프�
 * **프론트엔드** — React·TypeScript 채팅 UI, structured response 카드 렌더링, 프로젝트별 대화 관리
 * **구조화 응답 개선** — router·synthesize 노드를 보완해 최종 답변이 `structured_response` 카드(비용 내역·근거·가정)로 반환되도록 구성
 
-**팀원 담당** — FastAPI 백엔드 · weather(기상 리스크) 노드 · equipment(장비 대기비) 노드
+**팀원 담당** — FastAPI 백엔드 · weather(기상 리스크) 노드 · equipment(장비 대기비) 노드 · 라우터, 구조화 노드
 
 ## 1. 프로젝트 개요
 
