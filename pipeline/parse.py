@@ -52,13 +52,20 @@ def find_section_titles(pdf_path: str, page_no: int) -> list:
     return titles
 
 
-# 칸 하나 정리: 한 글자씩 띄어 쓴 줄만 공백을 없앤다
+# 여러 행을 묶어 보이려고 그려 넣은 괄호 기호. 값이 아니므로 줄 수에서 빼야 한다
+BRACKET_RE = re.compile(r"^[⌈⌉⌊⌋┌┐└┘│├┤]+$")
+
+
+# 칸 하나 정리: 한 글자씩 띄어 쓴 줄만 공백을 없애고, 괄호 기호 줄은 버린다
 def clean_cell(cell):
     if cell is None:
         return None
 
     lines = []
     for line in cell.split("\n"):
+        if BRACKET_RE.match(line.strip()):
+            continue
+
         parts = line.split(" ")
         if len(parts) > 1 and all(len(p) == 1 for p in parts):
             line = "".join(parts)
@@ -158,7 +165,13 @@ def table_to_records(table: list, section_title: str, page_no: int) -> list:
             else:
                 row_label = " ".join(part.strip() for part in labels)
 
-            parts = [section_title, row_label]
+            # 첫 칸이 라벨이 아니라 값인 표가 있다 (예: 층수별 할증률).
+            # 그때는 라벨로 쓰지 않고 다른 값처럼 열 이름을 붙인다.
+            if row_label and names[0] and NUMERIC_RE.match(row_label):
+                parts = [section_title, f"{names[0]} {row_label}"]
+            else:
+                parts = [section_title, row_label]
+
             for col in range(1, len(row)):
                 values = stacks[col]
                 if not values:
@@ -169,8 +182,9 @@ def table_to_records(table: list, section_title: str, page_no: int) -> list:
                     continue
 
                 name = names[col].strip()
-                # 직종 칸(첫 값 칸)은 열 이름을 붙이지 않는다
-                parts.append(value if col == 1 or not name else f"{name} {value}")
+                # 첫 칸과 머리글을 공유하는 칸(주로 직종)은 이름을 붙이면 '구분 콘크리트공'처럼 군더더기가 된다
+                skip_name = not name or name == names[0].strip()
+                parts.append(value if skip_name else f"{name} {value}")
 
             records.append(
                 {"text": " | ".join(parts), "section": section_title, "page": page_no}
