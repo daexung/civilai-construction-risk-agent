@@ -12,6 +12,13 @@ import pymupdf
 # "6-1-1 레디믹스트콘크리트 타설" 처럼 세 자리 절 번호로 시작하는 줄
 SECTION_RE = re.compile(r"^\d+-\d+-\d+\s")
 
+# "6-1 콘크리트" 처럼 두 자리 중분류. 절이 시작되기 전 도입부 설명을 묶는 데 쓴다
+SUBSECTION_RE = re.compile(r"^\d+-\d+\s")
+
+# 모든 쪽에 반복되는 머리글("제6장 철근콘크리트공사")과 쪽 번호.
+# 본문도 같은 높이에서 시작하는 쪽이 있어 위치가 아니라 내용으로 걸러야 한다
+RUNNING_HEAD_RE = re.compile(r"^(제\d+장(\s|$)|\d+$)")
+
 # "3", "0.15", "3\n3" 처럼 숫자만 들어있는 칸
 NUMERIC_RE = re.compile(r"^\d+(\.\d+)?(\n\d+(\.\d+)?)*$")
 
@@ -24,32 +31,72 @@ def extract_text(pdf_path: str, page_no: int) -> str:
     return text
 
 
-# table 추출 함수 (표의 세로 위치도 함께)
-def extract_tables_with_pos(pdf_path: str, page_no: int) -> list:
+# 표를 (bbox, 격자)로 읽는다
+def read_tables(page) -> list:
+    return [(table.bbox, table.extract()) for table in page.find_tables().tables]
+
+
+# 제목을 (세로 위치, 제목, 절인지 여부)로 읽는다
+def read_titles(page) -> list:
+    titles = []
+    for block in page.get_text("dict")["blocks"]:
+        for line in block.get("lines", []):
+            text = "".join(span["text"] for span in line["spans"]).strip()
+            if SECTION_RE.match(text):
+                titles.append((line["bbox"][1], text, True))
+            elif SUBSECTION_RE.match(text):
+                titles.append((line["bbox"][1], text, False))
+    return titles
+
+
+# 표 밖에 있는 줄글을 (세로 위치, 글) 목록으로 읽는다
+def read_text_blocks(page, table_boxes: list) -> list:
+    blocks = []
+
+    for x0, y0, x1, y1, text, _, block_type in page.get_text("blocks"):
+        text = " ".join(text.split())
+        if block_type != 0 or not text:
+            continue
+
+        # 쪽 번호와 쪽마다 반복되는 머리글
+        if RUNNING_HEAD_RE.match(text):
+            continue
+
+        # 제목 줄은 section 항목으로 따로 남으므로 본문에서는 뺀다
+        if SECTION_RE.match(text) or SUBSECTION_RE.match(text):
+            continue
+
+        # 표 안의 글자는 이미 격자로 읽었다
+        center_x, center_y = (x0 + x1) / 2, (y0 + y1) / 2
+        if any(
+            box[0] - 2 <= center_x <= box[2] + 2 and box[1] - 2 <= center_y <= box[3] + 2
+            for box in table_boxes
+        ):
+            continue
+
+        blocks.append((y0, text))
+
+    return blocks
+
+
+# text 추출 함수
+def extract_text(pdf_path: str, page_no: int) -> str:
     with pymupdf.open(pdf_path) as doc:
-        page = doc[page_no - 1]
-        tables = []
-        for table in page.find_tables().tables:
-            tables.append((table.bbox[1], table.extract()))
-    return tables
+        text = doc[page_no - 1].get_text()
+
+    return text
 
 
 # table 추출 함수
 def extract_tables(pdf_path: str, page_no: int) -> list:
-    return [grid for _, grid in extract_tables_with_pos(pdf_path, page_no)]
+    with pymupdf.open(pdf_path) as doc:
+        return [grid for _, grid in read_tables(doc[page_no - 1])]
 
 
 # 절 제목 추출 함수 (세로 위치, 제목)
 def find_section_titles(pdf_path: str, page_no: int) -> list:
-    titles = []
     with pymupdf.open(pdf_path) as doc:
-        page = doc[page_no - 1]
-        for block in page.get_text("dict")["blocks"]:
-            for line in block.get("lines", []):
-                text = "".join(span["text"] for span in line["spans"]).strip()
-                if SECTION_RE.match(text):
-                    titles.append((line["bbox"][1], text))
-    return titles
+        return [(y, title) for y, title, is_section in read_titles(doc[page_no - 1]) if is_section]
 
 
 # 여러 행을 묶어 보이려고 그려 넣은 괄호 기호. 값이 아니므로 줄 수에서 빼야 한다
@@ -193,10 +240,14 @@ def table_to_records(table: list, section_title: str, page_no: int) -> list:
     return records
 
 
-# 표보다 위에 있으면서 가장 가까운 절 제목
-def title_for_table(titles: list, table_top: float) -> str:
-    above = [title for y, title in titles if y <= table_top + 2]
-    return above[-1] if above else ""
+# 대상보다 위에 있으면서 가장 가까운 제목. 절(6-1-1)을 중분류(6-1)보다 우선한다
+def title_above(titles: list, top: float) -> str:
+    above = [(title, is_section) for y, title, is_section in titles if y <= top + 2]
+    if not above:
+        return ""
+
+    sections = [title for title, is_section in above if is_section]
+    return sections[-1] if sections else above[-1][0]
 
 
 def parse_pages(pdf_path: str, start_page: int, end_page: int) -> list:
@@ -204,18 +255,44 @@ def parse_pages(pdf_path: str, start_page: int, end_page: int) -> list:
     # 표가 여러 쪽에 걸치면 제목이 앞 쪽에만 있으므로 직전 제목을 이어받는다
     last_title = ""
 
-    for page_no in range(start_page, end_page + 1):
-        titles = find_section_titles(pdf_path, page_no)
+    with pymupdf.open(pdf_path) as doc:
+        for page_no in range(start_page, end_page + 1):
+            page = doc[page_no - 1]
+            titles = read_titles(page)
+            tables = read_tables(page)
 
-        for table_top, grid in extract_tables_with_pos(pdf_path, page_no):
-            title = title_for_table(titles, table_top) or last_title
-            last_title = title
-            records += table_to_records(clean_table(grid), title, page_no)
+            items = [(box[1], "table", grid) for box, grid in tables]
+            items += [
+                (y, "text", text)
+                for y, text in read_text_blocks(page, [box for box, _ in tables])
+            ]
 
-        if titles:
-            last_title = titles[-1][1]
+            # 쪽 안에서 위에서 아래 순서로 처리해야 제목을 이어받는 순서가 맞는다
+            for top, kind, content in sorted(items, key=lambda item: item[0]):
+                title = title_above(titles, top) or last_title
+                last_title = title
 
-    return records
+                if kind == "table":
+                    records += table_to_records(clean_table(content), title, page_no)
+                else:
+                    records.append(
+                        {"text": f"{title} | 설명 | {content}", "section": title, "page": page_no}
+                    )
+
+            if titles:
+                last_title = titles[-1][1]
+
+    # 같은 절 안에서 '(일당)' 같은 표기나 동일한 사양이 여러 표에 반복된다.
+    # 글자가 완전히 같으면 검색에 보탬이 되지 않으므로 하나만 남긴다
+    seen = set()
+    unique = []
+    for record in records:
+        if record["text"] in seen:
+            continue
+        seen.add(record["text"])
+        unique.append(record)
+
+    return unique
 
 
 def main() -> None:
