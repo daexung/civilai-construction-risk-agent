@@ -20,6 +20,8 @@ from parse import (NUMERIC_RE, clean_cell, count_header_rows, read_text_blocks, 
 
 BRACKETS = "⌈⌉⌊⌋┌┐└┘│├┤"
 VALUE_RE = re.compile(r"^(?:[-–〃]|\(?\d[\d.,\-]*\)?(?:[~∼]\d[\d.,]*)?(?:%|이하|이상|미만|초과)?)$")
+# 단위가 붙은 수치: '27 ㎝/min', '1.2∼2.0m 이하', '0.2㎥', '10ton'
+VALUE_UNIT_RE = re.compile(r"^\(?\d[\d.,]*\)?(?:\s*[~∼]\s*\d[\d.,]*)?\s*[A-Za-z㎝㎜㎡㎥㎏%/·ℓ]*\s*(?:이하|이상|미만|초과)?$")
 CONTINUATION_PREFIXES = ("-", "(", "※")
 SHADE_GRAY = (0.80, 0.95)   # 머리글 음영 회색 범위(쪽 아래 막대 0.76은 제외)
 
@@ -117,15 +119,46 @@ def is_row_label_lines(lines: list[str], depth: int) -> bool:
 NOT_LABEL_HEADERS = ("단위", "규격")
 
 
+def shared_value_depth(row: list, stacks: list[list[str]]) -> int:
+    """첫 열을 뺀 칸 중 둘 이상이 같은 줄 수(≥2)로 쌓였고 그중 하나가 단위 붙은 수치 칸이면 그 줄 수.
+
+    한 칸만 여러 줄이면 줄바꿈이다(334쪽 규격 '10ton / (0.29)'). 병합으로 복사된 칸은 한 칸으로 센다.
+    글자 줄 중 '-'·'('·'※'로 시작하는 줄은 앞 줄에 이어 센다(수치 줄은 그대로).
+    """
+    counts, value_counts, prev = Counter(), set(), object()
+    for c in range(1, len(row)):
+        if row[c] == prev or row[c] == row[0] or len(stacks[c]) < 2:
+            prev = row[c]
+            continue
+        prev = row[c]
+        lines = stacks[c]
+        if all(VALUE_UNIT_RE.match(line.strip()) for line in lines):
+            value_counts.add(len(lines))
+        else:
+            lines = join_continuations(lines)
+        counts[len(lines)] += 1
+    shared = [n for n, k in counts.items() if n > 1 and k >= 2 and n in value_counts]
+    return max(shared, default=0)
+
+
 def unstack(row: list, bracket: list, names: list[str]) -> list[list[str | None]]:
     """한 행에 쌓인 하위 행을 푼다. 반환은 하위 행 목록."""
     stacks = [cell.split("\n") if cell else [] for cell in row]
     numeric = [c for c in range(1, len(row)) if is_value_lines(stacks[c])]
-    if not numeric:
-        # 여러 행이 쌓인 것이 아니라 칸 안 줄바꿈이다(500쪽 '(50,000×0.65 / ÷120)=270')
+    if numeric:
+        counts = Counter(len(stacks[c]) for c in numeric)
+        depth = max(counts, key=lambda n: (counts[n], n))
+    elif (depth := shared_value_depth(row, stacks)) > 1:
+        # 단위가 붙은 수치 칸과 같은 줄 수로 쌓인 칸이 또 있으면 여러 행이다
+        # (396쪽 첫 표: 암종 '풍화암/연암/보통암/경암' + '27 ㎝/min/20 ㎝/min/…')
+        pass
+    elif len(stacks[0]) >= 2 and any(len(stacks[c]) == len(stacks[0]) for c in range(1, len(row)) if row[c] != row[0]):
+        # 숫자 칸이 없어도 첫 열과 다른 칸이 같은 줄 수로 쌓였으면 여러 행이다
+        # (500쪽 첫 표: 직종 5줄·수량 '7.5×2=15' 5줄·단가 5줄)
+        depth = len(stacks[0])
+    else:
+        # 첫 열이 한 줄이면 칸 안 줄바꿈이다(500쪽 '획지수 | (50,000×0.65 / ÷120)=270')
         return [[" ".join(s) if s else None for s in stacks]]
-    counts = Counter(len(stacks[c]) for c in numeric)
-    depth = max(counts, key=lambda n: (counts[n], n))
 
     labels = join_continuations(stacks[0]) if stacks[0] else []
     has_row_label_col = any(row[c] != row[0] and is_row_label_lines(stacks[c], depth)

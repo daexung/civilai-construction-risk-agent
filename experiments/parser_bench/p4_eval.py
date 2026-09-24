@@ -157,6 +157,15 @@ def main() -> None:
             "old_failed": (res["old"].get(tid) if tid in res["old"] else fres["old"][tid]),
             "new_failed": (res["new"].get(tid) if tid in res["new"] else fres["new"][tid])}
 
+    # 사실 정답이 없는 표까지 포함해 레코드 수가 달라진 표(병합·분리 변화) 목록. 사람이 원문과 대조한다
+    report["record_count_changes"] = []
+    for p in pages:
+        for i, t in enumerate(tables[p]):
+            o, n = old_records(t), new_records(t)
+            if len(o) != len(n):
+                report["record_count_changes"].append({"page": p, "index": i, "shape": f"{t['n_rows']}x{t['n_cols']}",
+                                                       "old": len(o), "new": len(n), "new_sample": n[:2]})
+
     report["golden5"] = golden5(tables)
     report["check_parse"] = {"old": check_23_old(tables), "new": check_23_new(tables)}
     save_json(RUN_DIR / "p4_report.json", report)
@@ -168,6 +177,9 @@ def main() -> None:
     print("개선:", report["blind20_gains"])
     print("남은 실패:", report["blind20_still_failing"])
     print("396·500:", report["failures"])
+    print("레코드 수가 달라진 표:")
+    for c in report["record_count_changes"]:
+        print(f"   p{c['page']}#{c['index']} {c['shape']} {c['old']}→{c['new']} {[s[:90] for s in c['new_sample']]}")
     for tid, d in report["diagnostics"].items():
         print(f"== {tid} 머리글 {d['header']} 실패 {d['old_failed']} → {d['new_failed']}")
         print("   전:", d["old_records"][:2])
