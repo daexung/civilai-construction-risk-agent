@@ -110,6 +110,41 @@ def value_in_field(hint: str, value: str, field: str) -> bool:
     return v in nws(field) and nws(field) != nws(hint)
 
 
+def row_depth(row) -> int:
+    """한 행에 쌓인 하위 행 수. 두 개 이상의 서로 다른 칸이 함께 가진 가장 큰 줄 수로 정한다.
+
+    - 여러 행이 한 칸에 쌓이면 라벨 칸과 값 칸이 같은 줄 수로 함께 쌓인다(라벨 3줄·값 3줄).
+    - 한 조건 칸이 줄바꿈된 것이면 그 줄 수를 가진 칸이 하나뿐이다('점 토 질/토 사' + 한 줄 값들).
+      이때 깊이는 1이고, 그 칸은 통째로 한 라벨이 된다.
+    병합 범위를 채우며 옆 칸에 그대로 복사된 글자(연속으로 같은 글자)는 한 칸으로 센다.
+    (P0 고정 뒤 버그 수정: results/blind20/REPORT.md 실험자 수정 사항 6)
+    """
+    counts = distinct_line_counts(row)
+    shared = [n for n in set(counts) if n > 1 and counts.count(n) >= 2]
+    return max(shared, default=1)
+
+
+def distinct_line_counts(row) -> list[int]:
+    """칸마다 줄 수. 병합 범위를 채우며 옆 칸에 복사된 글자(연속으로 같은 글자)는 한 칸으로 센다."""
+    counts, prev = [], object()
+    for cell in row:
+        if cell == prev:
+            continue
+        prev = cell
+        counts.append(len((cell or "").split("\n")))
+    return counts
+
+
+def whole_if_wrapped(lines: list[str], depth: int) -> str:
+    """깊이와 줄 수가 다른 여러 줄 칸을 값으로 쓸 때의 판정.
+
+    - 행에 쌓인 하위 행이 없으면(깊이 1) 그 칸은 한 칸이 줄바꿈된 것이므로 통째로 인정한다(528쪽 비고 3줄).
+    - 쌓인 하위 행이 있으면 줄 수가 다른 칸의 어느 줄이 어느 행인지 모르므로 인정하지 않는다
+      (835쪽 직종 5줄·값 4줄, 334쪽 PyMuPDF 규격 36줄·값 26줄).
+    """
+    return " ".join(lines) if depth == 1 else ""
+
+
 def virtual_rows(grid) -> list[list[str]]:
     """원시 격자의 한 행에 줄바꿈으로 쌓인 값을 줄 번호로 나눈다.
 
@@ -120,9 +155,9 @@ def virtual_rows(grid) -> list[list[str]]:
     out = []
     for row in grid:
         stacks = [(c or "").split("\n") for c in row]
-        depth = max(len(s) for s in stacks)
+        depth = row_depth(row)
         for i in range(depth):
-            vrow = [s[i] if len(s) == depth else " ".join(s) for s in stacks]
+            vrow =[s[i] if len(s) == depth else " ".join(s) for s in stacks]
             if out and not ws(vrow[0]):
                 vrow[0] = out[-1][0]
             out.append(vrow)
@@ -132,15 +167,16 @@ def virtual_rows(grid) -> list[list[str]]:
 def aligned_values(grid) -> list[list[str]]:
     """virtual_rows와 같은 순서로, 값으로 인정할 칸만 남긴다.
 
-    줄 수가 행 깊이와 같거나 한 줄짜리인 칸만 값으로 인정한다. 줄 수가 다른 여러 줄 칸은
-    어느 값이 어느 행인지 모르므로 빈 칸으로 둔다(835쪽: 직종 5줄·값 4줄이 한 칸에 쌓인 경우).
+    줄 수가 행 깊이와 같거나 한 줄짜리인 칸은 값으로 인정한다. 줄 수가 다른 여러 줄 칸은
+    whole_if_wrapped로 판정한다(835쪽: 직종 5줄·값 4줄이 한 칸에 쌓인 경우는 인정하지 않음).
     """
     out = []
     for row in grid:
         stacks = [(c or "").split("\n") for c in row]
-        depth = max(len(s) for s in stacks)
+        depth = row_depth(row)
         for i in range(depth):
-            out.append([s[i] if len(s) == depth else (s[0] if len(s) == 1 else "") for s in stacks])
+            out.append([s[i] if len(s) == depth else s[0] if len(s) == 1 else whole_if_wrapped(s, depth)
+                        for s in stacks])
     return out
 
 
