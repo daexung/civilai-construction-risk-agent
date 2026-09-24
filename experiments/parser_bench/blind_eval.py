@@ -83,7 +83,9 @@ NUMERIC_TOKEN = re.compile(r"^[\d.,~\-]+$")
 
 def norm(text) -> str:
     text = unicodedata.normalize("NFKC", strip_brackets(text or ""))
-    return re.sub(r"[∼～〜]", "~", text)
+    text = re.sub(r"[∼～〜]", "~", text)
+    # A printed numeric range can wrap after the tilde inside one PDF cell.
+    return re.sub(r"\s*~\s*", "~", text)
 
 
 def nws(text) -> str:
