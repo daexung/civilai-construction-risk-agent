@@ -160,6 +160,18 @@ def unstack(row: list, bracket: list, names: list[str]) -> list[list[str | None]
         # 첫 열이 한 줄이면 칸 안 줄바꿈이다(500쪽 '획지수 | (50,000×0.65 / ÷120)=270')
         return [[" ".join(s) if s else None for s in stacks]]
 
+    # Equipment lists can print a shared code stem and type above N aligned
+    # specifications. ODL may keep all N+1 lines in one cell even when the
+    # numeric columns contain N separate values (including mixed list nodes).
+    prefixes = {}
+    if (len(stacks[0]) == depth + 1 and re.fullmatch(r"\d+-", stacks[0][0].strip())
+            and all(VALUE_RE.match(s.strip()) for s in stacks[0][1:])
+            and sum(len(s) == depth + 1 for s in stacks) >= 2):
+        for c, s in enumerate(stacks):
+            if len(s) == depth + 1:
+                prefixes[c] = s[0]
+                stacks[c] = s[1:]
+
     labels = join_continuations(stacks[0]) if stacks[0] else []
     has_row_label_col = any(row[c] != row[0] and is_row_label_lines(stacks[c], depth)
                             and not any(h in re.sub(r"\s+", "", names[c]) for h in NOT_LABEL_HEADERS)
@@ -171,9 +183,11 @@ def unstack(row: list, bracket: list, names: list[str]) -> list[list[str | None]
         sub = []
         for c, s in enumerate(stacks):
             if c == 0:
-                sub.append(labels[i] if label_per_row else (" ".join(labels) or None))
+                label = labels[i] if label_per_row else (" ".join(labels) or None)
+                sub.append(f"{prefixes[0]} {label}" if label and 0 in prefixes else label)
             elif len(s) == depth:
-                sub.append(s[i] or None)
+                value = s[i] or None
+                sub.append(f"{prefixes[c]} {value}" if value and c in prefixes else value)
             elif not s:
                 sub.append(None)
             elif bracket[c]:
@@ -183,6 +197,30 @@ def unstack(row: list, bracket: list, names: list[str]) -> list[list[str | None]
                 sub.append(" ".join(s))
         out.append(sub)
     return out
+
+
+def parallel_column_groups(row: list) -> list[tuple[int, int]]:
+    """Find independent side-by-side lists with different row counts.
+
+    Both groups need at least two columns and their own numeric values. This
+    avoids pairing, for example, two workers with three tile sizes.
+    """
+    lengths = [len(cell.split("\n")) if cell else 0 for cell in row]
+    if any(n < 2 for n in lengths):
+        return [(0, len(row))]
+    cut = next((i for i in range(1, len(row)) if lengths[i] != lengths[0]), None)
+    if cut is None or cut < 2 or len(row) - cut < 2 or len(set(lengths[cut:])) != 1:
+        return [(0, len(row))]
+    if not all(any(all(VALUE_RE.match(re.sub(r"\s+", "", line)) for line in row[c].split("\n"))
+                   for c in range(start + 1, stop)) for start, stop in ((0, cut), (cut, len(row)))):
+        return [(0, len(row))]
+    return [(0, cut), (cut, len(row))]
+
+
+def note_clauses(note: str) -> list[str]:
+    """Keep each bullet condition with its own consequence."""
+    clauses = [part.strip() for part in re.split(r"(?m)(?=^\s*-\s+)", note) if part.strip()]
+    return clauses if len(clauses) > 1 else [note]
 
 
 def table_to_records(table: dict, shades: list, section_title: str, page_no: int) -> list[dict]:
@@ -214,30 +252,39 @@ def table_to_records(table: dict, shades: list, section_title: str, page_no: int
         merged.append((row, br))
 
     records, note_written = [], False
+    previous_values = [None] * table["n_cols"]
     for row, br in merged:
+        for col in range(1, len(row)):
+            if row[col] and re.sub(r"\s+", "", row[col]) == "〃" and previous_values[col]:
+                row[col] = previous_values[col]
+            elif row[col] and re.sub(r"\s+", "", row[col]) != "〃":
+                previous_values[col] = row[col]
         label = (row[0] or "").replace("\n", " ").strip()
         if label == "비고":
             if note_written:
                 continue
             note_written = True
             note = next((cell for cell in row[1:] if cell), "")
-            records.append({"text": f"{section_title} | 비고 | {note}".replace("\n", " "),
-                            "section": section_title, "page": page_no})
+            clauses = [note] if table.get("contains_nested_table") else note_clauses(note)
+            for clause in clauses:
+                records.append({"text": f"{section_title} | 비고 | {clause}".replace("\n", " "),
+                                "section": section_title, "page": page_no})
             continue
-        for sub in unstack(row, br, names):
-            row_label = (sub[0] or "").replace("\n", " ").strip()
-            if row_label and names[0] and NUMERIC_RE.match(row_label):
-                parts = [section_title, f"{names[0]} {row_label}"]
-            else:
-                parts = [section_title, row_label]
-            for col in range(1, len(sub)):
-                value = (sub[col] or "").replace("\n", " ").strip()
-                if value in ("", "-"):
-                    continue
-                name = names[col].strip()
-                skip_name = not name or name == names[0].strip()
-                parts.append(value if skip_name else f"{name} {value}")
-            records.append({"text": " | ".join(parts), "section": section_title, "page": page_no})
+        for start, stop in parallel_column_groups(row):
+            for sub in unstack(row[start:stop], br[start:stop], names[start:stop]):
+                row_label = (sub[0] or "").replace("\n", " ").strip()
+                if row_label and names[start] and (start > 0 or NUMERIC_RE.match(row_label)):
+                    parts = [section_title, f"{names[start]} {row_label}"]
+                else:
+                    parts = [section_title, row_label]
+                for col in range(1, len(sub)):
+                    value = (sub[col] or "").replace("\n", " ").strip()
+                    if value in ("", "-"):
+                        continue
+                    name = names[start + col].strip()
+                    skip_name = not name or name == names[start].strip()
+                    parts.append(value if skip_name else f"{name} {value}")
+                records.append({"text": " | ".join(parts), "section": section_title, "page": page_no})
     return records
 
 

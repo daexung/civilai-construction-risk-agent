@@ -258,6 +258,7 @@ def to_common(table: dict, page_height: float, nested: bool, split_rows: bool = 
     return {"page": table["page number"],
             "bbox_pt": [round(v, 1) for v in (x0, page_height - y1, x1, page_height - y0)],
             "nested": nested,
+            "contains_nested_table": any(find_tables(c) for row in rows for c in row.get("cells") or []),
             "n_rows": total, "n_cols": table["number of columns"],
             "rows_split": sum(1 for s in splits.values() if s),
             "cells": cells}
