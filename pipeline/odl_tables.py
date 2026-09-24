@@ -29,12 +29,13 @@ DEFAULT_JAR = ROOT / ".venv-odl/Lib/site-packages/opendataloader_pdf/jar/opendat
 CHILD_KEYS = ("kids", "rows", "cells", "list items")
 
 
-def run_odl(pdf: Path, pages: list[int], out_dir: Path, java: Path | None = None, jar: Path | None = None) -> dict:
+def run_odl(pdf: Path, pages: list[int], out_dir: Path, java: Path | None = None, jar: Path | None = None,
+            table_method: str = "default") -> dict:
     """지정한 쪽만 ODL로 추출한다. 반환값은 원시 JSON 경로와 실행 기록."""
     java = Path(java or os.environ.get("ODL_JAVA") or DEFAULT_JAVA)
     jar = Path(jar or os.environ.get("ODL_JAR") or DEFAULT_JAR)
     out_dir.mkdir(parents=True, exist_ok=True)
-    cmd = [str(java), "-jar", str(jar), "-f", "json", "--keep-line-breaks", "--table-method", "default",
+    cmd = [str(java), "-jar", str(jar), "-f", "json", "--keep-line-breaks", "--table-method", table_method,
            "-o", str(out_dir), "--pages", ",".join(str(p) for p in pages), str(pdf)]
 
     started = time.perf_counter()
