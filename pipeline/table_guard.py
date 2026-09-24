@@ -130,7 +130,7 @@ def pymupdf_to_common(table, page_no: int) -> dict:
             while r1 < len(row_boxes) and row_boxes[r1][3] <= box[3] + 1.0:
                 r1 += 1
             cells.append({"r0": i, "r1": r1, "c0": nearest_edge(x_edges, box[0]), "c1": nearest_edge(x_edges, box[2]),
-                          "text": extract[i][j] or ""})
+                          "text": extract[i][j] or "", "bbox_pt": [round(v, 1) for v in box]})
     return {"page": page_no, "bbox_pt": [round(v, 1) for v in table.bbox], "nested": False,
             "n_rows": len(row_boxes), "n_cols": len(x_edges) - 1, "cells": cells,
             "extractor": "fallback", "rows_split": 0}

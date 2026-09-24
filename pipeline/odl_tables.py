@@ -246,11 +246,15 @@ def to_common(table: dict, page_height: float, nested: bool, split_rows: bool = 
             c1 = c0 + cell.get("column span", 1)
             r1 = r0 + cell.get("row span", 1)
             per_row = splits[r][1].get(id(cell)) if splits.get(r) and cell.get("row span", 1) == 1 else None
+            # 칸 좌표(왼쪽 위 원점). 하위 행으로 나눈 칸은 원래 칸 좌표를 그대로 쓴다
+            bx0, by0, bx1, by1 = cell.get("bounding box") or table["bounding box"]
+            box = [round(bx0, 1), round(page_height - by1, 1), round(bx1, 1), round(page_height - by0, 1)]
             if per_row is None:
-                cells.append({"r0": offsets[r0], "r1": offsets[r1], "c0": c0, "c1": c1, "text": cell_text(cell)})
+                cells.append({"r0": offsets[r0], "r1": offsets[r1], "c0": c0, "c1": c1, "text": cell_text(cell),
+                              "bbox_pt": box})
             else:
-                cells += [{"r0": offsets[r0] + i, "r1": offsets[r0] + i + 1, "c0": c0, "c1": c1, "text": text}
-                          for i, text in enumerate(per_row)]
+                cells += [{"r0": offsets[r0] + i, "r1": offsets[r0] + i + 1, "c0": c0, "c1": c1, "text": text,
+                           "bbox_pt": box} for i, text in enumerate(per_row)]
     return {"page": table["page number"],
             "bbox_pt": [round(v, 1) for v in (x0, page_height - y1, x1, page_height - y0)],
             "nested": nested,
