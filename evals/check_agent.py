@@ -130,6 +130,41 @@ def main() -> int:
     check("하이브리드 질의 중 실패 → BM25 대체·경고, 결과 유지", r["status"] == "OK" and r["search"]["method"] == "bm25(대체)"
           and any("429" in w for w in r["warnings"]) and r["total_cost"] == "67500", r)
 
+    # ---- 품량 단계 연결: 에이전트의 노무량은 calc/quantity.py에서 온다 ----
+    import quantity_node
+    import rag
+
+    calls, original = [], quantity_node.compute
+
+    def spy(*args, **kwargs):
+        calls.append(args)
+        return original(*args, **kwargs)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("에이전트 경로에서 옛 rag.estimate_labor를 호출했다")
+
+    old_estimate = rag.estimate_labor
+    quantity_node.compute, rag.estimate_labor = spy, forbidden
+    try:
+        r = answer(Q, FULL, offline=True)
+    finally:
+        quantity_node.compute, rag.estimate_labor = original, old_estimate
+    check("품량 연결: quantity_step이 quantity.compute를 1회 호출(6-1-1, 공법·구조물·물량 전달)",
+          calls == [("6-1-1", {"공법": "인력운반 타설", "구조물": "철근구조물"}, "150")], r)
+    check("품량 연결: 옛 rag.estimate_labor 없이 같은 결과(각 22.5, 합계 67500)", r["status"] == "OK"
+          and all(i["person_days"] == "22.5" for i in r["cost_items"]) and r["total_cost"] == "67500", r)
+
+    def refused(*args, **kwargs):
+        return {"status": "refused", "reason": "테스트: 계산기가 거부함", "lines": []}
+
+    quantity_node.compute = refused
+    try:
+        r = answer(Q, FULL, offline=True)
+    finally:
+        quantity_node.compute = original
+    check("품량 계산기가 거부하면 금액 없이 ERROR", r["status"] == "ERROR" and r["total_cost"] is None
+          and not r["cost_items"] and "계산기가 거부함" in r["summary"], r)
+
     print(f"\n통과 {sum(results)} / 전체 {len(results)} (가상 단가로 흐름만 검증. 실제 금액 아님)")
     return 0 if all(results) else 1
 

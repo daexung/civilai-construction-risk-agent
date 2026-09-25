@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "agent" / "search"))
 sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from rag import CHUNKS, PARSED, citation, load  # noqa: E402
-from unit_price import VolumeError, parse_volume, safe_console  # noqa: E402
+from inputs import VolumeError, parse_volume, safe_console  # noqa: E402
 
 GOLDEN = ROOT / "evals/golden_quantity.json"
 NUMBER_RE = re.compile(r"^\d+(?:\.\d+)?$")

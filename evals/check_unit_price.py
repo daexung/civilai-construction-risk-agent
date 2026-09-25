@@ -96,6 +96,36 @@ def main() -> int:
         except RateError:
             check(f"잘못된 입력 거부: {name}", True)
 
+    # 8. 품량은 calc/quantity.py에서 받고, 계산 모듈 사이에 순환 참조가 없다
+    import copy
+    import subprocess
+
+    import quantity
+    from unit_price import apply_prices, quantity_conditions
+
+    r = calculate({})
+    check("품량 출처: calc/quantity.py 결과(골든 사례 ID, per_day)", r["quantity"]["calculator"] == "agent/calc/quantity.py"
+          and r["quantity"]["case_id"] == "6-1-1-manual-reinforced-100m3" and r["quantity"]["rule"] == "per_day"
+          and all(i["quantity_exact"] == "15" for i in r["items"]))
+    for order in (["inputs", "quantity", "unit_price"], ["unit_price", "quantity"], ["quantity_node"]):
+        code = ("import sys; sys.path[:0]=[r'%s', r'%s', r'%s']; " % tuple(str(ROOT / "agent" / s) for s in ("flow", "search", "calc"))
+                + "; ".join(f"import {m}" for m in order))
+        proc = subprocess.run([sys.executable, "-c", code], capture_output=True)
+        check(f"순환 참조 없음: {' → '.join(order)} 순서로 import", proc.returncode == 0, proc.stderr.decode("utf-8", "replace")[-200:])
+    labor = quantity.compute("6-1-1", quantity_conditions(), "100")
+    bad = copy.deepcopy(labor)
+    bad["lines"][0]["quantity"]["exact"] = "60/11"
+    try:
+        apply_prices(bad, parse_rates({"rates": [entry("콘크리트공", "1000")]}))
+        check("끝나지 않는 품량은 금액 계산 거부(반올림 규칙 미정)", False)
+    except RuntimeError as exc:
+        check("끝나지 않는 품량은 금액 계산 거부(반올림 규칙 미정)", "반올림 규칙 미정" in str(exc))
+    try:
+        apply_prices({"status": "refused", "reason": "테스트"}, {})
+        check("거부된 품량 결과에는 단가를 적용하지 않음", False)
+    except RuntimeError as exc:
+        check("거부된 품량 결과에는 단가를 적용하지 않음", "품량을 계산하지 못했습니다" in str(exc))
+
     print(f"\n통과 {sum(checks)} / 전체 {len(checks)} (가상 단가로 계산만 검증. 실제 금액 아님)")
     return 0 if all(checks) else 1
 

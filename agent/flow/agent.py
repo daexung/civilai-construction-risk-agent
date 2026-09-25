@@ -11,8 +11,8 @@
   extract   공법·구조물·물량을 뽑고 검증한다. 없으면 missing_fields, 여럿이거나 불분명하면 ambiguities
             → 하나라도 있으면 계산하지 않고 MISSING_INFO로 되묻는다(검색·API 호출도 하지 않는다)
   retrieve  하이브리드 검색(BM25 + 벡터 RRF)으로 품셈 근거를 찾는다. 임베딩을 쓸 수 없으면 BM25로 대신하고 기록한다
-  calculate unit_price.calculate_case (구조 확인한 표, '(일당)' 기준, Decimal). 계산에 쓴 원문 표가
-            검색 근거에 없으면 답하지 않는다(ERROR)
+  quantity  quantity_node.quantity_step → calc/quantity.py (원문 표 품량, 유리수 정확 계산). 거부되면 ERROR
+  price     unit_price.apply_prices (단가 적용). 계산에 쓴 원문 표가 검색 근거에 없으면 답하지 않는다(ERROR)
   respond   절·쪽·표 위치와 단가 기준일·출처를 붙여 답한다. 단가가 없는 직종은 금액을 만들지 않고 부족 항목으로 알린다
 """
 
@@ -28,8 +28,9 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "agent" / "search"))
 sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from rag import CHUNKS, Index, load  # noqa: E402
-from unit_price import (SUPPORTED_CASE, UNCALCULATED, RateError, VolumeError, calculate_case,  # noqa: E402
+from unit_price import (SUPPORTED_CASE, UNCALCULATED, RateError, VolumeError, apply_prices,  # noqa: E402
                         load_rates, parse_volume, safe_console, to_json, won)
+from quantity_node import quantity_step  # noqa: E402
 
 SCOPE = "6-1-1 레디믹스트콘크리트 타설 중 '철근구조물 · 인력운반 타설'의 노무량·노무비"
 
@@ -238,7 +239,13 @@ def answer(query: str, rates: dict | None = None, offline: bool = False, hybrid_
 
     index, method, warning = make_search_index(offline, hybrid_factory)
     search = _Fallback(index, index.bm25) if method == "hybrid" else index
-    result = calculate_case(ext["inputs"]["volume_m3"], rates, search_index=search, query=query)
+    labor = quantity_step(ext["inputs"])          # 품량 단계: calc/quantity.py가 계산
+    if labor["status"] != "computed":
+        resp = base_response("ERROR", f"품량을 계산하지 않았습니다: {labor['reason']}")
+        resp["inputs"] = {k: str(v) for k, v in ext["inputs"].items()}
+        resp["final_response"] = compose(resp, None)
+        return resp
+    result = apply_prices(labor, rates, search_index=search, query=query)   # 단가 단계
     used = search.used if isinstance(search, _Fallback) else method
     api_calls = getattr(index, "api_calls", 0)
     resp = base_response("OK", "")

@@ -58,9 +58,9 @@ python agent/search/rag.py estimate --section 6-1-1 --method "인력운반 타�
 
 | 폴더 | 역할 | 파일 |
 |---|---|---|
-| `agent/flow/` | 전체 흐름: 조건 확인 → 검색 → 계산 → 답변 | `agent.py` |
+| `agent/flow/` | 전체 흐름: 조건 확인 → 검색 → 품량 → 단가 → 답변 | `agent.py`, `quantity_node.py`(품량 단계 얇은 노드) |
 | `agent/search/` | 검색 | `rag.py`(BM25·근거 구성), `vector.py`, `hybrid.py` |
-| `agent/calc/` | 계산 | `unit_price.py`(노무량 × 단가), `quantity.py`(품량 계산기, 아직 흐름에 연결 안 됨) |
+| `agent/calc/` | 계산 | `quantity.py`(품량), `unit_price.py`(품량 × 단가), `inputs.py`(입력 검증 보조) |
 
 ```bash
 python agent/flow/agent.py "철근구조물 150㎥ 레미콘 인력운반 타설 노무비는?" --rates 내_노임단가.json
@@ -73,7 +73,8 @@ python agent/calc/quantity.py --section 6-1-2 --cond 유형=기계비빔타설 -
 `--json`을 붙이면 기계가 읽는 JSON(ASCII 이스케이프)을 낸다. 단가 파일 양식은 `evals/labor_rates.template.json`이다.
 
 > 다음 단계 과제: `agent/search/rag.py`에는 검색과 옛 품량 계산(`estimate_labor`)이 함께 있다.
-> 구조 정리 단계에서는 억지로 나누지 않았다. 계산 부분은 `agent/calc/`로 옮길 대상이다.
+> 에이전트는 이제 `calc/quantity.py`를 쓰고, `estimate_labor`는 기존 회귀 검사(`check_rag`, `check_quantity`)에서만 쓴다.
+> 검색 파일에서 떼어 내는 일은 아직 하지 않았다.
 
 ## 5. 점검
 
