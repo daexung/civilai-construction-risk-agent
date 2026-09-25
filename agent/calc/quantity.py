@@ -1,9 +1,9 @@
 """6장 품량 계량: 원문 표에서 노무 품량을 단가 없이 계산한다 (첫 구현).
 
 실행 예:
-    python backend/quantity.py --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=철근구조물 --quantity 100
-    python backend/quantity.py --section 6-1-1 --cond "공법=인력운반 타설" --cond 구조물=철근구조물 --quantity 100 --json
-    python backend/quantity.py --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=소형구조물 --quantity 8 \\
+    python agent/calc/quantity.py --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=철근구조물 --quantity 100
+    python agent/calc/quantity.py --section 6-1-1 --cond "공법=인력운반 타설" --cond 구조물=철근구조물 --quantity 100 --json
+    python agent/calc/quantity.py --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=소형구조물 --quantity 8 \\
         --confirm small_structure_scattered=true
 
 범위
@@ -29,8 +29,9 @@ from decimal import Decimal
 from fractions import Fraction
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from rag import CHUNKS, PARSED, citation, load  # noqa: E402
 from unit_price import VolumeError, parse_volume, safe_console  # noqa: E402
 

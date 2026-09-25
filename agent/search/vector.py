@@ -1,7 +1,7 @@
 """Parquet 벡터로 하는 정확한 코사인 검색.
 
 실행 예:
-    python backend/vector.py "콘크리트 펌프차 타설 인력편성"
+    python agent/search/vector.py "콘크리트 펌프차 타설 인력편성"
 
 질문만 Gemini로 임베딩하고(API 호출 1회), 청크 벡터는 embeddings.parquet에서 메모리로 읽어
 전체 청크와 코사인 유사도를 모두 계산한다(근사 탐색 없음).
@@ -15,7 +15,7 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "pipeline"))
 from embed import DIM, MODEL, client, document_input, embed_texts, query_input, sha256  # noqa: E402
 

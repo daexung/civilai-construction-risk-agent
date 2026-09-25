@@ -1,9 +1,9 @@
 """일위대가(노무비) 계산: 6-1-1 '철근구조물 인력운반 타설' 한 사례만.
 
 실행 예:
-    python backend/unit_price.py --volume 150 --rates 내_노임단가.json
-    python backend/unit_price.py --volume 150       # 단가 파일 없이: 전 직종 미산정
-    python backend/unit_price.py --golden           # 회귀: 골든 사례(100㎥)와 기존 노무량 15인·일 대조
+    python agent/calc/unit_price.py --volume 150 --rates 내_노임단가.json
+    python agent/calc/unit_price.py --volume 150       # 단가 파일 없이: 전 직종 미산정
+    python agent/calc/unit_price.py --golden           # 회귀: 골든 사례(100㎥)와 기존 노무량 15인·일 대조
 
 흐름
   1. 지원 사례(SUPPORTED_CASE)는 절·공법·구조물이 고정이다. 물량만 사용자 입력이며 parse_volume으로 검증한다.
@@ -26,8 +26,8 @@ import sys
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "agent" / "search"))
 from rag import CHUNKS, PARSED, Index, citation, estimate_labor, evidence, load  # noqa: E402
 
 GOLDEN = ROOT / "evals/golden_estimate.json"

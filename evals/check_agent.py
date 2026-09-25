@@ -1,4 +1,4 @@
-"""최소 에이전트(backend/agent.py) 점검: 정상 사례와 누락·모호·범위 밖 입력.
+"""최소 에이전트(agent/flow/agent.py) 점검: 정상 사례와 누락·모호·범위 밖 입력.
 
 실행: python evals/check_agent.py            # 계산 사례는 하이브리드 검색(질문마다 임베딩 1회)
       python evals/check_agent.py --offline  # 임베딩 없이 BM25만
@@ -11,7 +11,9 @@ from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "agent" / "flow"))
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from agent import answer  # noqa: E402
 from unit_price import parse_rates, safe_console  # noqa: E402
 

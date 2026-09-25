@@ -10,7 +10,9 @@ from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "agent" / "flow"))
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from unit_price import UNCALCULATED, RateError, calculate, load_rates, parse_rates, safe_console  # noqa: E402
 
 TEST_SOURCE = "테스트용 가상값(실제 노임단가 아님)"

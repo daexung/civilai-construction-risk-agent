@@ -1,8 +1,8 @@
 """청크 검색과 근거 묶음, 구조를 확인한 표에서만 하는 노무량 환산.
 
 실행 예:
-    python backend/rag.py search "레미콘 인력운반 타설 콘크리트공 인원"
-    python backend/rag.py estimate --section 6-1-1 --method "인력운반 타설" --trade 콘크리트공 \\
+    python agent/search/rag.py search "레미콘 인력운반 타설 콘크리트공 인원"
+    python agent/search/rag.py estimate --section 6-1-1 --method "인력운반 타설" --trade 콘크리트공 \\
         --column "시공량(㎥) 철근구조물" --volume 100
 
 검색은 외부 API 없이 BM25(낱말 + 한글 두 글자 조각)로 한다. 답변 문장 생성(LLM)은 연결하지 않았다.
@@ -18,7 +18,7 @@ from collections import Counter
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 CHUNKS = ROOT / "data/processed/chunks.jsonl"
 PARSED = ROOT / "data/processed/parsed.jsonl"
 

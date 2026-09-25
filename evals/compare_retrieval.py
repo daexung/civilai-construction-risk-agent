@@ -12,7 +12,9 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "agent" / "flow"))
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from rag import CHUNKS, Index, evidence, evidence_chunk_ids, load  # noqa: E402
 from vector import VectorIndex  # noqa: E402
 

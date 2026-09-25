@@ -1,9 +1,9 @@
 """최소 에이전트: 6-1-1 '철근구조물 인력운반 타설' 한 사례의 노무량·노무비 질의응답.
 
 실행 예:
-    python backend/agent.py "철근구조물 150㎥ 레미콘 인력운반 타설 노무비는?" --rates 내_노임단가.json
-    python backend/agent.py "레미콘 타설 노무비 알려줘"            # 조건 부족 → 필요한 항목 안내
-    python backend/agent.py "…" --offline                            # 임베딩 없이 BM25만
+    python agent/flow/agent.py "철근구조물 150㎥ 레미콘 인력운반 타설 노무비는?" --rates 내_노임단가.json
+    python agent/flow/agent.py "레미콘 타설 노무비 알려줘"            # 조건 부족 → 필요한 항목 안내
+    python agent/flow/agent.py "…" --offline                            # 임베딩 없이 BM25만
 
 흐름 (v1.0-team의 router → extractor → 비용 노드 → synthesize 구조와 결과 형식을 참고했다.
       지원 범위가 한 사례라 LLM 없이 규칙으로 판정한다)
@@ -24,8 +24,9 @@ import unicodedata
 from decimal import Decimal
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from rag import CHUNKS, Index, load  # noqa: E402
 from unit_price import (SUPPORTED_CASE, UNCALCULATED, RateError, VolumeError, calculate_case,  # noqa: E402
                         load_rates, parse_volume, safe_console, to_json, won)

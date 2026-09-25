@@ -10,7 +10,9 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "agent" / "flow"))
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from rag import (CHUNKS, PARSED, Index, citation, estimate_labor, evidence,  # noqa: E402
                  evidence_chunk_ids, load)
 

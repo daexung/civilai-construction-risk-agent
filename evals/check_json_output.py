@@ -1,8 +1,8 @@
 """--json 출력 왕복 검사: 콘솔 인코딩이 cp949여도 json.loads 결과에서 한글·특수문자가 '?'로 바뀌지 않는지.
 
 실행: python evals/check_json_output.py
-자식 프로세스의 출력 인코딩을 cp949로 고정해(PYTHONIOENCODING=cp949) backend/unit_price.py와
-backend/agent.py(--offline, API 호출 없음)를 --json으로 실행한다. 받은 바이트를 cp949로 풀어 json.loads한 값이
+자식 프로세스의 출력 인코딩을 cp949로 고정해(PYTHONIOENCODING=cp949) agent/calc/unit_price.py와
+agent/flow/agent.py(--offline, API 호출 없음)를 --json으로 실행한다. 받은 바이트를 cp949로 풀어 json.loads한 값이
 같은 계산을 프로세스 안에서 한 결과와 똑같아야 한다. 일반(사람용) 출력도 cp949에서 멈추지 않는지 본다.
 단가는 계산 검증용 가상값이다(실제 노임단가 아님).
 """
@@ -15,7 +15,9 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "agent" / "flow"))
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from agent import answer  # noqa: E402
 from unit_price import calculate, calculate_case, load_rates, parse_volume, safe_console, to_json  # noqa: E402
 
@@ -63,15 +65,15 @@ def main() -> int:
         rates = load_rates(rates_path)
 
         cases = [
-            ("unit_price --volume 150 --json", ["backend/unit_price.py", "--volume", "150", "--rates", str(rates_path), "--json"],
+            ("unit_price --volume 150 --json", ["agent/calc/unit_price.py", "--volume", "150", "--rates", str(rates_path), "--json"],
              lambda: calculate_case(parse_volume("150"), rates)),
-            ("unit_price --golden --json (단가 없음)", ["backend/unit_price.py", "--golden", "--json"],
+            ("unit_price --golden --json (단가 없음)", ["agent/calc/unit_price.py", "--golden", "--json"],
              lambda: calculate({})),
-            ("agent --json 정상", ["backend/agent.py", QUERY, "--offline", "--rates", str(rates_path), "--json"],
+            ("agent --json 정상", ["agent/flow/agent.py", QUERY, "--offline", "--rates", str(rates_path), "--json"],
              lambda: answer(QUERY, rates, offline=True)),
-            ("agent --json 조건 부족", ["backend/agent.py", "레미콘 타설 노무비 알려줘", "--offline", "--json"],
+            ("agent --json 조건 부족", ["agent/flow/agent.py", "레미콘 타설 노무비 알려줘", "--offline", "--json"],
              lambda: answer("레미콘 타설 노무비 알려줘", {}, offline=True)),
-            ("agent --json 범위 밖", ["backend/agent.py", "PC기둥 설치 노무비", "--offline", "--json"],
+            ("agent --json 범위 밖", ["agent/flow/agent.py", "PC기둥 설치 노무비", "--offline", "--json"],
              lambda: answer("PC기둥 설치 노무비", {}, offline=True)),
         ]
         for name, args, build in cases:
@@ -90,18 +92,18 @@ def main() -> int:
             lost = [s for s in strings(got) if "?" in s and s not in set(strings(want))]
             check(f"{name}: '?'로 바뀐 글자 없음", not lost, str(lost[:3]))
 
-        got = json.loads(run(["backend/unit_price.py", "--volume", "150", "--rates", str(rates_path), "--json"])
+        got = json.loads(run(["agent/calc/unit_price.py", "--volume", "150", "--rates", str(rates_path), "--json"])
                          .stdout.decode("cp949"))
         sources = {i["price_source"] for i in got["items"]}
         check("원문 특수문자 보존: 단가 출처 ①·∼·㎥·—·‘’", sources == {SPECIAL_SOURCE})
         check("한글·㎥ 보존: 사용한 원문 행", all("철근구조물" in i["labor_row"] and "㎥" in i["labor_row"] for i in got["items"]))
         check("원문 인용 보존: 공구손료 ④ 조건", any(u["text"].startswith("④ 공구손료") for u in got["unapplied_conditions"]))
 
-        human = run(["backend/unit_price.py", "--volume", "150", "--rates", str(rates_path)])
+        human = run(["agent/calc/unit_price.py", "--volume", "150", "--rates", str(rates_path)])
         text = human.stdout.decode("cp949", "replace")
         check("일반 출력: cp949에서 멈추지 않음(기존 동작)", human.returncode == 0 and "일위대가(노무비)" in text
               and "22.5 인·일" in text)
-        human = run(["backend/agent.py", QUERY, "--offline", "--rates", str(rates_path)])
+        human = run(["agent/flow/agent.py", QUERY, "--offline", "--rates", str(rates_path)])
         text = human.stdout.decode("cp949", "replace")
         check("일반 출력: 에이전트 답변도 cp949에서 멈추지 않음", human.returncode == 0 and "[결과]" in text
               and "PDF 185쪽" in text)

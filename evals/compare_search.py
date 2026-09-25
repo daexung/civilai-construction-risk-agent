@@ -16,7 +16,9 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "agent" / "flow"))
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from hybrid import HybridIndex  # noqa: E402
 from rag import CHUNKS, Index, load  # noqa: E402
 from vector import VectorIndex  # noqa: E402

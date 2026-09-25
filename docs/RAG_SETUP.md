@@ -18,7 +18,7 @@
   GEMINI_API_KEY=발급받은_키
   ```
   환경 변수 `GEMINI_API_KEY`가 있으면 그것을 먼저 쓴다. 코드는 키를 출력하지 않는다.
-- BM25 검색과 노무량 환산(`backend/rag.py`)은 API 키 없이 동작한다.
+- BM25 검색과 노무량 환산(`agent/search/rag.py`)은 API 키 없이 동작한다.
 
 > 이 개발 PC에서는 `.venv`의 원래 Python 경로가 없어, 저장소 안의 `.uv-python` Python에
 > `PYTHONPATH=.venv-embed;.venv\Lib\site-packages`를 지정해 실행했다. 새 환경에서는 위의 일반 절차를 쓴다.
@@ -45,20 +45,48 @@ python pipeline/embed.py                          # 나머지 전부
 ## 3. 검색
 
 ```bash
-python backend/rag.py search "레미콘 인력운반 타설 인원"     # BM25 (API 없음)
-python backend/vector.py "펌프카 작업조 인원"                # 벡터: 질문 임베딩 1회 + 정확한 코사인
-python backend/hybrid.py "펌프차 타설 현장조건 f2 계수"      # BM25 + 벡터 RRF: 질문 임베딩 1회
-python backend/rag.py estimate --section 6-1-1 --method "인력운반 타설" --trade 콘크리트공 \
+python agent/search/rag.py search "레미콘 인력운반 타설 인원"     # BM25 (API 없음)
+python agent/search/vector.py "펌프카 작업조 인원"                # 벡터: 질문 임베딩 1회 + 정확한 코사인
+python agent/search/hybrid.py "펌프차 타설 현장조건 f2 계수"      # BM25 + 벡터 RRF: 질문 임베딩 1회
+python agent/search/rag.py estimate --section 6-1-1 --method "인력운반 타설" --trade 콘크리트공 \
     --column "시공량(㎥) 철근구조물" --volume 100             # 구조 확인한 표에서만 노무량 환산
 ```
 
 세 검색 모두 `rag.evidence`로 절 단위 근거(선택된 하위 절 전체 + 상위 절 설명, 중복 없음)를 만든다.
 
-## 4. 점검
+## 4. 질문 처리 (`agent/`)
+
+| 폴더 | 역할 | 파일 |
+|---|---|---|
+| `agent/flow/` | 전체 흐름: 조건 확인 → 검색 → 계산 → 답변 | `agent.py` |
+| `agent/search/` | 검색 | `rag.py`(BM25·근거 구성), `vector.py`, `hybrid.py` |
+| `agent/calc/` | 계산 | `unit_price.py`(노무량 × 단가), `quantity.py`(품량 계산기, 아직 흐름에 연결 안 됨) |
 
 ```bash
-python evals/check_rag.py          # BM25 검색·근거 구성·적산 제한 (API 없음)
-python evals/compare_search.py     # BM25·벡터·하이브리드 비교 (질문 수 × 2회 임베딩 호출)
+python agent/flow/agent.py "철근구조물 150㎥ 레미콘 인력운반 타설 노무비는?" --rates 내_노임단가.json
+python agent/flow/agent.py "…" --offline                  # 임베딩 없이 BM25만
+python agent/calc/unit_price.py --volume 150 --rates 내_노임단가.json
+python agent/calc/unit_price.py --golden                  # 회귀: 골든 100㎥ 사례
+python agent/calc/quantity.py --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=철근구조물 --quantity 100
+```
+
+`--json`을 붙이면 기계가 읽는 JSON(ASCII 이스케이프)을 낸다. 단가 파일 양식은 `evals/labor_rates.template.json`이다.
+
+> 다음 단계 과제: `agent/search/rag.py`에는 검색과 옛 품량 계산(`estimate_labor`)이 함께 있다.
+> 구조 정리 단계에서는 억지로 나누지 않았다. 계산 부분은 `agent/calc/`로 옮길 대상이다.
+
+## 5. 점검
+
+```bash
+python evals/check_parse.py              # 파싱 골든 23건 (pymupdf 필요)
+python evals/check_estimate.py           # 6-1-1 노무량 골든 사례
+python evals/check_rag.py                # BM25 검색·근거 구성·적산 제한 (API 없음)
+python evals/check_unit_price.py         # 노무비 계산 (가상 단가)
+python evals/check_agent.py --offline    # 에이전트 흐름 (API 없음)
+python evals/check_json_output.py        # --json 출력이 cp949 콘솔에서도 보존되는지 (API 없음)
+python evals/check_quantity.py           # 품량 계산기 (API 없음)
+python evals/compare_search.py           # BM25·벡터·하이브리드 비교 (질문 수 × 2회 임베딩 호출)
 ```
 
 q06(강재거푸집 사용횟수)은 원본 파싱에서 193쪽 표가 빠진 문제라 검색 방식과 관계없이 실패한다.
+`check_rag`의 알려진 실패는 q06과 n03(BM25 표현 차이) 2건이다.

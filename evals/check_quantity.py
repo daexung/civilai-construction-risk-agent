@@ -1,4 +1,4 @@
-"""품량 계산기(backend/quantity.py) 점검. API·LLM·단가 없이 data/processed의 레코드·청크만 읽는다.
+"""품량 계산기(agent/calc/quantity.py) 점검. API·LLM·단가 없이 data/processed의 레코드·청크만 읽는다.
 
 실행: python evals/check_quantity.py
 정답: evals/golden_quantity.json (6-1-2는 원문 이미지 전사, 사람 검토 미완료), 6-1-1은 evals/golden_estimate.json.
@@ -14,7 +14,9 @@ from fractions import Fraction
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "agent" / "flow"))
+sys.path.insert(0, str(ROOT / "agent" / "search"))
+sys.path.insert(0, str(ROOT / "agent" / "calc"))
 import quantity  # noqa: E402
 from quantity import USER_INPUT, compute, decimal_text, load_golden, load_sources, table_model  # noqa: E402
 from rag import estimate_labor  # noqa: E402
@@ -44,7 +46,7 @@ def with_case(golden, section_no, conditions):
 def run_cli(args, encoding="cp949"):
     env = {k: v for k, v in os.environ.items() if k not in ("PYTHONIOENCODING", "PYTHONUTF8")}
     env["PYTHONIOENCODING"] = encoding
-    return subprocess.run([sys.executable, "backend/quantity.py", *args], cwd=ROOT, env=env, capture_output=True)
+    return subprocess.run([sys.executable, "agent/calc/quantity.py", *args], cwd=ROOT, env=env, capture_output=True)
 
 
 def main() -> int:
