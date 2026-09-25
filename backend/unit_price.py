@@ -1,14 +1,14 @@
-"""일위대가(노무비) 계산: 6-1-1 '철근구조물 100㎥ 인력운반 타설' 한 사례만.
+"""일위대가(노무비) 계산: 6-1-1 '철근구조물 인력운반 타설' 한 사례만.
 
 실행 예:
-    python backend/unit_price.py --rates 내_노임단가.json
-    python backend/unit_price.py                    # 단가 파일 없이: 전 직종 미산정
-    python backend/unit_price.py --rates … --json   # 기계가 읽는 형식
+    python backend/unit_price.py --volume 150 --rates 내_노임단가.json
+    python backend/unit_price.py --volume 150       # 단가 파일 없이: 전 직종 미산정
+    python backend/unit_price.py --golden           # 회귀: 골든 사례(100㎥)와 기존 노무량 15인·일 대조
 
 흐름
-  1. 사례 정의는 evals/golden_estimate.json (절·공법·구조물·물량·기대 노무량)을 그대로 쓴다.
-  2. 노무량은 rag.estimate_labor로 구한다(구조 확인한 표·'(일당)' 기준·행 1개일 때만). 기대값(15인·일)과
-     다르면 멈춘다.
+  1. 지원 사례(SUPPORTED_CASE)는 절·공법·구조물이 고정이다. 물량만 사용자 입력이며 parse_volume으로 검증한다.
+  2. 노무량은 rag.estimate_labor로 구한다(구조 확인한 표·'(일당)' 기준·행 1개일 때만).
+     골든 사례 경로(calculate)에서는 기존 결과(각 15인·일)와 다르면 멈춘다.
   3. 같은 사례로 검색해, 계산에 쓴 원문 표 청크가 검색 근거에 들어 있는지 확인한다.
   4. 노임단가는 외부 JSON에서만 읽는다. 단가를 추정하거나 기본값을 넣지 않는다. 단가·기준일·출처 중
      하나라도 없으면 그 직종은 '미산정'이다.
@@ -30,10 +30,44 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 from rag import CHUNKS, PARSED, Index, citation, estimate_labor, evidence, load  # noqa: E402
 
-CASE = ROOT / "evals/golden_estimate.json"
+GOLDEN = ROOT / "evals/golden_estimate.json"
 PRICE_UNIT = "원/인·일"
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 UNCALCULATED = "미산정"
+VOLUME_RE = re.compile(r"^\d{1,3}(?:,\d{3})+(?:\.\d+)?$|^\d+(?:\.\d+)?$")
+
+# 이번 범위에서 지원하는 유일한 사례. 물량 외의 조건은 바꿀 수 없다.
+SUPPORTED_CASE = {
+    "id": "6-1-1-manual-reinforced",
+    "section": "6-1-1 레디믹스트콘크리트 타설('24년 보완)",
+    "section_no": "6-1-1",
+    "pdf_page": 185,
+    "printed_page": 129,
+    "method": "인력운반 타설",
+    "structure": "철근구조물",
+    "trades": ["콘크리트공", "보통인부"],
+    "assumptions": [
+        "인력운반 타설이 가능한 현장으로 가정한다. 공법 적합성을 판정하지 않는다.",
+        "개소별 소량 타설 위치의 산재, 소규모 및 기타 할증/생산성 조정은 적용하지 않는다.",
+    ],
+    "not_calculated": ["공구손료/경장비 비용", "자재비, 기타 장비비", "별도 양생, 표면 마무리, 추가 인력",
+                       "간접비, 이윤, 세금", "실제 공기 및 투입 인원 편성"],
+}
+
+
+class VolumeError(ValueError):
+    """물량 입력이 계산에 쓸 수 없는 값."""
+
+
+def parse_volume(value) -> Decimal:
+    """사용자 물량(㎥)을 검증한다. 양의 10진수만 받는다(쉼표 자리 구분 허용, 부호·지수·NaN 거부)."""
+    text = str(value).strip() if value is not None else ""
+    if not VOLUME_RE.match(text):
+        raise VolumeError(f"물량은 양의 숫자(㎥)여야 합니다: {value!r}")
+    volume = Decimal(text.replace(",", ""))
+    if volume <= 0:
+        raise VolumeError(f"물량은 0보다 커야 합니다: {value!r}")
+    return volume
 
 
 def safe_console() -> None:
@@ -96,38 +130,41 @@ def parse_rates(data: dict) -> dict:
     return rates
 
 
-def case_query(case: dict) -> str:
-    return f"{case['source']['section']} {case['input']['method']} {case['input']['structure']}"
+def case_query(case: dict = SUPPORTED_CASE) -> str:
+    return f"{case['section']} {case['method']} {case['structure']}"
 
 
-def calculate(rates: dict, search_index=None) -> dict:
-    case = json.loads(CASE.read_text(encoding="utf-8"))
+def calculate_case(volume: Decimal, rates: dict, search_index=None, query: str | None = None) -> dict:
+    """실행 경로: 검증된 사용자 물량으로 지원 사례의 노무량·노무비를 계산한다.
+
+    query는 검색에 쓸 질문(에이전트가 사용자 질문을 넘긴다). 없으면 사례 조건으로 만든 질의를 쓴다.
+    """
+    if not isinstance(volume, Decimal) or not volume.is_finite() or volume <= 0:
+        raise VolumeError(f"검증된 양의 Decimal 물량이 필요합니다: {volume!r}")
+    case = SUPPORTED_CASE
     chunks = load(CHUNKS)
     records = [json.loads(line) for line in PARSED.read_text(encoding="utf-8").splitlines() if line.strip()]
-    section_no = case["source"]["section"].split()[0]
-    volume = Decimal(case["input"]["volume_m3"])
-    column = f"시공량(㎥) {case['input']['structure']}"
+    section_no = case["section_no"]
+    column = f"시공량(㎥) {case['structure']}"
 
     # 3. 검색 근거와 연결
     index = search_index or Index(chunks)
-    ev = evidence(index, case_query(case), 3)
+    search_query = query or case_query()
+    ev = evidence(index, search_query, 3)
     evidence_ids = {c["chunk_id"] for g in ev["sections"] + ev["parents"] for c in g["chunks"]}
     section_chunks = next((g["chunks"] for g in ev["sections"] if g["section_no"] == section_no), [])
 
     items, checks = [], []
-    for trade, expected in case["expected_person_days"].items():
-        labor = estimate_labor(chunks, records, section_no, case["input"]["method"], trade, column,
-                               case["input"]["volume_m3"])
+    for trade in case["trades"]:
+        labor = estimate_labor(chunks, records, section_no, case["method"], trade, column, str(volume))
         if labor["status"] != "ok":
             raise RuntimeError(f"{trade} 노무량을 계산할 수 없습니다: {labor['reason']}")
         person_days = Decimal(labor["person_days"])
-        if person_days != Decimal(expected):
-            raise RuntimeError(f"{trade} 노무량 {person_days}이 기존 결과 {expected}와 다릅니다.")
         chunk = next(c for c in chunks if c["kind"] == "table"
                      and any(records[r]["text"] == labor["row"] for r in c["record_ids"]))
         checks.append({"trade": trade, "table_chunk": chunk["chunk_id"],
                        "in_search_evidence": chunk["chunk_id"] in evidence_ids,
-                       "page_matches_case": chunk["source"]["page"] == case["source"]["pdf_page"],
+                       "page_matches_case": chunk["source"]["page"] == case["pdf_page"],
                        "basis": chunk["basis"], "structure": chunk["structure"]})
         crew, output = Decimal(labor["crew"]), Decimal(labor["daily_output"])
         per_m3 = crew / output
@@ -156,16 +193,34 @@ def calculate(rates: dict, search_index=None) -> dict:
         for m in re.finditer(r"[①-⑳][^①-⑳]*?(공구손료[^①-⑳]*)", c["text"]):
             unapplied.append({"text": m.group(0).strip(), "source": citation(c), "status": "미적용"})
 
-    return {"case": case["id"], "section": case["source"]["section"], "pdf_page": case["source"]["pdf_page"],
-            "printed_page": case["source"]["printed_page"], "method": case["input"]["method"],
-            "structure": case["input"]["structure"], "volume_m3": volume,
-            "search": {"query": case_query(case), "top3": [c["chunk_id"] for _, c in ev["hits"]]},
+    return {"case": case["id"], "section": case["section"], "pdf_page": case["pdf_page"],
+            "printed_page": case["printed_page"], "method": case["method"],
+            "structure": case["structure"], "volume_m3": volume,
+            "search": {"query": search_query, "top3": [c["chunk_id"] for _, c in ev["hits"]]},
             "items": items, "labor_total_status": status, "labor_total": total,
             "labor_total_per_m3": (total / volume) if total is not None else None,
             "excluded_uncalculated": [i["trade"] for i in items if i["status"] == UNCALCULATED],
             "source_checks": checks, "unapplied_conditions": unapplied,
             "assumptions": case["assumptions"], "not_calculated": case["not_calculated"],
             "rounding": "반올림·절사 없음(Decimal 정확값)"}
+
+
+def calculate(rates: dict, search_index=None) -> dict:
+    """회귀 경로: 골든 사례(evals/golden_estimate.json, 100㎥)로 계산하고 기존 노무량과 대조한다."""
+    golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
+    case = SUPPORTED_CASE
+    same = (golden["source"]["section"] == case["section"] and golden["source"]["pdf_page"] == case["pdf_page"]
+            and golden["input"]["method"] == case["method"] and golden["input"]["structure"] == case["structure"]
+            and list(golden["expected_person_days"]) == case["trades"])
+    if not same:
+        raise RuntimeError("골든 사례와 지원 사례 정의가 다릅니다.")
+    result = calculate_case(parse_volume(golden["input"]["volume_m3"]), rates, search_index)
+    for item in result["items"]:
+        expected = Decimal(golden["expected_person_days"][item["trade"]])
+        if item["person_days"] != expected:
+            raise RuntimeError(f"{item['trade']} 노무량 {item['person_days']}이 기존 결과 {expected}와 다릅니다.")
+    result["case"] = golden["id"]
+    return result
 
 
 def won(value) -> str:
@@ -205,27 +260,37 @@ def report(result: dict) -> str:
         for u in result["unapplied_conditions"]:
             lines.append(f"  - {u['text']} {u['source']}")
     lines.append("이 도구의 범위: 직종별 노무비(노무량 × 입력 단가)만 계산한다. 할증·감산·경비는 넣지 않았다.")
-    lines.append("사례 정의(golden_estimate.json)의 미계산 항목: " + "; ".join(result["not_calculated"]))
+    lines.append("계산하지 않은 항목: " + "; ".join(result["not_calculated"]))
     return "\n".join(lines)
 
 
-def to_json(result: dict) -> str:
-    return json.dumps(result, ensure_ascii=False, indent=1,
+def to_json(result: dict, ascii_only: bool = False) -> str:
+    """결과를 JSON 글자로. Decimal은 지수·끝자리 0 없는 문자열로 적는다.
+
+    ascii_only=True(명령줄 --json)면 한글·㎥·① 같은 글자를 \\uXXXX로 적는다. 콘솔 인코딩이 cp949여도
+    safe_console의 '?' 대체를 거치지 않으므로, 받는 쪽 json.loads가 원래 글자를 그대로 되살린다.
+    """
+    return json.dumps(result, ensure_ascii=ascii_only, indent=1,
                       default=lambda v: format(v.normalize(), "f") if isinstance(v, Decimal) else str(v))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--volume", help="철근구조물 인력운반 타설 물량(㎥). 양의 숫자")
+    parser.add_argument("--golden", action="store_true", help="회귀: 골든 사례(100㎥)로 계산하고 기존 노무량과 대조")
     parser.add_argument("--rates", type=Path, help="직종별 노임단가 JSON (없으면 전 직종 미산정)")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     safe_console()
+    if args.golden == (args.volume is not None):
+        parser.error("--volume 또는 --golden 중 하나만 지정해야 합니다.")
     try:
-        result = calculate(load_rates(args.rates))
-    except (RateError, OSError, json.JSONDecodeError) as exc:
-        print(f"단가 입력 오류: {exc}", file=sys.stderr)
+        rates = load_rates(args.rates)
+        result = calculate(rates) if args.golden else calculate_case(parse_volume(args.volume), rates)
+    except (RateError, VolumeError, OSError, json.JSONDecodeError) as exc:
+        print(f"입력 오류: {exc}", file=sys.stderr)
         return 2
-    print(to_json(result) if args.json else report(result))
+    print(to_json(result, ascii_only=True) if args.json else report(result))
     return 0
 
 
