@@ -1,0 +1,6 @@
+# Embedding, vector and hybrid search (pipeline/embed.py, backend/vector.py, backend/hybrid.py).
+# Not needed for parsing only. Pinned to the versions used on 2026-09-25.
+# Keep this file ASCII: pip reads it with the OS locale (cp949 on Korean Windows).
+google-genai==2.25.0
+pyarrow==25.0.1
+numpy==2.4.6
