@@ -130,6 +130,19 @@ def main() -> int:
     check("하이브리드 질의 중 실패 → BM25 대체·경고, 결과 유지", r["status"] == "OK" and r["search"]["method"] == "bm25(대체)"
           and any("429" in w for w in r["warnings"]) and r["total_cost"] == "67500", r)
 
+    # ---- 정확값 필드와 금액 표시 정책(미정) ----
+    r = answer(Q, FULL, offline=True)
+    it = items(r)
+    check("정확값 필드 추가, 기존 값 유지(22.5·22500·67500), 표시·적용 금액 정책 미정",
+          it["콘크리트공"]["person_days_exact"] == "22.5" and it["콘크리트공"]["amount_exact"] == "22500"
+          and it["콘크리트공"]["amount"] == "22500" and r["total_cost_exact"] == "67500" and r["total_cost"] == "67500"
+          and r["amount_policy"]["display_and_applied_amount"] == "미정"
+          and it["콘크리트공"]["applied_amount"] == {"value": None, "policy": "미정"}
+          and "[금액 표시]" in r["final_response"], r)
+    r = answer(Q, {}, offline=True)
+    check("단가 없음: 정확한 노무량(22.5)은 반환, 금액 정확값 없음", all(i["person_days_exact"] == "22.5"
+          and i["amount_exact"] is None for i in r["cost_items"]) and "[금액 표시]" not in r["final_response"], r)
+
     # ---- 품량 단계 연결: 에이전트의 노무량은 calc/quantity.py에서 온다 ----
     import quantity_node
     import rag

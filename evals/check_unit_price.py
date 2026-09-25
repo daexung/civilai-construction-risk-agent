@@ -112,14 +112,85 @@ def main() -> int:
                 + "; ".join(f"import {m}" for m in order))
         proc = subprocess.run([sys.executable, "-c", code], capture_output=True)
         check(f"순환 참조 없음: {' → '.join(order)} 순서로 import", proc.returncode == 0, proc.stderr.decode("utf-8", "replace")[-200:])
-    labor = quantity.compute("6-1-1", quantity_conditions(), "100")
-    bad = copy.deepcopy(labor)
-    bad["lines"][0]["quantity"]["exact"] = "60/11"
+    # 9. 순환소수도 거부·반올림 없이 정확히 계산 (실제 원문 6-1-1 장비사용 타설 행: 시공량 55, 콘크리트공 3·보통인부 1)
+    #    운영 지원 목록·사례 정의는 바꾸지 않고, 검사에서만 사본 정답 목록과 사례 정의를 넘긴다
+    from fractions import Fraction
+
+    from unit_price import SUPPORTED_CASE, report, to_json
+
+    test_case = {**SUPPORTED_CASE, "method": "장비사용 타설"}
+    test_golden = copy.deepcopy(quantity.load_golden())
+    test_golden["cases"].append({"id": "test-only-equipment", "section_no": "6-1-1",
+                                 "conditions": quantity_conditions(test_case),
+                                 "human_review": {"원문 대조": "미완료", "실무 검토": "미완료"}})
+    rates12 = parse_rates({"rates": [entry("콘크리트공", "1000"), entry("보통인부", "2000")]})
+
+    def priced(volume, rates):
+        labor = quantity.compute("6-1-1", quantity_conditions(test_case), volume, golden=test_golden)
+        return apply_prices(labor, rates, case=test_case)
+
+    r = priced("55", rates12)
+    it = by_trade(r)
+    ex = it["콘크리트공"]["exact"]
+    check("55㎥ ÷ 55㎥/일 × 3인 = 정확히 3인·일 (1㎥당 3/55가 순환소수여도 거부하지 않음)",
+          ex["person_days"]["exact"] == "3" and it["콘크리트공"]["person_days"] == Decimal(3)
+          and ex["person_days_per_m3"]["exact"] == "3/55" and ex["person_days_per_m3"]["display"] == "0.0(54)")
+    check("55㎥: 금액 정확값 3000·2000, 합계 5000, 1㎥당 합계 1000/11 (= 90.(90))",
+          ex["amount"]["exact"] == "3000" and it["보통인부"]["exact"]["amount"]["exact"] == "2000"
+          and r["labor_total"] == Decimal(5000) and r["exact"]["labor_total"]["exact"] == "5000"
+          and r["exact"]["labor_total_per_m3"]["exact"] == "1000/11" and r["exact"]["labor_total_per_m3"]["display"] == "90.(90)")
+    check("55㎥: 순환소수 값의 기존 Decimal 필드는 None, 정확값은 exact에", it["콘크리트공"]["person_days_per_m3"] is None
+          and r["labor_total_per_m3"] is None and it["콘크리트공"]["amount_per_m3"] is None)
+
+    r = priced("100", rates12)
+    it = by_trade(r)
+    c, b = it["콘크리트공"]["exact"], it["보통인부"]["exact"]
+    check("100㎥ ÷ 55㎥/일 × 3인 = 60/11인·일, 보통인부 20/11인·일",
+          c["person_days"]["exact"] == "60/11" and c["person_days"]["display"] == "5.(45)"
+          and b["person_days"]["exact"] == "20/11")
+    check("60/11 × 1,000 = 60000/11원, 20/11 × 2,000 = 40000/11원, 합계 100000/11원 (정확값)",
+          Fraction(c["amount"]["exact"]) == Fraction(60, 11) * 1000 and c["amount"]["exact"] == "60000/11"
+          and b["amount"]["exact"] == "40000/11" and r["exact"]["labor_total"]["exact"] == "100000/11"
+          and r["exact"]["labor_total"]["display"] == "9090.(90)" and r["labor_total"] is None)
+    check("표시·적용 금액은 정하지 않음(값 없음, 정책 미정)", r["amount_policy"]["display_and_applied_amount"] == "미정"
+          and all(i["applied_amount"] == {"value": None, "policy": "미정"} for i in r["items"]))
+    text = report(r)
+    check("사람용 출력: 반올림 없이 '분수 (= 순환소수)'로 표시하고 미산정으로 오표시하지 않음",
+          "60000/11 (= 5454.(54)) 원" in text and "100000/11 (= 9090.(90)) 원" in text and "합계: 미산정" not in text)
+    back = json.loads(to_json(r, ascii_only=True))
+    check("JSON: 순환소수 정확값이 문자열로 왕복", back["exact"]["labor_total"]["exact"] == "100000/11"
+          and back["items"][0]["exact"]["amount"]["numerator"] == "60000" and back["labor_total"] is None)
+
+    r = priced("100", {})
+    it = by_trade(r)
+    check("단가 없음: 금액은 미산정이어도 정확한 품량 60/11·20/11은 반환",
+          r["labor_total_status"] == UNCALCULATED and r["exact"]["labor_total"] is None
+          and it["콘크리트공"]["exact"]["person_days"]["exact"] == "60/11"
+          and it["보통인부"]["exact"]["person_days"]["exact"] == "20/11" and it["콘크리트공"]["amount"] is None)
+
+    labor = quantity.compute("6-1-1", quantity_conditions(test_case), "100", golden=test_golden)
     try:
-        apply_prices(bad, parse_rates({"rates": [entry("콘크리트공", "1000")]}))
-        check("끝나지 않는 품량은 금액 계산 거부(반올림 규칙 미정)", False)
+        apply_prices(labor, rates12)
+        check("운영 경로(기본 사례)는 장비사용 품량을 받지 않음", False)
     except RuntimeError as exc:
-        check("끝나지 않는 품량은 금액 계산 거부(반올림 규칙 미정)", "반올림 규칙 미정" in str(exc))
+        check("운영 경로(기본 사례)는 장비사용 품량을 받지 않음", "지원 사례가 아닌" in str(exc))
+    check("운영 정답 목록·사례 정의는 그대로(장비사용 미등록, 인력운반·철근구조물만)",
+          SUPPORTED_CASE["method"] == "인력운반 타설" and not any(
+              c["conditions"].get("공법") == "장비사용 타설" for c in quantity.load_golden()["cases"]))
+
+    # 10. 기존 끝나는 소수 결과의 필드·값 호환 (6-1-1 골든 사례)
+    r = calculate(rates12)
+    it = by_trade(r)
+    legacy_keys = {"trade", "person_days", "crew", "daily_output_m3", "person_days_per_m3", "unit_price", "price_unit",
+                   "basis_date", "price_source", "labor_source", "labor_row", "amount", "amount_per_m3", "status"}
+    check("기존 필드 유지·값 동일(15, 0.15, 15000·30000, 합계 45000, 1㎥당 450)",
+          all(legacy_keys <= set(i) for i in r["items"]) and it["콘크리트공"]["person_days"] == Decimal(15)
+          and it["콘크리트공"]["person_days_per_m3"] == Decimal("0.15") and it["콘크리트공"]["amount"] == Decimal(15000)
+          and it["보통인부"]["amount"] == Decimal(30000) and r["labor_total"] == Decimal(45000)
+          and r["labor_total_per_m3"] == Decimal(450) and r["exact"]["labor_total"]["exact"] == "45000")
+    check("기존 JSON 표기 유지(Decimal 문자열 '15', '0.15', '15000', '45000')",
+          (lambda j: j["items"][0]["person_days"] == "15" and j["items"][0]["person_days_per_m3"] == "0.15"
+           and j["items"][0]["amount"] == "15000" and j["labor_total"] == "45000")(json.loads(to_json(r))))
     try:
         apply_prices({"status": "refused", "reason": "테스트"}, {})
         check("거부된 품량 결과에는 단가를 적용하지 않음", False)

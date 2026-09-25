@@ -29,7 +29,7 @@ sys.path.insert(0, str(ROOT / "agent" / "search"))
 sys.path.insert(0, str(ROOT / "agent" / "calc"))
 from rag import CHUNKS, Index, load  # noqa: E402
 from unit_price import (SUPPORTED_CASE, UNCALCULATED, RateError, VolumeError, apply_prices,  # noqa: E402
-                        load_rates, parse_volume, safe_console, to_json, won)
+                        load_rates, parse_volume, safe_console, show, to_json, won)
 from quantity_node import quantity_step  # noqa: E402
 
 SCOPE = "6-1-1 레디믹스트콘크리트 타설 중 '철근구조물 · 인력운반 타설'의 노무량·노무비"
@@ -179,23 +179,29 @@ def compose(resp: dict, result: dict | None) -> str:
     r = result
     lines.append(f"[결과] {r['section']} | {r['method']} | {r['structure']} {won(r['volume_m3'])}㎥")
     for i in r["items"]:
-        qty = f"{won(i['person_days'])} 인·일"
+        ex = i["exact"]
+        qty = f"{show(i['person_days'], ex['person_days'])} 인·일"
         if i["status"] == UNCALCULATED:
             lines.append(f"  - {i['trade']}: {qty}, 노임단가 없음 → 노무비 {UNCALCULATED} ({i['reason']})")
         else:
-            lines.append(f"  - {i['trade']}: {qty} × {won(i['unit_price'])} {i['price_unit']} = {won(i['amount'])} 원"
-                         f" (단가 기준일 {i['basis_date']}, 출처 {i['price_source']})")
-    total = r["labor_total"]
+            lines.append(f"  - {i['trade']}: {qty} × {won(i['unit_price'])} {i['price_unit']} = "
+                         f"{show(i['amount'], ex['amount'])} 원 (단가 기준일 {i['basis_date']}, 출처 {i['price_source']})")
+    total, total_ex = r["labor_total"], r["exact"]["labor_total"]
     if r["labor_total_status"] == "완료":
-        lines.append(f"  노무비 합계: {won(total)} 원 (1㎥당 {won(r['labor_total_per_m3'])} 원)")
+        lines.append(f"  노무비 합계: {show(total, total_ex)} 원 (1㎥당 "
+                     f"{show(r['labor_total_per_m3'], r['exact']['labor_total_per_m3'])} 원)")
     elif r["labor_total_status"] == "부분":
-        lines.append(f"  노무비 부분 합계: {won(total)} 원 (미산정 제외: {', '.join(r['excluded_uncalculated'])}),"
+        lines.append(f"  노무비 부분 합계: {show(total, total_ex)} 원 (미산정 제외: {', '.join(r['excluded_uncalculated'])}),"
                      " 전체 노무비가 아닙니다")
     else:
         lines.append(f"  노무비 합계: {UNCALCULATED} (노임단가가 없어 금액을 만들지 않았습니다)")
     first = r["items"][0]
     lines.append(f"[계산식] {won(r['volume_m3'])}㎥ ÷ {won(first['daily_output_m3'])}㎥/일 × 작업조 인원"
-                 f" (1㎥당 {won(first['person_days_per_m3'])}인), 금액 = 노무량 × 단가, 반올림·절사 없음")
+                 f" (1㎥당 {show(first['person_days_per_m3'], first['exact']['person_days_per_m3'])}인), "
+                 "금액 = 노무량 × 단가, 반올림·절사 없음")
+    if total_ex is not None:
+        lines.append(f"[금액 표시] 위 금액은 정확한 계산값이다. 일위대가표의 표시·적용 금액(원 단위 반올림·절사 등)은 "
+                     f"{r['amount_policy']['display_and_applied_amount']}")
     lines.append(f"[근거] {r['section']} PDF {r['pdf_page']}쪽(인쇄 {r['printed_page']}쪽)")
     lines.append(f"  {first['labor_source']} 기준 {r['source_checks'][0]['basis']}")
     lines.append(f"  사용한 행: {first['labor_row']}")
@@ -267,7 +273,10 @@ def answer(query: str, rates: dict | None = None, offline: bool = False, hybrid_
         resp["cost_items"].append({"trade": i["trade"], "person_days": plain(i["person_days"]),
                                    "unit_price": plain(i["unit_price"]), "amount": plain(i["amount"]),
                                    "status": i["status"], "basis_date": i["basis_date"],
-                                   "price_source": i["price_source"], "labor_source": i["labor_source"]})
+                                   "price_source": i["price_source"], "labor_source": i["labor_source"],
+                                   "person_days_exact": i["exact"]["person_days"]["exact"],
+                                   "amount_exact": i["exact"]["amount"]["exact"] if i["exact"]["amount"] else None,
+                                   "applied_amount": i["applied_amount"]})
         if i["status"] == UNCALCULATED:
             resp["missing_fields"].append(f"노임단가({i['trade']}): 단가·기준일(YYYY-MM-DD)·출처 ({i['reason']})")
     resp["evidence"] = [{"chunk_id": c["table_chunk"], "citation": result["items"][0]["labor_source"],
@@ -275,6 +284,8 @@ def answer(query: str, rates: dict | None = None, offline: bool = False, hybrid_
     resp["assumptions"] = result["assumptions"]
     resp["excluded_items"] = result["not_calculated"] + [u["text"] for u in result["unapplied_conditions"]]
     resp["total_cost"] = plain(result["labor_total"])
+    resp["total_cost_exact"] = result["exact"]["labor_total"]["exact"] if result["exact"]["labor_total"] else None
+    resp["amount_policy"] = result["amount_policy"]
     resp["status"] = "OK" if result["labor_total_status"] == "완료" else "PARTIAL"
     resp["summary"] = {"완료": "노무량과 노무비를 산출했습니다.",
                        "부분": "노무량은 산출했고, 노임단가가 없는 직종의 노무비는 미산정입니다.",
