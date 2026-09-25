@@ -171,6 +171,10 @@ def build_column_names(header_rows: list, col_count: int) -> list:
 
 
 # 표 -> 레코드. 한 레코드가 한 행(구분+직종)에 대응한다
+#
+# structure는 이 행의 표 구조를 믿을 수 있는지 표시한다. 글자는 바꾸지 않는다.
+#   label_joined: 여러 줄 라벨을 행으로 나누지 못하고 한 라벨로 이었다('형틀목공 보통인부')
+#   value_lines_mismatch: 줄 수가 행 수와 다른 값 칸에서 첫 줄만 썼다(나머지 줄은 다른 행 값일 수 있다)
 def table_to_records(table: list, section_title: str, page_no: int) -> list:
     header_count = count_header_rows(table)
     names = build_column_names(table[:header_count], len(table[0]))
@@ -188,7 +192,8 @@ def table_to_records(table: list, section_title: str, page_no: int) -> list:
             note_written = True
             note = next((cell for cell in row[1:] if cell), "")
             text = f"{section_title} | 비고 | {note}".replace("\n", " ")
-            records.append({"text": text, "section": section_title, "page": page_no})
+            records.append({"text": text, "section": section_title, "page": page_no,
+                            "structure": {"status": "ok", "issues": []}})
             continue
 
         # 한 칸에 '\n'으로 쌓인 값들을 세로로 풀어 짝을 맞춘다
@@ -202,6 +207,19 @@ def table_to_records(table: list, section_title: str, page_no: int) -> list:
         # 첫 칸도 쌓여 있는 경우가 있다. 다만 칸 폭이 좁아 라벨이 줄바꿈된 것과 구분해야 한다.
         # 모든 칸의 줄 수가 같으면 쌓인 값으로 보고 풀고, 아니면 줄바꿈된 라벨로 보고 합친다.
         label_is_stacked = len(value_counts) == 1 and len(stacks[0]) == depth and depth > 1
+
+        # 첫 칸 여러 줄을 이어 붙인 경우, 줄마다 다른 글자를 가진 다른 칸(직종·재료명)이 있으면
+        # 행은 그 칸으로 구분되고 첫 칸은 줄바꿈된 조건이다(185쪽 '인력운반\n타설'). 그런 칸이 없으면 행을 합친 것이다
+        per_row_label_col = any(
+            len(values) == depth and len(set(values)) == depth and not any(re.search(r"\d", v) for v in values)
+            for col, values in stacks.items() if col > 0
+        )
+        issues = []
+        if depth > 1 and len(stacks[0]) > 1 and not label_is_stacked and not per_row_label_col:
+            issues.append("label_joined")
+        if any(1 < len(values) < depth for col, values in stacks.items() if col > 0):
+            issues.append("value_lines_mismatch")
+        structure = {"status": "uncertain" if issues else "ok", "issues": issues}
 
         for i in range(depth):
             labels = stacks[0]
@@ -234,7 +252,8 @@ def table_to_records(table: list, section_title: str, page_no: int) -> list:
                 parts.append(value if skip_name else f"{name} {value}")
 
             records.append(
-                {"text": " | ".join(parts), "section": section_title, "page": page_no}
+                {"text": " | ".join(parts), "section": section_title, "page": page_no,
+                 "structure": structure}
             )
 
     return records
@@ -261,7 +280,7 @@ def parse_pages(pdf_path: str, start_page: int, end_page: int) -> list:
             titles = read_titles(page)
             tables = read_tables(page)
 
-            items = [(box[1], "table", grid) for box, grid in tables]
+            items = [(box[1], "table", (i, box, grid)) for i, (box, grid) in enumerate(tables)]
             items += [
                 (y, "text", text)
                 for y, text in read_text_blocks(page, [box for box, _ in tables])
@@ -273,10 +292,15 @@ def parse_pages(pdf_path: str, start_page: int, end_page: int) -> list:
                 last_title = title
 
                 if kind == "table":
-                    records += table_to_records(clean_table(content), title, page_no)
+                    # 원문 표로 돌아갈 수 있게 표 번호(쪽 안 find_tables 순서)와 bbox(pt, 왼쪽 위 원점)를 남긴다
+                    index, box, grid = content
+                    source = {"kind": "table", "table_id": f"p{page_no}-t{index}",
+                              "bbox": [round(v, 1) for v in box]}
+                    records += [{**r, **source} for r in table_to_records(clean_table(grid), title, page_no)]
                 else:
                     records.append(
-                        {"text": f"{title} | 설명 | {content}", "section": title, "page": page_no}
+                        {"text": f"{title} | 설명 | {content}", "section": title, "page": page_no,
+                         "kind": "text", "table_id": None, "bbox": None}
                     )
 
             if titles:
