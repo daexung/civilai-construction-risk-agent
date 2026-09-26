@@ -209,9 +209,8 @@ def report(summary: dict) -> str:
         lines.append(f"| {code} | {focus['by_type'][code]} |")
     lines.extend([
         "", f"0레코드 표 ID: {', '.join(focus['zero_record_tables']) or '없음'}.",
-        "기존 대조 값의 표 70개는 레코드가 있는 표 수와 일치한다. "
-        "검출 총수에는 파싱 중 레코드가 사라진 14개 표도 포함했다. "
-        "uncertain 포함 21개와 `p193-t1` 0레코드도 재현됐다.",
+        "수정 전후 0레코드 표 비교와 남은 표의 사유는 "
+        "`results/remaining_zero_spot_check.md`에 기록했다.",
         "", "## 최종 분류 규칙", "",
         "`X > A > B > D > E > C > F` 순서로 첫 일치 유형을 부여한다.",
         "", "- X: 레코드가 없거나 `structure.status == uncertain`이 전체 레코드의 과반.",
