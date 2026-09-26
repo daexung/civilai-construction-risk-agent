@@ -1,0 +1,11 @@
+{
+    // 이 저장소에서만 적용: 실행 환경·캐시·임시 폴더를 탐색기에서 숨긴다(파일은 그대로 있다).
+    // 패턴에 **/ 를 붙이지 않아 저장소 최상위 폴더에만 적용된다.
+    "files.exclude": {
+        ".venv": true,
+        ".venv-*": true,
+        ".uv-cache": true,
+        ".uv-python": true,
+        "tmp": true
+    }
+}
