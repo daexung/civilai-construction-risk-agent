@@ -5,6 +5,7 @@ __pycache__/
 
 data/processed/*.jsonl
 data/processed/*.parquet
+experiments/table_census/results/parsed_all.jsonl
 
 # 파서 비교 실험의 재생성 가능한 산출물(원시 출력·렌더링 이미지·쪽 PDF·로그)
 # 이미 추적 중인 파일(holdout_v2/crops 등 정답 검수 이미지)은 영향을 받지 않는다. 새 검수 이미지는 git add -f
