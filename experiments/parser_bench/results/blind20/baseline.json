@@ -1,0 +1,1029 @@
+{
+ "note": "현행 경로(PyMuPDF + parse.py 조립)와 ODL + 같은 조립의 사실별 결과. 번호는 ground_truth.json facts 순서. 정답은 잠정.",
+ "ground_truth_status": "잠정 정답 (사람 재검토 전)",
+ "tables": {
+  "p106_t1": {
+   "n_facts": 3,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p106_t2": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [
+    0
+   ],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": [
+    0
+   ]
+  },
+  "p106_t3": {
+   "n_facts": 2,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [
+    0,
+    1
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1
+   ],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [
+    0,
+    1
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1
+   ]
+  },
+  "p155_t1": {
+   "n_facts": 4,
+   "pymupdf.raw.failed": [
+    2
+   ],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [
+    3
+   ],
+   "odl_local.raw.failed": [
+    2
+   ],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": [
+    3
+   ]
+  },
+  "p155_t2": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [
+    0
+   ],
+   "pymupdf.extract.failed": [
+    0
+   ],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [
+    0
+   ],
+   "odl_local.extract.failed": [
+    0
+   ]
+  },
+  "p155_t3": {
+   "n_facts": 9,
+   "pymupdf.raw.failed": [
+    0,
+    1,
+    2
+   ],
+   "pymupdf.spanfill.failed": [
+    0,
+    1,
+    2
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1,
+    2
+   ],
+   "odl_local.raw.failed": [
+    0,
+    1,
+    2
+   ],
+   "odl_local.spanfill.failed": [
+    0,
+    1,
+    2
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1,
+    2
+   ]
+  },
+  "p255_t1": {
+   "n_facts": 15,
+   "pymupdf.raw.failed": [
+    11,
+    12
+   ],
+   "pymupdf.spanfill.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "odl_local.raw.failed": [
+    11,
+    12
+   ],
+   "odl_local.spanfill.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ]
+  },
+  "p255_t2": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p288_t1": {
+   "n_facts": 8,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p288_t2": {
+   "n_facts": 9,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p288_t3": {
+   "n_facts": 4,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p334_t1": {
+   "n_facts": 26,
+   "pymupdf.raw.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ],
+   "pymupdf.spanfill.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p404_t1": {
+   "n_facts": 5,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p404_t2": {
+   "n_facts": 2,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p404_t3": {
+   "n_facts": 4,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p440_t1": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [
+    0
+   ],
+   "pymupdf.extract.failed": [
+    0
+   ],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [
+    0
+   ],
+   "odl_local.extract.failed": [
+    0
+   ]
+  },
+  "p440_t2": {
+   "n_facts": 24,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p488_t1": {
+   "n_facts": 8,
+   "pymupdf.raw.failed": [
+    2
+   ],
+   "pymupdf.spanfill.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "odl_local.raw.failed": [
+    2
+   ],
+   "odl_local.spanfill.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "p488_t2": {
+   "n_facts": 5,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p488_t3": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p488_t4": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p488_t5": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p528_t1": {
+   "n_facts": 4,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p528_t2": {
+   "n_facts": 6,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "p528_t3": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p594_t1": {
+   "n_facts": 13,
+   "pymupdf.raw.failed": [
+    6
+   ],
+   "pymupdf.spanfill.failed": [
+    0,
+    1,
+    2
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1,
+    2
+   ],
+   "odl_local.raw.failed": [
+    6
+   ],
+   "odl_local.spanfill.failed": [
+    0,
+    1,
+    2
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1,
+    2
+   ]
+  },
+  "p594_t2": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p594_t3": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p594_t4": {
+   "n_facts": 1,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p668_t1": {
+   "n_facts": 3,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [
+    0,
+    1
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1
+   ],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [
+    0,
+    1
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1
+   ]
+  },
+  "p668_t2": {
+   "n_facts": 3,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [
+    0,
+    1
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1
+   ],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [
+    0,
+    1
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1
+   ]
+  },
+  "p668_t3": {
+   "n_facts": 2,
+   "pymupdf.raw.failed": [
+    0,
+    1
+   ],
+   "pymupdf.spanfill.failed": [
+    0,
+    1
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1
+   ],
+   "odl_local.raw.failed": [
+    0,
+    1
+   ],
+   "odl_local.spanfill.failed": [
+    0,
+    1
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1
+   ]
+  },
+  "p773_t1": {
+   "n_facts": 15,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p773_t2": {
+   "n_facts": 9,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p835_t1": {
+   "n_facts": 24,
+   "pymupdf.raw.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ],
+   "pymupdf.spanfill.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ],
+   "odl_local.raw.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ],
+   "odl_local.spanfill.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ],
+   "odl_local.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ]
+  },
+  "p872_t1": {
+   "n_facts": 38,
+   "pymupdf.raw.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+   ],
+   "pymupdf.spanfill.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+   ],
+   "pymupdf.extract.failed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+   ],
+   "odl_local.raw.failed": [
+    23,
+    24,
+    25,
+    36,
+    37
+   ],
+   "odl_local.spanfill.failed": [
+    23,
+    24,
+    25,
+    36,
+    37
+   ],
+   "odl_local.extract.failed": [
+    23,
+    24,
+    25,
+    36,
+    37
+   ]
+  },
+  "p895_t1": {
+   "n_facts": 10,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p895_t2": {
+   "n_facts": 4,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p895_t3": {
+   "n_facts": 8,
+   "pymupdf.raw.failed": [
+    2,
+    5,
+    7
+   ],
+   "pymupdf.spanfill.failed": [
+    5
+   ],
+   "pymupdf.extract.failed": [
+    5
+   ],
+   "odl_local.raw.failed": [
+    2,
+    5,
+    7
+   ],
+   "odl_local.spanfill.failed": [
+    5
+   ],
+   "odl_local.extract.failed": [
+    5
+   ]
+  },
+  "p970_t1": {
+   "n_facts": 2,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p970_t2": {
+   "n_facts": 2,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p970_t3": {
+   "n_facts": 2,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  },
+  "p970_t4": {
+   "n_facts": 2,
+   "pymupdf.raw.failed": [],
+   "pymupdf.spanfill.failed": [],
+   "pymupdf.extract.failed": [],
+   "odl_local.raw.failed": [],
+   "odl_local.spanfill.failed": [],
+   "odl_local.extract.failed": []
+  }
+ },
+ "totals": {
+  "pymupdf.raw.passed": 187,
+  "pymupdf.spanfill.passed": 158,
+  "pymupdf.extract.passed": 150,
+  "odl_local.raw.passed": 246,
+  "odl_local.spanfill.passed": 217,
+  "odl_local.extract.passed": 209
+ }
+}

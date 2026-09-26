@@ -1,0 +1,154 @@
+{
+  "id": "T4",
+  "name": "6-1-5 [주] ② 비계 사용 시 층별 할증률",
+  "table_types": ["라벨 열 없음", "머리글이 곧 분류", "값 행 하나", "표 밖 문장이 표를 확장"],
+  "_format": {
+    "source_table.cells": "원문에 보이는 논리 셀. r·c는 0부터, rs·cs는 생략 시 1. text는 좁은 칸의 줄바꿈을 공백으로 바꾼 읽기 문자열이며, 숫자·단위·기호는 텍스트 레이어 문자 그대로(범위 기호 ∼는 U+223C). 값은 정규화하지 않는다.",
+    "derived_from_spans": "표 구조에서 따라 나오는 사실. 의미 해석은 포함하지 않는다.",
+    "interpretations": "원문 표기를 근거로 한 의미 해석. 실무자 검토 전이다. auto_score가 false인 해석은 자동 채점하지 않으며, 미확정 해석은 항상 false다.",
+    "expected_values": "레코드 단계 채점용 기대값(표기). 값은 원문 문자열과 정확히 같아야 한다.",
+    "scoring": "orientation이 header_is_key이면 머리글 칸 문자열이 행 키이고, 같은 열의 값 칸이 기대값이다.",
+    "pymupdf_baseline": "현행 파서의 원시 추출·현재 레코드와 비교해 손실 단계를 구분한 기록."
+  },
+  "source": {
+    "document": "2026_건설공사표준품셈_원문_정오표1차_반영.pdf",
+    "sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+    "pdf_page": 188,
+    "printed_page": "132",
+    "printed_page_evidence": "쪽 하단 왼쪽 텍스트 블록 '132 공통부문' (y=796.1pt, x=47.0pt).",
+    "section": "6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완)",
+    "subheading": null,
+    "note_anchor": "[주] ②",
+    "basis_marker": null,
+    "table_bbox_pt": [89.0, 253.3, 537.9, 302.0]
+  },
+  "verification": {
+    "checked_on": "2026-09-24",
+    "checked_by": "Claude",
+    "human_review": "미완료",
+    "methods": [
+      "PyMuPDF get_pixmap(dpi=170)으로 표 영역을 렌더링해 셀 경계를 육안 확인",
+      "텍스트 레이어(get_text blocks)로 문자열과 '0'에 % 기호가 없음을 확인",
+      "find_tables() 행별 셀 좌표(rows[].cells)로 병합이 없음을 확인"
+    ]
+  },
+  "context_text": {
+    "before_table": "② 비계사용시 높이에 따라 다음 할증률에 의한 품을 가산할 수 있으며 19층 이상은 매 3층 증가마다 4%씩 가산한다.",
+    "before_table_evidence": "표 위 텍스트 블록 두 개(y=224.2pt, 239.0pt)를 줄바꿈 없이 이음",
+    "after_table": "※ 층의 구분을 할 수 없을 때에는 층고를 3.6m로 기준하여 환산 적용한다.",
+    "after_table_evidence": "표 바로 아래 텍스트 블록(y=306.4pt)의 첫 문장. 같은 블록에 이어지는 ③·④ 조항은 이 표와 무관해 제외"
+  },
+  "source_table": {
+    "columns": ["지하층 및 1∼3층", "4∼6층", "7∼9층", "10∼12층", "13∼15층", "16∼18층"],
+    "cells": [
+      {"r": 0, "c": 0, "text": "지하층 및 1∼3층"},
+      {"r": 0, "c": 1, "text": "4∼6층"},
+      {"r": 0, "c": 2, "text": "7∼9층"},
+      {"r": 0, "c": 3, "text": "10∼12층"},
+      {"r": 0, "c": 4, "text": "13∼15층"},
+      {"r": 0, "c": 5, "text": "16∼18층"},
+      {"r": 1, "c": 0, "text": "0", "text_note": "원문 문자열 그대로. % 기호가 없다. '0%'로 정규화하지 않는다."},
+      {"r": 1, "c": 1, "text": "5%"},
+      {"r": 1, "c": 2, "text": "8%"},
+      {"r": 1, "c": 3, "text": "12%"},
+      {"r": 1, "c": 4, "text": "16%"},
+      {"r": 1, "c": 5, "text": "20%"}
+    ],
+    "unruled_row_boundaries": [],
+    "rule_notes": "병합 셀 없음. 라벨 열이 없고, 0행 전체가 머리글, 1행 전체가 값이다."
+  },
+  "derived_from_spans": [
+    {"id": "D1", "fact": "각 열의 값은 같은 열 0행의 층 구간에 대응한다. 라벨 열이 없으므로 1행 첫 칸 '0'도 라벨이 아니라 '지하층 및 1∼3층'의 값이다.", "from_cells": [[0, 0], [1, 0]]}
+  ],
+  "interpretations": [
+    {
+      "id": "I1",
+      "claim": "'0'은 지하층 및 1∼3층에서 할증이 없다(0%)는 뜻으로 읽힌다.",
+      "evidence": "다른 칸이 모두 백분율이고 층이 낮을수록 값이 작다.",
+      "consequence": "저장은 원문 '0' 그대로 하고, 계산 단계에서만 0%로 해석한다. 빈 칸(값 없음)과 구분해야 한다.",
+      "status": "표기 기반 해석 · 실무 검토 전",
+      "auto_score": false,
+      "auto_score_reason": "원문 문자열 '0' 보존은 expected_values로 채점한다. 0%라는 의미는 계산 단계에서 확인한다."
+    },
+    {
+      "id": "I2",
+      "claim": "19층 이상은 16∼18층(20%)에서 3층 올라갈 때마다 4%씩 더하는 것으로 읽힌다. 예: 19∼21층 24%, 22∼24층 28%.",
+      "evidence": "context_text.before_table의 '19층 이상은 매 3층 증가마다 4%씩 가산한다.'",
+      "consequence": "표에 없는 층 구간은 문장 규칙으로 계산해야 한다. 가산 기준점과 구간 경계는 원문만으로 확정하지 않는다.",
+      "status": "미확정 · 실무 검토 필요",
+      "auto_score": false,
+      "auto_score_reason": "미확정 해석"
+    },
+    {
+      "id": "I3",
+      "claim": "할증은 비계를 사용할 때만, 그리고 재량으로 적용한다.",
+      "evidence": "'비계사용시', '가산할 수 있으며'.",
+      "consequence": "자동 적용하지 않고 조건(비계 사용 여부, 층수)을 확인한 뒤 적용한다.",
+      "status": "표기 기반 해석 · 실무 검토 전",
+      "auto_score": false,
+      "auto_score_reason": "표 밖 문장의 조건 판단이다. 표 단독 시험의 채점 범위 밖."
+    },
+    {
+      "id": "I4",
+      "claim": "층 구분이 없으면 높이를 층고 3.6m 기준으로 층수로 환산해 이 표를 적용한다.",
+      "evidence": "context_text.after_table.",
+      "consequence": "입력이 높이(m)로 들어오면 3.6m로 나눠 층수를 구한 뒤 구간을 찾는다. 올림·내림 규칙은 원문에 없다.",
+      "status": "표기 기반 해석 · 반올림 규칙 미확정",
+      "auto_score": false,
+      "auto_score_reason": "미확정 해석(반올림 규칙)"
+    },
+    {
+      "id": "I5",
+      "claim": "할증 대상 '품'은 같은 절(6-1-5)의 노무 품으로 읽힌다. T3의 도장공 품과 같은 대상이다.",
+      "evidence": "이 표가 6-1-5 [주] ②에 속한다.",
+      "consequence": "T3 I3과 같은 미확정 사항(재료 포함 여부)을 공유한다.",
+      "status": "미확정 · 실무 검토 필요",
+      "auto_score": false,
+      "auto_score_reason": "미확정 해석"
+    }
+  ],
+  "expected_values": [
+    {"row_key": {"층 구간": "지하층 및 1∼3층"}, "fields": {"할증률": "0"}},
+    {"row_key": {"층 구간": "4∼6층"}, "fields": {"할증률": "5%"}},
+    {"row_key": {"층 구간": "7∼9층"}, "fields": {"할증률": "8%"}},
+    {"row_key": {"층 구간": "10∼12층"}, "fields": {"할증률": "12%"}},
+    {"row_key": {"층 구간": "13∼15층"}, "fields": {"할증률": "16%"}},
+    {"row_key": {"층 구간": "16∼18층"}, "fields": {"할증률": "20%"}}
+  ],
+  "scoring": {
+    "orientation": "header_is_key",
+    "key_field": "층 구간",
+    "value_field": "할증률"
+  },
+  "pymupdf_baseline": {
+    "tool": "PyMuPDF 1.28.2 page.find_tables()",
+    "table_index_on_page": 1,
+    "extract_shape": "2행 × 6열",
+    "raw_observations": [
+      {
+        "topic": "값 보존",
+        "raw": "extract() = [['지하층 및\\n1∼3층', '4∼6층', '7∼9층', '10∼12층', '13∼15층', '16∼18층'], ['0', '5%', '8%', '12%', '16%', '20%']]",
+        "finding": "원문 셀과 1:1로 일치한다. '0'도 % 없이 그대로 추출된다.",
+        "stage": "추출 정상"
+      }
+    ],
+    "current_records": {
+      "source": "data/processed/parsed.jsonl (2026-09-23 생성, 185~214쪽)",
+      "record": "6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완) | 지하층 및\\n1∼3층 0 | 4∼6층 5% | 7∼9층 8% | 10∼12층 12% | 13∼15층 16% | 16∼18층 20%"
+    },
+    "losses": [
+      {
+        "relation": "머리글 '지하층 및 1∼3층'의 문자열",
+        "status": "레코드 안에 줄바꿈 문자가 남음('지하층 및\\n1∼3층')",
+        "stage": "레코드 조립",
+        "cause": "build_column_names()가 머리글 칸의 줄바꿈을 공백으로 바꾸지 않는다. 값 대응은 맞다."
+      },
+      {
+        "relation": "[주] ② 확장 규칙·※ 환산 규칙과 표의 연결",
+        "status": "별도 설명 레코드로만 존재",
+        "stage": "레코드 조립",
+        "cause": "표 앞뒤 문장을 표 레코드와 묶지 않는다."
+      }
+    ]
+  }
+}
