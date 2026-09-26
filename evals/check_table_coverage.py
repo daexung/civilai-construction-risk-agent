@@ -64,6 +64,14 @@ def main() -> int:
         ):
             failed.append(f"{table_id}: 글자 표의 header_fallback/uncertain 표시 누락")
 
+    for table_id in ("p191-t1", "p192-t3", "p193-t1"):
+        if not by_table[table_id] or any(
+            row.get("structure", {}).get("status") != "uncertain"
+            or "header_extended_numeric" not in row.get("structure", {}).get("issues", [])
+            for row in by_table[table_id]
+        ):
+            failed.append(f"{table_id}: 확장 숫자 판정의 uncertain 표시 누락")
+
     print(f"검사 대상: 내용 있는 표 {checked}개, 예외 {len(EXCEPTIONS)}개")
     for reason in failed:
         print(f"FAIL {reason}")
