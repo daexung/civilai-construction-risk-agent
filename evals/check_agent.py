@@ -11,11 +11,10 @@ from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "agent" / "flow"))
-sys.path.insert(0, str(ROOT / "agent" / "search"))
-sys.path.insert(0, str(ROOT / "agent" / "calc"))
+sys.path.insert(0, str(ROOT))
 from agent import answer  # noqa: E402
-from unit_price import parse_rates, safe_console  # noqa: E402
+from agent.tools.calc.unit_price import parse_rates
+from agent.tools.calc.format import safe_console  # noqa: E402
 
 SRC = "테스트용 가상값(실제 노임단가 아님)"
 FULL = parse_rates({"rates": [
@@ -144,8 +143,8 @@ def main() -> int:
           and i["amount_exact"] is None for i in r["cost_items"]) and "[금액 표시]" not in r["final_response"], r)
 
     # ---- 품량 단계 연결: 에이전트의 노무량은 calc/quantity.py에서 온다 ----
-    import quantity_node
-    import rag
+    from agent.nodes import quantity as quantity_node
+    from agent.tools.calc import legacy_labor as rag
 
     calls, original = [], quantity_node.compute
 

@@ -24,14 +24,3 @@ def parse_volume(value) -> Decimal:
     if volume <= 0:
         raise VolumeError(f"물량은 0보다 커야 합니다: {value!r}")
     return volume
-
-
-def safe_console() -> None:
-    """Windows 기본 콘솔(cp949)에 없는 글자가 원문 인용 등에 섞여도 출력 중에 멈추지 않게 한다.
-
-    콘솔 인코딩은 바꾸지 않는다. UTF-8이 아닌 출력에서만, 인코딩할 수 없는 글자를 '?'로 대신한다.
-    """
-    for stream in (sys.stdout, sys.stderr):
-        encoding = (getattr(stream, "encoding", "") or "").lower().replace("-", "")
-        if hasattr(stream, "reconfigure") and encoding != "utf8":
-            stream.reconfigure(errors="replace")

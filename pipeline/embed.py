@@ -1,7 +1,7 @@
 # 청크(chunks.jsonl)를 Gemini 임베딩으로 바꿔 Parquet에 저장하는 단계
 #
-# 실행: python pipeline/embed.py --limit 5     # 먼저 5개로 호출·한도 확인
-#       python pipeline/embed.py               # 나머지 전부 (중단되면 다시 실행하면 이어서 한다)
+# 실행: python -m pipeline.embed --limit 5     # 먼저 5개로 호출·한도 확인
+#       python -m pipeline.embed               # 나머지 전부 (중단되면 다시 실행하면 이어서 한다)
 #
 # 기준: https://ai.google.dev/gemini-api/docs/embeddings?hl=ko
 #   - 모델 gemini-embedding-2는 task_type을 받지 않는다. 문서는 'title: … | text: …' 형식으로 넣는다
@@ -13,67 +13,12 @@
 # API 키는 .env의 GEMINI_API_KEY에서 읽고 출력하지 않는다.
 
 import argparse
-import hashlib
 import json
-import os
 import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MODEL = "gemini-embedding-2"
-DIM = 3072                      # 모델 기본 차원. 잘라 쓰지 않으므로 별도 정규화가 필요 없다
-
-
-def api_key() -> str:
-    """환경 변수, 없으면 저장소 .env에서 GEMINI_API_KEY를 읽는다. 값은 어디에도 출력하지 않는다."""
-    key = os.environ.get("GEMINI_API_KEY")
-    env = ROOT / ".env"
-    if not key and env.exists():
-        for line in env.read_text(encoding="utf-8").splitlines():
-            name, sep, value = line.partition("=")
-            if sep and name.strip() == "GEMINI_API_KEY":
-                key = value.strip().strip('"').strip("'")
-    if not key:
-        raise SystemExit("GEMINI_API_KEY가 없습니다(.env 또는 환경 변수)")
-    return key
-
-
-def document_input(chunk: dict) -> str:
-    """문서 쪽 입력. 공식 문서의 검색 문서 형식 'title: {제목} | text: {내용}'."""
-    sub = chunk.get("subsection")
-    title = chunk["section"] + (f" {sub['no']}. {sub['title']}" if sub else "")
-    return f"title: {title} | text: {chunk['text']}"
-
-
-def query_input(query: str) -> str:
-    """질문 쪽 입력. 공식 문서의 검색 질문 형식."""
-    return f"task: search result | query: {query}"
-
-
-def sha256(text: str) -> str:
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
-def client():
-    from google import genai
-    return genai.Client(api_key=api_key())
-
-
-def embed_texts(cli, texts: list[str]) -> list[list[float]]:
-    """입력마다 독립된 벡터를 받는다. 한 번의 API 호출(batchEmbedContents)."""
-    from google.genai import types
-
-    contents = [types.Content(parts=[types.Part(text=t)]) for t in texts]
-    result = cli.models.embed_content(model=MODEL, contents=contents,
-                                      config=types.EmbedContentConfig(output_dimensionality=DIM))
-    vectors = [e.values for e in result.embeddings]
-    if len(vectors) != len(texts):
-        raise RuntimeError(f"입력 {len(texts)}개에 벡터 {len(vectors)}개: 입력이 합쳐졌을 수 있어 저장하지 않는다")
-    if any(len(v) != DIM for v in vectors):
-        raise RuntimeError(f"차원이 {DIM}이 아닌 벡터가 있다")
-    return vectors
-
-
+from shared.embedding import MODEL, DIM, client, document_input, query_input, embed_texts, sha256
 def rate_limited(exc: Exception) -> bool:
     text = str(exc)
     return getattr(exc, "code", None) == 429 or "RESOURCE_EXHAUSTED" in text or "429" in text

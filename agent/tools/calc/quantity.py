@@ -1,9 +1,9 @@
 """6장 품량 계량: 원문 표에서 노무 품량을 단가 없이 계산한다 (첫 구현).
 
 실행 예:
-    python agent/calc/quantity.py --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=철근구조물 --quantity 100
-    python agent/calc/quantity.py --section 6-1-1 --cond "공법=인력운반 타설" --cond 구조물=철근구조물 --quantity 100 --json
-    python agent/calc/quantity.py --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=소형구조물 --quantity 8 \\
+    python -m agent.tools.calc.quantity --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=철근구조물 --quantity 100
+    python -m agent.tools.calc.quantity --section 6-1-1 --cond "공법=인력운반 타설" --cond 구조물=철근구조물 --quantity 100 --json
+    python -m agent.tools.calc.quantity --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=소형구조물 --quantity 8 \\
         --confirm small_structure_scattered=true
 
 범위
@@ -30,11 +30,11 @@ from decimal import Decimal
 from fractions import Fraction
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "agent" / "search"))
-sys.path.insert(0, str(ROOT / "agent" / "calc"))
-from rag import CHUNKS, PARSED, citation, load  # noqa: E402
-from inputs import VolumeError, parse_volume, safe_console  # noqa: E402
+ROOT = Path(__file__).resolve().parents[3]
+from agent.tools.search.bm25 import CHUNKS, PARSED, citation, load
+from agent.tools.calc.inputs import VolumeError, parse_volume
+from agent.tools.calc.format import safe_console
+from agent.rules.section_6 import SPECS
 
 GOLDEN = ROOT / "evals/golden_quantity.json"
 NUMBER_RE = re.compile(r"^\d+(?:\.\d+)?$")
@@ -53,28 +53,6 @@ UNIT_INTERPRETATION = {
 }
 
 # 절별 원문 표 명세. 레코드 글자('라벨 | 칸 | 열이름 값 | …')를 이 형식으로만 읽는다
-SPECS = {
-    "6-1-1": {
-        "rule": "per_day", "basis_label": "(일당)", "row_condition": "공법", "trade_re": r"^(\S+)$",
-        "column_condition": "구조물", "column_re": r"^시공량\(㎥\) (\S+) (\S+)$", "crew_re": r"^수량 (\S+)$",
-        "trades": ["콘크리트공", "보통인부"],
-    },
-    "6-1-2": {
-        "rule": "per_unit", "basis_label": "(㎥당)", "row_condition": "유형", "trade_re": r"^구분 (\S+)$",
-        "column_condition": "구조물", "column_re": r"^수량 (\S+) (\S+)$", "crew_re": None,
-        "trades": ["콘크리트공", "보통인부"],
-        # 원문 [주]가 현장 사실을 적용 기준으로 두는 값. 확인 항목 키에 명시적 true가 있어야 계산한다
-        "confirmations": {
-            ("구조물", "소형구조물"): {
-                "key": "small_structure_scattered",
-                "question": "현장이 원문 [주] ②의 소형구조물 적용 조건(소량의 콘크리트 구조물이 산재)에 해당합니까? (true/false)",
-                "clause_marker": "소형구조물은",
-            },
-        },
-    },
-}
-
-
 class Refused(Exception):
     """원문으로 확인할 수 없어 계산하지 않음."""
 

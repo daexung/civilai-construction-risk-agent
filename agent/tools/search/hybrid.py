@@ -1,7 +1,7 @@
 """BM25와 벡터 검색 결과를 RRF(Reciprocal Rank Fusion)로 합치는 하이브리드 검색.
 
 실행 예:
-    python agent/search/hybrid.py "펌프차 타설 현장조건 f2 계수"
+    python -m agent.tools.search.hybrid "펌프차 타설 현장조건 f2 계수"
 
 점수 = Σ 1 / (K + 순위). 각 방식에서 상위 CANDIDATES개까지만 순위를 매긴다.
 두 방식의 점수 크기(BM25 점수, 코사인)를 섞지 않고 순위만 쓰므로 가중치 조정이 필요 없다.
@@ -12,10 +12,9 @@ rag.Index와 같은 모양(.chunks, .search)이라 rag.evidence로 같은 절 �
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "agent" / "search"))
-from rag import CHUNKS, Index, load  # noqa: E402
-from vector import VectorIndex  # noqa: E402
+ROOT = Path(__file__).resolve().parents[3]
+from agent.tools.search.bm25 import CHUNKS, Index, load
+from agent.tools.search.vector import VectorIndex
 
 K = 60             # RRF 표준 상수
 CANDIDATES = 20    # 방식마다 합치기에 쓰는 상위 순위 수

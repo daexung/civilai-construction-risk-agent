@@ -12,15 +12,13 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "agent" / "flow"))
-sys.path.insert(0, str(ROOT / "agent" / "search"))
-sys.path.insert(0, str(ROOT / "agent" / "calc"))
-from rag import CHUNKS, Index, evidence, evidence_chunk_ids, load  # noqa: E402
-from vector import VectorIndex  # noqa: E402
+sys.path.insert(0, str(ROOT))
+from agent.tools.search.bm25 import CHUNKS, Index, evidence, evidence_chunk_ids, load  # noqa: E402
+from agent.tools.search.vector import VectorIndex  # noqa: E402
 
 QUESTIONS = Path(__file__).with_name("rag_questions.json")
 OUT = ROOT / "data/processed/retrieval_compare.jsonl"
-PARSER_GAPS = {"q06": "원본 파싱에서 193쪽 사용횟수 표(p193-t1)가 레코드 0개. 검색 방식과 무관"}
+PARSER_GAPS = {}
 
 
 def judge(item: dict, ev: dict) -> dict:
