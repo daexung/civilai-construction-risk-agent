@@ -1,0 +1,594 @@
+{
+ "truth_source": "PyMuPDF get_text() 텍스트 레이어",
+ "targets": [
+  {
+   "page": 186,
+   "token": "㎥/hr",
+   "expected": 2,
+   "runs": {
+    "docling_accurate": {
+     "exact": 3,
+     "variants": {},
+     "anchor_context": [
+      "-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, '",
+      " 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다",
+      "다. - 나. 펌프차 타설은 단일 구조물의 일일 타설(1회 셋팅 및 마감)"
+     ]
+    },
+    "docling_accurate_nomatch": {
+     "exact": 3,
+     "variants": {},
+     "anchor_context": [
+      "-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, '",
+      " 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다",
+      "다. - 나. 펌프차 타설은 단일 구조물의 일일 타설(1회 셋팅 및 마감)"
+     ]
+    },
+    "odl_hybrid_auto": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘",
+      " 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다",
+      "용한다. 나. 펌프차 타설은 단일 구조물의 일일 타설(1회 셋팅 및 마감)"
+     ]
+    },
+    "odl_hybrid_full": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘",
+      " 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다",
+      "용한다. 나. 펌프차 타설은 단일 구조물의 일일 타설(1회 셋팅 및 마감)"
+     ]
+    },
+    "odl_local": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘",
+      " 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다",
+      "용한다. 나. 펌프차 타설은 단일 구조물의 일일 타설(1회 셋팅 및 마감)"
+     ]
+    },
+    "odl_local_cluster": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘",
+      " 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다",
+      "용한다. 나. 펌프차 타설은 단일 구조물의 일일 타설(1회 셋팅 및 마감)"
+     ]
+    }
+   }
+  },
+  {
+   "page": 188,
+   "token": "0.013",
+   "expected": 2,
+   "runs": {
+    "docling_accurate": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "docling_accurate_nomatch": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_hybrid_auto": {
+     "exact": 4,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_hybrid_full": {
+     "exact": 4,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_local": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_local_cluster": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    }
+   }
+  },
+  {
+   "page": 188,
+   "token": "0.02",
+   "expected": 1,
+   "runs": {
+    "docling_accurate": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "-6 콘크리트 치핑(Chipping)('08, '21년 보완) (㎡당) ",
+      " 본 품은 소형치핑장비(소형브레이커, 치핑기)를 활용한 인력에 의한 작업",
+      "소형브레이커, 치핑기)를 활용한 인력에 의한 작업 기준이다. - ② 본 "
+     ]
+    },
+    "docling_accurate_nomatch": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "-6 콘크리트 치핑(Chipping)('08, '21년 보완) (㎡당) ",
+      " 본 품은 소형치핑장비(소형브레이커, 치핑기)를 활용한 인력에 의한 작업",
+      "소형브레이커, 치핑기)를 활용한 인력에 의한 작업 기준이다. - ② 본 "
+     ]
+    },
+    "odl_hybrid_auto": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "-6 콘크리트 치핑(Chipping)('08, '21년 보완) (㎡당) ",
+      " 본 품은 소형치핑장비 (소형브레이커 , 치핑기 )를 활용한 인력에 의한",
+      "형브레이커 , 치핑기 )를 활용한 인력에 의한 작업 기준이다 . ② 본 "
+     ]
+    },
+    "odl_hybrid_full": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "-6 콘크리트 치핑(Chipping)('08, '21년 보완) (㎡당) ",
+      " 본 품은 소형치핑장비 (소형브레이커 , 치핑기 )를 활용한 인력에 의한",
+      "형브레이커 , 치핑기 )를 활용한 인력에 의한 작업 기준이다 . ② 본 "
+     ]
+    },
+    "odl_local": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "-6 콘크리트 치핑(Chipping)('08, '21년 보완) (㎡당) ",
+      " 본 품은 소형치핑장비(소형브레이커, 치핑기)를 활용한 인력에 의한 작업",
+      "소형브레이커, 치핑기)를 활용한 인력에 의한 작업 기준이다. ② 본 품에"
+     ]
+    },
+    "odl_local_cluster": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "-6 콘크리트 치핑(Chipping)('08, '21년 보완) (㎡당) ",
+      " 본 품은 소형치핑장비(소형브레이커, 치핑기)를 활용한 인력에 의한 작업",
+      "소형브레이커, 치핑기)를 활용한 인력에 의한 작업 기준이다. ② 본 품에"
+     ]
+    }
+   }
+  },
+  {
+   "page": 188,
+   "token": "ℓ",
+   "expected": 2,
+   "runs": {
+    "docling_accurate": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "docling_accurate_nomatch": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_hybrid_auto": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_hybrid_full": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_local": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_local_cluster": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    }
+   }
+  },
+  {
+   "page": 193,
+   "token": "(100㎡당)",
+   "expected": 1,
+   "runs": {
+    "docling_accurate": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      ". ## 2. 인력 설치 및 해체 | | | | | 위 | 설 치 | 해 체 "
+     ]
+    },
+    "docling_accurate_nomatch": {
+     "exact": 3,
+     "variants": {},
+     "anchor_context": [
+      ". ## 2. 인력 설치 및 해체 | | | | | 단 위 | 설 치 | (1"
+     ]
+    },
+    "odl_hybrid_auto": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "상한다. 2. 인력 설치 및 해체 치 해 체 해 체 (100㎡당) 계 명 칭 "
+     ]
+    },
+    "odl_hybrid_full": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "상한다. 2. 인력 설치 및 해체 치 해 체 해 체 (100㎡당) 계 명 칭 "
+     ]
+    },
+    "odl_local": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "상한다. 2. 인력 설치 및 해체 (100㎡당) 명 칭 단 위 설 치 해 체 "
+     ]
+    },
+    "odl_local_cluster": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "상한다. 2. 인력 설치 및 해체 (100㎡당) 명 칭 단 위 설 치 해 체 "
+     ]
+    }
+   }
+  },
+  {
+   "page": 185,
+   "token": "(0.6∼0.8㎥)",
+   "expected": 1,
+   "runs": {
+    "docling_accurate": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "트공 보통인부 굴착기 | - - (0.6∼0.8㎥) | 인3 인1 대 | ",
+      "서 콘크리트를 굴착기로 공급받아 근접된 타설 위치에 직접 시공하는 기준이다"
+     ]
+    },
+    "docling_accurate_nomatch": {
+     "exact": 0,
+     "variants": {},
+     "anchor_context": [
+      "서 콘크리트를 굴착기로 공급받아 근접된 타설 위치에 직접 시공하는 기준이다"
+     ]
+    },
+    "odl_hybrid_auto": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      " 설 보통인부 굴착기 - (0.6∼0.8㎥) 인 1 대 1 63 63 55",
+      "는 기준이다. 굴착기로 공급받아 근접된 타설 위치에 직접 장비사용 타설 -",
+      "서 콘크리트를 굴착기로 공급받아 근접된 타설 위치에 직접 시공하는 기준이다"
+     ]
+    },
+    "odl_hybrid_full": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      " 설 보통인부 굴착기 - (0.6∼0.8㎥) 인 1 대 1 63 63 55",
+      "는 기준이다. 굴착기로 공급받아 근접된 타설 위치에 직접 장비사용 타설 -",
+      "서 콘크리트를 굴착기로 공급받아 근접된 타설 위치에 직접 시공하는 기준이다"
+     ]
+    },
+    "odl_local": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "1 63 55 굴착기 (0.6∼0.8㎥) 대 1 비 고 - 개소별 소량(1",
+      "서 콘크리트를 굴착기로 공급받아 근접된 타설 위치에 직접 시공하는 기준이다"
+     ]
+    },
+    "odl_local_cluster": {
+     "exact": 1,
+     "variants": {},
+     "anchor_context": [
+      "1 63 55 굴착기 (0.6∼0.8㎥) 대 1 비 고 - 개소별 소량(1",
+      "서 콘크리트를 굴착기로 공급받아 근접된 타설 위치에 직접 시공하는 기준이다"
+     ]
+    }
+   }
+  },
+  {
+   "page": 188,
+   "token": "0.12인",
+   "expected": 2,
+   "runs": {
+    "docling_accurate": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "| 수 량 | 도장공 | |-----------------------|--"
+     ]
+    },
+    "docling_accurate_nomatch": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": []
+    },
+    "odl_hybrid_auto": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "량 ㎏ 1.2 도장공 ⌉ 접 착 제 바 르 기 시 너 ℓ 0.2 0.12인"
+     ]
+    },
+    "odl_hybrid_full": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "량 ㎏ 1.2 도장공 ⌉ 접 착 제 바 르 기 시 너 ℓ 0.2 0.12인"
+     ]
+    },
+    "odl_local": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "단 위 수 량 도장공 신 구 - 콘 크 리 트 접 착 제 바 르 기 Epo"
+     ]
+    },
+    "odl_local_cluster": {
+     "exact": 2,
+     "variants": {},
+     "anchor_context": [
+      "단 위 수 량 도장공 신 구 - 콘 크 리 트 접 착 제 바 르 기 Epo"
+     ]
+    }
+   }
+  }
+ ],
+ "decimals": {
+  "185": {
+   "truth": [
+    "0.15",
+    "0.17",
+    "0.24",
+    "0.46",
+    "0.6",
+    "0.68",
+    "0.8",
+    "0.82",
+    "0.85",
+    "0.87",
+    "0.94",
+    "0.99",
+    "1.29",
+    "1.36"
+   ],
+   "docling_accurate": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "docling_accurate_nomatch": {
+    "not_in_source": [],
+    "never_output": [
+     "0.15",
+     "0.46",
+     "0.6",
+     "0.68",
+     "0.8",
+     "0.82",
+     "0.85",
+     "0.94"
+    ],
+    "count_short": [
+     "0.15",
+     "0.46",
+     "0.6",
+     "0.68",
+     "0.8",
+     "0.82",
+     "0.85",
+     "0.94"
+    ],
+    "count_extra": []
+   },
+   "odl_hybrid_auto": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_hybrid_full": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_local": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_local_cluster": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   }
+  },
+  "186": {
+   "truth": [
+    "0.34"
+   ],
+   "docling_accurate": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "docling_accurate_nomatch": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_hybrid_auto": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_hybrid_full": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_local": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_local_cluster": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   }
+  },
+  "188": {
+   "truth": [
+    "0.013",
+    "0.013",
+    "0.02",
+    "0.12",
+    "0.12",
+    "0.12",
+    "0.2",
+    "0.2",
+    "1.0",
+    "1.0",
+    "1.2",
+    "1.2",
+    "1.2",
+    "3.6"
+   ],
+   "docling_accurate": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "docling_accurate_nomatch": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_hybrid_auto": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": [
+     "0.013",
+     "0.013",
+     "0.02",
+     "0.12"
+    ]
+   },
+   "odl_hybrid_full": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": [
+     "0.013",
+     "0.013",
+     "0.02",
+     "0.12"
+    ]
+   },
+   "odl_local": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_local_cluster": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   }
+  },
+  "193": {
+   "truth": [
+    "1.7",
+    "12.0",
+    "3.2",
+    "4.5",
+    "4.5",
+    "4.5",
+    "4.5",
+    "6.2",
+    "7.5",
+    "9.0"
+   ],
+   "docling_accurate": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "docling_accurate_nomatch": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": [
+     "12.0",
+     "6.2",
+     "9.0"
+    ]
+   },
+   "odl_hybrid_auto": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": [
+     "1.7",
+     "4.5",
+     "4.5"
+    ]
+   },
+   "odl_hybrid_full": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": [
+     "1.7",
+     "4.5",
+     "4.5"
+    ]
+   },
+   "odl_local": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   },
+   "odl_local_cluster": {
+    "not_in_source": [],
+    "never_output": [],
+    "count_short": [],
+    "count_extra": []
+   }
+  }
+ }
+}

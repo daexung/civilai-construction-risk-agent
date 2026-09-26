@@ -1,0 +1,38 @@
+{
+ "status": "개발 점검용. 검색 동작 확인이며 파서 정답이나 보류 평가가 아니다",
+ "scope": "PDF 185~214쪽 (공통부문 6장 철근콘크리트공사), 운영 PyMuPDF 추출 결과",
+ "rule": "expect_section이 상위 3개 청크 중 하나의 절 번호여야 한다. must_contain이 있으면 그 글자가 상위 3개 청크나 같은 절 줄글 안에 있어야 한다. expect_tables가 있으면 그중 하나가 상위 3개 청크 안에 있어야 한다(비교 스크립트에서만 판정)",
+ "questions": [
+  {"id": "q01", "category": "기본", "query": "레미콘 인력운반 타설할 때 콘크리트공과 보통인부는 몇 명인가", "expect_section": "6-1-1", "expect_tables": ["p185-t0"], "must_contain": "인력운반 타설 | 보통인부 | 단위 인 | 수량 3"},
+  {"id": "q02", "category": "기본", "query": "콘크리트 펌프차 타설 품", "expect_section": "6-1-4"},
+  {"id": "q03", "category": "기본", "query": "에폭시 콘크리트 접착제 바르기에 드는 시너 양", "expect_section": "6-1-5", "expect_tables": ["p188-t0"], "must_contain": "시너"},
+  {"id": "q04", "category": "기본", "query": "철근 현장가공 인력 품", "expect_section": "6-2-2", "expect_tables": ["p189-t2"]},
+  {"id": "q05", "category": "여러 표 절", "query": "합판거푸집 설치 및 해체 형틀목공 시공량", "expect_section": "6-3-1", "expect_tables": ["p193-t0"]},
+  {"id": "q06", "category": "기본", "query": "강재거푸집 사용횟수", "expect_section": "6-3-2", "expect_tables": ["p193-t1"], "must_contain": "50∼60"},
+  {"id": "q07", "category": "여러 표 절", "query": "PSC빔 제작 형틀목공 인원", "expect_section": "6-4-1", "expect_tables": ["p200-t0", "p201-t1"]},
+  {"id": "q08", "category": "기본", "query": "수상 교량받침 설치 품", "expect_section": "6-6-2", "expect_tables": ["p208-t0"]},
+  {"id": "q09", "category": "기본", "query": "PC기둥 설치 시공량", "expect_section": "6-7-4", "expect_tables": ["p213-t0"]},
+  {"id": "q10", "category": "기본", "query": "레미콘 타설 공구손료 및 경장비 기계경비는 인력품의 몇 %", "expect_section": "6-1-1", "must_contain": "인력품의 2%"},
+  {"id": "q11", "category": "기본", "query": "슬립폼 공법", "expect_section": "6-3-6"},
+  {"id": "n01", "category": "표현 차이", "query": "펌프카로 콘크리트 부을 때 작업조는 몇 명으로 짜나", "expect_section": "6-1-4", "expect_tables": ["p186-t1"]},
+  {"id": "n02", "category": "표현 차이", "query": "합판 거푸집을 두 번째 다시 쓸 때 자재비는 처음의 몇 퍼센트", "expect_section": "6-3-1", "expect_tables": ["p192-t1"]},
+  {"id": "n03", "category": "표현 차이", "query": "육지에서 다리 받침 놓는 데 필요한 인력", "expect_section": "6-6-1", "expect_tables": ["p206-t1", "p207-t0"]},
+  {"id": "n04", "category": "표현 차이", "query": "콘크리트 수로관 하루에 몇 본 설치", "expect_section": "6-7-1", "expect_tables": ["p211-t2"]},
+  {"id": "n05", "category": "절 번호", "query": "6-3-3", "expect_section": "6-3-3"},
+  {"id": "n06", "category": "절 번호", "query": "6-6-7 품", "expect_section": "6-6-7", "expect_tables": ["p210-t1"]},
+  {"id": "n07", "category": "절 번호", "query": "6-2-4 Type-Ⅱ 철근공", "expect_section": "6-2-4", "expect_tables": ["p190-t2"]},
+  {"id": "n08", "category": "여러 표 절", "query": "펌프차 타설 현장조건 f2 계수", "expect_section": "6-1-4", "expect_tables": ["p187-t3"]},
+  {"id": "n09", "category": "여러 표 절", "query": "압송관 설치 및 철거 비계공 시공량", "expect_section": "6-1-4", "expect_tables": ["p187-t5"]},
+  {"id": "n10", "category": "여러 표 절", "query": "PSC빔 그라우팅 기계설비공 인원", "expect_section": "6-4-1", "expect_tables": ["p202-t0"]}
+ ],
+ "evidence_checks": [
+  {"id": "v01", "category": "근거 구성", "query": "6-1-1 레디믹스트콘크리트 타설", "expect_section": "6-1-1", "expect_tables": ["p185-t0"], "expect_parent": "6-1"},
+  {"id": "v02", "category": "근거 구성", "query": "콘크리트 펌프차 타설 2. 인력편성", "expect_section": "6-1-4", "expect_tables": ["p186-t1"], "expect_subsection": "2", "expect_parent": "6-1", "whole_section_once": true}
+ ],
+ "estimates": [
+  {"id": "e01", "section": "6-1-1", "method": "인력운반 타설", "trade": "콘크리트공", "column": "시공량(㎥) 철근구조물", "volume": "100", "expect": "ok", "person_days": "15"},
+  {"id": "e02", "section": "6-1-1", "method": "인력운반 타설", "trade": "보통인부", "column": "시공량(㎥) 철근구조물", "volume": "100", "expect": "ok", "person_days": "15"},
+  {"id": "e03", "section": "6-4-1", "method": null, "trade": "형틀목공", "column": "시공량(m)", "volume": "90", "expect": "refused", "reason_contains": "구조가 불확실"},
+  {"id": "e04", "section": "6-7-4", "method": null, "trade": "형틀목공", "column": "시공량(개소)", "volume": "32", "expect": "refused", "reason_contains": "구조가 불확실"}
+ ]
+}

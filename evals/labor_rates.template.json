@@ -1,0 +1,7 @@
+{
+ "note": "직종별 노임단가 입력 양식. 값은 비워 두었다(추정값 없음). 공표된 단가를 기준일·출처와 함께 채운 사본을 --rates로 넘긴다. 비어 있으면 그 직종은 미산정이다.",
+ "rates": [
+  {"trade": "콘크리트공", "unit_price": null, "unit": "원/인·일", "basis_date": "", "source": ""},
+  {"trade": "보통인부", "unit_price": null, "unit": "원/인·일", "basis_date": "", "source": ""}
+ ]
+}

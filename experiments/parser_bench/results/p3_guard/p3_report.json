@@ -1,0 +1,1953 @@
+{
+ "pages": [
+  2,
+  47,
+  58,
+  106,
+  155,
+  180,
+  185,
+  186,
+  187,
+  188,
+  189,
+  190,
+  191,
+  192,
+  193,
+  255,
+  288,
+  290,
+  334,
+  396,
+  404,
+  440,
+  488,
+  500,
+  525,
+  528,
+  594,
+  644,
+  668,
+  673,
+  734,
+  769,
+  773,
+  835,
+  872,
+  885,
+  894,
+  895,
+  970
+ ],
+ "odl_elapsed_sec": 33.1,
+ "guard_log": [
+  {
+   "page": 106,
+   "region": [
+    67.9,
+    214.4,
+    544.3,
+    281.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 규 격 단 위 수 량 비 계 공 설치, 해체 인 0.20 보 통 인 부 설치, 해체 인 0.07 크 레 인 10ton hr 0.06"
+  },
+  {
+   "page": 106,
+   "region": [
+    67.9,
+    416.9,
+    544.6,
+    483.5
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 규 격 단 위 수 량 벽 용 슬래브발코니, 난간용 설 치 해 체 설 치 해 체 비 계 공 설치, 해체 인 0.45 0.34 0.34 0."
+  },
+  {
+   "page": 106,
+   "region": [
+    67.9,
+    608.8,
+    544.6,
+    667.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 시공량(㎡) 비 계 공 인 3 100 보 통 인 부 인 1"
+  },
+  {
+   "page": 155,
+   "region": [
+    67.9,
+    204.0,
+    545.6,
+    316.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 시공량(개) 만들기 쌓기 헐기 P.P마대 (0.024㎥/개) 보통인부 인 2 130 320 320 톤마대 (0.7㎥/개) "
+  },
+  {
+   "page": 155,
+   "region": [
+    90.4,
+    354.7,
+    544.8,
+    386.9
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 만들기 쌓기 헐기 굴착기 0.2㎥ 1.0㎥ 1.0㎥"
+  },
+  {
+   "page": 155,
+   "region": [
+    67.9,
+    454.1,
+    545.8,
+    566.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 규 격(m) 시공량(m) H=250∼500 H=600∼800 철 골 공 인 2 5m이하 50 45 6~8m 65 55 용 "
+  },
+  {
+   "page": 180,
+   "region": [
+    67.9,
+    442.4,
+    544.3,
+    551.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 외부 반출/반입 작업구간 이동 기 계 설 비 공 인 1 1 철 공 〃 2 2 특 별 인 부 〃 1 1 크 레 인 대 1 1 소 요"
+  },
+  {
+   "page": 180,
+   "region": [
+    67.9,
+    671.0,
+    544.6,
+    748.7
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 보 링 공 인 1 특 별 인 부 〃 2 보 통 인 부 〃 1 용 접 공 〃 1"
+  },
+  {
+   "page": 185,
+   "region": [
+    67.9,
+    327.2,
+    542.8,
+    533.3
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 규 격 단 위 수 량 시공량(㎥) 무근구조물 철근구조물 인력운반 타 설 콘크리트공 - 인 3 23 20 보통인부 - 인 3 장비사용 타 "
+  },
+  {
+   "page": 185,
+   "region": [
+    141.5,
+    466.8,
+    538.8,
+    531.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 내 용 인력운반 타설- 인력운반 장비(손수레 등)로 콘크리트를 운반하여 시공하는 기준이다. 장비사용 타설- 믹서트럭에서 콘크리트를 굴착기"
+  },
+  {
+   "page": 185,
+   "region": [
+    67.9,
+    654.0,
+    544.6,
+    754.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "유 형 구 분 단 위 수 량 무근구조물 철근구조물 소형구조물 기계비빔타설 콘크리트공 인 0.15 0.17 0.24 보 통 인 부 인 0.46 0"
+  },
+  {
+   "page": 186,
+   "region": [
+    67.9,
+    227.3,
+    544.7,
+    258.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 미 장 공 인 0.34"
+  },
+  {
+   "page": 186,
+   "region": [
+    67.9,
+    577.3,
+    542.5,
+    686.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단위 작업조 비 고 무근콘크리트 철근콘크리트 콘 크 리 트 공 인 3 4 타설/진동기/면정리 특 별 인 부 인 1 1 배관타설 : 1인 "
+  },
+  {
+   "page": 187,
+   "region": [
+    67.9,
+    100.3,
+    544.7,
+    183.7
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "슬럼프 기준 시공량(㎥) 무근구조물 철근구조물 8~12㎝ 130 125 15㎝ 135 130 18㎝이상 145 140"
+  },
+  {
+   "page": 187,
+   "region": [
+    67.8,
+    296.9,
+    544.4,
+    330.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "유 형 Type-Ⅰ Type-Ⅱ Type-Ⅲ Type-Ⅳ f1 1.4 1.0 0.8 0.3"
+  },
+  {
+   "page": 187,
+   "region": [
+    67.9,
+    351.1,
+    542.9,
+    465.1
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구분 적용기준 T y p e - Ⅰ - 매트기초 등 펌프차 작업에 제약이 없는 시설물 T y p e - Ⅱ - 벽, 기둥, 보, 슬라브, 교대,"
+  },
+  {
+   "page": 187,
+   "region": [
+    67.8,
+    502.1,
+    544.4,
+    535.3
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "유 형 Type-Ⅰ Type-Ⅱ Type-Ⅲ f2 1.2 1.0 0.8"
+  },
+  {
+   "page": 187,
+   "region": [
+    67.9,
+    556.2,
+    542.9,
+    638.3
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구분 적용기준 T y p e - Ⅰ - 대기공간이 충분히 넓어 믹서트럭 2대가 병렬로 타설준비가 가능하며 지속적인 타설을 수행하는 경우 T y "
+  },
+  {
+   "page": 187,
+   "region": [
+    67.9,
+    692.4,
+    544.6,
+    742.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 시공량(m) 설치 철거 비 계 공 인 2 220 330"
+  },
+  {
+   "page": 188,
+   "region": [
+    67.9,
+    105.4,
+    544.6,
+    202.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 재료명 단 위 수 량 도장공 신구- 콘크리트 접착제바르기 Epoxy신구-콘크리트접착제 시 너 ㎏ ℓ 1.2 0.2 ⌉0.12인 ⌋ 콘크리"
+  },
+  {
+   "page": 188,
+   "region": [
+    88.9,
+    253.3,
+    538.1,
+    302.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "지하층 및 1∼3층 4∼6층 7∼9층 10∼12층 13∼15층 16∼18층 0 5% 8% 12% 16% 20%"
+  },
+  {
+   "page": 188,
+   "region": [
+    67.9,
+    425.5,
+    544.6,
+    475.6
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 특 별 인 부 인 0.12 보 통 인 부 인 0.02"
+  },
+  {
+   "page": 188,
+   "region": [
+    67.9,
+    607.9,
+    547.4,
+    666.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 중급품질관리기술인 인 0.013 보 통 인 부 인 0.013"
+  },
+  {
+   "page": 189,
+   "region": [
+    69.4,
+    228.0,
+    542.8,
+    417.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 유 형 T y p e - Ⅰ Ⅰ-1 - 철근가공 및 조립 작업이 일반적인 토목시설(반중력식 옹벽, L형 옹벽, 교량 슬래브, 매트기초, "
+  },
+  {
+   "page": 189,
+   "region": [
+    69.4,
+    461.8,
+    544.4,
+    556.3
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 유 형 T y p e - Ⅰ - 직경 13mm이하 철근이 전 철근중량의 50%미만인 경우 T y p e - Ⅱ - 직경 13mm이하 철근"
+  },
+  {
+   "page": 189,
+   "region": [
+    69.4,
+    625.4,
+    544.3,
+    692.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단위 수량 시공량(ton) Type-Ⅰ Type-Ⅱ Type-Ⅲ 철 근 공 인 3 4.5 4.0 3.5 보 통 인 부 인 1"
+  },
+  {
+   "page": 190,
+   "region": [
+    69.4,
+    106.8,
+    544.3,
+    304.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 유 형 인력(인) 시공량 (ton) 철근공 보통인부 토 목 Type-Ⅰ Ⅰ-1 6 2 3.4 Ⅰ-2 4 1 2.2 Type-Ⅱ Ⅱ-1 5"
+  },
+  {
+   "page": 190,
+   "region": [
+    90.4,
+    386.6,
+    543.7,
+    420.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구분 Type-Ⅰ Type-Ⅱ Type-Ⅲ 사용량(kg) 6.5 8.0 9.5"
+  },
+  {
+   "page": 190,
+   "region": [
+    69.4,
+    487.0,
+    544.3,
+    545.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단위 Type-Ⅰ Type-Ⅱ Type-Ⅲ 철 근 공 인 0.23 0.30 0.38 보 통 인 부 인 0.03 0.04 0.06"
+  },
+  {
+   "page": 191,
+   "region": [
+    67.9,
+    99.4,
+    544.6,
+    288.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 비 고 아 세 틸 렌 ℓ 133 수평, 수직 이음 공통 산 소 〃 744 용 접 공 인 0.06 연 마 공 〃 0.15 절"
+  },
+  {
+   "page": 191,
+   "region": [
+    222.2,
+    250.4,
+    534.8,
+    283.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "높 이 10m∼20m미만 20m 이상 요 율 10% 20%"
+  },
+  {
+   "page": 191,
+   "region": [
+    67.9,
+    426.7,
+    543.7,
+    529.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 시공량(m) 철 근 공 인 6 2,500 보 통 인 부 인 2 비 고 - 현장여건(고소작업, 철근 적재공간 협소 등)에 따"
+  },
+  {
+   "page": 192,
+   "region": [
+    67.9,
+    82.9,
+    544.6,
+    182.9
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "사용횟수 유 형 구조물 1~2회 제물치장 제물치장 콘크리트, 곡면 및 특수형상 2회 매우복잡 T형보, 난간, 복잡한 구조의 교각, 교대, 수문관"
+  },
+  {
+   "page": 192,
+   "region": [
+    67.8,
+    232.0,
+    543.6,
+    330.7
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 1회 사용 자재비의 % 1회 2회 3회 4회 5회 6회 합 판 ㎡ 1.03 55.0% 44.3% 38.0% 35.0% 32"
+  },
+  {
+   "page": 192,
+   "region": [
+    88.9,
+    410.4,
+    540.2,
+    488.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "측 압 규 격 3 t/㎡ 4 t/㎡ 5 t/㎡ 6 t/㎡ 7.9㎜ 1.07 1.42 1.80 2.14 9.5㎜ 0.71 0.97 1.19 1.4"
+  },
+  {
+   "page": 192,
+   "region": [
+    88.9,
+    565.6,
+    540.0,
+    648.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 비 고 시 멘 트 ㎏ 6.99 배합비 1 : 3 기준 모 래 ㎥ 0.015 혼 화 재 g - (필요에 따라서 별도계상) 보"
+  },
+  {
+   "page": 193,
+   "region": [
+    67.8,
+    100.3,
+    542.9,
+    260.6
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 시공량(㎡) 제물치장 매우복잡 복 잡 보 통 간 단 형틀목공 인 5 20 25 30 45 50 보통인부 인 2 비 고 - "
+  },
+  {
+   "page": 193,
+   "region": [
+    67.9,
+    370.2,
+    544.6,
+    453.5
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구조물 사용횟수 유 형 비 고 간 단 한 구 조 50∼60 측구, 기초, 수로 잔존율 10% 약 간 복 잡 한 구 조 40∼50 옹벽, 교대, "
+  },
+  {
+   "page": 193,
+   "region": [
+    67.9,
+    554.3,
+    544.6,
+    637.7
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "명 칭 단 위 설 치 해 체 계 형 틀 목 공 인 4.5 1.7 6.2 비 계 공 인 4.5 4.5 9.0 보 통 인 부 인 7.5 4.5 12"
+  },
+  {
+   "page": 255,
+   "region": [
+    93.4,
+    82.9,
+    544.4,
+    364.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "토 질 구 분 상 태 N치 점 토 질 토 사 軟泥 4이하 軟質 4∼10 中質 10∼20 硬質 20∼30 最硬質 30∼40 極硬質 40∼50 사 "
+  },
+  {
+   "page": 255,
+   "region": [
+    67.9,
+    667.6,
+    544.6,
+    700.9
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "해 머 규 격 1.5t 급 2.2t 급 3.2t 급 4.0t 급 Te(분) 4 6 8 10"
+  },
+  {
+   "page": 288,
+   "region": [
+    67.9,
+    84.6,
+    544.6,
+    266.5
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "분류 번호 규격 (㎥) 내용 시간 연간표준 가동시간 상각 비율 정비 비율 연간 관리 비율 시 간 당(10-7) 상각비 계수 정비비 계수 관리비 "
+  },
+  {
+   "page": 288,
+   "region": [
+    67.9,
+    335.3,
+    544.6,
+    534.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "분류 번호 규격 (㎥) 내용 시간 연간표준 가동시간 상각 비율 정비 비율 연간 관리 비율 시 간 당(10-7) 상각비 계수 정비비 계수 관리비 "
+  },
+  {
+   "page": 288,
+   "region": [
+    67.9,
+    602.6,
+    544.6,
+    719.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "분류 번호 규격 (㎥) 내용 시간 연간표준 가동시간 상각 비율 정비 비율 연간 관리 비율 시 간 당(10-7) 상각비 계수 정비비 계수 관리비 "
+  },
+  {
+   "page": 290,
+   "region": [
+    67.9,
+    84.6,
+    544.6,
+    183.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "분류 번호 규격 (ton) 내용 시간 연간표준 가동시간 상각 비율 정비 비율 연간 관리 비율 시 간 당(10-7) 상각비 계수 정비비 계수 관리"
+  },
+  {
+   "page": 290,
+   "region": [
+    67.9,
+    246.8,
+    544.6,
+    345.5
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "분류 번호 규격 (ton) 내용 시간 연간표준 가동시간 상각 비율 정비 비율 연간 관리 비율 시 간 당(10-7) 상각비 계수 정비비 계수 관리"
+  },
+  {
+   "page": 290,
+   "region": [
+    67.9,
+    397.7,
+    544.6,
+    496.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "분류 번호 규격 (ton) 내용 시간 연간표준 가동시간 상각 비율 정비 비율 연간 관리 비율 시 간 당(10-7) 상각비 계수 정비비 계수 관리"
+  },
+  {
+   "page": 290,
+   "region": [
+    67.9,
+    551.8,
+    544.6,
+    717.1
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "분류 번호 규격 (ton) 내용 시간 연간표준 가동시간 상각 비율 정비 비율 연간 관리 비율 시 간 당(10-7) 상각비 계수 정비비 계수 관리"
+  },
+  {
+   "page": 334,
+   "region": [
+    67.9,
+    91.1,
+    544.6,
+    710.3
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "분류번호 기계명 규격 주연료 (ℓ/hr) 잡재료 (주연료의%) 조종원 (인/일) 2101-0010 크 레 인 ( 무 한 궤 도 ) 10ton ("
+  },
+  {
+   "page": 396,
+   "region": [
+    67.9,
+    91.1,
+    544.6,
+    307.3
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 소형브레이커 점보드릴 비 고 암 종 풍 화 암 연 암 보 통 암 경 암 27 ㎝/min 20 ㎝/min 16 ㎝/min 12 ㎝/min "
+  },
+  {
+   "page": 396,
+   "region": [
+    88.9,
+    387.5,
+    540.0,
+    520.8
+   ],
+   "coverage": 0.0,
+   "status": "missing",
+   "fallback_tables": [
+    "8x10"
+   ],
+   "text": "암질별 연암 보통암 경암 1발파 진행거리(m) 0.8 1.0 1.1 1.2 1.3 1.4 1.5 구 분 굴착단면 1㎡당천공수 도갱면적 (㎡) 5"
+  },
+  {
+   "page": 404,
+   "region": [
+    67.9,
+    135.1,
+    542.8,
+    314.5
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 규 격 단 위 수 량 궤 도 공 인 9 보 통 인 부 인 3 측 량 중 급 기 술 자 인 1 크 레 인 50ton hr 3 굴착기+ 부착"
+  },
+  {
+   "page": 404,
+   "region": [
+    136.6,
+    257.5,
+    534.7,
+    307.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 #8 #10 #12 #15 #18.5 #26 할증률 50㎏ 0.70 0.82 0.92 1.15 1.33 1.56 60㎏ 0.75 0.90"
+  },
+  {
+   "page": 404,
+   "region": [
+    67.9,
+    449.2,
+    544.6,
+    549.1
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 규 격 단 위 수 량 일단 양단 궤 도 공 인 0.25 0.50 보 통 인 부 인 0.13 0.25 측 량 중 급 기 술 자 인 0.06"
+  },
+  {
+   "page": 440,
+   "region": [
+    88.9,
+    82.9,
+    534.4,
+    116.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "관 경(㎜) 80mm ~ 300mm 350mm ~ 600mm 요 율(%) 7% 12%"
+  },
+  {
+   "page": 440,
+   "region": [
+    67.9,
+    195.2,
+    544.2,
+    628.3
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 배관공(수도) (인) 보통인부 (인) 본관(㎜) 지관(㎜) 50 13∼20 0.20 0.10 25∼32 0.24 0.12 40∼50 0."
+  },
+  {
+   "page": 488,
+   "region": [
+    67.9,
+    136.6,
+    544.3,
+    328.3
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작업구분 일수 투입인원 비 고 고급 기술자 중급 기술자 초급 기술자 초급 기능사 (측량) 인부 계 획 준 비 (1) (0.5) (1) (1) -"
+  },
+  {
+   "page": 488,
+   "region": [
+    101.9,
+    378.8,
+    544.4,
+    478.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "지형 구분 계 수 비 고 밀 집 시 가 지 2.80 건물 및 도로가 시가지 면적의 90% 이상 지형 시 가 지 2.15 건물 및 도로가 시가지 "
+  },
+  {
+   "page": 488,
+   "region": [
+    101.9,
+    499.7,
+    544.4,
+    533.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "축 척 1/250 1/500 1/1,000 1/2,500 비 고 계 수 1.60 1.00 0.65 0.54"
+  },
+  {
+   "page": 488,
+   "region": [
+    101.9,
+    553.8,
+    544.4,
+    587.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작업량(면적:㎡) 2만 5만 10만 15만 20만 계 수 1.80 1.20 1.00 0.93 0.90"
+  },
+  {
+   "page": 488,
+   "region": [
+    101.9,
+    652.4,
+    544.4,
+    685.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작업종류 신규측량 수정측량 계 수 1.0 1.25"
+  },
+  {
+   "page": 500,
+   "region": [
+    99.1,
+    280.4,
+    544.4,
+    402.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 수 량 단 가 금 액 고 급 기 술 자 7.5×2=15 w1 W1=15×w1 중 급 기 술 자 13.5×2=27 w2 W2=27×w2 초"
+  },
+  {
+   "page": 500,
+   "region": [
+    67.9,
+    472.1,
+    544.6,
+    690.4
+   ],
+   "coverage": 0.0,
+   "status": "missing",
+   "fallback_tables": [
+    "10x6"
+   ],
+   "text": "지구별 번화지구 보통지구 촌락지구 정 리 산정기준면적 5만㎡ 10만㎡ 30만㎡ 구분 1 가 구 당 의 장 변 과 단 변 100m×30m 120m"
+  },
+  {
+   "page": 528,
+   "region": [
+    96.2,
+    68.0,
+    544.4,
+    228.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 고급 기술자 정보처리 기사 중급기능사 (도화) 비 고 성 과 입 력 5.76 2.88 5.76 고급기술자 2.4×1200/500 정보처리"
+  },
+  {
+   "page": 528,
+   "region": [
+    67.7,
+    278.2,
+    543.4,
+    453.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작업구분 일 수 인원수 1 일 당 합 계 고급 기술 자 중급 기술 자 초급 기술 자 초급 기능사 (측량) 인부 고급 기술 자 중급 기술 자 초급"
+  },
+  {
+   "page": 528,
+   "region": [
+    93.2,
+    563.8,
+    544.4,
+    597.1
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "점간거리 1km이내 2∼3km 3∼4km 4km이상 계수 1.00 1.30 1.60 2.00"
+  },
+  {
+   "page": 594,
+   "region": [
+    69.4,
+    118.7,
+    545.2,
+    148.6
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 작업별 지적기사 지적산업기사 지적기능사 비 고"
+  },
+  {
+   "page": 594,
+   "region": [
+    69.4,
+    148.6,
+    545.2,
+    380.5
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "자 료 조 사 (0.04) (0.05) ( )는 내업임 측량계획 및 준비 (0.04) (0.03) 측량준비도 작성 (0.02) (0.03) 현지"
+  },
+  {
+   "page": 594,
+   "region": [
+    99.1,
+    477.0,
+    544.4,
+    525.7
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "가산횟수 구 분 0회 1회 2회이상 계수 1.0 1.3 1.2+(0.10×n)"
+  },
+  {
+   "page": 594,
+   "region": [
+    96.2,
+    574.1,
+    544.4,
+    620.5
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 내 용 토지 임야 계수 1.00 1.20"
+  },
+  {
+   "page": 594,
+   "region": [
+    99.0,
+    656.3,
+    544.4,
+    706.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 내 용 면 읍 동 시 구 계수 1.00 1.10 1.30 1.40"
+  },
+  {
+   "page": 668,
+   "region": [
+    67.9,
+    192.6,
+    544.3,
+    273.1
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 시공량(㎡) 지붕 벽 지붕잇기공 인 3 55 50 보 통 인 부 인 1 비 고 - 지붕경사 30°이상일 경우 시공량의 17"
+  },
+  {
+   "page": 668,
+   "region": [
+    67.9,
+    451.1,
+    544.3,
+    515.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 시공량(㎡) 지 붕 잇 기 공 인 3 50 보 통 인 부 인 1 비 고 - 지붕경사 30°이상일 경우 시공량의 17%를 감"
+  },
+  {
+   "page": 668,
+   "region": [
+    88.9,
+    648.5,
+    544.4,
+    712.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 규 격 단 위 수 량 아스팔트싱글 336×1.000×3㎜ 매 7.30 잡재료 및 소모재료 ( 콘크리트 못 등) 주재료비의 % 3"
+  },
+  {
+   "page": 673,
+   "region": [
+    67.9,
+    201.5,
+    544.6,
+    268.1
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 시공량(m) 목조계단 콘크리트계단 내 장 공 인 2 145 110 보 통 인 부 인 1"
+  },
+  {
+   "page": 673,
+   "region": [
+    67.9,
+    376.6,
+    544.6,
+    409.9
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 미 장 공 인 0.24"
+  },
+  {
+   "page": 673,
+   "region": [
+    67.9,
+    483.0,
+    544.1,
+    516.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 특 별 인 부 인 0.006"
+  },
+  {
+   "page": 673,
+   "region": [
+    88.9,
+    566.5,
+    544.1,
+    631.9
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 규 격 단 위 수 량 와 이 어 메 시 1,800×1,800㎜ 매 0.36 잡재료 및 소모재료 ( 결 속 선 등 ) 주재료비의 % 3"
+  },
+  {
+   "page": 673,
+   "region": [
+    67.9,
+    704.6,
+    543.4,
+    754.6
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 설치대상 거푸집 데크플레이트 콘크리트 내 장 공 인 0.004 0.007 0.009"
+  },
+  {
+   "page": 769,
+   "region": [
+    67.9,
+    196.4,
+    544.4,
+    357.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "규 격(㎜) 플랜트용접공(인) 규 격(㎜) 플랜트용접공(인) ø15 0.044 100 0.159 20 0.049 125 0.191 25 0.05"
+  },
+  {
+   "page": 769,
+   "region": [
+    67.9,
+    456.0,
+    544.6,
+    755.9
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "규 격 (㎜) 인력시공 기계시공 배관공(인) 보통인부(인) 배관공(인) 보통인부(인) 크레인(hr) ø15 0.022 0.005 - - - 20"
+  },
+  {
+   "page": 773,
+   "region": [
+    67.9,
+    183.0,
+    544.4,
+    488.0
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "명 칭 규 격 단위 계장공 보통인부 분 전 반 W800×H500×D300이하 대 4.2 2.8 조 작 반 W800×H500×D300이하 대 4."
+  },
+  {
+   "page": 773,
+   "region": [
+    67.9,
+    571.8,
+    544.4,
+    738.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "명 칭 규 격 단위 계장공 비 고 파 이 프 스 텐 션 28×1,200∼1,600 본 0.37 기초별도 계 기 일반각종 대 0.3 발 신 기 D"
+  },
+  {
+   "page": 835,
+   "region": [
+    67.9,
+    68.0,
+    544.7,
+    683.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작 업 구 분 직 종 단위 용 량 별 50이하100 150 200 250 300 350 500 (MW) Lower inner casing 플랜트"
+  },
+  {
+   "page": 872,
+   "region": [
+    67.9,
+    68.0,
+    544.8,
+    734.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "공 정 별 직 종 수 량 설 치 준 비 Chipping 석 공 1.15 특 별 인 부 0.86 가 설 장 비 설 치 플 랜 트 기 계 설 치 공"
+  },
+  {
+   "page": 885,
+   "region": [
+    67.9,
+    103.0,
+    544.8,
+    168.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "두 께 직 종 15 25 40 50 65 80 100 보 온 공 0.06 0.082 0.112 0.132 0.16 0.192 0.232 특 별 "
+  },
+  {
+   "page": 885,
+   "region": [
+    67.9,
+    227.3,
+    544.8,
+    340.1
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "두 께 직 종 15 25 40 50 65 80 100 보 온 공 0.18 0.245 0.336 0.396 0.48 0.576 0.656 특 별 "
+  },
+  {
+   "page": 885,
+   "region": [
+    67.9,
+    428.8,
+    543.6,
+    645.2
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작업구분 직 종 단 위 수 량 비 고 기 술 관 리 기 계 기 사 인/일 0.8 표 면 손 질 특 별 인 부 인/㎡ 0.1 작 업 토 의 비 계"
+  },
+  {
+   "page": 894,
+   "region": [
+    67.9,
+    86.0,
+    544.8,
+    219.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "장 비 명 규 격 단 위 수 량 지 게 차 5ton 대 1 크 레 인 150ton 대 1 200ton 대 1 300ton 대 1 타 워 크 레 "
+  },
+  {
+   "page": 894,
+   "region": [
+    67.9,
+    412.7,
+    544.8,
+    684.6
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작 업 구 분 직 종 단 위 수 량 ◦ 기술관리 - 설치공사 기간중 기 계 기 사 인/일 1.03 ◦ 포장해체 - 수송을 위해 포장된 목재를 해"
+  },
+  {
+   "page": 895,
+   "region": [
+    67.9,
+    68.0,
+    544.8,
+    257.9
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작 업 구 분 직 종 단 위 수 량 ◦ Inner Plate 및 Hanger 조립 - Suspention Device 조립 포함 플 랜 트 제 "
+  },
+  {
+   "page": 895,
+   "region": [
+    67.9,
+    355.6,
+    544.8,
+    438.8
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "장 비 명 규 격 단 위 수 량 크 레 인 250톤 대 1 타 워 크 레 인 30톤 대 1 지 게 차 7.5톤 대 1 용 접 기 15KVA 대 "
+  },
+  {
+   "page": 895,
+   "region": [
+    67.9,
+    548.4,
+    544.8,
+    725.4
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "작 업 구 분 직 종 단 위 수 량 ◦ 기술관리 - 설치공사 기간중 기 계 기 사 인/일 0.96 ◦ 포장해체 - 수송을 위해 포장된 목재를 해"
+  },
+  {
+   "page": 970,
+   "region": [
+    67.9,
+    130.8,
+    545.2,
+    180.7
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수량 지 붕 잇 기 공 인 0.018 보 통 인 부 인 0.012"
+  },
+  {
+   "page": 970,
+   "region": [
+    67.9,
+    319.7,
+    544.6,
+    369.6
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 내 장 공 인 0.016 보 통 인 부 인 0.011"
+  },
+  {
+   "page": 970,
+   "region": [
+    67.9,
+    478.1,
+    544.6,
+    528.1
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수 량 내 장 공 인 0.018 보 통 인 부 인 0.012"
+  },
+  {
+   "page": 970,
+   "region": [
+    67.9,
+    667.0,
+    544.7,
+    716.9
+   ],
+   "coverage": 1.0,
+   "status": "covered",
+   "text": "구 분 단 위 수량 조 적 공 인 0.380 보 통 인 부 인 0.252"
+  }
+ ],
+ "guard_counts": {
+  "covered": 95,
+  "partial": 0,
+  "missing": 2
+ },
+ "scope_blind20": [
+  {
+   "id": "p106_t1",
+   "in_scope": true,
+   "overlap": 0.96,
+   "features": [
+    "ruled_partial"
+   ]
+  },
+  {
+   "id": "p106_t2",
+   "in_scope": true,
+   "overlap": 0.98,
+   "features": [
+    "multi_level_header"
+   ]
+  },
+  {
+   "id": "p106_t3",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "vertical_merge_value"
+   ]
+  },
+  {
+   "id": "p155_t1",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "multi_level_header",
+    "vertical_merge_label",
+    "vertical_merge_value",
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p155_t2",
+   "in_scope": true,
+   "overlap": 0.97,
+   "features": [
+    "small"
+   ]
+  },
+  {
+   "id": "p155_t3",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "independent_side_by_side_rows",
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p255_t1",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "vertical_merge_label",
+    "unruled_rows",
+    "multi_level_header"
+   ]
+  },
+  {
+   "id": "p255_t2",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "header_is_key"
+   ]
+  },
+  {
+   "id": "p288_t1",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "multi_level_header",
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p288_t2",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "multi_level_header",
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p288_t3",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "multi_level_header",
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p334_t1",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "unruled_rows",
+    "vertical_merge_label",
+    "two_line_cells",
+    "continues_next_page"
+   ]
+  },
+  {
+   "id": "p404_t1",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "unruled_rows",
+    "nested_table_in_note_row"
+   ]
+  },
+  {
+   "id": "p404_t2",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "nested",
+    "vertical_merge_label"
+   ]
+  },
+  {
+   "id": "p404_t3",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "multi_level_header",
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p440_t1",
+   "in_scope": true,
+   "overlap": 0.95,
+   "features": [
+    "header_is_key",
+    "small"
+   ]
+  },
+  {
+   "id": "p440_t2",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "vertical_merge_label",
+    "unruled_rows",
+    "numeric_first_column"
+   ]
+  },
+  {
+   "id": "p488_t1",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "multi_level_header",
+    "unruled_rows",
+    "vertical_merge_note",
+    "two_line_cells"
+   ]
+  },
+  {
+   "id": "p488_t2",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "ruled"
+   ]
+  },
+  {
+   "id": "p488_t3",
+   "in_scope": true,
+   "overlap": 0.98,
+   "features": [
+    "header_is_key"
+   ]
+  },
+  {
+   "id": "p488_t4",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "header_is_key"
+   ]
+  },
+  {
+   "id": "p488_t5",
+   "in_scope": true,
+   "overlap": 0.98,
+   "features": [
+    "header_is_key"
+   ]
+  },
+  {
+   "id": "p528_t1",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "multi_line_note",
+    "empty_cells"
+   ]
+  },
+  {
+   "id": "p528_t2",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "multi_level_header",
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p528_t3",
+   "in_scope": true,
+   "overlap": 0.97,
+   "features": [
+    "header_is_key"
+   ]
+  },
+  {
+   "id": "p594_t1",
+   "in_scope": true,
+   "overlap": 0.88,
+   "features": [
+    "diagonal_header",
+    "vertical_merge_note",
+    "vertical_merge_label"
+   ]
+  },
+  {
+   "id": "p594_t2",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "diagonal_header",
+    "header_is_key"
+   ]
+  },
+  {
+   "id": "p594_t3",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "diagonal_header",
+    "header_is_key"
+   ]
+  },
+  {
+   "id": "p594_t4",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "diagonal_header",
+    "header_is_key",
+    "multi_level_header"
+   ]
+  },
+  {
+   "id": "p668_t1",
+   "in_scope": true,
+   "overlap": 0.98,
+   "features": [
+    "multi_level_header",
+    "vertical_merge_value",
+    "unruled_rows",
+    "note_row"
+   ]
+  },
+  {
+   "id": "p668_t2",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "vertical_merge_value",
+    "unruled_rows",
+    "note_row"
+   ]
+  },
+  {
+   "id": "p668_t3",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "unruled_rows",
+    "multi_line_label"
+   ]
+  },
+  {
+   "id": "p773_t1",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "unruled_rows",
+    "ditto_marks",
+    "note_row"
+   ]
+  },
+  {
+   "id": "p773_t2",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "ruled",
+    "continues_next_page"
+   ]
+  },
+  {
+   "id": "p835_t1",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "unruled_rows",
+    "vertical_merge_label",
+    "multi_line_label",
+    "ditto_marks",
+    "continued_from_prev_page"
+   ]
+  },
+  {
+   "id": "p872_t1",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "fully_unruled_body",
+    "vertical_merge_label",
+    "label_split_across_rows",
+    "continued_from_prev_page"
+   ]
+  },
+  {
+   "id": "p895_t1",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "unruled_rows",
+    "vertical_merge_label",
+    "ditto_marks",
+    "merged_text_value",
+    "continued_from_prev_page"
+   ]
+  },
+  {
+   "id": "p895_t2",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p895_t3",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "unruled_rows",
+    "vertical_merge_label",
+    "continues_next_page"
+   ]
+  },
+  {
+   "id": "p970_t1",
+   "in_scope": true,
+   "overlap": 0.98,
+   "features": [
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p970_t2",
+   "in_scope": true,
+   "overlap": 0.99,
+   "features": [
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p970_t3",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "unruled_rows"
+   ]
+  },
+  {
+   "id": "p970_t4",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "unruled_rows"
+   ]
+  }
+ ],
+ "scope_failures": [
+  {
+   "id": "p396_t1",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "diagonal_header",
+    "multi_level_header",
+    "vertical_merge_label",
+    "ruled"
+   ]
+  },
+  {
+   "id": "p500_t1",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": [
+    "diagonal_header",
+    "multi_level_header",
+    "multi_line_label",
+    "ruled"
+   ]
+  }
+ ],
+ "scope_golden5": [
+  {
+   "id": "T1",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": []
+  },
+  {
+   "id": "T2",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": []
+  },
+  {
+   "id": "T3",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": []
+  },
+  {
+   "id": "T4",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": []
+  },
+  {
+   "id": "T5",
+   "in_scope": true,
+   "overlap": 1.0,
+   "features": []
+  }
+ ],
+ "failures": {
+  "no_guard": {
+   "p396_t1": {
+    "raw": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "spanfill": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "extract": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "n_facts": 5
+   },
+   "p500_t1": {
+    "raw": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "spanfill": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "extract": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "n_facts": 7
+   }
+  },
+  "guard": {
+   "p396_t1": {
+    "raw": {
+     "passed": 5,
+     "failed": []
+    },
+    "spanfill": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "extract": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "n_facts": 5
+   },
+   "p500_t1": {
+    "raw": {
+     "passed": 7,
+     "failed": []
+    },
+    "spanfill": {
+     "passed": 1,
+     "failed": [
+      0,
+      1,
+      2,
+      4,
+      5,
+      6
+     ]
+    },
+    "extract": {
+     "passed": 5,
+     "failed": [
+      0,
+      1
+     ]
+    },
+    "n_facts": 7
+   }
+  },
+  "pymupdf_reference": {
+   "p396_t1": {
+    "raw": {
+     "passed": 5,
+     "failed": []
+    },
+    "spanfill": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "extract": {
+     "passed": 0,
+     "failed": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "n_facts": 5
+   },
+   "p500_t1": {
+    "raw": {
+     "passed": 7,
+     "failed": []
+    },
+    "spanfill": {
+     "passed": 1,
+     "failed": [
+      0,
+      1,
+      2,
+      4,
+      5,
+      6
+     ]
+    },
+    "extract": {
+     "passed": 5,
+     "failed": [
+      0,
+      1
+     ]
+    },
+    "n_facts": 7
+   }
+  }
+ },
+ "blind20_totals": {
+  "no_guard": {
+   "raw": 271,
+   "spanfill": 220,
+   "extract": 212
+  },
+  "guard": {
+   "raw": 271,
+   "spanfill": 220,
+   "extract": 212
+  }
+ },
+ "blind20_changed": [],
+ "golden5": {
+  "p2_odl_rowsplit": {
+   "old_golden_subset": [
+    11,
+    12
+   ],
+   "old_golden_failures_by_type": {
+    "형식": 1,
+    "값·구조": 0
+   },
+   "expected_own": [
+    55,
+    55
+   ],
+   "expected_shared": [
+    12,
+    12
+   ],
+   "expected_failures_by_type": {
+    "형식": 0,
+    "값 오류": 0,
+    "구조": 0
+   },
+   "estimate_failure_type": null,
+   "interpretation_checks": [
+    0,
+    2
+   ],
+   "arithmetic": [
+    3,
+    3
+   ],
+   "estimate": true,
+   "estimate_detail": {
+    "콘크리트공": "15",
+    "보통인부": "15"
+   },
+   "assembly_errors": {}
+  },
+  "p3_odl_guard": {
+   "old_golden_subset": [
+    11,
+    12
+   ],
+   "old_golden_failures_by_type": {
+    "형식": 1,
+    "값·구조": 0
+   },
+   "expected_own": [
+    55,
+    55
+   ],
+   "expected_shared": [
+    12,
+    12
+   ],
+   "expected_failures_by_type": {
+    "형식": 0,
+    "값 오류": 0,
+    "구조": 0
+   },
+   "estimate_failure_type": null,
+   "interpretation_checks": [
+    0,
+    2
+   ],
+   "arithmetic": [
+    3,
+    3
+   ],
+   "estimate": true,
+   "estimate_detail": {
+    "콘크리트공": "15",
+    "보통인부": "15"
+   },
+   "assembly_errors": {}
+  }
+ },
+ "check_parse": {
+  "odl_rowsplit_guard": "통과 22 / 전체 23",
+  "pymupdf(운영)": "통과 23 / 전체 23"
+ }
+}

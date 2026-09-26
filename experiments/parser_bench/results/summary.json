@@ -1,0 +1,1672 @@
+{
+ "pymupdf": {
+  "A": {
+   "relations_own": [
+    27,
+    59
+   ],
+   "relations_shared": [
+    4,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     2,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     2,
+     6
+    ]
+   },
+   "bracket_groups": [
+    2,
+    2
+   ],
+   "row_split": [
+    6,
+    17
+   ],
+   "text_whole": [
+    83,
+    129
+   ],
+   "text_inside_merged": 46,
+   "text_split_across_cells": 0,
+   "text_missing": 0,
+   "novel_text": []
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     12,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     9,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 3
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     12,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   }
+  }
+ },
+ "pymupdf__pages": {
+  "A": {
+   "relations_own": [
+    27,
+    59
+   ],
+   "relations_shared": [
+    4,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     2,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     2,
+     6
+    ]
+   },
+   "bracket_groups": [
+    2,
+    2
+   ],
+   "row_split": [
+    6,
+    17
+   ],
+   "text_whole": [
+    83,
+    129
+   ],
+   "text_inside_merged": 46,
+   "text_split_across_cells": 0,
+   "text_missing": 0,
+   "novel_text": []
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     12,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     9,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 3
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     12,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   }
+  }
+ },
+ "docling_accurate__fullpdf": {
+  "A": {
+   "relations_own": [
+    17,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    5,
+    17
+   ],
+   "text_whole": [
+    77,
+    129
+   ],
+   "text_inside_merged": 38,
+   "text_split_across_cells": 5,
+   "text_missing": 9,
+   "novel_text": [
+    "1.20.2",
+    "1.20.2",
+    "(100㎡당)",
+    "명틀",
+    "칭목",
+    "단인"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 10
+    },
+    "expected_own": [
+     19,
+     55
+    ],
+    "expected_shared": [
+     3,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 3,
+     "구조": 42
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 10
+    },
+    "expected_own": [
+     19,
+     55
+    ],
+    "expected_shared": [
+     4,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 3,
+     "구조": 41
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "docling_accurate": {
+  "A": {
+   "relations_own": [
+    17,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    5,
+    17
+   ],
+   "text_whole": [
+    77,
+    129
+   ],
+   "text_inside_merged": 38,
+   "text_split_across_cells": 5,
+   "text_missing": 9,
+   "novel_text": [
+    "1.20.2",
+    "1.20.2",
+    "(100㎡당)",
+    "명틀",
+    "칭목",
+    "단인"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 10
+    },
+    "expected_own": [
+     19,
+     55
+    ],
+    "expected_shared": [
+     3,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 3,
+     "구조": 42
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 10
+    },
+    "expected_own": [
+     19,
+     55
+    ],
+    "expected_shared": [
+     4,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 3,
+     "구조": 41
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "docling_accurate_nomatch__fullpdf": {
+  "A": {
+   "relations_own": [
+    2,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    0,
+    17
+   ],
+   "text_whole": [
+    53,
+    129
+   ],
+   "text_inside_merged": 23,
+   "text_split_across_cells": 1,
+   "text_missing": 52,
+   "novel_text": [
+    "1.20.2",
+    "1.20.2",
+    "(100㎡당)",
+    "(100㎡당)",
+    "(100㎡당)"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     0,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 12
+    },
+    "expected_own": [
+     2,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 65
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     0,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 12
+    },
+    "expected_own": [
+     2,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 65
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "docling_accurate_nomatch": {
+  "A": {
+   "relations_own": [
+    2,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    0,
+    17
+   ],
+   "text_whole": [
+    53,
+    129
+   ],
+   "text_inside_merged": 23,
+   "text_split_across_cells": 1,
+   "text_missing": 52,
+   "novel_text": [
+    "1.20.2",
+    "1.20.2",
+    "(100㎡당)",
+    "(100㎡당)",
+    "(100㎡당)"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     0,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 12
+    },
+    "expected_own": [
+     2,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 65
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     0,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 12
+    },
+    "expected_own": [
+     2,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 65
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "odl_local__fullpdf": {
+  "A": {
+   "relations_own": [
+    27,
+    59
+   ],
+   "relations_shared": [
+    4,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     2,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     2,
+     6
+    ]
+   },
+   "bracket_groups": [
+    2,
+    2
+   ],
+   "row_split": [
+    6,
+    17
+   ],
+   "text_whole": [
+    80,
+    129
+   ],
+   "text_inside_merged": 49,
+   "text_split_across_cells": 0,
+   "text_missing": 0,
+   "novel_text": []
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     9,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 3
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   }
+  }
+ },
+ "odl_local": {
+  "A": {
+   "relations_own": [
+    27,
+    59
+   ],
+   "relations_shared": [
+    4,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     2,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     2,
+     6
+    ]
+   },
+   "bracket_groups": [
+    2,
+    2
+   ],
+   "row_split": [
+    6,
+    17
+   ],
+   "text_whole": [
+    80,
+    129
+   ],
+   "text_inside_merged": 49,
+   "text_split_across_cells": 0,
+   "text_missing": 0,
+   "novel_text": []
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     9,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 3
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   }
+  }
+ },
+ "odl_local_cluster__fullpdf": {
+  "A": {
+   "relations_own": [
+    27,
+    59
+   ],
+   "relations_shared": [
+    4,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     2,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     2,
+     6
+    ]
+   },
+   "bracket_groups": [
+    2,
+    2
+   ],
+   "row_split": [
+    6,
+    17
+   ],
+   "text_whole": [
+    80,
+    129
+   ],
+   "text_inside_merged": 49,
+   "text_split_across_cells": 0,
+   "text_missing": 0,
+   "novel_text": []
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     9,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 3
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   }
+  }
+ },
+ "odl_local_cluster": {
+  "A": {
+   "relations_own": [
+    27,
+    59
+   ],
+   "relations_shared": [
+    4,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     2,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     2,
+     6
+    ]
+   },
+   "bracket_groups": [
+    2,
+    2
+   ],
+   "row_split": [
+    6,
+    17
+   ],
+   "text_whole": [
+    80,
+    129
+   ],
+   "text_inside_merged": 49,
+   "text_split_across_cells": 0,
+   "text_missing": 0,
+   "novel_text": []
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     9,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 3
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   }
+  }
+ },
+ "odl_hybrid_auto__fullpdf": {
+  "A": {
+   "relations_own": [
+    11,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    4,
+    17
+   ],
+   "text_whole": [
+    59,
+    129
+   ],
+   "text_inside_merged": 45,
+   "text_split_across_cells": 9,
+   "text_missing": 16,
+   "novel_text": [
+    "(100㎡당)",
+    "단인"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 11
+    },
+    "expected_own": [
+     6,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 61
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 11
+    },
+    "expected_own": [
+     6,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 61
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "odl_hybrid_auto": {
+  "A": {
+   "relations_own": [
+    11,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    4,
+    17
+   ],
+   "text_whole": [
+    59,
+    129
+   ],
+   "text_inside_merged": 45,
+   "text_split_across_cells": 9,
+   "text_missing": 16,
+   "novel_text": [
+    "(100㎡당)",
+    "단인"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 11
+    },
+    "expected_own": [
+     6,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 61
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 11
+    },
+    "expected_own": [
+     6,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 61
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "odl_hybrid_full__fullpdf": {
+  "A": {
+   "relations_own": [
+    11,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    4,
+    17
+   ],
+   "text_whole": [
+    59,
+    129
+   ],
+   "text_inside_merged": 45,
+   "text_split_across_cells": 9,
+   "text_missing": 16,
+   "novel_text": [
+    "(100㎡당)",
+    "단인"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 11
+    },
+    "expected_own": [
+     6,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 61
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 11
+    },
+    "expected_own": [
+     6,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 61
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "odl_hybrid_full": {
+  "A": {
+   "relations_own": [
+    11,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    4,
+    17
+   ],
+   "text_whole": [
+    59,
+    129
+   ],
+   "text_inside_merged": 45,
+   "text_split_across_cells": 9,
+   "text_missing": 16,
+   "novel_text": [
+    "(100㎡당)",
+    "단인"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 11
+    },
+    "expected_own": [
+     6,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 61
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 0,
+     "값·구조": 11
+    },
+    "expected_own": [
+     6,
+     55
+    ],
+    "expected_shared": [
+     0,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 61
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ }
+}

@@ -1,0 +1,1036 @@
+{
+ "pages": {
+  "2": {
+   "pymupdf_tables": 0,
+   "odl_tables": 0,
+   "pairs": [],
+   "only_pymupdf": [],
+   "only_odl": []
+  },
+  "180": {
+   "pymupdf_tables": 2,
+   "odl_tables": 2,
+   "pairs": [
+    {
+     "shape": [
+      "4x5",
+      "4x5"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       6,
+       6
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       6,
+       6
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 0,
+     "odl_index": 0,
+     "iou": 0.993,
+     "bbox_pt": [
+      68.7,
+      442.4,
+      544.2,
+      551.0
+     ]
+    },
+    {
+     "shape": [
+      "2x3",
+      "2x3"
+     ],
+     "same_strict": false,
+     "same_loose": false,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [
+      [
+       1,
+       2,
+       0,
+       1,
+       "보링공특별인부보통인부용접공"
+      ],
+      [
+       1,
+       2,
+       2,
+       3,
+       "1211"
+      ]
+     ],
+     "records_extract": {
+      "count": [
+       0,
+       4
+      ],
+      "same_strict": false,
+      "same_loose": false,
+      "only_pymupdf": [],
+      "only_odl": [
+       "S | 보링공 | 단위 인 | 수량 1",
+       "S | 특별인부 | 단위 〃 | 수량 2",
+       "S | 보통인부 | 단위 〃 | 수량 1",
+       "S | 용접공 | 단위 〃 | 수량 1"
+      ]
+     },
+     "records_spanfill": {
+      "count": [
+       0,
+       4
+      ],
+      "same_strict": false,
+      "same_loose": false,
+      "only_pymupdf": [],
+      "only_odl": [
+       "S | 보링공 | 단위 인 | 수량 1",
+       "S | 특별인부 | 단위 〃 | 수량 2",
+       "S | 보통인부 | 단위 〃 | 수량 1",
+       "S | 용접공 | 단위 〃 | 수량 1"
+      ]
+     },
+     "pymupdf_index": 1,
+     "odl_index": 1,
+     "iou": 0.99,
+     "bbox_pt": [
+      68.7,
+      671.0,
+      544.2,
+      748.7
+     ]
+    }
+   ],
+   "only_pymupdf": [],
+   "only_odl": []
+  },
+  "290": {
+   "pymupdf_tables": 4,
+   "odl_tables": 4,
+   "pairs": [
+    {
+     "shape": [
+      "3x11",
+      "3x11"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       3,
+       3
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       3,
+       3
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 0,
+     "odl_index": 0,
+     "iou": 0.993,
+     "bbox_pt": [
+      68.3,
+      84.6,
+      544.4,
+      183.2
+     ]
+    },
+    {
+     "shape": [
+      "3x11",
+      "3x11"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       3,
+       3
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       3,
+       3
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 1,
+     "odl_index": 1,
+     "iou": 0.993,
+     "bbox_pt": [
+      68.3,
+      246.8,
+      544.4,
+      345.5
+     ]
+    },
+    {
+     "shape": [
+      "3x11",
+      "3x11"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       3,
+       3
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       3,
+       3
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 2,
+     "odl_index": 2,
+     "iou": 0.993,
+     "bbox_pt": [
+      68.3,
+      397.7,
+      544.4,
+      496.4
+     ]
+    },
+    {
+     "shape": [
+      "3x11",
+      "3x11"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       7,
+       7
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       7,
+       7
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 3,
+     "odl_index": 3,
+     "iou": 0.995,
+     "bbox_pt": [
+      68.3,
+      551.8,
+      544.4,
+      717.1
+     ]
+    }
+   ],
+   "only_pymupdf": [],
+   "only_odl": []
+  },
+  "396": {
+   "pymupdf_tables": 2,
+   "odl_tables": 1,
+   "pairs": [
+    {
+     "shape": [
+      "4x5",
+      "4x5"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       0,
+       0
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       0,
+       0
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 0,
+     "odl_index": 0,
+     "iou": 0.995,
+     "bbox_pt": [
+      68.9,
+      91.1,
+      544.4,
+      307.3
+     ]
+    }
+   ],
+   "only_pymupdf": [
+    {
+     "index": 1,
+     "bbox_pt": [
+      89.0,
+      387.5,
+      539.8,
+      520.8
+     ],
+     "shape": "8x10"
+    }
+   ],
+   "only_odl": []
+  },
+  "500": {
+   "pymupdf_tables": 2,
+   "odl_tables": 1,
+   "pairs": [
+    {
+     "shape": [
+      "3x4",
+      "3x4"
+     ],
+     "same_strict": false,
+     "same_loose": false,
+     "only_pymupdf_cells": [
+      [
+       1,
+       2,
+       3,
+       4,
+       "W=15×w11W=27×w22W=27×w33W=22×w44W=5×w55"
+      ]
+     ],
+     "only_odl_cells": [
+      [
+       1,
+       2,
+       3,
+       4,
+       "W1=15×w1W2=27×w2W3=27×w3W4=22×w4W5=5×w5"
+      ]
+     ],
+     "records_extract": {
+      "count": [
+       0,
+       0
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       0,
+       0
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 0,
+     "odl_index": 0,
+     "iou": 0.996,
+     "bbox_pt": [
+      98.7,
+      280.4,
+      544.3,
+      402.0
+     ]
+    }
+   ],
+   "only_pymupdf": [
+    {
+     "index": 1,
+     "bbox_pt": [
+      68.7,
+      472.1,
+      544.3,
+      690.4
+     ],
+     "shape": "10x6"
+    }
+   ],
+   "only_odl": []
+  },
+  "525": {
+   "pymupdf_tables": 0,
+   "odl_tables": 0,
+   "pairs": [],
+   "only_pymupdf": [],
+   "only_odl": []
+  },
+  "673": {
+   "pymupdf_tables": 5,
+   "odl_tables": 5,
+   "pairs": [
+    {
+     "shape": [
+      "3x5",
+      "3x5"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       2,
+       2
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       2,
+       2
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 0,
+     "odl_index": 0,
+     "iou": 0.989,
+     "bbox_pt": [
+      68.0,
+      201.5,
+      543.8,
+      268.1
+     ]
+    },
+    {
+     "shape": [
+      "2x3",
+      "2x3"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       1,
+       1
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       1,
+       1
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 1,
+     "odl_index": 1,
+     "iou": 0.978,
+     "bbox_pt": [
+      68.0,
+      376.6,
+      543.8,
+      409.9
+     ]
+    },
+    {
+     "shape": [
+      "2x3",
+      "2x3"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       1,
+       1
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       1,
+       1
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 2,
+     "odl_index": 2,
+     "iou": 0.984,
+     "bbox_pt": [
+      68.0,
+      483.0,
+      543.8,
+      516.4
+     ]
+    },
+    {
+     "shape": [
+      "3x4",
+      "3x4"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       2,
+       2
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       2,
+       2
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 3,
+     "odl_index": 3,
+     "iou": 0.993,
+     "bbox_pt": [
+      89.0,
+      566.5,
+      543.8,
+      631.9
+     ]
+    },
+    {
+     "shape": [
+      "3x5",
+      "3x5"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       1,
+       1
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       1,
+       1
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 4,
+     "odl_index": 4,
+     "iou": 0.989,
+     "bbox_pt": [
+      68.0,
+      704.6,
+      543.8,
+      754.6
+     ]
+    }
+   ],
+   "only_pymupdf": [],
+   "only_odl": []
+  },
+  "769": {
+   "pymupdf_tables": 2,
+   "odl_tables": 2,
+   "pairs": [
+    {
+     "shape": [
+      "3x4",
+      "3x4"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       9,
+       9
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       9,
+       9
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 0,
+     "odl_index": 0,
+     "iou": 0.996,
+     "bbox_pt": [
+      68.0,
+      196.4,
+      543.9,
+      357.4
+     ]
+    },
+    {
+     "shape": [
+      "3x6",
+      "3x6"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       16,
+       16
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       16,
+       16
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 1,
+     "odl_index": 1,
+     "iou": 0.996,
+     "bbox_pt": [
+      68.0,
+      456.0,
+      543.9,
+      755.9
+     ]
+    }
+   ],
+   "only_pymupdf": [],
+   "only_odl": []
+  },
+  "885": {
+   "pymupdf_tables": 3,
+   "odl_tables": 3,
+   "pairs": [
+    {
+     "shape": [
+      "2x8",
+      "2x8"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       3,
+       3
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       3,
+       3
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 0,
+     "odl_index": 0,
+     "iou": 0.989,
+     "bbox_pt": [
+      68.0,
+      103.0,
+      543.9,
+      168.4
+     ]
+    },
+    {
+     "shape": [
+      "3x8",
+      "3x8"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       4,
+       4
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       4,
+       4
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 1,
+     "odl_index": 1,
+     "iou": 0.993,
+     "bbox_pt": [
+      68.0,
+      227.3,
+      543.9,
+      340.1
+     ]
+    },
+    {
+     "shape": [
+      "2x5",
+      "13x5"
+     ],
+     "same_strict": false,
+     "same_loose": false,
+     "only_pymupdf_cells": [
+      [
+       1,
+       2,
+       0,
+       1,
+       "기술관리표면손질작업토의운반조작"
+      ],
+      [
+       1,
+       2,
+       1,
+       2,
+       "기계기사특별인부비계공플랜트기계설치공플랜트기계설치공비계공플랜트용접공특별인부비계공비계공플랜트설치공특별인부"
+      ],
+      [
+       1,
+       2,
+       2,
+       3,
+       "인/일인/㎡인/기〃〃인/대〃〃인/ton〃〃〃"
+      ],
+      [
+       1,
+       2,
+       3,
+       4,
+       "0.80.11.61.62.68.82.63.960.4220.0950.0210.071"
+      ],
+      [
+       1,
+       2,
+       4,
+       5,
+       "Wing설치및철거굴림운반조양및Setting"
+      ]
+     ],
+     "only_odl_cells": [
+      [
+       1,
+       2,
+       0,
+       1,
+       "기술관리"
+      ],
+      [
+       1,
+       2,
+       1,
+       2,
+       "기계기사"
+      ],
+      [
+       1,
+       2,
+       2,
+       3,
+       "인/일"
+      ],
+      [
+       1,
+       2,
+       3,
+       4,
+       "0.8"
+      ],
+      [
+       1,
+       2,
+       4,
+       5,
+       ""
+      ],
+      [
+       2,
+       3,
+       0,
+       1,
+       "표면손질"
+      ]
+     ],
+     "records_extract": {
+      "count": [
+       12,
+       12
+      ],
+      "same_strict": false,
+      "same_loose": false,
+      "only_pymupdf": [
+       "S | 기술관리 표면손질 작업토의 운반조작 | 직종 기계기사 | 단위 인/일 | 수량 0.8 | 비고 Wing 설치 및 철거",
+       "S | 기술관리 표면손질 작업토의 운반조작 | 직종 특별인부 | 단위 인/㎡ | 수량 0.1 | 비고 Wing 설치 및 철거",
+       "S | 기술관리 표면손질 작업토의 운반조작 | 직종 비계공 | 단위 인/기 | 수량 1.6 | 비고 Wing 설치 및 철거",
+       "S | 기술관리 표면손질 작업토의 운반조작 | 직종 플랜트기계설치공 | 단위 〃 | 수량 1.6 | 비고 Wing 설치 및 철거"
+      ],
+      "only_odl": [
+       "S | 기술관리 | 직종 기계기사 | 단위 인/일 | 수량 0.8",
+       "S | 표면손질 | 직종 특별인부 | 단위 인/㎡ | 수량 0.1",
+       "S | 작업토의 | 직종 비계공 | 단위 인/기 | 수량 1.6",
+       "S | 작업토의 | 직종 플랜트기계설치공 | 단위 〃 | 수량 1.6"
+      ]
+     },
+     "records_spanfill": {
+      "count": [
+       12,
+       12
+      ],
+      "same_strict": false,
+      "same_loose": false,
+      "only_pymupdf": [
+       "S | 기술관리 표면손질 작업토의 운반조작 | 직종 기계기사 | 단위 인/일 | 수량 0.8 | 비고 Wing 설치 및 철거",
+       "S | 기술관리 표면손질 작업토의 운반조작 | 직종 특별인부 | 단위 인/㎡ | 수량 0.1 | 비고 Wing 설치 및 철거",
+       "S | 기술관리 표면손질 작업토의 운반조작 | 직종 비계공 | 단위 인/기 | 수량 1.6 | 비고 Wing 설치 및 철거",
+       "S | 기술관리 표면손질 작업토의 운반조작 | 직종 플랜트기계설치공 | 단위 〃 | 수량 1.6 | 비고 Wing 설치 및 철거"
+      ],
+      "only_odl": [
+       "S | 기술관리 | 직종 기계기사 | 단위 인/일 | 수량 0.8",
+       "S | 표면손질 | 직종 특별인부 | 단위 인/㎡ | 수량 0.1",
+       "S | 작업토의 | 직종 비계공 | 단위 인/기 | 수량 1.6",
+       "S | 작업토의 | 직종 플랜트기계설치공 | 단위 〃 | 수량 1.6"
+      ]
+     },
+     "pymupdf_index": 2,
+     "odl_index": 2,
+     "iou": 0.996,
+     "bbox_pt": [
+      68.0,
+      428.8,
+      543.9,
+      645.2
+     ]
+    }
+   ],
+   "only_pymupdf": [],
+   "only_odl": []
+  },
+  "894": {
+   "pymupdf_tables": 2,
+   "odl_tables": 2,
+   "pairs": [
+    {
+     "shape": [
+      "8x4",
+      "8x4"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       7,
+       7
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       7,
+       7
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 0,
+     "odl_index": 0,
+     "iou": 0.995,
+     "bbox_pt": [
+      68.5,
+      86.0,
+      544.7,
+      219.4
+     ]
+    },
+    {
+     "shape": [
+      "8x4",
+      "8x4"
+     ],
+     "same_strict": true,
+     "same_loose": true,
+     "only_pymupdf_cells": [],
+     "only_odl_cells": [],
+     "records_extract": {
+      "count": [
+       14,
+       14
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "records_spanfill": {
+      "count": [
+       14,
+       14
+      ],
+      "same_strict": true,
+      "same_loose": true,
+      "only_pymupdf": [],
+      "only_odl": []
+     },
+     "pymupdf_index": 1,
+     "odl_index": 1,
+     "iou": 0.996,
+     "bbox_pt": [
+      68.5,
+      412.7,
+      544.7,
+      684.6
+     ]
+    }
+   ],
+   "only_pymupdf": [],
+   "only_odl": []
+  }
+ },
+ "totals": {
+  "pages": 10,
+  "pages_with_tables": 8,
+  "pairs": 20,
+  "same_strict": 17,
+  "same_loose": 17,
+  "records_extract_same_loose": 18,
+  "records_spanfill_same_loose": 18,
+  "records_spanfill_same_strict": 18,
+  "only_pymupdf_tables": 2,
+  "only_odl_tables": 0
+ }
+}

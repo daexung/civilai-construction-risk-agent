@@ -1,0 +1,46 @@
+{
+ "parser": "OpenDataLoader PDF",
+ "version": "2.5.11",
+ "config": {
+  "mode": "local",
+  "table_method": "default",
+  "keep_line_breaks": true,
+  "content_safety_off": null,
+  "hybrid_backend": null,
+  "hybrid_backend_note": null,
+  "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+  "command": [
+   "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\.venv-odl\\jre\\bin\\java.exe",
+   "-jar",
+   "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\.venv-odl\\Lib\\site-packages\\opendataloader_pdf\\jar\\opendataloader-pdf-cli.jar",
+   "-f",
+   "json,html",
+   "--keep-line-breaks",
+   "--table-method",
+   "default",
+   "-o",
+   "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parser_bench\\results\\validation_odl_local\\raw",
+   "--pages",
+   "2,180,290,396,500,525,673,769,885,894",
+   "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\raw\\standard_estimation\\2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
+  ],
+  "source": "원본 전체 PDF (--pages)"
+ },
+ "elapsed_sec": 14.95,
+ "elapsed_note": "10쪽을 한 번의 JVM 실행으로 처리한 전체 시간(JVM 기동 포함). hybrid는 서버 모델 로딩 시간 제외.",
+ "exit_code": 0,
+ "nested_tables_found": {
+  "2": 0,
+  "180": 0,
+  "290": 0,
+  "396": 0,
+  "500": 0,
+  "525": 0,
+  "673": 0,
+  "769": 0,
+  "885": 0,
+  "894": 0
+ },
+ "match_candidates": {},
+ "tables": {}
+}
