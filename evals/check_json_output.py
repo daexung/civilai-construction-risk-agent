@@ -15,11 +15,11 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "agent" / "flow"))
-sys.path.insert(0, str(ROOT / "agent" / "search"))
-sys.path.insert(0, str(ROOT / "agent" / "calc"))
+sys.path.insert(0, str(ROOT))
 from agent import answer  # noqa: E402
-from unit_price import calculate, calculate_case, load_rates, parse_volume, safe_console, to_json  # noqa: E402
+from agent.tools.calc.unit_price import calculate, calculate_case, load_rates
+from agent.tools.calc.inputs import parse_volume
+from agent.tools.calc.format import safe_console, to_json  # noqa: E402
 
 # cp949에 없는 글자(①·∼·㎥ 일부 조합, 줄표)를 일부러 넣어 원문 특수문자 보존을 확인한다
 SPECIAL_SOURCE = "테스트용 가상값(실제 노임단가 아님) ① 150∼200㎥ — ‘인용’"
@@ -65,15 +65,15 @@ def main() -> int:
         rates = load_rates(rates_path)
 
         cases = [
-            ("unit_price --volume 150 --json", ["agent/calc/unit_price.py", "--volume", "150", "--rates", str(rates_path), "--json"],
+            ("unit_price --volume 150 --json", ["-m", "agent.tools.calc.unit_price", "--volume", "150", "--rates", str(rates_path), "--json"],
              lambda: calculate_case(parse_volume("150"), rates)),
-            ("unit_price --golden --json (단가 없음)", ["agent/calc/unit_price.py", "--golden", "--json"],
+            ("unit_price --golden --json (단가 없음)", ["-m", "agent.tools.calc.unit_price", "--golden", "--json"],
              lambda: calculate({})),
-            ("agent --json 정상", ["agent/flow/agent.py", QUERY, "--offline", "--rates", str(rates_path), "--json"],
+            ("agent --json 정상", ["-m", "agent", QUERY, "--offline", "--rates", str(rates_path), "--json"],
              lambda: answer(QUERY, rates, offline=True)),
-            ("agent --json 조건 부족", ["agent/flow/agent.py", "레미콘 타설 노무비 알려줘", "--offline", "--json"],
+            ("agent --json 조건 부족", ["-m", "agent", "레미콘 타설 노무비 알려줘", "--offline", "--json"],
              lambda: answer("레미콘 타설 노무비 알려줘", {}, offline=True)),
-            ("agent --json 범위 밖", ["agent/flow/agent.py", "PC기둥 설치 노무비", "--offline", "--json"],
+            ("agent --json 범위 밖", ["-m", "agent", "PC기둥 설치 노무비", "--offline", "--json"],
              lambda: answer("PC기둥 설치 노무비", {}, offline=True)),
         ]
         for name, args, build in cases:
@@ -92,18 +92,18 @@ def main() -> int:
             lost = [s for s in strings(got) if "?" in s and s not in set(strings(want))]
             check(f"{name}: '?'로 바뀐 글자 없음", not lost, str(lost[:3]))
 
-        got = json.loads(run(["agent/calc/unit_price.py", "--volume", "150", "--rates", str(rates_path), "--json"])
+        got = json.loads(run(["-m", "agent.tools.calc.unit_price", "--volume", "150", "--rates", str(rates_path), "--json"])
                          .stdout.decode("cp949"))
         sources = {i["price_source"] for i in got["items"]}
         check("원문 특수문자 보존: 단가 출처 ①·∼·㎥·—·‘’", sources == {SPECIAL_SOURCE})
         check("한글·㎥ 보존: 사용한 원문 행", all("철근구조물" in i["labor_row"] and "㎥" in i["labor_row"] for i in got["items"]))
         check("원문 인용 보존: 공구손료 ④ 조건", any(u["text"].startswith("④ 공구손료") for u in got["unapplied_conditions"]))
 
-        human = run(["agent/calc/unit_price.py", "--volume", "150", "--rates", str(rates_path)])
+        human = run(["-m", "agent.tools.calc.unit_price", "--volume", "150", "--rates", str(rates_path)])
         text = human.stdout.decode("cp949", "replace")
         check("일반 출력: cp949에서 멈추지 않음(기존 동작)", human.returncode == 0 and "일위대가(노무비)" in text
               and "22.5 인·일" in text)
-        human = run(["agent/flow/agent.py", QUERY, "--offline", "--rates", str(rates_path)])
+        human = run(["-m", "agent", QUERY, "--offline", "--rates", str(rates_path)])
         text = human.stdout.decode("cp949", "replace")
         check("일반 출력: 에이전트 답변도 cp949에서 멈추지 않음", human.returncode == 0 and "[결과]" in text
               and "PDF 185쪽" in text)

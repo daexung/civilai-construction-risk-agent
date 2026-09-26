@@ -10,10 +10,9 @@ from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "agent" / "flow"))
-sys.path.insert(0, str(ROOT / "agent" / "search"))
-sys.path.insert(0, str(ROOT / "agent" / "calc"))
-from unit_price import UNCALCULATED, RateError, calculate, load_rates, parse_rates, safe_console  # noqa: E402
+sys.path.insert(0, str(ROOT))
+from agent.tools.calc.unit_price import RateError, calculate, load_rates, parse_rates
+from agent.tools.calc.format import UNCALCULATED, safe_console  # noqa: E402
 
 TEST_SOURCE = "테스트용 가상값(실제 노임단가 아님)"
 
@@ -100,23 +99,24 @@ def main() -> int:
     import copy
     import subprocess
 
-    import quantity
-    from unit_price import apply_prices, quantity_conditions
+    from agent.tools.calc import quantity
+    from agent.tools.calc.unit_price import apply_prices, quantity_conditions
 
     r = calculate({})
     check("품량 출처: calc/quantity.py 결과(골든 사례 ID, per_day)", r["quantity"]["calculator"] == "agent/calc/quantity.py"
           and r["quantity"]["case_id"] == "6-1-1-manual-reinforced-100m3" and r["quantity"]["rule"] == "per_day"
           and all(i["quantity_exact"] == "15" for i in r["items"]))
     for order in (["inputs", "quantity", "unit_price"], ["unit_price", "quantity"], ["quantity_node"]):
-        code = ("import sys; sys.path[:0]=[r'%s', r'%s', r'%s']; " % tuple(str(ROOT / "agent" / s) for s in ("flow", "search", "calc"))
-                + "; ".join(f"import {m}" for m in order))
-        proc = subprocess.run([sys.executable, "-c", code], capture_output=True)
+        code = "; ".join(f"import agent.tools.calc.{m}" if m != "quantity_node"
+                         else "import agent.nodes.quantity" for m in order)
+        proc = subprocess.run([sys.executable, "-c", code], cwd=ROOT, capture_output=True)
         check(f"순환 참조 없음: {' → '.join(order)} 순서로 import", proc.returncode == 0, proc.stderr.decode("utf-8", "replace")[-200:])
     # 9. 순환소수도 거부·반올림 없이 정확히 계산 (실제 원문 6-1-1 장비사용 타설 행: 시공량 55, 콘크리트공 3·보통인부 1)
     #    운영 지원 목록·사례 정의는 바꾸지 않고, 검사에서만 사본 정답 목록과 사례 정의를 넘긴다
     from fractions import Fraction
 
-    from unit_price import SUPPORTED_CASE, report, to_json
+    from agent.rules.section_6 import SUPPORTED_CASE
+    from agent.tools.calc.format import report, to_json
 
     test_case = {**SUPPORTED_CASE, "method": "장비사용 타설"}
     test_golden = copy.deepcopy(quantity.load_golden())

@@ -10,11 +10,10 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "agent" / "flow"))
-sys.path.insert(0, str(ROOT / "agent" / "search"))
-sys.path.insert(0, str(ROOT / "agent" / "calc"))
-from rag import (CHUNKS, PARSED, Index, citation, estimate_labor, evidence,  # noqa: E402
+sys.path.insert(0, str(ROOT))
+from agent.tools.search.bm25 import (CHUNKS, PARSED, Index, citation, evidence,  # noqa: E402
                  evidence_chunk_ids, load)
+from agent.tools.calc.legacy_labor import estimate_labor
 
 QUESTIONS = Path(__file__).with_name("rag_questions.json")
 
