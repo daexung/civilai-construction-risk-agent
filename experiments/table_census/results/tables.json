@@ -12,9 +12,9 @@
     "section_no": "4-3-3",
     "chapter": "4",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 19/19행(과반)",
+    "record_count": 19,
+    "uncertain_rows": 19
   },
   {
     "table_id": "p56-t0",
@@ -29,9 +29,9 @@
     "section_no": "2-1-20",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p60-t0",
@@ -45,9 +45,9 @@
     "section": "1-2-2 단위표준('12, '23년 보완)",
     "section_no": "1-2-2",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 18,
     "uncertain_rows": 0
   },
   {
@@ -63,9 +63,9 @@
     "section_no": "1-2-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 12/12행(과반)",
+    "record_count": 12,
+    "uncertain_rows": 12
   },
   {
     "table_id": "p62-t0",
@@ -80,9 +80,9 @@
     "section_no": "1-2-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p62-t1",
@@ -98,7 +98,7 @@
     "chapter": "1",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 3,
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -113,9 +113,9 @@
     "section": "1-2-3 토질('99, '14, '23년 보완)",
     "section_no": "1-2-3",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 13,
     "uncertain_rows": 0
   },
   {
@@ -130,9 +130,9 @@
     "section": "1-2-3 토질('99, '14, '23년 보완)",
     "section_no": "1-2-3",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 6,
     "uncertain_rows": 0
   },
   {
@@ -148,9 +148,9 @@
     "section_no": "1-2-3",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p66-t0",
@@ -165,9 +165,9 @@
     "section_no": "1-2-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 15/15행(과반)",
+    "record_count": 15,
+    "uncertain_rows": 15
   },
   {
     "table_id": "p67-t0",
@@ -182,9 +182,9 @@
     "section_no": "1-2-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 24/24행(과반)",
+    "record_count": 24,
+    "uncertain_rows": 24
   },
   {
     "table_id": "p67-t1",
@@ -199,9 +199,9 @@
     "section_no": "1-2-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p68-t0",
@@ -267,9 +267,9 @@
     "section_no": "1-2-7",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p72-t0",
@@ -335,9 +335,9 @@
     "section_no": "1-2-7",
     "chapter": "1",
     "type": "X",
-    "reason": "uncertain 7/7행(과반)",
-    "record_count": 7,
-    "uncertain_rows": 7
+    "reason": "uncertain 16/21행(과반)",
+    "record_count": 21,
+    "uncertain_rows": 16
   },
   {
     "table_id": "p74-t1",
@@ -487,9 +487,9 @@
     "section": "1-3-1 재료의 할증('06, '11, '12, '19, '22, '23년 보완)",
     "section_no": "1-3-1",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 3/3행(과반)",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -522,9 +522,9 @@
     "section_no": "1-3-1",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p77-t2",
@@ -556,9 +556,9 @@
     "section_no": "1-3-1",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 11/11행(과반)",
+    "record_count": 11,
+    "uncertain_rows": 11
   },
   {
     "table_id": "p79-t0",
@@ -573,9 +573,9 @@
     "section_no": "1-3-1",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p80-t0",
@@ -589,9 +589,9 @@
     "section": "1-4-3 작업지연('23, '25년 보완)",
     "section_no": "1-4-3",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 4/4행(과반)",
+    "record_count": 4,
     "uncertain_rows": 0
   },
   {
@@ -606,10 +606,10 @@
     "section": "1-4-3 작업지연('23, '25년 보완)",
     "section_no": "1-4-3",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "type": "D",
+    "reason": "% 포함 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p81-t0",
@@ -624,9 +624,9 @@
     "section_no": "1-4-3",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 10/10행(과반)",
+    "record_count": 10,
+    "uncertain_rows": 10
   },
   {
     "table_id": "p81-t1",
@@ -640,9 +640,9 @@
     "section": "1-4-4 지세/지형('23, '25년 보완)",
     "section_no": "1-4-4",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 8/8행(과반)",
+    "record_count": 8,
     "uncertain_rows": 0
   },
   {
@@ -658,9 +658,9 @@
     "section_no": "1-4-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p81-t3",
@@ -675,9 +675,9 @@
     "section_no": "1-4-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p82-t0",
@@ -692,9 +692,9 @@
     "section_no": "1-4-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 18/18행(과반)",
+    "record_count": 18,
+    "uncertain_rows": 18
   },
   {
     "table_id": "p83-t0",
@@ -709,9 +709,9 @@
     "section_no": "1-4-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 10/19행(과반)",
+    "record_count": 19,
+    "uncertain_rows": 10
   },
   {
     "table_id": "p84-t0",
@@ -726,9 +726,9 @@
     "section_no": "1-4-5",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 14/14행(과반)",
+    "record_count": 14,
+    "uncertain_rows": 14
   },
   {
     "table_id": "p84-t1",
@@ -742,9 +742,9 @@
     "section": "1-4-5 위험('23년 보완)",
     "section_no": "1-4-5",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -759,9 +759,9 @@
     "section": "1-4-5 위험('23년 보완)",
     "section_no": "1-4-5",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -776,9 +776,9 @@
     "section": "1-4-5 위험('23년 보완)",
     "section_no": "1-4-5",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 5/5행(과반)",
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -793,9 +793,9 @@
     "section": "1-4-6 작업제한('23, '24, '26년 보완)",
     "section_no": "1-4-6",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 5/5행(과반)",
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -810,9 +810,9 @@
     "section": "1-4-6 작업제한('23, '24, '26년 보완)",
     "section_no": "1-4-6",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 4/4행(과반)",
+    "record_count": 4,
     "uncertain_rows": 0
   },
   {
@@ -827,9 +827,9 @@
     "section": "1-4-7 작업환경('23년 보완)",
     "section_no": "1-4-7",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -845,9 +845,9 @@
     "section_no": "1-4-7",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p86-t1",
@@ -862,9 +862,9 @@
     "section_no": "1-4-7",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p88-t0",
@@ -896,9 +896,9 @@
     "section_no": "1-5-6",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 10/10행(과반)",
+    "record_count": 10,
+    "uncertain_rows": 10
   },
   {
     "table_id": "p91-t0",
@@ -947,9 +947,9 @@
     "section_no": "2-1-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p92-t1",
@@ -964,9 +964,9 @@
     "section_no": "2-1-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 11/11행(과반)",
+    "record_count": 11,
+    "uncertain_rows": 11
   },
   {
     "table_id": "p93-t0",
@@ -981,9 +981,9 @@
     "section_no": "2-1-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p93-t1",
@@ -998,9 +998,9 @@
     "section_no": "2-1-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 10/10행(과반)",
+    "record_count": 10,
+    "uncertain_rows": 10
   },
   {
     "table_id": "p93-t2",
@@ -1032,9 +1032,9 @@
     "section_no": "2-1-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p94-t0",
@@ -1151,9 +1151,9 @@
     "section_no": "2-2-5",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 15/15행(과반)",
+    "record_count": 15,
+    "uncertain_rows": 15
   },
   {
     "table_id": "p96-t2",
@@ -1184,9 +1184,9 @@
     "section": "2-2-7 규준틀('22년 신설)",
     "section_no": "2-2-7",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -1355,9 +1355,9 @@
     "section_no": "2-5-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p100-t2",
@@ -1440,9 +1440,9 @@
     "section_no": "2-6-1",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p101-t3",
@@ -1491,9 +1491,9 @@
     "section_no": "2-6-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p102-t0",
@@ -1525,9 +1525,9 @@
     "section_no": "2-6-3",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p102-t2",
@@ -1882,9 +1882,9 @@
     "section_no": "2-8-7",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p109-t1",
@@ -1898,9 +1898,9 @@
     "section": "2-8-7 철골 안전망 설치 및 해체('18년 보완)",
     "section_no": "2-8-7",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "C",
+    "reason": "재료 단위/소요량 + 직종/인 없음",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -2017,9 +2017,9 @@
     "section": "2-8-11 안전난간대 설치 및 해체('20년 신설)",
     "section_no": "2-8-11",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -2068,9 +2068,9 @@
     "section": "2-8-13 안전난간대 설치 및 해체(토목)('21년 신설)",
     "section_no": "2-8-13",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -2527,9 +2527,9 @@
     "section": "2-11-1 건축물보양('23년 보완)",
     "section_no": "2-11-1",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -2613,9 +2613,9 @@
     "section_no": "2-11-5",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p118-t2",
@@ -2647,9 +2647,9 @@
     "section_no": "2-11-7",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p119-t1",
@@ -2902,9 +2902,9 @@
     "section_no": "3-2-3",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p124-t2",
@@ -2986,9 +2986,9 @@
     "section": "3-2-3 흙깎기(기계)('25년 신설)",
     "section_no": "3-2-3",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -3004,9 +3004,9 @@
     "section_no": "3-2-4",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p125-t4",
@@ -3071,9 +3071,9 @@
     "section": "3-2-4 터파기(기계)('25년 신설)",
     "section_no": "3-2-4",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -3207,9 +3207,9 @@
     "section": "3-3-6 암발파(대규모발파 TYPE-Ⅵ)('20, '26년 보완)",
     "section_no": "3-3-6",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -3275,9 +3275,9 @@
     "section": "3-3-8 암파쇄(유압식 할암공법)('20년 보완)",
     "section_no": "3-3-8",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -3310,9 +3310,9 @@
     "section_no": "3-4-1",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p130-t2",
@@ -3905,9 +3905,9 @@
     "section_no": "3-9-2",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 12/12행(과반)",
+    "record_count": 12,
+    "uncertain_rows": 12
   },
   {
     "table_id": "p141-t0",
@@ -4177,9 +4177,9 @@
     "section_no": "4-1-3",
     "chapter": "4",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p148-t1",
@@ -4500,9 +4500,9 @@
     "section_no": "5-1-1",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p155-t2",
@@ -4602,9 +4602,9 @@
     "section_no": "5-1-6",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p157-t3",
@@ -4822,9 +4822,9 @@
     "section": "5-1-9 주열식 현장벽체공법(CIP,Cast In Placed Pile)('26년 신설)",
     "section_no": "5-1-9",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -4941,9 +4941,9 @@
     "section": "5-1-10 차수그라우팅('26년 신설)",
     "section_no": "5-1-10",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -4975,9 +4975,9 @@
     "section": "5-1-10 차수그라우팅('26년 신설)",
     "section_no": "5-1-10",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -5112,9 +5112,9 @@
     "section_no": "5-2-2",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p168-t2",
@@ -5163,9 +5163,9 @@
     "section_no": "5-2-3",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p170-t0",
@@ -5180,9 +5180,9 @@
     "section_no": "5-2-3",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p170-t1",
@@ -5196,9 +5196,9 @@
     "section": "5-2-3 플라스틱 보드 드레인(PBD)('13년 신설, '21, '26년 보완)",
     "section_no": "5-2-3",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -5265,9 +5265,9 @@
     "section_no": "5-2-4",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p171-t1",
@@ -5332,9 +5332,9 @@
     "section": "5-2-4 다짐말뚝('15, '21, '26년 보완)",
     "section_no": "5-2-4",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -5349,9 +5349,9 @@
     "section": "5-3-1 기성말뚝 기초('99년 신설, '15, '16, '20, '26년 보완)",
     "section_no": "5-3-1",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -5417,9 +5417,9 @@
     "section": "5-3-1 기성말뚝 기초('99년 신설, '15, '16, '20, '26년 보완)",
     "section_no": "5-3-1",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -5434,9 +5434,9 @@
     "section": "5-3-1 기성말뚝 기초('99년 신설, '15, '16, '20, '26년 보완)",
     "section_no": "5-3-1",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -5453,7 +5453,7 @@
     "chapter": "5",
     "type": "E",
     "reason": "표 행의 장비/hr/Q=/작업능력/기계경비",
-    "record_count": 2,
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -5469,9 +5469,9 @@
     "section_no": "5-3-1",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 24/24행(과반)",
+    "record_count": 24,
+    "uncertain_rows": 24
   },
   {
     "table_id": "p175-t2",
@@ -5487,7 +5487,7 @@
     "chapter": "5",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 3,
+    "record_count": 4,
     "uncertain_rows": 0
   },
   {
@@ -5604,9 +5604,9 @@
     "section": "5-3-2 말뚝박기용 천공('08, '15, '16, '20, '25, '26년 보완)",
     "section_no": "5-3-2",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -5622,9 +5622,9 @@
     "section_no": "5-3-2",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p178-t2",
@@ -5706,9 +5706,9 @@
     "section": "5-3-5 현장타설말뚝('15, '21, '26년 보완)",
     "section_no": "5-3-5",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -5741,9 +5741,9 @@
     "section_no": "5-3-5",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p181-t0",
@@ -5774,9 +5774,9 @@
     "section": "5-3-5 현장타설말뚝('15, '21, '26년 보완)",
     "section_no": "5-3-5",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -5910,9 +5910,9 @@
     "section": "5-3-5 현장타설말뚝('15, '21, '26년 보완)",
     "section_no": "5-3-5",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -5945,9 +5945,9 @@
     "section_no": "5-3-5",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p183-t2",
@@ -5995,9 +5995,9 @@
     "section": "5-4-1 차수재공('26년 보완)",
     "section_no": "5-4-1",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -6132,9 +6132,9 @@
     "section_no": "6-1-4",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p187-t3",
@@ -6166,9 +6166,9 @@
     "section_no": "6-1-4",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p187-t5",
@@ -6268,9 +6268,9 @@
     "section_no": "6-2-1",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 11/11행(과반)",
+    "record_count": 11,
+    "uncertain_rows": 11
   },
   {
     "table_id": "p189-t1",
@@ -6285,9 +6285,9 @@
     "section_no": "6-2-1",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p189-t2",
@@ -6386,9 +6386,9 @@
     "section": "6-2-5 철근의 기계적 이음",
     "section_no": "6-2-5",
     "chapter": "6",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -6421,9 +6421,9 @@
     "section_no": "6-3-1",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p192-t1",
@@ -6472,9 +6472,9 @@
     "section_no": "6-3-1",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p193-t0",
@@ -6506,9 +6506,9 @@
     "section_no": "6-3-2",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p193-t2",
@@ -6608,9 +6608,9 @@
     "section_no": "6-3-3",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p195-t2",
@@ -6710,9 +6710,9 @@
     "section_no": "6-3-7",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p197-t1",
@@ -6812,9 +6812,9 @@
     "section_no": "6-3-9",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p199-t1",
@@ -7254,9 +7254,9 @@
     "section_no": "6-6-7",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p211-t1",
@@ -7339,9 +7339,9 @@
     "section_no": "6-7-3",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p213-t0",
@@ -7628,9 +7628,9 @@
     "section_no": "8-1-1",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p219-t1",
@@ -7645,9 +7645,9 @@
     "section_no": "8-1-1",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p219-t2",
@@ -7662,9 +7662,9 @@
     "section_no": "8-1-2",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p220-t0",
@@ -7696,9 +7696,9 @@
     "section_no": "8-1-3",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 15/15행(과반)",
+    "record_count": 15,
+    "uncertain_rows": 15
   },
   {
     "table_id": "p224-t0",
@@ -7848,9 +7848,9 @@
     "section": "8-2-2 리퍼(유압식)('25년 보완)",
     "section_no": "8-2-2",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -8223,9 +8223,9 @@
     "section_no": "8-2-9",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p239-t0",
@@ -8563,9 +8563,9 @@
     "section_no": "8-2-13",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p249-t0",
@@ -8596,9 +8596,9 @@
     "section": "8-2-13 대형브레이커('14, '17, '25년 보완)",
     "section_no": "8-2-13",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -8648,9 +8648,9 @@
     "section_no": "8-2-18",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p251-t1",
@@ -8699,9 +8699,9 @@
     "section_no": "8-2-19",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p253-t0",
@@ -8716,9 +8716,9 @@
     "section_no": "8-2-21",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p254-t0",
@@ -8766,9 +8766,9 @@
     "section": "8-2-22 디젤 파일 해머",
     "section_no": "8-2-22",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -8852,9 +8852,9 @@
     "section_no": "8-2-22",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p257-t1",
@@ -8937,9 +8937,9 @@
     "section_no": "8-2-22",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p258-t3",
@@ -9006,7 +9006,7 @@
     "chapter": "8",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 4,
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -9040,7 +9040,7 @@
     "chapter": "8",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 4,
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -9056,9 +9056,9 @@
     "section_no": "8-2-23",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p261-t1",
@@ -9141,9 +9141,9 @@
     "section_no": "8-2-24",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p263-t0",
@@ -9208,9 +9208,9 @@
     "section": "8-2-24 진동파일 해머('96, '26년 보완)",
     "section_no": "8-2-24",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "E",
+    "reason": "표 행의 장비/hr/Q=/작업능력/기계경비",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -9226,9 +9226,9 @@
     "section_no": "8-2-24",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p264-t1",
@@ -9311,9 +9311,9 @@
     "section_no": "8-2-24",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p266-t0",
@@ -9328,9 +9328,9 @@
     "section_no": "8-2-24",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 12/12행(과반)",
+    "record_count": 12,
+    "uncertain_rows": 12
   },
   {
     "table_id": "p266-t1",
@@ -9345,9 +9345,9 @@
     "section_no": "8-2-24",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p266-t2",
@@ -9447,9 +9447,9 @@
     "section_no": "8-2-25",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 14/14행(과반)",
+    "record_count": 14,
+    "uncertain_rows": 14
   },
   {
     "table_id": "p269-t0",
@@ -9464,9 +9464,9 @@
     "section_no": "8-2-25",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 13/13행(과반)",
+    "record_count": 13,
+    "uncertain_rows": 13
   },
   {
     "table_id": "p269-t1",
@@ -9566,9 +9566,9 @@
     "section_no": "8-2-26",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p272-t0",
@@ -9583,9 +9583,9 @@
     "section_no": "8-2-26",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p272-t1",
@@ -9735,9 +9735,9 @@
     "section": "8-2-29 펌프식 준설선('10, '11년 보완)",
     "section_no": "8-2-29",
     "chapter": "8",
-    "type": "X",
-    "reason": "uncertain 2/3행(과반)",
-    "record_count": 3,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 4,
     "uncertain_rows": 2
   },
   {
@@ -9753,8 +9753,8 @@
     "section_no": "8-2-29",
     "chapter": "8",
     "type": "X",
-    "reason": "uncertain 8/8행(과반)",
-    "record_count": 8,
+    "reason": "uncertain 8/9행(과반)",
+    "record_count": 9,
     "uncertain_rows": 8
   },
   {
@@ -9771,7 +9771,7 @@
     "chapter": "8",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 14,
+    "record_count": 15,
     "uncertain_rows": 7
   },
   {
@@ -9804,9 +9804,9 @@
     "section_no": "8-2-29",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p276-t3",
@@ -9822,7 +9822,7 @@
     "chapter": "8",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 2,
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -9839,7 +9839,7 @@
     "chapter": "8",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 1,
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -9856,7 +9856,7 @@
     "chapter": "8",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 7,
+    "record_count": 8,
     "uncertain_rows": 3
   },
   {
@@ -9871,9 +9871,9 @@
     "section": "8-2-29 펌프식 준설선('10, '11년 보완)",
     "section_no": "8-2-29",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 6,
     "uncertain_rows": 0
   },
   {
@@ -9906,9 +9906,9 @@
     "section_no": "8-2-29",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p278-t2",
@@ -9940,9 +9940,9 @@
     "section_no": "8-2-29",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p279-t0",
@@ -9974,9 +9974,9 @@
     "section_no": "8-2-29",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p279-t2",
@@ -10008,9 +10008,9 @@
     "section_no": "8-2-29",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p279-t4",
@@ -10042,9 +10042,9 @@
     "section_no": "8-2-29",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p280-t0",
@@ -10075,9 +10075,9 @@
     "section": "8-2-30 그래브 준설선('10, '11년 보완)",
     "section_no": "8-2-30",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 11,
     "uncertain_rows": 0
   },
   {
@@ -10092,10 +10092,10 @@
     "section": "8-2-30 그래브 준설선('10, '11년 보완)",
     "section_no": "8-2-30",
     "chapter": "8",
-    "type": "F",
-    "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 2,
-    "uncertain_rows": 0
+    "type": "X",
+    "reason": "uncertain 4/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p281-t1",
@@ -10144,9 +10144,9 @@
     "section_no": "8-2-30",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p282-t0",
@@ -10178,9 +10178,9 @@
     "section_no": "8-2-30",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p282-t2",
@@ -10229,9 +10229,9 @@
     "section_no": "8-2-32",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p283-t1",
@@ -10297,9 +10297,9 @@
     "section_no": "8-2-32",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p284-t3",
@@ -10348,9 +10348,9 @@
     "section_no": "8-2-33",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p285-t1",
@@ -11775,9 +11775,9 @@
     "section": "8-3-6 [50]골재생산기계 등",
     "section_no": "8-3-6",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 4,
     "uncertain_rows": 0
   },
   {
@@ -11809,9 +11809,9 @@
     "section": "8-3-6 [50]골재생산기계 등",
     "section_no": "8-3-6",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -12982,9 +12982,9 @@
     "section": "8-3-8 [70]기타기계",
     "section_no": "8-3-8",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -12999,9 +12999,9 @@
     "section": "8-3-8 [70]기타기계",
     "section_no": "8-3-8",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -13016,9 +13016,9 @@
     "section": "8-3-8 [70]기타기계",
     "section_no": "8-3-8",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -13033,9 +13033,9 @@
     "section": "8-3-8 [70]기타기계",
     "section_no": "8-3-8",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -13051,9 +13051,9 @@
     "section_no": "8-3-8",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p325-t1",
@@ -13442,9 +13442,9 @@
     "section_no": "8-4-5",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 21/21행(과반)",
+    "record_count": 21,
+    "uncertain_rows": 21
   },
   {
     "table_id": "p337-t1",
@@ -13476,9 +13476,9 @@
     "section_no": "8-4-6",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p338-t1",
@@ -13510,9 +13510,9 @@
     "section_no": "8-4-8",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 38/38행(과반)",
+    "record_count": 38,
+    "uncertain_rows": 38
   },
   {
     "table_id": "p340-t0",
@@ -13527,9 +13527,9 @@
     "section_no": "8-4-8",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 18/18행(과반)",
+    "record_count": 18,
+    "uncertain_rows": 18
   },
   {
     "table_id": "p341-t0",
@@ -13628,9 +13628,9 @@
     "section": "8-4-9 [90]해상기계",
     "section_no": "8-4-9",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "E",
+    "reason": "표 행의 장비/hr/Q=/작업능력/기계경비",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -13662,9 +13662,9 @@
     "section": "8-4-9 [90]해상기계",
     "section_no": "8-4-9",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "E",
+    "reason": "표 행의 장비/hr/Q=/작업능력/기계경비",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -13697,9 +13697,9 @@
     "section_no": "8-5-1",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 15/15행(과반)",
+    "record_count": 15,
+    "uncertain_rows": 15
   },
   {
     "table_id": "p344-t0",
@@ -13714,9 +13714,9 @@
     "section_no": "8-5-1",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 38/38행(과반)",
+    "record_count": 38,
+    "uncertain_rows": 38
   },
   {
     "table_id": "p345-t0",
@@ -13731,9 +13731,9 @@
     "section_no": "8-5-1",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 27/27행(과반)",
+    "record_count": 27,
+    "uncertain_rows": 27
   },
   {
     "table_id": "p346-t0",
@@ -13748,9 +13748,9 @@
     "section_no": "8-5-2",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 32/32행(과반)",
+    "record_count": 32,
+    "uncertain_rows": 32
   },
   {
     "table_id": "p347-t0",
@@ -13765,9 +13765,9 @@
     "section_no": "8-5-3",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 40/40행(과반)",
+    "record_count": 40,
+    "uncertain_rows": 40
   },
   {
     "table_id": "p348-t0",
@@ -13782,9 +13782,9 @@
     "section_no": "8-5-3",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 34/34행(과반)",
+    "record_count": 34,
+    "uncertain_rows": 34
   },
   {
     "table_id": "p349-t0",
@@ -13799,9 +13799,9 @@
     "section_no": "8-5-4",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 27/27행(과반)",
+    "record_count": 27,
+    "uncertain_rows": 27
   },
   {
     "table_id": "p350-t0",
@@ -13816,9 +13816,9 @@
     "section_no": "8-5-5",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 33/33행(과반)",
+    "record_count": 33,
+    "uncertain_rows": 33
   },
   {
     "table_id": "p351-t0",
@@ -13833,9 +13833,9 @@
     "section_no": "8-5-6",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 37/37행(과반)",
+    "record_count": 37,
+    "uncertain_rows": 37
   },
   {
     "table_id": "p352-t0",
@@ -13850,9 +13850,9 @@
     "section_no": "8-5-6",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 39/39행(과반)",
+    "record_count": 39,
+    "uncertain_rows": 39
   },
   {
     "table_id": "p353-t0",
@@ -13867,9 +13867,9 @@
     "section_no": "8-5-6",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 23/23행(과반)",
+    "record_count": 23,
+    "uncertain_rows": 23
   },
   {
     "table_id": "p353-t1",
@@ -13884,9 +13884,9 @@
     "section_no": "8-5-7",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 10/10행(과반)",
+    "record_count": 10,
+    "uncertain_rows": 10
   },
   {
     "table_id": "p354-t0",
@@ -13901,9 +13901,9 @@
     "section_no": "8-5-7",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 38/38행(과반)",
+    "record_count": 38,
+    "uncertain_rows": 38
   },
   {
     "table_id": "p355-t0",
@@ -13918,9 +13918,9 @@
     "section_no": "8-5-7",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 19/19행(과반)",
+    "record_count": 19,
+    "uncertain_rows": 19
   },
   {
     "table_id": "p355-t1",
@@ -13935,9 +13935,9 @@
     "section_no": "8-5-8",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 14/14행(과반)",
+    "record_count": 14,
+    "uncertain_rows": 14
   },
   {
     "table_id": "p356-t0",
@@ -13952,9 +13952,9 @@
     "section_no": "8-5-8",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 39/39행(과반)",
+    "record_count": 39,
+    "uncertain_rows": 39
   },
   {
     "table_id": "p357-t0",
@@ -13969,9 +13969,9 @@
     "section_no": "8-5-8",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 39/39행(과반)",
+    "record_count": 39,
+    "uncertain_rows": 39
   },
   {
     "table_id": "p358-t0",
@@ -13986,9 +13986,9 @@
     "section_no": "8-5-8",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 25/25행(과반)",
+    "record_count": 25,
+    "uncertain_rows": 25
   },
   {
     "table_id": "p358-t1",
@@ -14002,9 +14002,9 @@
     "section": "8-5-9 [80]스마트 건설장비",
     "section_no": "8-5-9",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "E",
+    "reason": "표 행의 장비/hr/Q=/작업능력/기계경비",
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -14019,9 +14019,9 @@
     "section": "8-5-10 [90]해상기계",
     "section_no": "8-5-10",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -14037,9 +14037,9 @@
     "section_no": "8-5-10",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 39/39행(과반)",
+    "record_count": 39,
+    "uncertain_rows": 39
   },
   {
     "table_id": "p360-t0",
@@ -14054,9 +14054,9 @@
     "section_no": "8-5-10",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 37/37행(과반)",
+    "record_count": 37,
+    "uncertain_rows": 37
   },
   {
     "table_id": "p363-t0",
@@ -14428,9 +14428,9 @@
     "section_no": "1-6-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p372-t0",
@@ -14547,9 +14547,9 @@
     "section_no": "1-7-1",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p374-t2",
@@ -14581,9 +14581,9 @@
     "section_no": "1-7-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p375-t1",
@@ -14700,9 +14700,9 @@
     "section_no": "1-8-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p377-t2",
@@ -14887,9 +14887,9 @@
     "section_no": "1-8-9",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p380-t2",
@@ -15040,9 +15040,9 @@
     "section_no": "1-8-13",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p383-t0",
@@ -15074,9 +15074,9 @@
     "section_no": "1-8-14",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p383-t2",
@@ -15090,9 +15090,9 @@
     "section": "1-8-14 표시못 설치('20, '24년 보완)",
     "section_no": "1-8-14",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -15193,9 +15193,9 @@
     "section_no": "1-9-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p385-t2",
@@ -15363,9 +15363,9 @@
     "section_no": "2-2-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p390-t1",
@@ -15414,9 +15414,9 @@
     "section_no": "2-3-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p391-t1",
@@ -15431,9 +15431,9 @@
     "section_no": "2-3-3",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p393-t0",
@@ -15448,9 +15448,9 @@
     "section_no": "3-1-1",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p393-t1",
@@ -15464,9 +15464,9 @@
     "section": "3-1-1 터널노임 산정식('07, '13, '20년 보완)",
     "section_no": "3-1-1",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "표 행의 할증/보정/감액/가산 등",
+    "record_count": 11,
     "uncertain_rows": 0
   },
   {
@@ -15481,9 +15481,9 @@
     "section": "3-1-2 터널 여굴(餘掘)량('07, '13, '17년 보완)",
     "section_no": "3-1-2",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -15499,9 +15499,9 @@
     "section_no": "3-2-1",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 24/24행(과반)",
+    "record_count": 24,
+    "uncertain_rows": 24
   },
   {
     "table_id": "p395-t0",
@@ -15515,9 +15515,9 @@
     "section": "3-2-1 터널굴착 1발파당 싸이클 시간(Cycle Time)('07, '13, '20년 보완)",
     "section_no": "3-2-1",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -15550,9 +15550,9 @@
     "section_no": "3-2-3",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p396-t1",
@@ -15584,9 +15584,9 @@
     "section_no": "3-2-4",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p397-t1",
@@ -15601,9 +15601,9 @@
     "section_no": "3-2-4",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p397-t2",
@@ -15618,9 +15618,9 @@
     "section_no": "3-2-4",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p397-t3",
@@ -15634,9 +15634,9 @@
     "section": "3-2-5 터널굴착 1발파당 작업인원('07, '20년 보완)",
     "section_no": "3-2-5",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "E",
+    "reason": "표 행의 장비/hr/Q=/작업능력/기계경비",
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -15651,10 +15651,10 @@
     "section": "3-2-5 터널굴착 1발파당 작업인원('07, '20년 보완)",
     "section_no": "3-2-5",
     "chapter": "3",
-    "type": "E",
-    "reason": "표 행의 장비/hr/Q=/작업능력/기계경비",
-    "record_count": 4,
-    "uncertain_rows": 0
+    "type": "X",
+    "reason": "uncertain 6/11행(과반)",
+    "record_count": 11,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p398-t1",
@@ -16162,9 +16162,9 @@
     "section_no": "4-6-10",
     "chapter": "4",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p411-t0",
@@ -16332,9 +16332,9 @@
     "section_no": "5-1-3",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 25/25행(과반)",
+    "record_count": 25,
+    "uncertain_rows": 25
   },
   {
     "table_id": "p414-t1",
@@ -16400,9 +16400,9 @@
     "section_no": "5-2-3",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p415-t2",
@@ -16485,9 +16485,9 @@
     "section_no": "5-3-1",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p417-t0",
@@ -16569,9 +16569,9 @@
     "section": "6-1-1 적용기준 및 범위('18년 신설, '23, '25년 보완)",
     "section_no": "6-1-1",
     "chapter": "6",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 5/5행(과반)",
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -16671,9 +16671,9 @@
     "section": "6-2-2 K.P 메커니컬 접합 및 부설('23, '25년 보완)",
     "section_no": "6-2-2",
     "chapter": "6",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -16892,9 +16892,9 @@
     "section": "6-5-4 바트융착 접합 및 부설('23, '25년 보완)",
     "section_no": "6-5-4",
     "chapter": "6",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -17012,9 +17012,9 @@
     "section_no": "6-7-1",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p431-t1",
@@ -17063,9 +17063,9 @@
     "section_no": "6-7-3",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p433-t0",
@@ -17115,7 +17115,7 @@
     "chapter": "6",
     "type": "A",
     "reason": "일당 표기 (일당)",
-    "record_count": 4,
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -17132,7 +17132,7 @@
     "chapter": "6",
     "type": "A",
     "reason": "일당 표기 (일당)",
-    "record_count": 2,
+    "record_count": 7,
     "uncertain_rows": 0
   },
   {
@@ -17233,9 +17233,9 @@
     "section_no": "6-8-1",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p436-t3",
@@ -17267,9 +17267,9 @@
     "section_no": "6-8-2",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p437-t1",
@@ -17301,9 +17301,9 @@
     "section_no": "6-8-3",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p438-t1",
@@ -17335,9 +17335,9 @@
     "section_no": "6-8-4",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p439-t0",
@@ -17386,9 +17386,9 @@
     "section_no": "6-8-5",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p440-t0",
@@ -17402,9 +17402,9 @@
     "section": "6-8-5 부단수 천공 분기점 분기('00, '11, '21년 보완)",
     "section_no": "6-8-5",
     "chapter": "6",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -17488,9 +17488,9 @@
     "section_no": "7-1-2",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p444-t0",
@@ -17539,9 +17539,9 @@
     "section_no": "7-1-4",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p445-t1",
@@ -17674,9 +17674,9 @@
     "section": "7-3-1 케이슨 진수",
     "section_no": "7-3-1",
     "chapter": "7",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "B",
+    "reason": "단위당 표기 (개당) + 직종/인",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -17691,9 +17691,9 @@
     "section": "7-3-2 케이슨 거치",
     "section_no": "7-3-2",
     "chapter": "7",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "B",
+    "reason": "단위당 표기 (개당) + 직종/인",
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -17708,9 +17708,9 @@
     "section": "7-3-3 일반블록 거치",
     "section_no": "7-3-3",
     "chapter": "7",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "A",
+    "reason": "일당 표기 (일당)",
+    "record_count": 6,
     "uncertain_rows": 0
   },
   {
@@ -17725,9 +17725,9 @@
     "section": "7-3-4 소파블록 거치",
     "section_no": "7-3-4",
     "chapter": "7",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "A",
+    "reason": "일당 표기 (일당)",
+    "record_count": 4,
     "uncertain_rows": 0
   },
   {
@@ -17742,9 +17742,9 @@
     "section": "7-3-4 소파블록 거치",
     "section_no": "7-3-4",
     "chapter": "7",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 4,
     "uncertain_rows": 0
   },
   {
@@ -17777,9 +17777,9 @@
     "section_no": "7-4-1",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p450-t0",
@@ -17811,9 +17811,9 @@
     "section_no": "7-4-2",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p450-t2",
@@ -17862,9 +17862,9 @@
     "section_no": "7-4-3",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p451-t2",
@@ -17879,9 +17879,9 @@
     "section_no": "7-4-4",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p451-t3",
@@ -17896,9 +17896,9 @@
     "section_no": "7-4-5",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p452-t0",
@@ -17913,9 +17913,9 @@
     "section_no": "7-4-6",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p453-t0",
@@ -18117,9 +18117,9 @@
     "section_no": "8-3-1",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p457-t1",
@@ -18304,9 +18304,9 @@
     "section_no": "8-4-3",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p463-t0",
@@ -18322,7 +18322,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 2,
+    "record_count": 8,
     "uncertain_rows": 0
   },
   {
@@ -18355,9 +18355,9 @@
     "section_no": "9-1-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p464-t1",
@@ -18406,9 +18406,9 @@
     "section_no": "9-1-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 12/12행(과반)",
+    "record_count": 12,
+    "uncertain_rows": 12
   },
   {
     "table_id": "p465-t1",
@@ -18423,9 +18423,9 @@
     "section_no": "9-1-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p466-t0",
@@ -18474,9 +18474,9 @@
     "section_no": "9-1-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 13/13행(과반)",
+    "record_count": 13,
+    "uncertain_rows": 13
   },
   {
     "table_id": "p467-t0",
@@ -18491,9 +18491,9 @@
     "section_no": "9-1-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p467-t1",
@@ -18542,9 +18542,9 @@
     "section_no": "9-1-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 11/11행(과반)",
+    "record_count": 11,
+    "uncertain_rows": 11
   },
   {
     "table_id": "p468-t1",
@@ -18559,9 +18559,9 @@
     "section_no": "9-1-5",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p469-t0",
@@ -18661,9 +18661,9 @@
     "section_no": "9-2-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 42/42행(과반)",
+    "record_count": 42,
+    "uncertain_rows": 42
   },
   {
     "table_id": "p473-t0",
@@ -18729,9 +18729,9 @@
     "section_no": "9-2-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 41/41행(과반)",
+    "record_count": 41,
+    "uncertain_rows": 41
   },
   {
     "table_id": "p476-t0",
@@ -18797,9 +18797,9 @@
     "section_no": "9-2-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 40/40행(과반)",
+    "record_count": 40,
+    "uncertain_rows": 40
   },
   {
     "table_id": "p479-t0",
@@ -18865,9 +18865,9 @@
     "section_no": "9-2-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 40/40행(과반)",
+    "record_count": 40,
+    "uncertain_rows": 40
   },
   {
     "table_id": "p482-t0",
@@ -18933,9 +18933,9 @@
     "section_no": "9-2-5",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 40/40행(과반)",
+    "record_count": 40,
+    "uncertain_rows": 40
   },
   {
     "table_id": "p485-t0",
@@ -18984,9 +18984,9 @@
     "section_no": "9-2-6",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p486-t1",
@@ -19035,9 +19035,9 @@
     "section_no": "9-2-7",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p488-t0",
@@ -19052,9 +19052,9 @@
     "section_no": "9-3-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p488-t1",
@@ -19137,9 +19137,9 @@
     "section_no": "9-3-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 24/24행(과반)",
+    "record_count": 24,
+    "uncertain_rows": 24
   },
   {
     "table_id": "p490-t0",
@@ -19188,9 +19188,9 @@
     "section_no": "9-3-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p493-t0",
@@ -19239,9 +19239,9 @@
     "section_no": "9-3-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 21/21행(과반)",
+    "record_count": 21,
+    "uncertain_rows": 21
   },
   {
     "table_id": "p495-t1",
@@ -19290,9 +19290,9 @@
     "section_no": "9-3-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 10/10행(과반)",
+    "record_count": 10,
+    "uncertain_rows": 10
   },
   {
     "table_id": "p497-t1",
@@ -19308,7 +19308,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 8,
+    "record_count": 12,
     "uncertain_rows": 0
   },
   {
@@ -19325,7 +19325,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 1,
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -19342,7 +19342,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 2,
+    "record_count": 7,
     "uncertain_rows": 0
   },
   {
@@ -19359,7 +19359,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 8,
+    "record_count": 12,
     "uncertain_rows": 0
   },
   {
@@ -19376,7 +19376,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 8,
+    "record_count": 12,
     "uncertain_rows": 0
   },
   {
@@ -19393,7 +19393,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 8,
+    "record_count": 12,
     "uncertain_rows": 0
   },
   {
@@ -19410,7 +19410,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 8,
+    "record_count": 12,
     "uncertain_rows": 0
   },
   {
@@ -19426,9 +19426,9 @@
     "section_no": "9-3-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 10/10행(과반)",
+    "record_count": 10,
+    "uncertain_rows": 10
   },
   {
     "table_id": "p500-t1",
@@ -19460,9 +19460,9 @@
     "section_no": "9-3-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 12/12행(과반)",
+    "record_count": 12,
+    "uncertain_rows": 12
   },
   {
     "table_id": "p502-t0",
@@ -19477,9 +19477,9 @@
     "section_no": "9-3-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 13/13행(과반)",
+    "record_count": 13,
+    "uncertain_rows": 13
   },
   {
     "table_id": "p502-t1",
@@ -19494,9 +19494,9 @@
     "section_no": "9-3-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 18/18행(과반)",
+    "record_count": 18,
+    "uncertain_rows": 18
   },
   {
     "table_id": "p503-t0",
@@ -19664,9 +19664,9 @@
     "section_no": "9-3-5",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p509-t0",
@@ -19783,9 +19783,9 @@
     "section_no": "9-4-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p512-t0",
@@ -19902,9 +19902,9 @@
     "section_no": "9-4-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p515-t1",
@@ -19919,9 +19919,9 @@
     "section_no": "9-4-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p515-t2",
@@ -19970,9 +19970,9 @@
     "section_no": "9-4-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p517-t0",
@@ -20038,9 +20038,9 @@
     "section_no": "9-4-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p518-t2",
@@ -20106,9 +20106,9 @@
     "section_no": "9-4-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p520-t0",
@@ -20208,9 +20208,9 @@
     "section_no": "9-5-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p522-t2",
@@ -20225,9 +20225,9 @@
     "section_no": "9-5-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p523-t0",
@@ -20497,9 +20497,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p530-t2",
@@ -20565,9 +20565,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p532-t0",
@@ -20582,9 +20582,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p532-t1",
@@ -20616,9 +20616,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p532-t3",
@@ -20633,9 +20633,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p533-t0",
@@ -20701,9 +20701,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p534-t1",
@@ -20718,9 +20718,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p534-t2",
@@ -20803,9 +20803,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p535-t1",
@@ -20820,9 +20820,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p535-t2",
@@ -20837,9 +20837,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p535-t3",
@@ -20854,9 +20854,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p535-t4",
@@ -20922,9 +20922,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p536-t3",
@@ -20939,9 +20939,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p537-t0",
@@ -20956,9 +20956,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p537-t1",
@@ -20973,9 +20973,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p537-t2",
@@ -21024,9 +21024,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p538-t1",
@@ -21041,9 +21041,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p538-t2",
@@ -21075,9 +21075,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p539-t0",
@@ -21092,9 +21092,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p539-t1",
@@ -21143,9 +21143,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p539-t4",
@@ -21160,9 +21160,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p540-t0",
@@ -21228,9 +21228,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p540-t4",
@@ -21245,9 +21245,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p541-t0",
@@ -21313,9 +21313,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p541-t4",
@@ -21330,9 +21330,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p542-t0",
@@ -21364,9 +21364,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p542-t2",
@@ -21381,9 +21381,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p543-t0",
@@ -21517,9 +21517,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 12/12행(과반)",
+    "record_count": 12,
+    "uncertain_rows": 12
   },
   {
     "table_id": "p545-t1",
@@ -21533,9 +21533,9 @@
     "section": "9-5-4 수치지도 작성('21, '22, '24, '26년 보완)",
     "section_no": "9-5-4",
     "chapter": "9",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -21550,9 +21550,9 @@
     "section": "9-5-4 수치지도 작성('21, '22, '24, '26년 보완)",
     "section_no": "9-5-4",
     "chapter": "9",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -21568,9 +21568,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p546-t1",
@@ -21585,9 +21585,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p546-t2",
@@ -21602,9 +21602,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p546-t3",
@@ -21636,9 +21636,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 12/12행(과반)",
+    "record_count": 12,
+    "uncertain_rows": 12
   },
   {
     "table_id": "p547-t0",
@@ -21652,9 +21652,9 @@
     "section": "9-5-4 수치지도 작성('21, '22, '24, '26년 보완)",
     "section_no": "9-5-4",
     "chapter": "9",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -21669,9 +21669,9 @@
     "section": "9-5-4 수치지도 작성('21, '22, '24, '26년 보완)",
     "section_no": "9-5-4",
     "chapter": "9",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -21687,9 +21687,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p547-t3",
@@ -21704,9 +21704,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p547-t4",
@@ -21721,9 +21721,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p547-t5",
@@ -21772,9 +21772,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p548-t1",
@@ -21789,9 +21789,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p548-t2",
@@ -21806,9 +21806,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p549-t0",
@@ -21823,9 +21823,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p549-t1",
@@ -21840,9 +21840,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p549-t2",
@@ -21857,9 +21857,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p549-t3",
@@ -21942,9 +21942,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p551-t1",
@@ -22010,9 +22010,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p552-t2",
@@ -22078,9 +22078,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p553-t2",
@@ -22146,9 +22146,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p555-t0",
@@ -22282,9 +22282,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 11/11행(과반)",
+    "record_count": 11,
+    "uncertain_rows": 11
   },
   {
     "table_id": "p560-t0",
@@ -22537,9 +22537,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 35/35행(과반)",
+    "record_count": 35,
+    "uncertain_rows": 35
   },
   {
     "table_id": "p565-t1",
@@ -22554,9 +22554,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p565-t2",
@@ -22571,9 +22571,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p566-t0",
@@ -22605,9 +22605,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p566-t2",
@@ -22622,9 +22622,9 @@
     "section_no": "9-5-4",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p567-t0",
@@ -22741,9 +22741,9 @@
     "section_no": "9-5-5",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p569-t0",
@@ -23165,9 +23165,9 @@
     "section": "9-6-1 지적삼각측량('05년 보완)",
     "section_no": "9-6-1",
     "chapter": "9",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -23234,9 +23234,9 @@
     "section_no": "9-6-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p580-t0",
@@ -23353,9 +23353,9 @@
     "section_no": "9-7-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p583-t0",
@@ -23456,7 +23456,7 @@
     "chapter": "9",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 1,
+    "record_count": 3,
     "uncertain_rows": 0
   },
   {
@@ -23557,9 +23557,9 @@
     "section_no": "9-8-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p589-t0",
@@ -23693,9 +23693,9 @@
     "section_no": "9-9-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p592-t0",
@@ -23761,9 +23761,9 @@
     "section_no": "9-9-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p594-t0",
@@ -23931,9 +23931,9 @@
     "section_no": "9-11-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p599-t1",
@@ -23948,9 +23948,9 @@
     "section_no": "9-11-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p600-t0",
@@ -23999,9 +23999,9 @@
     "section_no": "9-11-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p601-t1",
@@ -24016,9 +24016,9 @@
     "section_no": "9-11-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p602-t0",
@@ -24033,9 +24033,9 @@
     "section_no": "9-12-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p603-t0",
@@ -24152,9 +24152,9 @@
     "section_no": "9-14-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p606-t0",
@@ -24220,9 +24220,9 @@
     "section_no": "9-14-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p607-t1",
@@ -24305,9 +24305,9 @@
     "section_no": "9-15-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p609-t0",
@@ -24373,9 +24373,9 @@
     "section_no": "9-15-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p610-t1",
@@ -24526,9 +24526,9 @@
     "section_no": "9-16-1",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p613-t1",
@@ -24594,9 +24594,9 @@
     "section_no": "9-16-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p615-t0",
@@ -25019,9 +25019,9 @@
     "section_no": "1-1-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p627-t0",
@@ -25342,9 +25342,9 @@
     "section_no": "1-2-7",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p631-t0",
@@ -25648,9 +25648,9 @@
     "section_no": "2-1-5",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p638-t0",
@@ -26481,9 +26481,9 @@
     "section_no": "5-3-5",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p653-t3",
@@ -26532,9 +26532,9 @@
     "section_no": "5-3-7",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p654-t1",
@@ -26633,9 +26633,9 @@
     "section": "5-4-2 단열재 접착제 붙이기('22, '24년 보완)",
     "section_no": "5-4-2",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "C",
+    "reason": "재료 단위/소요량 + 직종/인 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -26787,9 +26787,9 @@
     "section_no": "5-4-7",
     "chapter": "5",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p657-t3",
@@ -26871,9 +26871,9 @@
     "section": "5-4-9 외벽단열공법('99년 신설, '15, '22년 보완)",
     "section_no": "5-4-9",
     "chapter": "5",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "C",
+    "reason": "재료 단위/소요량 + 직종/인 없음",
+    "record_count": 5,
     "uncertain_rows": 0
   },
   {
@@ -26905,9 +26905,9 @@
     "section": "6-1-1 바탕처리('18, '23년 보완)",
     "section_no": "6-1-1",
     "chapter": "6",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -26957,9 +26957,9 @@
     "section_no": "6-1-4",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p660-t1",
@@ -27143,9 +27143,9 @@
     "section": "6-4-3 방수모르타르 바름('09, '15, '18년 보완)",
     "section_no": "6-4-3",
     "chapter": "6",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -27297,9 +27297,9 @@
     "section_no": "6-6-2",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p665-t1",
@@ -27314,9 +27314,9 @@
     "section_no": "6-6-3",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p667-t0",
@@ -27586,9 +27586,9 @@
     "section_no": "7-3-1",
     "chapter": "7",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p673-t0",
@@ -27687,9 +27687,9 @@
     "section": "8-1-4 인서트(Insert) 설치('16년 보완)",
     "section_no": "8-1-4",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -27789,9 +27789,9 @@
     "section": "8-2-1 용접식난간 설치('17, '24년 보완)",
     "section_no": "8-2-1",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -27942,9 +27942,9 @@
     "section": "8-3-1 잡철물 제작 및 설치('07, '22년 보완)",
     "section_no": "8-3-1",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -28011,9 +28011,9 @@
     "section_no": "9-1-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p680-t0",
@@ -28045,9 +28045,9 @@
     "section_no": "9-1-3",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p680-t2",
@@ -28078,9 +28078,9 @@
     "section": "9-1-4 표면 마무리('14, '15, '19년 보완)",
     "section_no": "9-1-4",
     "chapter": "9",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -28095,9 +28095,9 @@
     "section": "9-1-4 표면 마무리('14, '15, '19년 보완)",
     "section_no": "9-1-4",
     "chapter": "9",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -28113,9 +28113,9 @@
     "section_no": "9-1-5",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p681-t1",
@@ -28232,9 +28232,9 @@
     "section_no": "9-3-2",
     "chapter": "9",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p683-t1",
@@ -28317,9 +28317,9 @@
     "section_no": "10-1-1",
     "chapter": "10",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p685-t2",
@@ -28503,9 +28503,9 @@
     "section": "10-2-3 도어록 설치('20년 보완)",
     "section_no": "10-2-3",
     "chapter": "10",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -28520,9 +28520,9 @@
     "section": "10-3-1 창호유리 설치('14, '20, '26년 보완)",
     "section_no": "10-3-1",
     "chapter": "10",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 14,
     "uncertain_rows": 0
   },
   {
@@ -28929,9 +28929,9 @@
     "section_no": "1-1-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p702-t1",
@@ -28963,9 +28963,9 @@
     "section_no": "1-1-3",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p703-t0",
@@ -28997,9 +28997,9 @@
     "section_no": "1-1-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p704-t0",
@@ -29065,9 +29065,9 @@
     "section_no": "1-2-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p706-t0",
@@ -29133,9 +29133,9 @@
     "section_no": "1-3-2",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p708-t0",
@@ -29167,9 +29167,9 @@
     "section_no": "1-3-3",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p709-t0",
@@ -29201,9 +29201,9 @@
     "section_no": "1-3-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p709-t2",
@@ -29387,9 +29387,9 @@
     "section": "2-1-1 아연도금강판덕트(각형덕트) 설치('15, '16, '21, '24년 보완)",
     "section_no": "2-1-1",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -29421,9 +29421,9 @@
     "section": "2-1-2 아연도금강판덕트(스파이럴덕트) 설치('15, '16, '21, '24년 보완)",
     "section_no": "2-1-2",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -29455,9 +29455,9 @@
     "section": "2-1-3 스테인리스덕트(각형덕트) 설치('21, '24년 보완)",
     "section_no": "2-1-3",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -29813,9 +29813,9 @@
     "section_no": "3-4-1",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p725-t1",
@@ -29830,9 +29830,9 @@
     "section_no": "3-4-2",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p727-t0",
@@ -30119,9 +30119,9 @@
     "section_no": "6-1-3",
     "chapter": "6",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p736-t1",
@@ -30765,9 +30765,9 @@
     "section_no": "8-3-5",
     "chapter": "8",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p754-t0",
@@ -30883,9 +30883,9 @@
     "section": "8-6-1 로터리 오일 버너",
     "section_no": "8-6-1",
     "chapter": "8",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 4,
     "uncertain_rows": 0
   },
   {
@@ -30951,9 +30951,9 @@
     "section": "9-1-2 잡철물 제작 및 설치('07, '22년 보완)",
     "section_no": "9-1-2",
     "chapter": "9",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 2/2행(과반)",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -31411,9 +31411,9 @@
     "section_no": "10-8-2",
     "chapter": "10",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p768-t1",
@@ -31428,9 +31428,9 @@
     "section_no": "10-9-1",
     "chapter": "10",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p769-t0",
@@ -31478,9 +31478,9 @@
     "section": "11-1-2 용접식 부설('15년 보완)",
     "section_no": "11-1-2",
     "chapter": "11",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -31615,9 +31615,9 @@
     "section_no": "11-3-3",
     "chapter": "11",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p772-t3",
@@ -31819,9 +31819,9 @@
     "section_no": "12-3-1",
     "chapter": "12",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p778-t1",
@@ -31853,9 +31853,9 @@
     "section_no": "12-3-2",
     "chapter": "12",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p778-t3",
@@ -31869,9 +31869,9 @@
     "section": "12-3-3 콘솔(Console) 설치('03년 신설)",
     "section_no": "12-3-3",
     "chapter": "12",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -32159,8 +32159,8 @@
     "section_no": "13-1-2",
     "chapter": "13",
     "type": "X",
-    "reason": "uncertain 18/18행(과반)",
-    "record_count": 18,
+    "reason": "uncertain 18/21행(과반)",
+    "record_count": 21,
     "uncertain_rows": 18
   },
   {
@@ -32177,7 +32177,7 @@
     "chapter": "13",
     "type": "B",
     "reason": "단위당 표기 (개당) + 직종/인",
-    "record_count": 12,
+    "record_count": 15,
     "uncertain_rows": 0
   },
   {
@@ -32193,8 +32193,8 @@
     "section_no": "13-1-2",
     "chapter": "13",
     "type": "X",
-    "reason": "uncertain 4/4행(과반)",
-    "record_count": 4,
+    "reason": "uncertain 4/7행(과반)",
+    "record_count": 7,
     "uncertain_rows": 4
   },
   {
@@ -32210,8 +32210,8 @@
     "section_no": "13-1-2",
     "chapter": "13",
     "type": "X",
-    "reason": "uncertain 15/15행(과반)",
-    "record_count": 15,
+    "reason": "uncertain 15/18행(과반)",
+    "record_count": 18,
     "uncertain_rows": 15
   },
   {
@@ -32448,9 +32448,9 @@
     "section_no": "13-1-8",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p797-t1",
@@ -32500,7 +32500,7 @@
     "chapter": "13",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 18,
+    "record_count": 22,
     "uncertain_rows": 0
   },
   {
@@ -32517,7 +32517,7 @@
     "chapter": "13",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 6,
+    "record_count": 7,
     "uncertain_rows": 0
   },
   {
@@ -32534,7 +32534,7 @@
     "chapter": "13",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 12,
+    "record_count": 15,
     "uncertain_rows": 0
   },
   {
@@ -33110,10 +33110,10 @@
     "section": "13-4-1 보통 철골재",
     "section_no": "13-4-1",
     "chapter": "13",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "type": "D",
+    "reason": "표 행의 할증/보정/감액/가산 등",
+    "record_count": 7,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p820-t2",
@@ -33127,9 +33127,9 @@
     "section": "13-4-1 보통 철골재",
     "section_no": "13-4-1",
     "chapter": "13",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 6,
     "uncertain_rows": 0
   },
   {
@@ -33196,9 +33196,9 @@
     "section_no": "13-4-3",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p822-t1",
@@ -33247,9 +33247,9 @@
     "section_no": "13-4-3",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 21/22행(과반)",
+    "record_count": 22,
+    "uncertain_rows": 21
   },
   {
     "table_id": "p823-t1",
@@ -33265,8 +33265,8 @@
     "chapter": "13",
     "type": "F",
     "reason": "상위 유형의 명시적 단서 없음",
-    "record_count": 3,
-    "uncertain_rows": 0
+    "record_count": 5,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p824-t0",
@@ -33400,9 +33400,9 @@
     "section_no": "13-5-1",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p828-t1",
@@ -34029,9 +34029,9 @@
     "section_no": "13-6-1",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p849-t1",
@@ -34437,9 +34437,9 @@
     "section_no": "13-6-5",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p861-t1",
@@ -34641,9 +34641,9 @@
     "section_no": "13-6-8",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p867-t0",
@@ -34675,9 +34675,9 @@
     "section_no": "13-6-9",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p868-t0",
@@ -34709,9 +34709,9 @@
     "section_no": "13-6-9",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 11/11행(과반)",
+    "record_count": 11,
+    "uncertain_rows": 11
   },
   {
     "table_id": "p869-t0",
@@ -34743,9 +34743,9 @@
     "section_no": "13-6-10",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p870-t1",
@@ -34794,9 +34794,9 @@
     "section_no": "13-6-11",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 11/11행(과반)",
+    "record_count": 11,
+    "uncertain_rows": 11
   },
   {
     "table_id": "p871-t2",
@@ -34845,9 +34845,9 @@
     "section_no": "13-6-12",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p873-t1",
@@ -34879,9 +34879,9 @@
     "section_no": "13-6-13",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p874-t1",
@@ -34930,9 +34930,9 @@
     "section_no": "13-6-14",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p875-t2",
@@ -34981,9 +34981,9 @@
     "section_no": "13-6-15",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 9/9행(과반)",
+    "record_count": 9,
+    "uncertain_rows": 9
   },
   {
     "table_id": "p876-t2",
@@ -35032,9 +35032,9 @@
     "section_no": "13-6-16",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p878-t0",
@@ -35066,9 +35066,9 @@
     "section_no": "13-6-17",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p879-t0",
@@ -35083,9 +35083,9 @@
     "section_no": "13-6-17",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p879-t1",
@@ -35474,9 +35474,9 @@
     "section_no": "13-7-22",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 17/17행(과반)",
+    "record_count": 17,
+    "uncertain_rows": 17
   },
   {
     "table_id": "p891-t0",
@@ -35525,9 +35525,9 @@
     "section_no": "13-8-1",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 8/8행(과반)",
+    "record_count": 8,
+    "uncertain_rows": 8
   },
   {
     "table_id": "p893-t0",
@@ -35847,9 +35847,9 @@
     "section": "13-9-4 오수처리시설 설치('04년 신설)",
     "section_no": "13-9-4",
     "chapter": "13",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -36120,9 +36120,9 @@
     "section_no": "13-11-1",
     "chapter": "13",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p906-t1",
@@ -36426,9 +36426,9 @@
     "section_no": "1-2-4",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 5/5행(과반)",
+    "record_count": 5,
+    "uncertain_rows": 5
   },
   {
     "table_id": "p917-t1",
@@ -36561,9 +36561,9 @@
     "section": "1-2-11 잔디깎기('14, '19, '22, '26년 보완)",
     "section_no": "1-2-11",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -36596,9 +36596,9 @@
     "section_no": "1-2-12",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p920-t2",
@@ -36782,9 +36782,9 @@
     "section": "1-2-20 가로수 제거('24년 신설)",
     "section_no": "1-2-20",
     "chapter": "1",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -36953,9 +36953,9 @@
     "section_no": "1-3-8",
     "chapter": "1",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p927-t1",
@@ -37038,9 +37038,9 @@
     "section_no": "2-1-3",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p930-t1",
@@ -37072,9 +37072,9 @@
     "section_no": "2-1-4",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p931-t0",
@@ -37157,9 +37157,9 @@
     "section_no": "2-1-8",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p933-t2",
@@ -37174,9 +37174,9 @@
     "section_no": "2-1-8",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p933-t3",
@@ -37259,9 +37259,9 @@
     "section_no": "2-1-9",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p934-t3",
@@ -37276,9 +37276,9 @@
     "section_no": "2-1-9",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p934-t4",
@@ -37361,9 +37361,9 @@
     "section_no": "2-1-10",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p935-t4",
@@ -37378,9 +37378,9 @@
     "section_no": "2-1-10",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 6/6행(과반)",
+    "record_count": 6,
+    "uncertain_rows": 6
   },
   {
     "table_id": "p936-t0",
@@ -37462,9 +37462,9 @@
     "section": "2-1-11 맨홀보수('20년 보완)",
     "section_no": "2-1-11",
     "chapter": "2",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "D",
+    "reason": "% 포함 1/1행(과반)",
+    "record_count": 1,
     "uncertain_rows": 0
   },
   {
@@ -37480,9 +37480,9 @@
     "section_no": "2-1-11",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p937-t0",
@@ -37616,9 +37616,9 @@
     "section_no": "2-1-15",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p940-t1",
@@ -37718,9 +37718,9 @@
     "section_no": "2-1-19",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 7/7행(과반)",
+    "record_count": 7,
+    "uncertain_rows": 7
   },
   {
     "table_id": "p942-t1",
@@ -37888,9 +37888,9 @@
     "section_no": "2-1-27",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p945-t2",
@@ -37922,9 +37922,9 @@
     "section_no": "2-1-28",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p946-t0",
@@ -37956,9 +37956,9 @@
     "section_no": "2-1-29",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p946-t2",
@@ -37990,9 +37990,9 @@
     "section_no": "2-1-30",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p947-t1",
@@ -38058,9 +38058,9 @@
     "section_no": "2-1-32",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p948-t2",
@@ -38092,9 +38092,9 @@
     "section_no": "2-1-33",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p950-t0",
@@ -38194,9 +38194,9 @@
     "section_no": "2-2-6",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p953-t0",
@@ -38381,9 +38381,9 @@
     "section_no": "2-2-15",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p957-t1",
@@ -38398,9 +38398,9 @@
     "section_no": "2-2-16",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p958-t0",
@@ -38483,9 +38483,9 @@
     "section_no": "2-4-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p959-t3",
@@ -38500,9 +38500,9 @@
     "section_no": "2-4-2",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p960-t0",
@@ -38619,9 +38619,9 @@
     "section_no": "2-4-7",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p962-t2",
@@ -38636,9 +38636,9 @@
     "section_no": "2-4-7",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p962-t3",
@@ -38670,9 +38670,9 @@
     "section_no": "2-4-8",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p963-t1",
@@ -38687,9 +38687,9 @@
     "section_no": "2-4-8",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p963-t2",
@@ -38738,9 +38738,9 @@
     "section_no": "2-4-10",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p963-t5",
@@ -38755,9 +38755,9 @@
     "section_no": "2-4-10",
     "chapter": "2",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 1/1행(과반)",
+    "record_count": 1,
+    "uncertain_rows": 1
   },
   {
     "table_id": "p964-t0",
@@ -38941,9 +38941,9 @@
     "section": "3-1-5 석축 헐기(인력)('22년 보완)",
     "section_no": "3-1-5",
     "chapter": "3",
-    "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
+    "type": "F",
+    "reason": "상위 유형의 명시적 단서 없음",
+    "record_count": 2,
     "uncertain_rows": 0
   },
   {
@@ -39197,9 +39197,9 @@
     "section_no": "3-3-2",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 3/3행(과반)",
+    "record_count": 3,
+    "uncertain_rows": 3
   },
   {
     "table_id": "p974-t3",
@@ -39231,9 +39231,9 @@
     "section_no": "3-3-3",
     "chapter": "3",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 4/4행(과반)",
+    "record_count": 4,
+    "uncertain_rows": 4
   },
   {
     "table_id": "p975-t0",
@@ -39469,9 +39469,9 @@
     "section_no": "4-2-1",
     "chapter": "4",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p981-t0",
@@ -39520,9 +39520,9 @@
     "section_no": "4-3-2",
     "chapter": "4",
     "type": "X",
-    "reason": "파서 레코드 0개",
-    "record_count": 0,
-    "uncertain_rows": 0
+    "reason": "uncertain 2/2행(과반)",
+    "record_count": 2,
+    "uncertain_rows": 2
   },
   {
     "table_id": "p982-t1",
