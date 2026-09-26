@@ -8,12 +8,13 @@
 흐름
   1. 지원 사례(SUPPORTED_CASE)는 절·공법·구조물이 고정이다. 물량만 사용자 입력이며 parse_volume으로 검증한다.
   2. 노무량은 품량 계산기 quantity.compute가 낸 값을 받는다(apply_prices). 여기서 다시 계산하지 않는다.
-     끝나는 소수가 아닌 노무량은 금액 반올림 규칙이 정해지지 않아 금액을 계산하지 않는다.
+     끝나는 소수가 아닌 노무량도 거부하지 않고 유리수 정확값으로 금액까지 계산한다.
      골든 사례 경로(calculate)에서는 기존 결과(각 15인·일)와 다르면 멈춘다.
   3. 같은 사례로 검색해, 계산에 쓴 원문 표 청크가 검색 근거에 들어 있는지 확인한다.
   4. 노임단가는 외부 JSON에서만 읽는다. 단가를 추정하거나 기본값을 넣지 않는다. 단가·기준일·출처 중
      하나라도 없으면 그 직종은 '미산정'이다.
-  5. 금액 = 노무량 × 단가 (Decimal, 반올림·절사 없음). 1㎥당 값은 작업조 인원 ÷ 일당 시공량으로 따로 보인다.
+  5. 금액 = 노무량 × 단가 (유리수 정확값, 반올림·절사 없음). 1㎥당 값은 작업조 인원 ÷ 일당 시공량으로 따로 보인다.
+     품셈 1-2-2의 금액 버림(일위대가표 금액란 0.1원 미만, 계금 1원 미만)은 확인했지만 아직 적용하지 않는다(AMOUNT_POLICY).
 
 단가 파일 형식 (숫자는 문자열 또는 JSON 숫자. 둘 다 Decimal로 읽는다):
     {"rates": [{"trade": "콘크리트공", "unit_price": "…", "unit": "원/인·일",
@@ -118,11 +119,21 @@ def quantity_conditions(case: dict = SUPPORTED_CASE) -> dict:
     return {"공법": case["method"], "구조물": case["structure"]}
 
 
-# 정확한 내부 계산값과 최종 일위대가표의 표시·적용 금액은 다르다. 후자의 규칙은 아직 정하지 않았다
+# 정확한 내부 계산값과 최종 일위대가표의 표시·적용 금액은 다르다.
+# 금액란·계금의 버림 단위는 품셈 원문(1-2-2)에서 확인했다. 다만 품량 적용 자릿수와 소액 예외 적용 방식이
+# 정해지지 않아 적용 금액은 아직 만들지 않고, 버림도 계산에 적용하지 않는다(display_and_applied_amount = "미정")
 AMOUNT_POLICY = {
     "internal": "품량·1㎥당 품량·금액·합계를 유리수로 정확히 계산한다. 순환소수도 거부하거나 반올림하지 않는다.",
     "display_and_applied_amount": "미정",
-    "undecided": ["원 단위 반올림·절사·올림 여부", "적용 단계(직종별 금액, 1㎥당 금액, 합계 중 어디서)", "표시 자릿수"],
+    "confirmed": {
+        "source": "2026 건설공사 표준품셈 1-2-2 단위표준('12, '23년 보완) 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)",
+        "rules": [{"item": "일위대가표의 금액란", "unit": "원", "digit": "0.1", "rule": "미만버림"},
+                  {"item": "일위대가표의 계금", "unit": "원", "digit": "1", "rule": "미만버림"}],
+        "applied": False,
+    },
+    "undecided": ["단가를 곱하기 전 품량(인·일)에 적용할 소수 자릿수와 그 적용 여부",
+                  "소액 예외(1-2-2 2. [주]: 소액으로 공종이 없어질 우려가 있으면 소수자리 정도를 조정 계산)의 적용 조건과 방법",
+                  "이 결과의 값(직종별 금액, 1㎥당 금액, 합계)을 금액란·계금 중 어디에 대응시킬지"],
 }
 
 
@@ -159,7 +170,7 @@ def apply_prices(labor: dict, rates: dict, search_index=None, query: str | None 
     query는 검색에 쓸 질문(에이전트가 사용자 질문을 넘긴다). 없으면 사례 조건으로 만든 질의를 쓴다.
     case는 운영에서 항상 SUPPORTED_CASE다. 검사만 순환소수 계산 확인을 위해 다른 사례 정의를 넘긴다.
     모든 값은 유리수로 정확히 계산한다. 기존 Decimal 필드(person_days, amount 등)는 끝나는 소수일 때 채우고,
-    정확값은 항상 exact 필드에 둔다. 표시·적용 금액의 반올림 정책은 정하지 않았다(AMOUNT_POLICY).
+    정확값은 항상 exact 필드에 둔다. 표시·적용 금액은 만들지 않는다(확정된 버림 규칙과 남은 항목은 AMOUNT_POLICY).
     """
     if labor.get("status") != "computed":
         raise RuntimeError(f"품량을 계산하지 못했습니다: {labor.get('reason')}")
@@ -290,8 +301,12 @@ def report(result: dict) -> str:
                  + (f": 미산정 제외: {', '.join(result['excluded_uncalculated'])}" if result["excluded_uncalculated"] and total_ex is not None else ""))
     lines.append(f"계산: {result['rounding']}")
     if total_ex is not None:
-        lines.append(f"표시·적용 금액: {result['amount_policy']['display_and_applied_amount']} "
-                     f"({', '.join(result['amount_policy']['undecided'])}). 위 금액은 정확한 계산값이다.")
+        policy = result["amount_policy"]
+        rules = ", ".join(f"{r['item']} {r['digit']}{r['unit']} {r['rule']}" for r in policy["confirmed"]["rules"])
+        lines.append("위 금액은 정확한 계산값이다(버림 미적용).")
+        lines.append(f"  품셈 확인: {rules} ({policy['confirmed']['source']})")
+        lines.append(f"  표시·적용 금액: {policy['display_and_applied_amount']}, 정하지 않은 것: "
+                     + "; ".join(policy["undecided"]))
     lines.append("")
     lines.append(f"검색 연결: 질의 '{result['search']['query']}' 상위 3 {result['search']['top3']}")
     for c in result["source_checks"]:

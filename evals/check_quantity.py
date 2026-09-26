@@ -186,7 +186,7 @@ def main() -> int:
           lines.get("보통인부", {}).get("quantity", {}).get("exact") == "20/11"
           and lines["보통인부"]["quantity"]["display"] == "1.(81)")
     check("재현: 계산식에 정확값과 표시값", lines.get("콘크리트공", {}).get("formula") == "100㎥ ÷ 55㎥/일 × 3인 = 60/11 (= 5.(45))인·일")
-    check("재현: 반올림 규칙을 정하지 않았음을 결과에 명시", "금액 반올림 규칙은 정하지 않았다" in r.get("rounding", ""))
+    check("재현: 품량 자릿수를 정하지 않았음을 결과에 명시", "품량 표시·적용 자릿수는 정하지 않았다" in r.get("rounding", ""))
     r = compute("6-1-1", eq, "100")
     check("재현: 운영 정답 목록에는 없어 6-1-1 장비사용은 여전히 계산하지 않음", r["status"] == "refused"
           and "정답 사례가 아직 없는" in r["reason"])

@@ -200,8 +200,11 @@ def compose(resp: dict, result: dict | None) -> str:
                  f" (1㎥당 {show(first['person_days_per_m3'], first['exact']['person_days_per_m3'])}인), "
                  "금액 = 노무량 × 단가, 반올림·절사 없음")
     if total_ex is not None:
-        lines.append(f"[금액 표시] 위 금액은 정확한 계산값이다. 일위대가표의 표시·적용 금액(원 단위 반올림·절사 등)은 "
-                     f"{r['amount_policy']['display_and_applied_amount']}")
+        policy = r["amount_policy"]
+        rules = ", ".join(f"{p['item']} {p['digit']}{p['unit']} {p['rule']}" for p in policy["confirmed"]["rules"])
+        lines.append("[금액 표시] 위 금액은 정확한 계산값이다(버림 미적용). "
+                     f"품셈 1-2-2 확인: {rules} (PDF 62쪽). 품량 적용 자릿수·소액 예외 적용 방식은 정하지 않아 "
+                     f"표시·적용 금액은 {policy['display_and_applied_amount']}")
     lines.append(f"[근거] {r['section']} PDF {r['pdf_page']}쪽(인쇄 {r['printed_page']}쪽)")
     lines.append(f"  {first['labor_source']} 기준 {r['source_checks'][0]['basis']}")
     lines.append(f"  사용한 행: {first['labor_row']}")

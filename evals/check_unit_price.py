@@ -154,6 +154,13 @@ def main() -> int:
           and r["exact"]["labor_total"]["display"] == "9090.(90)" and r["labor_total"] is None)
     check("표시·적용 금액은 정하지 않음(값 없음, 정책 미정)", r["amount_policy"]["display_and_applied_amount"] == "미정"
           and all(i["applied_amount"] == {"value": None, "policy": "미정"} for i in r["items"]))
+    confirmed = r["amount_policy"]["confirmed"]
+    check("금액 정책: 1-2-2 버림 규칙(금액란 0.1원·계금 1원 미만버림) 기록, 계산에는 미적용",
+          "1-2-2" in confirmed["source"] and "PDF 62쪽" in confirmed["source"] and confirmed["applied"] is False
+          and {(x["item"], x["digit"], x["rule"]) for x in confirmed["rules"]}
+          == {("일위대가표의 금액란", "0.1", "미만버림"), ("일위대가표의 계금", "1", "미만버림")}
+          and any("품량" in u for u in r["amount_policy"]["undecided"])
+          and any("소액" in u for u in r["amount_policy"]["undecided"]))
     text = report(r)
     check("사람용 출력: 반올림 없이 '분수 (= 순환소수)'로 표시하고 미산정으로 오표시하지 않음",
           "60000/11 (= 5454.(54)) 원" in text and "100000/11 (= 9090.(90)) 원" in text and "합계: 미산정" not in text)
