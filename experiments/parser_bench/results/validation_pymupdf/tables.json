@@ -1,0 +1,11 @@
+{
+ "parser": "PyMuPDF",
+ "version": "PyMuPDF 1.28.2",
+ "config": {
+  "method": "page.find_tables() 기본값",
+  "spans": "rows[].cells 좌표에서 복원",
+  "source": "원본 전체 PDF"
+ },
+ "elapsed_sec": 1.15,
+ "tables": {}
+}

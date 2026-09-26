@@ -1,0 +1,91 @@
+{
+  "parser": "PaddleOCR-VL",
+  "status": "실행 불가 (현재 노트북 CPU 환경)",
+  "accuracy": "미측정",
+  "scored": false,
+  "reason": "메모리 부족으로 디스크 스와핑이 계속되어, 193쪽 1쪽도 약 5분 추론 후 완료되지 않았다. 사용자 지시로 중단.",
+  "recorded_on": "2026-09-24",
+
+  "model": {
+    "pipeline": "PaddleOCRVL(pipeline_version=\"v1.6\")",
+    "vlm": "PaddleOCR-VL-1.6 (0.9B, model_type=paddleocr_vl, 저장 dtype=bfloat16)",
+    "vlm_files": "C:/Users/daeseong/.paddlex/official_models/PaddleOCR-VL-1.6 (1.8GB)",
+    "layout": "PP-DocLayoutV3 (126MB)",
+    "inference_engine": "paddle_dynamic (Paddle 네이티브, 기본값). vLLM·SGLang·FastDeploy 서버 미사용"
+  },
+  "config": {
+    "device": "cpu",
+    "use_doc_orientation_classify": false,
+    "use_doc_unwarping": false,
+    "use_layout_detection": "기본값(켬)",
+    "input": "results/pages/p193.pdf (단쪽 PDF, 파이프라인 내부 렌더링)",
+    "script": "experiments/parser_bench/extract_paddle.py --name paddle_vl16 --pages 193",
+    "time_limit_sec": 1800
+  },
+  "versions": {
+    "paddlepaddle": "3.2.1 (CPU, https://www.paddlepaddle.org.cn/packages/stable/cpu/)",
+    "paddleocr": "3.7.0",
+    "paddlex": "3.7.2",
+    "python": "3.11.9",
+    "env": ".venv-paddle"
+  },
+  "hardware": {
+    "cpu": "Intel Core i5-10210U @ 1.60GHz, 4코어 8스레드",
+    "ram_total_gb": 7.8,
+    "ram_available_at_start_gb": 0.9,
+    "pagefile_gb": 10,
+    "gpu": "NVIDIA GeForce MX250 2GB (사용 안 함)",
+    "os": "Windows 11 Home 10.0.26200",
+    "note": "실행 전 가용 메모리는 사용자 프로그램(ChatGPT, Chrome, VS Code, Notion 등)이 차지한 상태. 닫지 않았다."
+  },
+
+  "install": {
+    "paddlepaddle_sec": 159,
+    "paddleocr_doc_parser_sec": 364,
+    "model_download_sec": 279,
+    "model_download_note": "첫 실행에서 '20개 파일 받기'가 4분 39초 걸렸다."
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "result": "모델 내려받기·적재 후 실험 스크립트 오류로 종료 (추론 전)",
+      "elapsed_sec": 563,
+      "cause": "extract_paddle.py의 메모리 측정 함수가 64비트 프로세스 핸들을 ctypes 기본 int로 넘겨 OverflowError. PaddleOCR-VL 문제가 아님. 수정 후 재시도.",
+      "log": "보존되지 않음 — 2차 시도가 같은 로그 파일명에 덮어썼다. 핵심 내용은 이 항목에 옮겨 적음."
+    },
+    {
+      "attempt": 2,
+      "result": "193쪽 추론 도중 사용자 지시로 중단 (미완료)",
+      "process_started": "15:58:37",
+      "init_sec": 276.1,
+      "init_note": "모델은 캐시에 있어 내려받기 없음. 초기화 시간 대부분이 스와핑.",
+      "init_memory": {"peak_working_set_mb": 3739, "peak_commit_mb": 9109, "page_faults": 7881539},
+      "inference_started_approx": "16:03:13 (초기화 종료 시점 기준 추정)",
+      "stopped_at": "16:08:15",
+      "inference_sec_before_stop_approx": 302,
+      "total_elapsed_sec": 578,
+      "cpu_time_sec": 407,
+      "cpu_time_note": "578초 경과 동안 CPU 누적 407초 (8스레드 기준 평균 약 9% 수준). 연산보다 디스크 대기가 지배적",
+      "observations_during_inference": [
+        {"time": "16:04:46", "process_working_set_mb": 1696, "system_available_mb": 994,
+         "page_faults_per_sec": 112631, "cpu_total_percent": 53},
+        {"time": "16:08:15", "process_working_set_mb": 1483, "process_paged_mb": 4817,
+         "system_available_mb": 612, "page_faults_per_sec": 105679}
+      ],
+      "after_stop": {"system_available_mb": 2123},
+      "log": "raw/run_p193_attempt2.log"
+    }
+  ],
+
+  "interpretation": [
+    "0.9B 모델 가중치가 bfloat16(1.8GB)으로 저장돼 있고 CPU에서 fp32로 풀리며 약 2배로 커진다. 초기화 최대 커밋 9.1GB가 RAM 7.8GB를 넘는다.",
+    "VLM은 토큰마다 가중치 전체를 읽으므로, 가중치 대부분이 페이지 파일에 있으면 초당 10만 회 이상 페이지 폴트가 난다.",
+    "따라서 이 결과는 PaddleOCR-VL의 정확도에 대한 증거가 아니다. 이 노트북에서의 실행 가능성에 대한 기록이다."
+  ],
+  "not_tried": [
+    "사용자 프로그램을 닫아 메모리 확보",
+    "GPU 서버·클라우드 실행",
+    "양자화 모델(PaddleOCR-VL-1.6-GGUF 등) — 공식 CPU 설정과 다른 모델이므로 별도 후보로 취급해야 함",
+    "Docker(권장 경로) — 같은 RAM을 쓰므로 메모리 제약은 그대로"
+  ]
+}

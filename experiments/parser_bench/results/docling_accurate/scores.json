@@ -1,0 +1,2550 @@
+{
+ "run": "docling_accurate",
+ "parser": "Docling",
+ "version": "2.130.0",
+ "config": {
+  "do_ocr": false,
+  "do_table_structure": true,
+  "table_mode": "TableFormerMode.ACCURATE",
+  "do_cell_matching": true,
+  "table_structure_options": "TableStructureOptions(do_cell_matching=True, mode=<TableFormerMode.ACCURATE: 'accurate'>)",
+  "device": "cpu"
+ },
+ "elapsed_sec": 178.03,
+ "summary": {
+  "A": {
+   "relations_own": [
+    17,
+    59
+   ],
+   "relations_shared": [
+    0,
+    12
+   ],
+   "relations_shared_by_basis": {
+    "ruled": [
+     0,
+     2
+    ],
+    "unruled": [
+     0,
+     4
+    ],
+    "mixed": [
+     0,
+     6
+    ]
+   },
+   "bracket_groups": [
+    0,
+    2
+   ],
+   "row_split": [
+    5,
+    17
+   ],
+   "text_whole": [
+    77,
+    129
+   ],
+   "text_inside_merged": 38,
+   "text_split_across_cells": 5,
+   "text_missing": 9,
+   "novel_text": [
+    "1.20.2",
+    "1.20.2",
+    "(100㎡당)",
+    "명틀",
+    "칭목",
+    "단인"
+   ]
+  },
+  "B": {
+   "extract": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 10
+    },
+    "expected_own": [
+     19,
+     55
+    ],
+    "expected_shared": [
+     3,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 3,
+     "구조": 42
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   },
+   "spanfill": {
+    "old_golden_subset": [
+     1,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 10
+    },
+    "expected_own": [
+     19,
+     55
+    ],
+    "expected_shared": [
+     4,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 3,
+     "구조": 41
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     0,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "A": {
+  "T1": {
+   "note": null,
+   "data_start_row": 1,
+   "relations": [
+    {
+     "row": "인력운반 타설 / 콘크리트공",
+     "field": "규격",
+     "value": "-",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 콘크리트공",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 콘크리트공",
+     "field": "수량",
+     "value": "3",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 콘크리트공",
+     "field": "시공량(㎥) > 무근구조물",
+     "value": "23",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "unruled",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 콘크리트공",
+     "field": "시공량(㎥) > 철근구조물",
+     "value": "20",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "unruled",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 보통인부",
+     "field": "규격",
+     "value": "-",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 보통인부",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 보통인부",
+     "field": "수량",
+     "value": "3",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 보통인부",
+     "field": "시공량(㎥) > 무근구조물",
+     "value": "23",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "unruled",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "인력운반 타설 / 보통인부",
+     "field": "시공량(㎥) > 철근구조물",
+     "value": "20",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "unruled",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 콘크리트공",
+     "field": "규격",
+     "value": "-",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 콘크리트공",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 콘크리트공",
+     "field": "수량",
+     "value": "3",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 콘크리트공",
+     "field": "시공량(㎥) > 무근구조물",
+     "value": "63",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "mixed",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 콘크리트공",
+     "field": "시공량(㎥) > 철근구조물",
+     "value": "55",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "mixed",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 보통인부",
+     "field": "규격",
+     "value": "-",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 보통인부",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 보통인부",
+     "field": "수량",
+     "value": "1",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 보통인부",
+     "field": "시공량(㎥) > 무근구조물",
+     "value": "63",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "mixed",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 보통인부",
+     "field": "시공량(㎥) > 철근구조물",
+     "value": "55",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "mixed",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 굴착기",
+     "field": "규격",
+     "value": "(0.6∼0.8㎥)",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 굴착기",
+     "field": "단위",
+     "value": "대",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 굴착기",
+     "field": "수량",
+     "value": "1",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 굴착기",
+     "field": "시공량(㎥) > 무근구조물",
+     "value": "63",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "mixed",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "장비사용 타설 / 굴착기",
+     "field": "시공량(㎥) > 철근구조물",
+     "value": "55",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "mixed",
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    }
+   ],
+   "row_split": [
+    {
+     "key": "콘크리트공",
+     "separate_cell": false
+    },
+    {
+     "key": "보통인부",
+     "separate_cell": false
+    },
+    {
+     "key": "콘크리트공",
+     "separate_cell": false
+    },
+    {
+     "key": "보통인부",
+     "separate_cell": false
+    },
+    {
+     "key": "굴착기",
+     "separate_cell": false
+    }
+   ],
+   "groupings": [],
+   "text": {
+    "golden_texts": 42,
+    "whole": 16,
+    "inside_merged_cell": 20,
+    "split_across_cells": 0,
+    "missing": [
+     "비고",
+     "- 개소별 소량(12㎥ 이하)의 타설 위치가 산재하는 경우 본 시공량을 50%까지 감하여 적용한다.",
+     "- 본 품의 타설 유형은 다음의 경우에 적용한다.",
+     "내용",
+     "- 인력운반 장비(손수레 등)로 콘크리트를 운반하여 시공하는 기준이다.",
+     "- 믹서트럭에서 콘크리트를 굴착기로 공급받아 근접된 타설 위치에 직접 시공하는 기준이다."
+    ],
+    "cells_merging_several_golden_cells": 0,
+    "novel_text": []
+   }
+  },
+  "T2": {
+   "note": null,
+   "data_start_row": 2,
+   "relations": [
+    {
+     "row": "콘크리트공",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false
+    },
+    {
+     "row": "콘크리트공",
+     "field": "작업조 > 무근콘크리트",
+     "value": "3",
+     "kind": "own",
+     "found": false
+    },
+    {
+     "row": "콘크리트공",
+     "field": "작업조 > 철근콘크리트",
+     "value": "4",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "콘크리트공",
+     "field": "비고",
+     "value": "타설/진동기/면정리",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "특별인부",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false
+    },
+    {
+     "row": "특별인부",
+     "field": "작업조 > 무근콘크리트",
+     "value": "1",
+     "kind": "own",
+     "found": false
+    },
+    {
+     "row": "특별인부",
+     "field": "작업조 > 철근콘크리트",
+     "value": "1",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "특별인부",
+     "field": "비고",
+     "value": "배관타설 : 1인 추가",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "형틀목공",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false
+    },
+    {
+     "row": "형틀목공",
+     "field": "작업조 > 무근콘크리트",
+     "value": "1",
+     "kind": "own",
+     "found": false
+    },
+    {
+     "row": "형틀목공",
+     "field": "작업조 > 철근콘크리트",
+     "value": "1",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "형틀목공",
+     "field": "비고",
+     "value": "거푸집 및 동바리 작업",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "보통인부",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "보통인부",
+     "field": "작업조 > 무근콘크리트",
+     "value": "1",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "보통인부",
+     "field": "작업조 > 철근콘크리트",
+     "value": "1",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "보통인부",
+     "field": "비고",
+     "value": "현장정리/보조",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "콘크리트펌프차",
+     "field": "단위",
+     "value": "대",
+     "kind": "own",
+     "found": false
+    },
+    {
+     "row": "콘크리트펌프차",
+     "field": "비고",
+     "value": "시공조건에 따른 규격 선정",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "콘크리트펌프차",
+     "field": "작업조 > 무근콘크리트",
+     "value": "1대(80㎥/hr 이상)",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "ruled"
+    },
+    {
+     "row": "콘크리트펌프차",
+     "field": "작업조 > 철근콘크리트",
+     "value": "1대(80㎥/hr 이상)",
+     "kind": "shared",
+     "found": false,
+     "span_basis": "ruled"
+    }
+   ],
+   "row_split": [
+    {
+     "key": "콘크리트공",
+     "separate_cell": true
+    },
+    {
+     "key": "특별인부",
+     "separate_cell": true
+    },
+    {
+     "key": "형틀목공",
+     "separate_cell": true
+    },
+    {
+     "key": "보통인부",
+     "separate_cell": true
+    },
+    {
+     "key": "콘크리트펌프차",
+     "separate_cell": true
+    }
+   ],
+   "groupings": [],
+   "text": {
+    "golden_texts": 30,
+    "whole": 27,
+    "inside_merged_cell": 3,
+    "split_across_cells": 0,
+    "missing": [],
+    "cells_merging_several_golden_cells": 0,
+    "novel_text": []
+   }
+  },
+  "T3": {
+   "note": null,
+   "data_start_row": 1,
+   "relations": [
+    {
+     "row": "신구-콘크리트 접착제바르기 / Epoxy신구-콘크리트접착제",
+     "field": "단위",
+     "value": "㎏",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "신구-콘크리트 접착제바르기 / Epoxy신구-콘크리트접착제",
+     "field": "수량",
+     "value": "1.2",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "신구-콘크리트 접착제바르기 / 시너",
+     "field": "단위",
+     "value": "ℓ",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "신구-콘크리트 접착제바르기 / 시너",
+     "field": "수량",
+     "value": "0.2",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "콘크리트 및 고무 기타 접착제바르기 / Epoxy-콘크리트고무접착제",
+     "field": "단위",
+     "value": "㎏",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "콘크리트 및 고무 기타 접착제바르기 / Epoxy-콘크리트고무접착제",
+     "field": "수량",
+     "value": "1.2",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "콘크리트 및 고무 기타 접착제바르기 / 시너",
+     "field": "단위",
+     "value": "ℓ",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "콘크리트 및 고무 기타 접착제바르기 / 시너",
+     "field": "수량",
+     "value": "0.2",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    }
+   ],
+   "row_split": [
+    {
+     "key": "Epoxy신구-콘크리트접착제",
+     "separate_cell": false
+    },
+    {
+     "key": "시너",
+     "separate_cell": false
+    },
+    {
+     "key": "Epoxy-콘크리트고무접착제",
+     "separate_cell": false
+    },
+    {
+     "key": "시너",
+     "separate_cell": false
+    }
+   ],
+   "groupings": [
+    {
+     "group": "G1",
+     "column_found": true,
+     "member_rows": [],
+     "value_present": false,
+     "value_once": false,
+     "covers_all_members": false,
+     "bracket_glyphs_in_text": false,
+     "pass": false
+    },
+    {
+     "group": "G2",
+     "column_found": true,
+     "member_rows": [],
+     "value_present": false,
+     "value_once": false,
+     "covers_all_members": false,
+     "bracket_glyphs_in_text": false,
+     "pass": false
+    }
+   ],
+   "text": {
+    "golden_texts": 23,
+    "whole": 8,
+    "inside_merged_cell": 14,
+    "split_across_cells": 1,
+    "missing": [],
+    "cells_merging_several_golden_cells": 2,
+    "novel_text": [
+     "1.20.2",
+     "1.20.2"
+    ]
+   }
+  },
+  "T4": {
+   "note": null,
+   "data_start_row": 1,
+   "relations": [
+    {
+     "row": "지하층 및 1∼3층",
+     "field": "할증률",
+     "value": "0",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "4∼6층",
+     "field": "할증률",
+     "value": "5%",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "7∼9층",
+     "field": "할증률",
+     "value": "8%",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "10∼12층",
+     "field": "할증률",
+     "value": "12%",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "13∼15층",
+     "field": "할증률",
+     "value": "16%",
+     "kind": "own",
+     "found": true
+    },
+    {
+     "row": "16∼18층",
+     "field": "할증률",
+     "value": "20%",
+     "kind": "own",
+     "found": true
+    }
+   ],
+   "row_split": [],
+   "groupings": [],
+   "text": {
+    "golden_texts": 12,
+    "whole": 12,
+    "inside_merged_cell": 0,
+    "split_across_cells": 0,
+    "missing": [],
+    "cells_merging_several_golden_cells": 0,
+    "novel_text": []
+   }
+  },
+  "T5": {
+   "note": null,
+   "data_start_row": 1,
+   "relations": [
+    {
+     "row": "형틀목공",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "형틀목공",
+     "field": "설치",
+     "value": "4.5",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "형틀목공",
+     "field": "해체",
+     "value": "1.7",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "형틀목공",
+     "field": "계",
+     "value": "6.2",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "비계공",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "비계공",
+     "field": "설치",
+     "value": "4.5",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "비계공",
+     "field": "해체",
+     "value": "4.5",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "비계공",
+     "field": "계",
+     "value": "9.0",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "보통인부",
+     "field": "단위",
+     "value": "인",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "보통인부",
+     "field": "설치",
+     "value": "7.5",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "보통인부",
+     "field": "해체",
+     "value": "4.5",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    },
+    {
+     "row": "보통인부",
+     "field": "계",
+     "value": "12.0",
+     "kind": "own",
+     "found": false,
+     "reason": "행 키를 가진 행이 없음(행 분리 실패 등)"
+    }
+   ],
+   "row_split": [
+    {
+     "key": "형틀목공",
+     "separate_cell": false
+    },
+    {
+     "key": "비계공",
+     "separate_cell": false
+    },
+    {
+     "key": "보통인부",
+     "separate_cell": false
+    }
+   ],
+   "groupings": [],
+   "text": {
+    "golden_texts": 22,
+    "whole": 14,
+    "inside_merged_cell": 1,
+    "split_across_cells": 4,
+    "missing": [
+     "명칭",
+     "단위",
+     "형틀목공"
+    ],
+    "cells_merging_several_golden_cells": 0,
+    "novel_text": [
+     "(100㎡당)",
+     "명틀",
+     "칭목",
+     "단인"
+    ]
+   }
+  }
+ },
+ "B": {
+  "extract": {
+   "per_table": {
+    "T1": {
+     "records": [
+      "6-1-1 레디믹스트콘크리트 타설('24년 보완) | 인력운반 타 설 | 콘크리트공 보통인부 | 규격 -- | 단위 인3 인3 | 시공량(㎥) 무근구조물 23 | 철근구조물 20",
+      "6-1-1 레디믹스트콘크리트 타설('24년 보완) | 장비사용 타 설 | 콘크리트공 보통인부 굴착기 | 규격 - - (0.6∼0.8㎥) | 단위 인3 인1 대 | 수량 1 | 시공량(㎥) 무근구조물 63 | 철근구조물 55"
+     ],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "인력운반 타설 / 콘크리트공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "인력운반 타설 / 콘크리트공",
+       "field": "수량",
+       "value": "3",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "인력운반 타설 / 콘크리트공",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "23",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "unruled",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "인력운반 타설 / 콘크리트공",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "20",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "unruled",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "인력운반 타설 / 보통인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "값 오류",
+       "failure_detail": "같은 열에 다른 값: ['단위 인3 인3']"
+      },
+      {
+       "row": "인력운반 타설 / 보통인부",
+       "field": "수량",
+       "value": "3",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      },
+      {
+       "row": "인력운반 타설 / 보통인부",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "23",
+       "kind": "shared",
+       "found": true,
+       "matching_records": 1,
+       "span_basis": "unruled"
+      },
+      {
+       "row": "인력운반 타설 / 보통인부",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "20",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 1,
+       "span_basis": "unruled",
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      },
+      {
+       "row": "장비사용 타설 / 콘크리트공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 콘크리트공",
+       "field": "수량",
+       "value": "3",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 콘크리트공",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "63",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 콘크리트공",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "55",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 보통인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 보통인부",
+       "field": "수량",
+       "value": "1",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 보통인부",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "63",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 보통인부",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "55",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "규격",
+       "value": "(0.6∼0.8㎥)",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "단위",
+       "value": "대",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "값 오류",
+       "failure_detail": "같은 열에 다른 값: ['단위 인3 인1 대']"
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "수량",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "63",
+       "kind": "shared",
+       "found": true,
+       "matching_records": 1,
+       "span_basis": "mixed"
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "55",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 1,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      }
+     ],
+     "interpretations": [],
+     "arithmetic": []
+    },
+    "T2": {
+     "records": [
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 콘크리트공 | 작업조 무근콘크리트 인3 | 작업조 철근콘크리트 4 | 비고 타설/진동기/면정리",
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 콘크리트공 | 단위 특별인부 | 작업조 무근콘크리트 인1 | 작업조 철근콘크리트 1 | 비고 배관타설 : 1인 추가",
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 형틀목공 | 작업조 무근콘크리트 인1 | 작업조 철근콘크리트 1 | 비고 거푸집 및 동바리 작업",
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 보통인부 | 단위 인 | 작업조 무근콘크리트 1 | 작업조 철근콘크리트 1 | 비고 현장정리/보조",
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 콘크리트펌프차 | 작업조 무근콘크리트 대 1대(80㎥/hr 이상) | 비고 시공조건에 따른 규격 선정"
+     ],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "콘크리트공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 2,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 2건"
+      },
+      {
+       "row": "콘크리트공",
+       "field": "작업조 > 무근콘크리트",
+       "value": "3",
+       "kind": "own",
+       "found": false,
+       "matching_records": 2,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 2건"
+      },
+      {
+       "row": "콘크리트공",
+       "field": "작업조 > 철근콘크리트",
+       "value": "4",
+       "kind": "own",
+       "found": false,
+       "matching_records": 2,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 2건"
+      },
+      {
+       "row": "콘크리트공",
+       "field": "비고",
+       "value": "타설/진동기/면정리",
+       "kind": "own",
+       "found": false,
+       "matching_records": 2,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 2건"
+      },
+      {
+       "row": "특별인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "값 오류",
+       "failure_detail": "같은 열에 다른 값: ['단위 특별인부']"
+      },
+      {
+       "row": "특별인부",
+       "field": "작업조 > 무근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "특별인부",
+       "field": "작업조 > 철근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "특별인부",
+       "field": "비고",
+       "value": "배관타설 : 1인 추가",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "형틀목공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      },
+      {
+       "row": "형틀목공",
+       "field": "작업조 > 무근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "형틀목공",
+       "field": "작업조 > 철근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "형틀목공",
+       "field": "비고",
+       "value": "거푸집 및 동바리 작업",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "보통인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "보통인부",
+       "field": "작업조 > 무근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "보통인부",
+       "field": "작업조 > 철근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "보통인부",
+       "field": "비고",
+       "value": "현장정리/보조",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "콘크리트펌프차",
+       "field": "단위",
+       "value": "대",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      },
+      {
+       "row": "콘크리트펌프차",
+       "field": "비고",
+       "value": "시공조건에 따른 규격 선정",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "콘크리트펌프차",
+       "field": "작업조 > 무근콘크리트",
+       "value": "1대(80㎥/hr 이상)",
+       "kind": "shared",
+       "found": true,
+       "matching_records": 1,
+       "span_basis": "ruled"
+      },
+      {
+       "row": "콘크리트펌프차",
+       "field": "작업조 > 철근콘크리트",
+       "value": "1대(80㎥/hr 이상)",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 1,
+       "span_basis": "ruled",
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      }
+     ],
+     "interpretations": [],
+     "arithmetic": []
+    },
+    "T3": {
+     "records": [],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "신구-콘크리트 접착제바르기 / Epoxy신구-콘크리트접착제",
+       "field": "단위",
+       "value": "㎏",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "신구-콘크리트 접착제바르기 / Epoxy신구-콘크리트접착제",
+       "field": "수량",
+       "value": "1.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "신구-콘크리트 접착제바르기 / 시너",
+       "field": "단위",
+       "value": "ℓ",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "신구-콘크리트 접착제바르기 / 시너",
+       "field": "수량",
+       "value": "0.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "콘크리트 및 고무 기타 접착제바르기 / Epoxy-콘크리트고무접착제",
+       "field": "단위",
+       "value": "㎏",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "콘크리트 및 고무 기타 접착제바르기 / Epoxy-콘크리트고무접착제",
+       "field": "수량",
+       "value": "1.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "콘크리트 및 고무 기타 접착제바르기 / 시너",
+       "field": "단위",
+       "value": "ℓ",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "콘크리트 및 고무 기타 접착제바르기 / 시너",
+       "field": "수량",
+       "value": "0.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      }
+     ],
+     "interpretations": [
+      {
+       "interpretation": "I1",
+       "group": "G1",
+       "records_with_value": 0,
+       "pass": false
+      },
+      {
+       "interpretation": "I1",
+       "group": "G2",
+       "records_with_value": 0,
+       "pass": false
+      }
+     ],
+     "arithmetic": []
+    },
+    "T4": {
+     "records": [
+      "6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완) | 지하층 및 1∼3층 0 | 4∼6층 5% | 7∼9층 8% | 10∼12층 12% | 13∼15층 16% | 16∼18층 20%"
+     ],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "지하층 및 1∼3층",
+       "field": "할증률",
+       "value": "0",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "4∼6층",
+       "field": "할증률",
+       "value": "5%",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "7∼9층",
+       "field": "할증률",
+       "value": "8%",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "10∼12층",
+       "field": "할증률",
+       "value": "12%",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "13∼15층",
+       "field": "할증률",
+       "value": "16%",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "16∼18층",
+       "field": "할증률",
+       "value": "20%",
+       "kind": "own",
+       "found": true
+      }
+     ],
+     "interpretations": [],
+     "arithmetic": []
+    },
+    "T5": {
+     "records": [
+      "6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완) | 형 | 명틀 | 칭목 | 공 | 위 단인 | 설치 4.5 | 해체 1.7 | (100㎡당) 계 6.2",
+      "6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완) | 비 | 계 | 공 | 위 인 | 설치 4.5 | 해체 4.5 | (100㎡당) 9.0",
+      "6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완) | 보 | 통 | 인 | 부 | 위 인 | 설치 7.5 | 해체 4.5 | (100㎡당) 12.0",
+      "6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완) | 비 | 고 | 위 - 수직고 7m이상인 경우에는 | 설치 3m증가마다 | 해체 품을 10% 범위 내에서 | (100㎡당) 가산하여 적용한다."
+     ],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "형틀목공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "형틀목공",
+       "field": "설치",
+       "value": "4.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "형틀목공",
+       "field": "해체",
+       "value": "1.7",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "형틀목공",
+       "field": "계",
+       "value": "6.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "field": "설치",
+       "value": "4.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "field": "해체",
+       "value": "4.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "field": "계",
+       "value": "9.0",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "field": "설치",
+       "value": "7.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "field": "해체",
+       "value": "4.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "field": "계",
+       "value": "12.0",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      }
+     ],
+     "interpretations": [],
+     "arithmetic": [
+      {
+       "row": "형틀목공",
+       "pass": false,
+       "reason": "레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "pass": false,
+       "reason": "레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "pass": false,
+       "reason": "레코드 0건"
+      }
+     ]
+    }
+   },
+   "old_golden": [
+    {
+     "id": "6-1-1 인력운반 콘크리트공",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-1 인력운반 보통인부",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-1 장비사용 콘크리트공",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-1 장비사용 보통인부 (수량 1)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "형식",
+     "failure_detail": "공백을 무시하면 통과"
+    },
+    {
+     "id": "6-1-1 굴착기",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-4 콘크리트공 (작업조 + 비고)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-4 콘크리트펌프차",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-5 Epoxy 접착제",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-5 시너 (현재 누락되는 값)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-5 층수별 할증 (첫 칸이 라벨이 아니라 값)",
+     "pass": true,
+     "hits": 1,
+     "banned": []
+    },
+    {
+     "id": "6-3-2 형틀목공 (쌓인 직종)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-3-2 비계공 (쌓인 직종)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    }
+   ],
+   "estimate": {
+    "pass": false,
+    "reason": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "failure_type": "구조",
+    "relaxed": {
+     "computed": false,
+     "matches_expected": false,
+     "person_days": {
+      "콘크리트공": "레코드 0건",
+      "보통인부": "값을 못 찾음 {}"
+     }
+    },
+    "basis_injected_from_golden": "6-1-1 레디믹스트콘크리트 타설('24년 보완) | 설명 | (일당)"
+   }
+  },
+  "spanfill": {
+   "per_table": {
+    "T1": {
+     "records": [
+      "6-1-1 레디믹스트콘크리트 타설('24년 보완) | 인력운반 타 설 | 콘크리트공 보통인부 | 규격 -- | 단위 인3 인3 | 시공량(㎥) 무근구조물 23 | 철근구조물 20",
+      "6-1-1 레디믹스트콘크리트 타설('24년 보완) | 장비사용 타 설 | 콘크리트공 보통인부 굴착기 | 규격 - - (0.6∼0.8㎥) | 단위 인3 인1 대 | 수량 1 | 시공량(㎥) 무근구조물 63 | 철근구조물 55"
+     ],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "인력운반 타설 / 콘크리트공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "인력운반 타설 / 콘크리트공",
+       "field": "수량",
+       "value": "3",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "인력운반 타설 / 콘크리트공",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "23",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "unruled",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "인력운반 타설 / 콘크리트공",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "20",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "unruled",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "인력운반 타설 / 보통인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "값 오류",
+       "failure_detail": "같은 열에 다른 값: ['단위 인3 인3']"
+      },
+      {
+       "row": "인력운반 타설 / 보통인부",
+       "field": "수량",
+       "value": "3",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      },
+      {
+       "row": "인력운반 타설 / 보통인부",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "23",
+       "kind": "shared",
+       "found": true,
+       "matching_records": 1,
+       "span_basis": "unruled"
+      },
+      {
+       "row": "인력운반 타설 / 보통인부",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "20",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 1,
+       "span_basis": "unruled",
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      },
+      {
+       "row": "장비사용 타설 / 콘크리트공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 콘크리트공",
+       "field": "수량",
+       "value": "3",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 콘크리트공",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "63",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 콘크리트공",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "55",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 보통인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 보통인부",
+       "field": "수량",
+       "value": "1",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 보통인부",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "63",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 보통인부",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "55",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 0,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "규격",
+       "value": "(0.6∼0.8㎥)",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "단위",
+       "value": "대",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "값 오류",
+       "failure_detail": "같은 열에 다른 값: ['단위 인3 인1 대']"
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "수량",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "시공량(㎥) > 무근구조물",
+       "value": "63",
+       "kind": "shared",
+       "found": true,
+       "matching_records": 1,
+       "span_basis": "mixed"
+      },
+      {
+       "row": "장비사용 타설 / 굴착기",
+       "field": "시공량(㎥) > 철근구조물",
+       "value": "55",
+       "kind": "shared",
+       "found": false,
+       "matching_records": 1,
+       "span_basis": "mixed",
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      }
+     ],
+     "interpretations": [],
+     "arithmetic": []
+    },
+    "T2": {
+     "records": [
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 콘크리트공 | 작업조 무근콘크리트 인3 | 작업조 철근콘크리트 4 | 비고 타설/진동기/면정리",
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 콘크리트공 | 단위 특별인부 | 작업조 무근콘크리트 인1 | 작업조 철근콘크리트 1 | 비고 배관타설 : 1인 추가",
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 형틀목공 | 작업조 무근콘크리트 인1 | 작업조 철근콘크리트 1 | 비고 거푸집 및 동바리 작업",
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 보통인부 | 단위 인 | 작업조 무근콘크리트 1 | 작업조 철근콘크리트 1 | 비고 현장정리/보조",
+      "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) | 콘크리트펌프차 | 작업조 무근콘크리트 대 1대(80㎥/hr 이상) | 작업조 철근콘크리트 대 1대(80㎥/hr 이상) | 비고 시공조건에 따른 규격 선정"
+     ],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "콘크리트공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 2,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 2건"
+      },
+      {
+       "row": "콘크리트공",
+       "field": "작업조 > 무근콘크리트",
+       "value": "3",
+       "kind": "own",
+       "found": false,
+       "matching_records": 2,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 2건"
+      },
+      {
+       "row": "콘크리트공",
+       "field": "작업조 > 철근콘크리트",
+       "value": "4",
+       "kind": "own",
+       "found": false,
+       "matching_records": 2,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 2건"
+      },
+      {
+       "row": "콘크리트공",
+       "field": "비고",
+       "value": "타설/진동기/면정리",
+       "kind": "own",
+       "found": false,
+       "matching_records": 2,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 2건"
+      },
+      {
+       "row": "특별인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "값 오류",
+       "failure_detail": "같은 열에 다른 값: ['단위 특별인부']"
+      },
+      {
+       "row": "특별인부",
+       "field": "작업조 > 무근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "특별인부",
+       "field": "작업조 > 철근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "특별인부",
+       "field": "비고",
+       "value": "배관타설 : 1인 추가",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "형틀목공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      },
+      {
+       "row": "형틀목공",
+       "field": "작업조 > 무근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "형틀목공",
+       "field": "작업조 > 철근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "형틀목공",
+       "field": "비고",
+       "value": "거푸집 및 동바리 작업",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "보통인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "보통인부",
+       "field": "작업조 > 무근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "보통인부",
+       "field": "작업조 > 철근콘크리트",
+       "value": "1",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "보통인부",
+       "field": "비고",
+       "value": "현장정리/보조",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "콘크리트펌프차",
+       "field": "단위",
+       "value": "대",
+       "kind": "own",
+       "found": false,
+       "matching_records": 1,
+       "failure_type": "구조",
+       "failure_detail": "해당 열이 레코드에 없음"
+      },
+      {
+       "row": "콘크리트펌프차",
+       "field": "비고",
+       "value": "시공조건에 따른 규격 선정",
+       "kind": "own",
+       "found": true,
+       "matching_records": 1
+      },
+      {
+       "row": "콘크리트펌프차",
+       "field": "작업조 > 무근콘크리트",
+       "value": "1대(80㎥/hr 이상)",
+       "kind": "shared",
+       "found": true,
+       "matching_records": 1,
+       "span_basis": "ruled"
+      },
+      {
+       "row": "콘크리트펌프차",
+       "field": "작업조 > 철근콘크리트",
+       "value": "1대(80㎥/hr 이상)",
+       "kind": "shared",
+       "found": true,
+       "matching_records": 1,
+       "span_basis": "ruled"
+      }
+     ],
+     "interpretations": [],
+     "arithmetic": []
+    },
+    "T3": {
+     "records": [],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "신구-콘크리트 접착제바르기 / Epoxy신구-콘크리트접착제",
+       "field": "단위",
+       "value": "㎏",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "신구-콘크리트 접착제바르기 / Epoxy신구-콘크리트접착제",
+       "field": "수량",
+       "value": "1.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "신구-콘크리트 접착제바르기 / 시너",
+       "field": "단위",
+       "value": "ℓ",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "신구-콘크리트 접착제바르기 / 시너",
+       "field": "수량",
+       "value": "0.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "콘크리트 및 고무 기타 접착제바르기 / Epoxy-콘크리트고무접착제",
+       "field": "단위",
+       "value": "㎏",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "콘크리트 및 고무 기타 접착제바르기 / Epoxy-콘크리트고무접착제",
+       "field": "수량",
+       "value": "1.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "콘크리트 및 고무 기타 접착제바르기 / 시너",
+       "field": "단위",
+       "value": "ℓ",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "콘크리트 및 고무 기타 접착제바르기 / 시너",
+       "field": "수량",
+       "value": "0.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      }
+     ],
+     "interpretations": [
+      {
+       "interpretation": "I1",
+       "group": "G1",
+       "records_with_value": 0,
+       "pass": false
+      },
+      {
+       "interpretation": "I1",
+       "group": "G2",
+       "records_with_value": 0,
+       "pass": false
+      }
+     ],
+     "arithmetic": []
+    },
+    "T4": {
+     "records": [
+      "6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완) | 지하층 및 1∼3층 0 | 4∼6층 5% | 7∼9층 8% | 10∼12층 12% | 13∼15층 16% | 16∼18층 20%"
+     ],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "지하층 및 1∼3층",
+       "field": "할증률",
+       "value": "0",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "4∼6층",
+       "field": "할증률",
+       "value": "5%",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "7∼9층",
+       "field": "할증률",
+       "value": "8%",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "10∼12층",
+       "field": "할증률",
+       "value": "12%",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "13∼15층",
+       "field": "할증률",
+       "value": "16%",
+       "kind": "own",
+       "found": true
+      },
+      {
+       "row": "16∼18층",
+       "field": "할증률",
+       "value": "20%",
+       "kind": "own",
+       "found": true
+      }
+     ],
+     "interpretations": [],
+     "arithmetic": []
+    },
+    "T5": {
+     "records": [
+      "6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완) | 형 | 명틀 | 칭목 | 공 | 위 단인 | 설치 4.5 | 해체 1.7 | (100㎡당) 계 6.2",
+      "6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완) | 비 | 계 | 공 | 위 인 | 설치 4.5 | 해체 4.5 | (100㎡당) 9.0",
+      "6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완) | 보 | 통 | 인 | 부 | 위 인 | 설치 7.5 | 해체 4.5 | (100㎡당) 12.0",
+      "6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완) | 비 | 고 | 위 - 수직고 7m이상인 경우에는 | 설치 3m증가마다 | 해체 품을 10% 범위 내에서 | (100㎡당) 가산하여 적용한다."
+     ],
+     "assembly_error": null,
+     "expected": [
+      {
+       "row": "형틀목공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "형틀목공",
+       "field": "설치",
+       "value": "4.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "형틀목공",
+       "field": "해체",
+       "value": "1.7",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "형틀목공",
+       "field": "계",
+       "value": "6.2",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "field": "설치",
+       "value": "4.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "field": "해체",
+       "value": "4.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "field": "계",
+       "value": "9.0",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "field": "단위",
+       "value": "인",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "field": "설치",
+       "value": "7.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "field": "해체",
+       "value": "4.5",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "field": "계",
+       "value": "12.0",
+       "kind": "own",
+       "found": false,
+       "matching_records": 0,
+       "failure_type": "구조",
+       "failure_detail": "행 키에 맞는 레코드 0건"
+      }
+     ],
+     "interpretations": [],
+     "arithmetic": [
+      {
+       "row": "형틀목공",
+       "pass": false,
+       "reason": "레코드 0건"
+      },
+      {
+       "row": "비계공",
+       "pass": false,
+       "reason": "레코드 0건"
+      },
+      {
+       "row": "보통인부",
+       "pass": false,
+       "reason": "레코드 0건"
+      }
+     ]
+    }
+   },
+   "old_golden": [
+    {
+     "id": "6-1-1 인력운반 콘크리트공",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-1 인력운반 보통인부",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-1 장비사용 콘크리트공",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-1 장비사용 보통인부 (수량 1)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "형식",
+     "failure_detail": "공백을 무시하면 통과"
+    },
+    {
+     "id": "6-1-1 굴착기",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-4 콘크리트공 (작업조 + 비고)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-4 콘크리트펌프차",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-5 Epoxy 접착제",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-5 시너 (현재 누락되는 값)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-1-5 층수별 할증 (첫 칸이 라벨이 아니라 값)",
+     "pass": true,
+     "hits": 1,
+     "banned": []
+    },
+    {
+     "id": "6-3-2 형틀목공 (쌓인 직종)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    },
+    {
+     "id": "6-3-2 비계공 (쌓인 직종)",
+     "pass": false,
+     "hits": 0,
+     "banned": [],
+     "failure_type": "값·구조",
+     "failure_detail": "느슨한 판정에서도 0건 (필요 1건)"
+    }
+   ],
+   "estimate": {
+    "pass": false,
+    "reason": "콘크리트공: 레코드 1개가 필요합니다. 실제: 0",
+    "failure_type": "구조",
+    "relaxed": {
+     "computed": false,
+     "matches_expected": false,
+     "person_days": {
+      "콘크리트공": "레코드 0건",
+      "보통인부": "값을 못 찾음 {}"
+     }
+    },
+    "basis_injected_from_golden": "6-1-1 레디믹스트콘크리트 타설('24년 보완) | 설명 | (일당)"
+   }
+  }
+ }
+}

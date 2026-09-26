@@ -1,0 +1,366 @@
+{
+ "pymupdf vs pymupdf__pages": {
+  "T1": {
+   "same": true,
+   "shape": [
+    "9x8",
+    "9x8"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T2": {
+   "same": true,
+   "shape": [
+    "7x5",
+    "7x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T3": {
+   "same": true,
+   "shape": [
+    "4x5",
+    "4x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T4": {
+   "same": true,
+   "shape": [
+    "2x6",
+    "2x6"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T5": {
+   "same": true,
+   "shape": [
+    "3x5",
+    "3x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  }
+ },
+ "docling_accurate__fullpdf vs docling_accurate": {
+  "T1": {
+   "same": true,
+   "shape": [
+    "3x7",
+    "3x7"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T2": {
+   "same": true,
+   "shape": [
+    "7x5",
+    "7x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T3": {
+   "same": true,
+   "shape": [
+    "4x5",
+    "4x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T4": {
+   "same": true,
+   "shape": [
+    "2x6",
+    "2x6"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T5": {
+   "same": true,
+   "shape": [
+    "5x8",
+    "5x8"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  }
+ },
+ "docling_accurate_nomatch__fullpdf vs docling_accurate_nomatch": {
+  "T1": {
+   "same": true,
+   "shape": [
+    "4x7",
+    "4x7"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T2": {
+   "same": true,
+   "shape": [
+    "7x8",
+    "7x8"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T3": {
+   "same": true,
+   "shape": [
+    "4x5",
+    "4x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T4": {
+   "same": true,
+   "shape": [
+    "2x6",
+    "2x6"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T5": {
+   "same": true,
+   "shape": [
+    "5x9",
+    "5x9"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  }
+ },
+ "odl_local__fullpdf vs odl_local": {
+  "T1": {
+   "same": true,
+   "shape": [
+    "6x7",
+    "6x7"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T2": {
+   "same": true,
+   "shape": [
+    "7x5",
+    "7x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T3": {
+   "same": true,
+   "shape": [
+    "4x5",
+    "4x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T4": {
+   "same": true,
+   "shape": [
+    "2x6",
+    "2x6"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T5": {
+   "same": true,
+   "shape": [
+    "3x5",
+    "3x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  }
+ },
+ "odl_local_cluster__fullpdf vs odl_local_cluster": {
+  "T1": {
+   "same": true,
+   "shape": [
+    "6x7",
+    "6x7"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T2": {
+   "same": true,
+   "shape": [
+    "7x5",
+    "7x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T3": {
+   "same": true,
+   "shape": [
+    "4x5",
+    "4x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T4": {
+   "same": true,
+   "shape": [
+    "2x6",
+    "2x6"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T5": {
+   "same": true,
+   "shape": [
+    "3x5",
+    "3x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  }
+ },
+ "odl_hybrid_auto__fullpdf vs odl_hybrid_auto": {
+  "T1": {
+   "same": true,
+   "shape": [
+    "3x7",
+    "3x7"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T2": {
+   "same": true,
+   "shape": [
+    "7x5",
+    "7x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T3": {
+   "same": true,
+   "shape": [
+    "4x5",
+    "4x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T4": {
+   "same": true,
+   "shape": [
+    "2x6",
+    "2x6"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T5": {
+   "same": true,
+   "shape": [
+    "5x8",
+    "5x8"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  }
+ },
+ "odl_hybrid_full__fullpdf vs odl_hybrid_full": {
+  "T1": {
+   "same": true,
+   "shape": [
+    "3x7",
+    "3x7"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T2": {
+   "same": true,
+   "shape": [
+    "7x5",
+    "7x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T3": {
+   "same": true,
+   "shape": [
+    "4x5",
+    "4x5"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T4": {
+   "same": true,
+   "shape": [
+    "2x6",
+    "2x6"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  },
+  "T5": {
+   "same": true,
+   "shape": [
+    "5x8",
+    "5x8"
+   ],
+   "only_in_full": [],
+   "only_in_pages": [],
+   "bbox_max_delta_pt": 0.0
+  }
+ }
+}

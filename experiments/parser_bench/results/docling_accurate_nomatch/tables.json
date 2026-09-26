@@ -1,0 +1,1669 @@
+{
+ "parser": "Docling",
+ "version": "2.130.0",
+ "versions": {
+  "docling": "2.130.0",
+  "docling-core": "2.98.0",
+  "docling-ibm-models": "4.0.3",
+  "docling-parse": "7.21.0",
+  "torch": "2.14.0"
+ },
+ "config": {
+  "do_ocr": false,
+  "do_table_structure": true,
+  "table_mode": "TableFormerMode.ACCURATE",
+  "do_cell_matching": false,
+  "table_structure_options": "TableStructureOptions(do_cell_matching=False, mode=<TableFormerMode.ACCURATE: 'accurate'>)",
+  "device": "cpu"
+ },
+ "init_sec": 34.24,
+ "page_sec": {
+  "185": 27.09,
+  "186": 21.75,
+  "188": 14.27,
+  "193": 17.46
+ },
+ "elapsed_sec": 114.81,
+ "match_candidates": {
+  "T1": [
+   {
+    "iou": 0.509,
+    "bbox_pt": [
+     67.0,
+     319.6,
+     543.7,
+     436.0
+    ]
+   },
+   {
+    "iou": 0.322,
+    "bbox_pt": [
+     71.8,
+     465.4,
+     540.3,
+     532.8
+    ]
+   },
+   {
+    "iou": 0.0,
+    "bbox_pt": [
+     67.2,
+     638.8,
+     545.3,
+     754.8
+    ]
+   }
+  ],
+  "T2": [
+   {
+    "iou": 0.975,
+    "bbox_pt": [
+     67.3,
+     575.7,
+     543.1,
+     686.8
+    ]
+   },
+   {
+    "iou": 0.0,
+    "bbox_pt": [
+     67.2,
+     225.9,
+     545.3,
+     259.2
+    ]
+   }
+  ],
+  "T3": [
+   {
+    "iou": 0.984,
+    "bbox_pt": [
+     67.4,
+     104.3,
+     545.2,
+     202.5
+    ]
+   },
+   {
+    "iou": 0.0,
+    "bbox_pt": [
+     87.9,
+     252.2,
+     538.7,
+     302.9
+    ]
+   },
+   {
+    "iou": 0.0,
+    "bbox_pt": [
+     67.0,
+     424.7,
+     545.2,
+     476.2
+    ]
+   }
+  ],
+  "T4": [
+   {
+    "iou": 0.957,
+    "bbox_pt": [
+     87.9,
+     252.2,
+     538.7,
+     302.9
+    ]
+   },
+   {
+    "iou": 0.0,
+    "bbox_pt": [
+     67.4,
+     104.3,
+     545.2,
+     202.5
+    ]
+   },
+   {
+    "iou": 0.0,
+    "bbox_pt": [
+     67.0,
+     424.7,
+     545.2,
+     476.2
+    ]
+   }
+  ],
+  "T5": [
+   {
+    "iou": 0.84,
+    "bbox_pt": [
+     67.2,
+     539.1,
+     545.4,
+     637.7
+    ]
+   },
+   {
+    "iou": 0.0,
+    "bbox_pt": [
+     67.3,
+     98.7,
+     543.5,
+     167.0
+    ]
+   },
+   {
+    "iou": 0.0,
+    "bbox_pt": [
+     67.3,
+     368.7,
+     545.1,
+     453.8
+    ]
+   }
+  ]
+ },
+ "tables": {
+  "T1": {
+   "n_rows": 4,
+   "n_cols": 7,
+   "cells": [
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 5,
+     "c1": 7,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 0,
+     "c1": 1,
+     "text": "구 분",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 5,
+     "c1": 6,
+     "text": "무근구조물",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 6,
+     "c1": 7,
+     "text": "철근구조물",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 0,
+     "c1": 1,
+     "text": "인력운반 타 설",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 1,
+     "c1": 2,
+     "text": "콘크리트공 보통인부",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 5,
+     "c1": 6,
+     "text": "23",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 6,
+     "c1": 7,
+     "text": "20",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 0,
+     "c1": 1,
+     "text": "장비사용 타 설",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 1,
+     "c1": 2,
+     "text": "콘크리트공 보통인부",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 5,
+     "c1": 6,
+     "text": "63",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 6,
+     "c1": 7,
+     "text": "55",
+     "column_header": false,
+     "row_header": false
+    }
+   ],
+   "id": "T1",
+   "page": 185,
+   "bbox_pt": [
+    67.0,
+    319.6,
+    543.7,
+    436.0
+   ],
+   "match_iou": 0.509,
+   "tables_on_page": 3
+  },
+  "T2": {
+   "n_rows": 7,
+   "n_cols": 8,
+   "cells": [
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 1,
+     "c1": 2,
+     "text": "구 분",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 5,
+     "c1": 7,
+     "text": "작업조",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 7,
+     "c1": 8,
+     "text": "비 고",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 2,
+     "c1": 3,
+     "text": "구 분",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 5,
+     "c1": 6,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 6,
+     "c1": 7,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 7,
+     "c1": 8,
+     "text": "비 고",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 5,
+     "c1": 6,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 6,
+     "c1": 7,
+     "text": "4",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 7,
+     "c1": 8,
+     "text": "타설/진동기/면정리",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 5,
+     "c1": 6,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 6,
+     "c1": 7,
+     "text": "1",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 7,
+     "c1": 8,
+     "text": "배관타설 : 1인 추가",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 5,
+     "c1": 6,
+     "text": "1",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 6,
+     "c1": 7,
+     "text": "1",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 7,
+     "c1": 8,
+     "text": "거푸집 및 동바리 작업",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 5,
+     "r1": 6,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 5,
+     "r1": 6,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 5,
+     "r1": 6,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 5,
+     "r1": 6,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 5,
+     "r1": 6,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 5,
+     "r1": 6,
+     "c0": 5,
+     "c1": 6,
+     "text": "1",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 5,
+     "r1": 6,
+     "c0": 6,
+     "c1": 7,
+     "text": "1",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 5,
+     "r1": 6,
+     "c0": 7,
+     "c1": 8,
+     "text": "현장정리/보조",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 6,
+     "r1": 7,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 6,
+     "r1": 7,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 6,
+     "r1": 7,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 6,
+     "r1": 7,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 6,
+     "r1": 7,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 6,
+     "r1": 7,
+     "c0": 5,
+     "c1": 7,
+     "text": "1대(80㎥/hr 이상)",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 6,
+     "r1": 7,
+     "c0": 7,
+     "c1": 8,
+     "text": "시공조건에 따른 규격 선정",
+     "column_header": false,
+     "row_header": false
+    }
+   ],
+   "id": "T2",
+   "page": 186,
+   "bbox_pt": [
+    67.3,
+    575.7,
+    543.1,
+    686.8
+   ],
+   "match_iou": 0.975,
+   "tables_on_page": 2
+  },
+  "T3": {
+   "n_rows": 4,
+   "n_cols": 5,
+   "cells": [
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 0,
+     "c1": 1,
+     "text": "구 분",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 1,
+     "c1": 2,
+     "text": "재료명",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 0,
+     "c1": 1,
+     "text": "신구 - 콘크리트 접 착 제 바 르 기",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 1,
+     "c1": 2,
+     "text": "Epoxy신구-콘크리트접착제 시 너",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 2,
+     "c1": 3,
+     "text": "㎏ ℓ",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 3,
+     "c1": 4,
+     "text": "1.2 0.2",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 4,
+     "c1": 5,
+     "text": "⌉ 0.12인",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 0,
+     "c1": 1,
+     "text": "콘크리트 및 고무",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 1,
+     "c1": 2,
+     "text": "Epoxy-콘크리트고무접착제 시 너",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 2,
+     "c1": 3,
+     "text": "㎏ ℓ",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 3,
+     "c1": 4,
+     "text": "1.2 0.2",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 4,
+     "c1": 5,
+     "text": "⌉ 0.12인",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 0,
+     "c1": 1,
+     "text": "비",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 1,
+     "c1": 2,
+     "text": "고 - 상부 슬래브 등 천장 시공은 본 품을 20% 가산한다.",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    }
+   ],
+   "id": "T3",
+   "page": 188,
+   "bbox_pt": [
+    67.4,
+    104.3,
+    545.2,
+    202.5
+   ],
+   "match_iou": 0.984,
+   "tables_on_page": 4
+  },
+  "T4": {
+   "n_rows": 2,
+   "n_cols": 6,
+   "cells": [
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 0,
+     "c1": 1,
+     "text": "지하층 및 1∼3층",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 1,
+     "c1": 2,
+     "text": "4∼6층",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 5,
+     "c1": 6,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 0,
+     "c1": 1,
+     "text": "0",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 1,
+     "c1": 2,
+     "text": "5%",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 2,
+     "c1": 3,
+     "text": "8%",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 3,
+     "c1": 4,
+     "text": "12%",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 4,
+     "c1": 5,
+     "text": "16%",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 5,
+     "c1": 6,
+     "text": "20%",
+     "column_header": false,
+     "row_header": false
+    }
+   ],
+   "id": "T4",
+   "page": 188,
+   "bbox_pt": [
+    87.9,
+    252.2,
+    538.7,
+    302.9
+   ],
+   "match_iou": 0.957,
+   "tables_on_page": 4
+  },
+  "T5": {
+   "n_rows": 5,
+   "n_cols": 9,
+   "cells": [
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 4,
+     "c1": 5,
+     "text": "단 위",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 5,
+     "c1": 6,
+     "text": "설 치",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 6,
+     "c1": 7,
+     "text": "(100㎡당)",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 7,
+     "c1": 8,
+     "text": "(100㎡당)",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 0,
+     "r1": 1,
+     "c0": 8,
+     "c1": 9,
+     "text": "(100㎡당)",
+     "column_header": true,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 4,
+     "c1": 5,
+     "text": "인",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 5,
+     "c1": 6,
+     "text": "4.5",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 6,
+     "c1": 7,
+     "text": "1.7",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 7,
+     "c1": 8,
+     "text": "6.2",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 1,
+     "r1": 2,
+     "c0": 8,
+     "c1": 9,
+     "text": "6.2",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 4,
+     "c1": 5,
+     "text": "인",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 5,
+     "c1": 6,
+     "text": "4.5",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 6,
+     "c1": 7,
+     "text": "4.5",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 7,
+     "c1": 8,
+     "text": "9.0",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 2,
+     "r1": 3,
+     "c0": 8,
+     "c1": 9,
+     "text": "9.0",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 0,
+     "c1": 1,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 4,
+     "c1": 5,
+     "text": "인",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 5,
+     "c1": 6,
+     "text": "7.5",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 6,
+     "c1": 7,
+     "text": "4.5",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 7,
+     "c1": 8,
+     "text": "12.0",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 3,
+     "r1": 4,
+     "c0": 8,
+     "c1": 9,
+     "text": "12.0",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 0,
+     "c1": 1,
+     "text": "비",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 1,
+     "c1": 2,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 2,
+     "c1": 3,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 3,
+     "c1": 4,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 4,
+     "c1": 5,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 5,
+     "c1": 6,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 6,
+     "c1": 7,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 7,
+     "c1": 8,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    },
+    {
+     "r0": 4,
+     "r1": 5,
+     "c0": 8,
+     "c1": 9,
+     "text": "",
+     "column_header": false,
+     "row_header": false
+    }
+   ],
+   "id": "T5",
+   "page": 193,
+   "bbox_pt": [
+    67.2,
+    539.1,
+    545.4,
+    637.7
+   ],
+   "match_iou": 0.84,
+   "tables_on_page": 3
+  }
+ }
+}

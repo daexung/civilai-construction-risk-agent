@@ -1,0 +1,671 @@
+{
+ "odl_pages": [
+  47,
+  58,
+  106,
+  155,
+  185,
+  186,
+  187,
+  188,
+  189,
+  190,
+  191,
+  192,
+  193,
+  255,
+  288,
+  334,
+  404,
+  440,
+  488,
+  528,
+  594,
+  644,
+  668,
+  734,
+  773,
+  835,
+  872,
+  895,
+  970
+ ],
+ "elapsed_sec": 21.56,
+ "blind20": {
+  "nosplit": {
+   "raw": 246,
+   "spanfill": 217,
+   "extract": 209
+  },
+  "rowsplit": {
+   "raw": 271,
+   "spanfill": 220,
+   "extract": 212
+  }
+ },
+ "nosplit_equals_baseline": true,
+ "targets": [
+  {
+   "table": "p155_t3",
+   "fact": 0,
+   "row": [
+    "철골공"
+   ],
+   "raw": false,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p155_t3",
+   "fact": 1,
+   "row": [
+    "용접공"
+   ],
+   "raw": false,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p155_t3",
+   "fact": 2,
+   "row": [
+    "보통인부"
+   ],
+   "raw": false,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p255_t1",
+   "fact": 11,
+   "row": [
+    "자갈혼합사질토사",
+    "軟質"
+   ],
+   "raw": false,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p255_t1",
+   "fact": 12,
+   "row": [
+    "자갈혼합사질토사",
+    "硬質"
+   ],
+   "raw": false,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p488_t1",
+   "fact": 2,
+   "row": [
+    "세부측량"
+   ],
+   "raw": false,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p668_t3",
+   "fact": 0,
+   "row": [
+    "아스팔트싱글"
+   ],
+   "raw": false,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p668_t3",
+   "fact": 1,
+   "row": [
+    "잡재료및소모재료"
+   ],
+   "raw": false,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 0,
+   "row": [
+    "Lowerinnercasing",
+    "기계설치공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 1,
+   "row": [
+    "Lowerinnercasing",
+    "비계공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 2,
+   "row": [
+    "Lowerinnercasing",
+    "건설기계운전조"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 3,
+   "row": [
+    "Lowerinnercasing",
+    "특별인부"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 4,
+   "row": [
+    "점검및조정",
+    "기계설치공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 5,
+   "row": [
+    "점검및조정",
+    "건설기계운전조"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 6,
+   "row": [
+    "점검및조정",
+    "특별인부"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 9,
+   "row": [
+    "NozzlePlate설치",
+    "기계설치공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 10,
+   "row": [
+    "NozzlePlate설치",
+    "비계공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 11,
+   "row": [
+    "NozzlePlate설치",
+    "특별인부"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 12,
+   "row": [
+    "NozzlePlate설치",
+    "건설기계운전조"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 13,
+   "row": [
+    "Rotor설치",
+    "기계설치공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 14,
+   "row": [
+    "Rotor설치",
+    "비계공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 15,
+   "row": [
+    "Rotor설치",
+    "특별인부"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 16,
+   "row": [
+    "Rotor설치",
+    "건설기계운전조"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 17,
+   "row": [
+    "Rotorclearance",
+    "기계설치공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 18,
+   "row": [
+    "Rotorclearance",
+    "건설기계운전조"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 19,
+   "row": [
+    "Rotorclearance",
+    "특별인부"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 20,
+   "row": [
+    "Upperinnercasing",
+    "기계설치공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 21,
+   "row": [
+    "Upperinnercasing",
+    "비계공"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 22,
+   "row": [
+    "Upperinnercasing",
+    "건설기계운전조"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p835_t1",
+   "fact": 23,
+   "row": [
+    "Upperinnercasing",
+    "특별인부"
+   ],
+   "raw": true,
+   "spanfill": false,
+   "extract": false
+  },
+  {
+   "table": "p895_t3",
+   "fact": 5,
+   "row": [
+    "소운반",
+    "건설기계운전조"
+   ],
+   "raw": true,
+   "spanfill": true,
+   "extract": true
+  }
+ ],
+ "regressions_vs_odl_baseline": [],
+ "gains_outside_targets": [
+  {
+   "table": "p488_t1",
+   "fact": 6,
+   "layer": "spanfill"
+  },
+  {
+   "table": "p488_t1",
+   "fact": 7,
+   "layer": "spanfill"
+  },
+  {
+   "table": "p488_t1",
+   "fact": 6,
+   "layer": "extract"
+  },
+  {
+   "table": "p488_t1",
+   "fact": 7,
+   "layer": "extract"
+  },
+  {
+   "table": "p895_t3",
+   "fact": 2,
+   "layer": "raw"
+  },
+  {
+   "table": "p895_t3",
+   "fact": 7,
+   "layer": "raw"
+  }
+ ],
+ "vs_production_extract": {
+  "nosplit": [],
+  "rowsplit": []
+ },
+ "split_tables_blind20": {
+  "p255#0": 3,
+  "p288#0": 1,
+  "p288#1": 1,
+  "p288#2": 1,
+  "p440#1": 8,
+  "p488#0": 1,
+  "p835#0": 6,
+  "p895#0": 2,
+  "p895#2": 3
+ },
+ "golden5": {
+  "odl_local__fullpdf": {
+   "B_spanfill": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "B_extract": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     9,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 3
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   }
+  },
+  "p2_odl_nosplit": {
+   "B_spanfill": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "B_extract": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     9,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 3
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   }
+  },
+  "p2_odl_rowsplit": {
+   "B_spanfill": {
+    "old_golden_subset": [
+     11,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 0
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     12,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 0
+    },
+    "estimate_failure_type": null,
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": true,
+    "estimate_detail": {
+     "콘크리트공": "15",
+     "보통인부": "15"
+    },
+    "assembly_errors": {}
+   },
+   "B_extract": {
+    "old_golden_subset": [
+     9,
+     12
+    ],
+    "old_golden_failures_by_type": {
+     "형식": 1,
+     "값·구조": 2
+    },
+    "expected_own": [
+     55,
+     55
+    ],
+    "expected_shared": [
+     5,
+     12
+    ],
+    "expected_failures_by_type": {
+     "형식": 0,
+     "값 오류": 0,
+     "구조": 7
+    },
+    "estimate_failure_type": "구조",
+    "interpretation_checks": [
+     0,
+     2
+    ],
+    "arithmetic": [
+     3,
+     3
+    ],
+    "estimate": false,
+    "estimate_detail": "'시공량(㎥) 철근구조물 ': 값이 정확히 1개 필요합니다. 실제: []",
+    "assembly_errors": {}
+   }
+  }
+ },
+ "golden5_stderr": "",
+ "check_parse": {
+  "pymupdf(운영)": "통과 23 / 전체 23",
+  "odl_nosplit": "통과 22 / 전체 23\n\n[실패] p188 6-1-5 Epoxy 접착제\n       있으면 안 되는 값: ['⌉', '⌋'] / 6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완) | 신구-콘크리트 접착제바르기 | 재료명 Epoxy신구-콘크리트접\n       찾던 것: ['6-1-5', '신구-콘크리트 접착제바르기', 'Epoxy신구-콘크리트접착제', '단위 ㎏', '수량 1.2', '0.12인']",
+  "odl_rowsplit": "통과 22 / 전체 23\n\n[실패] p188 6-1-5 Epoxy 접착제\n       있으면 안 되는 값: ['⌉', '⌋'] / 6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완) | 신구-콘크리트 접착제바르기 | 재료명 Epoxy신구-콘크리트접\n       찾던 것: ['6-1-5', '신구-콘크리트 접착제바르기', 'Epoxy신구-콘크리트접착제', '단위 ㎏', '수량 1.2', '0.12인']"
+ }
+}

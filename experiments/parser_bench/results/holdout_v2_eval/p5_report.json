@@ -1,0 +1,1917 @@
+{
+ "pages": [
+  260,
+  308,
+  350,
+  364,
+  424,
+  433,
+  533,
+  786,
+  802,
+  876,
+  922,
+  965
+ ],
+ "odl_elapsed_sec": 83.63,
+ "new_path_elapsed_sec": 86.67,
+ "production_elapsed_sec": 5.63,
+ "new": {
+  "all": {
+   "passed": 128,
+   "facts": 167,
+   "rate": 0.766,
+   "fail_kinds": {
+    "잘못 붙음": 35,
+    "수량 누락": 1,
+    "행 라벨 누락": 3
+   },
+   "tables_found": 21,
+   "tables": 21
+  },
+  "random": {
+   "passed": 49,
+   "facts": 86,
+   "rate": 0.57,
+   "fail_kinds": {
+    "잘못 붙음": 35,
+    "수량 누락": 1,
+    "행 라벨 누락": 1
+   },
+   "tables_found": 16,
+   "tables": 16
+  },
+  "targeted": {
+   "passed": 79,
+   "facts": 81,
+   "rate": 0.975,
+   "fail_kinds": {
+    "행 라벨 누락": 2
+   },
+   "tables_found": 5,
+   "tables": 5
+  }
+ },
+ "production": {
+  "all": {
+   "passed": 78,
+   "facts": 167,
+   "rate": 0.467,
+   "fail_kinds": {
+    "잘못 붙음": 44,
+    "레코드 없음(조립)": 41,
+    "수량 누락": 1,
+    "행 라벨 누락": 3
+   },
+   "tables_found": 21,
+   "tables": 21
+  },
+  "random": {
+   "passed": 34,
+   "facts": 86,
+   "rate": 0.395,
+   "fail_kinds": {
+    "잘못 붙음": 42,
+    "레코드 없음(조립)": 8,
+    "수량 누락": 1,
+    "행 라벨 누락": 1
+   },
+   "tables_found": 16,
+   "tables": 16
+  },
+  "targeted": {
+   "passed": 44,
+   "facts": 81,
+   "rate": 0.543,
+   "fail_kinds": {
+    "행 라벨 누락": 2,
+    "레코드 없음(조립)": 33,
+    "잘못 붙음": 2
+   },
+   "tables_found": 5,
+   "tables": 5
+  }
+ },
+ "new_fails_where_production_passes": [],
+ "false_positives": {
+  "new": [
+   {
+    "page": 922,
+    "bbox_pt": [
+     68.7,
+     422.2,
+     543.9,
+     453.1
+    ],
+    "shape": "1x2"
+   }
+  ],
+  "production": [
+   {
+    "page": 922,
+    "bbox_pt": [
+     68.67000007629395,
+     422.1600036621094,
+     543.8759887695312,
+     453.1199951171875
+    ],
+    "shape": "1x2"
+   }
+  ]
+ },
+ "guard_log": [
+  {
+   "page": 308,
+   "region": [
+    67.9,
+    560.8,
+    544.7,
+    740.8
+   ],
+   "coverage": 0.0,
+   "status": "missing",
+   "fallback_tables": [
+    "5x14"
+   ]
+  },
+  {
+   "page": 922,
+   "region": [
+    67.9,
+    422.2,
+    543.8,
+    453.1
+   ],
+   "coverage": 0.0,
+   "status": "missing",
+   "fallback_tables": [
+    "1x2"
+   ]
+  }
+ ],
+ "per_table": {
+  "new": {
+   "v2_433_t1": {
+    "n_facts": 7,
+    "passed": 7,
+    "found": true,
+    "shapes": [
+     "9x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_433_t2": {
+    "n_facts": 7,
+    "passed": 7,
+    "found": true,
+    "shapes": [
+     "5x9"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_433_t3": {
+    "n_facts": 4,
+    "passed": 4,
+    "found": true,
+    "shapes": [
+     "3x6"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_876_t1": {
+    "n_facts": 5,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "2x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "용접"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트용접공 | 수량 4.46",
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트제관공 | 수량 0.75"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "교정"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트용접공 | 수량 4.46",
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트제관공 | 수량 0.75"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "조작"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트용접공 | 수량 4.46",
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트제관공 | 수량 0.75"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "소운반"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트용접공 | 수량 4.46",
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트제관공 | 수량 0.75"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "보조"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트용접공 | 수량 4.46",
+       "S | 용접 교정 조작 소운반 보조(기능) | 직종 플랜트제관공 | 수량 0.75"
+      ]
+     }
+    ]
+   },
+   "v2_876_t2": {
+    "n_facts": 8,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "2x4"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "절단및교정"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 절단및교정 용접 현도 Grinding Holing Threading 기계톱절단 선반절단 동력 | 품명 산소 아세틸렌 용접봉 함 석 ( Templ at e) 연마석 drill drill Bite 톱날 Bite | 규격 6,000ℓ입 2,100ℓ입 #32×3'×6' 12\"ø 1/4\" 11/15\" | 수량 1.805병 1.275병 20.7㎏ 0.53매 1.55개 0.96개 0.96개 2.5개 2.5개 3.2개"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "용접"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 절단및교정 용접 현도 Grinding Holing Threading 기계톱절단 선반절단 동력 | 품명 산소 아세틸렌 용접봉 함 석 ( Templ at e) 연마석 drill drill Bite 톱날 Bite | 규격 6,000ℓ입 2,100ℓ입 #32×3'×6' 12\"ø 1/4\" 11/15\" | 수량 1.805병 1.275병 20.7㎏ 0.53매 1.55개 0.96개 0.96개 2.5개 2.5개 3.2개"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "현도"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 절단및교정 용접 현도 Grinding Holing Threading 기계톱절단 선반절단 동력 | 품명 산소 아세틸렌 용접봉 함 석 ( Templ at e) 연마석 drill drill Bite 톱날 Bite | 규격 6,000ℓ입 2,100ℓ입 #32×3'×6' 12\"ø 1/4\" 11/15\" | 수량 1.805병 1.275병 20.7㎏ 0.53매 1.55개 0.96개 0.96개 2.5개 2.5개 3.2개"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "Grinding"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 절단및교정 용접 현도 Grinding Holing Threading 기계톱절단 선반절단 동력 | 품명 산소 아세틸렌 용접봉 함 석 ( Templ at e) 연마석 drill drill Bite 톱날 Bite | 규격 6,000ℓ입 2,100ℓ입 #32×3'×6' 12\"ø 1/4\" 11/15\" | 수량 1.805병 1.275병 20.7㎏ 0.53매 1.55개 0.96개 0.96개 2.5개 2.5개 3.2개"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "Holing"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 절단및교정 용접 현도 Grinding Holing Threading 기계톱절단 선반절단 동력 | 품명 산소 아세틸렌 용접봉 함 석 ( Templ at e) 연마석 drill drill Bite 톱날 Bite | 규격 6,000ℓ입 2,100ℓ입 #32×3'×6' 12\"ø 1/4\" 11/15\" | 수량 1.805병 1.275병 20.7㎏ 0.53매 1.55개 0.96개 0.96개 2.5개 2.5개 3.2개"
+      ]
+     },
+     {
+      "fact": 5,
+      "row": [
+       "Threading"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 절단및교정 용접 현도 Grinding Holing Threading 기계톱절단 선반절단 동력 | 품명 산소 아세틸렌 용접봉 함 석 ( Templ at e) 연마석 drill drill Bite 톱날 Bite | 규격 6,000ℓ입 2,100ℓ입 #32×3'×6' 12\"ø 1/4\" 11/15\" | 수량 1.805병 1.275병 20.7㎏ 0.53매 1.55개 0.96개 0.96개 2.5개 2.5개 3.2개"
+      ]
+     },
+     {
+      "fact": 6,
+      "row": [
+       "기계톱절단"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 절단및교정 용접 현도 Grinding Holing Threading 기계톱절단 선반절단 동력 | 품명 산소 아세틸렌 용접봉 함 석 ( Templ at e) 연마석 drill drill Bite 톱날 Bite | 규격 6,000ℓ입 2,100ℓ입 #32×3'×6' 12\"ø 1/4\" 11/15\" | 수량 1.805병 1.275병 20.7㎏ 0.53매 1.55개 0.96개 0.96개 2.5개 2.5개 3.2개"
+      ]
+     },
+     {
+      "fact": 7,
+      "row": [
+       "선반절단"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 절단및교정 용접 현도 Grinding Holing Threading 기계톱절단 선반절단 동력 | 품명 산소 아세틸렌 용접봉 함 석 ( Templ at e) 연마석 drill drill Bite 톱날 Bite | 규격 6,000ℓ입 2,100ℓ입 #32×3'×6' 12\"ø 1/4\" 11/15\" | 수량 1.805병 1.275병 20.7㎏ 0.53매 1.55개 0.96개 0.96개 2.5개 2.5개 3.2개"
+      ]
+     }
+    ]
+   },
+   "v2_876_t3": {
+    "n_facts": 7,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "14x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "기술관리"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 기술관리 | 직종 기계기사 | 수량 1.66"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "운반검측"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 운반검측 | 직종 플랜트기계설치공 | 수량 0.05",
+       "S | 운반검측 | 직종 특별인부 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "수정"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 수정 | 직종 산소절단공 | 수량 0.05",
+       "S | 수정 | 직종 플랜트기계설치공 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "설치준비"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 설치준비철근정리 | 직종 산소절단공 | 수량 0.047",
+       "S | 설치준비철근정리 | 직종 특별인부 | 수량 0.047"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "Chipping"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | Chipping | 직종 석공 | 수량 0.1",
+       "S | Chipping | 직종 특별인부 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 5,
+      "row": [
+       "Beam설치"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | Beam 설 치 | 직종 특별인부 | 수량 0.175",
+       "S | Beam 설 치 c r a n e 작 업 | 직종 측량사 | 수량 0.14"
+      ]
+     },
+     {
+      "fact": 6,
+      "row": [
+       "Crane작업"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | Crane 작 업 | 직종 특수비계공 | 수량 0.18"
+      ]
+     }
+    ]
+   },
+   "v2_922_t1": {
+    "n_facts": 2,
+    "passed": 2,
+    "found": true,
+    "shapes": [
+     "3x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_922_t2": {
+    "n_facts": 4,
+    "passed": 3,
+    "found": true,
+    "shapes": [
+     "5x11"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 3,
+      "row": [
+       "비고",
+       "지속적인"
+      ],
+      "kind": "수량 누락",
+      "records_with_row_label": []
+     }
+    ]
+   },
+   "v2_922_t3": {
+    "n_facts": 5,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "4x6"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "벌목부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 나무베기 | 벌목부 보통인부 | 단위 인 인 | 수량 2 3 | 흉고직경 (cm) 11㎝미만 | 시공량 (주) 48",
+       "S | 나무베기 | 벌목부 보통인부 | 단위 인 인 | 수량 2 3 | 흉고직경 (cm) 11~21㎝미만 | 시공량 (주) 32"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "보통인부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 나무베기 | 벌목부 보통인부 | 단위 인 인 | 수량 2 3 | 흉고직경 (cm) 11㎝미만 | 시공량 (주) 48",
+       "S | 나무베기 | 벌목부 보통인부 | 단위 인 인 | 수량 2 3 | 흉고직경 (cm) 11~21㎝미만 | 시공량 (주) 32"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "나무베기굴착기"
+      ],
+      "kind": "행 라벨 누락",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 3,
+      "row": [
+       "부착용집게"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 나무베기 | 굴착기+ 부착용집게 고소작업차 | 단위 대 | 수량 1 | 흉고직경 (cm) 11㎝미만 | 시공량 (주) 48",
+       "S | 나무베기 | 굴착기+ 부착용집게 고소작업차 | 단위 대 | 수량 1 | 흉고직경 (cm) 11~21㎝미만 | 시공량 (주) 32"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "고소작업차"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 나무베기 | 굴착기+ 부착용집게 고소작업차 | 단위 대 | 수량 1 | 흉고직경 (cm) 11㎝미만 | 시공량 (주) 48",
+       "S | 나무베기 | 굴착기+ 부착용집게 고소작업차 | 단위 대 | 수량 1 | 흉고직경 (cm) 11~21㎝미만 | 시공량 (주) 32"
+      ]
+     }
+    ]
+   },
+   "v2_260_t1": {
+    "n_facts": 4,
+    "passed": 4,
+    "found": true,
+    "shapes": [
+     "6x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_802_t1": {
+    "n_facts": 4,
+    "passed": 4,
+    "found": true,
+    "shapes": [
+     "7x10"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_802_t2": {
+    "n_facts": 11,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "4x10"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "φ15"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 | 40 용접봉 (kg) 0.006 | 80 용접봉 (kg) 0.015 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.024"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "20"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. 직종 구경 ㎜ 20 | 40 용접봉 (kg) 0.012 | 80 용접봉 (kg) 0.021 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.063"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "25"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. 직종 구경 ㎜ 25 | 40 용접봉 (kg) 0.018 | 80 용접봉 (kg) 0.036 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.092"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "40"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 | 40 용접봉 (kg) 0.006 | 80 용접봉 (kg) 0.015 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.024",
+       "S | SCH No. 직종 구경 ㎜ 20 | 40 용접봉 (kg) 0.012 | 80 용접봉 (kg) 0.021 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.063"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "50"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. 직종 구경 ㎜ 50 | 40 용접봉 (kg) 0.049 | 80 용접봉 (kg) 0.130 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.250"
+      ]
+     },
+     {
+      "fact": 5,
+      "row": [
+       "65"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. 직종 구경 ㎜ 65 | 40 용접봉 (kg) 0.150 | 80 용접봉 (kg) 0.240 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.370"
+      ]
+     },
+     {
+      "fact": 6,
+      "row": [
+       "80"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 | 40 용접봉 (kg) 0.006 | 80 용접봉 (kg) 0.015 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.024",
+       "S | SCH No. 직종 구경 ㎜ 20 | 40 용접봉 (kg) 0.012 | 80 용접봉 (kg) 0.021 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.063"
+      ]
+     },
+     {
+      "fact": 7,
+      "row": [
+       "90"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. 직종 구경 ㎜ 90 | 40 용접봉 (kg) 0.230 | 80 용접봉 (kg) 0.410 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 0.760"
+      ]
+     },
+     {
+      "fact": 8,
+      "row": [
+       "100"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. 직종 구경 ㎜ 100 | 40 용접봉 (kg) 0.280 | 80 용접봉 (kg) 0.480 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 1.010"
+      ]
+     },
+     {
+      "fact": 9,
+      "row": [
+       "125"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. 직종 구경 ㎜ 125 | 40 용접봉 (kg) 0.400 | 80 용접봉 (kg) 1.010 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 1.650"
+      ]
+     },
+     {
+      "fact": 10,
+      "row": [
+       "150"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. 직종 구경 ㎜ 150 | 40 용접봉 (kg) 0.540 | 80 용접봉 (kg) 1.060 | 120 용접봉 (kg) 0.730 1.130 1.650 | 160 용접봉 (kg) 2.490"
+      ]
+     }
+    ]
+   },
+   "v2_786_t1": {
+    "n_facts": 3,
+    "passed": 3,
+    "found": true,
+    "shapes": [
+     "12x10"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_364_t1": {
+    "n_facts": 6,
+    "passed": 6,
+    "found": true,
+    "shapes": [
+     "4x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_364_t2": {
+    "n_facts": 4,
+    "passed": 4,
+    "found": true,
+    "shapes": [
+     "4x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_364_t3": {
+    "n_facts": 5,
+    "passed": 5,
+    "found": true,
+    "shapes": [
+     "4x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_533_t1": {
+    "n_facts": 6,
+    "passed": 5,
+    "found": true,
+    "shapes": [
+     "3x7"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "도로·철도·시설물"
+      ],
+      "kind": "행 라벨 누락",
+      "records_with_row_label": []
+     }
+    ]
+   },
+   "v2_308_t1": {
+    "n_facts": 5,
+    "passed": 5,
+    "found": true,
+    "shapes": [
+     "5x14"
+    ],
+    "extractors": [
+     "fallback"
+    ],
+    "fails": []
+   },
+   "v2_350_t1": {
+    "n_facts": 33,
+    "passed": 33,
+    "found": true,
+    "shapes": [
+     "34x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_424_t1": {
+    "n_facts": 19,
+    "passed": 18,
+    "found": true,
+    "shapes": [
+     "3x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 14,
+      "row": [
+       "1,650"
+      ],
+      "kind": "행 라벨 누락",
+      "records_with_row_label": []
+     }
+    ]
+   },
+   "v2_965_t1": {
+    "n_facts": 18,
+    "passed": 18,
+    "found": true,
+    "shapes": [
+     "3x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   }
+  },
+  "production": {
+   "v2_433_t1": {
+    "n_facts": 7,
+    "passed": 7,
+    "found": true,
+    "shapes": [
+     "2x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_433_t2": {
+    "n_facts": 7,
+    "passed": 7,
+    "found": true,
+    "shapes": [
+     "5x9"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_433_t3": {
+    "n_facts": 4,
+    "passed": 4,
+    "found": true,
+    "shapes": [
+     "3x6"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_876_t1": {
+    "n_facts": 5,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "2x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "용접"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 용접 | 직종 플랜트용접공 | 수량 4.46"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "교정"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 교정 | 직종 플랜트제관공 | 수량 0.75"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "조작"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 조작 | 직종 특수비계공 | 수량 3.3"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "소운반"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 소운반 | 직종 인부 | 수량 1"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "보조"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 보조(기능) | 직종 특별인부 | 수량 37.68"
+      ]
+     }
+    ]
+   },
+   "v2_876_t2": {
+    "n_facts": 8,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "2x4"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "절단및교정"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 1,
+      "row": [
+       "용접"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 2,
+      "row": [
+       "현도"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 3,
+      "row": [
+       "Grinding"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 4,
+      "row": [
+       "Holing"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 5,
+      "row": [
+       "Threading"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 6,
+      "row": [
+       "기계톱절단"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 7,
+      "row": [
+       "선반절단"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     }
+    ]
+   },
+   "v2_876_t3": {
+    "n_facts": 7,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "2x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "기술관리"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 기계기사 | 수량 1.66",
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 플랜트기계설치공 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "운반검측"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 기계기사 | 수량 1.66",
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 플랜트기계설치공 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "수정"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 기계기사 | 수량 1.66",
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 플랜트기계설치공 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "설치준비"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 기계기사 | 수량 1.66",
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 플랜트기계설치공 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "Chipping"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 기계기사 | 수량 1.66",
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 플랜트기계설치공 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 5,
+      "row": [
+       "Beam설치"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 기계기사 | 수량 1.66",
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 플랜트기계설치공 | 수량 0.05"
+      ]
+     },
+     {
+      "fact": 6,
+      "row": [
+       "Crane작업"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 기계기사 | 수량 1.66",
+       "S | 기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업 | 직종 플랜트기계설치공 | 수량 0.05"
+      ]
+     }
+    ]
+   },
+   "v2_922_t1": {
+    "n_facts": 2,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "3x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "조경공"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 조경공 보통인부 | 단위 인 | 수량 2 | 시공량(m) 설치높이 0.45m 350 | 시공량(m) 설치높이 0.9m 250",
+       "S | 조경공 보통인부 | 단위 인 | 수량 1 | 시공량(m) 설치높이 0.45m 350 | 시공량(m) 설치높이 0.9m 250"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "보통인부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 조경공 보통인부 | 단위 인 | 수량 2 | 시공량(m) 설치높이 0.45m 350 | 시공량(m) 설치높이 0.9m 250",
+       "S | 조경공 보통인부 | 단위 인 | 수량 1 | 시공량(m) 설치높이 0.45m 350 | 시공량(m) 설치높이 0.9m 250"
+      ]
+     }
+    ]
+   },
+   "v2_922_t2": {
+    "n_facts": 4,
+    "passed": 1,
+    "found": true,
+    "shapes": [
+     "5x11"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "조경공"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 조경공 보통인부 | 단위 인 | 수량 2 | 시공량(주) 흉고직경 11㎝\n미만 46 | 시공량(주) 11∼\n21㎝\n미만 31 | 시공량(주) 21∼\n31㎝\n미만 23 | 시공량(주) 31∼\n41㎝\n미만 17 | 시공량(주) 41∼\n51㎝\n미만 15 | 시공량(주) 51~\n61㎝\n미만 14 | 시공량(주) 61cm\n초과 10",
+       "S | 조경공 보통인부 | 단위 인 | 수량 4 | 시공량(주) 흉고직경 11㎝\n미만 46 | 시공량(주) 11∼\n21㎝\n미만 31 | 시공량(주) 21∼\n31㎝\n미만 23 | 시공량(주) 31∼\n41㎝\n미만 17 | 시공량(주) 41∼\n51㎝\n미만 15 | 시공량(주) 51~\n61㎝\n미만 14 | 시공량(주) 61cm\n초과 10"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "보통인부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 조경공 보통인부 | 단위 인 | 수량 2 | 시공량(주) 흉고직경 11㎝\n미만 46 | 시공량(주) 11∼\n21㎝\n미만 31 | 시공량(주) 21∼\n31㎝\n미만 23 | 시공량(주) 31∼\n41㎝\n미만 17 | 시공량(주) 41∼\n51㎝\n미만 15 | 시공량(주) 51~\n61㎝\n미만 14 | 시공량(주) 61cm\n초과 10",
+       "S | 조경공 보통인부 | 단위 인 | 수량 4 | 시공량(주) 흉고직경 11㎝\n미만 46 | 시공량(주) 11∼\n21㎝\n미만 31 | 시공량(주) 21∼\n31㎝\n미만 23 | 시공량(주) 31∼\n41㎝\n미만 17 | 시공량(주) 41∼\n51㎝\n미만 15 | 시공량(주) 51~\n61㎝\n미만 14 | 시공량(주) 61cm\n초과 10"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "비고",
+       "지속적인"
+      ],
+      "kind": "수량 누락",
+      "records_with_row_label": []
+     }
+    ]
+   },
+   "v2_922_t3": {
+    "n_facts": 5,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "3x6"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "벌목부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 나무베기 | 벌목부 | 단위 인 | 수량 2 | 흉고직경\n(cm) 11㎝미만 | 시공량\n(주) 48",
+       "S | 나무베기 | 벌목부 | 단위 인 | 수량 2 | 흉고직경\n(cm) 11~21㎝미만 | 시공량\n(주) 32"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "보통인부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 2,
+      "row": [
+       "나무베기굴착기"
+      ],
+      "kind": "행 라벨 누락",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 3,
+      "row": [
+       "부착용집게"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 나무베기 | 부착용집게 | 단위 대 | 수량 1"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "고소작업차"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 나무베기 | 고소작업차 | 단위 대 | 수량 1"
+      ]
+     }
+    ]
+   },
+   "v2_260_t1": {
+    "n_facts": 4,
+    "passed": 4,
+    "found": true,
+    "shapes": [
+     "3x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_802_t1": {
+    "n_facts": 4,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "4x10"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "400"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 400 | 0.540 | 0.540 | 0.725 | 0.950 | 1.220 | 1.660 | 1.830 | 2.360 | 2.710"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "450"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 450 | 0.640 | 0.750 | 0.960 | 1.290 | 1.600 | 1.990 | 2.300 | 2.840 | 3.220"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "500"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 500 | 0.690 | 0.940 | 1.050 | 1.460 | 1.820 | 2.360 | 2.930 | 3.560 | 4.050"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "600"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 600 | 0.800 | 1.100 | 1.230 | 1.790 | 2.280 | 3.180 | 4.200 | 5.000 | 5.560"
+      ]
+     }
+    ]
+   },
+   "v2_802_t2": {
+    "n_facts": 11,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "4x10"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "φ15"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.012 | 0.021 | 0.730 | 0.063"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "20"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. | 20 | 30 | 40 | 60 | 80 | 100 | 120 | 140 | 160",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "25"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.012 | 0.021 | 0.730 | 0.063"
+      ]
+     },
+     {
+      "fact": 3,
+      "row": [
+       "40"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. | 20 | 30 | 40 | 60 | 80 | 100 | 120 | 140 | 160",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024"
+      ]
+     },
+     {
+      "fact": 4,
+      "row": [
+       "50"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.012 | 0.021 | 0.730 | 0.063"
+      ]
+     },
+     {
+      "fact": 5,
+      "row": [
+       "65"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.012 | 0.021 | 0.730 | 0.063"
+      ]
+     },
+     {
+      "fact": 6,
+      "row": [
+       "80"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. | 20 | 30 | 40 | 60 | 80 | 100 | 120 | 140 | 160",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024"
+      ]
+     },
+     {
+      "fact": 7,
+      "row": [
+       "90"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.012 | 0.021 | 0.730 | 0.063"
+      ]
+     },
+     {
+      "fact": 8,
+      "row": [
+       "100"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | SCH No. | 20 | 30 | 40 | 60 | 80 | 100 | 120 | 140 | 160",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024"
+      ]
+     },
+     {
+      "fact": 9,
+      "row": [
+       "125"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.012 | 0.021 | 0.730 | 0.063"
+      ]
+     },
+     {
+      "fact": 10,
+      "row": [
+       "150"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.006 | 0.015 | 0.730 | 0.024",
+       "S | φ 15 20 25 40 50 65 80 90 100 125 150 | 0.012 | 0.021 | 0.730 | 0.063"
+      ]
+     }
+    ]
+   },
+   "v2_786_t1": {
+    "n_facts": 3,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "5x10"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "38.7"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 배관구분 옥내배관 나사식 플랜트\n용접공 9.7 | 배관구분 특별\n인부 9.7 | 배관구분 인/\nton 38.7 | 배관구분 옥외배관 용접식 플랜트\n용접공 13.9 | 배관구분 플랜트\n배관공 6.9 | 배관구분 특별\n인부 6.9 | 배관구분 나사식 플랜트\n배관공 13.9 | 배관구분 플랜트\n용접공 6.9 | 배관구분 특별\n인부 6.9 | 배관구분 인/\nton 27.7"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "36.8"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 배관구분 옥내배관 나사식 플랜트\n용접공 9.2 | 배관구분 특별\n인부 9.2 | 배관구분 인/\nton 36.8 | 배관구분 옥외배관 용접식 플랜트\n용접공 13.2 | 배관구분 플랜트\n배관공 6.6 | 배관구분 특별\n인부 6.6 | 배관구분 나사식 플랜트\n배관공 13.2 | 배관구분 플랜트\n용접공 6.6 | 배관구분 특별\n인부 6.6 | 배관구분 인/\nton 26.4"
+      ]
+     },
+     {
+      "fact": 2,
+      "row": [
+       "32.0"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 배관구분 옥내배관 나사식 플랜트\n용접공 8.0 | 배관구분 특별\n인부 8.0 | 배관구분 인/\nton 32.0 | 배관구분 옥외배관 용접식 플랜트\n용접공 11.4 | 배관구분 플랜트\n배관공 5.7 | 배관구분 특별\n인부 5.7 | 배관구분 나사식 플랜트\n배관공 11.4 | 배관구분 플랜트\n용접공 5.7 | 배관구분 특별\n인부 5.7 | 배관구분 인/\nton 22.8"
+      ]
+     }
+    ]
+   },
+   "v2_364_t1": {
+    "n_facts": 6,
+    "passed": 4,
+    "found": true,
+    "shapes": [
+     "4x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "포설공"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 포설공 보통인부 | 단위 인 | 수량 2 | 시공량(㎥) 250",
+       "S | 포설공 보통인부 | 단위 인 | 수량 2 | 시공량(㎥) 250"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "보통인부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 포설공 보통인부 | 단위 인 | 수량 2 | 시공량(㎥) 250",
+       "S | 포설공 보통인부 | 단위 인 | 수량 2 | 시공량(㎥) 250"
+      ]
+     }
+    ]
+   },
+   "v2_364_t2": {
+    "n_facts": 4,
+    "passed": 4,
+    "found": true,
+    "shapes": [
+     "4x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_364_t3": {
+    "n_facts": 5,
+    "passed": 3,
+    "found": true,
+    "shapes": [
+     "4x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "포설공"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 포설공 보통인부 | 단위 인 | 수량 2 | 시공량(㎥) 150",
+       "S | 포설공 보통인부 | 단위 인 | 수량 2 | 시공량(㎥) 150"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "보통인부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 포설공 보통인부 | 단위 인 | 수량 2 | 시공량(㎥) 150",
+       "S | 포설공 보통인부 | 단위 인 | 수량 2 | 시공량(㎥) 150"
+      ]
+     }
+    ]
+   },
+   "v2_533_t1": {
+    "n_facts": 6,
+    "passed": 5,
+    "found": true,
+    "shapes": [
+     "3x7"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "도로·철도·시설물"
+      ],
+      "kind": "행 라벨 누락",
+      "records_with_row_label": []
+     }
+    ]
+   },
+   "v2_308_t1": {
+    "n_facts": 5,
+    "passed": 5,
+    "found": true,
+    "shapes": [
+     "5x14"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": []
+   },
+   "v2_350_t1": {
+    "n_facts": 33,
+    "passed": 0,
+    "found": true,
+    "shapes": [
+     "2x3"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "4108-0060"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 1,
+      "row": [
+       "0090"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 2,
+      "row": [
+       "0120"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 3,
+      "row": [
+       "0150"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 4,
+      "row": [
+       "0180"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 5,
+      "row": [
+       "0210"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 6,
+      "row": [
+       "4115-0100"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 7,
+      "row": [
+       "0150"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 8,
+      "row": [
+       "0200"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 9,
+      "row": [
+       "0300"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 10,
+      "row": [
+       "4205-0010"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 11,
+      "row": [
+       "0017"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 12,
+      "row": [
+       "0020"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 13,
+      "row": [
+       "0030"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 14,
+      "row": [
+       "0040"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 15,
+      "row": [
+       "0045"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 16,
+      "row": [
+       "4304-0060"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 17,
+      "row": [
+       "0061"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 18,
+      "row": [
+       "4430-0400"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 19,
+      "row": [
+       "4504-0021"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 20,
+      "row": [
+       "0028"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 21,
+      "row": [
+       "0032"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 22,
+      "row": [
+       "0036"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 23,
+      "row": [
+       "0041"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 24,
+      "row": [
+       "0043"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 25,
+      "row": [
+       "0047"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 26,
+      "row": [
+       "0052"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 27,
+      "row": [
+       "4505-0015"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 28,
+      "row": [
+       "0026"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 29,
+      "row": [
+       "4506-0200"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 30,
+      "row": [
+       "0400"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 31,
+      "row": [
+       "4611-0075"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     },
+     {
+      "fact": 32,
+      "row": [
+       "0350"
+      ],
+      "kind": "레코드 없음(조립)",
+      "records_with_row_label": []
+     }
+    ]
+   },
+   "v2_424_t1": {
+    "n_facts": 19,
+    "passed": 18,
+    "found": true,
+    "shapes": [
+     "3x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 14,
+      "row": [
+       "1,650"
+      ],
+      "kind": "행 라벨 누락",
+      "records_with_row_label": []
+     }
+    ]
+   },
+   "v2_965_t1": {
+    "n_facts": 18,
+    "passed": 16,
+    "found": true,
+    "shapes": [
+     "3x5"
+    ],
+    "extractors": [
+     "odl"
+    ],
+    "fails": [
+     {
+      "fact": 0,
+      "row": [
+       "배관공(수도)"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 배관공(수도) 보통인부 | 단위 인 | 수량 2 | 관경(㎜) 250 | 시공량(본) 43",
+       "S | 배관공(수도) 보통인부 | 단위 인 | 수량 2 | 관경(㎜) 300 | 시공량(본) 39"
+      ]
+     },
+     {
+      "fact": 1,
+      "row": [
+       "보통인부"
+      ],
+      "kind": "잘못 붙음",
+      "records_with_row_label": [
+       "S | 배관공(수도) 보통인부 | 단위 인 | 수량 2 | 관경(㎜) 250 | 시공량(본) 43",
+       "S | 배관공(수도) 보통인부 | 단위 인 | 수량 2 | 관경(㎜) 300 | 시공량(본) 39"
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "G7": {
+  "rate_ge_95": false,
+  "no_missing_quantity": false,
+  "no_misattached": false
+ }
+}

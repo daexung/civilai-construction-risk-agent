@@ -1,0 +1,474 @@
+{
+ "elapsed_sec": 34.24,
+ "command": [
+  "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\.venv-odl\\jre\\bin\\java.exe",
+  "-jar",
+  "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\.venv-odl\\Lib\\site-packages\\opendataloader_pdf\\jar\\opendataloader-pdf-cli.jar",
+  "-f",
+  "json",
+  "--keep-line-breaks",
+  "--table-method",
+  "default",
+  "-o",
+  "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parser_bench\\results\\p1_odl_adapter\\raw",
+  "--pages",
+  "47,58,106,155,255,288,334,404,440,488,528,594,644,668,734,773,835,872,895,970",
+  "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\raw\\standard_estimation\\2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
+ ],
+ "tables": {
+  "p106_t1": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p106_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": [
+    0
+   ]
+  },
+  "p106_t3": {
+   "raw": [],
+   "spanfill": [
+    0,
+    1
+   ],
+   "extract": [
+    0,
+    1
+   ]
+  },
+  "p155_t1": {
+   "raw": [
+    2
+   ],
+   "spanfill": [],
+   "extract": [
+    3
+   ]
+  },
+  "p155_t2": {
+   "raw": [],
+   "spanfill": [
+    0
+   ],
+   "extract": [
+    0
+   ]
+  },
+  "p155_t3": {
+   "raw": [
+    0,
+    1,
+    2
+   ],
+   "spanfill": [
+    0,
+    1,
+    2
+   ],
+   "extract": [
+    0,
+    1,
+    2
+   ]
+  },
+  "p255_t1": {
+   "raw": [
+    11,
+    12
+   ],
+   "spanfill": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "extract": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ]
+  },
+  "p255_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p288_t1": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p288_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p288_t3": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p334_t1": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p404_t1": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p404_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p404_t3": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p440_t1": {
+   "raw": [],
+   "spanfill": [
+    0
+   ],
+   "extract": [
+    0
+   ]
+  },
+  "p440_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p488_t1": {
+   "raw": [
+    2
+   ],
+   "spanfill": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "extract": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "p488_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p488_t3": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p488_t4": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p488_t5": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p528_t1": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p528_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "p528_t3": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p594_t1": {
+   "raw": [
+    6
+   ],
+   "spanfill": [
+    0,
+    1,
+    2
+   ],
+   "extract": [
+    0,
+    1,
+    2
+   ]
+  },
+  "p594_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p594_t3": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p594_t4": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p668_t1": {
+   "raw": [],
+   "spanfill": [
+    0,
+    1
+   ],
+   "extract": [
+    0,
+    1
+   ]
+  },
+  "p668_t2": {
+   "raw": [],
+   "spanfill": [
+    0,
+    1
+   ],
+   "extract": [
+    0,
+    1
+   ]
+  },
+  "p668_t3": {
+   "raw": [
+    0,
+    1
+   ],
+   "spanfill": [
+    0,
+    1
+   ],
+   "extract": [
+    0,
+    1
+   ]
+  },
+  "p773_t1": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p773_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p835_t1": {
+   "raw": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ],
+   "spanfill": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ],
+   "extract": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ]
+  },
+  "p872_t1": {
+   "raw": [
+    23,
+    24,
+    25,
+    36,
+    37
+   ],
+   "spanfill": [
+    23,
+    24,
+    25,
+    36,
+    37
+   ],
+   "extract": [
+    23,
+    24,
+    25,
+    36,
+    37
+   ]
+  },
+  "p895_t1": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p895_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p895_t3": {
+   "raw": [
+    2,
+    5,
+    7
+   ],
+   "spanfill": [
+    5
+   ],
+   "extract": [
+    5
+   ]
+  },
+  "p970_t1": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p970_t2": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p970_t3": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  },
+  "p970_t4": {
+   "raw": [],
+   "spanfill": [],
+   "extract": []
+  }
+ },
+ "mismatch": [],
+ "passed": {
+  "raw": 246,
+  "spanfill": 217,
+  "extract": 209
+ },
+ "baseline_passed": {
+  "raw": 246,
+  "spanfill": 217,
+  "extract": 209
+ },
+ "vs_experiment_extractor": {
+  "pages_identical": 20,
+  "pages_different": []
+ }
+}

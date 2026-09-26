@@ -1,0 +1,24 @@
+{
+ "status": "개발 점검용. 검색 동작 확인이며 파서 정답이나 보류 평가가 아니다",
+ "scope": "PDF 185~214쪽 (공통부문 6장 철근콘크리트공사), 운영 PyMuPDF 추출 결과",
+ "rule": "expect_section이 상위 3개 청크 중 하나의 절 번호여야 한다. must_contain이 있으면 그 글자가 상위 3개 청크나 같은 절 줄글 안에 있어야 한다",
+ "questions": [
+  {"id": "q01", "query": "레미콘 인력운반 타설할 때 콘크리트공과 보통인부는 몇 명인가", "expect_section": "6-1-1", "must_contain": "인력운반 타설 | 보통인부 | 단위 인 | 수량 3"},
+  {"id": "q02", "query": "콘크리트 펌프차 타설 품", "expect_section": "6-1-4"},
+  {"id": "q03", "query": "에폭시 콘크리트 접착제 바르기에 드는 시너 양", "expect_section": "6-1-5", "must_contain": "시너"},
+  {"id": "q04", "query": "철근 현장가공 인력 품", "expect_section": "6-2-2"},
+  {"id": "q05", "query": "합판거푸집 설치 및 해체 형틀목공 시공량", "expect_section": "6-3-1"},
+  {"id": "q06", "query": "강재거푸집 사용횟수", "expect_section": "6-3-2", "must_contain": "50∼60"},
+  {"id": "q07", "query": "PSC빔 제작 형틀목공 인원", "expect_section": "6-4-1"},
+  {"id": "q08", "query": "수상 교량받침 설치 품", "expect_section": "6-6-2"},
+  {"id": "q09", "query": "PC기둥 설치 시공량", "expect_section": "6-7-4"},
+  {"id": "q10", "query": "레미콘 타설 공구손료 및 경장비 기계경비는 인력품의 몇 %", "expect_section": "6-1-1", "must_contain": "인력품의 2%"},
+  {"id": "q11", "query": "슬립폼 공법", "expect_section": "6-3-6"}
+ ],
+ "estimates": [
+  {"id": "e01", "section": "6-1-1", "method": "인력운반 타설", "trade": "콘크리트공", "column": "시공량(㎥) 철근구조물", "volume": "100", "expect": "ok", "person_days": "15"},
+  {"id": "e02", "section": "6-1-1", "method": "인력운반 타설", "trade": "보통인부", "column": "시공량(㎥) 철근구조물", "volume": "100", "expect": "ok", "person_days": "15"},
+  {"id": "e03", "section": "6-4-1", "method": null, "trade": "형틀목공", "column": "시공량(m)", "volume": "90", "expect": "refused", "reason_contains": "구조가 불확실"},
+  {"id": "e04", "section": "6-7-4", "method": null, "trade": "형틀목공", "column": "시공량(개소)", "volume": "32", "expect": "refused", "reason_contains": "구조가 불확실"}
+ ]
+}
