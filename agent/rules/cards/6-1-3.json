@@ -1,0 +1,25 @@
+{
+  "id": "6-1-3",
+  "title": "표면 마무리",
+  "section": "6-1-3 표면 마무리",
+  "source": {
+    "pdf_page": 186,
+    "printed_page": 130,
+    "table_id": "p186-t0"
+  },
+  "aliases": ["6-1-3", "표면 마무리", "표면마무리", "쇠흙손 마감", "쇠흙손 마무리"],
+  "basis": "(100㎡당)",
+  "inputs": [
+    {
+      "key": "area_m2",
+      "type": "quantity",
+      "ask": "물량: 표면 마무리할 면적(㎡)을 알려 주세요.",
+      "unit": "㎡"
+    }
+  ],
+  "confirmations": [],
+  "verified": [],
+  "trades": ["미장공"],
+  "assumptions": ["콘크리트 타설 후 쇠흙손을 이용하여 마감하는 기준이다."],
+  "not_calculated": ["계산기가 ㎡ 단위와 이 절을 아직 지원하지 않음"]
+}
