@@ -22,6 +22,28 @@ RUNNING_HEAD_RE = re.compile(r"^(제\d+장(\s|$)|\d+$)")
 # "3", "0.15", "3\n3" 처럼 숫자만 들어있는 칸
 NUMERIC_RE = re.compile(r"^\d+(\.\d+)?(\n\d+(\.\d+)?)*$")
 
+# 운영 파서 전용 머리글 판정. NUMERIC_RE/count_header_rows는 ODL assemble 경로도
+# 사용하므로 그대로 두고, 표 본문을 놓치는 경우에만 이 규칙을 적용한다.
+TABLE_NUMBER = r"(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?"
+TABLE_VALUE_LINE_RE = re.compile(rf"^{TABLE_NUMBER}(?:\s*[∼~]\s*{TABLE_NUMBER})?\s*%?$")
+
+
+def is_table_value_cell(cell: str | None) -> bool:
+    if not cell:
+        return False
+    lines = [line.strip() for line in cell.split("\n") if line.strip()]
+    return bool(lines) and any(TABLE_VALUE_LINE_RE.fullmatch(line) for line in lines) and all(
+        line == "-" or TABLE_VALUE_LINE_RE.fullmatch(line) for line in lines
+    )
+
+
+def table_header_count(table: list) -> tuple[int, bool]:
+    for index, row in enumerate(table):
+        if any(is_table_value_cell(cell) for cell in row):
+            return index, False
+    # 숫자가 없는 Type/적용기준 표도 첫 줄만 머리글로 두고 내용을 보존한다.
+    return min(1, len(table)), True
+
 
 # text 추출 함수
 def extract_text(pdf_path: str, page_no: int) -> str:
@@ -176,7 +198,7 @@ def build_column_names(header_rows: list, col_count: int) -> list:
 #   label_joined: 여러 줄 라벨을 행으로 나누지 못하고 한 라벨로 이었다('형틀목공 보통인부')
 #   value_lines_mismatch: 줄 수가 행 수와 다른 값 칸에서 첫 줄만 썼다(나머지 줄은 다른 행 값일 수 있다)
 def table_to_records(table: list, section_title: str, page_no: int) -> list:
-    header_count = count_header_rows(table)
+    header_count, header_fallback = table_header_count(table)
     names = build_column_names(table[:header_count], len(table[0]))
 
     records = []
@@ -193,7 +215,8 @@ def table_to_records(table: list, section_title: str, page_no: int) -> list:
             note = next((cell for cell in row[1:] if cell), "")
             text = f"{section_title} | 비고 | {note}".replace("\n", " ")
             records.append({"text": text, "section": section_title, "page": page_no,
-                            "structure": {"status": "ok", "issues": []}})
+                            "structure": {"status": "uncertain" if header_fallback else "ok",
+                                          "issues": ["header_fallback"] if header_fallback else []}})
             continue
 
         # 한 칸에 '\n'으로 쌓인 값들을 세로로 풀어 짝을 맞춘다
@@ -214,7 +237,7 @@ def table_to_records(table: list, section_title: str, page_no: int) -> list:
             len(values) == depth and len(set(values)) == depth and not any(re.search(r"\d", v) for v in values)
             for col, values in stacks.items() if col > 0
         )
-        issues = []
+        issues = ["header_fallback"] if header_fallback else []
         if depth > 1 and len(stacks[0]) > 1 and not label_is_stacked and not per_row_label_col:
             issues.append("label_joined")
         if any(1 < len(values) < depth for col, values in stacks.items() if col > 0):
