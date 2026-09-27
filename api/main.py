@@ -106,18 +106,95 @@ def _work_out(state: dict, spec: dict | None) -> dict | None:
 
 
 def _status_out(state: dict) -> str:
-    status = state.get("status", "RUNNING")
-    if status == "RUNNING" and not state.get("questions"):
-        return "READY"
-    return status
+    return state.get("status", "RUNNING")
 
 
 def _message_out(status: str, state: dict) -> str:
-    if status == "READY":
-        return "계산 준비가 끝났습니다. 계산 단계는 다음 작업에서 연결됩니다."
+    if status == "COMPUTED":
+        return "계산이 끝났습니다. 금액은 다음 단계에서 계산됩니다."
+    if status == "BLOCKED":
+        return state.get("reason") or "원문 근거가 불명확해 계산을 보류합니다."
     if status == "EVIDENCE_ONLY":
         return state.get("reason") or "아직 계산을 지원하지 않는 공종입니다. 근거만 안내합니다."
+    if status == "ERROR":
+        return state.get("reason") or "처리 중 오류가 발생했습니다."
     return state.get("reason") or ""
+
+
+def _source_label(cell: dict) -> str:
+    return f"{cell['table']} {cell['row']}·{cell['column']} {cell['value']}"
+
+
+def _rule_label(rule: dict) -> str:
+    when = ", ".join(f"{name}={value}" for name, value in rule["when"].items())
+    return f"{when} → {rule['change']} ({rule['source']})"
+
+
+def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
+    tables = {table["id"]: table for table in spec["tables"]}
+    base_table = spec["quantity_model"]["params"]["base_output"]["table"]
+    daily_provenance = raw["provenance"]["daily_volume_m3"]
+    base_source = daily_provenance["base_output"]
+    coefficient_sources = daily_provenance["coefficients"]
+    formula = " × ".join(
+        [f"기준 {base_source['value']}"] + [f"{c['row']} {c['value']}" for c in coefficient_sources]
+    )
+    sources = [f"{base_source['table']} {base_source['source']}"]
+    sources += [f"{c['table']} {c['source']}" for c in coefficient_sources]
+
+    work_provenance = raw["provenance"]["work_days"]
+
+    lines = []
+    equipment_name, equipment_unit = next(iter(raw["equipment_units"].items()))
+    for trade, value in raw["person_days"].items():
+        source = raw["provenance"]["person_days"][trade]
+        lines.append({
+            "kind": "labor",
+            "name": trade,
+            "value": value,
+            "unit": "인·일",
+            "crew": source["adjusted_crew"],
+            "rules": [_rule_label(rule) for rule in source["rules"]],
+            "source": _source_label(source["crew"]),
+        })
+    equipment_source = raw["provenance"]["equipment_days"][equipment_name]
+    lines.append({
+        "kind": "equipment",
+        "name": equipment_name,
+        "value": raw["equipment_days"][equipment_name],
+        "unit": equipment_unit,
+        "crew": None,
+        "rules": [],
+        "source": _source_label(equipment_source["equipment"]),
+    })
+
+    return {
+        "daily_volume": {
+            "value": raw["daily_volume_m3"],
+            "unit": tables[base_table].get("unit", ""),
+            "formula": formula,
+            "sources": sources,
+        },
+        "work_days": {
+            "value": raw["work_days"],
+            "formula": f"{work_provenance['quantity']} ÷ {raw['daily_volume_m3']}",
+        },
+        "lines": lines,
+        "not_calculated": raw["not_calculated"],
+        "review_status": review_status,
+    }
+
+
+def _result_out(state: dict, spec: dict | None) -> dict | None:
+    status = state.get("status")
+    raw = state.get("result")
+    if not raw:
+        return None
+    if status == "BLOCKED":
+        return raw
+    if status == "COMPUTED" and spec:
+        return _computed_result_out(raw, spec, state.get("review_status", ""))
+    return None
 
 
 def _search_out(state: dict) -> dict:
@@ -141,6 +218,7 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "questions": _questions_out(state.get("questions", [])),
         "inputs": _inputs_out(state, spec),
         "evidence": _evidence_out(state),
+        "result": _result_out(state, spec),
         "search": _search_out(state),
     }
 
