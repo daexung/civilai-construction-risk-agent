@@ -4,8 +4,8 @@ from agent.rules.specs import specs_by_section
 from agent.state import AgentState
 
 
-# check_select.py의 26개 질문에서 오답 0건인 후보 중 되묻기 최소값.
-MARGIN = 2.0
+# check_select.py 하이브리드 34문항: 4.0은 오답 0·되묻기 20, 3.0은 오답 2.
+MARGIN = 4.0
 
 
 def decide(hits: list[dict], specs: dict[str, list[dict]], margin: float = MARGIN) -> dict:
