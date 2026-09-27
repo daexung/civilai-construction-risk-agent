@@ -12,6 +12,54 @@
   ],
   "inputs": [
     {
+      "name": "pump_size",
+      "type": "enum",
+      "allowed_values": [
+        "32m",
+        "36m",
+        "41m",
+        "43m",
+        "47m",
+        "52m"
+      ],
+      "unit": "m",
+      "required": true,
+      "ask": "펌프차 붐 길이는? (32m / 36m / 41m / 43m / 47m / 52m)",
+      "source": "6-1-4 적용범위 80㎥/hr 이상; 경비산출표 PDF 13~14쪽 4504. 21m·28m는 65~75㎥/hr로 제외",
+      "excluded": {
+        "21m": "65~75㎥/hr",
+        "28m": "65~75㎥/hr"
+      },
+      "machine_codes": {
+        "32m": "4504-0032",
+        "36m": "4504-0036",
+        "41m": "4504-0041",
+        "43m": "4504-0043",
+        "47m": "4504-0047",
+        "52m": "4504-0052"
+      },
+      "synonyms": {
+        "32m": [
+          "32미터"
+        ],
+        "36m": [
+          "36미터"
+        ],
+        "41m": [
+          "41미터"
+        ],
+        "43m": [
+          "43미터"
+        ],
+        "47m": [
+          "47미터"
+        ],
+        "52m": [
+          "52미터"
+        ]
+      }
+    },
+    {
       "name": "volume",
       "type": "positive_rational",
       "allowed_values": "0보다 큰 수",
@@ -406,7 +454,9 @@
       "equipment": {
         "name": "콘크리트펌프차",
         "table": "p186-t1",
-        "unit": "대·일"
+        "unit": "대·일",
+        "machine_code_input": "pump_size",
+        "operator_rate_code": "1048"
       },
       "quantity_input": "volume"
     },
