@@ -7,6 +7,8 @@ import re
 from fractions import Fraction
 from typing import Any
 
+from agent.tools.calc.unit_rounding import round_quantity, unit_places
+
 
 _COMPARISONS = {
     ">": operator.gt,
@@ -148,7 +150,13 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
     if daily_volume <= 0:
         return {"status": "rejected", "reason": "명세의 일당시공량이 0 이하임", "input": "spec"}
 
+    places = unit_places(daily_volume)
     quantity_name = params["quantity_input"]
+    quantity_unit = by_name[quantity_name]["unit"]
+    daily_text = _exact_text(daily_volume)
+    magnitude = "1단위이하" if daily_volume < 10 else f"{10 ** (places - 2):,}단위"
+    rule_label = f"1-2-8 {magnitude}→소수 {places}자리, 1-2-1 반올림"
+    unit_lines = []
     quantity = validated[quantity_name]
     work_days = quantity / daily_volume
     crew = params["crew"]
@@ -167,6 +175,13 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         if count < 0:
             return {"status": "rejected", "reason": f"명세 오류: {trade} 조정 후 인원이 음수임", "input": "spec"}
         person_days[trade] = _exact_text(work_days * count)
+        unit_value = count / daily_volume
+        unit_lines.append({
+            "kind": "labor", "name": trade, "unit": f"인/{quantity_unit}",
+            "exact": str(unit_value), "applied": round_quantity(unit_value, places),
+            "places": places, "formula": f"{_exact_text(count)}인 ÷ {daily_text}{quantity_unit}",
+            "rule": rule_label, "source": f"{crew_source['table']} {crew_source['source']}",
+        })
         person_sources[trade] = {
             "crew": crew_source,
             "rules": applied_rules,
@@ -180,6 +195,14 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
     if equipment_count < 0:
         return {"status": "rejected", "reason": "명세 오류: 장비 대수가 음수임", "input": "spec"}
     equipment_days = _exact_text(work_days * equipment_count)
+    equipment_value = equipment_count * 8 / daily_volume
+    unit_lines.append({
+        "kind": "equipment", "name": equipment["name"], "unit": f"hr/{quantity_unit}",
+        "exact": str(equipment_value), "applied": round_quantity(equipment_value, places),
+        "places": places,
+        "formula": f"{_exact_text(equipment_count)}대 × 8hr ÷ {daily_text}{quantity_unit}",
+        "rule": rule_label, "source": f"{equipment_source['table']} {equipment_source['source']}",
+    })
 
     return {
         "status": "computed",
@@ -188,6 +211,11 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         "person_days": person_days,
         "equipment_days": {equipment["name"]: equipment_days},
         "equipment_units": {equipment["name"]: equipment["unit"]},
+        "unit_lines": unit_lines,
+        "unit_basis": {
+            "per": f"1{quantity_unit}", "daily_output": daily_text, "places": places,
+            "adjustable_note": "1-2-8은 조정 가능 조항. 기본 자릿수 적용",
+        },
         "provenance": {
             "daily_volume_m3": {
                 "base_output": base_source,
