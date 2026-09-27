@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
+import { EXAMPLE_QUESTIONS } from '../examples';
 import './ChatArea.css';
 
 interface Props {
@@ -8,13 +9,8 @@ interface Props {
   onSendMessage: (text: string) => void;
   onSendAnswers: (answers: Record<string, ChoiceValue>, summary: string) => void;
   onNewChat: () => void;
+  onSendExample: (text: string) => void;
 }
-
-const EXAMPLES = [
-  '철근콘크리트 벽체 260㎥ 펌프차로 타설 비용',
-  '합판거푸집 설치 인건비',
-  '레미콘 타설 노무비 알려줘',
-];
 
 const STATUS_LABEL: Record<ChatResponse['status'], string> = {
   OUT_OF_SCOPE: '범위 밖',
@@ -360,11 +356,13 @@ function AssistantCard({
   );
 }
 
-export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers, onNewChat }: Props) {
+export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers, onNewChat, onSendExample }: Props) {
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
+  const [showExampleMenu, setShowExampleMenu] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const exampleMenuRef = useRef<HTMLDivElement>(null);
 
   const lastTurn = turns[turns.length - 1];
   const lastResponse = lastTurn?.role === 'assistant' ? lastTurn.response : undefined;
@@ -391,6 +389,22 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [turns.length, loading]);
+
+  useEffect(() => {
+    if (!showExampleMenu) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (exampleMenuRef.current && !exampleMenuRef.current.contains(e.target as Node)) {
+        setShowExampleMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showExampleMenu]);
+
+  const handleExampleClick = useCallback((text: string) => {
+    setShowExampleMenu(false);
+    onSendExample(text);
+  }, [onSendExample]);
 
   const handleSelect = useCallback((name: string, value: ChoiceValue, label: string) => {
     setDraft((prev) => ({ ...prev, [name]: { value, label } }));
@@ -423,8 +437,35 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
     if (el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 160) + 'px'; }
   };
 
-  const inputBox = (
+  const renderInputBox = (withExampleMenu: boolean) => (
     <div className="input-box">
+      {withExampleMenu && (
+        <div className="example-menu-wrap" ref={exampleMenuRef}>
+          <button
+            type="button"
+            className="example-menu-btn"
+            disabled={loading}
+            onClick={() => setShowExampleMenu((prev) => !prev)}
+          >
+            예시
+          </button>
+          {showExampleMenu && (
+            <div className="example-menu">
+              {EXAMPLE_QUESTIONS.map((ex) => (
+                <button
+                  key={ex.label}
+                  type="button"
+                  className="example-menu-item"
+                  onClick={() => handleExampleClick(ex.text)}
+                  title={ex.text}
+                >
+                  {ex.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       <textarea
         ref={textareaRef}
         value={input}
@@ -453,11 +494,13 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
             <p className="welcome-subtitle">2026 건설공사 표준품셈을 기준으로 계산에 필요한 조건을 확인해드립니다</p>
           </div>
           <div className="example-prompts">
-            {EXAMPLES.map((text) => (
-              <button key={text} className="example-btn" onClick={() => onSendMessage(text)}>{text}</button>
+            {EXAMPLE_QUESTIONS.map((ex) => (
+              <button key={ex.label} className="example-btn" onClick={() => onSendMessage(ex.text)} title={ex.text}>
+                {ex.label}
+              </button>
             ))}
           </div>
-          <div className="centered-input-area">{inputBox}</div>
+          <div className="centered-input-area">{renderInputBox(false)}</div>
         </div>
       </main>
     );
@@ -516,7 +559,7 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
           <div ref={bottomRef} />
         </div>
       </div>
-      <div className="input-area">{inputBox}</div>
+      <div className="input-area">{renderInputBox(true)}</div>
     </main>
   );
 }

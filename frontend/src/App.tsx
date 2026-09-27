@@ -21,12 +21,16 @@ export default function App() {
     showToast(text, 'error');
   }, []);
 
-  const send = useCallback(async (userLabel: string, body: { message?: string; answers?: Record<string, ChoiceValue> }) => {
+  const send = useCallback(async (
+    userLabel: string,
+    body: { message?: string; answers?: Record<string, ChoiceValue> },
+    thread: string | null,
+  ) => {
     const userTurn: ChatTurn = { id: uuidv4(), role: 'user', text: userLabel };
     setTurns(prev => [...prev, userTurn]);
     setLoading(true);
     try {
-      const response = await sendChat({ thread_id: threadId, ...body });
+      const response = await sendChat({ thread_id: thread, ...body });
       setThreadId(response.thread_id);
       setTurns(prev => [...prev, { id: uuidv4(), role: 'assistant', response }]);
     } catch (err) {
@@ -34,18 +38,24 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }, [threadId, handleError]);
+  }, [handleError]);
 
-  const handleSendMessage = useCallback((text: string) => send(text, { message: text }), [send]);
+  const handleSendMessage = useCallback((text: string) => send(text, { message: text }, threadId), [send, threadId]);
 
   const handleSendAnswers = useCallback((answers: Record<string, ChoiceValue>, summary: string) => {
-    return send(summary, { answers });
-  }, [send]);
+    return send(summary, { answers }, threadId);
+  }, [send, threadId]);
 
   const handleNewChat = useCallback(() => {
     setThreadId(null);
     setTurns([]);
   }, []);
+
+  const handleSendExample = useCallback((text: string) => {
+    setTurns([]);
+    setThreadId(null);
+    return send(text, { message: text }, null);
+  }, [send]);
 
   return (
     <div className="app">
@@ -56,6 +66,7 @@ export default function App() {
         onSendMessage={handleSendMessage}
         onSendAnswers={handleSendAnswers}
         onNewChat={handleNewChat}
+        onSendExample={handleSendExample}
       />
     </div>
   );
