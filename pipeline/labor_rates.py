@@ -39,7 +39,7 @@ def extract_h2() -> tuple[dict, int]:
                 name = "".join(lines[:first_rate]).replace(" ", "")
                 if not name or match.group(1) in rates:
                     raise ValueError(f"PDF {page_index + 1}쪽 직종명 또는 중복 코드: {match.group(1)}")
-                rates[match.group(1)] = {"name": name,
+                rates[match.group(1)] = {"name": name, "mark": text[match.start():match.end()].strip().removesuffix(match.group(1)) or None,
                                          "daily": values[0].replace(",", "") if values[0] != "-" else None,
                                          "pdf_page": page_index + 1}
         match = re.search(r"2026\.\s*9\.\s*1\s*\([^)]*\)\s*([\d,]+)", doc[4].get_text("text"))
@@ -72,7 +72,11 @@ def build() -> tuple[dict, dict]:
                        if re.sub(r"\s", "", h1[code]["name"]) != re.sub(r"\s", "", h2[code]["name"])]
     if name_mismatches:
         raise ValueError(f"상·하반기 직종명 차이: {name_mismatches}")
-    data = {"versions": [
+    data = {"mark_meanings": {
+        "*": "조사현장수가 5개 미만인 직종", "**": "조사되지 않은 직종",
+        "source_pdf_page": 4,
+        "quote": "직종번호앞의「*」표시는조사현장수가5개미만인직종, 「**」표시는\n조사되지않은직종이므로유의하여적용(Ⅱ.임금적용요령참조)",
+    }, "versions": [
         {"id": "2026H2", "title": "2026년 하반기 적용 건설업 임금실태조사",
          "publisher": "대한건설협회", "published": "2026-09-01",
          "effective_from": "2026-09-01", "effective_to": None,

@@ -1,4 +1,10 @@
 {
+  "mark_meanings": {
+    "*": "조사현장수가 5개 미만인 직종",
+    "**": "조사되지 않은 직종",
+    "source_pdf_page": 4,
+    "quote": "직종번호앞의「*」표시는조사현장수가5개미만인직종, 「**」표시는\n조사되지않은직종이므로유의하여적용(Ⅱ.임금적용요령참조)"
+  },
   "versions": [
     {
       "id": "2026H2",
@@ -21,661 +27,793 @@
       "rates": {
         "1001": {
           "name": "작업반장",
+          "mark": null,
           "daily": "218316",
           "pdf_page": 10
         },
         "1002": {
           "name": "보통인부",
+          "mark": null,
           "daily": "172698",
           "pdf_page": 10
         },
         "1003": {
           "name": "특별인부",
+          "mark": null,
           "daily": "228717",
           "pdf_page": 10
         },
         "1004": {
           "name": "조력공",
+          "mark": null,
           "daily": "181496",
           "pdf_page": 10
         },
         "1005": {
           "name": "제도사",
+          "mark": "*",
           "daily": "242423",
           "pdf_page": 10
         },
         "1006": {
           "name": "비계공",
+          "mark": null,
           "daily": "284440",
           "pdf_page": 10
         },
         "1007": {
           "name": "형틀목공",
+          "mark": null,
           "daily": "275379",
           "pdf_page": 10
         },
         "1008": {
           "name": "철근공",
+          "mark": null,
           "daily": "268932",
           "pdf_page": 10
         },
         "1009": {
           "name": "철공",
+          "mark": null,
           "daily": "243870",
           "pdf_page": 10
         },
         "1010": {
           "name": "철판공",
+          "mark": null,
           "daily": "220901",
           "pdf_page": 10
         },
         "1011": {
           "name": "철골공",
+          "mark": null,
           "daily": "255172",
           "pdf_page": 10
         },
         "1012": {
           "name": "용접공",
+          "mark": null,
           "daily": "286330",
           "pdf_page": 10
         },
         "1013": {
           "name": "콘크리트공",
+          "mark": null,
           "daily": "276285",
           "pdf_page": 10
         },
         "1014": {
           "name": "보링공",
+          "mark": null,
           "daily": "233503",
           "pdf_page": 10
         },
         "1015": {
           "name": "착암공",
+          "mark": "*",
           "daily": "223246",
           "pdf_page": 10
         },
         "1016": {
           "name": "화약취급공",
+          "mark": null,
           "daily": "270444",
           "pdf_page": 10
         },
         "1017": {
           "name": "할석공",
+          "mark": null,
           "daily": "246224",
           "pdf_page": 10
         },
         "1018": {
           "name": "포설공",
+          "mark": "*",
           "daily": "221306",
           "pdf_page": 10
         },
         "1019": {
           "name": "포장공",
+          "mark": null,
           "daily": "274873",
           "pdf_page": 10
         },
         "1020": {
           "name": "잠수부",
+          "mark": "*",
           "daily": "391240",
           "pdf_page": 10
         },
         "1021": {
           "name": "조적공",
+          "mark": null,
           "daily": "273229",
           "pdf_page": 10
         },
         "1022": {
           "name": "견출공",
+          "mark": null,
           "daily": "254875",
           "pdf_page": 10
         },
         "1023": {
           "name": "건축목공",
+          "mark": null,
           "daily": "282990",
           "pdf_page": 10
         },
         "1024": {
           "name": "창호공",
+          "mark": null,
           "daily": "248547",
           "pdf_page": 10
         },
         "1025": {
           "name": "유리공",
+          "mark": null,
           "daily": "258602",
           "pdf_page": 10
         },
         "1026": {
           "name": "방수공",
+          "mark": null,
           "daily": "233163",
           "pdf_page": 10
         },
         "1027": {
           "name": "미장공",
+          "mark": null,
           "daily": "279102",
           "pdf_page": 10
         },
         "1028": {
           "name": "타일공",
+          "mark": null,
           "daily": "294379",
           "pdf_page": 10
         },
         "1029": {
           "name": "도장공",
+          "mark": null,
           "daily": "268225",
           "pdf_page": 10
         },
         "1030": {
           "name": "내장공",
+          "mark": null,
           "daily": "258904",
           "pdf_page": 10
         },
         "1031": {
           "name": "도배공",
+          "mark": null,
           "daily": "229833",
           "pdf_page": 10
         },
         "1032": {
           "name": "연마공",
+          "mark": "*",
           "daily": "208207",
           "pdf_page": 11
         },
         "1033": {
           "name": "석공",
+          "mark": null,
           "daily": "270694",
           "pdf_page": 11
         },
         "1034": {
           "name": "줄눈공",
+          "mark": null,
           "daily": "212390",
           "pdf_page": 11
         },
         "1035": {
           "name": "판넬조립공",
+          "mark": null,
           "daily": "246986",
           "pdf_page": 11
         },
         "1036": {
           "name": "지붕잇기공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 11
         },
         "1037": {
           "name": "벌목부",
+          "mark": "*",
           "daily": "257444",
           "pdf_page": 11
         },
         "1038": {
           "name": "조경공",
+          "mark": null,
           "daily": "235843",
           "pdf_page": 11
         },
         "1039": {
           "name": "배관공",
+          "mark": null,
           "daily": "249073",
           "pdf_page": 11
         },
         "1040": {
           "name": "배관공(수도)",
+          "mark": null,
           "daily": "260673",
           "pdf_page": 11
         },
         "1041": {
           "name": "보일러공",
+          "mark": "*",
           "daily": "240647",
           "pdf_page": 11
         },
         "1042": {
           "name": "위생공",
+          "mark": null,
           "daily": "221435",
           "pdf_page": 11
         },
         "1043": {
           "name": "덕트공",
+          "mark": null,
           "daily": "208140",
           "pdf_page": 11
         },
         "1044": {
           "name": "보온공",
+          "mark": null,
           "daily": "222151",
           "pdf_page": 11
         },
         "1045": {
           "name": "인력운반공",
+          "mark": "*",
           "daily": "183687",
           "pdf_page": 11
         },
         "1046": {
           "name": "궤도공",
+          "mark": null,
           "daily": "220821",
           "pdf_page": 11
         },
         "1047": {
           "name": "건설기계조장",
+          "mark": "**",
           "daily": null,
           "pdf_page": 11
         },
         "1048": {
           "name": "건설기계운전사",
+          "mark": null,
           "daily": "283323",
           "pdf_page": 11
         },
         "1049": {
           "name": "화물차운전사",
+          "mark": "*",
           "daily": "240042",
           "pdf_page": 11
         },
         "1050": {
           "name": "일반기계운전사",
+          "mark": "**",
           "daily": null,
           "pdf_page": 11
         },
         "1051": {
           "name": "기계설비공",
+          "mark": null,
           "daily": "242647",
           "pdf_page": 11
         },
         "1052": {
           "name": "준설선선장",
+          "mark": "**",
           "daily": null,
           "pdf_page": 11
         },
         "1053": {
           "name": "준설선기관사",
+          "mark": "**",
           "daily": null,
           "pdf_page": 11
         },
         "1054": {
           "name": "준설선운전사",
+          "mark": "**",
           "daily": null,
           "pdf_page": 11
         },
         "1055": {
           "name": "선원",
+          "mark": "**",
           "daily": null,
           "pdf_page": 11
         },
         "1056": {
           "name": "플랜트배관공",
+          "mark": null,
           "daily": "327442",
           "pdf_page": 11
         },
         "1057": {
           "name": "플랜트제관공",
+          "mark": null,
           "daily": "268949",
           "pdf_page": 11
         },
         "1058": {
           "name": "플랜트용접공",
+          "mark": null,
           "daily": "289745",
           "pdf_page": 11
         },
         "1059": {
           "name": "플랜트특수용접공",
+          "mark": "*",
           "daily": "334739",
           "pdf_page": 11
         },
         "1060": {
           "name": "플랜트기계설치공",
+          "mark": null,
           "daily": "234041",
           "pdf_page": 11
         },
         "1061": {
           "name": "플랜트특별인부",
+          "mark": null,
           "daily": "215601",
           "pdf_page": 11
         },
         "1062": {
           "name": "플랜트케이블전공",
+          "mark": "*",
           "daily": "263300",
           "pdf_page": 11
         },
         "1063": {
           "name": "플랜트계장공",
+          "mark": "*",
           "daily": "204167",
           "pdf_page": 12
         },
         "1064": {
           "name": "플랜트덕트공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 12
         },
         "1065": {
           "name": "플랜트보온공",
+          "mark": "*",
           "daily": "252567",
           "pdf_page": 12
         },
         "1066": {
           "name": "제철축로공",
+          "mark": "*",
           "daily": "365714",
           "pdf_page": 12
         },
         "1067": {
           "name": "비파괴시험공",
+          "mark": null,
           "daily": "220565",
           "pdf_page": 12
         },
         "1068": {
           "name": "특급품질관리원",
+          "mark": "*",
           "daily": "200971",
           "pdf_page": 12
         },
         "1069": {
           "name": "고급품질관리원",
+          "mark": "*",
           "daily": "199200",
           "pdf_page": 12
         },
         "1070": {
           "name": "중급품질관리원",
+          "mark": null,
           "daily": "179012",
           "pdf_page": 12
         },
         "1071": {
           "name": "초급품질관리원",
+          "mark": "*",
           "daily": "150049",
           "pdf_page": 12
         },
         "1072": {
           "name": "지적기사",
+          "mark": null,
           "daily": "283066",
           "pdf_page": 12
         },
         "1073": {
           "name": "지적산업기사",
+          "mark": null,
           "daily": "251236",
           "pdf_page": 12
         },
         "1074": {
           "name": "지적기능사",
+          "mark": null,
           "daily": "175118",
           "pdf_page": 12
         },
         "1075": {
           "name": "내선전공",
+          "mark": null,
           "daily": "276108",
           "pdf_page": 12
         },
         "1076": {
           "name": "특고압케이블전공",
+          "mark": null,
           "daily": "444519",
           "pdf_page": 12
         },
         "1077": {
           "name": "고압케이블전공",
+          "mark": null,
           "daily": "376049",
           "pdf_page": 12
         },
         "1078": {
           "name": "저압케이블전공",
+          "mark": null,
           "daily": "306274",
           "pdf_page": 12
         },
         "1079": {
           "name": "송전전공",
+          "mark": null,
           "daily": "645607",
           "pdf_page": 12
         },
         "1080": {
           "name": "송전활선전공",
+          "mark": null,
           "daily": "685744",
           "pdf_page": 12
         },
         "1081": {
           "name": "배전전공",
+          "mark": null,
           "daily": "420978",
           "pdf_page": 12
         },
         "1082": {
           "name": "배전활선전공",
+          "mark": null,
           "daily": "562067",
           "pdf_page": 12
         },
         "1083": {
           "name": "플랜트전공",
+          "mark": null,
           "daily": "269471",
           "pdf_page": 12
         },
         "1084": {
           "name": "계장공",
+          "mark": null,
           "daily": "321645",
           "pdf_page": 12
         },
         "1085": {
           "name": "철도신호공",
+          "mark": null,
           "daily": "318257",
           "pdf_page": 12
         },
         "1086": {
           "name": "통신내선공",
+          "mark": null,
           "daily": "286219",
           "pdf_page": 12
         },
         "1087": {
           "name": "통신설비공",
+          "mark": null,
           "daily": "316875",
           "pdf_page": 12
         },
         "1088": {
           "name": "통신외선공",
+          "mark": null,
           "daily": "410182",
           "pdf_page": 12
         },
         "1089": {
           "name": "통신케이블공",
+          "mark": null,
           "daily": "438070",
           "pdf_page": 12
         },
         "1090": {
           "name": "무선안테나공",
+          "mark": null,
           "daily": "360084",
           "pdf_page": 12
         },
         "1091": {
           "name": "석면해체공",
+          "mark": "*",
           "daily": "203461",
           "pdf_page": 12
         },
         "2001": {
           "name": "광케이블설치사",
+          "mark": null,
           "daily": "471931",
           "pdf_page": 12
         },
         "2002": {
           "name": "H/W시험사",
+          "mark": "*",
           "daily": "398279",
           "pdf_page": 12
         },
         "2003": {
           "name": "S/W시험사",
+          "mark": "*",
           "daily": "446560",
           "pdf_page": 12
         },
         "3001": {
           "name": "도편수",
+          "mark": "*",
           "daily": "533333",
           "pdf_page": 13
         },
         "3002": {
           "name": "드잡이공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3003": {
           "name": "한식목공",
+          "mark": null,
           "daily": "353383",
           "pdf_page": 13
         },
         "3004": {
           "name": "한식목공조공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3005": {
           "name": "한식석공",
+          "mark": null,
           "daily": "403594",
           "pdf_page": 13
         },
         "3006": {
           "name": "한식미장공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3007": {
           "name": "한식와공",
+          "mark": "*",
           "daily": "374046",
           "pdf_page": 13
         },
         "3008": {
           "name": "한식와공조공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3009": {
           "name": "목조각공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3010": {
           "name": "석조각공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3011": {
           "name": "특수화공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3012": {
           "name": "화공",
+          "mark": "*",
           "daily": "300798",
           "pdf_page": 13
         },
         "3013": {
           "name": "드잡이공편수",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3014": {
           "name": "한식미장공편수",
+          "mark": "*",
           "daily": "395789",
           "pdf_page": 13
         },
         "3015": {
           "name": "한식와공편수",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3016": {
           "name": "한식단청공편수",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3017": {
           "name": "한식석공조공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "3018": {
           "name": "한식미장공조공",
+          "mark": "**",
           "daily": null,
           "pdf_page": 13
         },
         "4001": {
           "name": "원자력플랜트전공",
+          "mark": null,
           "daily": "238957",
           "pdf_page": 13
         },
         "4002": {
           "name": "원자력용접공",
+          "mark": null,
           "daily": "220497",
           "pdf_page": 13
         },
         "4003": {
           "name": "원자력기계설치공",
+          "mark": null,
           "daily": "244723",
           "pdf_page": 13
         },
         "4004": {
           "name": "원자력품질관리사",
+          "mark": null,
           "daily": "287101",
           "pdf_page": 13
         },
         "5001": {
           "name": "통신관련기사",
+          "mark": "*",
           "daily": "324979",
           "pdf_page": 13
         },
         "5002": {
           "name": "통신관련산업기사",
+          "mark": "*",
           "daily": "304662",
           "pdf_page": 13
         },
         "5003": {
           "name": "통신관련기능사",
+          "mark": "*",
           "daily": "250000",
           "pdf_page": 13
         },
         "5004": {
           "name": "전기공사기사",
+          "mark": null,
           "daily": "339070",
           "pdf_page": 13
         },
         "5005": {
           "name": "전기공사산업기사",
+          "mark": null,
           "daily": "298573",
           "pdf_page": 13
         },
         "5006": {
           "name": "변전전공",
+          "mark": null,
           "daily": "485593",
           "pdf_page": 13
         },
         "5007": {
           "name": "코킹공",
+          "mark": null,
           "daily": "212439",
           "pdf_page": 13
         },
         "5008": {
           "name": "특급품질관리기술인",
+          "mark": "*",
           "daily": "272695",
           "pdf_page": 13
         },
         "5009": {
           "name": "고급품질관리기술인",
+          "mark": "*",
           "daily": "221341",
           "pdf_page": 13
         },
         "5010": {
           "name": "중급품질관리기술인",
+          "mark": null,
           "daily": "193319",
           "pdf_page": 13
         },
         "5011": {
           "name": "초급품질관리기술인",
+          "mark": null,
           "daily": "167631",
           "pdf_page": 13
         },
         "5012": {
           "name": "플로어링마루시공공",
+          "mark": "*",
           "daily": "257926",
           "pdf_page": 13
         },
         "5013": {
           "name": "교통정리원",
+          "mark": null,
           "daily": "176930",
           "pdf_page": 13
         },
         "5014": {
           "name": "철거공",
+          "mark": null,
           "daily": "261108",
           "pdf_page": 13
         },
         "5015": {
           "name": "흙막이공",
+          "mark": null,
           "daily": "272418",
           "pdf_page": 13
         },
         "5016": {
           "name": "전철전공",
+          "mark": null,
           "daily": "429783",
           "pdf_page": 13
         }
