@@ -51,6 +51,20 @@ def _type_values(query: str, field: dict) -> set[str]:
             if not re.search(r"(?:현장조건|현장)", query[max(0, start - 8):start])}
 
 
+def _format_rational(exact: Fraction) -> str:
+    if exact.denominator == 1:
+        return str(exact.numerator)
+    # 유한소수는 원래 크기를 정확한 십진 문자열로 저장한다.
+    denominator = exact.denominator
+    while denominator % 2 == 0:
+        denominator //= 2
+    while denominator % 5 == 0:
+        denominator //= 5
+    if denominator == 1:
+        return _finite_decimal(exact)
+    return f"{exact.numerator}/{exact.denominator}"
+
+
 def _volume(query: str) -> tuple[str | None, str | None]:
     # NFKC는 ㎥를 m3로 바꾼다. 한글 단위는 그대로 유지한다.
     pattern = re.compile(r"(?<![0-9a-z.])(-?\d[\d,]*(?:\.\d+)?(?:/\d+)?)\s*(m3|루베)(?![a-z])", re.I)
@@ -65,18 +79,7 @@ def _volume(query: str) -> tuple[str | None, str | None]:
     if found:
         if found[0] <= 0:
             return None, "물량은 0보다 커야 합니다"
-        exact = found[0]
-        if exact.denominator == 1:
-            return str(exact.numerator), None
-        # 유한소수는 원래 크기를 정확한 십진 문자열로 저장한다.
-        denominator = exact.denominator
-        while denominator % 2 == 0:
-            denominator //= 2
-        while denominator % 5 == 0:
-            denominator //= 5
-        if denominator == 1:
-            return _finite_decimal(exact), None
-        return f"{exact.numerator}/{exact.denominator}", None
+        return _format_rational(found[0]), None
     wrong_unit = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?\s*(?:m2|m|톤)(?![a-z0-9])", query, re.I)
     if wrong_unit:
         return None, "물량 단위가 ㎥/m3/루베가 아닙니다"
@@ -167,18 +170,11 @@ def _compatible_inputs(inputs: dict, sources: dict, spec: dict) -> tuple[dict, d
     retained_sources = {}
     for field in spec["inputs"]:
         name = field["name"]
-        if name not in inputs:
+        if name not in inputs or not _valid_for_field(inputs[name], field):
             continue
-        value = inputs[name]
-        kind = field["type"]
-        valid = (value in field["allowed_values"] if kind == "enum" else
-                 type(value) is bool if kind == "boolean" else
-                 _valid_positive_rational(value) if kind == "positive_rational" else
-                 type(value) is int and value >= 0 if kind == "nonnegative_integer" else False)
-        if valid:
-            retained[name] = value
-            if name in sources:
-                retained_sources[name] = sources[name]
+        retained[name] = inputs[name]
+        if name in sources:
+            retained_sources[name] = sources[name]
     return retained, retained_sources
 
 
@@ -189,6 +185,28 @@ def _valid_positive_rational(value: object) -> bool:
         return False
 
 
+def _valid_for_field(value: object, field: dict) -> bool:
+    kind = field["type"]
+    if kind == "enum":
+        return value in field["allowed_values"]
+    if kind == "boolean":
+        return type(value) is bool
+    if kind == "positive_rational":
+        return _valid_positive_rational(value)
+    if kind == "nonnegative_integer":
+        return type(value) is int and value >= 0
+    return False
+
+
+def _reply_parts(reply: object) -> tuple[dict, str]:
+    """재개 값을 (선택 답 dict, 자유 입력 text)로 나눈다."""
+    if isinstance(reply, dict):
+        if "answers" in reply or "text" in reply:
+            return dict(reply.get("answers") or {}), reply.get("text") or ""
+        return dict(reply), ""
+    return {}, reply or ""
+
+
 def fill(state: AgentState) -> dict:
     spec_id = state.get("spec_id", "")
     spec = load_specs()[spec_id] if spec_id else None
@@ -196,9 +214,18 @@ def fill(state: AgentState) -> dict:
     inputs = dict(previous)
     sources = dict(state.get("input_sources", {}))
     reply = state.get("reply", "")
+    answers, reply_text = _reply_parts(reply)
+    field_answers = {name: value for name, value in answers.items() if name != "work"}
     update = {}
-    if reply and state.get("selection", {}).get("confirmed") is False:
-        chosen = _work_choice(reply, state.get("candidates", []))
+    work_error = None
+    if (answers or reply_text) and state.get("selection", {}).get("confirmed") is False:
+        candidates = state.get("candidates", [])
+        if "work" in answers:
+            chosen = next((item for item in candidates if item["section_no"] == answers["work"]), None)
+            if chosen is None:
+                work_error = "선택한 공종을 후보에서 찾을 수 없습니다"
+        else:
+            chosen = _work_choice(reply_text, candidates)
         if chosen:
             selection = {**state.get("selection", {}), "decision": "chosen", "confirmed": True,
                          "section_no": chosen["section_no"], "section": chosen["section"]}
@@ -213,17 +240,33 @@ def fill(state: AgentState) -> dict:
                 inputs, sources = _compatible_inputs(inputs, sources, available)
                 spec = available
                 update["spec_id"] = available["id"]
-    text = reply or state.get("query", "")
+    text = reply_text if (answers or reply_text) else state.get("query", "")
     values, ambiguities = extract_inputs(text, spec) if spec else ({}, {})
-    origin = "답변" if reply or previous else "질문"
+    origin = "답변" if (answers or reply_text or previous) else "질문"
     inputs.update(values)
     sources.update({name: origin for name in values})
+    dict_errors = {}
+    if spec:
+        for field in spec["inputs"]:
+            name = field["name"]
+            if name not in field_answers:
+                continue
+            value = field_answers[name]
+            if _valid_for_field(value, field):
+                inputs[name] = value if field["type"] != "positive_rational" else _format_rational(Fraction(str(value)))
+                sources[name] = "선택"
+            else:
+                dict_errors[name] = "허용값이 아닙니다"
+    ambiguities = {**ambiguities, **dict_errors}
     questions = []
     if update.get("selection", state.get("selection", {})).get("confirmed") is False:
         candidates = state.get("candidates", [])
-        questions.append({"name": "work", "ask": "어느 공종으로 계산할까요?",
+        work_question = {"name": "work", "ask": "어느 공종으로 계산할까요?",
                           "choices": [item["section"] for item in candidates],
-                          "default": candidates[0]["section_no"] if candidates else ""})
+                          "default": candidates[0]["section_no"] if candidates else ""}
+        if work_error:
+            work_question["reason"] = work_error
+        questions.append(work_question)
     if spec:
         tables = {table["id"]: table for table in spec["tables"]}
         for field in spec["inputs"]:
