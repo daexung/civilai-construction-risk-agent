@@ -5,6 +5,7 @@ from langgraph.graph import END, START, StateGraph
 
 from agent.nodes.ask import ask
 from agent.nodes.compute import compute
+from agent.nodes.price import price
 from agent.nodes.fill import fill
 from agent.nodes.gate import gate
 from agent.nodes.retrieve import retrieve
@@ -47,6 +48,7 @@ def build_graph(checkpointer=None):
     graph.add_node("ask", ask)
     graph.add_node("gate", gate)
     graph.add_node("compute", compute)
+    graph.add_node("price", price)
     graph.add_edge(START, "route")
     graph.add_conditional_edges("route", _after_route, {"end": END, "retrieve": "retrieve"})
     graph.add_edge("retrieve", "select")
@@ -54,5 +56,6 @@ def build_graph(checkpointer=None):
     graph.add_conditional_edges("fill", _after_fill, {"ask": "ask", "end": END, "gate": "gate"})
     graph.add_edge("ask", "fill")
     graph.add_conditional_edges("gate", _after_gate, {"end": END, "compute": "compute"})
-    graph.add_edge("compute", END)
+    graph.add_edge("compute", "price")
+    graph.add_edge("price", END)
     return graph.compile(checkpointer=checkpointer if checkpointer is not None else MemorySaver())

@@ -23,8 +23,14 @@ class AgentState(TypedDict, total=False):
     reply: str  # 마지막 사용자 답
     review_status: str  # 명세의 검토 상태(예: "미완료")
     result: dict  # gate·compute의 계산 결과
+    basis_date: str  # 노임단가 적용 기준일(YYYY-MM-DD); 없으면 현재일
+    priced: dict  # 일위대가 노무비·요율 비용
+    rate_version: dict | None  # 적용한 공표 버전 메타데이터
 
 
-def new_state(query: str) -> AgentState:
-    return {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [], "search_info": {},
-            "candidates": [], "spec_id": "", "selection": {}}
+def new_state(query: str, basis_date: str | None = None) -> AgentState:
+    state: AgentState = {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [],
+                         "search_info": {}, "candidates": [], "spec_id": "", "selection": {}}
+    if basis_date is not None:
+        state["basis_date"] = basis_date
+    return state
