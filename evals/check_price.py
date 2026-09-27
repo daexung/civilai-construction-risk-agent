@@ -112,7 +112,7 @@ def main() -> int:
     old = client.post("/api/chat", json={"thread_id": first_old["thread_id"], "answers": answers}).json()
     checks.append(("P14 API 적용 기간 없음", old["status"] == "PARTIAL"
                    and old["priced"]["rate_version"] is None
-                   and old["priced"]["total"] == "4464"
+                   and old["priced"]["total"] is None
                    and "적용 가능한 노임단가 없음" in old["message"]))
 
     for name, passed in checks:

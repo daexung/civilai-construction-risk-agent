@@ -135,6 +135,16 @@ export interface PricedResult {
     source_file: string;
     unit: string;
   } | null;
+  equipment_rate_version: {
+    version: string;
+    title: string;
+    publisher: string;
+    published: string;
+    effective_from: string;
+    effective_to: string;
+    source_file: string;
+    effective_period_basis: string;
+  } | null;
   lines: PricedLine[];
   equipment_lines?: PricedLine[];
   cost_lines: PricedLine[];

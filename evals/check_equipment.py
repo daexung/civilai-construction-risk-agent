@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT))
 
 from agent.nodes.fill import extract_inputs, fill  # noqa: E402
 from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
-from agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
+from agent.tools.calc.price import price_unit, select_equipment_version, select_rate_version  # noqa: E402
 from pipeline.equipment_rates import build  # noqa: E402
 from api.main import app  # noqa: E402
 
@@ -39,7 +39,8 @@ def main() -> int:
     cases = json.loads((ROOT / "evals/cases/common_6-1-4_pump.json").read_text(encoding="utf-8"))["cases"]
     version = select_rate_version("2026-10-01")
     a = cases[0]["input"] | {"pump_size": "32m"}
-    priced_a = price_unit(spec, adjusted_daily_crew(spec, a)["unit_lines"], version, a)
+    units_a = adjusted_daily_crew(spec, a)["unit_lines"]
+    priced_a = price_unit(spec, units_a, version, a, "2026-10-01")
     a_rows = {row["name"]: row for row in priced_a["equipment_lines"]}
     checks.append(("E5 사례 A 손료", a_rows["펌프차 기계손료"]["amount_exact"] == "4464.9"
                    and a_rows["펌프차 기계손료"]["amount"] == "4464.9"))
@@ -53,7 +54,7 @@ def main() -> int:
         Decimal(cost["amount_exact"]) == Decimal(priced_a["labor_subtotal"]) * Decimal("0.05")
         for cost in priced_a["cost_lines"])))
     d = cases[3]["input"] | {"pump_size": "52m"}
-    priced_d = price_unit(spec, adjusted_daily_crew(spec, d)["unit_lines"], version, d)
+    priced_d = price_unit(spec, adjusted_daily_crew(spec, d)["unit_lines"], version, d, "2026-10-01")
     d_rows = {row["name"]: row for row in priced_d["equipment_lines"]}
     checks.append(("E9 사례 D 52m 손료", d_rows["펌프차 기계손료"]["amount_exact"] == "12210.088"
                    and d_rows["펌프차 기계손료"]["amount"] == "12210.0"))
@@ -78,10 +79,24 @@ def main() -> int:
     }}).json()
     checks.append(("E14 API 구성 금액", computed["status"] == "PARTIAL"
                    and [row["amount"] for row in computed["priced"]["equipment_lines"]]
-                   == ["4464.9", "2178.0", None]))
+                   == ["4464.9", "2178.0", None]
+                   and computed["priced"]["equipment_rate_version"]["version"] == "2026"
+                   and computed["priced"]["equipment_rate_version"]["published"] == "2026-01-08"))
     rejected = fill({**state, "query": "철근콘크리트 260㎥ 28m 펌프차 타설"})
     checks.append(("E15 28m 거부 안내", any(question["name"] == "pump_size"
                    and "80㎥/hr" in question.get("reason", "") for question in rejected["questions"])))
+    checks.append(("E16 2025년 자료 없음", select_equipment_version("2025-12-01") is None))
+    old = price_unit(spec, units_a, None, a, "2025-12-01")
+    checks.append(("E17 2025년 장비 미산정", old["equipment_rate_version"] is None
+                   and old["total"] is None
+                   and all(row["amount"] is None for row in old["equipment_lines"])
+                   and all(row["reason"] == "기준일에 적용 가능한 건설기계 경비산출표 없음"
+                           for row in old["equipment_lines"][:2])))
+    checks.append(("E18 2026년 적용·2027년 자료 없음",
+                   select_equipment_version("2026-10-01")["version"] == "2026"
+                   and select_equipment_version("2027-01-01") is None
+                   and all(row["amount"] is None for row in
+                           price_unit(spec, units_a, None, a, "2027-01-01")["equipment_lines"])))
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

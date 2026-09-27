@@ -187,6 +187,9 @@ function ComputedCard({ work, inputs, result, priced }: {
       <div className="unit-note">{priced?.rate_version
         ? `노임단가: ${priced.rate_version.id.slice(0, 4)} ${priced.rate_version.id.endsWith('H2') ? '하반기' : '상반기'} (${priced.rate_version.effective_from} 적용)`
         : '적용 가능한 노임단가 없음'}</div>
+      <div className="unit-note">{priced?.equipment_rate_version
+        ? `건설기계 경비: ${priced.equipment_rate_version.version}년도 (${priced.equipment_rate_version.published} 공표, ${priced.equipment_rate_version.effective_from}~${priced.equipment_rate_version.effective_to} 적용)`
+        : '기준일에 적용 가능한 건설기계 경비산출표 없음'}</div>
       <table className="inputs-table unit-table">
         <thead>
           <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>금액</th></tr>

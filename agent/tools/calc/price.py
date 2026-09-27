@@ -40,6 +40,14 @@ def select_rate_version(basis_date: str | date | None = None) -> dict | None:
                  and (version["effective_to"] is None or day <= date.fromisoformat(version["effective_to"]))), None)
 
 
+def select_equipment_version(basis_date: str | date | None = None) -> dict | None:
+    """연도별 경비산출표의 적용 기간을 확인한다. 다른 연도로 보간하지 않는다."""
+    day = date.today() if basis_date is None else date.fromisoformat(basis_date) if isinstance(basis_date, str) else basis_date
+    version = _equipment_rates()
+    return (version if date.fromisoformat(version["effective_from"]) <= day
+            <= date.fromisoformat(version["effective_to"]) else None)
+
+
 def _truncate(value: Decimal, quantum: str) -> Decimal:
     unit = Decimal(quantum)
     return (value / unit).to_integral_value(rounding=ROUND_DOWN) * unit
@@ -87,6 +95,14 @@ def _version_info(version: dict | None) -> dict | None:
                                           "source_file", "unit")}
 
 
+def _equipment_version_info(version: dict | None) -> dict | None:
+    if version is None:
+        return None
+    return {"version": version["version"], "title": f"{version['version']}년도 건설기계 경비산출표",
+            **{key: version[key] for key in ("publisher", "published", "effective_from",
+                                               "effective_to", "source_file", "effective_period_basis")}}
+
+
 def _machine_citation(code: str, entry: dict, item: str, value: str) -> dict:
     return {"code": "2026년도 건설기계 경비산출표", "division": "건설기계",
             "section_no": "4504", "section_title": "콘크리트 펌프차", "section": "4504 콘크리트 펌프차",
@@ -115,19 +131,28 @@ def _operator_hours_citation() -> dict:
             "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」 7. 이용상의 주의사항 (PDF 4쪽)\n건설기계운전사 일당의 시간당 환산: 1일 8시간"}
 
 
-def _machine_rows(spec: dict, line: dict, version: dict | None, inputs: dict) -> list[dict]:
+def _machine_rows(spec: dict, line: dict, version: dict | None,
+                  equipment_version: dict | None, inputs: dict) -> list[dict]:
     setting = spec["quantity_model"]["params"]["equipment"]
     field = next(field for field in spec["inputs"] if field["name"] == setting["machine_code_input"])
     size = inputs.get(setting["machine_code_input"])
     code = field["machine_codes"].get(size)
     if not code:
         return []
-    machine = _equipment_rates()["machines"][code]
-    quantity = Decimal(line["applied"])
     base = {"kind": "equipment_component", "machine_code": code,
-            "machine_spec": machine["spec"], "unit": line["unit"],
+            "machine_spec": size, "unit": line["unit"],
             "quantity": line["applied"], "rate_code": None,
             "amount_exact": None, "amount": None, "reason": None}
+    if equipment_version is None:
+        reason = "기준일에 적용 가능한 건설기계 경비산출표 없음"
+        return [{**base, "category": category, "name": name, "unit_price": None,
+                 "reason": reason, "citations": list(line.get("citations", []))}
+                for category, name in (("경비", "펌프차 기계손료"),
+                                       ("노무비", "펌프차 운전원"),
+                                       ("재료비", "펌프차 연료·잡재료비"))]
+    machine = equipment_version["machines"][code]
+    base["machine_spec"] = machine["spec"]
+    quantity = Decimal(line["applied"])
     amount_rule = _rule_citation("일위대가표의 금액란", "0.1")
     standard = _standard_citation("8-1-6", "기계경비 적산요령", 223,
         "3. 운전경비 : 기계를 사용하는데 필요한 다음 각호 경비의 합계액으로 한다.")
@@ -171,7 +196,7 @@ def _machine_rows(spec: dict, line: dict, version: dict | None, inputs: dict) ->
 
 
 def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
-               inputs: dict | None = None) -> dict:
+               inputs: dict | None = None, basis_date: str | date | None = None) -> dict:
     """applied 품량으로만 금액을 산출하며, 없는 단가/기계경비는 null로 남긴다."""
     amount_rule = _rule_citation("일위대가표의 금액란", "0.1")
     total_rule = _rule_citation("일위대가표의 계금", "1")
@@ -180,6 +205,7 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
     unpriced = []
     priced_labor = []
     equipment_lines = []
+    equipment_version = select_equipment_version(basis_date)
     labor_missing = False
     for line in unit_lines:
         row = {"kind": line["kind"], "category": "노무비" if line["kind"] == "labor" else "경비",
@@ -188,7 +214,7 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
                "unit_price": None, "amount_exact": None, "amount": None,
                "citations": list(line.get("citations", [])), "reason": None}
         if line["kind"] == "equipment":
-            equipment_lines.extend(_machine_rows(spec, line, rate_version, inputs or {}))
+            equipment_lines.extend(_machine_rows(spec, line, rate_version, equipment_version, inputs or {}))
             if not equipment_lines:
                 row["reason"] = "장비 규격 미입력으로 기계경비 미산정"
         elif rate_version is None:
@@ -250,7 +276,9 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
     has_amount = any(category_values.values())
     partial = bool(unpriced)
     return {"status": "PARTIAL" if partial else "OK", "partial": partial,
-            "rate_version": _version_info(rate_version), "lines": rows, "equipment_lines": equipment_lines,
+            "rate_version": _version_info(rate_version),
+            "equipment_rate_version": _equipment_version_info(equipment_version),
+            "lines": rows, "equipment_lines": equipment_lines,
             "cost_lines": costs,
             "labor_subtotal": _money(labor_subtotal, 1), "subtotals": subtotals,
             "total_exact": _money(total_exact, 1) if has_amount else None,

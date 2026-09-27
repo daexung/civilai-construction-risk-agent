@@ -47,6 +47,8 @@ def build() -> dict:
             raise ValueError(f"{code} 손료계수 불일치: {calculated} != {entry['hourly_depreciation']}")
     return {
         "version": "2026", "publisher": "대한건설협회", "published": "2026-01-08",
+        "effective_from": "2026-01-01", "effective_to": "2026-12-31",
+        "effective_period_basis": "PDF 1쪽 표제 '2026년도 건설기계 경비산출표'의 연도별 적용. 원문에 별도 적용 기간 문구 없음",
         "source_file": str(PDF.relative_to(ROOT)).replace("\\", "/"),
         "source_original_name": "2026년 건설기계의 기계경비 산출표.pdf",
         "source_pages": [2, 13, 14], "standard_coefficient_pages": [300, 301],
