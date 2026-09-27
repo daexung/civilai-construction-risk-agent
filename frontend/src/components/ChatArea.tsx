@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { AgentQuestion, ChatResponse, ChatTurn, ChoiceValue } from '../types';
+import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, ComputedResult } from '../types';
 import './ChatArea.css';
 
 interface Props {
@@ -20,7 +20,13 @@ const STATUS_LABEL: Record<ChatResponse['status'], string> = {
   OUT_OF_SCOPE: '범위 밖',
   EVIDENCE_ONLY: '근거만 제공',
   MISSING_INFO: '확인이 필요합니다',
-  READY: '계산 준비 완료',
+  COMPUTED: '계산 완료',
+  BLOCKED: '계산 보류',
+  ERROR: '오류',
+};
+
+const BLOCKED_HINTS: Record<string, string> = {
+  reset_status: '재셋팅 여부를 "없음"으로 답하면 계산됩니다.',
 };
 
 function choiceLabel(value: ChoiceValue): string {
@@ -112,23 +118,65 @@ function EvidenceList({ items }: { items: ChatResponse['evidence'] }) {
   );
 }
 
-function InputsTable({ items }: { items: ChatResponse['inputs'] }) {
-  if (items.length === 0) return null;
+function ComputedCard({ work, result }: { work: ChatResponse['work']; result: ComputedResult }) {
+  const notReviewed = result.review_status !== '완료';
   return (
-    <table className="inputs-table">
-      <thead>
-        <tr><th>항목</th><th>값</th><th>출처</th></tr>
-      </thead>
-      <tbody>
-        {items.map((row) => (
-          <tr key={row.name}>
-            <td>{row.label}</td>
-            <td>{choiceLabel(row.value)}</td>
-            <td>{row.source}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="computed-card">
+      <div className="computed-title-row">
+        {work && <strong>{work.title}</strong>}
+        {notReviewed && <span className="review-badge">검토 전 명세 · 참고용</span>}
+      </div>
+
+      <div className="formula-row">
+        <span className="formula-label">하루 시공량</span>
+        <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
+        <span className="formula-text">{result.daily_volume.formula}</span>
+      </div>
+      <div className="formula-row">
+        <span className="formula-label">작업일수</span>
+        <strong>{result.work_days.value}</strong>
+        <span className="formula-text">{result.work_days.formula}</span>
+      </div>
+
+      <table className="inputs-table lines-table">
+        <thead>
+          <tr><th>구분</th><th>항목</th><th>값</th><th>단위</th><th>인원</th><th>적용 규칙</th></tr>
+        </thead>
+        <tbody>
+          {result.lines.map((line) => (
+            <tr key={line.name}>
+              <td>{line.kind === 'labor' ? '인력' : '장비'}</td>
+              <td>{line.name}</td>
+              <td>{line.value}</td>
+              <td>{line.unit}</td>
+              <td>{line.crew ?? '-'}</td>
+              <td>{line.rules.length > 0 ? line.rules.join('; ') : '-'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="source-list">
+        {result.daily_volume.sources.map((source, i) => <div key={`d${i}`}>{source}</div>)}
+        {result.lines.map((line) => <div key={line.name}>{line.name}: {line.source}</div>)}
+      </div>
+
+      <div className="not-calculated">
+        <h4>계산하지 않은 항목</h4>
+        <ul>
+          {result.not_calculated.map((item, i) => <li key={i}>{item.item}</li>)}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function BlockedCard({ result }: { result: BlockedResult }) {
+  return (
+    <div className="blocked-card">
+      <p className="blocked-source">원문 출처: {result.source}</p>
+      <p className="blocked-hint">{BLOCKED_HINTS[result.input] ?? `${result.input} 값을 바꾸면 계산될 수 있습니다.`}</p>
+    </div>
   );
 }
 
@@ -186,7 +234,13 @@ function AssistantCard({
         </div>
       )}
 
-      {response.status === 'READY' && <InputsTable items={response.inputs} />}
+      {response.status === 'COMPUTED' && response.result && (
+        <ComputedCard work={response.work} result={response.result as ComputedResult} />
+      )}
+
+      {response.status === 'BLOCKED' && response.result && (
+        <BlockedCard result={response.result as BlockedResult} />
+      )}
     </div>
   );
 }

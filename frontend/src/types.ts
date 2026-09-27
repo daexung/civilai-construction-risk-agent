@@ -48,7 +48,31 @@ export interface SearchInfo {
   warnings: string[];
 }
 
-export type ChatStatus = 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'READY';
+export interface ResultLine {
+  kind: 'labor' | 'equipment';
+  name: string;
+  value: string;
+  unit: string;
+  crew: string | null;
+  rules: string[];
+  source: string;
+}
+
+export interface ComputedResult {
+  daily_volume: { value: string; unit: string; formula: string; sources: string[] };
+  work_days: { value: string; formula: string };
+  lines: ResultLine[];
+  not_calculated: { item: string; source: string }[];
+  review_status: string;
+}
+
+export interface BlockedResult {
+  reason: string;
+  source: string;
+  input: string;
+}
+
+export type ChatStatus = 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR';
 
 export interface ChatResponse {
   thread_id: string;
@@ -58,6 +82,7 @@ export interface ChatResponse {
   questions: AgentQuestion[];
   inputs: InputRow[];
   evidence: EvidenceItem[];
+  result: ComputedResult | BlockedResult | null;
   search: SearchInfo;
 }
 
