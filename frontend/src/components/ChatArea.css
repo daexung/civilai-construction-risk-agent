@@ -448,6 +448,45 @@
   text-align: right;
 }
 
+.unit-summary,
+.unit-note {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.unit-table td:nth-child(n+4) {
+  text-align: right;
+}
+
+.unit-quantity summary {
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.unit-quantity[open] {
+  min-width: 230px;
+}
+
+.unit-quantity div {
+  text-align: left;
+  white-space: normal;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.calculation-details > summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.calculation-details > *:not(summary) {
+  margin-top: 8px;
+}
+
 .source-list {
   display: flex;
   flex-direction: column;

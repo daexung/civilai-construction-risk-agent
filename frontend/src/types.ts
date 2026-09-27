@@ -58,10 +58,24 @@ export interface ResultLine {
   source: string;
 }
 
+export interface UnitLine {
+  kind: 'labor' | 'equipment';
+  name: string;
+  unit: string;
+  exact: string;
+  applied: string;
+  places: number;
+  formula: string;
+  rule: string;
+  source: string;
+}
+
 export interface ComputedResult {
   daily_volume: { value: string; unit: string; formula: string; sources: string[] };
   work_days: { value: string; formula: string };
   lines: ResultLine[];
+  unit_lines: UnitLine[];
+  unit_basis: { per: string; daily_output: string; places: number; adjustable_note: string };
   not_calculated: { item: string; source: string }[];
   review_status: string;
 }

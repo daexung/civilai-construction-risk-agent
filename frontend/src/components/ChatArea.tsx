@@ -118,48 +118,63 @@ function EvidenceList({ items }: { items: ChatResponse['evidence'] }) {
   );
 }
 
-function ComputedCard({ work, result }: { work: ChatResponse['work']; result: ComputedResult }) {
+function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult }) {
   const notReviewed = result.review_status !== '완료';
+  const conditionNames = ['structure', 'slump_band', 'facility_type', 'site_type', 'placement', 'vibrator_used'];
+  const conditions = inputs.filter((item) => conditionNames.includes(item.name))
+    .map((item) => `${item.label} ${choiceLabel(item.value)}`).join(' · ');
   return (
     <div className="computed-card">
       <div className="computed-title-row">
-        {work && <strong>{work.title}</strong>}
+        <strong>일위대가 ({result.unit_basis.per}당)</strong>
         {notReviewed && <span className="review-badge">검토 전 명세 · 참고용</span>}
       </div>
-
-      <div className="formula-row">
-        <span className="formula-label">하루 시공량</span>
-        <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
-        <span className="formula-text">{result.daily_volume.formula}</span>
-      </div>
-      <div className="formula-row">
-        <span className="formula-label">작업일수</span>
-        <strong>{result.work_days.value}</strong>
-        <span className="formula-text">{result.work_days.formula}</span>
-      </div>
-
-      <table className="inputs-table lines-table">
+      <div className="unit-summary">{work?.title}{conditions && ` · ${conditions}`}</div>
+      <table className="inputs-table unit-table">
         <thead>
-          <tr><th>구분</th><th>항목</th><th>값</th><th>단위</th><th>인원</th><th>적용 규칙</th></tr>
+          <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>금액</th></tr>
         </thead>
         <tbody>
-          {result.lines.map((line) => (
+          {result.unit_lines.map((line) => (
             <tr key={line.name}>
-              <td>{line.kind === 'labor' ? '인력' : '장비'}</td>
+              <td>{line.kind === 'labor' ? '노무' : '장비'}</td>
               <td>{line.name}</td>
-              <td>{line.value}</td>
               <td>{line.unit}</td>
-              <td>{line.crew ?? '-'}</td>
-              <td>{line.rules.length > 0 ? line.rules.join('; ') : '-'}</td>
+              <td><details className="unit-quantity" title={`${line.formula} = ${line.exact}; ${line.rule}; ${line.source}`}>
+                <summary>{line.applied}</summary>
+                <div>산식: {line.formula}</div>
+                <div>정확한 값: {line.exact}</div>
+                <div>자릿수: {line.rule}</div>
+                <div>원문 출처: {line.source}</div>
+              </details></td>
+              <td>—</td><td>—</td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <div className="source-list">
-        {result.daily_volume.sources.map((source, i) => <div key={`d${i}`}>{source}</div>)}
-        {result.lines.map((line) => <div key={line.name}>{line.name}: {line.source}</div>)}
-      </div>
+      <div className="unit-note">단가·금액은 다음 단계에서 계산 · {result.unit_basis.adjustable_note}</div>
+      <details className="calculation-details">
+        <summary>산출 근거</summary>
+        <div className="formula-row"><span className="formula-label">일당시공량</span>
+          <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
+          <span className="formula-text">{result.daily_volume.formula}</span></div>
+        <div className="formula-row"><span className="formula-label">작업조 투입량</span>
+          <strong>{result.work_days.value} 작업조·일</strong>
+          <span className="formula-text">{result.work_days.formula}</span></div>
+        <p className="unit-note">작업조 투입량은 실제 공사 기간이 아닙니다.</p>
+        <table className="inputs-table lines-table">
+          <thead><tr><th>구분</th><th>항목</th><th>총 투입량</th><th>단위</th><th>작업조 인원</th><th>적용 규칙</th></tr></thead>
+          <tbody>{result.lines.map((line) => <tr key={line.name}>
+            <td>{line.kind === 'labor' ? '노무' : '장비'}</td><td>{line.name}</td><td>{line.value}</td>
+            <td>{line.unit}</td><td>{line.crew ?? '1대'}</td>
+            <td>{line.rules.length > 0 ? line.rules.join('; ') : '—'}</td>
+          </tr>)}</tbody>
+        </table>
+        <div className="source-list">
+          {result.daily_volume.sources.map((source, i) => <div key={`d${i}`}>{source}</div>)}
+          {result.lines.map((line) => <div key={line.name}>{line.name}: {line.source}</div>)}
+        </div>
+      </details>
 
       <div className="not-calculated">
         <h4>계산하지 않은 항목</h4>
@@ -235,7 +250,7 @@ function AssistantCard({
       )}
 
       {response.status === 'COMPUTED' && response.result && (
-        <ComputedCard work={response.work} result={response.result as ComputedResult} />
+        <ComputedCard work={response.work} inputs={response.inputs} result={response.result as ComputedResult} />
       )}
 
       {response.status === 'BLOCKED' && response.result && (
