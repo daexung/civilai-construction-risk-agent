@@ -34,9 +34,14 @@ def main() -> int:
     checks.append(("A3", missing["status"] == "MISSING_INFO" and len(missing["questions"]) == 6
                    and missing["work"]["section_no"] == "6-1-4"))
 
-    ready = CLIENT.post("/api/chat", json={"thread_id": thread_id, "answers": PUMP_ANSWERS}).json()
-    checks.append(("A4", ready["status"] == "READY" and len(ready["inputs"]) == 8
-                   and all(item["source"] in ("질문", "선택") for item in ready["inputs"])))
+    computed = CLIENT.post("/api/chat", json={"thread_id": thread_id, "answers": PUMP_ANSWERS}).json()
+    computed_lines = {line["name"]: line for line in computed.get("result", {}).get("lines", [])}
+    checks.append(("A4", computed["status"] == "COMPUTED" and len(computed["inputs"]) == 8
+                   and all(item["source"] in ("질문", "선택") for item in computed["inputs"])
+                   and computed_lines.get("콘크리트공", {}).get("value") == "8"
+                   and computed_lines.get("콘크리트펌프차", {}).get("kind") == "equipment"
+                   and computed_lines.get("콘크리트펌프차", {}).get("value") == "2"
+                   and computed["result"]["review_status"] == "미완료"))
 
     reused = CLIENT.post("/api/chat", json={"thread_id": thread_id, "message": "새 질문"}).json()
     checks.append(("A5", reused["thread_id"] != thread_id))
@@ -44,12 +49,19 @@ def main() -> int:
     health = CLIENT.get("/api/health").json()
     checks.append(("A6", health == {"status": "ok"}))
 
+    blocked_start = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"}).json()
+    blocked_answers = {**PUMP_ANSWERS, "reset_status": "있음"}
+    blocked = CLIENT.post("/api/chat", json={"thread_id": blocked_start["thread_id"], "answers": blocked_answers}).json()
+    checks.append(("A7", blocked["status"] == "BLOCKED" and blocked["result"]["input"] == "reset_status"
+                   and bool(blocked["result"]["source"]) and blocked["message"] == blocked["result"]["reason"]))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")
     if not all(passed for _, passed in checks):
         print("A3:", missing)
-        print("A4:", ready)
+        print("A4:", computed)
+        print("A7:", blocked)
     return 0 if all(passed for _, passed in checks) else 1
 
 

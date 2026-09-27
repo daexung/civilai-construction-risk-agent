@@ -13,10 +13,9 @@ sys.path.insert(0, str(ROOT))
 
 from langgraph.types import Command  # noqa: E402
 
+import agent.nodes.compute as compute_module  # noqa: E402
 from agent.graph import build_graph  # noqa: E402
-from agent.rules.specs import load_specs  # noqa: E402
 from agent.state import new_state  # noqa: E402
-from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 
 
 QUERY = "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"
@@ -47,21 +46,19 @@ def main() -> int:
     first_questions = questions(initial)
     facility = next((item for item in first_questions if item["name"] == "facility_type"), {})
     completed = graph.invoke(Command(resume=COMPLETE), config("g3"))
-    spec = load_specs()[completed["spec_id"]]
-    calculation = adjusted_daily_crew(spec, completed["inputs"])
     checks.append(("G3", len(first_questions) == 6
                    and facility.get("hint") == {"value": "Type-Ⅱ", "matched": "벽"}
-                   and completed["status"] == "RUNNING" and not questions(completed)
+                   and completed["status"] == "COMPUTED" and not questions(completed)
                    and len(completed["inputs"]) == 8
-                   and calculation["status"] == "computed"
-                   and calculation["person_days"]["콘크리트공"] == "8"))
+                   and completed["result"]["person_days"]["콘크리트공"] == "8"
+                   and completed["result"]["equipment_days"]["콘크리트펌프차"] == "2"))
 
     graph.invoke(new_state(QUERY), config("g4"))
     partial = graph.invoke(Command(resume="15cm 붐"), config("g4"))
     remaining = questions(partial)
     finished = graph.invoke(Command(resume="타입2 현장 2유형 진동기 사용 재셋팅 없음"), config("g4"))
     checks.append(("G4", len(remaining) == 4 and not questions(finished)
-                   and len(finished["inputs"]) == 8 and finished["status"] == "RUNNING"))
+                   and len(finished["inputs"]) == 8 and finished["status"] == "COMPUTED"))
 
     graph.invoke(new_state(QUERY), config("g5a"))
     other = graph.invoke(new_state("오늘 현장 날씨 어때?"), config("g5b"))
@@ -85,7 +82,7 @@ def main() -> int:
     dict_completed = graph.invoke(Command(resume={"slump_band": "15㎝", "facility_type": "Type-Ⅱ",
                                                   "site_type": "Type-Ⅱ", "placement": "붐",
                                                   "vibrator_used": True, "reset_status": "없음"}), config("g7"))
-    checks.append(("G7", not questions(dict_completed) and dict_completed["status"] == "RUNNING"
+    checks.append(("G7", not questions(dict_completed) and dict_completed["status"] == "COMPUTED"
                    and len(dict_completed["inputs"]) == 8
                    and dict_completed["input_sources"]["vibrator_used"] == "선택"))
 
@@ -96,6 +93,33 @@ def main() -> int:
     bad_questions = questions(bad_dict_result)
     checks.append(("G8", any(question["name"] == "facility_type" and question.get("reason")
                              for question in bad_questions)))
+
+    graph.invoke(new_state(QUERY), config("g9"))
+    reset_present = graph.invoke(Command(resume="15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 있음"), config("g9"))
+    checks.append(("G9", reset_present["status"] == "BLOCKED" and not questions(reset_present)
+                   and reset_present["result"]["input"] == "reset_status"))
+
+    graph.invoke(new_state(QUERY), config("g10"))
+    reset_unknown = graph.invoke(Command(resume="15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 모름"), config("g10"))
+    checks.append(("G10", reset_unknown["status"] == "BLOCKED" and not questions(reset_unknown)
+                   and reset_unknown["result"]["input"] == "reset_status"))
+
+    graph.invoke(new_state("철근콘크리트 100㎥ 펌프차로 타설"), config("g11"))
+    case_d = graph.invoke(Command(resume={
+        "slump_band": "18㎝이상", "facility_type": "Type-Ⅲ", "site_type": "Type-Ⅲ",
+        "placement": "붐", "vibrator_used": True, "reset_status": "없음",
+    }), config("g11"))
+    checks.append(("G11", case_d["status"] == "COMPUTED"
+                   and case_d["result"]["person_days"]["콘크리트공"] == "125/28"))
+
+    fake_spec = {"quantity_model": {"name": "no_such_calculator"}}
+    original_load_specs = compute_module.load_specs
+    compute_module.load_specs = lambda: {"fake": fake_spec}
+    try:
+        unregistered = compute_module.compute({"spec_id": "fake", "inputs": {}})
+    finally:
+        compute_module.load_specs = original_load_specs
+    checks.append(("G12", unregistered["status"] == "ERROR" and "no_such_calculator" in unregistered["reason"]))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
