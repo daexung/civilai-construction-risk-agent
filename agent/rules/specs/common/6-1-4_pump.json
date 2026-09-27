@@ -395,7 +395,13 @@
           "특별인부",
           "형틀목공",
           "보통인부"
-        ]
+        ],
+        "rate_codes": {
+          "콘크리트공": "1013",
+          "특별인부": "1003",
+          "형틀목공": "1007",
+          "보통인부": "1002"
+        }
       },
       "equipment": {
         "name": "콘크리트펌프차",
@@ -448,24 +454,6 @@
   ],
   "not_calculated": [
     {
-      "item": "공구손료·경장비 기계경비 5%",
-      "source": "PDF 186쪽 2. 인력편성 [주] ② (p186-x31)",
-      "cite": {
-        "section_no": "6-1-4",
-        "subsection_no": "2",
-        "marker": "②"
-      }
-    },
-    {
-      "item": "잔여 콘크리트 재료비 5%",
-      "source": "PDF 186쪽 2. 인력편성 [주] ③ (p186-x31)",
-      "cite": {
-        "section_no": "6-1-4",
-        "subsection_no": "2",
-        "marker": "③"
-      }
-    },
-    {
       "item": "펌프차 기계경비",
       "source": "PDF 186쪽 1. 적용범위 가·바 및 p186-t1; 기본 품량만 계산",
       "cite": [
@@ -480,7 +468,7 @@
       ]
     },
     {
-      "item": "콘크리트 재료비",
+      "item": "레미콘(콘크리트) 재료비",
       "source": "PDF 186쪽 1. 적용범위 및 2. 인력편성; 기본 품량만 계산",
       "cite": {
         "section_no": "6-1-4",
@@ -489,23 +477,44 @@
       }
     },
     {
-      "item": "단가·금액",
-      "source": "PDF 186~187쪽 6-1-4에는 단가 표가 없음; 기본 품량만 계산",
-      "cite": [
-        {
-          "table_id": "p186-t1"
-        },
-        {
-          "table_id": "p187-t0"
-        }
-      ]
-    },
-    {
       "item": "공통 정책 1-2-9 소규모 적용",
       "source": "공통부문 1-2-9; 이번 범위는 PDF 186~187쪽 6-1-4의 기본 품량",
       "cite": {
         "section_no": "1-2-9",
         "marker": "본문"
+      }
+    },
+    {
+      "item": "살수 양생 품량",
+      "source": "PDF 186쪽 1. 적용범위 사",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "1",
+        "marker": "사."
+      }
+    }
+  ],
+  "cost_rules": [
+    {
+      "name": "공구손료 및 경장비",
+      "category": "경비",
+      "base": "labor_subtotal",
+      "rate": "0.05",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "2",
+        "marker": "②"
+      }
+    },
+    {
+      "name": "잔여 콘크리트 재료비",
+      "category": "재료비",
+      "base": "labor_subtotal",
+      "rate": "0.05",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "2",
+        "marker": "③"
       }
     }
   ]
