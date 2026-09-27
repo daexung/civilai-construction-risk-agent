@@ -155,18 +155,30 @@
   ],
   "crew_rules": [
     {
-      "when": "placement = 배관",
+      "when": {"placement": "배관"},
+      "when_text": "placement = 배관",
       "change": {"특별인부": "+1"},
       "source": "PDF 186쪽 p186-t1 특별인부 비고"
     },
     {
-      "when": "vibrator_used = false",
+      "when": {"vibrator_used": false},
+      "when_text": "vibrator_used = false",
       "change": {"콘크리트공": "-1", "특별인부": "-1"},
       "source": "PDF 186쪽 2. 인력편성 [주] ① (p186-t1 뒤 p186-x31)"
     }
   ],
   "quantity_model": {
     "name": "adjusted_daily_crew",
+    "params": {
+      "base_output": {"table": "p187-t0", "row_input": "slump_band", "column_input": "structure"},
+      "coefficients": [
+        {"table": "p187-t1", "row": "f1", "input": "facility_type"},
+        {"table": "p187-t3", "row": "f2", "input": "site_type"}
+      ],
+      "crew": {"table": "p186-t1", "column_input": "structure", "trades": ["콘크리트공", "특별인부", "형틀목공", "보통인부"]},
+      "equipment": {"name": "콘크리트펌프차", "table": "p186-t1", "unit": "대·일"},
+      "quantity_input": "volume"
+    },
     "steps": [
       "p187-t0에서 구조물·슬럼프별 기준시공량을 고른다.",
       "p187-t1의 f1과 p187-t3의 f2를 곱해 일당시공량 = 기준시공량 × f1 × f2를 구한다.",
@@ -180,6 +192,7 @@
   "blocked": [
     {
       "condition": "reset_count > 0",
+      "blocked_if": {"input": "reset_count", "op": ">", "value": 0},
       "reason": "원문은 이동·재셋팅이 필요한 경우 회당 시공량의 5% 감산만 명시하며 여러 회의 누적 방식은 확정하지 않음",
       "source": "PDF 187쪽 3. 일일시공량 [주] ② 뒤 ※ (p187-x39)"
     },
