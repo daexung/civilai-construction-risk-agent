@@ -582,6 +582,25 @@
   height: auto;
 }
 
+.price-detail summary {
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.price-detail[open] {
+  min-width: 210px;
+}
+
+.price-summary-table th {
+  width: 45%;
+}
+
+.price-summary-table td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 .source-list {
   display: flex;
   flex-direction: column;

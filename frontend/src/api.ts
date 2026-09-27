@@ -6,6 +6,7 @@ export interface ChatRequestBody {
   thread_id?: string | null;
   message?: string;
   answers?: Record<string, ChoiceValue>;
+  basis_date?: string;
 }
 
 export async function sendChat(body: ChatRequestBody): Promise<ChatResponse> {

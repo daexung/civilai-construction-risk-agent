@@ -102,6 +102,44 @@ export interface ComputedResult {
   review_status: string;
 }
 
+export interface PricedLine {
+  kind: 'labor' | 'equipment' | 'rate_cost';
+  category: string;
+  name: string;
+  unit?: string;
+  quantity?: string;
+  rate_code?: string | null;
+  unit_price?: string | null;
+  base?: string;
+  rate?: string;
+  amount_exact: string | null;
+  amount: string | null;
+  reason: string | null;
+  citations: Citation[];
+}
+
+export interface PricedResult {
+  status: 'OK' | 'PARTIAL';
+  partial: boolean;
+  rate_version: {
+    id: string;
+    title: string;
+    publisher: string;
+    effective_from: string;
+    effective_to: string | null;
+    source_file: string;
+    unit: string;
+  } | null;
+  lines: PricedLine[];
+  cost_lines: PricedLine[];
+  labor_subtotal: string | null;
+  subtotals: Record<'재료비' | '노무비' | '경비', string | null>;
+  total_exact: string | null;
+  total: string | null;
+  total_citations: Citation[];
+  unpriced: { name: string; reason: string; category: string | null; citations: Citation[] }[];
+}
+
 export interface BlockedResult {
   reason: string;
   source: string;
@@ -109,7 +147,7 @@ export interface BlockedResult {
   citations: Citation[];
 }
 
-export type ChatStatus = 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR';
+export type ChatStatus = 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR' | 'OK' | 'PARTIAL';
 
 export interface ChatResponse {
   thread_id: string;
@@ -120,6 +158,8 @@ export interface ChatResponse {
   inputs: InputRow[];
   evidence: EvidenceItem[];
   result: ComputedResult | BlockedResult | null;
+  priced: PricedResult | null;
+  basis_date: string;
   search: SearchInfo;
 }
 

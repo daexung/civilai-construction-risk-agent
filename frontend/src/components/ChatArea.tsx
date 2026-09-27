@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult } from '../types';
+import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
 import './ChatArea.css';
 
 interface Props {
@@ -21,6 +21,8 @@ const STATUS_LABEL: Record<ChatResponse['status'], string> = {
   EVIDENCE_ONLY: '근거만 제공',
   MISSING_INFO: '확인이 필요합니다',
   COMPUTED: '계산 완료',
+  OK: '금액 계산 완료',
+  PARTIAL: '부분 금액 계산',
   BLOCKED: '계산 보류',
   ERROR: '오류',
 };
@@ -32,6 +34,24 @@ const BLOCKED_HINTS: Record<string, string> = {
 function choiceLabel(value: ChoiceValue): string {
   if (typeof value === 'boolean') return value ? '예' : '아니오';
   return value;
+}
+
+function won(value: string | null | undefined): string {
+  if (value == null) return '—';
+  const [whole, fraction] = value.split('.');
+  const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return fraction === undefined ? grouped : `${grouped}.${fraction}`;
+}
+
+function percent(rate: string | undefined): string {
+  if (!rate) return '—';
+  const [whole, fraction = ''] = rate.split('.');
+  const digits = (whole + fraction).replace(/^0+/, '') || '0';
+  const point = digits.length + 2 - fraction.length;
+  const shifted = point <= 0 ? `0.${'0'.repeat(-point)}${digits}`
+    : point >= digits.length ? `${digits}${'0'.repeat(point - digits.length)}`
+      : `${digits.slice(0, point)}.${digits.slice(point)}`;
+  return `${shifted.replace(/\.0+$/, '').replace(/(\.\d*?)0+$/, '$1')}%`;
 }
 
 // choices에 담긴 절 제목("6-1-4 콘크리트 펌프차 타설...")에서 앞의 절 번호만 뽑아 답으로 보낸다.
@@ -149,8 +169,11 @@ function CitationList({ citations }: { citations: Citation[] }) {
   );
 }
 
-function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult }) {
+function ComputedCard({ work, inputs, result, priced }: {
+  work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult; priced: PricedResult | null;
+}) {
   const notReviewed = result.review_status !== '완료';
+  const priceByName = new Map(priced?.lines.map((line) => [line.name, line]) ?? []);
   const conditionNames = ['structure', 'slump_band', 'facility_type', 'site_type', 'placement', 'vibrator_used'];
   const conditions = inputs.filter((item) => conditionNames.includes(item.name))
     .map((item) => `${item.label} ${choiceLabel(item.value)}`).join(' · ');
@@ -161,12 +184,17 @@ function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; in
         {notReviewed && <span className="review-badge">검토 전 명세 · 참고용</span>}
       </div>
       <div className="unit-summary">{work?.title}{conditions && ` · ${conditions}`}</div>
+      <div className="unit-note">{priced?.rate_version
+        ? `노임단가: ${priced.rate_version.id.slice(0, 4)} ${priced.rate_version.id.endsWith('H2') ? '하반기' : '상반기'} (${priced.rate_version.effective_from} 적용)`
+        : '적용 가능한 노임단가 없음'}</div>
       <table className="inputs-table unit-table">
         <thead>
           <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>금액</th></tr>
         </thead>
         <tbody>
-          {result.unit_lines.map((line) => (
+          {result.unit_lines.map((line) => {
+            const price = priceByName.get(line.name);
+            return (
             <tr key={line.name}>
               <td>{line.kind === 'labor' ? '노무' : '장비'}</td>
               <td>{line.name}</td>
@@ -178,12 +206,30 @@ function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; in
                 <div>자릿수: {line.rule}</div>
                 <CitationList citations={line.citations} />
               </details></td>
-              <td>—</td><td>—</td>
+              <td>{price?.unit_price ? <details className="price-detail"><summary>{won(price.unit_price)}</summary>
+                <CitationList citations={price.citations} /></details> : '—'}</td>
+              <td>{price?.amount ? <details className="price-detail"><summary>{won(price.amount)}</summary>
+                <div>버림 전: {won(price.amount_exact)}원</div>
+                <CitationList citations={price.citations} /></details> : '—'}</td>
             </tr>
-          ))}
+          ); })}
+          {priced?.cost_lines.map((line) => <tr key={line.name}>
+            <td>{line.category}</td><td>{line.name}</td><td>노무비</td>
+            <td>{percent(line.rate)}</td><td>{won(priced.labor_subtotal)}</td>
+            <td>{line.amount ? <details className="price-detail"><summary>{won(line.amount)}</summary>
+              <div>버림 전: {won(line.amount_exact)}원</div><CitationList citations={line.citations} />
+            </details> : '—'}</td>
+          </tr>)}
         </tbody>
       </table>
-      <div className="unit-note">단가·금액은 다음 단계에서 계산 · {result.unit_basis.adjustable_note}</div>
+      <div className="unit-note">{result.unit_basis.adjustable_note}</div>
+      {priced && <table className="inputs-table price-summary-table"><tbody>
+        <tr><th>재료비 소계</th><td>{won(priced.subtotals['재료비'])}</td></tr>
+        <tr><th>노무비 소계</th><td>{won(priced.subtotals['노무비'])}</td></tr>
+        <tr><th>경비 소계</th><td>{won(priced.subtotals['경비'])}</td></tr>
+        <tr><th>{priced.partial ? '미산정 제외 부분 합계' : '계'}</th>
+          <td>{won(priced.total)}{priced.total_exact && ` (계금 버림 전 ${won(priced.total_exact)})`}</td></tr>
+      </tbody></table>}
       <details className="calculation-details">
         <summary>산출 근거</summary>
         <div className="formula-row"><span className="formula-label">일당시공량</span>
@@ -209,9 +255,10 @@ function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; in
       </details>
 
       <div className="not-calculated">
-        <h4>계산하지 않은 항목</h4>
+        <h4>미산정 항목</h4>
         <ul>
-          {result.not_calculated.map((item, i) => <li key={i}>{item.item}</li>)}
+          {(priced?.unpriced ?? result.not_calculated.map((item) => ({ name: item.item, reason: '미산정' })))
+            .map((item, i) => <li key={i}>{item.name}: {item.reason}</li>)}
         </ul>
       </div>
     </div>
@@ -281,8 +328,9 @@ function AssistantCard({
         </div>
       )}
 
-      {response.status === 'COMPUTED' && response.result && (
-        <ComputedCard work={response.work} inputs={response.inputs} result={response.result as ComputedResult} />
+      {['COMPUTED', 'OK', 'PARTIAL'].includes(response.status) && response.result && (
+        <ComputedCard work={response.work} inputs={response.inputs} result={response.result as ComputedResult}
+          priced={response.priced} />
       )}
 
       {response.status === 'BLOCKED' && response.result && (
