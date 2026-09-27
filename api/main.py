@@ -5,8 +5,11 @@ from __future__ import annotations
 import re
 from typing import Optional
 from uuid import uuid4
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi import HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from langgraph.types import Command
 from pydantic import BaseModel
@@ -14,6 +17,7 @@ from pydantic import BaseModel
 from agent.graph import build_graph
 from agent.rules.specs import load_specs
 from agent.state import new_state
+from agent.tools.source.citation import resolve_cites
 
 GRAPH = build_graph()
 
@@ -25,6 +29,7 @@ DEV_ORIGINS = [
 ]
 
 app = FastAPI(title="civilai-construction-risk-agent chat api")
+SOURCES = Path(__file__).resolve().parents[1] / "data/processed/sources"
 app.add_middleware(
     CORSMiddleware,
     allow_origins=DEV_ORIGINS,
@@ -130,6 +135,11 @@ def _rule_label(rule: dict) -> str:
     return f"{when} → {rule['change']} ({rule['source']})"
 
 
+def _citations_out(citations: list[dict]) -> list[dict]:
+    return [{**citation, **({"image_url": f"/api/source/{citation['internal_id']}.png"}
+                           if citation["item"] == "표" else {})} for citation in citations]
+
+
 def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
     tables = {table["id"]: table for table in spec["tables"]}
     base_table = spec["quantity_model"]["params"]["base_output"]["table"]
@@ -156,6 +166,7 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
             "crew": source["adjusted_crew"],
             "rules": [_rule_label(rule) for rule in source["rules"]],
             "source": _source_label(source["crew"]),
+            "citations": _citations_out(source["citations"]),
         })
     equipment_source = raw["provenance"]["equipment_days"][equipment_name]
     lines.append({
@@ -166,6 +177,7 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
         "crew": None,
         "rules": [],
         "source": _source_label(equipment_source["equipment"]),
+        "citations": _citations_out(equipment_source["citations"]),
     })
 
     return {
@@ -174,15 +186,18 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
             "unit": tables[base_table].get("unit", ""),
             "formula": formula,
             "sources": sources,
+            "citations": _citations_out(daily_provenance["citations"]),
         },
         "work_days": {
             "value": raw["work_days"],
             "formula": f"{work_provenance['quantity']} ÷ {raw['daily_volume_m3']}",
         },
         "lines": lines,
-        "unit_lines": raw["unit_lines"],
+        "unit_lines": [{**line, "citations": _citations_out(line["citations"])}
+                       for line in raw["unit_lines"]],
         "unit_basis": raw["unit_basis"],
-        "not_calculated": raw["not_calculated"],
+        "not_calculated": [{**item, "citations": _citations_out(resolve_cites(item.get("cite")))}
+                           for item in raw["not_calculated"]],
         "review_status": review_status,
     }
 
@@ -193,7 +208,7 @@ def _result_out(state: dict, spec: dict | None) -> dict | None:
     if not raw:
         return None
     if status == "BLOCKED":
-        return raw
+        return {**raw, "citations": _citations_out(raw.get("citations", []))}
     if status == "COMPUTED" and spec:
         return _computed_result_out(raw, spec, state.get("review_status", ""))
     return None
@@ -228,6 +243,16 @@ def _build_response(thread_id: str, state: dict) -> dict:
 @app.get("/api/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+@app.get("/api/source/{table_id}.png")
+def source_image(table_id: str) -> FileResponse:
+    if not re.fullmatch(r"p\d+-t\d+", table_id):
+        raise HTTPException(status_code=404, detail="표 이미지를 찾을 수 없습니다")
+    path = SOURCES / f"{table_id}.png"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="표 이미지를 찾을 수 없습니다")
+    return FileResponse(path, media_type="image/png")
 
 
 @app.post("/api/chat")
