@@ -1,0 +1,132 @@
+{
+  "version": "2026",
+  "publisher": "대한건설협회",
+  "published": "2026-01-08",
+  "source_file": "data/raw/equipment_rates/2026_machine_cost_table.pdf",
+  "source_original_name": "2026년 건설기계의 기계경비 산출표.pdf",
+  "source_pages": [
+    2,
+    13,
+    14
+  ],
+  "standard_coefficient_pages": [
+    300,
+    301
+  ],
+  "hourly_depreciation_coefficient_4504": "2640/10000000",
+  "notes": {
+    "price_unit": "천원",
+    "hourly_depreciation_unit": "원/hr",
+    "fuel_unit": "ℓ/hr",
+    "exchange_rate_header": "1$= 1,118.10",
+    "fuel_type": "주연료란에 휘발유 또는 중유로 표시되지 아니한 것은 경유를 말합니다. (해상장비 포함)",
+    "fuel_price": "주연료 가격은 구입조건 또는 유가등락 등에 따라 달라지므로 게재하지 아니하였습니다.",
+    "misc": "잡재료는 주연료에 대한 비율을 말하며, 자세한 사항은 표준품셈(공통부문) \"8-4 운전경비 산정\"을 참고하시기 바랍니다."
+  },
+  "machines": {
+    "4504-0021": {
+      "name": "콘크리트 펌프차",
+      "spec": "21m, 65~75㎥/hr",
+      "price_thousand_won": 195829,
+      "hourly_depreciation": 51698,
+      "fuel_type": "경유",
+      "fuel_l_per_hr": "14.7",
+      "misc_pct_of_fuel": 35,
+      "operator_per_day": 1,
+      "assistant_per_day": null,
+      "foreman_per_day": null,
+      "pdf_page": 13
+    },
+    "4504-0028": {
+      "name": "콘크리트 펌프차",
+      "spec": "28m, 65~75㎥/hr",
+      "price_thousand_won": 233210,
+      "hourly_depreciation": 61567,
+      "fuel_type": "경유",
+      "fuel_l_per_hr": "15.3",
+      "misc_pct_of_fuel": 35,
+      "operator_per_day": 1,
+      "assistant_per_day": null,
+      "foreman_per_day": null,
+      "pdf_page": 14
+    },
+    "4504-0032": {
+      "name": "콘크리트 펌프차",
+      "spec": "32m, 80~95㎥/hr",
+      "price_thousand_won": 275000,
+      "hourly_depreciation": 72600,
+      "fuel_type": "경유",
+      "fuel_l_per_hr": "17.3",
+      "misc_pct_of_fuel": 35,
+      "operator_per_day": 1,
+      "assistant_per_day": null,
+      "foreman_per_day": null,
+      "pdf_page": 14
+    },
+    "4504-0036": {
+      "name": "콘크리트 펌프차",
+      "spec": "36m, 80~95㎥/hr",
+      "price_thousand_won": 341000,
+      "hourly_depreciation": 90024,
+      "fuel_type": "경유",
+      "fuel_l_per_hr": "17.7",
+      "misc_pct_of_fuel": 35,
+      "operator_per_day": 1,
+      "assistant_per_day": null,
+      "foreman_per_day": null,
+      "pdf_page": 14
+    },
+    "4504-0041": {
+      "name": "콘크리트 펌프차",
+      "spec": "41m, 80~95㎥/hr",
+      "price_thousand_won": 353000,
+      "hourly_depreciation": 93192,
+      "fuel_type": "경유",
+      "fuel_l_per_hr": "23.3",
+      "misc_pct_of_fuel": 35,
+      "operator_per_day": 1,
+      "assistant_per_day": null,
+      "foreman_per_day": null,
+      "pdf_page": 14
+    },
+    "4504-0043": {
+      "name": "콘크리트 펌프차",
+      "spec": "43m, 80~95㎥/hr",
+      "price_thousand_won": 447500,
+      "hourly_depreciation": 118140,
+      "fuel_type": "경유",
+      "fuel_l_per_hr": "26.3",
+      "misc_pct_of_fuel": 35,
+      "operator_per_day": 1,
+      "assistant_per_day": null,
+      "foreman_per_day": null,
+      "pdf_page": 14
+    },
+    "4504-0047": {
+      "name": "콘크리트 펌프차",
+      "spec": "47m, 80~95㎥/hr",
+      "price_thousand_won": 490833,
+      "hourly_depreciation": 129579,
+      "fuel_type": "경유",
+      "fuel_l_per_hr": "26.3",
+      "misc_pct_of_fuel": 35,
+      "operator_per_day": 1,
+      "assistant_per_day": null,
+      "foreman_per_day": null,
+      "pdf_page": 14
+    },
+    "4504-0052": {
+      "name": "콘크리트 펌프차",
+      "spec": "52m, 80~95㎥/hr",
+      "price_thousand_won": 519667,
+      "hourly_depreciation": 137192,
+      "fuel_type": "경유",
+      "fuel_l_per_hr": "31.0",
+      "misc_pct_of_fuel": 35,
+      "operator_per_day": 1,
+      "assistant_per_day": null,
+      "foreman_per_day": null,
+      "pdf_page": 14
+    }
+  }
+}
