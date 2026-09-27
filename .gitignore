@@ -3,6 +3,9 @@
 .env
 __pycache__/
 
+frontend/node_modules/
+frontend/build/
+
 data/processed/*.jsonl
 data/processed/*.parquet
 experiments/table_census/results/parsed_all.jsonl

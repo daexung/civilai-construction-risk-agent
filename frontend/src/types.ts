@@ -1,96 +1,69 @@
-export type AgentType = 'weather' | 'labor' | 'equipment' | 'material' | 'synthesize' | 'router';
-export type UserRole = 'admin' | 'user';
-export type ProjectRole = 'owner' | 'member';
-export type Visibility = 'private' | 'project_shared';
+export type ChoiceValue = string | boolean;
 
-export interface User {
-  user_id: string;
-  name: string;
-  email: string;
-  role: UserRole;
+export interface QuestionHint {
+  value: string;
+  matched: string;
 }
 
-export interface AuthResponse extends User {
-  token: string;
-}
-
-export interface Message {
-  id: string;
-  conversation_id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  final_response?: string | null;
-  structured_response?: StructuredResponse | null;
-  agent?: AgentType | null;
-  created_at: string;
-}
-
-export type AnswerType = 'CHAT' | 'RAG_QA' | 'COST_REPORT' | 'RISK_REPORT' | 'MISSING_INFO';
-
-export interface StructuredResponse {
-  answer_type?: AnswerType;
-  message?: string;
-  summary?: {
-    total_additional_cost?: number | string | null;
-    total_extra_cost?: number | string | null;   // 구버전 호환
-    risk_level?: string | null;
-    expected_delay?: number | string | null;
-    delay_days?: number | string | null;          // 구버전 호환
-    main_cause?: string | null;
-    [key: string]: unknown;
-  };
-  cost_breakdown?: Array<Record<string, unknown>>;
-  calculation_details?: Array<Record<string, unknown>>;
-  evidence?: Array<Record<string, unknown>>;
-  items?: Array<Record<string, unknown>>;
-  assumptions?: Array<Record<string, unknown> | string>;
-  missing_info?: Array<Record<string, unknown> | string>;
+export interface DecisionRow {
+  적용기준?: string;
   [key: string]: unknown;
 }
 
-export interface Project {
-  id: string;
+export interface AgentQuestion {
   name: string;
-  site_name: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  work_type: string;
-  start_date: string;
-  end_date: string;
-  description: string;
-  created_by: string;
-  created_by_name: string;
-  my_project_role: ProjectRole;
-  created_at: string;
-  updated_at: string;
+  ask: string;
+  choices?: ChoiceValue[] | null;
+  hint?: QuestionHint | null;
+  default?: string | null;
+  decision_table?: Record<string, DecisionRow> | null;
+  reason?: string | null;
 }
 
-export interface ProjectCreateRequest {
-  name: string;
-  site_name: string;
-  address: string;
-  start_date: string;
-  end_date: string;
-  description: string;
-}
-
-export interface ProjectMember {
-  user_id: string;
-  name: string;
-  email: string;
-  project_role: ProjectRole;
-}
-
-export interface Conversation {
-  id: string;
-  project_id: string | null;
-  owner_id: string;
-  owner_name: string;
+export interface WorkInfo {
+  spec_id: string;
+  section_no: string;
   title: string;
-  visibility: Visibility;
-  can_write: boolean;
-  message_count: number;
-  created_at: string;
-  updated_at: string;
+  confirmed: boolean;
+}
+
+export interface InputRow {
+  name: string;
+  label: string;
+  value: ChoiceValue;
+  source: string;
+}
+
+export interface EvidenceItem {
+  section_no: string;
+  section: string;
+  page: number;
+  table_id?: string | null;
+  snippet: string;
+}
+
+export interface SearchInfo {
+  method: string;
+  api_calls: number;
+  warnings: string[];
+}
+
+export type ChatStatus = 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'READY';
+
+export interface ChatResponse {
+  thread_id: string;
+  status: ChatStatus;
+  message: string;
+  work: WorkInfo | null;
+  questions: AgentQuestion[];
+  inputs: InputRow[];
+  evidence: EvidenceItem[];
+  search: SearchInfo;
+}
+
+export interface ChatTurn {
+  id: string;
+  role: 'user' | 'assistant';
+  text?: string;
+  response?: ChatResponse;
 }
