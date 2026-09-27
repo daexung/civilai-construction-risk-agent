@@ -81,6 +81,22 @@ def main() -> int:
         serializable = False
     checks.append(("G6", serializable))
 
+    graph.invoke(new_state(QUERY), config("g7"))
+    dict_completed = graph.invoke(Command(resume={"slump_band": "15㎝", "facility_type": "Type-Ⅱ",
+                                                  "site_type": "Type-Ⅱ", "placement": "붐",
+                                                  "vibrator_used": True, "reset_status": "없음"}), config("g7"))
+    checks.append(("G7", not questions(dict_completed) and dict_completed["status"] == "RUNNING"
+                   and len(dict_completed["inputs"]) == 8
+                   and dict_completed["input_sources"]["vibrator_used"] == "선택"))
+
+    graph.invoke(new_state(QUERY), config("g8"))
+    bad_dict_result = graph.invoke(Command(resume={"slump_band": "15㎝", "facility_type": "Type-X",
+                                                   "site_type": "Type-Ⅱ", "placement": "붐",
+                                                   "vibrator_used": True, "reset_status": "없음"}), config("g8"))
+    bad_questions = questions(bad_dict_result)
+    checks.append(("G8", any(question["name"] == "facility_type" and question.get("reason")
+                             for question in bad_questions)))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")
