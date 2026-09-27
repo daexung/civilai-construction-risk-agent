@@ -51,24 +51,55 @@ def _type_values(query: str, field: dict) -> set[str]:
             if not re.search(r"(?:현장조건|현장)", query[max(0, start - 8):start])}
 
 
-def _volume(query: str) -> tuple[int | Fraction | None, str | None]:
+def _volume(query: str) -> tuple[str | None, str | None]:
     # NFKC는 ㎥를 m3로 바꾼다. 한글 단위는 그대로 유지한다.
-    pattern = re.compile(r"(?<![0-9a-z.])(-?\d[\d,]*(?:\.\d+)?)\s*(m3|루베)(?![a-z0-9])", re.I)
-    found = [Fraction(match.group(1).replace(",", "")) for match in pattern.finditer(query)]
+    pattern = re.compile(r"(?<![0-9a-z.])(-?\d[\d,]*(?:\.\d+)?(?:/\d+)?)\s*(m3|루베)(?![a-z0-9])", re.I)
+    found = []
+    for match in pattern.finditer(query):
+        try:
+            found.append(Fraction(match.group(1).replace(",", "")))
+        except (ValueError, ZeroDivisionError):
+            return None, "물량 숫자를 해석할 수 없습니다"
     if len(set(found)) > 1:
         return None, "물량이 둘 이상입니다"
     if found:
         if found[0] <= 0:
             return None, "물량은 0보다 커야 합니다"
-        return int(found[0]) if found[0].denominator == 1 else found[0], None
+        exact = found[0]
+        if exact.denominator == 1:
+            return str(exact.numerator), None
+        # 유한소수는 원래 크기를 정확한 십진 문자열로 저장한다.
+        denominator = exact.denominator
+        while denominator % 2 == 0:
+            denominator //= 2
+        while denominator % 5 == 0:
+            denominator //= 5
+        if denominator == 1:
+            return _finite_decimal(exact), None
+        return f"{exact.numerator}/{exact.denominator}", None
     wrong_unit = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?\s*(?:m2|m|톤)(?![a-z0-9])", query, re.I)
     if wrong_unit:
         return None, "물량 단위가 ㎥/m3/루베가 아닙니다"
-    without_options = re.sub(r"타입\d+|\d+유형|\d+(?:~|-)\d+cm|\d+cm", "", query)
+    without_options = re.sub(r"\d+-\d+-\d+|타입\d+|\d+유형|\d+(?:~|-)\d+cm|\d+cm", "", query)
     bare = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?(?![0-9a-z.]|cm|유형)", without_options)
     if bare:
         return None, "물량 단위가 없습니다"
     return None, None
+
+
+def _finite_decimal(value: Fraction) -> str:
+    denominator = value.denominator
+    twos = fives = 0
+    while denominator % 2 == 0:
+        twos += 1
+        denominator //= 2
+    while denominator % 5 == 0:
+        fives += 1
+        denominator //= 5
+    places = max(twos, fives)
+    scaled = value.numerator * (10 ** places // value.denominator)
+    digits = str(scaled).zfill(places + 1)
+    return digits[:-places] + "." + digits[-places:]
 
 
 def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
@@ -118,18 +149,76 @@ def _hint(query: str, field: dict, tables: dict) -> dict | None:
     return None
 
 
+def _work_choice(reply: str, candidates: list[dict]) -> dict | None:
+    text = _norm(reply)
+    aliases = {"6-1-1": ("레미콘",), "6-1-2": ("현장비빔",), "6-1-4": ("펌프차",)}
+    matches = []
+    for candidate in candidates:
+        section_no = candidate["section_no"]
+        title = candidate["section"]
+        words = (section_no, title, *aliases.get(section_no, ()))
+        if any(_norm(word) in text for word in words):
+            matches.append(candidate)
+    return matches[0] if len(matches) == 1 else None
+
+
+def _compatible_inputs(inputs: dict, sources: dict, spec: dict) -> tuple[dict, dict]:
+    retained = {}
+    retained_sources = {}
+    for field in spec["inputs"]:
+        name = field["name"]
+        if name not in inputs:
+            continue
+        value = inputs[name]
+        kind = field["type"]
+        valid = (value in field["allowed_values"] if kind == "enum" else
+                 type(value) is bool if kind == "boolean" else
+                 _valid_positive_rational(value) if kind == "positive_rational" else
+                 type(value) is int and value >= 0 if kind == "nonnegative_integer" else False)
+        if valid:
+            retained[name] = value
+            if name in sources:
+                retained_sources[name] = sources[name]
+    return retained, retained_sources
+
+
+def _valid_positive_rational(value: object) -> bool:
+    try:
+        return Fraction(str(value)) > 0
+    except (ValueError, ZeroDivisionError):
+        return False
+
+
 def fill(state: AgentState) -> dict:
     spec_id = state.get("spec_id", "")
     spec = load_specs()[spec_id] if spec_id else None
     previous = state.get("inputs", {})
     inputs = dict(previous)
     sources = dict(state.get("input_sources", {}))
-    values, ambiguities = extract_inputs(state.get("query", ""), spec) if spec else ({}, {})
-    origin = "답변" if previous else "질문"
+    reply = state.get("reply", "")
+    update = {}
+    if reply and state.get("selection", {}).get("confirmed") is False:
+        chosen = _work_choice(reply, state.get("candidates", []))
+        if chosen:
+            selection = {**state.get("selection", {}), "decision": "chosen", "confirmed": True}
+            update["selection"] = selection
+            available = next((item for item in load_specs().values()
+                              if item["section_no"] == chosen["section_no"]), None)
+            if available is None:
+                return {**update, "spec_id": "", "inputs": {}, "input_sources": {},
+                        "questions": [], "status": "EVIDENCE_ONLY",
+                        "reason": f"{chosen['section_no']} 절의 계산 명세가 없습니다"}
+            if available["id"] != spec_id:
+                inputs, sources = _compatible_inputs(inputs, sources, available)
+                spec = available
+                update["spec_id"] = available["id"]
+    text = reply or state.get("query", "")
+    values, ambiguities = extract_inputs(text, spec) if spec else ({}, {})
+    origin = "답변" if reply or previous else "질문"
     inputs.update(values)
     sources.update({name: origin for name in values})
     questions = []
-    if state.get("selection", {}).get("confirmed") is False:
+    if update.get("selection", state.get("selection", {})).get("confirmed") is False:
         candidates = state.get("candidates", [])
         questions.append({"name": "work", "ask": "어느 공종으로 계산할까요?",
                           "choices": [item["section"] for item in candidates],
@@ -151,7 +240,7 @@ def fill(state: AgentState) -> dict:
             if name in ambiguities:
                 question["reason"] = ambiguities[name]
             questions.append(question)
-    update = {"inputs": inputs, "input_sources": sources, "questions": questions}
+    update.update(inputs=inputs, input_sources=sources, questions=questions)
     if questions:
         update.update(status="MISSING_INFO", reason="계산에 필요한 조건을 확인해 주세요")
     return update

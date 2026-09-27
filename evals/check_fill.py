@@ -34,7 +34,7 @@ def main() -> int:
     first = fill(state("철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"))
     names = [question["name"] for question in first["questions"]]
     facility = next(question for question in first["questions"] if question["name"] == "facility_type")
-    checks.append(("F1", first["inputs"] == {"volume": 260, "structure": "철근"}
+    checks.append(("F1", first["inputs"] == {"volume": "260", "structure": "철근"}
                    and names == ["slump_band", "facility_type", "site_type", "placement", "vibrator_used", "reset_status"]
                    and facility.get("hint") == {"value": "Type-Ⅱ", "matched": "벽"}))
 
@@ -58,7 +58,7 @@ def main() -> int:
         question["name"] == "volume" and "단위" in question.get("reason", "") for question in no_unit["questions"])))
 
     inherited = fill(state("15cm, 타입2, 현장 2유형, 붐, 진동기 사용, 재셋팅 없음",
-                           inputs={"volume": 260, "structure": "철근"}))
+                           inputs={"volume": "260", "structure": "철근"}))
     checks.append(("F6", len(inherited["inputs"]) == 8 and not inherited["questions"]
                    and inherited["input_sources"]["volume"] == "질문"
                    and inherited["input_sources"]["slump_band"] == "답변"))

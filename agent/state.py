@@ -19,6 +19,7 @@ class AgentState(TypedDict, total=False):
     inputs: dict  # 입력 이름에서 값으로의 매핑
     input_sources: dict  # 입력 이름에서 질문 또는 답변 출처로의 매핑
     questions: list[dict]  # 한 번에 확인할 질문 목록
+    reply: str  # 마지막 사용자 답
 
 
 def new_state(query: str) -> AgentState:
