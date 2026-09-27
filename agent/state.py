@@ -12,6 +12,8 @@ class AgentState(TypedDict, total=False):
     status: Status  # 처리 상태
     reason: str  # 상태의 이유
     answer: str  # 최종 답변
+    answer_source: str  # "llm" | "template"
+    llm_info: dict  # LLM 모델, 걸린 시간, 실패·거부 사유, 거부된 숫자
     hits: list[dict]  # 검색된 청크
     search_info: dict  # 검색 방식과 경고
     candidates: list[dict]  # 후보 절과 제목·점수·명세 여부
