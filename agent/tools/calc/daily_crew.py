@@ -8,6 +8,7 @@ from fractions import Fraction
 from typing import Any
 
 from agent.tools.calc.unit_rounding import round_quantity, unit_places
+from agent.tools.source.citation import cite_table, resolve_cites
 
 
 _COMPARISONS = {
@@ -80,7 +81,8 @@ def _cell(tables: dict, table_id: str, row: str, column: str) -> tuple[Fraction,
     table = tables[table_id]
     raw = table["values"][row][column]
     value = Fraction(raw)
-    return value, {"table": table_id, "row": row, "column": column, "value": raw, "source": table["source"]}
+    return value, {"table": table_id, "row": row, "column": column, "value": raw,
+                   "source": table["source"], "citations": [cite_table(table_id, row, column, raw)]}
 
 
 def check_blocked(spec: dict, inputs: dict) -> dict | None:
@@ -98,7 +100,8 @@ def check_blocked(spec: dict, inputs: dict) -> dict | None:
         condition = item.get("blocked_if")
         if (condition and condition["input"] in validated
                 and _COMPARISONS[condition["op"]](validated[condition["input"]], condition["value"])):
-            return {"reason": item["reason"], "source": item["source"], "input": condition["input"]}
+            return {"reason": item["reason"], "source": item["source"], "input": condition["input"],
+                    "citations": resolve_cites(item.get("cite"))}
     return None
 
 
@@ -171,7 +174,8 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                 if trade in rule["change"]:
                     change = rule["change"][trade]
                     count += Fraction(change)
-                    applied_rules.append({"when": rule["when"], "change": change, "source": rule["source"]})
+                    applied_rules.append({"when": rule["when"], "change": change, "source": rule["source"],
+                                          "citations": resolve_cites(rule.get("cite"))})
         if count < 0:
             return {"status": "rejected", "reason": f"명세 오류: {trade} 조정 후 인원이 음수임", "input": "spec"}
         person_days[trade] = _exact_text(work_days * count)
@@ -181,6 +185,8 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
             "exact": str(unit_value), "applied": round_quantity(unit_value, places),
             "places": places, "formula": f"{_exact_text(count)}인 ÷ {daily_text}{quantity_unit}",
             "rule": rule_label, "source": f"{crew_source['table']} {crew_source['source']}",
+            "citations": crew_source["citations"] + [citation for rule in applied_rules
+                                                        for citation in rule["citations"]],
         })
         person_sources[trade] = {
             "crew": crew_source,
@@ -188,6 +194,8 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
             "adjusted_crew": _exact_text(count),
             "work_days": "work_days",
             "formula": "work_days × adjusted_crew",
+            "citations": crew_source["citations"] + [citation for rule in applied_rules
+                                                   for citation in rule["citations"]],
         }
 
     equipment = params["equipment"]
@@ -202,6 +210,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         "places": places,
         "formula": f"{_exact_text(equipment_count)}대 × 8hr ÷ {daily_text}{quantity_unit}",
         "rule": rule_label, "source": f"{equipment_source['table']} {equipment_source['source']}",
+        "citations": equipment_source["citations"],
     })
 
     return {
@@ -221,6 +230,8 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                 "base_output": base_source,
                 "coefficients": coefficient_sources,
                 "formula_source": spec["quantity_model"]["source"],
+                "citations": base_source["citations"] + [citation for source in coefficient_sources
+                                                        for citation in source["citations"]],
             },
             "work_days": {
                 "quantity_input": quantity_name,
@@ -228,6 +239,8 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                 "quantity_source": by_name[quantity_name]["source"],
                 "daily_volume_m3": "daily_volume_m3",
                 "formula": "quantity ÷ daily_volume_m3",
+                "citations": base_source["citations"] + [citation for source in coefficient_sources
+                                                        for citation in source["citations"]],
             },
             "person_days": person_sources,
             "equipment_days": {
@@ -235,6 +248,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                     "equipment": equipment_source,
                     "work_days": "work_days",
                     "formula": "work_days × equipment_count",
+                    "citations": equipment_source["citations"],
                 }
             },
         },
