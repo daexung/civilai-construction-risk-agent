@@ -14,6 +14,7 @@ from agent.tools.source.citation import resolve_cites
 ROOT = Path(__file__).resolve().parents[3]
 RATES = ROOT / "data/rates/labor_rates.json"
 AMOUNTS = ROOT / "agent/rules/common/1-2-2_amount_units.json"
+EQUIPMENT_RATES = ROOT / "data/rates/equipment_rates.json"
 
 
 @lru_cache(maxsize=1)
@@ -24,6 +25,11 @@ def _versions() -> list[dict]:
 @lru_cache(maxsize=1)
 def _amount_rules() -> dict:
     return json.loads(AMOUNTS.read_text(encoding="utf-8"))
+
+
+@lru_cache(maxsize=1)
+def _equipment_rates() -> dict:
+    return json.loads(EQUIPMENT_RATES.read_text(encoding="utf-8"))
 
 
 def select_rate_version(basis_date: str | date | None = None) -> dict | None:
@@ -81,7 +87,91 @@ def _version_info(version: dict | None) -> dict | None:
                                           "source_file", "unit")}
 
 
-def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None) -> dict:
+def _machine_citation(code: str, entry: dict, item: str, value: str) -> dict:
+    return {"code": "2026년도 건설기계 경비산출표", "division": "건설기계",
+            "section_no": "4504", "section_title": "콘크리트 펌프차", "section": "4504 콘크리트 펌프차",
+            "subsection": entry["spec"], "item": item, "row": code, "column": item,
+            "value": value, "pdf_page": entry["pdf_page"], "printed_page": entry["pdf_page"],
+            "quote": None, "internal_id": code,
+            "label": f"대한건설협회 「2026년도 건설기계 경비산출표」 {code} {entry['spec']} (PDF {entry['pdf_page']}쪽)\n{item}: {value}"}
+
+
+def _standard_citation(section_no: str, title: str, page: int, quote: str) -> dict:
+    return {"code": "2026 건설공사 표준품셈", "division": "공통부문",
+            "section_no": section_no, "section_title": title, "section": f"{section_no} {title}",
+            "subsection": None, "item": "본문", "row": None, "column": None,
+            "value": None, "pdf_page": page, "printed_page": page - 56,
+            "quote": quote, "internal_id": f"PDF{page}-{section_no}",
+            "label": f"2026 건설공사 표준품셈 공통부문 {section_no} {title} (인쇄 {page - 56}쪽)"}
+
+
+def _operator_hours_citation() -> dict:
+    return {"code": "2026년 하반기 적용 건설업 임금실태조사", "division": None,
+            "section_no": None, "section_title": "이용상의 주의사항", "section": "이용상의 주의사항",
+            "subsection": "7. 이용상의 주의사항", "item": "1일 8시간 기준",
+            "row": None, "column": None, "value": "8시간", "pdf_page": 4,
+            "printed_page": 3, "quote": "다. 본조사임금은1일8시간기준(단, 잠수부는6시간기준)금액임.",
+            "internal_id": "2026H2:PDF4:8시간",
+            "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」 7. 이용상의 주의사항 (PDF 4쪽)\n건설기계운전사 일당의 시간당 환산: 1일 8시간"}
+
+
+def _machine_rows(spec: dict, line: dict, version: dict | None, inputs: dict) -> list[dict]:
+    setting = spec["quantity_model"]["params"]["equipment"]
+    field = next(field for field in spec["inputs"] if field["name"] == setting["machine_code_input"])
+    size = inputs.get(setting["machine_code_input"])
+    code = field["machine_codes"].get(size)
+    if not code:
+        return []
+    machine = _equipment_rates()["machines"][code]
+    quantity = Decimal(line["applied"])
+    base = {"kind": "equipment_component", "machine_code": code,
+            "machine_spec": machine["spec"], "unit": line["unit"],
+            "quantity": line["applied"], "rate_code": None,
+            "amount_exact": None, "amount": None, "reason": None}
+    amount_rule = _rule_citation("일위대가표의 금액란", "0.1")
+    standard = _standard_citation("8-1-6", "기계경비 적산요령", 223,
+        "3. 운전경비 : 기계를 사용하는데 필요한 다음 각호 경비의 합계액으로 한다.")
+    hourly = Decimal(machine["hourly_depreciation"])
+    exact = quantity * hourly
+    depreciation = {**base, "category": "경비", "name": "펌프차 기계손료",
+                    "unit_price": _exact(hourly), "amount_exact": _exact(exact),
+                    "amount": _money(_truncate(exact, "0.1"), 1),
+                    "citations": list(line.get("citations", [])) + [
+                        _machine_citation(code, machine, "시간당 손료", str(machine["hourly_depreciation"])),
+                        _standard_citation("8-1-5", "기계경비 용어와 정의", 223,
+                            "손료계수의 합계를 곱한 값을 말한다. (원미만의 값은 절사한다.)"),
+                        amount_rule]}
+    wage = version["rates"].get(setting["operator_rate_code"]) if version else None
+    operator = {**base, "category": "노무비", "name": "펌프차 운전원",
+                "rate_code": setting["operator_rate_code"], "unit_price": None,
+                "reason": None, "citations": list(line.get("citations", [])) + [
+                    _machine_citation(code, machine, "조종원", str(machine["operator_per_day"])),
+                    standard,
+                    _operator_hours_citation()]}
+    if wage and wage["daily"] is not None and wage["name"] == "건설기계운전사":
+        hourly_wage = Decimal(machine["operator_per_day"]) * Decimal(wage["daily"]) / Decimal(8)
+        exact = quantity * hourly_wage
+        operator.update(unit_price=_exact(hourly_wage), amount_exact=_exact(exact),
+                        amount=_money(_truncate(exact, "0.1"), 1),
+                        citations=operator["citations"] + [
+                            _wage_citation(version, setting["operator_rate_code"], wage), amount_rule])
+    else:
+        operator["reason"] = "적용 가능한 건설기계운전사 공표 노임단가 없음"
+    fuel_amount = quantity * Decimal(machine["fuel_l_per_hr"])
+    fuel = {**base, "category": "재료비", "name": "펌프차 연료·잡재료비",
+            "unit_price": None, "fuel_l_per_hr": machine["fuel_l_per_hr"],
+            "fuel_l_per_unit": _exact(fuel_amount),
+            "misc_pct_of_fuel": machine["misc_pct_of_fuel"],
+            "reason": "유류 가격 미입력 — 품셈 8-1-7: 해당 지역 가격",
+            "citations": list(line.get("citations", [])) + [
+                _machine_citation(code, machine, "주연료", machine["fuel_l_per_hr"] + "ℓ/hr"),
+                _standard_citation("8-1-7", "손료보정 등", 224,
+                    "5. 유류가격은 해당지역의 가격으로 한다.")]}
+    return [depreciation, operator, fuel]
+
+
+def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
+               inputs: dict | None = None) -> dict:
     """applied 품량으로만 금액을 산출하며, 없는 단가/기계경비는 null로 남긴다."""
     amount_rule = _rule_citation("일위대가표의 금액란", "0.1")
     total_rule = _rule_citation("일위대가표의 계금", "1")
@@ -89,6 +179,7 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None) ->
     rows = []
     unpriced = []
     priced_labor = []
+    equipment_lines = []
     labor_missing = False
     for line in unit_lines:
         row = {"kind": line["kind"], "category": "노무비" if line["kind"] == "labor" else "경비",
@@ -97,7 +188,9 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None) ->
                "unit_price": None, "amount_exact": None, "amount": None,
                "citations": list(line.get("citations", [])), "reason": None}
         if line["kind"] == "equipment":
-            row["reason"] = "장비 기계경비 단가 미산정"
+            equipment_lines.extend(_machine_rows(spec, line, rate_version, inputs or {}))
+            if not equipment_lines:
+                row["reason"] = "장비 규격 미입력으로 기계경비 미산정"
         elif rate_version is None:
             row["reason"] = "적용 가능한 노임단가 없음"
             labor_missing = True
@@ -122,6 +215,12 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None) ->
     labor_subtotal = sum(priced_labor, Decimal("0")) if priced_labor else None
     costs = []
     category_values = {"재료비": [], "노무비": priced_labor, "경비": []}
+    for component in equipment_lines:
+        if component["amount"] is None:
+            unpriced.append({"name": component["name"], "reason": component["reason"],
+                             "category": component["category"], "citations": component["citations"]})
+        else:
+            category_values[component["category"]].append(Decimal(component["amount"]))
     for rule in spec.get("cost_rules", []):
         if rule["base"] != "labor_subtotal":
             raise ValueError(f"지원하지 않는 요율 기준: {rule['base']}")
@@ -151,7 +250,8 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None) ->
     has_amount = any(category_values.values())
     partial = bool(unpriced)
     return {"status": "PARTIAL" if partial else "OK", "partial": partial,
-            "rate_version": _version_info(rate_version), "lines": rows, "cost_lines": costs,
+            "rate_version": _version_info(rate_version), "lines": rows, "equipment_lines": equipment_lines,
+            "cost_lines": costs,
             "labor_subtotal": _money(labor_subtotal, 1), "subtotals": subtotals,
             "total_exact": _money(total_exact, 1) if has_amount else None,
             "total": _money(_truncate(total_exact, "1"), 0) if has_amount else None,
