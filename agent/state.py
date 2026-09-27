@@ -11,9 +11,11 @@ class AgentState(TypedDict, total=False):
     status: Status  # 처리 상태
     reason: str  # 상태의 이유
     answer: str  # 최종 답변
+    hits: list[dict]  # 검색된 청크
+    search_info: dict  # 검색 방식과 경고
     card_id: str  # 선택된 카드 id
     candidates: list[str]  # 여러 카드가 걸렸을 때 후보 id
 
 
 def new_state(query: str) -> AgentState:
-    return {"query": query, "status": "RUNNING", "reason": "", "answer": "", "card_id": "", "candidates": []}
+    return {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [], "search_info": {}, "card_id": "", "candidates": []}
