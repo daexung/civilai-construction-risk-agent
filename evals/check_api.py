@@ -31,12 +31,12 @@ def main() -> int:
 
     missing = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"}).json()
     thread_id = missing["thread_id"]
-    checks.append(("A3", missing["status"] == "MISSING_INFO" and len(missing["questions"]) == 6
+    checks.append(("A3", missing["status"] == "MISSING_INFO" and len(missing["questions"]) == 7
                    and missing["work"]["section_no"] == "6-1-4"))
 
     computed = CLIENT.post("/api/chat", json={"thread_id": thread_id, "answers": PUMP_ANSWERS}).json()
     computed_lines = {line["name"]: line for line in computed.get("result", {}).get("lines", [])}
-    checks.append(("A4", computed["status"] == "PARTIAL" and len(computed["inputs"]) == 8
+    checks.append(("A4", computed["status"] == "PARTIAL" and len(computed["inputs"]) == 9
                    and all(item["source"] in ("질문", "선택") for item in computed["inputs"])
                    and computed_lines.get("콘크리트공", {}).get("value") == "8"
                    and computed_lines.get("콘크리트펌프차", {}).get("kind") == "equipment"

@@ -19,7 +19,7 @@ CANDIDATES = [
     {"section_no": "6-1-1", "section": "6-1-1 레디믹스트콘크리트 타설"},
     {"section_no": "6-1-2", "section": "6-1-2 현장비빔 타설"},
 ]
-COMPLETE = "철근 260㎥ 슬럼프 15cm Type-Ⅱ 현장조건 Type-Ⅱ 붐타설 진동기 사용 재셋팅 없음"
+COMPLETE = "철근 260㎥ 펌프차 32m 슬럼프 15cm Type-Ⅱ 현장조건 Type-Ⅱ 붐타설 진동기 사용 재셋팅 없음"
 
 
 def state(query: str, *, confirmed: bool = True, inputs: dict | None = None, reply="") -> dict:
@@ -33,14 +33,16 @@ def main() -> int:
     checks = []
     first = fill(state("철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"))
     names = [question["name"] for question in first["questions"]]
+    pump_size = next(question for question in first["questions"] if question["name"] == "pump_size")
     facility = next(question for question in first["questions"] if question["name"] == "facility_type")
     checks.append(("F1", first["inputs"] == {"volume": "260", "structure": "철근"}
-                   and names == ["slump_band", "facility_type", "site_type", "placement", "vibrator_used", "reset_status"]
+                   and names == ["pump_size", "slump_band", "facility_type", "site_type", "placement", "vibrator_used", "reset_status"]
+                   and pump_size["choices"] == ["32m", "36m", "41m", "43m", "47m", "52m"]
                    and facility.get("hint") == {"value": "Type-Ⅱ", "matched": "벽"}))
 
     complete = fill(state(COMPLETE))
     checks.append(("F2", not complete["questions"] and "status" not in complete
-                   and len(complete["inputs"]) == 8
+                   and len(complete["inputs"]) == 9
                    and extract_inputs("철근 260㎥ 15cm", SPEC)[0]["volume"] == "260"
                    and complete["inputs"]["facility_type"] == "Type-Ⅱ"
                    and complete["inputs"]["site_type"] == "Type-Ⅱ"
@@ -59,8 +61,8 @@ def main() -> int:
         question["name"] == "volume" and "단위" in question.get("reason", "") for question in no_unit["questions"])))
 
     inherited = fill(state("15cm, 타입2, 현장 2유형, 붐, 진동기 사용, 재셋팅 없음",
-                           inputs={"volume": "260", "structure": "철근"}))
-    checks.append(("F6", len(inherited["inputs"]) == 8 and not inherited["questions"]
+                           inputs={"volume": "260", "structure": "철근", "pump_size": "32m"}))
+    checks.append(("F6", len(inherited["inputs"]) == 9 and not inherited["questions"]
                    and inherited["input_sources"]["volume"] == "질문"
                    and inherited["input_sources"]["slump_band"] == "답변"))
 
@@ -73,11 +75,11 @@ def main() -> int:
     calculated = adjusted_daily_crew(SPEC, complete["inputs"])
     checks.append(("F8", calculated["status"] == "computed"))
 
-    dict_answers = {"slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
+    dict_answers = {"pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
                      "placement": "붐", "vibrator_used": True, "reset_status": "없음"}
     dict_complete = fill(state("", inputs=first["inputs"], reply=dict_answers))
     checks.append(("F9", not dict_complete["questions"] and "status" not in dict_complete
-                   and len(dict_complete["inputs"]) == 8
+                   and len(dict_complete["inputs"]) == 9
                    and dict_complete["inputs"]["vibrator_used"] is True
                    and dict_complete["input_sources"]["slump_band"] == "선택"
                    and dict_complete["input_sources"]["vibrator_used"] == "선택"))
@@ -89,9 +91,9 @@ def main() -> int:
                    and any(question["name"] == "facility_type" and question.get("reason") == "허용값이 아닙니다"
                            for question in dict_partial["questions"])))
 
-    combo_reply = {"answers": {"vibrator_used": True}, "text": "15cm 타입2 현장 2유형 붐 재셋팅 없음"}
+    combo_reply = {"answers": {"vibrator_used": True}, "text": "펌프차 32m 15cm 타입2 현장 2유형 붐 재셋팅 없음"}
     combo = fill(state("", inputs=first["inputs"], reply=combo_reply))
-    checks.append(("F11", not combo["questions"] and len(combo["inputs"]) == 8
+    checks.append(("F11", not combo["questions"] and len(combo["inputs"]) == 9
                    and combo["input_sources"]["vibrator_used"] == "선택"
                    and combo["input_sources"]["slump_band"] == "답변"))
 
@@ -103,7 +105,7 @@ def main() -> int:
     checks.append(("F12", resumed_work.get("selection", {}).get("confirmed") is True
                    and resumed_work.get("selection", {}).get("section_no") == "6-1-4"
                    and not resumed_work["questions"] and "status" not in resumed_work
-                   and len(resumed_work["inputs"]) == 8))
+                   and len(resumed_work["inputs"]) == 9))
 
     bad_work = fill({**provisional_state, "reply": {"work": "9-9-9"},
                      "inputs": first_provisional["inputs"],

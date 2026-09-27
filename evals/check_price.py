@@ -106,12 +106,13 @@ def main() -> int:
     first_h1 = client.post("/api/chat", json={"message": question, "basis_date": "2026-06-01"}).json()
     h1 = client.post("/api/chat", json={"thread_id": first_h1["thread_id"], "answers": answers}).json()
     checks.append(("P13 API 기준일 상반기", h1["priced"]["rate_version"]["id"] == "2026H1"
-                   and h1["priced"]["total"] == "14975"))
+                   and h1["priced"]["total_exact"] == "21618.6"
+                   and h1["priced"]["total"] == "21618"))
     first_old = client.post("/api/chat", json={"message": question, "basis_date": "2025-12-01"}).json()
     old = client.post("/api/chat", json={"thread_id": first_old["thread_id"], "answers": answers}).json()
     checks.append(("P14 API 적용 기간 없음", old["status"] == "PARTIAL"
                    and old["priced"]["rate_version"] is None
-                   and old["priced"]["total"] is None
+                   and old["priced"]["total"] == "4464"
                    and "적용 가능한 노임단가 없음" in old["message"]))
 
     for name, passed in checks:
