@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from datetime import date
 from typing import Optional
 from uuid import uuid4
 from pathlib import Path
@@ -42,6 +43,7 @@ class ChatRequest(BaseModel):
     thread_id: Optional[str] = None
     message: Optional[str] = None
     answers: Optional[dict] = None
+    basis_date: Optional[date] = None
 
 
 _FIELD_LABELS = {
@@ -115,6 +117,10 @@ def _status_out(state: dict) -> str:
 
 
 def _message_out(status: str, state: dict) -> str:
+    if status == "PARTIAL":
+        return state.get("reason") or "일위대가의 산정 가능한 금액을 계산했습니다. 미산정 항목은 부분 합계에서 제외했습니다."
+    if status == "OK":
+        return "일위대가 금액 계산이 끝났습니다."
     if status == "COMPUTED":
         return "계산이 끝났습니다. 금액은 다음 단계에서 계산됩니다."
     if status == "BLOCKED":
@@ -202,6 +208,18 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
     }
 
 
+def _priced_out(raw: dict | None) -> dict | None:
+    if raw is None:
+        return None
+    return {**raw,
+            "lines": [{**line, "citations": _citations_out(line["citations"])} for line in raw["lines"]],
+            "cost_lines": [{**line, "citations": _citations_out(line["citations"])}
+                           for line in raw["cost_lines"]],
+            "unpriced": [{**item, "citations": _citations_out(item["citations"])}
+                         for item in raw["unpriced"]],
+            "total_citations": _citations_out(raw["total_citations"])}
+
+
 def _result_out(state: dict, spec: dict | None) -> dict | None:
     status = state.get("status")
     raw = state.get("result")
@@ -209,7 +227,7 @@ def _result_out(state: dict, spec: dict | None) -> dict | None:
         return None
     if status == "BLOCKED":
         return {**raw, "citations": _citations_out(raw.get("citations", []))}
-    if status == "COMPUTED" and spec:
+    if status in ("COMPUTED", "OK", "PARTIAL") and spec:
         return _computed_result_out(raw, spec, state.get("review_status", ""))
     return None
 
@@ -236,6 +254,8 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "inputs": _inputs_out(state, spec),
         "evidence": _evidence_out(state),
         "result": _result_out(state, spec),
+        "priced": _priced_out(state.get("priced")),
+        "basis_date": state.get("basis_date") or date.today().isoformat(),
         "search": _search_out(state),
     }
 
@@ -265,9 +285,12 @@ def chat(payload: ChatRequest) -> dict:
     if config is not None:
         thread_id = payload.thread_id
         resume = payload.answers if payload.answers else (payload.message or "")
-        state = GRAPH.invoke(Command(resume=resume), config)
+        state = GRAPH.invoke(Command(resume=resume,
+                                     update={"basis_date": payload.basis_date.isoformat()}
+                                     if payload.basis_date else None), config)
     else:
         thread_id = uuid4().hex
         config = {"configurable": {"thread_id": thread_id}}
-        state = GRAPH.invoke(new_state(payload.message or ""), config)
+        state = GRAPH.invoke(new_state(payload.message or "", payload.basis_date.isoformat()
+                                       if payload.basis_date else None), config)
     return _build_response(thread_id, state)
