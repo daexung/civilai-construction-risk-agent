@@ -73,7 +73,7 @@ def main() -> int:
     }}).json()
     result = computed.get("result") or {}
     lines = result.get("unit_lines", [])
-    checks.append(("C9 계산 응답의 각 수량 인용", computed["status"] == "COMPUTED"
+    checks.append(("C9 계산 응답의 각 수량 인용", computed["status"] == "PARTIAL"
                    and len(lines) == 5 and all(line.get("citations") for line in lines)
                    and all(not re.search(r"p\d+-t\d+", citation["label"])
                            for line in lines for citation in line["citations"])

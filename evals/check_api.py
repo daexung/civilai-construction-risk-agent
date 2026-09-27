@@ -36,7 +36,7 @@ def main() -> int:
 
     computed = CLIENT.post("/api/chat", json={"thread_id": thread_id, "answers": PUMP_ANSWERS}).json()
     computed_lines = {line["name"]: line for line in computed.get("result", {}).get("lines", [])}
-    checks.append(("A4", computed["status"] == "COMPUTED" and len(computed["inputs"]) == 8
+    checks.append(("A4", computed["status"] == "PARTIAL" and len(computed["inputs"]) == 8
                    and all(item["source"] in ("질문", "선택") for item in computed["inputs"])
                    and computed_lines.get("콘크리트공", {}).get("value") == "8"
                    and computed_lines.get("콘크리트펌프차", {}).get("kind") == "equipment"

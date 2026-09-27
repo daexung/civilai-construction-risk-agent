@@ -96,11 +96,27 @@ def build() -> tuple[dict, dict]:
             changes.append((code, current["name"], percent))
     wages = [Decimal(item["daily"]) for item in h2.values() if item["daily"]]
     arithmetic_mean = (sum(wages) / len(wages)).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    distribution = {"-10% 미만": 0, "-10%~-5%": 0, "-5%~0%": 0,
+                    "0%~5%": 0, "5%~10%": 0, "10% 초과": 0}
+    for _, _, percent in changes:
+        if percent < -10:
+            distribution["-10% 미만"] += 1
+        elif percent < -5:
+            distribution["-10%~-5%"] += 1
+        elif percent < 0:
+            distribution["-5%~0%"] += 1
+        elif percent <= 5:
+            distribution["0%~5%"] += 1
+        elif percent <= 10:
+            distribution["5%~10%"] += 1
+        else:
+            distribution["10% 초과"] += 1
     summary = {"h2_rows": len(h2), "h2_available": len(wages),
                "published_average": published_average,
                "arithmetic_mean_of_available_rates_half_up": str(arithmetic_mean),
                "average_note": "공표 평균은 조사 인원/임금 기반 평균이다. 개별 직종 공표값의 단순 평균과 다르다.",
                "matched_codes_and_names": len(h2), "comparable": len(changes),
+               "change_distribution": distribution,
                "change_percent_min": str(min(change[2] for change in changes).quantize(Decimal("0.01"))),
                "change_percent_max": str(max(change[2] for change in changes).quantize(Decimal("0.01"))),
                "outliers_abs_over_10_percent": [
