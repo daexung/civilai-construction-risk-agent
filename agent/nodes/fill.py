@@ -1,0 +1,157 @@
+"""명세 입력을 규칙으로 읽고 확인할 조건을 한 번에 모은다."""
+
+from __future__ import annotations
+
+import re
+import unicodedata
+from fractions import Fraction
+
+from agent.rules.specs import load_specs
+from agent.state import AgentState
+
+
+def _norm(text: str) -> str:
+    return re.sub(r"\s+", "", unicodedata.normalize("NFKC", text)).casefold()
+
+
+def _type_mentions(query: str, field: dict) -> list[tuple[int, int, str]]:
+    """같은 Type 표현을 중복 세지 않고 원문 위치와 함께 반환한다."""
+    found = []
+    for value in field["allowed_values"]:
+        for spelling in [value, *field.get("synonyms", {}).get(value, [])]:
+            needle = _norm(spelling)
+            for match in re.finditer(re.escape(needle), query):
+                found.append((match.start(), match.end(), value))
+    found.sort(key=lambda hit: (hit[0], -(hit[1] - hit[0])))
+    distinct = []
+    for hit in found:
+        if not any(hit[0] < other[1] and other[0] < hit[1] for other in distinct):
+            distinct.append(hit)
+    return distinct
+
+
+def _enum_matches(query: str, field: dict) -> set[str]:
+    matches = set()
+    for value in field["allowed_values"]:
+        for spelling in [value, *field.get("synonyms", {}).get(value, [])]:
+            needle = _norm(spelling)
+            if needle in query:
+                matches.add(value)
+    return matches
+
+
+def _type_values(query: str, field: dict) -> set[str]:
+    mentions = _type_mentions(query, field)
+    if not mentions:
+        return set()
+    if field["name"] == "site_type":
+        return {value for start, _, value in mentions
+                if re.search(r"(?:현장조건|현장)", query[max(0, start - 8):start])}
+    return {value for start, _, value in mentions
+            if not re.search(r"(?:현장조건|현장)", query[max(0, start - 8):start])}
+
+
+def _volume(query: str) -> tuple[int | Fraction | None, str | None]:
+    # NFKC는 ㎥를 m3로 바꾼다. 한글 단위는 그대로 유지한다.
+    pattern = re.compile(r"(?<![0-9a-z.])(-?\d[\d,]*(?:\.\d+)?)\s*(m3|루베)(?![a-z0-9])", re.I)
+    found = [Fraction(match.group(1).replace(",", "")) for match in pattern.finditer(query)]
+    if len(set(found)) > 1:
+        return None, "물량이 둘 이상입니다"
+    if found:
+        if found[0] <= 0:
+            return None, "물량은 0보다 커야 합니다"
+        return int(found[0]) if found[0].denominator == 1 else found[0], None
+    wrong_unit = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?\s*(?:m2|m|톤)(?![a-z0-9])", query, re.I)
+    if wrong_unit:
+        return None, "물량 단위가 ㎥/m3/루베가 아닙니다"
+    without_options = re.sub(r"타입\d+|\d+유형|\d+(?:~|-)\d+cm|\d+cm", "", query)
+    bare = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?(?![0-9a-z.]|cm|유형)", without_options)
+    if bare:
+        return None, "물량 단위가 없습니다"
+    return None, None
+
+
+def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
+    """질문에서 명시된 값만 찾는다. 모호한 입력은 values에 넣지 않는다."""
+    normalized = _norm(query)
+    values: dict = {}
+    ambiguities: dict[str, str] = {}
+    for field in spec["inputs"]:
+        name = field["name"]
+        if field["type"] == "positive_rational":
+            value, reason = _volume(normalized)
+            if value is not None:
+                values[name] = value
+            elif reason:
+                ambiguities[name] = reason
+        elif field["type"] == "enum":
+            if name in ("facility_type", "site_type"):
+                matches = _type_values(normalized, field)
+            elif name == "reset_status":
+                matches = (_enum_matches(normalized, field)
+                           if re.search(r"재셋팅|리셋팅|이동", normalized) else set())
+            else:
+                matches = _enum_matches(normalized, field)
+            if len(matches) > 1:
+                ambiguities[name] = "서로 다른 선택지가 함께 언급되었습니다"
+            elif matches:
+                values[name] = next(iter(matches))
+        elif name == "vibrator_used":
+            negative = any(term in normalized for term in ("진동기없이", "진동기미사용", "진동기안씀"))
+            positive = any(term in normalized for term in ("진동기사용", "진동기씀"))
+            if negative and positive:
+                ambiguities[name] = "진동기 사용 여부가 서로 다르게 언급되었습니다"
+            elif negative or positive:
+                values[name] = positive
+    return values, ambiguities
+
+
+def _hint(query: str, field: dict, tables: dict) -> dict | None:
+    table = tables[field["decision_table"]]
+    normalized = _norm(query)
+    for value, row in table["values"].items():
+        criterion = row.get("적용기준", "")
+        for part in re.split(r"[,·･，]", criterion):
+            word = part.strip().split(" ")[0]
+            if word and _norm(word) in normalized:
+                return {"value": value, "matched": word}
+    return None
+
+
+def fill(state: AgentState) -> dict:
+    spec_id = state.get("spec_id", "")
+    spec = load_specs()[spec_id] if spec_id else None
+    previous = state.get("inputs", {})
+    inputs = dict(previous)
+    sources = dict(state.get("input_sources", {}))
+    values, ambiguities = extract_inputs(state.get("query", ""), spec) if spec else ({}, {})
+    origin = "답변" if previous else "질문"
+    inputs.update(values)
+    sources.update({name: origin for name in values})
+    questions = []
+    if state.get("selection", {}).get("confirmed") is False:
+        candidates = state.get("candidates", [])
+        questions.append({"name": "work", "ask": "어느 공종으로 계산할까요?",
+                          "choices": [item["section"] for item in candidates],
+                          "default": candidates[0]["section_no"] if candidates else ""})
+    if spec:
+        tables = {table["id"]: table for table in spec["tables"]}
+        for field in spec["inputs"]:
+            name = field["name"]
+            if not field["required"] or (name in inputs and name not in ambiguities):
+                continue
+            question = {"name": name, "ask": field["ask"],
+                        "choices": field["allowed_values"]}
+            if "decision_table" in field:
+                table = tables[field["decision_table"]]
+                question["decision_table"] = table["values"]
+                hint = _hint(state.get("query", ""), field, tables)
+                if hint:
+                    question["hint"] = hint
+            if name in ambiguities:
+                question["reason"] = ambiguities[name]
+            questions.append(question)
+    update = {"inputs": inputs, "input_sources": sources, "questions": questions}
+    if questions:
+        update.update(status="MISSING_INFO", reason="계산에 필요한 조건을 확인해 주세요")
+    return update

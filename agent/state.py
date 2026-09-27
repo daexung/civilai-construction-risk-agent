@@ -16,6 +16,9 @@ class AgentState(TypedDict, total=False):
     candidates: list[dict]  # 후보 절과 제목·점수·명세 여부
     spec_id: str  # 선택된 계산 명세 id
     selection: dict  # 공종 선택 결정과 이유
+    inputs: dict  # 입력 이름에서 값으로의 매핑
+    input_sources: dict  # 입력 이름에서 질문 또는 답변 출처로의 매핑
+    questions: list[dict]  # 한 번에 확인할 질문 목록
 
 
 def new_state(query: str) -> AgentState:
