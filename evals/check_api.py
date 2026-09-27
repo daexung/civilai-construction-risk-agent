@@ -16,7 +16,7 @@ from api.main import app  # noqa: E402
 
 CLIENT = TestClient(app)
 
-PUMP_ANSWERS = {"slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
+PUMP_ANSWERS = {"pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
                 "placement": "붐", "vibrator_used": True, "reset_status": "없음"}
 
 

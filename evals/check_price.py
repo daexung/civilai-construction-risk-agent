@@ -95,7 +95,7 @@ def main() -> int:
 
     client = TestClient(app)
     question = "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"
-    answers = {"slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
+    answers = {"pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
                "placement": "붐", "vibrator_used": True, "reset_status": "없음"}
     first = client.post("/api/chat", json={"message": question}).json()
     response = client.post("/api/chat", json={"thread_id": first["thread_id"], "answers": answers}).json()

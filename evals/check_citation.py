@@ -68,7 +68,7 @@ def main() -> int:
     client = TestClient(app)
     start = client.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"}).json()
     computed = client.post("/api/chat", json={"thread_id": start["thread_id"], "answers": {
-        "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
+        "pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
         "placement": "붐", "vibrator_used": True, "reset_status": "없음",
     }}).json()
     result = computed.get("result") or {}
@@ -90,7 +90,7 @@ def main() -> int:
 
     blocked_start = client.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"}).json()
     blocked = client.post("/api/chat", json={"thread_id": blocked_start["thread_id"], "answers": {
-        "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
+        "pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
         "placement": "붐", "vibrator_used": True, "reset_status": "있음",
     }}).json()
     checks.append(("C11 보류 사유 원문 주석", blocked["status"] == "BLOCKED"

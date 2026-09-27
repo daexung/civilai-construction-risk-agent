@@ -18,7 +18,7 @@ from agent.graph import build_graph  # noqa: E402
 from agent.state import new_state  # noqa: E402
 
 
-QUERY = "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"
+QUERY = "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"
 COMPLETE = "15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 없음"
 
 
@@ -104,7 +104,7 @@ def main() -> int:
     checks.append(("G10", reset_unknown["status"] == "BLOCKED" and not questions(reset_unknown)
                    and reset_unknown["result"]["input"] == "reset_status"))
 
-    graph.invoke(new_state("철근콘크리트 100㎥ 펌프차로 타설"), config("g11"))
+    graph.invoke(new_state("철근콘크리트 100㎥ 32m 펌프차로 타설"), config("g11"))
     case_d = graph.invoke(Command(resume={
         "slump_band": "18㎝이상", "facility_type": "Type-Ⅲ", "site_type": "Type-Ⅲ",
         "placement": "붐", "vibrator_used": True, "reset_status": "없음",
