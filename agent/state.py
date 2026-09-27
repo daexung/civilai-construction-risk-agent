@@ -3,7 +3,8 @@
 from typing import Literal, TypedDict
 
 
-Status = Literal["RUNNING", "OUT_OF_SCOPE", "MISSING_INFO", "EVIDENCE_ONLY", "ERROR", "OK", "PARTIAL"]
+Status = Literal["RUNNING", "OUT_OF_SCOPE", "MISSING_INFO", "EVIDENCE_ONLY", "BLOCKED", "COMPUTED",
+                 "ERROR", "OK", "PARTIAL"]
 
 
 class AgentState(TypedDict, total=False):
@@ -20,6 +21,8 @@ class AgentState(TypedDict, total=False):
     input_sources: dict  # 입력 이름에서 질문 또는 답변 출처로의 매핑
     questions: list[dict]  # 한 번에 확인할 질문 목록
     reply: str  # 마지막 사용자 답
+    review_status: str  # 명세의 검토 상태(예: "미완료")
+    result: dict  # gate·compute의 계산 결과
 
 
 def new_state(query: str) -> AgentState:
