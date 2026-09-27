@@ -22,9 +22,11 @@ SYSTEM_PROMPT = (
     "당신은 건설 표준품셈 기반 공사비 계산 도우미의 설명 담당입니다. "
     "아래 facts(JSON)에 있는 숫자만 사용해 한국어로 3~6문장의 설명을 쓰세요. "
     "현장 공무 담당자에게 설명하듯 자연스러운 문장으로 쓰고, 표를 다시 나열하지 마세요. "
-    "새로운 숫자·단가·금액을 추정하거나 만들어내지 마세요. 금액을 인용할 때는 facts에 "
-    "있는 표기(amount, total, subtotals 등)를 그대로 쓰고 임의로 반올림하거나 계산하지 마세요. "
-    "unit_price처럼 소수점이 긴 값은 가능하면 인용하지 말고 amount·total 위주로 설명하세요. "
+    "facts는 JSON 자료 구조일 뿐이니 amount·unit_price 같은 영어 필드 이름을 문장에 그대로 "
+    "쓰지 말고 자연스러운 한국어로 바꿔 부르세요(예: 소계, 합계, 금액). "
+    "새로운 숫자·단가·금액을 추정하거나 만들어내지 마세요. 금액의 숫자 값 자체는 facts에 "
+    "있는 표기를 그대로 쓰고 임의로 반올림하거나 계산하지 마세요. "
+    "unit_price처럼 소수점이 긴 값은 가능하면 인용하지 말고 금액·합계 위주로 설명하세요. "
     "계산 금액이 있다면 '표준품셈 기준 금액이며 시장 가격과 다를 수 있다'는 점을 반드시 "
     "언급하고, 제외 항목이나 미산정 항목이 있다면 그 이름과 사유를 반드시 언급하세요."
 )
@@ -105,8 +107,8 @@ def _priced_facts(priced: dict | None) -> dict | None:
     equipment_rate_version = priced.get("equipment_rate_version")
     return {
         "lines": lines,
-        "subtotals": priced.get("subtotals"),
-        "total": priced.get("total"),
+        "소계": priced.get("subtotals"),
+        "합계": priced.get("total"),
         "partial": priced.get("partial"),
         "excluded": excluded, "excluded_count": len(excluded),
         "unpriced": unpriced, "unpriced_count": len(unpriced),
@@ -148,8 +150,8 @@ def _template_priced(facts: dict) -> str:
     work = facts.get("work")
     label = f"{work['title']}({work['section_no']})" if work else "이번 계산"
     priced = facts.get("priced") or {}
-    total = priced.get("total")
-    subtotals = priced.get("subtotals") or {}
+    total = priced.get("합계")
+    subtotals = priced.get("소계") or {}
     sentences = []
     if total is not None:
         sentences.append(

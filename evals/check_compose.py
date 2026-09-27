@@ -66,7 +66,7 @@ def main() -> int:
     facts = build_facts(state)
 
     def good_llm(prompt: str, system: str) -> str:
-        return (f"{facts['work']['title']} 계산 결과 합계는 {facts['priced']['total']}원입니다. "
+        return (f"{facts['work']['title']} 계산 결과 합계는 {facts['priced']['합계']}원입니다. "
                 "표준품셈 기준 금액이며 시장 가격과 다를 수 있습니다.")
 
     good = compose(state, generate_fn=good_llm)
