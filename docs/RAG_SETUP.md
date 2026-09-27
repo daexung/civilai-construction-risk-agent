@@ -2,6 +2,7 @@
 
 파싱 → 청킹 → 임베딩 → 검색 순서로 실행한다. 모든 명령은 저장소 루트에서 실행한다.
 생성물은 `data/processed/`에 쓰이며 커밋하지 않는다(`.gitignore`).
+인쇄 쪽 대응표는 `.venv/Scripts/python.exe pipeline/page_map.py`로 `data/processed/page_map.json`을 재생성한다.
 
 ## 1. 환경
 
