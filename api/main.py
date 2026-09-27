@@ -217,8 +217,12 @@ def _priced_out(raw: dict | None) -> dict | None:
                                 for line in raw.get("equipment_lines", [])],
             "cost_lines": [{**line, "citations": _citations_out(line["citations"])}
                            for line in raw["cost_lines"]],
+            "supply_lines": [{**line, "citations": _citations_out(line["citations"])}
+                             for line in raw.get("supply_lines", [])],
             "unpriced": [{**item, "citations": _citations_out(item["citations"])}
                          for item in raw["unpriced"]],
+            "excluded": [{**item, "citations": _citations_out(item["citations"])}
+                        for item in raw.get("excluded", [])],
             "total_citations": _citations_out(raw["total_citations"])}
 
 

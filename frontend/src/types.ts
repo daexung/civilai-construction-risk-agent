@@ -103,7 +103,7 @@ export interface ComputedResult {
 }
 
 export interface PricedLine {
-  kind: 'labor' | 'equipment' | 'rate_cost';
+  kind: 'labor' | 'equipment' | 'rate_cost' | 'equipment_component' | 'supply_component';
   category: string;
   name: string;
   unit?: string;
@@ -121,6 +121,7 @@ export interface PricedLine {
   fuel_l_per_hr?: string;
   fuel_l_per_unit?: string;
   misc_pct_of_fuel?: number;
+  status?: '제외' | '미산정';
 }
 
 export interface PricedResult {
@@ -148,12 +149,14 @@ export interface PricedResult {
   lines: PricedLine[];
   equipment_lines?: PricedLine[];
   cost_lines: PricedLine[];
+  supply_lines?: PricedLine[];
   labor_subtotal: string | null;
   subtotals: Record<'재료비' | '노무비' | '경비', string | null>;
   total_exact: string | null;
   total: string | null;
   total_citations: Citation[];
   unpriced: { name: string; reason: string; category: string | null; citations: Citation[] }[];
+  excluded?: { name: string; reason: string; category: string | null; citations: Citation[] }[];
 }
 
 export interface BlockedResult {

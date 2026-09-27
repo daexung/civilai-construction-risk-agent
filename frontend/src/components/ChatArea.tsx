@@ -229,6 +229,20 @@ function ComputedCard({ work, inputs, result, priced }: {
                 <CitationList citations={price.citations} /></details> : '—'}</td>
             </tr>
           ); })}
+          {priced?.supply_lines?.map((line) => (
+            <tr key={line.name} className={line.status === '제외' ? 'excluded-row' : undefined}>
+              <td>{line.category}</td>
+              <td>{line.name}
+                <span className={`supply-status-badge${line.status === '제외' ? ' excluded' : ''}`}>
+                  {line.status}
+                </span>
+              </td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span>— {line.reason}</span></td>
+            </tr>
+          ))}
           {priced?.cost_lines.map((line) => <tr key={line.name}>
             <td>{line.category}</td><td>{line.name}</td><td>노무비</td>
             <td>{percent(line.rate)}</td><td>{won(priced.labor_subtotal)}</td>

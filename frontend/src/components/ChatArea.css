@@ -459,6 +459,25 @@
   text-align: right;
 }
 
+.excluded-row {
+  color: var(--text-muted);
+}
+
+.supply-status-badge {
+  margin-left: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.supply-status-badge.excluded {
+  background: var(--border-color);
+  color: var(--text-muted);
+}
+
 .unit-quantity summary {
   cursor: pointer;
   font-variant-numeric: tabular-nums;
