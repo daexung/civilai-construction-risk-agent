@@ -15,7 +15,8 @@
         "site_type": "Type-Ⅱ",
         "placement": "붐",
         "vibrator_used": true,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "computed",
@@ -47,7 +48,8 @@
         "site_type": "Type-Ⅱ",
         "placement": "붐",
         "vibrator_used": false,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "computed",
@@ -79,7 +81,8 @@
         "site_type": "Type-Ⅰ",
         "placement": "배관",
         "vibrator_used": true,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "computed",
@@ -111,7 +114,8 @@
         "site_type": "Type-Ⅲ",
         "placement": "붐",
         "vibrator_used": true,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "computed",
@@ -143,7 +147,8 @@
         "site_type": "Type-Ⅱ",
         "placement": "붐",
         "vibrator_used": true,
-        "reset_status": "있음"
+        "reset_status": "있음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "blocked",
@@ -186,7 +191,8 @@
         "facility_type": "Type-Ⅱ",
         "site_type": "Type-Ⅱ",
         "placement": "붐",
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "ask",
@@ -210,7 +216,8 @@
         "site_type": "Type-Ⅱ",
         "placement": "붐",
         "vibrator_used": true,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "ask",
@@ -280,7 +287,8 @@
         "site_type": "Type-Ⅱ",
         "placement": "붐",
         "vibrator_used": true,
-        "reset_status": "모름"
+        "reset_status": "모름",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "blocked",

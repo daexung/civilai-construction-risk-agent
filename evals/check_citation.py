@@ -69,7 +69,7 @@ def main() -> int:
     start = client.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"}).json()
     computed = client.post("/api/chat", json={"thread_id": start["thread_id"], "answers": {
         "pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
-        "placement": "붐", "vibrator_used": True, "reset_status": "없음",
+        "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",
     }}).json()
     result = computed.get("result") or {}
     lines = result.get("unit_lines", [])
@@ -91,7 +91,7 @@ def main() -> int:
     blocked_start = client.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"}).json()
     blocked = client.post("/api/chat", json={"thread_id": blocked_start["thread_id"], "answers": {
         "pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
-        "placement": "붐", "vibrator_used": True, "reset_status": "있음",
+        "placement": "붐", "vibrator_used": True, "reset_status": "있음", "concrete_supply": "관급",
     }}).json()
     checks.append(("C11 보류 사유 원문 주석", blocked["status"] == "BLOCKED"
                    and any("회당 \n시공량의 5%" in (c["quote"] or "")

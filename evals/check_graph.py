@@ -19,7 +19,7 @@ from agent.state import new_state  # noqa: E402
 
 
 QUERY = "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"
-COMPLETE = "15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 없음"
+COMPLETE = "15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 없음 레미콘 관급"
 
 
 def config(thread_id: str) -> dict:
@@ -46,25 +46,25 @@ def main() -> int:
     first_questions = questions(initial)
     facility = next((item for item in first_questions if item["name"] == "facility_type"), {})
     completed = graph.invoke(Command(resume=COMPLETE), config("g3"))
-    checks.append(("G3", len(first_questions) == 6
+    checks.append(("G3", len(first_questions) == 7
                    and facility.get("hint") == {"value": "Type-Ⅱ", "matched": "벽"}
                    and completed["status"] == "PARTIAL" and not questions(completed)
-                   and len(completed["inputs"]) == 9
+                   and len(completed["inputs"]) == 10
                    and completed["result"]["person_days"]["콘크리트공"] == "8"
                    and completed["result"]["equipment_days"]["콘크리트펌프차"] == "2"))
 
     graph.invoke(new_state(QUERY), config("g4"))
     partial = graph.invoke(Command(resume="15cm 붐"), config("g4"))
     remaining = questions(partial)
-    finished = graph.invoke(Command(resume="타입2 현장 2유형 진동기 사용 재셋팅 없음"), config("g4"))
-    checks.append(("G4", len(remaining) == 4 and not questions(finished)
-                   and len(finished["inputs"]) == 9 and finished["status"] == "PARTIAL"))
+    finished = graph.invoke(Command(resume="타입2 현장 2유형 진동기 사용 재셋팅 없음 레미콘 관급"), config("g4"))
+    checks.append(("G4", len(remaining) == 5 and not questions(finished)
+                   and len(finished["inputs"]) == 10 and finished["status"] == "PARTIAL"))
 
     graph.invoke(new_state(QUERY), config("g5a"))
     other = graph.invoke(new_state("오늘 현장 날씨 어때?"), config("g5b"))
     saved_a = graph.get_state(config("g5a"))
     saved_b = graph.get_state(config("g5b"))
-    checks.append(("G5", len(saved_a.values["questions"]) == 6
+    checks.append(("G5", len(saved_a.values["questions"]) == 7
                    and saved_a.values["query"] == QUERY
                    and saved_b.values["query"] == "오늘 현장 날씨 어때?"
                    and saved_b.values["status"] == "OUT_OF_SCOPE"
@@ -81,33 +81,35 @@ def main() -> int:
     graph.invoke(new_state(QUERY), config("g7"))
     dict_completed = graph.invoke(Command(resume={"slump_band": "15㎝", "facility_type": "Type-Ⅱ",
                                                   "site_type": "Type-Ⅱ", "placement": "붐",
-                                                  "vibrator_used": True, "reset_status": "없음"}), config("g7"))
+                                                  "vibrator_used": True, "reset_status": "없음",
+                                                  "concrete_supply": "관급"}), config("g7"))
     checks.append(("G7", not questions(dict_completed) and dict_completed["status"] == "PARTIAL"
-                   and len(dict_completed["inputs"]) == 9
+                   and len(dict_completed["inputs"]) == 10
                    and dict_completed["input_sources"]["vibrator_used"] == "선택"))
 
     graph.invoke(new_state(QUERY), config("g8"))
     bad_dict_result = graph.invoke(Command(resume={"slump_band": "15㎝", "facility_type": "Type-X",
                                                    "site_type": "Type-Ⅱ", "placement": "붐",
-                                                   "vibrator_used": True, "reset_status": "없음"}), config("g8"))
+                                                   "vibrator_used": True, "reset_status": "없음",
+                                                   "concrete_supply": "관급"}), config("g8"))
     bad_questions = questions(bad_dict_result)
     checks.append(("G8", any(question["name"] == "facility_type" and question.get("reason")
                              for question in bad_questions)))
 
     graph.invoke(new_state(QUERY), config("g9"))
-    reset_present = graph.invoke(Command(resume="15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 있음"), config("g9"))
+    reset_present = graph.invoke(Command(resume="15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 있음 레미콘 관급"), config("g9"))
     checks.append(("G9", reset_present["status"] == "BLOCKED" and not questions(reset_present)
                    and reset_present["result"]["input"] == "reset_status"))
 
     graph.invoke(new_state(QUERY), config("g10"))
-    reset_unknown = graph.invoke(Command(resume="15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 모름"), config("g10"))
+    reset_unknown = graph.invoke(Command(resume="15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 모름 레미콘 관급"), config("g10"))
     checks.append(("G10", reset_unknown["status"] == "BLOCKED" and not questions(reset_unknown)
                    and reset_unknown["result"]["input"] == "reset_status"))
 
     graph.invoke(new_state("철근콘크리트 100㎥ 32m 펌프차로 타설"), config("g11"))
     case_d = graph.invoke(Command(resume={
         "slump_band": "18㎝이상", "facility_type": "Type-Ⅲ", "site_type": "Type-Ⅲ",
-        "placement": "붐", "vibrator_used": True, "reset_status": "없음",
+        "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",
     }), config("g11"))
     checks.append(("G11", case_d["status"] == "PARTIAL"
                    and case_d["result"]["person_days"]["콘크리트공"] == "125/28"))

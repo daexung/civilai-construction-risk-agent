@@ -14,7 +14,8 @@
         "site_type": "Type-Ⅱ",
         "placement": "붐",
         "vibrator_used": true,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "computed",
@@ -58,7 +59,8 @@
         "site_type": "Type-Ⅱ",
         "placement": "붐",
         "vibrator_used": false,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "computed",
@@ -102,7 +104,8 @@
         "site_type": "Type-Ⅰ",
         "placement": "배관",
         "vibrator_used": true,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "computed",
@@ -146,7 +149,8 @@
         "site_type": "Type-Ⅲ",
         "placement": "붐",
         "vibrator_used": true,
-        "reset_status": "없음"
+        "reset_status": "없음",
+        "concrete_supply": "관급"
       },
       "expected": {
         "status": "computed",
