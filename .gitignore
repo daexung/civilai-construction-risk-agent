@@ -8,6 +8,8 @@ frontend/build/
 
 data/processed/*.jsonl
 data/processed/*.parquet
+data/processed/page_map.json
+data/processed/sources/
 experiments/table_census/results/parsed_all.jsonl
 
 # 파서 비교 실험의 재생성 가능한 산출물(원시 출력·렌더링 이미지·쪽 PDF·로그)
