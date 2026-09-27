@@ -178,6 +178,8 @@ export interface ChatResponse {
   evidence: EvidenceItem[];
   result: ComputedResult | BlockedResult | null;
   priced: PricedResult | null;
+  answer: string | null;
+  answer_source: 'llm' | 'template' | null;
   basis_date: string;
   search: SearchInfo;
 }

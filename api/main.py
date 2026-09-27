@@ -261,6 +261,8 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "evidence": _evidence_out(state),
         "result": _result_out(state, spec),
         "priced": _priced_out(state.get("priced")),
+        "answer": state.get("answer") or None,
+        "answer_source": state.get("answer_source") or None,
         "basis_date": state.get("basis_date") or date.today().isoformat(),
         "search": _search_out(state),
     }

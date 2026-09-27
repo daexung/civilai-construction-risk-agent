@@ -330,7 +330,16 @@ function AssistantCard({
         <span className="status-badge">{STATUS_LABEL[response.status]}</span>
         {response.work && <span className="work-badge">{response.work.title}</span>}
       </div>
-      <div className="assistant-text">{response.message}</div>
+      {response.answer ? (
+        <div className="assistant-answer">
+          <span className={`answer-source-badge${response.answer_source === 'llm' ? ' llm' : ''}`}>
+            {response.answer_source === 'llm' ? 'AI 설명' : '기본 설명'}
+          </span>
+          <div className="assistant-text">{response.answer}</div>
+        </div>
+      ) : (
+        <div className="assistant-text">{response.message}</div>
+      )}
 
       {response.status === 'EVIDENCE_ONLY' && <EvidenceList items={response.evidence} />}
 
