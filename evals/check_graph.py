@@ -121,6 +121,14 @@ def main() -> int:
         compute_module.load_specs = original_load_specs
     checks.append(("G12", unregistered["status"] == "ERROR" and "no_such_calculator" in unregistered["reason"]))
 
+    unit_lines = {line["name"]: line for line in completed["result"].get("unit_lines", [])}
+    checks.append(("G13", completed["result"].get("unit_basis") == {
+        "per": "1㎥", "daily_output": "130", "places": 4,
+        "adjustable_note": "1-2-8은 조정 가능 조항. 기본 자릿수 적용",
+    } and unit_lines.get("콘크리트공", {}).get("exact") == "2/65"
+                   and unit_lines.get("콘크리트공", {}).get("applied") == "0.0308"
+                   and unit_lines.get("콘크리트펌프차", {}).get("applied") == "0.0615"))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

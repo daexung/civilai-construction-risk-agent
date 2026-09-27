@@ -180,6 +180,8 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
             "formula": f"{work_provenance['quantity']} ÷ {raw['daily_volume_m3']}",
         },
         "lines": lines,
+        "unit_lines": raw["unit_lines"],
+        "unit_basis": raw["unit_basis"],
         "not_calculated": raw["not_calculated"],
         "review_status": review_status,
     }

@@ -55,6 +55,13 @@ def main() -> int:
     checks.append(("A7", blocked["status"] == "BLOCKED" and blocked["result"]["input"] == "reset_status"
                    and bool(blocked["result"]["source"]) and blocked["message"] == blocked["result"]["reason"]))
 
+    unit_lines = {line["name"]: line for line in computed["result"].get("unit_lines", [])}
+    checks.append(("A8", computed["result"].get("unit_basis", {}).get("per") == "1㎥"
+                   and computed["result"]["unit_basis"]["places"] == 4
+                   and unit_lines.get("콘크리트공", {}).get("applied") == "0.0308"
+                   and unit_lines.get("콘크리트펌프차", {}).get("exact") == "4/65"
+                   and computed_lines["콘크리트공"]["value"] == "8"))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")
