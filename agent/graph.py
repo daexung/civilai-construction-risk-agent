@@ -4,6 +4,7 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 
 from agent.nodes.ask import ask
+from agent.nodes.compose import compose
 from agent.nodes.compute import compute
 from agent.nodes.price import price
 from agent.nodes.fill import fill
@@ -16,12 +17,12 @@ from agent.state import AgentState
 
 def _after_route(state: AgentState) -> str:
     # 공사비 범위 밖의 질문은 검색하지 않는다.
-    return "end" if state.get("status") == "OUT_OF_SCOPE" else "retrieve"
+    return "compose" if state.get("status") == "OUT_OF_SCOPE" else "retrieve"
 
 
 def _after_select(state: AgentState) -> str:
     # 계산 명세가 없으면 근거만 남기고 마친다.
-    return "end" if state.get("status") == "EVIDENCE_ONLY" else "fill"
+    return "compose" if state.get("status") == "EVIDENCE_ONLY" else "fill"
 
 
 def _after_fill(state: AgentState) -> str:
@@ -30,13 +31,13 @@ def _after_fill(state: AgentState) -> str:
     if status == "MISSING_INFO":
         return "ask"
     if status == "EVIDENCE_ONLY":
-        return "end"
+        return "compose"
     return "gate"
 
 
 def _after_gate(state: AgentState) -> str:
     # 보류 조건에 걸리면 계산하지 않고 끝낸다.
-    return "end" if state.get("status") == "BLOCKED" else "compute"
+    return "compose" if state.get("status") == "BLOCKED" else "compute"
 
 
 def build_graph(checkpointer=None):
@@ -49,13 +50,15 @@ def build_graph(checkpointer=None):
     graph.add_node("gate", gate)
     graph.add_node("compute", compute)
     graph.add_node("price", price)
+    graph.add_node("compose", compose)
     graph.add_edge(START, "route")
-    graph.add_conditional_edges("route", _after_route, {"end": END, "retrieve": "retrieve"})
+    graph.add_conditional_edges("route", _after_route, {"compose": "compose", "retrieve": "retrieve"})
     graph.add_edge("retrieve", "select")
-    graph.add_conditional_edges("select", _after_select, {"end": END, "fill": "fill"})
-    graph.add_conditional_edges("fill", _after_fill, {"ask": "ask", "end": END, "gate": "gate"})
+    graph.add_conditional_edges("select", _after_select, {"compose": "compose", "fill": "fill"})
+    graph.add_conditional_edges("fill", _after_fill, {"ask": "ask", "compose": "compose", "gate": "gate"})
     graph.add_edge("ask", "fill")
-    graph.add_conditional_edges("gate", _after_gate, {"end": END, "compute": "compute"})
+    graph.add_conditional_edges("gate", _after_gate, {"compose": "compose", "compute": "compute"})
     graph.add_edge("compute", "price")
-    graph.add_edge("price", END)
+    graph.add_edge("price", "compose")
+    graph.add_edge("compose", END)
     return graph.compile(checkpointer=checkpointer if checkpointer is not None else MemorySaver())
