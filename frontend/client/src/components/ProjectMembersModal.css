@@ -1,0 +1,260 @@
+.pm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.pm-modal {
+  background: white;
+  border-radius: 16px;
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+  overflow: hidden;
+}
+
+/* ── 헤더 ── */
+.pm-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+  flex-shrink: 0;
+}
+
+.pm-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 2px;
+}
+
+.pm-subtitle {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+
+.pm-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.15s, background-color 0.15s;
+}
+.pm-close:hover { color: #333; background-color: #f0f0f0; }
+
+/* ── 섹션 공통 ── */
+.pm-section {
+  padding: 16px 20px;
+  border-top: 1px solid #f0f0f0;
+}
+.pm-section:first-of-type { border-top: none; margin-top: 16px; }
+
+.pm-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #3a7d44;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px;
+}
+
+/* ── 멤버 목록 ── */
+.pm-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.pm-loading, .pm-empty {
+  font-size: 13px;
+  color: #aaa;
+  text-align: center;
+  padding: 16px 0;
+}
+
+.pm-member-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: background-color 0.12s;
+}
+.pm-member-row:hover { background-color: #f9f9f9; }
+
+.pm-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #3a7d44;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pm-member-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pm-member-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pm-me-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: #3a7d44;
+  background: #f0f7f1;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.pm-member-email {
+  font-size: 12px;
+  color: #888;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pm-role-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.pm-role-badge.owner  { background: #f0f7f1; color: #3a7d44; }
+.pm-role-badge.member { background: #f3f4f6; color: #6b7280; }
+
+.pm-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.15s, background-color 0.15s;
+}
+.pm-remove-btn:hover:not(:disabled) { color: #e55; background-color: #fee; }
+.pm-remove-btn:disabled { cursor: default; opacity: 0.5; }
+
+/* ── 초대 폼 ── */
+.pm-invite-section {
+  background: #fafafa;
+  border-top: 1px solid #f0f0f0;
+}
+
+.pm-invite-row {
+  display: flex;
+  gap: 6px;
+}
+
+.pm-email-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+  font-family: inherit;
+  min-width: 0;
+  transition: border-color 0.15s;
+}
+.pm-email-input:focus { border-color: #3a7d44; }
+.pm-email-input::placeholder { color: #bbb; }
+
+.pm-role-select {
+  padding: 8px 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #333;
+  background: white;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+.pm-role-select:focus { border-color: #3a7d44; }
+
+.pm-invite-btn {
+  padding: 8px 16px;
+  background: #3a7d44;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+.pm-invite-btn:hover:not(:disabled) { background: #14532d; }
+.pm-invite-btn:disabled { background: #9dc4a3; cursor: not-allowed; }
+
+.pm-invite-error {
+  font-size: 12px;
+  color: #dc2626;
+  margin: 6px 0 0;
+  padding: 0;
+}
+
+/* ── 푸터 ── */
+.pm-footer {
+  padding: 12px 20px 16px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.pm-footer-close {
+  padding: 8px 20px;
+  background: #f3f4f6;
+  color: #444;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.15s;
+}
+.pm-footer-close:hover { background: #e5e7eb; }

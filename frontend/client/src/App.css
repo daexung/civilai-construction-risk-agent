@@ -1,0 +1,95 @@
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.sidebar-open-btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 100;
+  width: 34px;
+  height: 34px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: background-color 0.15s;
+}
+
+.sidebar-open-btn:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.empty-state-inner {
+  text-align: center;
+}
+
+.empty-project-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.empty-hint-text {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ── 모바일 사이드바 오버레이 ── */
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 300;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 299;
+  }
+
+  .sidebar-open-btn {
+    display: flex;
+  }
+
+  .agent-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .message {
+    padding: 0 12px;
+  }
+
+  .input-area {
+    padding: 12px 12px 24px;
+  }
+
+  .chat-toolbar {
+    padding: 6px 12px 0;
+  }
+}
