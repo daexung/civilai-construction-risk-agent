@@ -123,7 +123,7 @@ def reuse_hybrid(cases: list[dict]) -> list[dict]:
 
 
 def classify(expected: str, result: dict) -> str:
-    if result["decision"] == "ask":
+    if result["decision"] in ("ask", "provisional"):
         return "ask"
     chosen = result["candidates"][0]["section_no"]
     return "correct" if chosen == expected else "wrong"
@@ -132,15 +132,18 @@ def classify(expected: str, result: dict) -> str:
 def evaluate(mode: str, rows: list[dict], specs: dict) -> list[tuple]:
     trials = []
     ambiguous = sum(row["expect"] == "ask" for row in rows)
-    print(f"\n{mode}: MARGIN | correct | wrong | ask | ambiguous ask")
+    print(f"\n{mode}: MARGIN | correct | wrong | ask | ambiguous ask | provisional top correct")
     for margin in MARGINS:
         outcomes = [(row, decide(row["hits"], specs, margin)) for row in rows]
         counts = {label: sum(classify(row["expect"], result) == label for row, result in outcomes)
                   for label in ("correct", "wrong", "ask")}
-        ambiguous_ask = sum(result["decision"] == "ask" for row, result in outcomes
+        ambiguous_ask = sum(result["decision"] in ("ask", "provisional") for row, result in outcomes
                             if row["expect"] == "ask")
+        provisional = [(row, result) for row, result in outcomes if result["decision"] == "provisional"]
+        top_correct = sum(result["candidates"][0]["section_no"] == row["expect"]
+                          for row, result in provisional)
         trials.append((margin, counts, outcomes))
-        print(f"{margin:g} | {counts['correct']} | {counts['wrong']} | {counts['ask']} | {ambiguous_ask}/{ambiguous}")
+        print(f"{margin:g} | {counts['correct']} | {counts['wrong']} | {counts['ask']} | {ambiguous_ask}/{ambiguous} | {top_correct}/{len(provisional)}")
     return trials
 
 

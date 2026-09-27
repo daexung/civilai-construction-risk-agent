@@ -27,13 +27,14 @@ def decide(hits: list[dict], specs: dict[str, list[dict]], margin: float = MARGI
 
     first = candidates[0]
     second = candidates[1] if len(candidates) > 1 else None
-    if second and first["score"] <= margin * second["score"]:
-        return {"decision": "ask", "candidates": candidates,
-                "reason": f"상위 절 {first['section_no']}와 {second['section_no']}의 검색 점수가 비슷합니다"}
+    if second and first["score"] < margin * second["score"]:
+        return {"decision": "provisional", "confirmed": False, "candidates": candidates,
+                "reason": f"상위 절 {first['section_no']}와 {second['section_no']}의 검색 점수가 비슷합니다",
+                "spec_id": specs[first["section_no"]][0]["id"] if first["has_spec"] else ""}
     if not first["has_spec"]:
-        return {"decision": "no_spec", "candidates": candidates,
+        return {"decision": "no_spec", "confirmed": True, "candidates": candidates,
                 "reason": f"{first['section_no']} 절의 계산 명세가 없습니다"}
-    return {"decision": "chosen", "candidates": candidates,
+    return {"decision": "chosen", "confirmed": True, "candidates": candidates,
             "reason": f"{first['section_no']} 절의 검색 점수가 가장 높습니다",
             "spec_id": specs[first["section_no"]][0]["id"]}
 
@@ -42,8 +43,9 @@ def select(state: AgentState) -> dict:
     result = decide(state["hits"], specs_by_section())
     decision = result["decision"]
     update = {"candidates": result["candidates"],
-              "selection": {"decision": decision, "reason": result["reason"]}}
-    if decision == "chosen":
+              "selection": {"decision": decision, "confirmed": result.get("confirmed", False),
+                            "reason": result["reason"]}}
+    if decision in ("chosen", "provisional"):
         update["spec_id"] = result["spec_id"]
     elif decision == "ask":
         names = ", ".join(item["section"] for item in result["candidates"])
