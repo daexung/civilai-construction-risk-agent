@@ -56,6 +56,27 @@ export interface ResultLine {
   crew: string | null;
   rules: string[];
   source: string;
+  citations: Citation[];
+}
+
+export interface Citation {
+  code: string;
+  division: string | null;
+  section_no: string;
+  section_title: string;
+  section: string;
+  subsection: string | null;
+  item: string;
+  row: string | null;
+  column: string | null;
+  value: string | null;
+  pdf_page: number;
+  printed_page: number | null;
+  quote: string | null;
+  internal_id: string;
+  label: string;
+  image_url?: string;
+  reason?: string;
 }
 
 export interface UnitLine {
@@ -68,15 +89,16 @@ export interface UnitLine {
   formula: string;
   rule: string;
   source: string;
+  citations: Citation[];
 }
 
 export interface ComputedResult {
-  daily_volume: { value: string; unit: string; formula: string; sources: string[] };
+  daily_volume: { value: string; unit: string; formula: string; sources: string[]; citations: Citation[] };
   work_days: { value: string; formula: string };
   lines: ResultLine[];
   unit_lines: UnitLine[];
   unit_basis: { per: string; daily_output: string; places: number; adjustable_note: string };
-  not_calculated: { item: string; source: string }[];
+  not_calculated: { item: string; source: string; citations: Citation[] }[];
   review_status: string;
 }
 
@@ -84,6 +106,7 @@ export interface BlockedResult {
   reason: string;
   source: string;
   input: string;
+  citations: Citation[];
 }
 
 export type ChatStatus = 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR';

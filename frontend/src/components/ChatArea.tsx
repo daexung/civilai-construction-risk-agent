@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, ComputedResult } from '../types';
+import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult } from '../types';
 import './ChatArea.css';
 
 interface Props {
@@ -118,6 +118,37 @@ function EvidenceList({ items }: { items: ChatResponse['evidence'] }) {
   );
 }
 
+function CitationList({ citations }: { citations: Citation[] }) {
+  const [openImage, setOpenImage] = useState<Citation | null>(null);
+  return (
+    <div className="citation-list">
+      {citations.map((citation, index) => (
+        <div className="citation-item" key={`${citation.internal_id}-${index}`}>
+          <div className="citation-label">
+            {citation.quote ? citation.label.split('\n').slice(0, 2).join('\n') : citation.label}
+          </div>
+          {citation.quote && <blockquote><strong>{citation.item}</strong> “{citation.quote}”</blockquote>}
+          {citation.reason && <div>{citation.reason}</div>}
+          {citation.image_url && <button type="button" className="source-image-button"
+            onClick={() => setOpenImage(citation)}>원문 보기</button>}
+          <details className="citation-internal"><summary>자세히</summary>
+            <small>내부 ID: {citation.internal_id} · PDF {citation.pdf_page}쪽</small>
+          </details>
+        </div>
+      ))}
+      {openImage?.image_url && <div className="source-modal-backdrop" role="presentation"
+        onClick={() => setOpenImage(null)}>
+        <div className="source-modal" role="dialog" aria-modal="true" aria-label="표 원문"
+          onClick={(event) => event.stopPropagation()}>
+          <div className="source-modal-header"><strong>표 원문 · PDF {openImage.pdf_page}쪽</strong>
+            <button type="button" onClick={() => setOpenImage(null)} aria-label="닫기">닫기</button></div>
+          <img src={openImage.image_url} alt={`${openImage.section_no} ${openImage.subsection ?? ''} 표 원문`} />
+        </div>
+      </div>}
+    </div>
+  );
+}
+
 function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult }) {
   const notReviewed = result.review_status !== '완료';
   const conditionNames = ['structure', 'slump_band', 'facility_type', 'site_type', 'placement', 'vibrator_used'];
@@ -140,12 +171,12 @@ function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; in
               <td>{line.kind === 'labor' ? '노무' : '장비'}</td>
               <td>{line.name}</td>
               <td>{line.unit}</td>
-              <td><details className="unit-quantity" title={`${line.formula} = ${line.exact}; ${line.rule}; ${line.source}`}>
+              <td><details className="unit-quantity" title={`${line.formula} = ${line.exact}; ${line.rule}`}>
                 <summary>{line.applied}</summary>
                 <div>산식: {line.formula}</div>
                 <div>정확한 값: {line.exact}</div>
                 <div>자릿수: {line.rule}</div>
-                <div>원문 출처: {line.source}</div>
+                <CitationList citations={line.citations} />
               </details></td>
               <td>—</td><td>—</td>
             </tr>
@@ -167,12 +198,13 @@ function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; in
           <tbody>{result.lines.map((line) => <tr key={line.name}>
             <td>{line.kind === 'labor' ? '노무' : '장비'}</td><td>{line.name}</td><td>{line.value}</td>
             <td>{line.unit}</td><td>{line.crew ?? '1대'}</td>
-            <td>{line.rules.length > 0 ? line.rules.join('; ') : '—'}</td>
+            <td>{line.rules.length > 0 ? '인원 조정 적용' : '—'}</td>
           </tr>)}</tbody>
         </table>
-        <div className="source-list">
-          {result.daily_volume.sources.map((source, i) => <div key={`d${i}`}>{source}</div>)}
-          {result.lines.map((line) => <div key={line.name}>{line.name}: {line.source}</div>)}
+        <div className="source-list"><strong>일당시공량 출처</strong>
+          <CitationList citations={result.daily_volume.citations} />
+          {result.lines.map((line) => <div key={line.name}><strong>{line.name} 작업조·조정 근거</strong>
+            <CitationList citations={line.citations} /></div>)}
         </div>
       </details>
 
@@ -189,7 +221,7 @@ function ComputedCard({ work, inputs, result }: { work: ChatResponse['work']; in
 function BlockedCard({ result }: { result: BlockedResult }) {
   return (
     <div className="blocked-card">
-      <p className="blocked-source">원문 출처: {result.source}</p>
+      <CitationList citations={result.citations} />
       <p className="blocked-hint">{BLOCKED_HINTS[result.input] ?? `${result.input} 값을 바꾸면 계산될 수 있습니다.`}</p>
     </div>
   );
