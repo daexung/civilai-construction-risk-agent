@@ -1,0 +1,20 @@
+{
+  "id": "1-2-2_amount_units",
+  "title": "금액의 단위표준",
+  "description": "설계서와 일위대가표의 금액은 표의 자리 미만을 버린다. 이번 일위대가표 금액란에는 0.1원, 계금에는 1원 기준을 적용한다.",
+  "source": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)",
+  "cite": {"section_no": "1-2-2", "subsection_no": "2", "pdf_page": 62, "item": "금액의 단위표준"},
+  "method": "미만버림",
+  "rules": [
+    {"item": "설계서의 총액", "unit": "원", "truncate_below": "1000"},
+    {"item": "설계서의 소계", "unit": "원", "truncate_below": "1"},
+    {"item": "설계서의 금액란", "unit": "원", "truncate_below": "1"},
+    {"item": "일위대가표의 계금", "unit": "원", "truncate_below": "1"},
+    {"item": "일위대가표의 금액란", "unit": "원", "truncate_below": "0.1"}
+  ],
+  "small_amount_exception": {
+    "quote": "일위대가표 금액란 또는 기초계산금액에서 소액이 산출되어 공종이 없어질 우려가 있어 소수자리 1자리 \n이하의 산출이 불가피할 경우에는 소수자리의 정도를 조정 계산한다.",
+    "cite": {"section_no": "1-2-2", "subsection_no": "2", "pdf_page": 62, "marker": "[주]"}
+  },
+  "policy": "소액 예외의 적용 여부는 이 명세에서 자동 판정하지 않는다. 기본 자리 미만 버림을 적용하고 정확값을 보존한다."
+}
