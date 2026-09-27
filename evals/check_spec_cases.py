@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
+from agent.tools.calc.unit_rounding import round_quantity, unit_places  # noqa: E402
 
 
 CALCULATORS = {"adjusted_daily_crew": adjusted_daily_crew}
@@ -31,6 +32,26 @@ def differences(case: dict, result: dict, spec: dict) -> list[str]:
     issues = []
     if result.get("status") != expected["status"]:
         return [f"status: 예상 {expected['status']}, 실제 {result.get('status')}"]
+    if "unit_lines" in expected:
+        basis = result.get("unit_basis", {})
+        for key, value in expected["unit_basis"].items():
+            if basis.get(key) != value:
+                issues.append(f"unit_basis.{key}: 예상 {value}, 실제 {basis.get(key)}")
+        if not basis.get("adjustable_note"):
+            issues.append("unit_basis.adjustable_note 누락")
+        lines = {line["name"]: line for line in result.get("unit_lines", [])}
+        if set(lines) != set(expected["unit_lines"]):
+            issues.append("unit_lines 항목 불일치")
+        for name, (exact, applied) in expected["unit_lines"].items():
+            line = lines.get(name, {})
+            kind = "equipment" if name == spec["quantity_model"]["params"]["equipment"]["name"] else "labor"
+            unit = "hr/㎥" if kind == "equipment" else "인/㎥"
+            if (line.get("kind") != kind or line.get("unit") != unit
+                    or line.get("exact") != exact or line.get("applied") != applied
+                    or line.get("places") != basis.get("places")
+                    or not all(line.get(field) for field in ("formula", "rule", "source"))):
+                issues.append(f"unit_lines.{name}: 예상 {exact}, {applied}; 실제 {line}")
+        return issues
     status = expected["status"]
     if status == "computed":
         for key in ("daily_volume_m3", "work_days"):
@@ -110,6 +131,18 @@ def main() -> int:
             else:
                 passed += 1
                 print(f"PASS {path.name} {case['id']}")
+        for case in suite.get("unit_places_cases", []):
+            total += 1
+            actual = unit_places(Fraction(case["daily_output"]))
+            ok = actual == case["places"]
+            passed += ok
+            print(f"{'PASS' if ok else 'FAIL'} {path.name} unit_places({case['daily_output']}): {actual}")
+        for case in suite.get("round_quantity_cases", []):
+            total += 1
+            actual = round_quantity(Fraction(case["value"]), case["places"])
+            ok = actual == case["expected"]
+            passed += ok
+            print(f"{'PASS' if ok else 'FAIL'} {path.name} round_quantity({case['value']}): {actual}")
     print(f"통과 {passed} / 전체 {total}")
     return 0 if passed == total else 1
 
