@@ -3,7 +3,7 @@
 from typing import Literal, TypedDict
 
 
-Status = Literal["RUNNING", "OUT_OF_SCOPE", "MISSING_INFO", "ERROR", "OK", "PARTIAL"]
+Status = Literal["RUNNING", "OUT_OF_SCOPE", "MISSING_INFO", "EVIDENCE_ONLY", "ERROR", "OK", "PARTIAL"]
 
 
 class AgentState(TypedDict, total=False):
@@ -13,8 +13,11 @@ class AgentState(TypedDict, total=False):
     answer: str  # 최종 답변
     hits: list[dict]  # 검색된 청크
     search_info: dict  # 검색 방식과 경고
-    candidates: list[str]  # 여러 카드가 걸렸을 때 후보 id
+    candidates: list[dict]  # 후보 절과 제목·점수·명세 여부
+    spec_id: str  # 선택된 계산 명세 id
+    selection: dict  # 공종 선택 결정과 이유
 
 
 def new_state(query: str) -> AgentState:
-    return {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [], "search_info": {}, "candidates": []}
+    return {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [], "search_info": {},
+            "candidates": [], "spec_id": "", "selection": {}}
