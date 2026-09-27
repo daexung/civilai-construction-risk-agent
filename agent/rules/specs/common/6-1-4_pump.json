@@ -232,6 +232,30 @@
       "required": true,
       "ask": "펌프차 타설범위를 넘어 이동·재셋팅이 필요합니까? (없음 / 있음 / 모름)",
       "source": "PDF 187쪽 3. 일일시공량 [주] ② 뒤 ※"
+    },
+    {
+      "name": "concrete_supply",
+      "type": "enum",
+      "allowed_values": [
+        "관급",
+        "사급"
+      ],
+      "unit": null,
+      "required": true,
+      "ask": "레미콘은 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+      "source": "관급/사급 구분과 처리 방식은 실무 확인 전 — docs/ADVISOR_QUESTIONS.md 참고",
+      "synonyms": {
+        "관급": [
+          "관급자재",
+          "지급자재",
+          "발주처 지급"
+        ],
+        "사급": [
+          "사급자재",
+          "시공사 구매",
+          "자체 구매"
+        ]
+      }
     }
   ],
   "tables": [
@@ -518,15 +542,6 @@
       ]
     },
     {
-      "item": "레미콘(콘크리트) 재료비",
-      "source": "PDF 186쪽 1. 적용범위 및 2. 인력편성; 기본 품량만 계산",
-      "cite": {
-        "section_no": "6-1-4",
-        "subsection_no": "1",
-        "marker": "가."
-      }
-    },
-    {
       "item": "공통 정책 1-2-9 소규모 적용",
       "source": "공통부문 1-2-9; 이번 범위는 PDF 186~187쪽 6-1-4의 기본 품량",
       "cite": {
@@ -541,6 +556,29 @@
         "section_no": "6-1-4",
         "subsection_no": "1",
         "marker": "사."
+      }
+    }
+  ],
+  "supply_rules": [
+    {
+      "item": "레미콘(콘크리트) 재료비",
+      "input": "concrete_supply",
+      "category": "재료비",
+      "when": {
+        "관급": {
+          "status": "제외",
+          "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+        },
+        "사급": {
+          "status": "미산정",
+          "reason": "지역별 레미콘 단가 미입력"
+        }
+      },
+      "source": "PDF 186쪽 1. 적용범위 및 2. 인력편성; 관급/사급 구분과 처리 방식은 실무 확인 전 — docs/ADVISOR_QUESTIONS.md",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "1",
+        "marker": "가."
       }
     }
   ],

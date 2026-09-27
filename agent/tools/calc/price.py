@@ -270,6 +270,24 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
         unpriced.append({"name": item["item"], "reason": "이번 계산 범위에서 미산정",
                          "category": None, "citations": resolve_cites(item.get("cite"))})
 
+    supply_lines = []
+    excluded = []
+    for rule in spec.get("supply_rules", []):
+        value = (inputs or {}).get(rule["input"])
+        citations = resolve_cites(rule.get("cite"))
+        outcome = rule["when"].get(value)
+        if outcome is None:
+            status, reason = "미산정", f"{rule['input']} 미입력"
+        else:
+            status, reason = outcome["status"], outcome["reason"]
+        supply_lines.append({"kind": "supply_component", "category": rule.get("category"),
+                             "name": rule["item"], "status": status, "unit_price": None,
+                             "amount": None, "amount_exact": None, "reason": reason,
+                             "citations": citations})
+        entry = {"name": rule["item"], "reason": reason, "category": rule.get("category"),
+                 "citations": citations}
+        (excluded if status == "제외" else unpriced).append(entry)
+
     subtotals = {category: _money(sum(values, Decimal("0")) if values else None, 1)
                  for category, values in category_values.items()}
     total_exact = sum((value for values in category_values.values() for value in values), Decimal("0"))
@@ -279,12 +297,12 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
             "rate_version": _version_info(rate_version),
             "equipment_rate_version": _equipment_version_info(equipment_version),
             "lines": rows, "equipment_lines": equipment_lines,
-            "cost_lines": costs,
+            "cost_lines": costs, "supply_lines": supply_lines,
             "labor_subtotal": _money(labor_subtotal, 1), "subtotals": subtotals,
             "total_exact": _money(total_exact, 1) if has_amount else None,
             "total": _money(_truncate(total_exact, "1"), 0) if has_amount else None,
             "total_citations": [total_rule] if has_amount else [],
-            "unpriced": unpriced,
+            "unpriced": unpriced, "excluded": excluded,
             "rounding_policy": {"source": _amount_rules()["source"],
                                 "line": "0.1원 미만버림", "total": "1원 미만버림",
                                 "small_amount_exception": _amount_rules()["small_amount_exception"]}}
