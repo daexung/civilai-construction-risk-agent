@@ -174,7 +174,7 @@ function ComputedCard({ work, inputs, result, priced }: {
 }) {
   const notReviewed = result.review_status !== '완료';
   const priceByName = new Map(priced?.lines.map((line) => [line.name, line]) ?? []);
-  const conditionNames = ['structure', 'slump_band', 'facility_type', 'site_type', 'placement', 'vibrator_used'];
+  const conditionNames = ['structure', 'slump_band', 'facility_type', 'site_type', 'placement', 'vibrator_used', 'pump_size'];
   const conditions = inputs.filter((item) => conditionNames.includes(item.name))
     .map((item) => `${item.label} ${choiceLabel(item.value)}`).join(' · ');
   return (
@@ -194,6 +194,23 @@ function ComputedCard({ work, inputs, result, priced }: {
         <tbody>
           {result.unit_lines.map((line) => {
             const price = priceByName.get(line.name);
+            if (line.kind === 'equipment' && priced?.equipment_lines?.length) {
+              return <React.Fragment key={line.name}>{priced.equipment_lines.map((part) =>
+                <tr key={part.name}>
+                  <td>{part.category}</td>
+                  <td>기계경비 · {part.name}{part.machine_spec && <small> ({part.machine_spec})</small>}</td>
+                  <td>{line.unit}</td>
+                  <td><details className="unit-quantity"><summary>{line.applied}</summary>
+                    <div>산식: {line.formula}</div><div>정확한 값: {line.exact}</div>
+                    <CitationList citations={line.citations} /></details></td>
+                  <td>{part.unit_price ? <details className="price-detail"><summary>{won(part.unit_price)}원/hr</summary>
+                    <CitationList citations={part.citations} /></details> : '—'}</td>
+                  <td>{part.amount ? <details className="price-detail"><summary>{won(part.amount)}</summary>
+                    <div>버림 전: {won(part.amount_exact)}원</div>
+                    <CitationList citations={part.citations} /></details> :
+                    <span>— {part.reason}{part.fuel_l_per_unit && ` · 필요 연료 ${part.fuel_l_per_unit}ℓ/㎥`}</span>}</td>
+                </tr>)}</React.Fragment>;
+            }
             return (
             <tr key={line.name}>
               <td>{line.kind === 'labor' ? '노무' : '장비'}</td>

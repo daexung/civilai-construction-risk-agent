@@ -116,6 +116,11 @@ export interface PricedLine {
   amount: string | null;
   reason: string | null;
   citations: Citation[];
+  machine_code?: string;
+  machine_spec?: string;
+  fuel_l_per_hr?: string;
+  fuel_l_per_unit?: string;
+  misc_pct_of_fuel?: number;
 }
 
 export interface PricedResult {
@@ -131,6 +136,7 @@ export interface PricedResult {
     unit: string;
   } | null;
   lines: PricedLine[];
+  equipment_lines?: PricedLine[];
   cost_lines: PricedLine[];
   labor_subtotal: string | null;
   subtotals: Record<'재료비' | '노무비' | '경비', string | null>;

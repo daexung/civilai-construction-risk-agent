@@ -126,6 +126,9 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
                            if re.search(r"재셋팅|리셋팅|이동", normalized) else set())
             else:
                 matches = _enum_matches(normalized, field)
+            if name == "pump_size" and re.search(r"(?<!\d)(?:21|28)(?:m|미터)",
+                                                  unicodedata.normalize("NFKC", query).casefold()):
+                ambiguities[name] = "21m·28m 펌프차는 65~75㎥/hr로 6-1-4의 80㎥/hr 이상 적용범위에 맞지 않습니다"
             if len(matches) > 1:
                 ambiguities[name] = "서로 다른 선택지가 함께 언급되었습니다"
             elif matches:
