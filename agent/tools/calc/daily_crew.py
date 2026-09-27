@@ -81,6 +81,25 @@ def _cell(tables: dict, table_id: str, row: str, column: str) -> tuple[Fraction,
     return value, {"table": table_id, "row": row, "column": column, "value": raw, "source": table["source"]}
 
 
+def check_blocked(spec: dict, inputs: dict) -> dict | None:
+    """명세의 blocked 조건에 걸리면 사유·출처를 돌려주고, 아니면 None. gate와 compute가 함께 쓴다."""
+    by_name = {field["name"]: field for field in spec["inputs"]}
+    validated: dict[str, Any] = {}
+    for name, value in inputs.items():
+        field = by_name.get(name)
+        if field is None or value is None:
+            continue
+        checked, error = _validate(field, value)
+        if error is None:
+            validated[name] = checked
+    for item in spec["blocked"]:
+        condition = item.get("blocked_if")
+        if (condition and condition["input"] in validated
+                and _COMPARISONS[condition["op"]](validated[condition["input"]], condition["value"])):
+            return {"reason": item["reason"], "source": item["source"], "input": condition["input"]}
+    return None
+
+
 def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
     """검사 → 누락 질문 → 보류 판정 → 정확한 기본 품량 순으로 처리한다."""
     fields = spec["inputs"]
@@ -111,10 +130,9 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
             questions.append(question)
         return {"status": "ask", "missing": missing, "questions": questions}
 
-    for item in spec["blocked"]:
-        condition = item.get("blocked_if")
-        if condition and _COMPARISONS[condition["op"]](validated[condition["input"]], condition["value"]):
-            return {"status": "blocked", "reason": item["reason"], "source": item["source"], "input": condition["input"]}
+    blocked = check_blocked(spec, validated)
+    if blocked:
+        return {"status": "blocked", **blocked}
 
     params = spec["quantity_model"]["params"]
     base = params["base_output"]
