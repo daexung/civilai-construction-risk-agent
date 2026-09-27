@@ -53,7 +53,7 @@ def _type_values(query: str, field: dict) -> set[str]:
 
 def _volume(query: str) -> tuple[str | None, str | None]:
     # NFKC는 ㎥를 m3로 바꾼다. 한글 단위는 그대로 유지한다.
-    pattern = re.compile(r"(?<![0-9a-z.])(-?\d[\d,]*(?:\.\d+)?(?:/\d+)?)\s*(m3|루베)(?![a-z0-9])", re.I)
+    pattern = re.compile(r"(?<![0-9a-z.])(-?\d[\d,]*(?:\.\d+)?(?:/\d+)?)\s*(m3|루베)(?![a-z])", re.I)
     found = []
     for match in pattern.finditer(query):
         try:
@@ -200,7 +200,8 @@ def fill(state: AgentState) -> dict:
     if reply and state.get("selection", {}).get("confirmed") is False:
         chosen = _work_choice(reply, state.get("candidates", []))
         if chosen:
-            selection = {**state.get("selection", {}), "decision": "chosen", "confirmed": True}
+            selection = {**state.get("selection", {}), "decision": "chosen", "confirmed": True,
+                         "section_no": chosen["section_no"], "section": chosen["section"]}
             update["selection"] = selection
             available = next((item for item in load_specs().values()
                               if item["section_no"] == chosen["section_no"]), None)

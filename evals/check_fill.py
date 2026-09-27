@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.nodes.fill import fill  # noqa: E402
+from agent.nodes.fill import extract_inputs, fill  # noqa: E402
 from agent.rules.specs import load_specs  # noqa: E402
 from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 
@@ -41,6 +41,7 @@ def main() -> int:
     complete = fill(state(COMPLETE))
     checks.append(("F2", not complete["questions"] and "status" not in complete
                    and len(complete["inputs"]) == 8
+                   and extract_inputs("철근 260㎥ 15cm", SPEC)[0]["volume"] == "260"
                    and complete["inputs"]["facility_type"] == "Type-Ⅱ"
                    and complete["inputs"]["site_type"] == "Type-Ⅱ"
                    and complete["inputs"]["reset_status"] == "없음"))
