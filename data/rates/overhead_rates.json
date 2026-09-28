@@ -547,31 +547,31 @@
         ],
         "formula_rates": [
           {
-            "name": "간접노무비",
+            "name": "산재보험료",
             "rate": "3.56",
             "cell": "BZ63",
             "source_text": "(노) x 3.56"
           },
           {
-            "name": "산재보험료",
+            "name": "건강보험료",
             "rate": "3.595",
             "cell": "AU63",
             "source_text": "(직노) x 3.595"
           },
           {
-            "name": "건강보험료 추가분",
+            "name": "노인장기요양보험료",
             "rate": "13.14",
             "cell": "BD63",
             "source_text": "(건강보험료) x 13.14"
           },
           {
-            "name": "장기요양보험료",
+            "name": "연금보험료",
             "rate": "4.75",
             "cell": "BR63",
             "source_text": "(직노) x 4.75"
           },
           {
-            "name": "건설기계대여대금 지급보증서 발급금액 추가분",
+            "name": "퇴직공제부금비",
             "rate": "2.3",
             "cell": "BZ109",
             "source_text": "(직노) x 2.3"
@@ -1121,31 +1121,31 @@
         ],
         "formula_rates": [
           {
-            "name": "간접노무비",
+            "name": "산재보험료",
             "rate": "3.56",
             "cell": "BY63",
             "source_text": "(노) x 3.56"
           },
           {
-            "name": "산재보험료",
+            "name": "건강보험료",
             "rate": "3.595",
             "cell": "AU63",
             "source_text": "(직노) x 3.595"
           },
           {
-            "name": "건강보험료 추가분",
+            "name": "노인장기요양보험료",
             "rate": "13.14",
             "cell": "BC63",
             "source_text": "(건강보험료) x 13.14"
           },
           {
-            "name": "장기요양보험료",
+            "name": "연금보험료",
             "rate": "4.75",
             "cell": "BQ63",
             "source_text": "(직노) x 4.75"
           },
           {
-            "name": "건설기계대여대금 지급보증서 발급금액 추가분",
+            "name": "퇴직공제부금비",
             "rate": "2.3",
             "cell": "BY109",
             "source_text": "(직노) x 2.3"
@@ -1699,31 +1699,31 @@
         ],
         "formula_rates": [
           {
-            "name": "간접노무비",
+            "name": "산재보험료",
             "rate": "3.56",
             "cell": "BZ51",
             "source_text": "(노) x 3.56"
           },
           {
-            "name": "산재보험료",
+            "name": "건강보험료",
             "rate": "3.595",
             "cell": "AU51",
             "source_text": "(직노) x 3.595"
           },
           {
-            "name": "건강보험료 추가분",
+            "name": "노인장기요양보험료",
             "rate": "13.14",
             "cell": "BD51",
             "source_text": "(건강보험료) x 13.14"
           },
           {
-            "name": "장기요양보험료",
+            "name": "연금보험료",
             "rate": "4.75",
             "cell": "BR51",
             "source_text": "(직노) x 4.75"
           },
           {
-            "name": "건설기계대여대금 지급보증서 발급금액 추가분",
+            "name": "퇴직공제부금비",
             "rate": "2.3",
             "cell": "AU110",
             "source_text": "(직노) x 2.3"
@@ -2273,31 +2273,31 @@
         ],
         "formula_rates": [
           {
-            "name": "간접노무비",
+            "name": "산재보험료",
             "rate": "3.56",
             "cell": "BY51",
             "source_text": "(노) x 3.56"
           },
           {
-            "name": "산재보험료",
+            "name": "건강보험료",
             "rate": "3.595",
             "cell": "AU51",
             "source_text": "(직노) x 3.595"
           },
           {
-            "name": "건강보험료 추가분",
+            "name": "노인장기요양보험료",
             "rate": "13.14",
             "cell": "BC51",
             "source_text": "(건강보험료) x 13.14"
           },
           {
-            "name": "장기요양보험료",
+            "name": "연금보험료",
             "rate": "4.75",
             "cell": "BQ51",
             "source_text": "(직노) x 4.75"
           },
           {
-            "name": "건설기계대여대금 지급보증서 발급금액 추가분",
+            "name": "퇴직공제부금비",
             "rate": "2.3",
             "cell": "AU110",
             "source_text": "(직노) x 2.3"

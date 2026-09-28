@@ -18,6 +18,14 @@ NS = {
     "office_rel": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
 }
 RATES_PATH = ROOT / "data/rates/overhead_rates.json"
+FORMULA_BASES = {
+    "산재보험료": "노",
+    "건강보험료": "직노",
+    "노인장기요양보험료": "건강보험료",
+    "연금보험료": "직노",
+    "퇴직공제부금비": "직노",
+}
+FORMULA_TEXT = re.compile(r"^\(([^)]+)\)\s*[x×]\s*(\d+(?:\.\d+)?)$")
 
 
 def _column_number(label: str) -> int:
@@ -106,6 +114,21 @@ def main() -> int:
     for version in data["versions"].values():
         groups.extend(group for group in version.values() if isinstance(group, dict) and "source_file" in group)
     groups.extend(group for group in data["shared_law_rates"].values())
+
+    for version_id, version in data["versions"].items():
+        for work in ("civil", "architecture"):
+            group = version[work]
+            formulas = group["formula_rates"]
+            names = [item["name"] for item in formulas]
+            if len(formulas) != len(FORMULA_BASES) or set(names) != set(FORMULA_BASES):
+                failures.append(f"{version_id} {work}: 보험료·퇴직공제 항목 이름 누락 또는 중복")
+            for item in formulas:
+                source_text = item.get("source_text", "")
+                match = FORMULA_TEXT.fullmatch(source_text)
+                if not match or match.group(1) != FORMULA_BASES.get(item["name"]):
+                    failures.append(f"{version_id} {work} {item['name']}: 괄호 기준 불일치 ({source_text!r})")
+                elif Decimal(match.group(2)) != Decimal(item["rate"]):
+                    failures.append(f"{version_id} {work} {item['name']}: 원문 요율 불일치 ({source_text!r})")
 
     for group in groups:
         source_file = group["source_file"]
