@@ -84,45 +84,71 @@ def calculate_cost_statement(priced: dict, inputs: dict, basis_date: str | date)
             ["5억 미만", "5억~30억 미만", "30억~100억 미만", "100억 이상"])
 
     lines: list[dict] = []
+    exclusions: list[dict] = []
 
     def add(name: str, category: str, base_name: str, base: int, item: dict | None,
-            *, divisor: int = 100, note: str | None = None, amount: int | None = None) -> int:
-        calc_amount = _rate_amount(base, item["rate"], divisor) if amount is None and item else amount
+            *, status: str = "산정", reason: str | None = None, note: str | None = None,
+            amount: int | None = None, condition_cell: str | None = None) -> int:
+        if status == "산정":
+            calc_amount = _rate_amount(base, item["rate"]) if amount is None and item else amount
+        else:
+            calc_amount = 0 if status == "제외" else None
         lines.append({"name": name, "category": category, "base": base_name, "base_amount": base,
                       "rate": item.get("rate") if item else None, "amount": calc_amount,
                       "source": {"file": rates["source_file"], "cell": item.get("cell") if item else None,
                                  "version": version_id, "effective_from": version["effective_from"]},
-                      "note": note})
+                      "condition_source": {"file": rates["source_file"], "cell": condition_cell}
+                                          if condition_cell else None,
+                      "status": status, "reason": reason, "note": note})
+        if status == "제외":
+            exclusions.append({"name": name, "reason": reason})
         return int(calc_amount or 0)
+
+    def add_total(name: str, category: str, amount: int, base_name: str) -> None:
+        lines.append({"name": name, "category": category, "base": base_name,
+                      "base_amount": amount, "rate": None, "amount": amount,
+                      "source": {"file": "원가계산서 합산", "version": version_id},
+                      "condition_source": None, "status": "산정", "reason": None, "note": None})
 
     lines.extend([
         {"name": "재료비", "category": "재료비", "base": "일위대가표 물량 기준 참고 금액",
          "base_amount": direct_materials, "rate": None, "amount": direct_materials,
-         "source": {"file": "일위대가표", "version": priced.get("rate_version", {}).get("id")}, "note": None},
+         "source": {"file": "일위대가표", "version": priced.get("rate_version", {}).get("id")},
+         "condition_source": None, "status": "산정", "reason": None, "note": None},
         {"name": "직접노무비", "category": "노무비", "base": "일위대가표 물량 기준 참고 금액",
          "base_amount": direct_labor, "rate": None, "amount": direct_labor,
-         "source": {"file": "일위대가표", "version": priced.get("rate_version", {}).get("id")}, "note": None},
+         "source": {"file": "일위대가표", "version": priced.get("rate_version", {}).get("id")},
+         "condition_source": None, "status": "산정", "reason": None, "note": None},
         {"name": "직접경비", "category": "경비", "base": "일위대가표 물량 기준 참고 금액",
          "base_amount": direct_expenses, "rate": None, "amount": direct_expenses,
-         "source": {"file": "일위대가표", "version": priced.get("rate_version", {}).get("id")}, "note": None},
+         "source": {"file": "일위대가표", "version": priced.get("rate_version", {}).get("id")},
+         "condition_source": None, "status": "산정", "reason": None, "note": None},
     ])
 
     indirect_item = _pick(rates["indirect_labor"], scale=indirect_scale, period=duration)
     indirect_labor = add("간접노무비", "노무비", "직접노무비", direct_labor, indirect_item)
     labor_total = direct_labor + indirect_labor
-    labor_base = labor_total
-    health_item = next(item for item in rates["formula_rates"] if item["name"] == "건강보험료 추가분")
-    accident_item = next(item for item in rates["formula_rates"] if item["name"] == "간접노무비")
-    pension_item = next(item for item in rates["formula_rates"] if item["name"] == "장기요양보험료")
-    accident = add("산재보험료", "경비", "직접노무비 + 간접노무비", labor_base, accident_item)
+    add_total("노무비 계", "노무비", labor_total, "직접노무비 + 간접노무비")
+    formulas = {item["name"]: item for item in rates["formula_rates"]}
+    accident = add("산재보험료", "경비", "노무비 계", labor_total, formulas["산재보험료"])
     employment_item = next(item for item in rates["employment_insurance"] if item["minimum_won"] <= scale_basis)
-    employment = add("고용보험료", "경비", "직접노무비 + 간접노무비", labor_base, employment_item)
-    health_item = {**health_item, "rate": "3.595", "cell": next(
-        item["cell"] for item in rates["formula_rates"] if item["name"] == "산재보험료")}
-    health = add("건강보험료", "경비", "직접노무비", direct_labor, health_item)
-    long_term_item = next(item for item in rates["formula_rates"] if item["name"] == "건강보험료 추가분")
-    long_term = add("장기요양보험료", "경비", "건강보험료", health, long_term_item)
-    pension = add("국민연금보험료", "경비", "직접노무비", direct_labor, pension_item)
+    employment = add("고용보험료", "경비", "노무비 계", labor_total, employment_item)
+    short_duration = inputs.get("duration") == "1개월 미만"
+    insurance_reason = "공사기간 1개월 미만 — 원문: 공사기간 1개월(30일) 이상 모든 건설공사"
+    insurance_cell = "AU53" if version_id == "260413" else "AU65"
+    health = add("건강보험료", "경비", "직접노무비", direct_labor, formulas["건강보험료"],
+                 status="제외" if short_duration else "산정",
+                 reason=insurance_reason if short_duration else None,
+                 condition_cell=insurance_cell if short_duration else None)
+    long_term = add("노인장기요양보험료", "경비", "건강보험료", health,
+                    formulas["노인장기요양보험료"],
+                    status="제외" if short_duration else "산정",
+                    reason=insurance_reason if short_duration else None,
+                    condition_cell=insurance_cell if short_duration else None)
+    pension = add("연금보험료", "경비", "직접노무비", direct_labor, formulas["연금보험료"],
+                  status="제외" if short_duration else "산정",
+                  reason=insurance_reason if short_duration else None,
+                  condition_cell=insurance_cell if short_duration else None)
 
     env_kind = {
         "도로": "road", "플랜트": "plant", "지하철": "subway", "철도": "rail",
@@ -137,22 +163,46 @@ def calculate_cost_statement(priced: dict, inputs: dict, basis_date: str | date)
     other_item = _pick(rates["other_expense"], scale=indirect_scale, period=duration)
     other_expense = add("기타경비", "경비", "재료비 + 노무비", direct_materials + labor_total, other_item)
     subcontract_item = next(item for item in rates["subcontract"] if item["minimum_won"] <= scale_basis)
+    professional = contractor == "전문건설업"
+    subcontract_cell = ("BZ" if work == "civil" else "BY") + ("86" if version_id == "260413" else "98")
     subcontract = add("하도급대금 지급보증 수수료", "경비", "직접공사비", direct_total,
-                      subcontract_item)
+                      subcontract_item, status="제외" if professional else "산정",
+                      reason="적용제외: 전문공사" if professional else None,
+                      condition_cell=subcontract_cell if professional else None)
     shared = _rates()["shared_law_rates"][work]
     asbestos = add("석면분담금", "경비", "노무비", labor_total, shared["asbestos"])
     wage_claim = add("임금채권부담금", "경비", "노무비", labor_total, shared["wage_claim"])
 
+    retirement_eligible = scale_basis >= 100_000_000
+    retirement_cell = ("AU113" if version_id == "260413" else
+                       ("BZ112" if work == "civil" else "BY112"))
+    retirement = add("퇴직공제부금비", "경비", "직접노무비", direct_labor,
+                     formulas["퇴직공제부금비"],
+                     status="산정" if retirement_eligible else "제외",
+                     reason=None if retirement_eligible else "추정금액 1억 미만",
+                     condition_cell=None if retirement_eligible else retirement_cell)
+    safety_scale = _threshold_scale(scale_basis, [500_000_000, 5_000_000_000],
+                                    ["5억 미만", "5억~50억 미만", "50억 이상"])
+    safety_kind = ({"플랜트": "특수건설공사", "지하철": "중건설공사", "철도": "중건설공사",
+                    "댐": "중건설공사"}.get(inputs["work_category"], "토목공사")
+                   if work == "civil" else "건축공사")
+    safety_item = _pick(rates["industrial_safety"], scale=safety_scale, kind=safety_kind)
+    safety_eligible = scale_basis >= 20_000_000
+    safety = add("산업안전보건관리비", "경비", "재료비 + 직접노무비",
+                 direct_materials + direct_labor, safety_item,
+                 status="산정" if safety_eligible else "제외",
+                 reason=None if safety_eligible else "총 공사금액 2천만원 미만",
+                 note="기초액은 전체 공사에 1회 계상 — 부분 견적에서 제외(간이)" if safety_eligible else None,
+                 condition_cell=None if safety_eligible else ("DK51" if work == "civil" else "DJ51"))
+
     management_item = _pick(rates["management"], contractor=contractor, scale=contractor_scale)
     expense_total = (direct_expenses + accident + employment + health + long_term + pension
-                     + environment + other_expense + subcontract + asbestos + wage_claim)
+                     + environment + other_expense + subcontract + asbestos + wage_claim
+                     + retirement + safety)
+    add_total("경비 계", "경비", expense_total, "직접경비 + 간접경비")
     net_cost = direct_materials + labor_total + expense_total
-    management = _rate_amount(net_cost, management_item["rate"])
-    lines.append({"name": "일반관리비", "category": "일반관리비", "base": "순공사원가",
-                  "base_amount": net_cost, "rate": management_item["rate"], "amount": management,
-                  "source": {"file": rates["source_file"], "cell": management_item["cell"],
-                             "version": version_id, "effective_from": version["effective_from"]},
-                  "note": None})
+    add_total("순공사원가", "합계", net_cost, "재료비 + 노무비 계 + 경비 계")
+    management = add("일반관리비", "일반관리비", "순공사원가", net_cost, management_item)
     profit_scale = _threshold_scale(scale_basis,
         [5_000_000_000, 30_000_000_000, 100_000_000_000],
         ["50억 미만", "50억~300억 미만", "300억~1000억 미만", "1000억 이상"])
@@ -161,33 +211,31 @@ def calculate_cost_statement(priced: dict, inputs: dict, basis_date: str | date)
     profit = add("이윤", "이윤", "노무비 + 경비 + 일반관리비", profit_base, profit_item)
     total_cost = net_cost + management + profit
     vat = _won(Decimal(total_cost) * Decimal("0.1"))
-
-    exclusions = [
-        {"name": "퇴직공제부금비", "reason": "공사 종류·규모별 요건 확인 전 제외"},
-        {"name": "산업안전보건관리비", "reason": "부분 견적에 기본액을 배분하지 않음. 기본액은 전체 공사에 1회 계상"},
-        {"name": "공사이행보증", "reason": _rates()["unpriced_rules"]["performance_bond"]},
-    ]
-    safety_scale = _threshold_scale(scale_basis, [500_000_000, 5_000_000_000],
-                                    ["5억 미만", "5억~50억 미만", "50억 이상"])
-    safety_kind = ({"플랜트": "특수건설공사", "지하철": "중건설공사", "철도": "중건설공사",
-                    "댐": "중건설공사"}.get(inputs["work_category"], "토목공사")
-                   if work == "civil" else "건축공사")
-    safety_item = _pick(rates["industrial_safety"], scale=safety_scale, kind=safety_kind)
-    exclusions[1]["rate"] = safety_item["rate"]
-    exclusions[1]["source"] = {"file": rates["source_file"], "cell": safety_item["cell"],
-                                 "version": version_id}
+    add_total("총원가", "합계", total_cost, "순공사원가 + 일반관리비 + 이윤")
+    add("부가가치세", "부가가치세", "총원가", total_cost, None, amount=vat)
+    add_total("계약 금액", "합계", total_cost + vat, "총원가 + 부가가치세")
+    add("공사이행보증", "경비", "", 0, None, status="제외",
+        reason=_rates()["unpriced_rules"]["performance_bond"])
+    for item in priced.get("excluded", []):
+        if not any(line["name"] == item.get("name") for line in lines):
+            add(item["name"], item.get("category", "경비"), "", 0, None,
+                status="제외", reason=item.get("reason"))
     unpriced = list(priced.get("unpriced", []))
     if not any(item.get("name") == "건설기계대여대금 지급보증 수수료" for item in unpriced):
         unpriced.append({"name": "건설기계대여대금 지급보증 수수료",
                          "reason": _rates()["unpriced_rules"]["equipment_rental_guarantee"]})
-    partial = bool(unpriced or exclusions or priced.get("partial"))
+    for item in unpriced:
+        if not any(line["name"] == item.get("name") for line in lines):
+            add(item["name"], item.get("category", "경비"), "", 0, None,
+                status="미산정", reason=item.get("reason"))
+    partial = bool(unpriced)
     return {
         "status": "PARTIAL" if partial else "OK", "basis_date": str(basis_date),
         "overhead_version": {"id": version_id, "effective_from": version["effective_from"],
                               "source_files": [rates["source_file"]]},
         "conditions": conditions,
         "basis_notes": [scale_note,
-                        "안전관리비는 요율만 참고했고 기본액은 부분 견적에서 제외했습니다. 전체 공사에 한 번 계상하는 금액입니다."],
+                        "산업안전보건관리비 기초액은 전체 공사에 1회 계상 — 부분 견적에서 제외(간이)."],
         "lines": lines,
         "excluded": exclusions,
         "unpriced": unpriced,
