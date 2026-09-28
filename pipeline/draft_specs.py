@@ -19,6 +19,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from pipeline.validate_drafts import check_citations, chunks_by_id_from_list, file_sha256
+
 ROOT = Path(__file__).resolve().parents[1]
 ORIGINAL_ROOT = Path(r"C:\Users\daeseong\Desktop\PROJECTS\civilai-construction-risk-agent")
 
@@ -34,6 +36,7 @@ DEFAULT_CONFIG = Path(__file__).with_name("draft_specs_config.json")
 EXAMPLE_TARGET = ("공통", "6-1-4")  # 정답이 있는 절: 채점용으로 예시를 빼고 형식 문서만 준다.
 
 CALC_TYPES = {"daily_crew", "per_unit", "rate", "lookup_only", "not_calculable"}
+CALC_TYPE_ALIASES = {"adjusted_daily_crew": "daily_crew"}  # 모델이 계산 함수 이름을 그대로 답하는 경우 정규화
 REQUIRED_DRAFT_FIELDS = {"id", "edition", "division", "section_no", "title", "work", "review",
                           "source_pages", "inputs", "tables", "quantity_model"}
 RETRY_DELAYS = (1, 2, 4, 8, 16)  # 초, 429/503 지수 대기 5회
@@ -201,6 +204,15 @@ JSON 하나만 출력하세요. 형식 밖 필드를 만들지 말고, 형식에
   "questions": ["이 절을 찾을 현장 질문 3개: 쉬운 것 1개, 애매한 것 1개, 입력이 빠진 것 1개"]
 }}
 
+[calc_type — 다음 다섯 값만 허용]
+- "daily_crew": 일당 작업조형(기준 일일시공량 × 계수 → 작업일수 → 직종별 인·일). 계산 함수 이름(예: adjusted_daily_crew)이
+  아니라 반드시 이 값 "daily_crew"를 쓴다.
+- "per_unit": 단위당 품이 표에 직접 있는 경우
+- "rate": 물량에 비율(%)만 곱하는 계산이 본 작업인 경우
+- "lookup_only": 조건에 따라 표 값 하나를 찾아 보여주기만 하면 되는 경우
+- "not_calculable": 자동 계산할 만큼 원문이 명확하지 않거나 판단이 크게 필요한 경우
+이 다섯 값 외의 문자열(함수 이름, 새로 만든 분류 등)을 쓰지 않는다.
+
 [규칙]
 - draft.id는 "2026-정오표1차/{division}/{section_no}/<작업이름>" 형식.
 - 표(tables[].id)는 "우리 파싱 결과"에 있는 table_id만 쓴다. 지어내지 않는다.
@@ -208,6 +220,16 @@ JSON 하나만 출력하세요. 형식 밖 필드를 만들지 말고, 형식에
 - 계산 함수가 없는 calc_type(rate/lookup_only/not_calculable)이면 draft.quantity_model.params는 {{}}로 두고
   draft.quantity_model.steps에 사람이 볼 근거만 짧게 남긴다.
 - 원문이 애매하면 추측하지 말고 open_questions에 적는다.
+- **표의 비고·[주] 칸에 있는 인원 증감·조건**(예: "○○ 타설: 특별인부 1인 추가")은 절대 빠뜨리지 말고 반드시
+  crew_rules/blocked/cost_rules 중 하나로 옮기고, 그 조건 판단에 필요한 입력을 draft.inputs에 추가한다.
+- **원문이 두 가지 이상으로 읽히면 계산식에 넣지 말고**, draft.blocked에 조건·이유·출처를 적고 open_questions에도
+  같은 내용을 적는다(예: 재셋팅·감산이 여러 번 겹칠 때 누적 방식이 원문에 명시되지 않은 경우). 짐작으로 계산 규칙을
+  만들지 않는다.
+- citations는 두 형식만 쓴다. 표: {{"table_id","row","column","value"}} — row/column은 "우리 파싱 결과" 조각
+  텍스트에 있는 글자를 **그대로 복사**한다(새 이름을 합쳐 만들지 않는다. 예: "기계비빔타설_콘크리트공"처럼 원문에 없는
+  행 이름을 만들지 않는다). 줄글: {{"chunk_id","quote"}} — quote는 조각 텍스트의 **연속된 부분 문자열을 그대로**
+  복사한다(의역·요약·띄어쓰기 변경 금지). {{"section_no","marker"}}처럼 이 두 형식 밖의 인용을 쓰지 않는다.
+- "우리 파싱 결과"에 없는 chunk_id/table_id를 만들지 않는다.
 
 [명세 형식]
 {spec_format}
@@ -219,6 +241,24 @@ JSON 하나만 출력하세요. 형식 밖 필드를 만들지 말고, 형식에
 EXAMPLE_BLOCK_TEMPLATE = """
 [완성 예시: 2026-정오표1차/공통/6-1-4/펌프차타설]
 {example_json}
+"""
+
+PARSE_RETRY_SUFFIX = """
+
+[재요청 — 이전 응답이 JSON으로 파싱되지 않았습니다]
+오류: {error}
+반드시 위 [출력 JSON 최상위 구조]와 정확히 같은 하나의 JSON 객체만 출력하세요. 설명 문장이나 코드블록 표시(```) 없이
+JSON 본문만 출력하세요.
+"""
+
+CITATION_RETRY_SUFFIX = """
+
+[재요청 — 이전 응답의 인용이 조각 텍스트와 일치하지 않습니다]
+아래 불일치를 고쳐 같은 절의 명세를 다시 작성하세요. row/column/value/quote는 "우리 파싱 결과"에 있는 글자를
+그대로 복사해야 합니다. 원문에서 확인할 수 없으면 그 숫자를 draft에서 빼고 open_questions에 적으세요.
+
+불일치 목록:
+{issues}
 """
 
 
@@ -301,8 +341,12 @@ def parse_response(response_text: str) -> dict:
     missing_top = {"draft", "calc_type"} - parsed.keys()
     if missing_top:
         raise ValueError(f"최상위 필드 누락: {sorted(missing_top)}")
-    if parsed["calc_type"] not in CALC_TYPES:
-        raise ValueError(f"알 수 없는 calc_type: {parsed['calc_type']}")
+    raw_calc_type = parsed["calc_type"]
+    normalized_calc_type = CALC_TYPE_ALIASES.get(raw_calc_type, raw_calc_type)
+    if normalized_calc_type not in CALC_TYPES:
+        raise ValueError(f"알 수 없는 calc_type: {raw_calc_type}")
+    parsed["calc_type"] = normalized_calc_type
+    parsed["calc_type_raw"] = raw_calc_type
     missing_draft = REQUIRED_DRAFT_FIELDS - parsed["draft"].keys()
     if missing_draft:
         raise ValueError(f"draft 필드 누락: {sorted(missing_draft)}")
@@ -310,10 +354,13 @@ def parse_response(response_text: str) -> dict:
 
 
 def save_draft(out_dir: Path, division: str, section_no: str, parsed: dict, *, model: str,
-               input_tokens: int, output_tokens: int, source_pages: list[int], prompt_sha256: str) -> Path:
+               input_tokens: int, output_tokens: int, source_pages: list[int], prompt_sha256: str,
+               chunks_path: str, chunks_sha256: str | None, citation_retry_used: bool = False,
+               citation_issues_after_retry: list[str] | None = None) -> Path:
     record = {
         "draft": parsed["draft"],
         "calc_type": parsed["calc_type"],
+        "calc_type_raw": parsed.get("calc_type_raw", parsed["calc_type"]),
         "calc_type_reason": parsed.get("calc_type_reason", ""),
         "citations": parsed.get("citations", []),
         "open_questions": parsed.get("open_questions", []),
@@ -322,6 +369,9 @@ def save_draft(out_dir: Path, division: str, section_no: str, parsed: dict, *, m
             "model": model, "created_at": datetime.now(timezone.utc).isoformat(),
             "input_tokens": input_tokens, "output_tokens": output_tokens,
             "source_pages": source_pages, "prompt_sha256": prompt_sha256,
+            "chunks_path": chunks_path, "chunks_sha256": chunks_sha256,
+            "citation_retry_used": citation_retry_used,
+            "citation_issues_after_retry": citation_issues_after_retry or [],
         },
     }
     path = draft_path(out_dir, division, section_no)
@@ -330,8 +380,10 @@ def save_draft(out_dir: Path, division: str, section_no: str, parsed: dict, *, m
     return path
 
 
-def save_raw(out_dir: Path, division: str, section_no: str, response_text: str) -> Path:
+def save_raw(out_dir: Path, division: str, section_no: str, response_text: str, *, suffix: str = "") -> Path:
     path = raw_path(out_dir, division, section_no)
+    if suffix:
+        path = path.with_name(f"{path.stem}{suffix}{path.suffix}")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(response_text, encoding="utf-8")
     return path
@@ -375,7 +427,7 @@ class CostTracker:
 def process_section(division: str, section_no: str, chunks_for_section: list[dict], *, pdf_path: Path,
                      spec_format_text: str, example_spec_text: str | None, out_dir: Path, model: str,
                      max_output_tokens: int, request_fn: RequestFn, cost_tracker: CostTracker,
-                     force: bool) -> str:
+                     force: bool, chunks_path: str = "", chunks_sha256: str | None = None) -> str:
     """돌려주는 상태: "skipped" | "saved" | "failed"."""
     path = draft_path(out_dir, division, section_no)
     if path.exists() and not force:
@@ -385,30 +437,65 @@ def process_section(division: str, section_no: str, chunks_for_section: list[dic
 
     example = None if (division, section_no) == EXAMPLE_TARGET else example_spec_text
     parsed_payload = build_parsed_payload(chunks_for_section)
-    instructions = build_instructions(division, section_no, parsed_payload, spec_format_text, example)
-    prompt_sha256 = hashlib.sha256(instructions.encode("utf-8")).hexdigest()
+    base_instructions = build_instructions(division, section_no, parsed_payload, spec_format_text, example)
+    prompt_sha256 = hashlib.sha256(base_instructions.encode("utf-8")).hexdigest()
     pages = section_pages(chunks_for_section)
     pdf_bytes = build_pdf_excerpt(pdf_path, pages)
+    section_chunks_by_id = chunks_by_id_from_list(chunks_for_section)
 
-    try:
+    def call(instructions: str) -> tuple[str, int, int]:
         response_text, input_tokens, output_tokens = call_with_retry(
             request_fn, model, pdf_bytes, instructions, max_output_tokens,
         )
-    except Exception as exc:  # noqa: BLE001
-        append_failure(out_dir, division, section_no, f"{type(exc).__name__}: {exc}", len(RETRY_DELAYS) + 1)
-        return "failed"
+        cost_tracker.add(input_tokens, output_tokens)
+        return response_text, input_tokens, output_tokens
 
-    cost_tracker.add(input_tokens, output_tokens)
-    save_raw(out_dir, division, section_no, response_text)
+    # 1. 요청, 실패하면 JSON 파싱·calc_type 실패는 1회 재요청.
+    total_input_tokens = total_output_tokens = 0
+    parsed = None
+    for parse_attempt in range(2):
+        instructions = base_instructions if parse_attempt == 0 else (
+            base_instructions + PARSE_RETRY_SUFFIX.format(error=str(last_parse_error)))
+        try:
+            response_text, input_tokens, output_tokens = call(instructions)
+        except Exception as exc:  # noqa: BLE001
+            append_failure(out_dir, division, section_no, f"{type(exc).__name__}: {exc}", len(RETRY_DELAYS) + 1)
+            return "failed"
+        total_input_tokens += input_tokens
+        total_output_tokens += output_tokens
+        save_raw(out_dir, division, section_no, response_text, suffix=f".parse{parse_attempt + 1}" if parse_attempt else "")
+        try:
+            parsed = parse_response(response_text)
+            break
+        except Exception as exc:  # noqa: BLE001
+            last_parse_error = exc
+            if parse_attempt == 1:
+                append_failure(out_dir, division, section_no, f"응답 파싱 실패(재요청 후): {exc}", 2)
+                return "failed"
 
-    try:
-        parsed = parse_response(response_text)
-    except Exception as exc:  # noqa: BLE001
-        append_failure(out_dir, division, section_no, f"응답 파싱 실패: {exc}", 1)
-        return "failed"
+    # 2. 인용 자체 점검, 불일치가 있으면 불일치 목록을 붙여 같은 절을 한 번만 다시 요청.
+    citation_issues = check_citations(section_chunks_by_id, parsed.get("citations", []))
+    citation_retry_used = False
+    if citation_issues:
+        citation_retry_used = True
+        retry_instructions = base_instructions + CITATION_RETRY_SUFFIX.format(
+            issues="\n".join(f"- {issue}" for issue in citation_issues))
+        try:
+            response_text, input_tokens, output_tokens = call(retry_instructions)
+            total_input_tokens += input_tokens
+            total_output_tokens += output_tokens
+            save_raw(out_dir, division, section_no, response_text, suffix=".citation_retry")
+            retried = parse_response(response_text)
+            parsed = retried
+            citation_issues = check_citations(section_chunks_by_id, parsed.get("citations", []))
+        except Exception as exc:  # noqa: BLE001
+            # 재요청 자체가 실패하면 첫 응답을 그대로 저장하고 불일치를 report용으로 남긴다.
+            append_failure(out_dir, division, section_no, f"인용 재요청 실패, 첫 응답 유지: {exc}", 1)
 
-    save_draft(out_dir, division, section_no, parsed, model=model, input_tokens=input_tokens,
-               output_tokens=output_tokens, source_pages=pages, prompt_sha256=prompt_sha256)
+    save_draft(out_dir, division, section_no, parsed, model=model, input_tokens=total_input_tokens,
+               output_tokens=total_output_tokens, source_pages=pages, prompt_sha256=prompt_sha256,
+               chunks_path=chunks_path, chunks_sha256=chunks_sha256, citation_retry_used=citation_retry_used,
+               citation_issues_after_retry=citation_issues)
     return "saved"
 
 
@@ -475,6 +562,8 @@ def main() -> int:
     example_spec_text = Path(args.example_spec).read_text(encoding="utf-8")
     out_dir = Path(args.out_dir)
     pdf_path = Path(args.pdf)
+    chunks_path = Path(args.chunks)
+    chunks_sha256 = file_sha256(chunks_path)
 
     request_fn = make_vertex_request_fn(api_key)
     cost_tracker = CostTracker(args.max_usd, config["input_usd_per_million"], config["output_usd_per_million"])
@@ -490,6 +579,7 @@ def main() -> int:
                 spec_format_text=spec_format_text, example_spec_text=example_spec_text,
                 out_dir=out_dir, model=model, max_output_tokens=max_output_tokens,
                 request_fn=request_fn, cost_tracker=cost_tracker, force=args.force,
+                chunks_path=str(chunks_path), chunks_sha256=chunks_sha256,
             )
         except BudgetExceeded as exc:
             append_failure(out_dir, division, section_no, str(exc), 0)
