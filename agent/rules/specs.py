@@ -26,8 +26,8 @@ def load_specs() -> dict[str, dict]:
 
 
 @cache
-def specs_by_section() -> dict[str, list[dict]]:
-    sections: dict[str, list[dict]] = {}
+def specs_by_section() -> dict[tuple[str, str], list[dict]]:
+    sections: dict[tuple[str, str], list[dict]] = {}
     for spec in load_specs().values():
-        sections.setdefault(spec["section_no"], []).append(spec)
+        sections.setdefault((spec["division"], spec["section_no"]), []).append(spec)
     return sections

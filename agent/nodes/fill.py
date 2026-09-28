@@ -210,6 +210,9 @@ def _hint(query: str, field: dict, tables: dict) -> dict | None:
 
 def _work_choice(reply: str, candidates: list[dict]) -> dict | None:
     text = _norm(reply)
+    exact = [candidate for candidate in candidates if _norm(candidate["section"]) in text]
+    if len(exact) == 1:
+        return exact[0]
     aliases = {"6-1-1": ("레미콘",), "6-1-2": ("현장비빔",), "6-1-4": ("펌프차",)}
     matches = []
     for candidate in candidates:
@@ -290,7 +293,9 @@ def fill(state: AgentState) -> dict:
     if (answers or reply_text) and state.get("selection", {}).get("confirmed") is False:
         candidates = state.get("candidates", [])
         if "work" in answers:
-            chosen = next((item for item in candidates if item["section_no"] == answers["work"]), None)
+            chosen_options = [item for item in candidates
+                              if answers["work"] in (item["section"], item["section_no"])]
+            chosen = chosen_options[0] if len(chosen_options) == 1 else None
             if chosen is None:
                 work_error = "선택한 공종을 후보에서 찾을 수 없습니다"
         else:
@@ -300,7 +305,8 @@ def fill(state: AgentState) -> dict:
                          "section_no": chosen["section_no"], "section": chosen["section"]}
             update["selection"] = selection
             available = next((item for item in load_specs().values()
-                              if item["section_no"] == chosen["section_no"]), None)
+                              if (item["division"], item["section_no"]) ==
+                              (chosen.get("division", "공통"), chosen["section_no"])), None)
             if available is None:
                 return {**update, "spec_id": "", "inputs": {}, "input_sources": {},
                         "questions": [], "status": "EVIDENCE_ONLY",
@@ -349,7 +355,10 @@ def fill(state: AgentState) -> dict:
         candidates = state.get("candidates", [])
         work_question = {"name": "work", "ask": "어느 공종으로 계산할까요?",
                           "choices": [item["section"] for item in candidates],
-                          "default": candidates[0]["section_no"] if candidates else ""}
+                          "default": candidates[0]["section"] if candidates and
+                                     sum(item["section_no"] == candidates[0]["section_no"]
+                                         for item in candidates) > 1 else
+                                     (candidates[0]["section_no"] if candidates else "")}
         if work_error:
             work_question["reason"] = work_error
         questions.append(work_question)

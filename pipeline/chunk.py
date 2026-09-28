@@ -18,6 +18,7 @@ import unicodedata
 from pathlib import Path
 
 PDF = "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
+PAGE_MAP = Path(__file__).resolve().parents[1] / "data/processed/page_map.json"
 
 SECTION_NO_RE = re.compile(r"^(\d+-\d+(?:-\d+)?)")
 # 표 바로 위에 따로 인쇄되는 기준 표기: (일당), (㎥당), (100㎡당), (ton당), (개소당)
@@ -62,7 +63,15 @@ def parse_heading(content: str) -> dict | None:
     return {"no": match.group(1), "title": title, "basis": basis, "has_body": has_body}
 
 
-def make_chunks(records: list[dict], pdf: str = PDF) -> list[dict]:
+def page_divisions(path: Path = PAGE_MAP) -> dict[int, str | None]:
+    pages = json.loads(path.read_text(encoding="utf-8"))["pages"]
+    return {int(page): details["division"].removesuffix("부문") if details.get("division") else None
+            for page, details in pages.items()}
+
+
+def make_chunks(records: list[dict], pdf: str = PDF,
+                divisions: dict[int, str | None] | None = None) -> list[dict]:
+    divisions = page_divisions() if divisions is None else divisions
     chunks = []
     pending_basis = None     # (레코드 번호, 글자): 다음 표에 붙일 기준 표기
     text_group = []          # 이어지는 줄글 레코드 번호
@@ -99,6 +108,7 @@ def make_chunks(records: list[dict], pdf: str = PDF) -> list[dict]:
             "kind": "text",
             "section": first["section"],
             "section_no": section_no(first["section"]),
+            "division": divisions.get(first["page"]),
             "subsection": subsection,
             "pages": [first["page"]],
             "source": {"pdf": pdf, "page": first["page"], "table_id": None, "bbox": None},
@@ -138,6 +148,7 @@ def make_chunks(records: list[dict], pdf: str = PDF) -> list[dict]:
                 "kind": "table",
                 "section": record["section"],
                 "section_no": section_no(record["section"]),
+                "division": divisions.get(record["page"]),
                 "subsection": subsection,
                 "pages": [record["page"]],
                 "source": {"pdf": pdf, "page": record["page"], "table_id": table_id, "bbox": record["bbox"]},
@@ -199,6 +210,7 @@ def main() -> None:
     print(f"절 {len(sections)}개 중 소제목이 있는 절 {len(with_sub)}개")
     print(f"구조 불확실 표 {sum(c['structure'] == 'uncertain' for c in tables)}개, "
           f"기준 표기 없는 표 {sum(not c['basis'] for c in tables)}개")
+    print(f"부문 없는 조각 {sum(c['division'] is None for c in chunks)}개")
 
 
 if __name__ == "__main__":
