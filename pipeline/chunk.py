@@ -12,6 +12,7 @@
 # 행 하나라도 구조가 불확실하면 그 표 청크 전체를 structure=uncertain으로 두고 자동 적산에 쓰지 않는다.
 
 import argparse
+from collections import defaultdict
 import json
 import re
 import unicodedata
@@ -72,6 +73,12 @@ def page_divisions(path: Path = PAGE_MAP) -> dict[int, str | None]:
 def make_chunks(records: list[dict], pdf: str = PDF,
                 divisions: dict[int, str | None] | None = None) -> list[dict]:
     divisions = page_divisions() if divisions is None else divisions
+    page_ordinals = []
+    page_counts = defaultdict(int)
+    for record in records:
+        page = record["page"]
+        page_ordinals.append(page_counts[page])
+        page_counts[page] += 1
     chunks = []
     pending_basis = None     # (레코드 번호, 글자): 다음 표에 붙일 기준 표기
     text_group = []          # 이어지는 줄글 레코드 번호
@@ -104,7 +111,7 @@ def make_chunks(records: list[dict], pdf: str = PDF,
         subsection = current_sub(first["section"])
         starts_with_heading = subsection is not None and subsection["record_id"] == ids[0]
         chunks.append({
-            "chunk_id": f"p{first['page']}-x{ids[0]}",
+            "chunk_id": f"p{first['page']}-x{page_ordinals[ids[0]]}",
             "kind": "text",
             "section": first["section"],
             "section_no": section_no(first["section"]),

@@ -22,7 +22,14 @@ def load_cache(path: Path) -> dict:
             if line.strip():
                 row = json.loads(line)
                 cache[(row["chunk_id"], row["text_sha256"], row["model"], row["dim"])] = row
+                cache[("text", row["text_sha256"], row["model"], row["dim"])] = row
     return cache
+
+
+def cached_row(cache: dict, chunk: dict, config) -> dict | None:
+    fingerprint = document_fingerprint(chunk, config)
+    return (cache.get((chunk["chunk_id"], fingerprint, config.model, config.dim))
+            or cache.get(("text", fingerprint, config.model, config.dim)))
 
 
 def write_parquet(chunks: list[dict], cache: dict, out: Path, config) -> int:
@@ -32,7 +39,7 @@ def write_parquet(chunks: list[dict], cache: dict, out: Path, config) -> int:
     rows = []
     for chunk in chunks:
         fingerprint = document_fingerprint(chunk, config)
-        row = cache.get((chunk["chunk_id"], fingerprint, config.model, config.dim))
+        row = cached_row(cache, chunk, config)
         if row:
             src = chunk["source"]
             rows.append({"chunk_id": chunk["chunk_id"], "section_no": chunk["section_no"],
@@ -63,8 +70,7 @@ def main() -> None:
               if line.strip()]
     cache_path = Path(args.cache)
     cache = load_cache(cache_path)
-    missing = [chunk for chunk in chunks if
-               (chunk["chunk_id"], document_fingerprint(chunk, config), config.model, config.dim) not in cache]
+    missing = [chunk for chunk in chunks if cached_row(cache, chunk, config) is None]
     todo = missing[:args.limit] if args.limit is not None else missing
     print(f"청크 {len(chunks)}개 중 이미 임베딩 {len(chunks) - len(missing)}개, 이번 대상 {len(todo)}개")
 
@@ -96,6 +102,7 @@ def main() -> None:
                 row = {"chunk_id": chunk["chunk_id"], "text_sha256": document_fingerprint(chunk, config),
                        "model": config.model, "dim": config.dim, "vector": vector}
                 cache[(row["chunk_id"], row["text_sha256"], config.model, config.dim)] = row
+                cache[("text", row["text_sha256"], config.model, config.dim)] = row
                 file.write(json.dumps(row) + "\n")
         done += len(batch)
         print(f"  {done}/{len(todo)} 완료 (호출 {calls}회)")
