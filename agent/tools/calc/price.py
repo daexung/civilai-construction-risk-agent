@@ -61,6 +61,26 @@ def _exact(value: Decimal) -> str:
     return format(value.normalize(), "f")
 
 
+def _reference_amounts(subtotals: dict, total: str | None, volume: str | None) -> dict | None:
+    """Calculate whole-won quantity references from displayed unit amounts."""
+    if volume is None:
+        return None
+    quantity = Decimal(str(volume))
+    if quantity <= 0:
+        return None
+
+    def multiply(amount: str | None) -> str | None:
+        if amount is None:
+            return None
+        return _money(_truncate(Decimal(amount) * quantity, "1"), 0)
+
+    return {
+        "volume": _exact(quantity),
+        "subtotals": {category: multiply(amount) for category, amount in subtotals.items()},
+        "total": multiply(total),
+    }
+
+
 def _rule_citation(item: str, value: str) -> dict:
     rule = _amount_rules()
     return {
@@ -292,7 +312,10 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
                  for category, values in category_values.items()}
     total_exact = sum((value for values in category_values.values() for value in values), Decimal("0"))
     has_amount = any(category_values.values())
-    partial = bool(unpriced)
+    partial = bool(unpriced or excluded)
+    reference_amounts = _reference_amounts(subtotals, _money(_truncate(total_exact, "1"), 0)
+                                            if has_amount else None,
+                                            (inputs or {}).get("volume"))
     return {"status": "PARTIAL" if partial else "OK", "partial": partial,
             "rate_version": _version_info(rate_version),
             "equipment_rate_version": _equipment_version_info(equipment_version),
@@ -301,6 +324,7 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
             "labor_subtotal": _money(labor_subtotal, 1), "subtotals": subtotals,
             "total_exact": _money(total_exact, 1) if has_amount else None,
             "total": _money(_truncate(total_exact, "1"), 0) if has_amount else None,
+            "reference_amounts": reference_amounts,
             "total_citations": [total_rule] if has_amount else [],
             "unpriced": unpriced, "excluded": excluded,
             "rounding_policy": {"source": _amount_rules()["source"],

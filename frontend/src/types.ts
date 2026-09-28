@@ -154,6 +154,11 @@ export interface PricedResult {
   subtotals: Record<'재료비' | '노무비' | '경비', string | null>;
   total_exact: string | null;
   total: string | null;
+  reference_amounts?: {
+    volume: string;
+    subtotals: Record<'재료비' | '노무비' | '경비', string | null>;
+    total: string | null;
+  } | null;
   total_citations: Citation[];
   unpriced: { name: string; reason: string; category: string | null; citations: Citation[] }[];
   excluded?: { name: string; reason: string; category: string | null; citations: Citation[] }[];

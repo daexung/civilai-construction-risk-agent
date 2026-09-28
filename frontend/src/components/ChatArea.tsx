@@ -36,7 +36,7 @@ function won(value: string | null | undefined): string {
   if (value == null) return '—';
   const [whole, fraction] = value.split('.');
   const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return fraction === undefined ? grouped : `${grouped}.${fraction}`;
+  return `${fraction === undefined ? grouped : `${grouped}.${fraction}`}원`;
 }
 
 function percent(rate: string | undefined): string {
@@ -188,7 +188,7 @@ function ComputedCard({ work, inputs, result, priced }: {
         : '기준일에 적용 가능한 건설기계 경비산출표 없음'}</div>
       <table className="inputs-table unit-table">
         <thead>
-          <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>금액</th></tr>
+          <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>1㎥당 금액</th></tr>
         </thead>
         <tbody>
           {result.unit_lines.map((line) => {
@@ -202,10 +202,10 @@ function ComputedCard({ work, inputs, result, priced }: {
                   <td><details className="unit-quantity"><summary>{line.applied}</summary>
                     <div>산식: {line.formula}</div><div>정확한 값: {line.exact}</div>
                     <CitationList citations={line.citations} /></details></td>
-                  <td>{part.unit_price ? <details className="price-detail"><summary>{won(part.unit_price)}원/hr</summary>
+                  <td>{part.unit_price ? <details className="price-detail"><summary>{won(part.unit_price)}/hr</summary>
                     <CitationList citations={part.citations} /></details> : '—'}</td>
                   <td>{part.amount ? <details className="price-detail"><summary>{won(part.amount)}</summary>
-                    <div>버림 전: {won(part.amount_exact)}원</div>
+                    <div>버림 전: {won(part.amount_exact)}</div>
                     <CitationList citations={part.citations} /></details> :
                     <span>— {part.reason}{part.fuel_l_per_unit && ` · 필요 연료 ${part.fuel_l_per_unit}ℓ/㎥`}</span>}</td>
                 </tr>)}</React.Fragment>;
@@ -225,7 +225,7 @@ function ComputedCard({ work, inputs, result, priced }: {
               <td>{price?.unit_price ? <details className="price-detail"><summary>{won(price.unit_price)}</summary>
                 <CitationList citations={price.citations} /></details> : '—'}</td>
               <td>{price?.amount ? <details className="price-detail"><summary>{won(price.amount)}</summary>
-                <div>버림 전: {won(price.amount_exact)}원</div>
+                <div>버림 전: {won(price.amount_exact)}</div>
                 <CitationList citations={price.citations} /></details> : '—'}</td>
             </tr>
           ); })}
@@ -247,19 +247,25 @@ function ComputedCard({ work, inputs, result, priced }: {
             <td>{line.category}</td><td>{line.name}</td><td>노무비</td>
             <td>{percent(line.rate)}</td><td>{won(priced.labor_subtotal)}</td>
             <td>{line.amount ? <details className="price-detail"><summary>{won(line.amount)}</summary>
-              <div>버림 전: {won(line.amount_exact)}원</div><CitationList citations={line.citations} />
+              <div>버림 전: {won(line.amount_exact)}</div><CitationList citations={line.citations} />
             </details> : '—'}</td>
           </tr>)}
         </tbody>
       </table>
       <div className="unit-note">{result.unit_basis.adjustable_note}</div>
       {priced && <table className="inputs-table price-summary-table"><tbody>
-        <tr><th>재료비 소계</th><td>{won(priced.subtotals['재료비'])}</td></tr>
-        <tr><th>노무비 소계</th><td>{won(priced.subtotals['노무비'])}</td></tr>
-        <tr><th>경비 소계</th><td>{won(priced.subtotals['경비'])}</td></tr>
-        <tr><th>{priced.partial ? '미산정 제외 부분 합계' : '계'}</th>
+        <tr><th>1㎥당 재료비 소계</th><td>{won(priced.subtotals['재료비'])}</td></tr>
+        <tr><th>1㎥당 노무비 소계</th><td>{won(priced.subtotals['노무비'])}</td></tr>
+        <tr><th>1㎥당 경비 소계</th><td>{won(priced.subtotals['경비'])}</td></tr>
+        <tr><th>{priced.partial ? '1㎥당 부분 합계' : '1㎥당 계'}</th>
           <td>{won(priced.total)}{priced.total_exact && ` (계금 버림 전 ${won(priced.total_exact)})`}</td></tr>
       </tbody></table>}
+      {priced?.reference_amounts?.total != null && <div className="unit-note">
+        <strong>{priced.reference_amounts.volume}㎥ 기준 참고 금액({priced.partial ? '부분' : '전체'}): {won(priced.reference_amounts.total)}</strong>
+        {priced.partial && <div>빠진 항목: {[...(priced.unpriced ?? []), ...(priced.excluded ?? [])]
+          .map((item) => item.name).filter((name, index, names) => names.indexOf(name) === index).join(', ') || '없음'}</div>}
+        <div>내역서 작성 전 참고 금액이며, 제외·미산정 항목이 반영되지 않았습니다.</div>
+      </div>}
       <details className="calculation-details">
         <summary>산출 근거</summary>
         <div className="formula-row"><span className="formula-label">일당시공량</span>

@@ -26,12 +26,24 @@ SYSTEM_PROMPT = (
     "쓰지 말고 자연스러운 한국어로 바꿔 부르세요(예: 소계, 합계, 금액). "
     "새로운 숫자·단가·금액을 추정하거나 만들어내지 마세요. 금액의 숫자 값 자체는 facts에 "
     "있는 표기를 그대로 쓰고 임의로 반올림하거나 계산하지 마세요. "
+    "금액을 말할 때는 반드시 '1㎥당'인지 '전체 물량 기준'인지 밝히세요. "
+    "부분 금액이면 무엇이 제외되거나 미산정되어 빠졌는지도 함께 말하세요. "
     "unit_price처럼 소수점이 긴 값은 가능하면 인용하지 말고 금액·합계 위주로 설명하세요. "
     "계산 금액이 있다면 '표준품셈 기준 금액이며 시장 가격과 다를 수 있다'는 점을 반드시 "
     "언급하고, 제외 항목이나 미산정 항목이 있다면 그 이름과 사유를 반드시 언급하세요."
 )
 
 NUMBER_PATTERN = re.compile(r"\d+(?:-\d+){2}(?!\d)|\d[\d,]*(?:\.\d+)?(?:/\d+)?")
+
+
+def _won(value: str | int | None) -> str | None:
+    if value is None:
+        return None
+    amount = Decimal(str(value))
+    rendered = format(amount, ",f")
+    if "." in rendered:
+        rendered = rendered.rstrip("0").rstrip(".")
+    return f"{rendered}원"
 
 
 def _label(field: dict) -> str:
@@ -70,8 +82,10 @@ def _inputs_facts(state: AgentState, spec: dict | None) -> list[dict]:
 
 def _line_fact(line: dict) -> dict:
     fact = {"category": line.get("category"), "name": line.get("name"), "unit": line.get("unit"),
-            "quantity": line.get("quantity"), "unit_price": line.get("unit_price"),
-            "amount": line.get("amount"), "reason": line.get("reason")}
+            "quantity": line.get("quantity"),
+            "unit_price": f"단가 {_won(line['unit_price'])}" if line.get("unit_price") is not None else None,
+            "amount": f"1㎥당 {_won(line['amount'])}" if line.get("amount") is not None else None,
+            "reason": line.get("reason")}
     rate = line.get("rate")
     if rate is not None:
         fact["rate_percent"] = _percent(rate)
@@ -105,10 +119,18 @@ def _priced_facts(priced: dict | None) -> dict | None:
     unpriced = [{"name": item["name"], "reason": item["reason"]} for item in priced.get("unpriced", [])]
     rate_version = priced.get("rate_version")
     equipment_rate_version = priced.get("equipment_rate_version")
+    reference = priced.get("reference_amounts") or {}
+    volume = reference.get("volume")
+    reference_label = f"{volume}㎥ 기준 참고 금액(부분)" if priced.get("partial") else f"{volume}㎥ 기준 참고 금액"
     return {
         "lines": lines,
-        "소계": priced.get("subtotals"),
-        "합계": priced.get("total"),
+        "1㎥당 소계": {f"1㎥당 {name} 소계": _won(value)
+                       for name, value in (priced.get("subtotals") or {}).items()},
+        "1㎥당 합계(부분)" if priced.get("partial") else "1㎥당 합계": _won(priced.get("total")),
+        reference_label: _won(reference.get("total")),
+        "물량 기준 참고 소계": {f"{volume}㎥ 기준 {name} 소계(부분)" if priced.get("partial")
+                              else f"{volume}㎥ 기준 {name} 소계": _won(value)
+                              for name, value in reference.get("subtotals", {}).items()},
         "partial": priced.get("partial"),
         "excluded": excluded, "excluded_count": len(excluded),
         "unpriced": unpriced, "unpriced_count": len(unpriced),
@@ -150,15 +172,22 @@ def _template_priced(facts: dict) -> str:
     work = facts.get("work")
     label = f"{work['title']}({work['section_no']})" if work else "이번 계산"
     priced = facts.get("priced") or {}
-    total = priced.get("합계")
-    subtotals = priced.get("소계") or {}
+    partial = priced.get("partial")
+    total_key = "1㎥당 합계(부분)" if partial else "1㎥당 합계"
+    total = priced.get(total_key)
+    subtotals = priced.get("1㎥당 소계") or {}
     sentences = []
     if total is not None:
+        reference_key = next((key for key in priced if "㎥ 기준 참고 금액" in key), None)
+        reference_amount = priced.get(reference_key) if reference_key else None
         sentences.append(
-            f"{label} 계산 결과 재료비 {subtotals.get('재료비') or '0'}원, "
-            f"노무비 {subtotals.get('노무비') or '0'}원, 경비 {subtotals.get('경비') or '0'}원으로, "
-            f"{'미산정 항목을 제외한 부분 합계는' if priced.get('partial') else '합계는'} {total}원입니다."
+            f"{label}의 1㎥당 재료비 {subtotals.get('1㎥당 재료비 소계') or '0원'}, "
+            f"1㎥당 노무비 {subtotals.get('1㎥당 노무비 소계') or '0원'}, "
+            f"1㎥당 경비 {subtotals.get('1㎥당 경비 소계') or '0원'}이며, "
+            f"1㎥당 {'미산정 항목을 제외한 부분 합계' if partial else '합계'}는 {total}입니다."
         )
+        if reference_amount is not None:
+            sentences.append(f"{reference_key}: {reference_amount}입니다. 내역서 작성 전 참고용입니다.")
     else:
         sentences.append(f"{label}은(는) 현재 적용 가능한 단가가 없어 금액을 계산하지 못했습니다.")
     excluded = priced.get("excluded") or []
@@ -231,6 +260,15 @@ def validate_numbers(text: str, facts: dict) -> tuple[bool, list[str]]:
     return not bad, bad
 
 
+def validate_amount_basis(text: str) -> bool:
+    """Require each currency amount to carry an adjacent quantity basis."""
+    for match in re.finditer(r"\d[\d,]*(?:\.\d+)?\s*원", text):
+        context = text[max(0, match.start() - 24):match.start()]
+        if not re.search(r"(?:1\s*㎥\s*당|㎥\s*기준)", context):
+            return False
+    return True
+
+
 def _prompt(facts: dict) -> str:
     return "다음 계산 결과를 설명해 주세요.\n\nfacts:\n" + json.dumps(facts, ensure_ascii=False, indent=2)
 
@@ -260,5 +298,8 @@ def compose(state: AgentState, generate_fn=None) -> dict:
     if not ok:
         llm_info["error"] = "숫자 불일치"
         llm_info["bad_numbers"] = bad
+        return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
+    if not validate_amount_basis(text):
+        llm_info["error"] = "금액 기준 누락"
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
     return {"answer": text, "answer_source": "llm", "llm_info": llm_info}
