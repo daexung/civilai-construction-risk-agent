@@ -12,7 +12,8 @@ import time
 from pathlib import Path
 
 from shared.embedding import (ROOT, client, document_fingerprint, document_input,
-                              document_title, embed_texts, retryable_error, settings)
+                              document_title, embed_texts, rate_limit_error,
+                              retryable_error, settings)
 
 
 def load_cache(path: Path) -> dict:
@@ -89,7 +90,7 @@ def main() -> None:
                 break
             except Exception as exc:
                 if retryable_error(exc) and attempt < 4:
-                    wait = 2 ** attempt
+                    wait = 60 if config.provider == "vertex" and rate_limit_error(exc) else 2 ** attempt
                     print(f"  임시 호출 오류({type(exc).__name__}), {wait}초 뒤 재시도")
                     time.sleep(wait)
                     continue
@@ -114,6 +115,8 @@ def main() -> None:
     print(f"Parquet {count}/{len(chunks)}개 청크 -> {args.out}")
     if stop_reason:
         raise SystemExit(f"중단: {stop_reason}. 성공한 벡터는 캐시에 남아 재실행 때 이어집니다")
+    if count != len(chunks):
+        raise SystemExit(f"누락된 임베딩 {len(chunks) - count}개: Parquet이 완성되지 않았습니다")
 
 
 if __name__ == "__main__":

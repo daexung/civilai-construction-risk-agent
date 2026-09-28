@@ -148,3 +148,17 @@ def retryable_error(exc: Exception) -> bool:
         marker in f"{type(exc).__name__}: {exc}".upper()
         for marker in ("429", "503", "UNAVAILABLE", "RESOURCE_EXHAUSTED")
     )
+
+
+def rate_limit_error(exc: Exception) -> bool:
+    code = getattr(exc, "code", None)
+    if callable(code):
+        try:
+            code = code()
+        except Exception:
+            code = None
+    code = code or getattr(getattr(exc, "response", None), "status_code", None)
+    return code in (429, "429") or any(
+        marker in f"{type(exc).__name__}: {exc}".upper()
+        for marker in ("429", "RESOURCE_EXHAUSTED")
+    )

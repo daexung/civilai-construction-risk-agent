@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import sys
+import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -16,9 +17,11 @@ from agent.state import new_state  # noqa: E402
 from agent.tools.search.bm25 import Index, load  # noqa: E402
 from agent.tools.search.vector import ModelMismatchError, VectorIndex  # noqa: E402
 from api.main import _search_out  # noqa: E402
+from evals.compare_embedding_models import QueryCache  # noqa: E402
 from pipeline.chunk import page_divisions  # noqa: E402
+from pipeline import embed as embed_pipeline  # noqa: E402
 from shared.embedding import (document_input, document_title, embed_texts,  # noqa: E402
-                              query_input, settings)
+                              query_input, rate_limit_error, settings)
 
 
 class FakeModels:
@@ -34,6 +37,10 @@ class FakeModels:
 
 class FakeServiceError(Exception):
     code = 503
+
+
+class FakeLimitError(Exception):
+    code = 429
 
 
 def main() -> int:
@@ -107,6 +114,64 @@ def main() -> int:
 
     divisions = page_divisions()
     checks.append(("쪽별 부문", divisions[186] == "공통" and divisions[982] == "유지관리"))
+
+    checks.append(("429 판별", rate_limit_error(FakeLimitError())
+                   and not rate_limit_error(FakeServiceError())))
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "queries.jsonl"
+        waits = []
+        calls = []
+        clock = [0.0]
+
+        def sleep(seconds):
+            waits.append(seconds)
+            clock[0] += seconds
+
+        def embed_once(_query):
+            calls.append(1)
+            if len(calls) == 1:
+                raise FakeLimitError()
+            return __import__("numpy").array([1.0] + [0.0] * 3071, dtype="float32")
+
+        cache = QueryCache(path, pause=5, sleep_fn=sleep, clock_fn=lambda: clock[0])
+        fake_index = SimpleNamespace(vector=SimpleNamespace(embedding=vertex))
+        first = cache.embed(fake_index, "질문", embed_once)
+        cache.embed(fake_index, "다른 질문", embed_once)
+        second = QueryCache(path).embed(fake_index, "질문", lambda _query: (_ for _ in ()).throw(AssertionError()))
+        checks.append(("비교 질문 429 60초 대기·캐시 재사용",
+                       len(calls) == 3 and waits == [60, 5] and first.tolist() == second.tolist()))
+
+        chunks = Path(directory) / "chunks.jsonl"
+        chunks.write_text('{"chunk_id":"missing","section":"test","text":"test"}\n', encoding="utf-8")
+        argv = ["embed", "--chunks", str(chunks), "--cache", str(Path(directory) / "empty.jsonl"),
+                "--out", str(Path(directory) / "empty.parquet"), "--limit", "0"]
+        with patch.object(sys, "argv", argv), patch.object(embed_pipeline, "write_parquet", return_value=0):
+            try:
+                embed_pipeline.main()
+            except SystemExit as exc:
+                incomplete = "누락된 임베딩 1개" in str(exc)
+            else:
+                incomplete = False
+        checks.append(("임베딩 누락 시 실패 종료", incomplete))
+
+        attempts, waits = [], []
+
+        def vertex_embed(*_args, **_kwargs):
+            attempts.append(1)
+            if len(attempts) == 1:
+                raise FakeLimitError()
+            return [[1.0] + [0.0] * 3071]
+
+        vertex_argv = ["embed", "--chunks", str(chunks), "--cache", str(Path(directory) / "vertex.jsonl"),
+                       "--out", str(Path(directory) / "vertex.parquet"), "--pause", "0"]
+        with patch.object(sys, "argv", vertex_argv), \
+                patch.object(embed_pipeline, "settings", return_value=vertex), \
+                patch.object(embed_pipeline, "client", return_value=object()), \
+                patch.object(embed_pipeline, "embed_texts", side_effect=vertex_embed), \
+                patch.object(embed_pipeline, "write_parquet", return_value=1), \
+                patch.object(embed_pipeline.time, "sleep", side_effect=waits.append):
+            embed_pipeline.main()
+        checks.append(("Vertex 429 60초 뒤 재시도", len(attempts) == 2 and waits == [60]))
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")
