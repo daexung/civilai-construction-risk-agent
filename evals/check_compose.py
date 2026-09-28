@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 os.environ["AGENT_OFFLINE"] = "1"
 os.environ.setdefault("AGENT_LLM", "off")
@@ -14,7 +16,8 @@ sys.path.insert(0, str(ROOT))
 from langgraph.types import Command  # noqa: E402
 
 from agent.graph import build_graph  # noqa: E402
-from agent.nodes.compose import build_facts, build_template, compose, validate_amount_basis, validate_numbers  # noqa: E402
+from agent.nodes.compose import (_josa, build_facts, build_template, compose,
+                                 validate_amount_basis, validate_numbers)  # noqa: E402
 from agent.nodes.compute import compute  # noqa: E402
 from agent.nodes.gate import gate  # noqa: E402
 from agent.nodes.price import price  # noqa: E402
@@ -22,6 +25,7 @@ from agent.nodes.statement import statement  # noqa: E402
 from agent.rules.specs import load_specs  # noqa: E402
 from agent.state import new_state  # noqa: E402
 from agent.tools.llm.client import LLMUnavailable  # noqa: E402
+from agent.tools.llm import client as llm_client  # noqa: E402
 
 
 PUMP_SPEC = next(spec for spec in load_specs().values() if spec["section_no"] == "6-1-4")
@@ -81,6 +85,25 @@ def main() -> int:
     checks.append(("C0c 원가계산서 도급액 facts",
                    facts["statement"]["totals"]["전체 물량 기준 도급액(부가세 포함)"] == "10,032,436원"
                    and facts["statement"]["totals"]["전체 물량 기준 순공사원가"] == "7,364,857원"))
+
+    template = build_template(facts)
+    checks.append(("C0d template 첫 문장 전체 물량 도급액",
+                   template.split(".", 1)[0].startswith("철근콘크리트 벽체 260㎥ 콘크리트 펌프차 붐타설 공사비는 전체 물량 기준 부가세 포함 총 10,032,436원(도급액)")))
+    duplicate_facts = json.loads(json.dumps(facts, ensure_ascii=False))
+    for field in ("excluded", "unpriced"):
+        if duplicate_facts["priced"][field]:
+            duplicate_facts["priced"][field].append(duplicate_facts["priced"][field][0])
+            duplicate_facts["statement"][field].append(duplicate_facts["statement"][field][0])
+    duplicate_text = build_template(duplicate_facts)
+    duplicate_names = [item["name"] for field in ("excluded", "unpriced")
+                       for item in facts["priced"][field]]
+    checks.append(("C0e 빠진 항목 이름 중복 제거",
+                   duplicate_text.count("빠진 항목:") == 1
+                   and all(duplicate_text.count(name) == 1 for name in duplicate_names)))
+    checks.append(("C0f 숫자·괄호 뒤 조사 선택",
+                   f"912,039원{_josa('912,039원', '을/를')}" == "912,039원을"
+                   and f"(6-1-4){_josa('타설(6-1-4)', '은/는')}" == "(6-1-4)은"
+                   and f"(부분){_josa('참고 금액(부분)', '은/는')}" == "(부분)은"))
 
     def good_llm(prompt: str, system: str) -> str:
         return (f"{facts['work']['title']} 계산 결과 1㎥당 합계(부분)는 "
@@ -149,6 +172,46 @@ def main() -> int:
                    validate_numbers(basis_missing_text, facts)[0]
                    and not validate_amount_basis(basis_missing_text)
                    and compose(state, generate_fn=lambda *_: basis_missing_text)["answer_source"] == "template"))
+
+    class FakeServiceError(Exception):
+        def __init__(self, message: str, code: int):
+            super().__init__(message)
+            self.code = code
+
+    def env_for_fake(name: str) -> str | None:
+        return "fake-test-key" if name == "VERTEX_API_KEY" else None
+
+    def retry_backend(model: str, prompt: str, system: str, timeout_ms: int) -> str:
+        retry_calls.append((model, timeout_ms))
+        if len(retry_calls) < 3:
+            raise FakeServiceError("UNAVAILABLE", 503)
+        return good_llm(prompt, system)
+
+    retry_calls = []
+    with patch.dict(os.environ, {"AGENT_LLM": "on", "LLM_PROVIDER": "vertex"}, clear=False), \
+            patch.object(llm_client, "_env_value", env_for_fake):
+        retried = compose(state, generate_fn=lambda prompt, system: llm_client.generate(
+            prompt, system, request_fn=retry_backend, sleep_fn=lambda _seconds: None))
+    checks.append(("C11 503 두 번 후 성공 재시도", retried["answer_source"] == "llm"
+                   and retried["llm_info"]["provider"] == "vertex"
+                   and retried["llm_info"]["attempts"] == 3 and len(retry_calls) == 3))
+
+    def bad_request(model: str, prompt: str, system: str, timeout_ms: int) -> str:
+        raise FakeServiceError("invalid argument", 400)
+
+    with patch.dict(os.environ, {"AGENT_LLM": "on", "LLM_PROVIDER": "vertex"}, clear=False), \
+            patch.object(llm_client, "_env_value", env_for_fake):
+        rejected = compose(state, generate_fn=lambda prompt, system: llm_client.generate(
+            prompt, system, request_fn=bad_request, sleep_fn=lambda _seconds: None))
+    checks.append(("C12 400 즉시 template", rejected["answer_source"] == "template"
+                   and rejected["llm_info"]["attempts"] == 1))
+
+    with patch.dict(os.environ, {"AGENT_LLM": "on", "LLM_PROVIDER": "vertex"}, clear=False), \
+            patch.object(llm_client, "_env_value", lambda _name: None):
+        no_vertex_key = compose(state)
+    checks.append(("C13 Vertex 키 없음은 LLMUnavailable", no_vertex_key["answer_source"] == "template"
+                   and no_vertex_key["llm_info"]["provider"] == "vertex"
+                   and no_vertex_key["llm_info"]["error"] == "VERTEX_API_KEY 없음"))
 
     graph = build_graph()
     config = {"configurable": {"thread_id": "compose-g1"}}

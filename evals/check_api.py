@@ -70,6 +70,12 @@ def main() -> int:
                    and unit_lines.get("콘크리트펌프차", {}).get("exact") == "4/65"
                    and computed_lines["콘크리트공"]["value"] == "8"))
 
+    checks.append(("A9 응답에 llm_info 포함",
+                   computed.get("llm_info", {}).get("provider") == "vertex"
+                   and computed["llm_info"].get("model") == "gemini-3.5-flash-lite"
+                   and computed["llm_info"].get("attempts") == 0
+                   and "VERTEX_API_KEY" not in str(computed["llm_info"])))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

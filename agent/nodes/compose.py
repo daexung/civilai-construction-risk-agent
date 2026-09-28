@@ -57,6 +57,19 @@ def _percent(rate: str) -> str:
     return f"{format(value, 'f')}%"
 
 
+def _josa(word: str, pair: str) -> str:
+    """Select a Korean particle using the final Hangul syllable before punctuation."""
+    left, right = pair.split("/", 1)
+    value = word.rstrip(" \t.,!?…:;\"'”’")
+    if value.endswith(")"):
+        opening = value.rfind("(")
+        if opening >= 0:
+            value = value[:opening].rstrip()
+    final = value[-1] if value else ""
+    has_batchim = "가" <= final <= "힣" and (ord(final) - 0xAC00) % 28 != 0
+    return left if has_batchim else right
+
+
 def _spec(state: AgentState) -> dict | None:
     spec_id = state.get("spec_id")
     return load_specs().get(spec_id) if spec_id else None
@@ -217,7 +230,16 @@ def _template_priced(facts: dict) -> str:
     statement_totals = statement.get("totals") or {}
     contract_amount = statement_totals.get("전체 물량 기준 도급액(부가세 포함)")
     if contract_amount is not None:
-        sentences.append(f"전체 물량 기준 원가계산서 도급액(부가세 포함)은 {contract_amount}입니다.")
+        inputs = {item.get("name"): item.get("value") for item in facts.get("inputs", [])}
+        structure = "철근콘크리트 벽체" if inputs.get("structure") == "철근" else "콘크리트 벽체"
+        volume = inputs.get("volume")
+        placement = inputs.get("placement")
+        subject = (f"{structure} {volume}㎥ 콘크리트 펌프차 {placement}타설 공사비"
+                   if volume and placement else "원가계산서 공사비")
+        sentences.append(
+            f"{subject}{_josa(subject, '은/는')} 전체 물량 기준 부가세 포함 총 "
+            f"{contract_amount}(도급액)으로 계산되었습니다."
+        )
         sentences.append(
             f"전체 물량 기준 재료비 {statement_totals.get('전체 물량 기준 재료비', '0원')}, "
             f"노무비 {statement_totals.get('전체 물량 기준 노무비', '0원')}, "
@@ -235,25 +257,27 @@ def _template_priced(facts: dict) -> str:
     if total is not None:
         reference_key = next((key for key in priced if "㎥ 기준 참고 금액" in key), None)
         reference_amount = priced.get(reference_key) if reference_key else None
+        amount_label = "미산정 항목을 제외한 부분 합계" if partial else "합계"
         unit_sentence = (
-            f"{label}는 1㎥당 재료비 {subtotals.get('1㎥당 재료비 소계') or '0원'}, "
+            f"{label}{_josa(label, '은/는')} 1㎥당 재료비 {subtotals.get('1㎥당 재료비 소계') or '0원'}, "
             f"노무비 {subtotals.get('1㎥당 노무비 소계') or '0원'}, "
             f"경비 {subtotals.get('1㎥당 경비 소계') or '0원'}이며, "
-            f"1㎥당 {'미산정 항목을 제외한 부분 합계' if partial else '합계'}는 {total}입니다."
+            f"1㎥당 {amount_label}{_josa(amount_label, '은/는')} {total}입니다."
         )
         if reference_amount is not None:
-            unit_sentence += f" {reference_key}는 {reference_amount}입니다. 내역서 작성 전 참고용입니다."
+            unit_sentence += (f" {reference_key}{_josa(reference_key, '은/는')} "
+                              f"{reference_amount}입니다. 내역서 작성 전 참고용입니다.")
         sentences.append(unit_sentence)
     else:
         sentences.append(f"{label}은(는) 현재 적용 가능한 단가가 없어 금액을 계산하지 못했습니다.")
-    excluded = list(priced.get("excluded") or [])
-    excluded += statement.get("excluded") or []
-    unpriced = list(priced.get("unpriced") or [])
-    unpriced += statement.get("unpriced") or []
-    omitted = [*(f"{item['name']} 제외({item['reason']})" for item in excluded),
-               *(f"{item['name']} 미산정({item['reason']})" for item in unpriced)]
+    omitted_by_name = {}
+    for item in [*(priced.get("excluded") or []), *(statement.get("excluded") or [])]:
+        omitted_by_name.setdefault(item["name"], f"{item['name']} 제외({item['reason']})")
+    for item in [*(priced.get("unpriced") or []), *(statement.get("unpriced") or [])]:
+        omitted_by_name.setdefault(item["name"], f"{item['name']} 미산정({item['reason']})")
+    omitted = list(omitted_by_name.values())
     if omitted:
-        sentences.append("제외·미산정 항목: " + "; ".join(omitted) + ".")
+        sentences.append("빠진 항목: " + ", ".join(omitted) + ".")
     sentences.append("표준품셈 기준 금액이며 시장 가격과 다를 수 있습니다.")
     return " ".join(sentences)
 
@@ -337,15 +361,29 @@ def compose(state: AgentState, generate_fn=None) -> dict:
     template_text = build_template(facts)
     fn = generate_fn or llm_client.generate
     try:
+        provider = llm_client.provider_name()
+    except llm_client.LLMUnavailable:
+        provider = None
+    try:
         model = llm_client.model_name()
     except llm_client.LLMUnavailable:
         model = None
-    llm_info = {"model": model, "elapsed_ms": None, "error": None, "bad_numbers": []}
+    llm_info = {"provider": provider, "model": model, "elapsed_ms": None,
+                "attempts": 0, "error": None, "bad_numbers": []}
     start = time.monotonic()
     try:
-        text = fn(_prompt(facts), SYSTEM_PROMPT)
+        generated = fn(_prompt(facts), SYSTEM_PROMPT)
+        if isinstance(generated, llm_client.LLMResult):
+            text = generated.text
+            llm_info["provider"] = generated.provider
+            llm_info["attempts"] = generated.attempts
+        else:
+            text = generated
+            llm_info["attempts"] = 1
     except Exception as exc:  # 키 없음·한도 초과·시간 초과 등 무엇이 와도 기본 문장으로 대신한다
         llm_info["elapsed_ms"] = round((time.monotonic() - start) * 1000)
+        llm_info["attempts"] = getattr(exc, "attempts", 1)
+        llm_info["provider"] = getattr(exc, "provider", None) or llm_info["provider"]
         llm_info["error"] = str(exc) if isinstance(exc, llm_client.LLMUnavailable) \
             else f"{type(exc).__name__}: {str(exc)[:200]}"
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
