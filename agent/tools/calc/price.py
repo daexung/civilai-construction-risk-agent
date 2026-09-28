@@ -61,7 +61,7 @@ def _exact(value: Decimal) -> str:
     return format(value.normalize(), "f")
 
 
-def _reference_amounts(subtotals: dict, total: str | None, volume: str | None) -> dict | None:
+def _reference_amounts(unit_prices: dict, total: str | None, volume: str | None) -> dict | None:
     """Calculate whole-won quantity references from displayed unit amounts."""
     if volume is None:
         return None
@@ -76,7 +76,7 @@ def _reference_amounts(subtotals: dict, total: str | None, volume: str | None) -
 
     return {
         "volume": _exact(quantity),
-        "subtotals": {category: multiply(amount) for category, amount in subtotals.items()},
+        "subtotals": {category: multiply(amount) for category, amount in unit_prices.items()},
         "total": multiply(total),
     }
 
@@ -310,11 +310,15 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
 
     subtotals = {category: _money(sum(values, Decimal("0")) if values else None, 1)
                  for category, values in category_values.items()}
-    total_exact = sum((value for values in category_values.values() for value in values), Decimal("0"))
+    unit_prices = {category: (_money(_truncate(sum(values, Decimal("0")), "1"), 0)
+                              if values else None)
+                   for category, values in category_values.items()}
     has_amount = any(category_values.values())
+    unit_total = (str(sum(int(value) for value in unit_prices.values() if value is not None))
+                  if has_amount else None)
+    total_exact = sum((value for values in category_values.values() for value in values), Decimal("0"))
     partial = bool(unpriced or excluded)
-    reference_amounts = _reference_amounts(subtotals, _money(_truncate(total_exact, "1"), 0)
-                                            if has_amount else None,
+    reference_amounts = _reference_amounts(unit_prices, unit_total,
                                             (inputs or {}).get("volume"))
     return {"status": "PARTIAL" if partial else "OK", "partial": partial,
             "rate_version": _version_info(rate_version),
@@ -322,8 +326,9 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
             "lines": rows, "equipment_lines": equipment_lines,
             "cost_lines": costs, "supply_lines": supply_lines,
             "labor_subtotal": _money(labor_subtotal, 1), "subtotals": subtotals,
+            "unit_prices": unit_prices,
             "total_exact": _money(total_exact, 1) if has_amount else None,
-            "total": _money(_truncate(total_exact, "1"), 0) if has_amount else None,
+            "total": unit_total,
             "reference_amounts": reference_amounts,
             "total_citations": [total_rule] if has_amount else [],
             "unpriced": unpriced, "excluded": excluded,

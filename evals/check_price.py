@@ -71,7 +71,8 @@ def main() -> int:
                                                    and item["amount"] == "680.7" for item in costs.values())
                    and {item["category"] for item in costs.values()} == {"경비", "재료비"}))
     checks.append(("P8 미산정 제외 부분 계금", priced["total_exact"] == "14975.9"
-                   and priced["total"] == "14975" and priced["partial"]
+                   and priced["unit_prices"] == {"재료비": "680", "노무비": "13614", "경비": "680"}
+                   and priced["total"] == "14974" and priced["partial"]
                    and priced["status"] == "PARTIAL"
                    and lines["콘크리트펌프차"]["amount"] is None
                    and any("레미콘" in item["name"] for item in priced["unpriced"])))
@@ -93,6 +94,17 @@ def main() -> int:
         line for line in incomplete["lines"] if line["name"] == "콘크리트공")["amount"] is None
                    and all(item["amount"] is None for item in incomplete["cost_lines"])))
 
+    case_input = cases["cases"][0]["input"]
+    reference_case = price_unit(spec, adjusted_daily_crew(spec, case_input)["unit_lines"],
+                                select_rate_version("2026-10-01"), case_input, "2026-10-01")
+    checks.append(("P11a 재료비·노무비·경비별 원 미만 버림 및 참고 금액",
+                   reference_case["unit_prices"] == {"재료비": "686", "노무비": "15898", "경비": "5150"}
+                   and reference_case["total"] == "21734"
+                   and reference_case["reference_amounts"] == {
+                       "volume": "260",
+                       "subtotals": {"재료비": "178360", "노무비": "4133480", "경비": "1339000"},
+                       "total": "5650840"}))
+
     client = TestClient(app)
     question = "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"
     answers = {"pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
@@ -107,7 +119,7 @@ def main() -> int:
     h1 = client.post("/api/chat", json={"thread_id": first_h1["thread_id"], "answers": answers}).json()
     checks.append(("P13 API 기준일 상반기", h1["priced"]["rate_version"]["id"] == "2026H1"
                    and h1["priced"]["total_exact"] == "21618.6"
-                   and h1["priced"]["total"] == "21618"))
+                   and h1["priced"]["total"] == "21617"))
     first_old = client.post("/api/chat", json={"message": question, "basis_date": "2025-12-01"}).json()
     old = client.post("/api/chat", json={"thread_id": first_old["thread_id"], "answers": answers}).json()
     checks.append(("P14 API 적용 기간 없음", old["status"] == "PARTIAL"
