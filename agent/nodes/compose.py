@@ -28,6 +28,7 @@ SYSTEM_PROMPT = (
     "있는 표기를 그대로 쓰고 임의로 반올림하거나 계산하지 마세요. "
     "금액을 말할 때는 반드시 '1㎥당'인지 '전체 물량 기준'인지 밝히세요. "
     "부분 금액이면 무엇이 제외되거나 미산정되어 빠졌는지도 함께 말하세요. "
+    "원가계산서 facts가 있으면 첫 문장은 반드시 '전체 물량 기준 도급액(부가세 포함)'을 말하세요. "
     "unit_price처럼 소수점이 긴 값은 가능하면 인용하지 말고 금액·합계 위주로 설명하세요. "
     "계산 금액이 있다면 '표준품셈 기준 금액이며 시장 가격과 다를 수 있다'는 점을 반드시 "
     "언급하고, 제외 항목이나 미산정 항목이 있다면 그 이름과 사유를 반드시 언급하세요."
@@ -125,7 +126,7 @@ def _priced_facts(priced: dict | None) -> dict | None:
     return {
         "lines": lines,
         "1㎥당 소계": {f"1㎥당 {name} 소계": _won(value)
-                       for name, value in (priced.get("subtotals") or {}).items()},
+                       for name, value in (priced.get("unit_prices") or priced.get("subtotals") or {}).items()},
         "1㎥당 합계(부분)" if priced.get("partial") else "1㎥당 합계": _won(priced.get("total")),
         reference_label: _won(reference.get("total")),
         "물량 기준 참고 소계": {f"{volume}㎥ 기준 {name} 소계(부분)" if priced.get("partial")
@@ -139,6 +140,40 @@ def _priced_facts(priced: dict | None) -> dict | None:
         "equipment_rate_version": {"version": equipment_rate_version["version"],
                                     "published": equipment_rate_version["published"]}
                                    if equipment_rate_version else None,
+    }
+
+
+def _statement_facts(statement: dict | None) -> dict | None:
+    if not statement:
+        return None
+    totals = statement.get("totals") or {}
+    total_names = {
+        "materials": "전체 물량 기준 재료비",
+        "labor": "전체 물량 기준 노무비",
+        "expenses": "전체 물량 기준 경비",
+        "net_cost": "전체 물량 기준 순공사원가",
+        "management": "전체 물량 기준 일반관리비",
+        "profit": "전체 물량 기준 이윤",
+        "total_cost": "전체 물량 기준 총원가",
+        "vat": "전체 물량 기준 부가가치세",
+        "contract_amount": "전체 물량 기준 도급액(부가세 포함)",
+    }
+    return {
+        "status": statement.get("status"),
+        "basis_date": statement.get("basis_date"),
+        "overhead_version": statement.get("overhead_version"),
+        "conditions": statement.get("conditions"),
+        "totals": {label: _won(totals[key]) for key, label in total_names.items() if key in totals},
+        "lines": [{"name": line.get("name"), "category": line.get("category"),
+                   "base": line.get("base"),
+                   "전체 물량 기준 기준액": _won(line.get("base_amount")),
+                   "rate": f"{line['rate']}%" if line.get("rate") is not None else None,
+                   "전체 물량 기준 금액": _won(line.get("amount")), "note": line.get("note")}
+                  for line in statement.get("lines", [])],
+        "excluded": statement.get("excluded", []),
+        "unpriced": statement.get("unpriced", []),
+        "basis_notes": statement.get("basis_notes", []),
+        "reason": statement.get("reason"),
     }
 
 
@@ -157,6 +192,7 @@ def build_facts(state: AgentState) -> dict:
         facts["inputs"] = _inputs_facts(state, spec)
         facts["input_count"] = len(facts["inputs"])
         facts["priced"] = _priced_facts(priced)
+        facts["statement"] = _statement_facts(state.get("statement"))
         facts["citation_labels"] = _citation_labels(_priced_citations(priced))
     elif status == "BLOCKED":
         result = state.get("result") or {}
@@ -172,32 +208,52 @@ def _template_priced(facts: dict) -> str:
     work = facts.get("work")
     label = f"{work['title']}({work['section_no']})" if work else "이번 계산"
     priced = facts.get("priced") or {}
+    statement = facts.get("statement") or {}
     partial = priced.get("partial")
     total_key = "1㎥당 합계(부분)" if partial else "1㎥당 합계"
     total = priced.get(total_key)
     subtotals = priced.get("1㎥당 소계") or {}
     sentences = []
+    statement_totals = statement.get("totals") or {}
+    contract_amount = statement_totals.get("전체 물량 기준 도급액(부가세 포함)")
+    if contract_amount is not None:
+        sentences.append(f"전체 물량 기준 원가계산서 도급액(부가세 포함)은 {contract_amount}입니다.")
+        sentences.append(
+            f"전체 물량 기준 재료비 {statement_totals.get('전체 물량 기준 재료비', '0원')}, "
+            f"노무비 {statement_totals.get('전체 물량 기준 노무비', '0원')}, "
+            f"경비 {statement_totals.get('전체 물량 기준 경비', '0원')}, "
+            f"순공사원가 {statement_totals.get('전체 물량 기준 순공사원가', '0원')}입니다."
+        )
+        sentences.append(
+            f"기준일 {statement.get('basis_date')} 제비율을 적용해 일반관리비 "
+            f"{statement_totals.get('전체 물량 기준 일반관리비', '0원')}과 이윤 "
+            f"{statement_totals.get('전체 물량 기준 이윤', '0원')}, 부가가치세 "
+            f"{statement_totals.get('전체 물량 기준 부가가치세', '0원')}를 반영했습니다."
+        )
+    elif statement.get("status") == "UNCALCULATED":
+        sentences.append("해당 기준일의 제비율이 없어 원가계산서 금액은 미산정입니다.")
     if total is not None:
         reference_key = next((key for key in priced if "㎥ 기준 참고 금액" in key), None)
         reference_amount = priced.get(reference_key) if reference_key else None
-        sentences.append(
-            f"{label}의 1㎥당 재료비 {subtotals.get('1㎥당 재료비 소계') or '0원'}, "
-            f"1㎥당 노무비 {subtotals.get('1㎥당 노무비 소계') or '0원'}, "
-            f"1㎥당 경비 {subtotals.get('1㎥당 경비 소계') or '0원'}이며, "
+        unit_sentence = (
+            f"{label}는 1㎥당 재료비 {subtotals.get('1㎥당 재료비 소계') or '0원'}, "
+            f"노무비 {subtotals.get('1㎥당 노무비 소계') or '0원'}, "
+            f"경비 {subtotals.get('1㎥당 경비 소계') or '0원'}이며, "
             f"1㎥당 {'미산정 항목을 제외한 부분 합계' if partial else '합계'}는 {total}입니다."
         )
         if reference_amount is not None:
-            sentences.append(f"{reference_key}: {reference_amount}입니다. 내역서 작성 전 참고용입니다.")
+            unit_sentence += f" {reference_key}는 {reference_amount}입니다. 내역서 작성 전 참고용입니다."
+        sentences.append(unit_sentence)
     else:
         sentences.append(f"{label}은(는) 현재 적용 가능한 단가가 없어 금액을 계산하지 못했습니다.")
-    excluded = priced.get("excluded") or []
-    if excluded:
-        parts = "; ".join(f"{item['name']}({item['reason']})" for item in excluded)
-        sentences.append(f"제외 항목: {parts}.")
-    unpriced = priced.get("unpriced") or []
-    if unpriced:
-        parts = "; ".join(f"{item['name']}({item['reason']})" for item in unpriced)
-        sentences.append(f"미산정 항목: {parts}.")
+    excluded = list(priced.get("excluded") or [])
+    excluded += statement.get("excluded") or []
+    unpriced = list(priced.get("unpriced") or [])
+    unpriced += statement.get("unpriced") or []
+    omitted = [*(f"{item['name']} 제외({item['reason']})" for item in excluded),
+               *(f"{item['name']} 미산정({item['reason']})" for item in unpriced)]
+    if omitted:
+        sentences.append("제외·미산정 항목: " + "; ".join(omitted) + ".")
     sentences.append("표준품셈 기준 금액이며 시장 가격과 다를 수 있습니다.")
     return " ".join(sentences)
 
@@ -264,7 +320,7 @@ def validate_amount_basis(text: str) -> bool:
     """Require each currency amount to carry an adjacent quantity basis."""
     for match in re.finditer(r"\d[\d,]*(?:\.\d+)?\s*원", text):
         context = text[max(0, match.start() - 24):match.start()]
-        if not re.search(r"(?:1\s*㎥\s*당|㎥\s*기준)", context):
+        if not re.search(r"(?:1\s*㎥\s*당|㎥\s*기준|전체\s*물량\s*기준)", context):
             return False
     return True
 

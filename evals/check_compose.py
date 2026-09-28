@@ -18,6 +18,7 @@ from agent.nodes.compose import build_facts, build_template, compose, validate_a
 from agent.nodes.compute import compute  # noqa: E402
 from agent.nodes.gate import gate  # noqa: E402
 from agent.nodes.price import price  # noqa: E402
+from agent.nodes.statement import statement  # noqa: E402
 from agent.rules.specs import load_specs  # noqa: E402
 from agent.state import new_state  # noqa: E402
 from agent.tools.llm.client import LLMUnavailable  # noqa: E402
@@ -28,6 +29,8 @@ PUMP_INPUTS = {
     "pump_size": "32m", "volume": "260", "structure": "철근", "slump_band": "15㎝",
     "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ", "placement": "붐",
     "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",
+    "work_category": "기타 토목공사", "duration": "1~6개월", "contractor_type": "종합건설업",
+    "project_scale": "이 견적만",
 }
 
 
@@ -38,6 +41,7 @@ def partial_state() -> dict:
     state.update(gate(state))
     state.update(compute(state))
     state.update(price(state))
+    state.update(statement(state))
     return state
 
 
@@ -69,11 +73,14 @@ def main() -> int:
                    "1㎥당 합계(부분)" in priced_facts
                    and "합계" not in priced_facts
                    and "260㎥ 기준 참고 금액(부분)" in priced_facts
-                   and priced_facts["260㎥ 기준 참고 금액(부분)"] == "5,651,100원"
+                   and priced_facts["260㎥ 기준 참고 금액(부분)"] == "5,650,840원"
                    and all(key.startswith("1㎥당 ") for key in priced_facts["1㎥당 소계"])))
     checks.append(("C0b 6-1-4 제외·미산정에 펌프차 기계경비 없음",
                    all("펌프차 기계경비" not in item["name"]
                        for field in ("excluded", "unpriced") for item in priced_facts[field])))
+    checks.append(("C0c 원가계산서 도급액 facts",
+                   facts["statement"]["totals"]["전체 물량 기준 도급액(부가세 포함)"] == "10,032,436원"
+                   and facts["statement"]["totals"]["전체 물량 기준 순공사원가"] == "7,364,857원"))
 
     def good_llm(prompt: str, system: str) -> str:
         return (f"{facts['work']['title']} 계산 결과 1㎥당 합계(부분)는 "
@@ -132,12 +139,12 @@ def main() -> int:
         checks.append((f"C5 {status} status 불변", "status" not in result))
     checks.append(("C5 상태 확인", all(st["status"] == status for status, st in per_status.items())))
 
-    ok, bad_numbers = validate_numbers("6-1-4 절의 합계는 21,735원입니다.", facts)
+    ok, bad_numbers = validate_numbers("6-1-4 절의 합계는 21,734원입니다.", facts)
     checks.append(("C6 숫자 정규화(쉼표·절 번호)", ok and not bad_numbers))
     ok2, bad_numbers2 = validate_numbers("약 21735.5원입니다.", facts)
     checks.append(("C7 facts에 없는 소수도 거부", not ok2 and "21735.5" in bad_numbers2))
 
-    basis_missing_text = "총 공사비 21,735원입니다."
+    basis_missing_text = "총 공사비 21,734원입니다."
     checks.append(("C7b 금액 기준 표시 누락은 template 대체",
                    validate_numbers(basis_missing_text, facts)[0]
                    and not validate_amount_basis(basis_missing_text)
@@ -146,7 +153,7 @@ def main() -> int:
     graph = build_graph()
     config = {"configurable": {"thread_id": "compose-g1"}}
     graph.invoke(new_state("철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"), config)
-    final = graph.invoke(Command(resume="15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 없음 레미콘 관급"), config)
+    final = graph.invoke(Command(resume="기타 토목공사 6개월 종합건설업 이 견적만 15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 없음 레미콘 관급"), config)
     checks.append(("C8 그래프 전체: PARTIAL 유지", final["status"] == "PARTIAL"))
     checks.append(("C9 그래프 전체: answer 필드 추가", bool(final.get("answer"))
                    and final.get("answer_source") in ("llm", "template")))
