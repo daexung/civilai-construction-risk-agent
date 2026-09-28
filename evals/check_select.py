@@ -80,7 +80,7 @@ def collect(cases: list[dict], offline: bool) -> list[dict] | None:
         os.environ.pop("AGENT_OFFLINE", None)
         try:
             api_key()
-        except SystemExit:
+        except (RuntimeError, SystemExit):
             print("HYBRID SKIPPED: GEMINI_API_KEY 없음")
             return None
     get_search.cache_clear()

@@ -4,7 +4,8 @@ import os
 from functools import cache
 
 from agent.state import AgentState
-from agent.tools.search.bm25 import CHUNKS, Index, load
+from agent.tools.search.bm25 import Index, load
+from agent.tools.search.vector import ModelMismatchError, load_index_config
 
 
 class _Fallback:
@@ -15,24 +16,26 @@ class _Fallback:
         self.bm25 = bm25
         self.used = "hybrid"
         self.error: str | None = None
+        self.fallback_reason: str | None = None
 
     @property
     def api_calls(self) -> int:
         return self.primary.api_calls
 
     def search(self, query: str, k: int = 10):
-        self.used, self.error = "hybrid", None
+        self.used, self.error, self.fallback_reason = "hybrid", None, None
         try:
             return self.primary.search(query, k)
         except Exception as exc:  # API·벡터 검색 오류
             self.used = "bm25(대체)"
-            self.error = f"하이브리드 검색 실패로 BM25로 대신했습니다: {type(exc).__name__}: {str(exc)[:120]}"
+            self.fallback_reason = type(exc).__name__
+            self.error = f"하이브리드 검색 실패로 BM25로 대신했습니다: {self.fallback_reason}"
             return self.bm25.search(query, k)
 
 
 def make_search_index(offline: bool, hybrid_factory=None):
     """검색 인덱스와 초기 검색 방식·경고를 만든다."""
-    bm25 = Index(load(CHUNKS))
+    bm25 = Index(load(load_index_config()["chunks"]))
     if offline:
         return bm25, "bm25(오프라인)", None
     try:
@@ -40,6 +43,8 @@ def make_search_index(offline: bool, hybrid_factory=None):
             from agent.tools.search.hybrid import HybridIndex
             hybrid_factory = HybridIndex
         return _Fallback(hybrid_factory(bm25=bm25), bm25), "hybrid", None
+    except ModelMismatchError:
+        raise
     except Exception as exc:  # 패키지·벡터 파일 오류
         return bm25, "bm25(대체)", f"하이브리드 검색을 준비하지 못해 BM25로 대신했습니다: {type(exc).__name__}: {str(exc)[:120]}"
 
@@ -64,6 +69,7 @@ def retrieve(state: AgentState) -> dict:
             "chunk_id": chunk["chunk_id"],
             "kind": chunk["kind"],
             "section_no": chunk["section_no"],
+            "division": chunk.get("division", "공통"),
             "section": chunk["section"],
             "page": chunk["source"]["page"],
             "table_id": chunk["source"].get("table_id"),
@@ -76,4 +82,5 @@ def retrieve(state: AgentState) -> dict:
         "method": method,
         "api_calls": getattr(index, "api_calls", 0) - before,
         "warnings": [warning] if warning else [],
+        "fallback_reason": index.fallback_reason if isinstance(index, _Fallback) else None,
     }}

@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-from agent.tools.search.bm25 import CHUNKS, Index, load
+from agent.tools.search.bm25 import Index
 from agent.tools.search.vector import VectorIndex
 
 K = 60             # RRF 표준 상수
@@ -21,9 +21,10 @@ CANDIDATES = 20    # 방식마다 합치기에 쓰는 상위 순위 수
 
 
 class HybridIndex:
-    def __init__(self, bm25: Index | None = None, vector: VectorIndex | None = None):
-        self.vector = vector or VectorIndex()
-        self.bm25 = bm25 or Index(load(CHUNKS))
+    def __init__(self, bm25: Index | None = None, vector: VectorIndex | None = None,
+                 *, config_path: Path | None = None):
+        self.vector = vector or VectorIndex(config_path=config_path)
+        self.bm25 = bm25 or Index(self.vector.chunks)
         self.chunks = self.vector.chunks
         self.by_id = {c["chunk_id"]: c for c in self.chunks}
         self.last_ranks: dict[str, dict] = {}

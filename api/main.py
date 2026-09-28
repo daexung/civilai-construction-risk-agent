@@ -250,7 +250,8 @@ def _search_out(state: dict) -> dict:
     warnings = list(search_info.get("warnings", []))
     if method and method not in ("hybrid", "bm25(오프라인)") and not warnings:
         warnings = [f"임베딩 검색이 꺼져 단어 검색({method})으로만 찾았습니다"]
-    return {"method": method, "api_calls": search_info.get("api_calls", 0), "warnings": warnings}
+    return {"method": method, "api_calls": search_info.get("api_calls", 0), "warnings": warnings,
+            "fallback_reason": search_info.get("fallback_reason")}
 
 
 def _build_response(thread_id: str, state: dict) -> dict:
