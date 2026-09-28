@@ -17,7 +17,9 @@ from api.main import app  # noqa: E402
 CLIENT = TestClient(app)
 
 PUMP_ANSWERS = {"pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
-                "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급"}
+                "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",
+                "work_category": "기타 토목공사", "duration": "1~6개월", "contractor_type": "종합건설업",
+                "project_scale": "이 견적만"}
 
 
 def main() -> int:
@@ -29,19 +31,25 @@ def main() -> int:
     evidence = CLIENT.post("/api/chat", json={"message": "합판거푸집 설치 인건비"}).json()
     checks.append(("A2", evidence["status"] == "EVIDENCE_ONLY" and len(evidence["evidence"]) == 3))
 
-    missing = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"}).json()
+    missing = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
+                                              "basis_date": "2026-10-01"}).json()
     thread_id = missing["thread_id"]
-    checks.append(("A3", missing["status"] == "MISSING_INFO" and len(missing["questions"]) == 8
+    checks.append(("A3", missing["status"] == "MISSING_INFO" and len(missing["questions"]) == 12
                    and missing["work"]["section_no"] == "6-1-4"))
 
     computed = CLIENT.post("/api/chat", json={"thread_id": thread_id, "answers": PUMP_ANSWERS}).json()
     computed_lines = {line["name"]: line for line in computed.get("result", {}).get("lines", [])}
-    checks.append(("A4", computed["status"] == "PARTIAL" and len(computed["inputs"]) == 10
-                   and all(item["source"] in ("질문", "선택") for item in computed["inputs"])
+    checks.append(("A4", computed["status"] == "PARTIAL" and len(computed["inputs"]) == 14
+                   and all(item["source"] in ("질문", "답변", "선택", "기본값") for item in computed["inputs"])
                    and computed_lines.get("콘크리트공", {}).get("value") == "8"
                    and computed_lines.get("콘크리트펌프차", {}).get("kind") == "equipment"
                    and computed_lines.get("콘크리트펌프차", {}).get("value") == "2"
-                   and computed["result"]["review_status"] == "미완료"))
+                   and computed["result"]["review_status"] == "미완료"
+                   and computed["statement"]["totals"] == {
+                       "materials": 178360, "labor": 4922974, "expenses": 2263523,
+                       "net_cost": 7364857, "management": 589188, "profit": 1166352,
+                       "total_cost": 9120397, "vat": 912039, "contract_amount": 10032436
+                   }))
 
     reused = CLIENT.post("/api/chat", json={"thread_id": thread_id, "message": "새 질문"}).json()
     checks.append(("A5", reused["thread_id"] != thread_id))

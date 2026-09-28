@@ -13,7 +13,9 @@ def compute(state: AgentState) -> dict:
     calculate = CALCULATORS.get(name)
     if calculate is None:
         return {"status": "ERROR", "reason": f"등록되지 않은 계산 방식입니다: {name}"}
-    result = calculate(spec, state.get("inputs", {}))
+    spec_inputs = {field["name"] for field in spec["inputs"]}
+    result = calculate(spec, {name: value for name, value in state.get("inputs", {}).items()
+                              if name in spec_inputs})
     if result.get("status") != "computed":
         return {"status": "ERROR",
                 "reason": f"fill·gate가 막았어야 할 계산 결과입니다({result.get('status')}): {result}"}

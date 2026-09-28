@@ -76,6 +76,8 @@ def main() -> int:
     computed = client.post("/api/chat", json={"thread_id": start["thread_id"], "answers": {
         "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
         "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",
+        "work_category": "기타 토목공사", "duration": "1~6개월", "contractor_type": "종합건설업",
+        "project_scale": "이 견적만",
     }}).json()
     checks.append(("E14 API 구성 금액", computed["status"] == "PARTIAL"
                    and [row["amount"] for row in computed["priced"]["equipment_lines"]]

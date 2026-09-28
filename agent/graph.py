@@ -7,6 +7,7 @@ from agent.nodes.ask import ask
 from agent.nodes.compose import compose
 from agent.nodes.compute import compute
 from agent.nodes.price import price
+from agent.nodes.statement import statement
 from agent.nodes.fill import fill
 from agent.nodes.gate import gate
 from agent.nodes.retrieve import retrieve
@@ -50,6 +51,7 @@ def build_graph(checkpointer=None):
     graph.add_node("gate", gate)
     graph.add_node("compute", compute)
     graph.add_node("price", price)
+    graph.add_node("statement", statement)
     graph.add_node("compose", compose)
     graph.add_edge(START, "route")
     graph.add_conditional_edges("route", _after_route, {"compose": "compose", "retrieve": "retrieve"})
@@ -59,6 +61,7 @@ def build_graph(checkpointer=None):
     graph.add_edge("ask", "fill")
     graph.add_conditional_edges("gate", _after_gate, {"compose": "compose", "compute": "compute"})
     graph.add_edge("compute", "price")
-    graph.add_edge("price", "compose")
+    graph.add_edge("price", "statement")
+    graph.add_edge("statement", "compose")
     graph.add_edge("compose", END)
     return graph.compile(checkpointer=checkpointer if checkpointer is not None else MemorySaver())

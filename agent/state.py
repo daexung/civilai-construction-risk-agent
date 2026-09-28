@@ -27,6 +27,7 @@ class AgentState(TypedDict, total=False):
     result: dict  # gate·compute의 계산 결과
     basis_date: str  # 노임단가 적용 기준일(YYYY-MM-DD); 없으면 현재일
     priced: dict  # 일위대가 노무비·요율 비용
+    statement: dict  # 물량 기준 원가계산서 최종 견적
     rate_version: dict | None  # 적용한 공표 버전 메타데이터
 
 

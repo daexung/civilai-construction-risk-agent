@@ -18,6 +18,7 @@ from pydantic import BaseModel
 from agent.graph import build_graph
 from agent.rules.specs import load_specs
 from agent.state import new_state
+from agent.nodes.fill import _common_fields
 from agent.tools.source.citation import resolve_cites
 
 GRAPH = build_graph()
@@ -54,6 +55,8 @@ _FIELD_LABELS = {
 
 
 def _label(field: dict) -> str:
+    if field.get("label"):
+        return field["label"]
     if field["name"] in _FIELD_LABELS:
         return _FIELD_LABELS[field["name"]]
     match = re.search(r"^(.+?)(?:은|는|이|가)\s", field.get("ask", ""))
@@ -70,6 +73,8 @@ def _questions_out(questions: list[dict]) -> list[dict]:
             "default": question.get("default"),
             "decision_table": question.get("decision_table"),
             "reason": question.get("reason"),
+            "optional": question.get("optional", False),
+            "free_input": question.get("free_input", False),
         }
         for question in questions
     ]
@@ -77,6 +82,7 @@ def _questions_out(questions: list[dict]) -> list[dict]:
 
 def _inputs_out(state: dict, spec: dict | None) -> list[dict]:
     field_by_name = {field["name"]: field for field in spec["inputs"]} if spec else {}
+    field_by_name.update({field["name"]: field for field in _common_fields()})
     sources = state.get("input_sources", {})
     out = []
     for name, value in state.get("inputs", {}).items():
@@ -261,6 +267,7 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "evidence": _evidence_out(state),
         "result": _result_out(state, spec),
         "priced": _priced_out(state.get("priced")),
+        "statement": state.get("statement"),
         "answer": state.get("answer") or None,
         "answer_source": state.get("answer_source") or None,
         "basis_date": state.get("basis_date") or date.today().isoformat(),

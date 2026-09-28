@@ -5,9 +5,17 @@ from __future__ import annotations
 import re
 import unicodedata
 from fractions import Fraction
+import json
+from pathlib import Path
 
 from agent.rules.specs import load_specs
 from agent.state import AgentState
+
+_COMMON_INPUTS = Path(__file__).resolve().parents[1] / "rules/cost_statement_inputs.json"
+
+
+def _common_fields() -> list[dict]:
+    return json.loads(_COMMON_INPUTS.read_text(encoding="utf-8"))["fields"]
 
 
 def _norm(text: str) -> str:
@@ -38,6 +46,48 @@ def _enum_matches(query: str, field: dict) -> set[str]:
             if needle in query:
                 matches.add(value)
     return matches
+
+
+def _extract_common_inputs(text: str) -> dict:
+    normalized = _norm(text)
+    fields = _common_fields()
+    values = {}
+    for field in fields:
+        name = field["name"]
+        if name == "project_scale":
+            if "이견적만" in normalized or "이번견적만" in normalized:
+                values[name] = "이 견적만"
+            else:
+                scale = re.search(r"([\d,]+(?:\.\d+)?)\s*(억|원)", normalized)
+                if scale:
+                    amount = Fraction(scale.group(1).replace(",", ""))
+                    amount *= 100_000_000 if scale.group(2) == "억" else 1
+                    if amount.denominator == 1 and amount > 0:
+                        values[name] = str(amount.numerator)
+            continue
+        matches = []
+        for value in field["allowed_values"]:
+            for spelling in [value, *field.get("synonyms", {}).get(value, [])]:
+                needle = _norm(spelling)
+                if needle and needle in normalized:
+                    matches.append((len(needle), value))
+        if name == "duration":
+            if "36개월초과" in normalized or "3년초과" in normalized:
+                matches.append((100, "36개월 초과"))
+            elif re.search(r"(?:13|1[3-9]|2\d|3[0-6])\s*(?:~|-|에서|부터)\s*36\s*개월|(?:13|1[3-9]|2\d|3[0-6])\s*개월", normalized):
+                matches.append((100, "13~36개월"))
+            elif re.search(r"(?:7|8|9|10|11|12)\s*(?:~|-|에서|부터)\s*12?\s*개월|(?:7|8|9|10|11|12)\s*개월", normalized):
+                matches.append((100, "7~12개월"))
+            elif "1개월미만" in normalized or "30일미만" in normalized:
+                matches.append((100, "1개월 미만"))
+            elif re.search(r"(?:1\s*(?:~|-|에서|부터)\s*6\s*개월|6\s*개월)", normalized):
+                matches.append((100, "1~6개월"))
+        if matches:
+            max_length = max(length for length, _ in matches)
+            selected = {value for length, value in matches if length == max_length}
+            if len(selected) == 1:
+                values[name] = selected.pop()
+    return values
 
 
 def _type_values(query: str, field: dict) -> set[str]:
@@ -83,7 +133,10 @@ def _volume(query: str) -> tuple[str | None, str | None]:
     wrong_unit = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?\s*(?:m2|m|톤)(?![a-z0-9])", query, re.I)
     if wrong_unit:
         return None, "물량 단위가 ㎥/m3/루베가 아닙니다"
-    without_options = re.sub(r"\d+-\d+-\d+|타입\d+|\d+유형|\d+(?:~|-)\d+cm|\d+cm", "", query)
+    without_options = re.sub(
+        r"\d+-\d+-\d+|타입\d+|\d+유형|\d+(?:~|-)\d+cm|\d+cm|"
+        r"\d+(?:~|-)\d+개월|\d+개월|\d+일|\d[\d,]*(?:\.\d+)?(?:억|원)",
+        "", query)
     bare = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?(?![0-9a-z.]|cm|유형)", without_options)
     if bare:
         return None, "물량 단위가 없습니다"
@@ -178,6 +231,12 @@ def _compatible_inputs(inputs: dict, sources: dict, spec: dict) -> tuple[dict, d
         retained[name] = inputs[name]
         if name in sources:
             retained_sources[name] = sources[name]
+    for field in _common_fields():
+        name = field["name"]
+        if name in inputs and _valid_for_field(inputs[name], field):
+            retained[name] = inputs[name]
+            if name in sources:
+                retained_sources[name] = sources[name]
     return retained, retained_sources
 
 
@@ -198,6 +257,13 @@ def _valid_for_field(value: object, field: dict) -> bool:
         return _valid_positive_rational(value)
     if kind == "nonnegative_integer":
         return type(value) is int and value >= 0
+    if kind == "project_scale":
+        if value == "이 견적만":
+            return True
+        try:
+            return Fraction(str(value)) > 0
+        except (ValueError, ZeroDivisionError):
+            return False
     return False
 
 
@@ -245,9 +311,12 @@ def fill(state: AgentState) -> dict:
                 update["spec_id"] = available["id"]
     text = reply_text if (answers or reply_text) else state.get("query", "")
     values, ambiguities = extract_inputs(text, spec) if spec else ({}, {})
+    common_values = _extract_common_inputs(text)
     origin = "답변" if (answers or reply_text or previous) else "질문"
     inputs.update(values)
+    inputs.update(common_values)
     sources.update({name: origin for name in values})
+    sources.update({name: origin for name in common_values})
     dict_errors = {}
     if spec:
         for field in spec["inputs"]:
@@ -260,6 +329,20 @@ def fill(state: AgentState) -> dict:
                 sources[name] = "선택"
             else:
                 dict_errors[name] = "허용값이 아닙니다"
+    common_fields = _common_fields()
+    for field in common_fields:
+        name = field["name"]
+        if name not in field_answers:
+            continue
+        value = field_answers[name]
+        if _valid_for_field(value, field):
+            inputs[name] = str(value) if field["type"] == "project_scale" and value != "이 견적만" else value
+            sources[name] = "선택"
+        else:
+            dict_errors[name] = "허용값이 아닙니다"
+    if "project_scale" not in inputs:
+        inputs["project_scale"] = "이 견적만"
+        sources["project_scale"] = "기본값"
     ambiguities = {**ambiguities, **dict_errors}
     questions = []
     if update.get("selection", state.get("selection", {})).get("confirmed") is False:
@@ -287,6 +370,21 @@ def fill(state: AgentState) -> dict:
             if name in ambiguities:
                 question["reason"] = ambiguities[name]
             questions.append(question)
+    missing_common = []
+    for field in common_fields:
+        name = field["name"]
+        if field["required"] and (name not in inputs or name in ambiguities):
+            question = {"name": name, "ask": field["ask"],
+                        "choices": field.get("allowed_values")}
+            if name in ambiguities:
+                question["reason"] = ambiguities[name]
+            questions.append(question)
+            missing_common.append(name)
+    if missing_common and sources.get("project_scale") == "기본값":
+        scale_field = next(field for field in common_fields if field["name"] == "project_scale")
+        questions.append({"name": "project_scale", "ask": scale_field["ask"],
+                          "choices": scale_field["allowed_values"], "free_input": True,
+                          "default": scale_field["default"], "optional": True})
     update.update(inputs=inputs, input_sources=sources, questions=questions)
     if questions:
         update.update(status="MISSING_INFO", reason="계산에 필요한 조건을 확인해 주세요")
