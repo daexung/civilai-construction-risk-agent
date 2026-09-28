@@ -1,0 +1,2345 @@
+{
+  "versions": {
+    "260101": {
+      "effective_from": "2026-01-01",
+      "effective_rule": "기초금액 발표분부터",
+      "civil": {
+        "source_file": "data/raw/토목공사 간접공사비 적용기준(260101).xlsx",
+        "indirect_labor": [
+          {
+            "scale": "10억 미만",
+            "period": "6개월 이하",
+            "rate": "16.5",
+            "cell": "AC15"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "7~12개월",
+            "rate": "16.7",
+            "cell": "AC17"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "13~36개월",
+            "rate": "16.8",
+            "cell": "AC19"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "36개월 초과",
+            "rate": "17.7",
+            "cell": "AC21"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "6개월 이하",
+            "rate": "16.2",
+            "cell": "AC23"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "7~12개월",
+            "rate": "16.4",
+            "cell": "AC25"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "13~36개월",
+            "rate": "16.5",
+            "cell": "AC27"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "36개월 초과",
+            "rate": "17.5",
+            "cell": "AC29"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "6개월 이하",
+            "rate": "16.3",
+            "cell": "AC31"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "7~12개월",
+            "rate": "16.4",
+            "cell": "AC33"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "13~36개월",
+            "rate": "16.6",
+            "cell": "AC35"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "36개월 초과",
+            "rate": "17.5",
+            "cell": "AC37"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "6개월 이하",
+            "rate": "15.7",
+            "cell": "AC39"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "7~12개월",
+            "rate": "15.9",
+            "cell": "AC41"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "13~36개월",
+            "rate": "16",
+            "cell": "AC43"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "36개월 초과",
+            "rate": "16.9",
+            "cell": "AC45"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "6개월 이하",
+            "rate": "15.7",
+            "cell": "AC47"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "7~12개월",
+            "rate": "15.8",
+            "cell": "AC49"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "13~36개월",
+            "rate": "16",
+            "cell": "AC51"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "36개월 초과",
+            "rate": "16.9",
+            "cell": "AC53"
+          }
+        ],
+        "other_expense": [
+          {
+            "scale": "10억 미만",
+            "period": "6개월 이하",
+            "rate": "5.2",
+            "cell": "AL15"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "7~12개월",
+            "rate": "5.3",
+            "cell": "AL17"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "13~36개월",
+            "rate": "5.6",
+            "cell": "AL19"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "36개월 초과",
+            "rate": "6.1",
+            "cell": "AL21"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "6개월 이하",
+            "rate": "5.3",
+            "cell": "AL23"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "7~12개월",
+            "rate": "5.4",
+            "cell": "AL25"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "13~36개월",
+            "rate": "5.7",
+            "cell": "AL27"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "36개월 초과",
+            "rate": "6.3",
+            "cell": "AL29"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "6개월 이하",
+            "rate": "5.7",
+            "cell": "AL31"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "7~12개월",
+            "rate": "5.8",
+            "cell": "AL33"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "13~36개월",
+            "rate": "6.1",
+            "cell": "AL35"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "36개월 초과",
+            "rate": "6.7",
+            "cell": "AL37"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "6개월 이하",
+            "rate": "6",
+            "cell": "AL39"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "7~12개월",
+            "rate": "6.1",
+            "cell": "AL41"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "13~36개월",
+            "rate": "6.4",
+            "cell": "AL43"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "36개월 초과",
+            "rate": "7",
+            "cell": "AL45"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "6개월 이하",
+            "rate": "6.1",
+            "cell": "AL47"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "7~12개월",
+            "rate": "6.2",
+            "cell": "AL49"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "13~36개월",
+            "rate": "6.5",
+            "cell": "AL51"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "36개월 초과",
+            "rate": "7.1",
+            "cell": "AL53"
+          }
+        ],
+        "management": [
+          {
+            "contractor": "종합건설업",
+            "scale": "50억 미만",
+            "rate": "8",
+            "cell": "BD15"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "50억~300억 미만",
+            "rate": "6.5",
+            "cell": "BD33"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "300억~1000억 미만",
+            "rate": "5",
+            "cell": "BD45"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "1000억 이상",
+            "rate": "4.5",
+            "cell": "BD51"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "5억 미만",
+            "rate": "8",
+            "cell": "BL15"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "5억~30억 미만",
+            "rate": "6.5",
+            "cell": "BL21"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "30억~100억 미만",
+            "rate": "5",
+            "cell": "BL27"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "100억 이상",
+            "rate": "4.5",
+            "cell": "BL39"
+          }
+        ],
+        "profit": [
+          {
+            "scale": "50억 미만",
+            "rate": "15",
+            "cell": "BS15"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "rate": "12",
+            "cell": "BS33"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "rate": "10",
+            "cell": "BS45"
+          },
+          {
+            "scale": "1000억 이상",
+            "rate": "9",
+            "cell": "BS51"
+          }
+        ],
+        "employment_insurance": [
+          {
+            "grade": "1등급",
+            "minimum_won": 120000000000,
+            "rate": "1.57",
+            "cell": "AH67"
+          },
+          {
+            "grade": "2등급",
+            "minimum_won": 80000000000,
+            "rate": "1.30",
+            "cell": "AH69"
+          },
+          {
+            "grade": "3등급",
+            "minimum_won": 52000000000,
+            "rate": "1.13",
+            "cell": "AH71"
+          },
+          {
+            "grade": "4등급",
+            "minimum_won": 34000000000,
+            "rate": "1.06",
+            "cell": "AH73"
+          },
+          {
+            "grade": "5등급",
+            "minimum_won": 21000000000,
+            "rate": "1.03",
+            "cell": "AH75"
+          },
+          {
+            "grade": "6등급",
+            "minimum_won": 13000000000,
+            "rate": "1.02",
+            "cell": "AH77"
+          },
+          {
+            "grade": "7등급",
+            "minimum_won": 0,
+            "rate": "1.01",
+            "cell": "AH79"
+          }
+        ],
+        "industrial_safety": [
+          {
+            "scale": "5억 미만",
+            "kind": "건축공사",
+            "rate": "3.11",
+            "cell": "ES19"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "토목공사",
+            "rate": "3.15",
+            "cell": "ES21"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "중건설공사",
+            "rate": "3.64",
+            "cell": "ES23"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "특수건설공사",
+            "rate": "2.07",
+            "cell": "ES25"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "건축공사",
+            "rate": "2.28",
+            "cell": "ES27"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "토목공사",
+            "rate": "2.53",
+            "cell": "ES29"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "중건설공사",
+            "rate": "3.05",
+            "cell": "ES31"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "특수건설공사",
+            "rate": "1.59",
+            "cell": "ES33"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "건축공사",
+            "rate": "2.37",
+            "cell": "ES35"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "토목공사",
+            "rate": "2.6",
+            "cell": "ES37"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "중건설공사",
+            "rate": "3.11",
+            "cell": "ES39"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "특수건설공사",
+            "rate": "1.64",
+            "cell": "ES41"
+          }
+        ],
+        "environment": [
+          {
+            "kind": "road",
+            "rate": "0.9",
+            "cell": "BU80"
+          },
+          {
+            "kind": "plant",
+            "rate": "0.4",
+            "cell": "BU82"
+          },
+          {
+            "kind": "subway",
+            "rate": "0.5",
+            "cell": "BU84"
+          },
+          {
+            "kind": "rail",
+            "rate": "1.5",
+            "cell": "BU86"
+          },
+          {
+            "kind": "water",
+            "rate": "0.5",
+            "cell": "BU88"
+          },
+          {
+            "kind": "port",
+            "rate": "0.8",
+            "cell": "BU90"
+          },
+          {
+            "kind": "silt_screen",
+            "rate": "1.8",
+            "cell": "BU92",
+            "source_text": "(1.8)"
+          },
+          {
+            "kind": "dam",
+            "rate": "1.1",
+            "cell": "BU94"
+          },
+          {
+            "kind": "land",
+            "rate": "0.6",
+            "cell": "BU96"
+          },
+          {
+            "kind": "other_civil",
+            "rate": "0.8",
+            "cell": "BU98"
+          },
+          {
+            "kind": "redevelopment",
+            "rate": "0.7",
+            "cell": "BU102"
+          },
+          {
+            "kind": "new_housing",
+            "rate": "0.3",
+            "cell": "BU104"
+          },
+          {
+            "kind": "other_building",
+            "rate": "0.5",
+            "cell": "BU106"
+          }
+        ],
+        "subcontract": [
+          {
+            "scale": "50억 미만",
+            "minimum_won": 0,
+            "rate": "0.081",
+            "cell": "DC80"
+          },
+          {
+            "scale": "50억~100억 미만",
+            "minimum_won": 5000000000,
+            "rate": "0.08",
+            "cell": "DC83"
+          },
+          {
+            "scale": "100억~300억 미만",
+            "minimum_won": 10000000000,
+            "rate": "0.075",
+            "cell": "DC86"
+          },
+          {
+            "scale": "300억 이상 종심·종평제(토목 및 산업설비)",
+            "minimum_won": 30000000000,
+            "rate": "0.071",
+            "cell": "DC89"
+          },
+          {
+            "scale": "300억 이상 종심·종평제(건축)",
+            "minimum_won": 30000000000,
+            "rate": "0.068",
+            "cell": "DC92"
+          },
+          {
+            "scale": "턴키·대안공사",
+            "minimum_won": 0,
+            "rate": "0.084",
+            "cell": "DC95"
+          }
+        ],
+        "formula_rates": [
+          {
+            "name": "간접노무비",
+            "rate": "3.56",
+            "cell": "BZ63",
+            "source_text": "(노) x 3.56"
+          },
+          {
+            "name": "산재보험료",
+            "rate": "3.595",
+            "cell": "AU63",
+            "source_text": "(직노) x 3.595"
+          },
+          {
+            "name": "건강보험료 추가분",
+            "rate": "13.14",
+            "cell": "BD63",
+            "source_text": "(건강보험료) x 13.14"
+          },
+          {
+            "name": "장기요양보험료",
+            "rate": "4.75",
+            "cell": "BR63",
+            "source_text": "(직노) x 4.75"
+          },
+          {
+            "name": "건설기계대여대금 지급보증서 발급금액 추가분",
+            "rate": "2.3",
+            "cell": "BZ109",
+            "source_text": "(직노) x 2.3"
+          }
+        ]
+      },
+      "architecture": {
+        "source_file": "data/raw/건축공사 간접공사비 적용기준(260101).xlsx",
+        "indirect_labor": [
+          {
+            "scale": "10억 미만",
+            "period": "6개월 이하",
+            "rate": "15",
+            "cell": "AC15"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "7~12개월",
+            "rate": "15.2",
+            "cell": "AC17"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "13~36개월",
+            "rate": "15.4",
+            "cell": "AC19"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "36개월 초과",
+            "rate": "16.2",
+            "cell": "AC21"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "6개월 이하",
+            "rate": "14.7",
+            "cell": "AC23"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "7~12개월",
+            "rate": "14.9",
+            "cell": "AC25"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "13~36개월",
+            "rate": "15.1",
+            "cell": "AC27"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "36개월 초과",
+            "rate": "16",
+            "cell": "AC29"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "6개월 이하",
+            "rate": "14.8",
+            "cell": "AC31"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "7~12개월",
+            "rate": "15",
+            "cell": "AC33"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "13~36개월",
+            "rate": "15.2",
+            "cell": "AC35"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "36개월 초과",
+            "rate": "16",
+            "cell": "AC37"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "6개월 이하",
+            "rate": "14.3",
+            "cell": "AC39"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "7~12개월",
+            "rate": "14.5",
+            "cell": "AC41"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "13~36개월",
+            "rate": "14.7",
+            "cell": "AC43"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "36개월 초과",
+            "rate": "15.6",
+            "cell": "AC45"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "6개월 이하",
+            "rate": "14.2",
+            "cell": "AC47"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "7~12개월",
+            "rate": "14.4",
+            "cell": "AC49"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "13~36개월",
+            "rate": "14.6",
+            "cell": "AC51"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "36개월 초과",
+            "rate": "15.5",
+            "cell": "AC53"
+          }
+        ],
+        "other_expense": [
+          {
+            "scale": "10억 미만",
+            "period": "6개월 이하",
+            "rate": "4.6",
+            "cell": "AL15"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "7~12개월",
+            "rate": "4.7",
+            "cell": "AL17"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "13~36개월",
+            "rate": "5",
+            "cell": "AL19"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "36개월 초과",
+            "rate": "5.5",
+            "cell": "AL21"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "6개월 이하",
+            "rate": "4.7",
+            "cell": "AL23"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "7~12개월",
+            "rate": "4.8",
+            "cell": "AL25"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "13~36개월",
+            "rate": "5.1",
+            "cell": "AL27"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "36개월 초과",
+            "rate": "5.6",
+            "cell": "AL29"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "6개월 이하",
+            "rate": "5.1",
+            "cell": "AL31"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "7~12개월",
+            "rate": "5.2",
+            "cell": "AL33"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "13~36개월",
+            "rate": "5.5",
+            "cell": "AL35"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "36개월 초과",
+            "rate": "6.1",
+            "cell": "AL37"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "6개월 이하",
+            "rate": "5.3",
+            "cell": "AL39"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "7~12개월",
+            "rate": "5.4",
+            "cell": "AL41"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "13~36개월",
+            "rate": "5.7",
+            "cell": "AL43"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "36개월 초과",
+            "rate": "6.2",
+            "cell": "AL45"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "6개월 이하",
+            "rate": "5.6",
+            "cell": "AL47"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "7~12개월",
+            "rate": "5.7",
+            "cell": "AL49"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "13~36개월",
+            "rate": "6",
+            "cell": "AL51"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "36개월 초과",
+            "rate": "6.5",
+            "cell": "AL53"
+          }
+        ],
+        "management": [
+          {
+            "contractor": "종합건설업",
+            "scale": "50억 미만",
+            "rate": "8",
+            "cell": "BE15"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "50억~300억 미만",
+            "rate": "6.5",
+            "cell": "BE33"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "300억~1000억 미만",
+            "rate": "5",
+            "cell": "BE45"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "1000억 이상",
+            "rate": "4.5",
+            "cell": "BE51"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "5억 미만",
+            "rate": "8",
+            "cell": "BK15"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "5억~30억 미만",
+            "rate": "6.5",
+            "cell": "BK21"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "30억~100억 미만",
+            "rate": "5",
+            "cell": "BK27"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "100억 이상",
+            "rate": "4.5",
+            "cell": "BK39"
+          }
+        ],
+        "profit": [
+          {
+            "scale": "50억 미만",
+            "rate": "15",
+            "cell": "BR15"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "rate": "12",
+            "cell": "BR33"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "rate": "10",
+            "cell": "BR45"
+          },
+          {
+            "scale": "1000억 이상",
+            "rate": "9",
+            "cell": "BR51"
+          }
+        ],
+        "employment_insurance": [
+          {
+            "grade": "1등급",
+            "minimum_won": 120000000000,
+            "rate": "1.57",
+            "cell": "AH67"
+          },
+          {
+            "grade": "2등급",
+            "minimum_won": 80000000000,
+            "rate": "1.30",
+            "cell": "AH69"
+          },
+          {
+            "grade": "3등급",
+            "minimum_won": 52000000000,
+            "rate": "1.13",
+            "cell": "AH71"
+          },
+          {
+            "grade": "4등급",
+            "minimum_won": 34000000000,
+            "rate": "1.06",
+            "cell": "AH73"
+          },
+          {
+            "grade": "5등급",
+            "minimum_won": 21000000000,
+            "rate": "1.03",
+            "cell": "AH75"
+          },
+          {
+            "grade": "6등급",
+            "minimum_won": 13000000000,
+            "rate": "1.02",
+            "cell": "AH77"
+          },
+          {
+            "grade": "7등급",
+            "minimum_won": 0,
+            "rate": "1.01",
+            "cell": "AH79"
+          }
+        ],
+        "industrial_safety": [
+          {
+            "scale": "5억 미만",
+            "kind": "건축공사",
+            "rate": "3.11",
+            "cell": "ER19"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "토목공사",
+            "rate": "3.15",
+            "cell": "ER21"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "중건설공사",
+            "rate": "3.64",
+            "cell": "ER23"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "특수건설공사",
+            "rate": "2.07",
+            "cell": "ER25"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "건축공사",
+            "rate": "2.28",
+            "cell": "ER27"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "토목공사",
+            "rate": "2.53",
+            "cell": "ER29"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "중건설공사",
+            "rate": "3.05",
+            "cell": "ER31"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "특수건설공사",
+            "rate": "1.59",
+            "cell": "ER33"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "건축공사",
+            "rate": "2.37",
+            "cell": "ER35"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "토목공사",
+            "rate": "2.6",
+            "cell": "ER37"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "중건설공사",
+            "rate": "3.11",
+            "cell": "ER39"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "특수건설공사",
+            "rate": "1.64",
+            "cell": "ER41"
+          }
+        ],
+        "environment": [
+          {
+            "kind": "road",
+            "rate": "0.9",
+            "cell": "BT80"
+          },
+          {
+            "kind": "plant",
+            "rate": "0.4",
+            "cell": "BT82"
+          },
+          {
+            "kind": "subway",
+            "rate": "0.5",
+            "cell": "BT84"
+          },
+          {
+            "kind": "rail",
+            "rate": "1.5",
+            "cell": "BT86"
+          },
+          {
+            "kind": "water",
+            "rate": "0.5",
+            "cell": "BT88"
+          },
+          {
+            "kind": "port",
+            "rate": "0.8",
+            "cell": "BT92"
+          },
+          {
+            "kind": "silt_screen",
+            "rate": "1.8",
+            "cell": "BT90"
+          },
+          {
+            "kind": "dam",
+            "rate": "1.1",
+            "cell": "BT94"
+          },
+          {
+            "kind": "land",
+            "rate": "0.6",
+            "cell": "BT96"
+          },
+          {
+            "kind": "other_civil",
+            "rate": "0.8",
+            "cell": "BT98"
+          },
+          {
+            "kind": "redevelopment",
+            "rate": "0.7",
+            "cell": "BT100"
+          },
+          {
+            "kind": "new_housing",
+            "rate": "0.3",
+            "cell": "BT102"
+          },
+          {
+            "kind": "other_building",
+            "rate": "0.5",
+            "cell": "BT104"
+          }
+        ],
+        "subcontract": [
+          {
+            "scale": "50억 미만",
+            "minimum_won": 0,
+            "rate": "0.081",
+            "cell": "DB80"
+          },
+          {
+            "scale": "50억~100억 미만",
+            "minimum_won": 5000000000,
+            "rate": "0.08",
+            "cell": "DB83"
+          },
+          {
+            "scale": "100억~300억 미만",
+            "minimum_won": 10000000000,
+            "rate": "0.075",
+            "cell": "DB86"
+          },
+          {
+            "scale": "300억 이상 종심·종평제(토목 및 산업설비)",
+            "minimum_won": 30000000000,
+            "rate": "0.071",
+            "cell": "DB89"
+          },
+          {
+            "scale": "300억 이상 종심·종평제(건축)",
+            "minimum_won": 30000000000,
+            "rate": "0.068",
+            "cell": "DB92"
+          },
+          {
+            "scale": "턴키·대안공사",
+            "minimum_won": 0,
+            "rate": "0.084",
+            "cell": "DB95"
+          }
+        ],
+        "formula_rates": [
+          {
+            "name": "간접노무비",
+            "rate": "3.56",
+            "cell": "BY63",
+            "source_text": "(노) x 3.56"
+          },
+          {
+            "name": "산재보험료",
+            "rate": "3.595",
+            "cell": "AU63",
+            "source_text": "(직노) x 3.595"
+          },
+          {
+            "name": "건강보험료 추가분",
+            "rate": "13.14",
+            "cell": "BC63",
+            "source_text": "(건강보험료) x 13.14"
+          },
+          {
+            "name": "장기요양보험료",
+            "rate": "4.75",
+            "cell": "BQ63",
+            "source_text": "(직노) x 4.75"
+          },
+          {
+            "name": "건설기계대여대금 지급보증서 발급금액 추가분",
+            "rate": "2.3",
+            "cell": "BY109",
+            "source_text": "(직노) x 2.3"
+          }
+        ]
+      }
+    },
+    "260413": {
+      "effective_from": "2026-04-13",
+      "effective_rule": "입찰공고분부터",
+      "civil": {
+        "source_file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+        "indirect_labor": [
+          {
+            "scale": "10억 미만",
+            "period": "6개월 이하",
+            "rate": "19.1",
+            "cell": "AC15"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "7~12개월",
+            "rate": "19.5",
+            "cell": "AC17"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "13~36개월",
+            "rate": "19.8",
+            "cell": "AC19"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "36개월 초과",
+            "rate": "21",
+            "cell": "AC21"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "6개월 이하",
+            "rate": "18.9",
+            "cell": "AC23"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "7~12개월",
+            "rate": "19.3",
+            "cell": "AC25"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "13~36개월",
+            "rate": "19.6",
+            "cell": "AC27"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "36개월 초과",
+            "rate": "20.8",
+            "cell": "AC29"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "6개월 이하",
+            "rate": "19",
+            "cell": "AC31"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "7~12개월",
+            "rate": "19.4",
+            "cell": "AC33"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "13~36개월",
+            "rate": "19.7",
+            "cell": "AC35"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "36개월 초과",
+            "rate": "20.9",
+            "cell": "AC37"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "6개월 이하",
+            "rate": "19.1",
+            "cell": "AC39"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "7~12개월",
+            "rate": "19.5",
+            "cell": "AC41"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "13~36개월",
+            "rate": "19.8",
+            "cell": "AC43"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "36개월 초과",
+            "rate": "21",
+            "cell": "AC45"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "6개월 이하",
+            "rate": "18.9",
+            "cell": "AC47"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "7~12개월",
+            "rate": "19.3",
+            "cell": "AC49"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "13~36개월",
+            "rate": "19.6",
+            "cell": "AC51"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "36개월 초과",
+            "rate": "20.8",
+            "cell": "AC53"
+          }
+        ],
+        "other_expense": [
+          {
+            "scale": "10억 미만",
+            "period": "6개월 이하",
+            "rate": "5.5",
+            "cell": "AL15"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "7~12개월",
+            "rate": "5.7",
+            "cell": "AL17"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "13~36개월",
+            "rate": "6.1",
+            "cell": "AL19"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "36개월 초과",
+            "rate": "6.7",
+            "cell": "AL21"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "6개월 이하",
+            "rate": "5.8",
+            "cell": "AL23"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "7~12개월",
+            "rate": "5.9",
+            "cell": "AL25"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "13~36개월",
+            "rate": "6.3",
+            "cell": "AL27"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "36개월 초과",
+            "rate": "6.9",
+            "cell": "AL29"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "6개월 이하",
+            "rate": "6.4",
+            "cell": "AL31"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "7~12개월",
+            "rate": "6.6",
+            "cell": "AL33"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "13~36개월",
+            "rate": "6.9",
+            "cell": "AL35"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "36개월 초과",
+            "rate": "7.6",
+            "cell": "AL37"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "6개월 이하",
+            "rate": "6.6",
+            "cell": "AL39"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "7~12개월",
+            "rate": "6.8",
+            "cell": "AL41"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "13~36개월",
+            "rate": "7.2",
+            "cell": "AL43"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "36개월 초과",
+            "rate": "7.8",
+            "cell": "AL45"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "6개월 이하",
+            "rate": "6.9",
+            "cell": "AL47"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "7~12개월",
+            "rate": "7.1",
+            "cell": "AL49"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "13~36개월",
+            "rate": "7.4",
+            "cell": "AL51"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "36개월 초과",
+            "rate": "8.1",
+            "cell": "AL53"
+          }
+        ],
+        "management": [
+          {
+            "contractor": "종합건설업",
+            "scale": "50억 미만",
+            "rate": "8",
+            "cell": "BD15"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "50억~300억 미만",
+            "rate": "6.5",
+            "cell": "BD31"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "300억~1000억 미만",
+            "rate": "5",
+            "cell": "BD39"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "1000억 이상",
+            "rate": "4.5",
+            "cell": "BD43"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "5억 미만",
+            "rate": "8",
+            "cell": "BL15"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "5억~30억 미만",
+            "rate": "6.5",
+            "cell": "BL21"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "30억~100억 미만",
+            "rate": "5",
+            "cell": "BL27"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "100억 이상",
+            "rate": "4.5",
+            "cell": "BL35"
+          }
+        ],
+        "profit": [
+          {
+            "scale": "50억 미만",
+            "rate": "15",
+            "cell": "BS15"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "rate": "12",
+            "cell": "BS31"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "rate": "10",
+            "cell": "BS39"
+          },
+          {
+            "scale": "1000억 이상",
+            "rate": "9",
+            "cell": "BS43"
+          }
+        ],
+        "employment_insurance": [
+          {
+            "grade": "1등급",
+            "minimum_won": 120000000000,
+            "rate": "1.57",
+            "cell": "AH67"
+          },
+          {
+            "grade": "2등급",
+            "minimum_won": 80000000000,
+            "rate": "1.30",
+            "cell": "AH69"
+          },
+          {
+            "grade": "3등급",
+            "minimum_won": 52000000000,
+            "rate": "1.13",
+            "cell": "AH71"
+          },
+          {
+            "grade": "4등급",
+            "minimum_won": 34000000000,
+            "rate": "1.06",
+            "cell": "AH73"
+          },
+          {
+            "grade": "5등급",
+            "minimum_won": 21000000000,
+            "rate": "1.03",
+            "cell": "AH75"
+          },
+          {
+            "grade": "6등급",
+            "minimum_won": 13000000000,
+            "rate": "1.02",
+            "cell": "AH77"
+          },
+          {
+            "grade": "7등급",
+            "minimum_won": 0,
+            "rate": "1.01",
+            "cell": "AH79"
+          }
+        ],
+        "industrial_safety": [
+          {
+            "scale": "5억 미만",
+            "kind": "건축공사",
+            "rate": "3.11",
+            "cell": "ES19"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "토목공사",
+            "rate": "3.15",
+            "cell": "ES21"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "중건설공사",
+            "rate": "3.64",
+            "cell": "ES23"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "특수건설공사",
+            "rate": "2.07",
+            "cell": "ES25"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "건축공사",
+            "rate": "2.28",
+            "cell": "ES27"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "토목공사",
+            "rate": "2.53",
+            "cell": "ES29"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "중건설공사",
+            "rate": "3.05",
+            "cell": "ES31"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "특수건설공사",
+            "rate": "1.59",
+            "cell": "ES33"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "건축공사",
+            "rate": "2.37",
+            "cell": "ES35"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "토목공사",
+            "rate": "2.6",
+            "cell": "ES37"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "중건설공사",
+            "rate": "3.11",
+            "cell": "ES39"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "특수건설공사",
+            "rate": "1.64",
+            "cell": "ES41"
+          }
+        ],
+        "environment": [
+          {
+            "kind": "road",
+            "rate": "0.9",
+            "cell": "BU68"
+          },
+          {
+            "kind": "plant",
+            "rate": "0.4",
+            "cell": "BU70"
+          },
+          {
+            "kind": "subway",
+            "rate": "0.5",
+            "cell": "BU72"
+          },
+          {
+            "kind": "rail",
+            "rate": "1.5",
+            "cell": "BU74"
+          },
+          {
+            "kind": "water",
+            "rate": "0.5",
+            "cell": "BU76"
+          },
+          {
+            "kind": "port",
+            "rate": "0.8",
+            "cell": "BU78"
+          },
+          {
+            "kind": "silt_screen",
+            "rate": "1.8",
+            "cell": "BU80"
+          },
+          {
+            "kind": "dam",
+            "rate": "1.1",
+            "cell": "BU82"
+          },
+          {
+            "kind": "land",
+            "rate": "0.6",
+            "cell": "BU84"
+          },
+          {
+            "kind": "other_civil",
+            "rate": "0.8",
+            "cell": "BU86"
+          },
+          {
+            "kind": "redevelopment",
+            "rate": "0.7",
+            "cell": "BU90"
+          },
+          {
+            "kind": "new_housing",
+            "rate": "0.3",
+            "cell": "BU92"
+          },
+          {
+            "kind": "other_building",
+            "rate": "0.5",
+            "cell": "BU94"
+          }
+        ],
+        "subcontract": [
+          {
+            "scale": "50억 미만",
+            "minimum_won": 0,
+            "rate": "0.081",
+            "cell": "DC68"
+          },
+          {
+            "scale": "50억~100억 미만",
+            "minimum_won": 5000000000,
+            "rate": "0.08",
+            "cell": "DC71"
+          },
+          {
+            "scale": "100억~300억 미만",
+            "minimum_won": 10000000000,
+            "rate": "0.075",
+            "cell": "DC74"
+          },
+          {
+            "scale": "300억 이상 종심·종평제(토목 및 산업설비)",
+            "minimum_won": 30000000000,
+            "rate": "0.071",
+            "cell": "DC77"
+          },
+          {
+            "scale": "300억 이상 종심·종평제(건축)",
+            "minimum_won": 30000000000,
+            "rate": "0.068",
+            "cell": "DC80"
+          },
+          {
+            "scale": "턴키·대안공사",
+            "minimum_won": 0,
+            "rate": "0.084",
+            "cell": "DC83"
+          }
+        ],
+        "formula_rates": [
+          {
+            "name": "간접노무비",
+            "rate": "3.56",
+            "cell": "BZ51",
+            "source_text": "(노) x 3.56"
+          },
+          {
+            "name": "산재보험료",
+            "rate": "3.595",
+            "cell": "AU51",
+            "source_text": "(직노) x 3.595"
+          },
+          {
+            "name": "건강보험료 추가분",
+            "rate": "13.14",
+            "cell": "BD51",
+            "source_text": "(건강보험료) x 13.14"
+          },
+          {
+            "name": "장기요양보험료",
+            "rate": "4.75",
+            "cell": "BR51",
+            "source_text": "(직노) x 4.75"
+          },
+          {
+            "name": "건설기계대여대금 지급보증서 발급금액 추가분",
+            "rate": "2.3",
+            "cell": "AU110",
+            "source_text": "(직노) x 2.3"
+          }
+        ]
+      },
+      "architecture": {
+        "source_file": "data/raw/건축공사 간접공사비 적용기준(260413).xlsx",
+        "indirect_labor": [
+          {
+            "scale": "10억 미만",
+            "period": "6개월 이하",
+            "rate": "17.5",
+            "cell": "AC15"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "7~12개월",
+            "rate": "17.9",
+            "cell": "AC17"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "13~36개월",
+            "rate": "18.2",
+            "cell": "AC19"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "36개월 초과",
+            "rate": "19.4",
+            "cell": "AC21"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "6개월 이하",
+            "rate": "17.4",
+            "cell": "AC23"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "7~12개월",
+            "rate": "17.8",
+            "cell": "AC25"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "13~36개월",
+            "rate": "18.1",
+            "cell": "AC27"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "36개월 초과",
+            "rate": "19.2",
+            "cell": "AC29"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "6개월 이하",
+            "rate": "17.5",
+            "cell": "AC31"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "7~12개월",
+            "rate": "17.9",
+            "cell": "AC33"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "13~36개월",
+            "rate": "18.2",
+            "cell": "AC35"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "36개월 초과",
+            "rate": "19.4",
+            "cell": "AC37"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "6개월 이하",
+            "rate": "17.5",
+            "cell": "AC39"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "7~12개월",
+            "rate": "17.9",
+            "cell": "AC41"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "13~36개월",
+            "rate": "18.2",
+            "cell": "AC43"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "36개월 초과",
+            "rate": "19.4",
+            "cell": "AC45"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "6개월 이하",
+            "rate": "17.4",
+            "cell": "AC47"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "7~12개월",
+            "rate": "17.8",
+            "cell": "AC49"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "13~36개월",
+            "rate": "18.1",
+            "cell": "AC51"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "36개월 초과",
+            "rate": "19.3",
+            "cell": "AC53"
+          }
+        ],
+        "other_expense": [
+          {
+            "scale": "10억 미만",
+            "period": "6개월 이하",
+            "rate": "5",
+            "cell": "AL15"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "7~12개월",
+            "rate": "5.2",
+            "cell": "AL17"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "13~36개월",
+            "rate": "5.5",
+            "cell": "AL19"
+          },
+          {
+            "scale": "10억 미만",
+            "period": "36개월 초과",
+            "rate": "6.1",
+            "cell": "AL21"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "6개월 이하",
+            "rate": "5.2",
+            "cell": "AL23"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "7~12개월",
+            "rate": "5.4",
+            "cell": "AL25"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "13~36개월",
+            "rate": "5.7",
+            "cell": "AL27"
+          },
+          {
+            "scale": "10억~50억 미만",
+            "period": "36개월 초과",
+            "rate": "6.4",
+            "cell": "AL29"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "6개월 이하",
+            "rate": "5.9",
+            "cell": "AL31"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "7~12개월",
+            "rate": "6",
+            "cell": "AL33"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "13~36개월",
+            "rate": "6.4",
+            "cell": "AL35"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "period": "36개월 초과",
+            "rate": "7",
+            "cell": "AL37"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "6개월 이하",
+            "rate": "6.1",
+            "cell": "AL39"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "7~12개월",
+            "rate": "6.3",
+            "cell": "AL41"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "13~36개월",
+            "rate": "6.6",
+            "cell": "AL43"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "period": "36개월 초과",
+            "rate": "7.2",
+            "cell": "AL45"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "6개월 이하",
+            "rate": "6.4",
+            "cell": "AL47"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "7~12개월",
+            "rate": "6.5",
+            "cell": "AL49"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "13~36개월",
+            "rate": "6.9",
+            "cell": "AL51"
+          },
+          {
+            "scale": "1000억 이상",
+            "period": "36개월 초과",
+            "rate": "7.5",
+            "cell": "AL53"
+          }
+        ],
+        "management": [
+          {
+            "contractor": "종합건설업",
+            "scale": "50억 미만",
+            "rate": "8",
+            "cell": "BE15"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "50억~300억 미만",
+            "rate": "6.5",
+            "cell": "BE31"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "300억~1000억 미만",
+            "rate": "5",
+            "cell": "BE39"
+          },
+          {
+            "contractor": "종합건설업",
+            "scale": "1000억 이상",
+            "rate": "4.5",
+            "cell": "BE43"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "5억 미만",
+            "rate": "8",
+            "cell": "BK15"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "5억~30억 미만",
+            "rate": "6.5",
+            "cell": "BK21"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "30억~100억 미만",
+            "rate": "5",
+            "cell": "BK27"
+          },
+          {
+            "contractor": "전문건설업",
+            "scale": "100억 이상",
+            "rate": "4.5",
+            "cell": "BK35"
+          }
+        ],
+        "profit": [
+          {
+            "scale": "50억 미만",
+            "rate": "15",
+            "cell": "BR15"
+          },
+          {
+            "scale": "50억~300억 미만",
+            "rate": "12",
+            "cell": "BR31"
+          },
+          {
+            "scale": "300억~1000억 미만",
+            "rate": "10",
+            "cell": "BR39"
+          },
+          {
+            "scale": "1000억 이상",
+            "rate": "9",
+            "cell": "BR43"
+          }
+        ],
+        "employment_insurance": [
+          {
+            "grade": "1등급",
+            "minimum_won": 120000000000,
+            "rate": "1.57",
+            "cell": "AH67"
+          },
+          {
+            "grade": "2등급",
+            "minimum_won": 80000000000,
+            "rate": "1.30",
+            "cell": "AH69"
+          },
+          {
+            "grade": "3등급",
+            "minimum_won": 52000000000,
+            "rate": "1.13",
+            "cell": "AH71"
+          },
+          {
+            "grade": "4등급",
+            "minimum_won": 34000000000,
+            "rate": "1.06",
+            "cell": "AH73"
+          },
+          {
+            "grade": "5등급",
+            "minimum_won": 21000000000,
+            "rate": "1.03",
+            "cell": "AH75"
+          },
+          {
+            "grade": "6등급",
+            "minimum_won": 13000000000,
+            "rate": "1.02",
+            "cell": "AH77"
+          },
+          {
+            "grade": "7등급",
+            "minimum_won": 0,
+            "rate": "1.01",
+            "cell": "AH79"
+          }
+        ],
+        "industrial_safety": [
+          {
+            "scale": "5억 미만",
+            "kind": "건축공사",
+            "rate": "3.11",
+            "cell": "ER19"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "토목공사",
+            "rate": "3.15",
+            "cell": "ER21"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "중건설공사",
+            "rate": "3.64",
+            "cell": "ER23"
+          },
+          {
+            "scale": "5억 미만",
+            "kind": "특수건설공사",
+            "rate": "2.07",
+            "cell": "ER25"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "건축공사",
+            "rate": "2.28",
+            "cell": "ER27"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "토목공사",
+            "rate": "2.53",
+            "cell": "ER29"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "중건설공사",
+            "rate": "3.05",
+            "cell": "ER31"
+          },
+          {
+            "scale": "5억~50억 미만",
+            "kind": "특수건설공사",
+            "rate": "1.59",
+            "cell": "ER33"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "건축공사",
+            "rate": "2.37",
+            "cell": "ER35"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "토목공사",
+            "rate": "2.6",
+            "cell": "ER37"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "중건설공사",
+            "rate": "3.11",
+            "cell": "ER39"
+          },
+          {
+            "scale": "50억 이상",
+            "kind": "특수건설공사",
+            "rate": "1.64",
+            "cell": "ER41"
+          }
+        ],
+        "environment": [
+          {
+            "kind": "road",
+            "rate": "0.9",
+            "cell": "BT68"
+          },
+          {
+            "kind": "plant",
+            "rate": "0.4",
+            "cell": "BT70"
+          },
+          {
+            "kind": "subway",
+            "rate": "0.5",
+            "cell": "BT72"
+          },
+          {
+            "kind": "rail",
+            "rate": "1.5",
+            "cell": "BT74"
+          },
+          {
+            "kind": "water",
+            "rate": "0.5",
+            "cell": "BT76"
+          },
+          {
+            "kind": "port",
+            "rate": "0.8",
+            "cell": "BT80"
+          },
+          {
+            "kind": "silt_screen",
+            "rate": "1.8",
+            "cell": "BT78"
+          },
+          {
+            "kind": "dam",
+            "rate": "1.1",
+            "cell": "BT82"
+          },
+          {
+            "kind": "land",
+            "rate": "0.6",
+            "cell": "BT84"
+          },
+          {
+            "kind": "other_civil",
+            "rate": "0.8",
+            "cell": "BT86"
+          },
+          {
+            "kind": "redevelopment",
+            "rate": "0.7",
+            "cell": "BT88"
+          },
+          {
+            "kind": "new_housing",
+            "rate": "0.3",
+            "cell": "BT90"
+          },
+          {
+            "kind": "other_building",
+            "rate": "0.5",
+            "cell": "BT92"
+          }
+        ],
+        "subcontract": [
+          {
+            "scale": "50억 미만",
+            "minimum_won": 0,
+            "rate": "0.081",
+            "cell": "DB68"
+          },
+          {
+            "scale": "50억~100억 미만",
+            "minimum_won": 5000000000,
+            "rate": "0.08",
+            "cell": "DB71"
+          },
+          {
+            "scale": "100억~300억 미만",
+            "minimum_won": 10000000000,
+            "rate": "0.075",
+            "cell": "DB74"
+          },
+          {
+            "scale": "300억 이상 종심·종평제(토목 및 산업설비)",
+            "minimum_won": 30000000000,
+            "rate": "0.071",
+            "cell": "DB77"
+          },
+          {
+            "scale": "300억 이상 종심·종평제(건축)",
+            "minimum_won": 30000000000,
+            "rate": "0.068",
+            "cell": "DB80"
+          },
+          {
+            "scale": "턴키·대안공사",
+            "minimum_won": 0,
+            "rate": "0.084",
+            "cell": "DB83"
+          }
+        ],
+        "formula_rates": [
+          {
+            "name": "간접노무비",
+            "rate": "3.56",
+            "cell": "BY51",
+            "source_text": "(노) x 3.56"
+          },
+          {
+            "name": "산재보험료",
+            "rate": "3.595",
+            "cell": "AU51",
+            "source_text": "(직노) x 3.595"
+          },
+          {
+            "name": "건강보험료 추가분",
+            "rate": "13.14",
+            "cell": "BC51",
+            "source_text": "(건강보험료) x 13.14"
+          },
+          {
+            "name": "장기요양보험료",
+            "rate": "4.75",
+            "cell": "BQ51",
+            "source_text": "(직노) x 4.75"
+          },
+          {
+            "name": "건설기계대여대금 지급보증서 발급금액 추가분",
+            "rate": "2.3",
+            "cell": "AU110",
+            "source_text": "(직노) x 2.3"
+          }
+        ]
+      }
+    }
+  },
+  "shared_law_rates": {
+    "civil": {
+      "source_file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+      "asbestos": {
+        "rate": "0.006",
+        "cell": "BZ99",
+        "source_text": "(노) x 0.006",
+        "name": "석면분담금"
+      },
+      "wage_claim": {
+        "rate": "0.09",
+        "cell": "CS99",
+        "source_text": "(노) x 0.09",
+        "name": "임금채권부담금"
+      }
+    },
+    "architecture": {
+      "source_file": "data/raw/건축공사 간접공사비 적용기준(260413).xlsx",
+      "asbestos": {
+        "rate": "0.006",
+        "cell": "BY99",
+        "source_text": "(노) x 0.006",
+        "name": "석면분담금"
+      },
+      "wage_claim": {
+        "rate": "0.09",
+        "cell": "CR99",
+        "source_text": "(노) x 0.09",
+        "name": "임금채권부담금"
+      }
+    }
+  },
+  "unpriced_rules": {
+    "equipment_rental_guarantee": "원문 요율은 '지급보증액 발급금액' 기준이라 보증 수수료 산정 방법 확인 필요",
+    "performance_bond": "지방계약법 시행령 제51조제1항 적용 의무 대상(추정가격 300억 이상 등)만 해당"
+  }
+}

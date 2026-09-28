@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 QUICK_CHECKS = [
     "check_compose", "check_fill", "check_graph", "check_api", "check_price",
-    "check_equipment", "check_supply", "check_spec_cases", "check_citation",
+    "check_equipment", "check_supply", "check_spec_cases", "check_citation", "check_overhead_rates",
 ]
 
 SUMMARY_PATTERN = re.compile(r"통과 (\d+) / 전체 (\d+)")
