@@ -18,3 +18,6 @@ experiments/parser_bench/results/**/raw/
 experiments/parser_bench/results/**/*.png
 experiments/parser_bench/results/**/*.pdf
 experiments/parser_bench/results/**/*.log
+
+# 강한 모델 원 응답(용량 큼, 재생성 가능). 초안 JSON(data/drafts/specs/)은 추적한다.
+data/drafts/raw/
