@@ -213,7 +213,7 @@ def calculate_cost_statement(priced: dict, inputs: dict, basis_date: str | date)
     vat = _won(Decimal(total_cost) * Decimal("0.1"))
     add_total("총원가", "합계", total_cost, "순공사원가 + 일반관리비 + 이윤")
     add("부가가치세", "부가가치세", "총원가", total_cost, None, amount=vat)
-    add_total("계약 금액", "합계", total_cost + vat, "총원가 + 부가가치세")
+    add_total("도급액", "합계", total_cost + vat, "총원가 + 부가가치세")
     add("공사이행보증", "경비", "", 0, None, status="제외",
         reason=_rates()["unpriced_rules"]["performance_bond"])
     for item in priced.get("excluded", []):

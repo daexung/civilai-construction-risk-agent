@@ -246,11 +246,12 @@ def _template_priced(facts: dict) -> str:
             f"경비 {statement_totals.get('전체 물량 기준 경비', '0원')}, "
             f"순공사원가 {statement_totals.get('전체 물량 기준 순공사원가', '0원')}입니다."
         )
+        vat = statement_totals.get("전체 물량 기준 부가가치세", "0원")
         sentences.append(
             f"기준일 {statement.get('basis_date')} 제비율을 적용해 일반관리비 "
             f"{statement_totals.get('전체 물량 기준 일반관리비', '0원')}과 이윤 "
             f"{statement_totals.get('전체 물량 기준 이윤', '0원')}, 부가가치세 "
-            f"{statement_totals.get('전체 물량 기준 부가가치세', '0원')}를 반영했습니다."
+            f"{vat}{_josa(vat, '을/를')} 반영했습니다."
         )
     elif statement.get("status") == "UNCALCULATED":
         sentences.append("해당 기준일의 제비율이 없어 원가계산서 금액은 미산정입니다.")

@@ -103,7 +103,10 @@ def main() -> int:
     checks.append(("C0f 숫자·괄호 뒤 조사 선택",
                    f"912,039원{_josa('912,039원', '을/를')}" == "912,039원을"
                    and f"(6-1-4){_josa('타설(6-1-4)', '은/는')}" == "(6-1-4)은"
-                   and f"(부분){_josa('참고 금액(부분)', '은/는')}" == "(부분)은"))
+                   and f"(부분){_josa('참고 금액(부분)', '은/는')}" == "(부분)은"
+                   and "912,039원을 반영했습니다." in template
+                   and "타설(6-1-4)은" in template
+                   and "참고 금액(부분)은" in template))
 
     def good_llm(prompt: str, system: str) -> str:
         return (f"{facts['work']['title']} 계산 결과 1㎥당 합계(부분)는 "
