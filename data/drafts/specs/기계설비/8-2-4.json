@@ -1,0 +1,232 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/8-2-4/천장형에어컨설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "8-2-4",
+    "title": "천장형 에어컨 설치('20년 신설)",
+    "work": "천장형 에어컨 실내기 및 실외기 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      695
+    ],
+    "inputs": [
+      {
+        "name": "target_unit",
+        "type": "enum",
+        "allowed_values": [
+          "수량 (냉방능력 kW) 실내기 16이하",
+          "수량 (냉방능력 kW) 실외기 6~12이하",
+          "수량 (냉방능력 kW) 16이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 기기의 종류와 냉방능력은 무엇입니까?",
+        "source": "PDF 695쪽 8-2-4 표",
+        "synonyms": {
+          "수량 (냉방능력 kW) 실내기 16이하": [
+            "실내기 16이하",
+            "실내기 16kW 이하"
+          ],
+          "수량 (냉방능력 kW) 실외기 6~12이하": [
+            "실외기 6~12이하",
+            "실외기 6~12kW 이하"
+          ],
+          "수량 (냉방능력 kW) 16이하": [
+            "실외기 16이하",
+            "실외기 16kW 이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 에어컨의 수량은 몇 대입니까?",
+        "source": "PDF 695쪽 8-2-4 표 단위 (대당)"
+      },
+      {
+        "name": "additional_indoor_units",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "대",
+        "required": true,
+        "ask": "실외기 설치 시, 기본 1대 외에 추가로 연결되어 배관접합이 추가되는 실내기는 몇 대입니까? (해당 없거나 실내기 단독 설치인 경우 0)",
+        "source": "PDF 695쪽 8-2-4 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p751-t1",
+        "role": "천장형 에어컨 설치 대당 품",
+        "source": "PDF 695쪽 8-2-4 표",
+        "unit": "인/대",
+        "values": {
+          "기계설비공": {
+            "수량 (냉방능력 kW) 실내기 16이하": "0.45",
+            "수량 (냉방능력 kW) 실외기 6~12이하": "1.00",
+            "수량 (냉방능력 kW) 16이하": "1.33"
+          },
+          "보통인부": {
+            "수량 (냉방능력 kW) 실내기 16이하": "0.22",
+            "수량 (냉방능력 kW) 실외기 6~12이하": "0.50",
+            "수량 (냉방능력 kW) 16이하": "0.67"
+          }
+        },
+        "cite": {
+          "table_id": "p751-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p751-t1",
+          "row_input": "고정(직종별)",
+          "column_input": "target_unit",
+          "trades": [
+            "기계설비공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "target_unit": "수량 (냉방능력 kW) 실외기 6~12이하"
+            },
+            "change": "additional_indoor_units 대수당 실외기 품의 15% 가산",
+            "source": "PDF 695쪽 8-2-4 표 비고"
+          },
+          {
+            "when": {
+              "target_unit": "수량 (냉방능력 kW) 16이하"
+            },
+            "change": "additional_indoor_units 대수당 실외기 품의 15% 가산",
+            "source": "PDF 695쪽 8-2-4 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p751-t1에서 설치 대상(target_unit)에 해당하는 기계설비공, 보통인부의 단위당 품을 찾는다.",
+        "물량(quantity)을 곱하여 기본 총 품을 구한다.",
+        "실외기 설치 시 추가 실내기가 있는 경우(additional_indoor_units > 0), 추가 1대당 실외기 품의 15%를 가산한다."
+      ],
+      "source": "PDF 695쪽 8-2-4",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "배관 설치 및 보온, 전기･통신배선 작업",
+        "source": "PDF 695쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p751-x19",
+          "quote": "배관 설치 및 보온, 전기･통신배선 작업은 별도 계상한다."
+        }
+      },
+      {
+        "item": "장비(크레인, 냉매가스 충전기 등)",
+        "source": "PDF 695쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p751-x19",
+          "quote": "장비(크레인, 냉매가스 충전기 등)는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p751-x19",
+          "quote": "공구손료 및 경장비(전동드릴 등) 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대당) 품이 표에 직접 제시되어 있으며, 물량을 곱하고 조건에 따라 할증(15%)을 적용하는 방식이므로 per_unit 모델이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p751-t1",
+      "row": "기계설비공",
+      "column": "수량 (냉방능력 kW) 실내기 16이하",
+      "value": "0.45"
+    },
+    {
+      "table_id": "p751-t1",
+      "row": "기계설비공",
+      "column": "수량 (냉방능력 kW) 실외기 6~12이하",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p751-t1",
+      "row": "기계설비공",
+      "column": "수량 (냉방능력 kW) 16이하",
+      "value": "1.33"
+    },
+    {
+      "table_id": "p751-t1",
+      "row": "보통인부",
+      "column": "수량 (냉방능력 kW) 실내기 16이하",
+      "value": "0.22"
+    },
+    {
+      "table_id": "p751-t1",
+      "row": "보통인부",
+      "column": "수량 (냉방능력 kW) 실외기 6~12이하",
+      "value": "0.50"
+    },
+    {
+      "table_id": "p751-t1",
+      "row": "보통인부",
+      "column": "수량 (냉방능력 kW) 16이하",
+      "value": "0.67"
+    },
+    {
+      "chunk_id": "p751-x19",
+      "quote": "배관 설치 및 보온, 전기･통신배선 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p751-x19",
+      "quote": "장비(크레인, 냉매가스 충전기 등)는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p751-x19",
+      "quote": "공구손료 및 경장비(전동드릴 등) 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 실외기 16kW 이하의 열 이름이 '수량 (냉방능력 kW) 16이하'로 되어 있어 '실외기'라는 단어가 누락되었으나, 문맥상 실외기 16kW 이하로 간주하여 처리했습니다."
+  ],
+  "questions": [
+    "천장형 에어컨 실내기 16kW 이하 1대를 설치할 때 품은 어떻게 되나요?",
+    "실외기 1대에 실내기 3대를 연결할 경우 품 할증은 어떻게 계산하나요?",
+    "냉매가스 충전기 사용료는 어떻게 반영하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:51.357193+00:00",
+    "input_tokens": 11786,
+    "output_tokens": 2661,
+    "source_pages": [
+      751,
+      752
+    ],
+    "prompt_sha256": "008f8ba42e26529744bbc21ea6beaf35c300d0ef3605aafc162929d4261affb1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/9-1-1/입상관방진가대설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "9-1-1",
+    "title": "입상관 방진가대 설치",
+    "work": "입상관 방진가대 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      701
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø50",
+          "65",
+          "80",
+          "100",
+          "125",
+          "150",
+          "200",
+          "250",
+          "300",
+          "350"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "입상관 방진가대의 규격은 몇 ㎜입니까?",
+        "source": "PDF 701쪽 9-1-1 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "조",
+        "required": true,
+        "ask": "설치할 입상관 방진가대의 수량은 몇 조입니까?",
+        "source": "PDF 701쪽 9-1-1 표 단위 (조당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p757-t0",
+        "role": "규격별 입상관 방진가대 설치 품",
+        "source": "PDF 701쪽 9-1-1 표",
+        "unit": "인/조",
+        "values": {
+          "ø50": {
+            "배관공(인)": "0.093",
+            "용접공(인)": "0.093"
+          },
+          "65": {
+            "배관공(인)": "0.093",
+            "용접공(인)": "0.093"
+          },
+          "80": {
+            "배관공(인)": "0.109",
+            "용접공(인)": "0.109"
+          },
+          "100": {
+            "배관공(인)": "0.125",
+            "용접공(인)": "0.125"
+          },
+          "125": {
+            "배관공(인)": "0.125",
+            "용접공(인)": "0.125"
+          },
+          "150": {
+            "배관공(인)": "0.140",
+            "용접공(인)": "0.140"
+          },
+          "200": {
+            "배관공(인)": "0.156",
+            "용접공(인)": "0.156"
+          },
+          "250": {
+            "배관공(인)": "0.197",
+            "용접공(인)": "0.197"
+          },
+          "300": {
+            "배관공(인)": "0.239",
+            "용접공(인)": "0.239"
+          },
+          "350": {
+            "배관공(인)": "0.281",
+            "용접공(인)": "0.281"
+          }
+        },
+        "cite": {
+          "table_id": "p757-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p757-t0",
+          "row_input": "pipe_size",
+          "trades": [
+            "배관공(인)",
+            "용접공(인)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p757-t0에서 규격별 단위당 품(배관공, 용접공)을 찾는다.",
+        "물량(quantity)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 701쪽 9-1-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "지지찬넬 가대설치",
+        "source": "PDF 701쪽 9-1-1 [주] ③",
+        "cite": {
+          "chunk_id": "p757-x11",
+          "quote": "③ 지지찬넬 가대설치는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p757-x11",
+          "quote": "④ 공구손료 및 경장비(절단기, 용접기 등)의 기계경비는 인력품의 3%로 계상하다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(조당)당 배관공과 용접공의 품이 표에 직접 명시되어 있어 물량을 곱하는 방식으로 계산합니다.",
+  "citations": [
+    {
+      "table_id": "p757-t0",
+      "row": "ø50",
+      "column": "배관공(인)",
+      "value": "0.093"
+    },
+    {
+      "table_id": "p757-t0",
+      "row": "350",
+      "column": "용접공(인)",
+      "value": "0.281"
+    },
+    {
+      "chunk_id": "p757-x11",
+      "quote": "③ 지지찬넬 가대설치는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p757-x11",
+      "quote": "④ 공구손료 및 경장비(절단기, 용접기 등)의 기계경비는 인력품의 3%로 계상하다."
+    }
+  ],
+  "open_questions": [
+    "원문 [주] ①에 '옥내기준의 입상관 방진가대를 설치하는 기준이다'라고 명시되어 있으나, 옥외 설치 시의 할증이나 별도 기준에 대해서는 언급이 없어 추측하지 않고 남겨둡니다."
+  ],
+  "questions": [
+    "입상관 방진가대 100mm 규격을 10조 설치할 때 배관공과 용접공의 품은 어떻게 되나요?",
+    "지지찬넬 가대설치 작업도 이 품셈에 포함되어 계산되나요?",
+    "설치할 방진가대의 수량(조)은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:42:58.569016+00:00",
+    "input_tokens": 11874,
+    "output_tokens": 1926,
+    "source_pages": [
+      757,
+      758
+    ],
+    "prompt_sha256": "2e2455d15efb95f9d30871fa63af8ef35816a128f0395e7dbe629f6542ee5b54",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

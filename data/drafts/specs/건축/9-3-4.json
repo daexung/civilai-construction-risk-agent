@@ -1,0 +1,201 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/9-3-4/우레탄폼분사충전",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "9-3-4",
+    "title": "우레탄폼 분사 충전",
+    "work": "우레탄폼 분사 충전 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      627
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "우레탄폼 분사 충전 물량은 몇 ㎥입니까?",
+        "source": "PDF 627쪽 9-3-4 표의 시공량(㎥) 단위"
+      },
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "벽",
+          "천장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위는 벽과 천장 중 어디입니까?",
+        "source": "PDF 627쪽 9-3-4 표의 시공량 구분",
+        "synonyms": {
+          "벽": [
+            "벽면"
+          ],
+          "천장": [
+            "천정"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p683-t3",
+        "role": "작업조 인원, 장비 대수 및 부위별 일일시공량",
+        "source": "PDF 627쪽 9-3-4 표",
+        "unit": "인/일, 대/일, ㎥/일",
+        "values": {
+          "내장공": {
+            "수량": "2"
+          },
+          "특별인부": {
+            "수량": "2"
+          },
+          "우레탄폼 분사용기구": {
+            "수량": "1"
+          },
+          "시공량(㎥)": {
+            "벽": "22",
+            "천장": "19"
+          }
+        },
+        "cite": {
+          "table_id": "p683-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p683-t3",
+          "row": "시공량(㎥)",
+          "column_input": "surface_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p683-t3",
+          "column": "수량",
+          "trades": [
+            "내장공",
+            "특별인부"
+          ],
+          "rate_codes": {
+            "내장공": "1014",
+            "특별인부": "1003"
+          }
+        },
+        "equipment": {
+          "name": "우레탄폼 분사용기구",
+          "table": "p683-t3",
+          "unit": "대·일",
+          "column": "수량"
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p683-t3 표에서 시공 부위(surface_type)에 해당하는 일일시공량을 찾는다.",
+        "작업일수 = volume ÷ 일일시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 수량(내장공 2, 특별인부 2)으로 구한다.",
+        "장비 대·일 = 작업일수 × 우레탄폼 분사용기구 수량(1)으로 구한다."
+      ],
+      "source": "PDF 627쪽 9-3-4 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "보양 작업",
+        "source": "PDF 627쪽 9-3-4 [주] ③",
+        "cite": {
+          "chunk_id": "p683-x13",
+          "quote": "보양 작업은 별도 계상한다."
+        }
+      },
+      {
+        "item": "우레탄폼 분사용기구 기계경비",
+        "source": "PDF 627쪽 9-3-4 [주] ④",
+        "cite": {
+          "chunk_id": "p683-x13",
+          "quote": "우레탄폼 분사용기구의 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 기준의 작업조 인원 및 장비 대수와 부위별 일일시공량이 표로 제시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구하는 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p683-t3",
+      "row": "시공량(㎥)",
+      "column": "벽",
+      "value": "22"
+    },
+    {
+      "table_id": "p683-t3",
+      "row": "시공량(㎥)",
+      "column": "천장",
+      "value": "19"
+    },
+    {
+      "table_id": "p683-t3",
+      "row": "내장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p683-t3",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p683-t3",
+      "row": "우레탄폼 분사용기구",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p683-x13",
+      "quote": "장비 조립 및 해체, 단열재 충전, 시공면정리 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p683-x13",
+      "quote": "보양 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p683-x13",
+      "quote": "우레탄폼 분사용기구의 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "우레탄폼(단열재) 자체의 재료량 산정 기준이 본문에 명시되어 있지 않아 재료비 계산 규칙을 포함하지 않았습니다."
+  ],
+  "questions": [
+    "벽면에 우레탄폼을 50㎥ 분사 충전할 때 필요한 내장공과 특별인부의 인·일은 어떻게 계산하나요?",
+    "우레탄폼 분사용기구의 기계경비는 어떻게 산정해야 하나요?",
+    "우레탄폼 단열재 자체의 소요량(재료량)은 어디서 확인할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:09:15.804076+00:00",
+    "input_tokens": 11546,
+    "output_tokens": 1918,
+    "source_pages": [
+      683,
+      684
+    ],
+    "prompt_sha256": "5a15086e2703406cade9a7cca1247db12312df0b9c5b26f26017f9dd8dd9ca36",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-17-4/도면작성",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-17-4",
+    "title": "도면작성",
+    "work": "도면작성 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      617,
+      618
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "장",
+        "required": true,
+        "ask": "도면작성 물량은 몇 장입니까?",
+        "source": "p618-x0 ③ 기타사항 ㉮"
+      },
+      {
+        "name": "land_type",
+        "type": "enum",
+        "allowed_values": [
+          "토지",
+          "임야"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지적공부 등록지는 토지입니까, 임야입니까?",
+        "source": "p617-x18 [주] ① 등록계수 및 p617-t3"
+      },
+      {
+        "name": "size_half_or_less",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기준규격의 1/2 이하의 도면작성입니까?",
+        "source": "p618-x0 ③ 기타사항 ㉱"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p617-t2",
+        "role": "작업별 일수 및 인원수",
+        "source": "9-17-4 도면작성 표",
+        "unit": "인·일",
+        "values": {
+          "지적전산파일변환": {
+            "일\n수": "(0.25)",
+            "인원수 지적\n산업\n기사 1": "1",
+            "인원수 지적\n산업\n기사": "(0.25)"
+          },
+          "제도": {
+            "일\n수": "(0.34)",
+            "인원수 지적\n산업\n기사 1": "1",
+            "인원수 지적\n산업\n기사": "(0.34)"
+          },
+          "대조수정": {
+            "일\n수": "(0.03)",
+            "인원수 지적\n산업\n기사 1": "1",
+            "인원수 지적\n산업\n기사": "(0.03)"
+          },
+          "성과작성": {
+            "일\n수": "(0.13)",
+            "인원수 지적\n산업\n기사 1": "1",
+            "인원수 지적\n산업\n기사": "(0.13)"
+          },
+          "점검": {
+            "일\n수": "(0.02)",
+            "인원수 지적\n산업\n기사 1": "1",
+            "인원수 지적\n산업\n기사": "(0.02)"
+          },
+          "성과인계": {
+            "일\n수": "(0.01)",
+            "인원수 지적\n산업\n기사 1": "1",
+            "인원수 지적\n산업\n기사": "(0.01)"
+          },
+          "합계": {
+            "일\n수": "(0.78)",
+            "인원수 지적\n산업\n기사": "(0.78)"
+          }
+        },
+        "cite": {
+          "table_id": "p617-t2"
+        }
+      },
+      {
+        "id": "p617-t3",
+        "role": "등록계수",
+        "source": "9-17-4 도면작성 [주] ① 등록계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "토지": "1.00",
+            "임야": "1.28"
+          }
+        },
+        "cite": {
+          "table_id": "p617-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p617-t2",
+          "row_input": "합계",
+          "column_input": "인원수 지적\n산업\n기사",
+          "trades": [
+            "지적산업기사"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "land_type": "토지"
+            },
+            "change": "p617-t3의 토지 계수(1.00) 곱하기",
+            "source": "p617-x18 [주] ①"
+          },
+          {
+            "when": {
+              "land_type": "임야"
+            },
+            "change": "p617-t3의 임야 계수(1.28) 곱하기",
+            "source": "p617-x18 [주] ①"
+          },
+          {
+            "when": {
+              "size_half_or_less": true
+            },
+            "change": "도면작성수수료의 50% 적용 (0.5 곱하기)",
+            "source": "p618-x0 ③ ㉱"
+          }
+        ]
+      },
+      "steps": [
+        "p617-t2에서 합계 품(지적산업기사)을 찾는다.",
+        "물량(장)을 곱하여 기본 품을 구한다.",
+        "지적공부 등록지(land_type)에 따라 p617-t3의 등록계수를 곱한다.",
+        "기준규격의 1/2 이하(size_half_or_less)인 경우 50%를 곱하여 최종 품을 산출한다."
+      ],
+      "source": "p617-t2, p617-t3, p617-x18, p618-x0",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "p618-x0 ③ ㉯",
+        "cite": {
+          "chunk_id": "p618-x0",
+          "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "특수한 용지 사용 시 재료비",
+        "source": "p618-x0 ③ ㉰",
+        "cite": {
+          "chunk_id": "p618-x0",
+          "quote": "특수한 용지를 사용할 때에는 실정에 따라 재료비를 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "지적도 크기 1장을 기준으로 한 단위당 품이 표에 직접 제시되어 있으며, 물량에 단위당 품을 곱하고 계수를 적용하는 방식이므로 per_unit이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p617-t2",
+      "row": "합계",
+      "column": "인원수 지적\n산업\n기사",
+      "value": "(0.78)"
+    },
+    {
+      "table_id": "p617-t3",
+      "row": "계수",
+      "column": "토지",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p617-t3",
+      "row": "계수",
+      "column": "임야",
+      "value": "1.28"
+    },
+    {
+      "chunk_id": "p617-x18",
+      "quote": "지적공부 등록지(토지, 임야)별로 다음의 계수를 곱하여 계상한다."
+    },
+    {
+      "chunk_id": "p618-x0",
+      "quote": "본 품은 지적도 크기의 1장을 기준한 것이다."
+    },
+    {
+      "chunk_id": "p618-x0",
+      "quote": "기준규격의 1/2 이하의 도면작성시에는 본 품에 의한 도면작성수수료의 50%의 값을 적용한다."
+    },
+    {
+      "chunk_id": "p618-x0",
+      "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p618-x0",
+      "quote": "특수한 용지를 사용할 때에는 실정에 따라 재료비를 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표의 품이 괄호로 둘러싸여 있고 비고에 '( )는 내업임'으로 표시되어 있는데, 괄호 안의 숫자가 내업 품을 의미하는지, 아니면 전체가 내업 품인지 명확하지 않습니다. (일반적으로 괄호 표기는 내업을 의미함)"
+  ],
+  "questions": [
+    "도면작성 물량은 몇 장입니까?",
+    "지적공부 등록지가 토지입니까, 임야입니까?",
+    "기준규격의 1/2 이하로 도면을 작성합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:10:05.793337+00:00",
+    "input_tokens": 12600,
+    "output_tokens": 2572,
+    "source_pages": [
+      617,
+      618,
+      619
+    ],
+    "prompt_sha256": "eaf3bb0210b103aa327c3d4b37a22a1c4de5936b0b3f29ad74864279a6f60adb",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

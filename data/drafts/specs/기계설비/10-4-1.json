@@ -1,0 +1,145 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/10-4-1/일반송수구설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "10-4-1",
+    "title": "일반송수구 설치",
+    "work": "일반송수구 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      709
+    ],
+    "inputs": [
+      {
+        "name": "spec",
+        "type": "enum",
+        "allowed_values": [
+          "단구형",
+          "쌍구형",
+          "단구스탠드형",
+          "쌍구스탠드형"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "일반송수구의 규격은 무엇입니까?",
+        "source": "PDF 709쪽 10-4-1 일반송수구 설치 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "조",
+        "required": true,
+        "ask": "설치할 일반송수구의 수량은 몇 조입니까?",
+        "source": "PDF 709쪽 10-4-1 일반송수구 설치 표 (조당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p765-t1",
+        "role": "일반송수구 규격별 설치 품",
+        "source": "PDF 709쪽 10-4-1 일반송수구 설치 표",
+        "unit": "인/조",
+        "values": {
+          "단구형": {
+            "배 관 공": "0.400"
+          },
+          "쌍구형": {
+            "배 관 공": "0.600"
+          },
+          "단구스탠드형": {
+            "배 관 공": "0.800"
+          },
+          "쌍구스탠드형": {
+            "배 관 공": "1.200"
+          }
+        },
+        "cite": {
+          "table_id": "p765-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p765-t1",
+          "row_input": "spec",
+          "column_input": "배 관 공",
+          "trades": [
+            "배 관 공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p765-t1에서 규격별 배관공 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 709쪽 10-4-1 일반송수구 설치 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(조)당 배관공 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p765-t1",
+      "row": "단구형",
+      "column": "배 관 공(인)",
+      "value": "0.400"
+    },
+    {
+      "table_id": "p765-t1",
+      "row": "쌍구형",
+      "column": "배 관 공(인)",
+      "value": "0.600"
+    },
+    {
+      "table_id": "p765-t1",
+      "row": "단구스탠드형",
+      "column": "배 관 공(인)",
+      "value": "0.800"
+    },
+    {
+      "table_id": "p765-t1",
+      "row": "쌍구스탠드형",
+      "column": "배 관 공(인)",
+      "value": "1.200"
+    },
+    {
+      "chunk_id": "p765-x9",
+      "quote": "[주] 본 품은 소운반, 설비 설치품을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "일반송수구의 규격(단구형, 쌍구형 등)은 무엇입니까?",
+    "설치할 일반송수구의 수량은 몇 조입니까?",
+    "소운반 및 설비 설치품 외에 추가로 고려해야 할 현장 조건이 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:29:36.249077+00:00",
+    "input_tokens": 11502,
+    "output_tokens": 1291,
+    "source_pages": [
+      765,
+      766
+    ],
+    "prompt_sha256": "03f04970e4949d12f175171307332b8d7ca6bb71de830e666707d98b420d7648",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

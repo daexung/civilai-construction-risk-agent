@@ -1,0 +1,210 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-6-1/린콘크리트기층포설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-6-1",
+    "title": "린 콘크리트 기층 포설",
+    "work": "기층 포설",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      315
+    ],
+    "inputs": [
+      {
+        "name": "pavement_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반포장",
+          "터널포장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "일반포장과 터널포장 중 어느 것입니까?",
+        "source": "PDF 315쪽 p371-t0 시공량 구분"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "포설할 린 콘크리트 물량은 몇 ㎥입니까?",
+        "source": "PDF 315쪽 p371-t0 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p371-t0",
+        "role": "작업조 인원, 장비 대수 및 시공량",
+        "source": "PDF 315쪽 1-6-1 표",
+        "unit": "인, 대, ㎥/일",
+        "values": {
+          "포 장 공": {
+            "수 량": "2",
+            "일반포장": "550",
+            "터널포장": "500"
+          },
+          "보 통 인 부": {
+            "수 량": "2"
+          },
+          "아 스 팔 트 피 니 셔": {
+            "수 량": "1"
+          },
+          "타 이 어 롤 러": {
+            "수 량": "1"
+          },
+          "진 동 롤 러": {
+            "수 량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p371-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p371-t0",
+          "row": "포 장 공",
+          "column_input": "pavement_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p371-t0",
+          "column": "수 량",
+          "trades": [
+            "포 장 공",
+            "보 통 인 부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "아 스 팔 트 피 니 셔",
+            "table": "p371-t0",
+            "column": "수 량",
+            "unit": "대·일"
+          },
+          {
+            "name": "타 이 어 롤 러",
+            "table": "p371-t0",
+            "column": "수 량",
+            "unit": "대·일"
+          },
+          {
+            "name": "진 동 롤 러",
+            "table": "p371-t0",
+            "column": "수 량",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p371-t0에서 포장 종류에 따른 시공량을 고른다.",
+        "작업일수 = volume ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 315쪽 1-6-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수가 고정되어 있고, 포장 종류에 따른 일일시공량을 기준으로 작업일수를 산출하여 총 투입량을 계산하는 방식이므로 daily_crew가 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p371-t0",
+      "row": "포 장 공",
+      "column": "일반포장",
+      "value": "550"
+    },
+    {
+      "table_id": "p371-t0",
+      "row": "포 장 공",
+      "column": "터널포장",
+      "value": "500"
+    },
+    {
+      "table_id": "p371-t0",
+      "row": "포 장 공",
+      "column": "수 량",
+      "value": "2"
+    },
+    {
+      "table_id": "p371-t0",
+      "row": "보 통 인 부",
+      "column": "수 량",
+      "value": "2"
+    },
+    {
+      "table_id": "p371-t0",
+      "row": "아 스 팔 트 피 니 셔",
+      "column": "수 량",
+      "value": "1"
+    },
+    {
+      "table_id": "p371-t0",
+      "row": "타 이 어 롤 러",
+      "column": "수 량",
+      "value": "1"
+    },
+    {
+      "table_id": "p371-t0",
+      "row": "진 동 롤 러",
+      "column": "수 량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p371-x5",
+      "quote": "본 품은 피니셔를 사용한 린 콘크리트의 기층 포설 기준이다."
+    },
+    {
+      "chunk_id": "p371-x5",
+      "quote": "본 품은 포설 및 다짐, 양생을 포함한다."
+    },
+    {
+      "chunk_id": "p371-x5",
+      "quote": "현장여건 및 시험포장 결과에 따라 장비조합 및 규격을 변경하여 적용할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "장비가 3종류(아스팔트피니셔, 타이어롤러, 진동롤러) 투입되는데, quantity_model의 equipment 필드가 단일 객체만 허용하는지 배열도 허용하는지 불확실하여 배열로 작성했습니다.",
+    "원문 표에서 시공량 값이 '포 장 공' 행과 같은 줄에 병합되어 표시되므로, base_output의 row를 '포 장 공'으로 지정했습니다."
+  ],
+  "questions": [
+    "일반포장과 터널포장 중 어느 것입니까?",
+    "현장여건에 따라 장비조합을 변경할 경우 품셈 적용은 어떻게 하나요?",
+    "포설할 린 콘크리트의 총 물량(㎥)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:42.247054+00:00",
+    "input_tokens": 11530,
+    "output_tokens": 1924,
+    "source_pages": [
+      371,
+      372
+    ],
+    "prompt_sha256": "187a0939926b9226507f6545bb88e0b6f5fdbeebe8754008406fd619acd311ed",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '포 장 공'이 p371-t0 조각 텍스트에 없음",
+      "row '포 장 공'이 p371-t0 조각 텍스트에 없음",
+      "row '포 장 공'이 p371-t0 조각 텍스트에 없음",
+      "row '보 통 인 부'이 p371-t0 조각 텍스트에 없음",
+      "row '아 스 팔 트 피 니 셔'이 p371-t0 조각 텍스트에 없음",
+      "row '타 이 어 롤 러'이 p371-t0 조각 텍스트에 없음",
+      "row '진 동 롤 러'이 p371-t0 조각 텍스트에 없음"
+    ]
+  }
+}

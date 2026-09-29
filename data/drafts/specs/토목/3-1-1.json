@@ -1,0 +1,220 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/3-1-1/터널노임산정",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "3-1-1",
+    "title": "터널노임 산정식",
+    "work": "터널노임 할증률 및 산정식",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      337
+    ],
+    "inputs": [
+      {
+        "name": "distance",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "m",
+        "required": true,
+        "ask": "갱구에서부터 뚫기점까지의 거리는 몇 m입니까?",
+        "source": "PDF 337쪽 p393-t1"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p393-t0",
+        "role": "터널노임 산정식",
+        "source": "PDF 337쪽 3-1-1 터널노임 산정식 표",
+        "values": {
+          "노임합계": {
+            "구분": "PW",
+            "산정식": "P+PO"
+          },
+          "기본노임": {
+            "구분": "P",
+            "산정식": "P"
+          },
+          "할증노임": {
+            "구분": "PO",
+            "산정식": "P×β"
+          }
+        },
+        "cite": {
+          "table_id": "p393-t0"
+        }
+      },
+      {
+        "id": "p393-t1",
+        "role": "갱구에서부터 뚫기점까지의 거리별 할증률",
+        "source": "PDF 337쪽 3-1-1 [주] ④ 장대 터널 할증률(α1) 표",
+        "unit": "%",
+        "values": {
+          "할증률(%)": {
+            "갱구에서 500m 까지": "-",
+            "500m∼1,000m 까지": "10",
+            "1,000m∼1,500m 까지": "20",
+            "1,500m∼2,000m 까지": "30",
+            "2,000m∼2,500m 까지": "40",
+            "2,500m∼3,000m 까지": "50",
+            "3,000m∼3,500m 까지": "60",
+            "3,500m∼4,000m 까지": "70",
+            "4,000m∼4,500m 까지": "80",
+            "4,500m∼5,000m 까지": "90",
+            "5,000m 이상": "100"
+          }
+        },
+        "cite": {
+          "table_id": "p393-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 갱구에서부터 뚫기점까지의 거리에 따라 p393-t1에서 할증률(β)을 찾는다.",
+        "p393-t0의 산정식에 따라 할증 노임(PO = P × β) 및 노임 합계(PW = P + PO)를 구한다."
+      ],
+      "source": "PDF 337쪽 p393-t0, p393-t1",
+      "rounding": "기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "장대터널 할증",
+        "source": "PDF 337쪽 [주] ①",
+        "cite": {
+          "section_no": "3-1-1",
+          "marker": "①"
+        }
+      },
+      {
+        "item": "3교대 이상 및 특수한 조건",
+        "source": "PDF 337쪽 [주] ②",
+        "cite": {
+          "section_no": "3-1-1",
+          "marker": "②"
+        }
+      },
+      {
+        "item": "유해, 위험 예방조치 비용",
+        "source": "PDF 337쪽 [주] ③",
+        "cite": {
+          "section_no": "3-1-1",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "갱내외 설비비 (버력처리비, 조명비, 동바리비 등)",
+        "source": "PDF 337쪽 [주] ⑥",
+        "cite": {
+          "section_no": "3-1-1",
+          "marker": "⑥"
+        }
+      },
+      {
+        "item": "환기설비",
+        "source": "PDF 337쪽 [주] ⑦",
+        "cite": {
+          "section_no": "3-1-1",
+          "marker": "⑦"
+        }
+      },
+      {
+        "item": "급·배기 시설",
+        "source": "PDF 337쪽 [주] ⑧",
+        "cite": {
+          "section_no": "3-1-1",
+          "marker": "⑧"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "잡재료비 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "section_no": "3-1-1",
+          "marker": "⑤"
+        }
+      }
+    ]
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "이 절은 터널 작업 노임의 할증률을 거리 조건에 따라 표에서 찾아 적용하는 산정식을 제공하므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p393-t0",
+      "row": "노임합계",
+      "column": "산정식",
+      "value": "P+PO"
+    },
+    {
+      "table_id": "p393-t1",
+      "row": "1,000m∼1,500m 까지",
+      "column": "할증률(%)",
+      "value": "20"
+    },
+    {
+      "chunk_id": "p393-x16",
+      "quote": "터널굴착시 발생하는 잡재료비(록볼트 표시기, 전설걸이, 마대 등) 및 경장비의 기계경비는 인력품의\n3%로 계상한다."
+    },
+    {
+      "chunk_id": "p393-x3",
+      "quote": "본 노임 산정표준은 연장 1,000m까지의 일반터널의 경우이며, 장대터널은 별도 장대터널 할증을 가산한다."
+    },
+    {
+      "chunk_id": "p393-x3",
+      "quote": "3교대 이상인 때와 특수한 조건일 때 별도 계상할 수 있다."
+    },
+    {
+      "chunk_id": "p393-x3",
+      "quote": "근로자에 대한 유해, 위험 예방조치에 필요한 비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p393-x16",
+      "quote": "버력처리비(적재, 운반, 버리기), 조명비, 동바리비, 착암설비(컴프레서, 소형브레이커, 송기관, 공기탱크),\n배수처리비, 기계장치비, 가설비, 환기설비 등 갱내외 설비비는 굴착공법과 조건에 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p393-x16",
+      "quote": "환기설비는 갱구에서 200m 이상일 때 필요에 따라 별도 계상하며, 갱구에서 200m 미만은 자연환기로\n한다. 단, 200m 미만이라도 필요에 따라 환기시설을 별도 계상할 수 있다."
+    },
+    {
+      "chunk_id": "p393-x16",
+      "quote": "터널연장이 1000m 이상 시에는 급･배기 시설을 별도 계상할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "원문 [주] ④에 '장대 터널 할증률(α1)'이라고 명시되어 있으나, 바로 아래 표는 '갱구에서부터 뚫기점까지의 거리'에 따른 할증률(%)을 나타내고 있어, 이 표가 장대터널 전용 할증률인지 일반터널의 거리별 할증률인지 명확하지 않음."
+  ],
+  "questions": [
+    "갱구에서 1,200m 떨어진 곳에서 작업할 때 터널노임 할증률은 얼마인가요?",
+    "장대터널의 경우 별도 할증을 가산한다고 되어 있는데, 구체적으로 몇 %를 가산해야 하나요?",
+    "터널 굴착 시 발생하는 잡재료비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:42:03.525726+00:00",
+    "input_tokens": 12256,
+    "output_tokens": 2418,
+    "source_pages": [
+      393,
+      394
+    ],
+    "prompt_sha256": "f3266aaf1b9fd18cb544dc7db459ce5bdf5e76fac8730a887caed96a95c1426c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p393-x16 조각 텍스트에 없음",
+      "quote가 p393-x16 조각 텍스트에 없음",
+      "quote가 p393-x16 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-4-6/골재생산기계등",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-4-6",
+    "title": "[50]골재생산기계 등",
+    "work": "기계별 조종원 수 조회",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      281
+    ],
+    "inputs": [
+      {
+        "name": "machine_spec",
+        "type": "enum",
+        "allowed_values": [
+          "50ton/hr(93㎾)",
+          "100 (155)",
+          "150 (260)",
+          "200 (326)",
+          "15㎾",
+          "(62.5㎥/hr)",
+          "3.5㎥/min",
+          "7.1",
+          "10.3",
+          "17.0",
+          "21.0",
+          "25.5"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용할 기계의 규격은 무엇입니까?",
+        "source": "PDF 281쪽 8-4-6 표의 규격 열"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p337-t1",
+        "role": "골재생산기계 등 규격별 조종원 수",
+        "source": "PDF 281쪽 8-4-6 [50]골재생산기계 등 표",
+        "unit": "인/일",
+        "values": {
+          "조종원\n(인/일)": {
+            "50ton/hr(93㎾)": "1",
+            "100 (155)": "1",
+            "150 (260)": "1",
+            "200 (326)": "1",
+            "15㎾": "1",
+            "(62.5㎥/hr)": "1",
+            "3.5㎥/min": "1",
+            "7.1": "1",
+            "10.3": "1",
+            "17.0": "1",
+            "21.0": "1",
+            "25.5": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p337-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 기계 규격에 해당하는 조종원 수를 표에서 찾는다."
+      ],
+      "source": "PDF 281쪽 8-4-6 표",
+      "rounding": "적용 안 함"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "이 절은 기계 규격에 따른 조종원 수를 보여주는 단순 조회용 표이므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p337-t1",
+      "row": "50ton/hr(93㎾)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "100 (155)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "150 (260)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "200 (326)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "15㎾",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "(62.5㎥/hr)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "3.5㎥/min",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "7.1",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "10.3",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "17.0",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "21.0",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p337-t1",
+      "row": "25.5",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에 원문 표에 있는 '주연료'와 '잡재료' 데이터가 누락되어 있어 명세에 포함하지 못했습니다.",
+    "파싱 결과에서 기계명이 모두 '크러셔(이동식)'으로 잘못 파싱되어 있어, 부득이하게 규격을 기준으로 표를 재구성했습니다."
+  ],
+  "questions": [
+    "50ton/hr(93㎾) 규격의 크러셔 조종원 수는 몇 명인가요?",
+    "원문 표에 있는 주연료와 잡재료율은 기계경비 산출 시 어떻게 적용해야 하나요?",
+    "사용하려는 기계의 규격이 무엇입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:42:53.192509+00:00",
+    "input_tokens": 12646,
+    "output_tokens": 1729,
+    "source_pages": [
+      337,
+      338
+    ],
+    "prompt_sha256": "070edd7f5c672a10e62bbedebd90409f34162c619473a166fdf7aecd91cadcc5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/5-2-3/도장재료사용량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "5-2-3",
+    "title": "도장재료 사용량('08, '24년 보완)",
+    "work": "도장재료(도료, 희석재) 사용량 산출",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      359
+    ],
+    "inputs": [
+      {
+        "name": "paint_type",
+        "type": "enum",
+        "allowed_values": [
+          "무기질아연말계도료",
+          "에폭시계방청도료",
+          "고고형분에폭시계도료",
+          "우레탄계도료",
+          "불소수지계도료",
+          "실록산계도료",
+          "세라믹계방식도료",
+          "세라믹계우레탄도료"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용할 도료의 종별은 무엇입니까?",
+        "source": "PDF 359쪽 5-2-3 ㉮ 고형분용적비 표 (p415-t2)"
+      },
+      {
+        "name": "paint_location",
+        "type": "enum",
+        "allowed_values": [
+          "공장도장",
+          "현장도장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도장 장소는 공장도장입니까, 현장도장입니까?",
+        "source": "PDF 359쪽 5-2-3 ㉯ 손실률 표 (p415-t3)"
+      },
+      {
+        "name": "paint_coat",
+        "type": "enum",
+        "allowed_values": [
+          "하도",
+          "중·상도"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도장 단계는 하도입니까, 중·상도입니까?",
+        "source": "PDF 359쪽 5-2-3 ㉯ 손실률 표 (p415-t3)"
+      },
+      {
+        "name": "film_thickness",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "μ",
+        "required": true,
+        "ask": "도막두께는 몇 μ입니까?",
+        "source": "PDF 359쪽 5-2-3 도장재료 사용량 산출식 (p415-t1)"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "도장면적은 몇 ㎡입니까?",
+        "source": "PDF 359쪽 5-2-3 [주] ④ (p415-x25)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p415-t1",
+        "role": "도장재료 사용량 산출식",
+        "source": "PDF 359쪽 5-2-3 도장재료 사용량 표",
+        "unit": "ℓ/㎡",
+        "values": {
+          "도료": {
+            "사용량": "도막두께(μ) / (고형분용접기 × 10) × 1 / (1 - 손실률(%) / 100)"
+          },
+          "희석재": {
+            "사용량": "도료 사용량의 25%"
+          }
+        },
+        "cite": {
+          "table_id": "p415-t1"
+        }
+      },
+      {
+        "id": "p415-t2",
+        "role": "도료종별 고형분용적비",
+        "source": "PDF 359쪽 5-2-3 ㉮ 고형분용적비 표",
+        "unit": "%",
+        "values": {
+          "무기질아연말계도료": {
+            "고형분용적비(%)": "60"
+          },
+          "에폭시계방청도료": {
+            "고형분용적비(%)": "50"
+          },
+          "고고형분에폭시계도료": {
+            "고형분용적비(%)": "80"
+          },
+          "우레탄계도료": {
+            "고형분용적비(%)": "50"
+          },
+          "불소수지계도료": {
+            "고형분용적비(%)": "30"
+          },
+          "실록산계도료": {
+            "고형분용적비(%)": "60"
+          },
+          "세라믹계방식도료": {
+            "고형분용적비(%)": "80"
+          },
+          "세라믹계우레탄도료": {
+            "고형분용적비(%)": "50"
+          }
+        },
+        "cite": {
+          "table_id": "p415-t2"
+        }
+      },
+      {
+        "id": "p415-t3",
+        "role": "도장 장소 및 단계별 손실률",
+        "source": "PDF 359쪽 5-2-3 ㉯ 손실률 표",
+        "unit": "%",
+        "values": {
+          "공장도장": {
+            "하도": "36",
+            "중·상도": "32"
+          },
+          "현장도장": {
+            "하도": "44",
+            "중·상도": "40"
+          }
+        },
+        "cite": {
+          "table_id": "p415-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p415-t1",
+          "row_input": null,
+          "column_input": null,
+          "trades": []
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p415-t2에서 paint_type에 해당하는 고형분용적비(%)를 찾는다.",
+        "p415-t3에서 paint_location과 paint_coat에 해당하는 손실률(%)을 찾는다.",
+        "p415-t1의 산출식에 따라 단위당 도료 사용량(ℓ/㎡) = (film_thickness / (고형분용적비 × 10)) × (1 / (1 - 손실률 / 100))을 계산한다.",
+        "단위당 희석재 사용량(ℓ/㎡) = 단위당 도료 사용량 × 0.25를 계산한다.",
+        "총 도료 사용량 = 단위당 도료 사용량 × area, 총 희석재 사용량 = 단위당 희석재 사용량 × area를 구한다."
+      ],
+      "source": "PDF 359쪽 5-2-3 도장재료 사용량 산출식 및 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "스터드볼트 및 연결볼트 등의 면적",
+        "source": "PDF 359쪽 5-2-3 [주] ④",
+        "cite": {
+          "chunk_id": "p415-x25"
+        }
+      },
+      {
+        "item": "잡재료 (도료와 희석재 합계약의 10%)",
+        "source": "PDF 359쪽 5-2-3 [주] ②",
+        "cite": {
+          "chunk_id": "p415-x25"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 도료 및 희석재 사용량을 산출하는 명시적인 수식과 계수 표가 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p415-t1",
+      "row": "도료",
+      "column": "사용량",
+      "value": "고형분용접기×  손실률"
+    },
+    {
+      "table_id": "p415-t1",
+      "row": "희석재",
+      "column": "사용량",
+      "value": "도료 사용량의 25%"
+    },
+    {
+      "table_id": "p415-t2",
+      "row": "무기질아연말계도료",
+      "column": "고형분용적비(%)",
+      "value": "60"
+    },
+    {
+      "table_id": "p415-t3",
+      "row": "공장도장",
+      "column": "하도",
+      "value": "36"
+    },
+    {
+      "chunk_id": "p415-x23",
+      "quote": "고형분 용적비는 도료 제작회사에 따라 변경이 가능하다"
+    },
+    {
+      "chunk_id": "p415-x25",
+      "quote": "잡재료는 도료와 희석재 합계약의 10%로 계상한다"
+    },
+    {
+      "chunk_id": "p415-x25",
+      "quote": "스터드볼트 및 연결볼트 등의 면적은 포함시키지 않는다"
+    }
+  ],
+  "open_questions": [
+    "원문에 '고형분 용적비는 도료 제작회사에 따라 변경이 가능하다'고 명시되어 있어, 표의 값을 기본값으로 하되 사용자 입력을 허용해야 하는지 모호합니다.",
+    "'잡재료는 도료와 희석재 합계약의 10%로 계상한다'에서 '합계약'이 수량의 합인지 금액(재료비)의 합인지 명확하지 않으며, 현재 cost_rules가 labor_subtotal만 지원하여 반영하기 어렵습니다."
+  ],
+  "questions": [
+    "에폭시계 방청도료의 고형분 용적비는 얼마인가요?",
+    "잡재료 10% 계상은 수량 기준인가요, 금액 기준인가요?",
+    "도막두께가 얼마인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:42:59.675057+00:00",
+    "input_tokens": 12167,
+    "output_tokens": 2803,
+    "source_pages": [
+      415,
+      416
+    ],
+    "prompt_sha256": "a3441c31f1b7855628b4bc71760713c6cac73e5ade1526a8350101990fa08c0a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

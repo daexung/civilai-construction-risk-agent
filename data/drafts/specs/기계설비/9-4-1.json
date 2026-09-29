@@ -1,0 +1,287 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/9-4-1/기밀시험",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "9-4-1",
+    "title": "기밀시험('15, '19년 보완)",
+    "work": "기밀시험 1회 기준 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      704
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "회",
+        "required": true,
+        "ask": "기밀시험 횟수는 몇 회입니까?",
+        "source": "PDF 704쪽 9-4-1 표 단위 (회당) 및 [주] ①"
+      },
+      {
+        "name": "pipe_type",
+        "type": "enum",
+        "allowed_values": [
+          "지상노출관",
+          "지하매설관"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배관 종류는 지상노출관과 지하매설관 중 무엇입니까?",
+        "source": "PDF 704쪽 9-4-1 표 수량 구분",
+        "synonyms": {
+          "지상노출관": [
+            "지상노출",
+            "노출관"
+          ],
+          "지하매설관": [
+            "지하매설",
+            "매설관"
+          ]
+        }
+      },
+      {
+        "name": "test_material_volume",
+        "type": "enum",
+        "allowed_values": [
+          "1㎥미만",
+          "1㎥이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시험재료 투입량은 1㎥ 미만입니까, 1㎥ 이상입니까?",
+        "source": "PDF 704쪽 9-4-1 [주] ②, ③"
+      },
+      {
+        "name": "test_duration",
+        "type": "enum",
+        "allowed_values": [
+          "30분 미만",
+          "30분 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기밀유지시간은 30분 미만입니까, 30분 이상입니까?",
+        "source": "PDF 704쪽 9-4-1 [주] ②, ④"
+      },
+      {
+        "name": "blind_plate_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기밀시험에 맹관, 맹판 접합 및 해체가 필요합니까?",
+        "source": "PDF 704쪽 9-4-1 [주] ⑤"
+      },
+      {
+        "name": "test_gas",
+        "type": "enum",
+        "allowed_values": [
+          "공기",
+          "질소"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시험재료로 사용하는 가스는 무엇입니까? (공기 / 질소)",
+        "source": "PDF 704쪽 9-4-1 [주] ①, ⑥"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p760-t1",
+        "role": "기밀시험 단위당 품 (회당)",
+        "source": "PDF 704쪽 9-4-1 표",
+        "unit": "인/회",
+        "values": {
+          "배관공": {
+            "지상노출관": "0.14",
+            "지하매설관": "0.19"
+          },
+          "보통인부": {
+            "지상노출관": "0.14",
+            "지하매설관": "0.19"
+          }
+        },
+        "cite": {
+          "table_id": "p760-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p760-t1",
+          "row_input": "고정 행이름(배관공, 보통인부)",
+          "column_input": "pipe_type",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p760-t1에서 배관 종류(pipe_type)에 따른 배관공과 보통인부의 단위당 품을 찾는다.",
+        "찾은 단위당 품에 기밀시험 횟수(quantity)를 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 704쪽 9-4-1 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [
+      {
+        "condition": "시험재료 1㎥이상 투입",
+        "blocked_if": {
+          "input": "test_material_volume",
+          "op": "==",
+          "value": "1㎥이상"
+        },
+        "reason": "시험재료 1㎥이상 투입시에는 별도 계상하도록 되어 있음",
+        "source": "PDF 704쪽 9-4-1 [주] ③",
+        "cite": {
+          "chunk_id": "p760-x17",
+          "quote": "③ 시험재료 1㎥이상 투입시에는 별도 계상한다."
+        }
+      },
+      {
+        "condition": "기밀유지시간 30분 이상 소요",
+        "blocked_if": {
+          "input": "test_duration",
+          "op": "==",
+          "value": "30분 이상"
+        },
+        "reason": "기밀유지시간이 30분이상 소요되는 경우 시험관리 인력을 추가 계상해야 하나, 구체적인 추가 인력 기준이 명시되어 있지 않음",
+        "source": "PDF 704쪽 9-4-1 [주] ④",
+        "cite": {
+          "chunk_id": "p760-x17",
+          "quote": "④ 기밀유지시간이 30분이상 소요되는 경우 시험관리 인력을 추가 계상한다."
+        }
+      },
+      {
+        "condition": "맹관, 맹판 접합 및 해체 필요",
+        "blocked_if": {
+          "input": "blind_plate_needed",
+          "op": "==",
+          "value": true
+        },
+        "reason": "기밀시험에 맹관, 맹판 접합 및 해체가 필요한 경우 별도 계상하도록 되어 있음",
+        "source": "PDF 704쪽 9-4-1 [주] ⑤",
+        "cite": {
+          "chunk_id": "p760-x17",
+          "quote": "⑤ 기밀시험에 맹관, 맹판 접합 및 해체가 필요한 경우 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "질소 사용 시 재료비",
+        "source": "PDF 704쪽 9-4-1 [주] ⑥",
+        "cite": {
+          "chunk_id": "p760-x17",
+          "quote": "질소를 기밀시험 재료로 사용할 경우 재료비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.08",
+        "cite": {
+          "chunk_id": "p760-x17",
+          "quote": "⑥ 공구손료 및 경장비(콤프레셔, 압력계 등)의 기계경비는 인력품의 8%로 계상하며"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 1회당 배관공과 보통인부의 단위당 품이 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p760-t1",
+      "row": "배관공",
+      "column": "지상노출관",
+      "value": "0.14"
+    },
+    {
+      "table_id": "p760-t1",
+      "row": "배관공",
+      "column": "지하매설관",
+      "value": "0.19"
+    },
+    {
+      "table_id": "p760-t1",
+      "row": "보통인부",
+      "column": "지상노출관",
+      "value": "0.14"
+    },
+    {
+      "table_id": "p760-t1",
+      "row": "보통인부",
+      "column": "지하매설관",
+      "value": "0.19"
+    },
+    {
+      "chunk_id": "p760-x17",
+      "quote": "① 본 품은 자기압력기록계와 공기를 시험재료로 사용한 저압 및 중압의 기밀시험 1회 기준이다."
+    },
+    {
+      "chunk_id": "p760-x17",
+      "quote": "② 시험준비 및 측정기 설치, 시험재료 투입(1㎥미만), 해체정리 작업과 기밀유지시간(30분 미만)을 포함한다."
+    },
+    {
+      "chunk_id": "p760-x17",
+      "quote": "③ 시험재료 1㎥이상 투입시에는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p760-x17",
+      "quote": "④ 기밀유지시간이 30분이상 소요되는 경우 시험관리 인력을 추가 계상한다."
+    },
+    {
+      "chunk_id": "p760-x17",
+      "quote": "⑤ 기밀시험에 맹관, 맹판 접합 및 해체가 필요한 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p760-x17",
+      "quote": "⑥ 공구손료 및 경장비(콤프레셔, 압력계 등)의 기계경비는 인력품의 8%로 계상하며, 질소를 기밀시험"
+    },
+    {
+      "chunk_id": "p760-x17",
+      "quote": "재료로 사용할 경우 재료비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "기밀유지시간이 30분 이상 소요되는 경우 시험관리 인력을 추가 계상하라고 되어 있으나, 구체적으로 어떤 직종을 얼마만큼 추가해야 하는지 기준이 명시되어 있지 않아 계산식에 반영할 수 없습니다."
+  ],
+  "questions": [
+    "지하매설관 기밀시험 1회당 배관공 품은 얼마인가요?",
+    "기밀유지시간이 40분 걸렸는데, 시험관리 인력은 얼마나 추가해야 하나요?",
+    "시험재료 투입량이 1.5㎥인데 이 품셈을 그대로 적용해도 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:26.091393+00:00",
+    "input_tokens": 11684,
+    "output_tokens": 2985,
+    "source_pages": [
+      760,
+      761
+    ],
+    "prompt_sha256": "9aba90ab5c6681cb7bda74c01f8cf6019e1a2da65af595cb94d48a58ead214cd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

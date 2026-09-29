@@ -1,0 +1,164 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/10-2-2/플로어힌지설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "10-2-2",
+    "title": "플로어힌지 설치",
+    "work": "플로어힌지 및 로트 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      631,
+      632
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 플로어힌지는 몇 개소입니까?",
+        "source": "10-2-2 표 단위 (10개소당)"
+      },
+      {
+        "name": "is_tempered_glass_door",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치 대상 문이 강화유리문입니까?",
+        "source": "10-2-2 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p687-t3",
+        "role": "플로어힌지 설치 직종별 인력 품",
+        "source": "10-2-2 플로어힌지 설치 표",
+        "unit": "인/10개소",
+        "values": {
+          "창호공": {
+            "수량": "0.96"
+          },
+          "보통인부": {
+            "수량": "0.48"
+          }
+        },
+        "cite": {
+          "table_id": "p687-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p687-t3",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "창호공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p687-t3 표에서 10개소당 직종별 품을 확인한다.",
+        "입력된 물량(quantity)을 10으로 나누어 표의 품에 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "10-2-2 플로어힌지 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "강화유리문이 아닌 경우",
+        "blocked_if": {
+          "input": "is_tempered_glass_door",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 강화유리문의 플로어힌지 설치 기준이므로, 다른 재질의 문에 대해서는 별도 산정 필요",
+        "source": "10-2-2 [주] ①",
+        "cite": {
+          "chunk_id": "p688-x0",
+          "quote": "본 품은 강화유리문의 플로어힌지 설치 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p688-x0",
+          "quote": "공구손료 및 경장비(용접기, 전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(10개소)당 직종별 인력 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p687-t3",
+      "row": "창호공",
+      "column": "수량",
+      "value": "0.96"
+    },
+    {
+      "table_id": "p687-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.48"
+    },
+    {
+      "chunk_id": "p688-x0",
+      "quote": "본 품은 강화유리문의 플로어힌지 설치 기준이다."
+    },
+    {
+      "chunk_id": "p688-x0",
+      "quote": "본 품은 플로어힌지 및 로트 설치를 포함한다."
+    },
+    {
+      "chunk_id": "p688-x0",
+      "quote": "공구손료 및 경장비(용접기, 전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 chunk_id와 table_id에 포함된 페이지 번호(p687, p688)가 실제 원문 이미지의 페이지 번호(631, 632)와 다릅니다. 파싱 결과를 우선하여 id를 작성했습니다."
+  ],
+  "questions": [
+    "플로어힌지 20개소를 설치할 때 창호공 품은 얼마인가요?",
+    "강화유리문이 아닌 목재문에 플로어힌지를 설치할 때도 이 품을 적용할 수 있나요?",
+    "플로어힌지 설치 시 기계경비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:51:10.472487+00:00",
+    "input_tokens": 12026,
+    "output_tokens": 1580,
+    "source_pages": [
+      687,
+      688,
+      689
+    ],
+    "prompt_sha256": "d629eb2056115f8cbef53355d94c6cc731c3732a186b4ea17a9ee6c28cc84103",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

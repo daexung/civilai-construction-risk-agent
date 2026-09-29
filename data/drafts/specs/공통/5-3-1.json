@@ -1,0 +1,390 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/5-3-1/기성말뚝기초",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "5-3-1",
+    "title": "기성말뚝 기초('99년 신설, '15, '16, '20, '26년 보완)",
+    "work": "기성말뚝 천공 및 말뚝조성",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      172,
+      173,
+      174,
+      175,
+      176
+    ],
+    "inputs": [
+      {
+        "name": "pile_type",
+        "type": "enum",
+        "allowed_values": [
+          "강관말뚝",
+          "기성콘크리트말뚝"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공할 말뚝의 종류는 무엇입니까?",
+        "source": "PDF 172쪽 1. 적용범위 표"
+      },
+      {
+        "name": "pile_diameter",
+        "type": "nonnegative_integer",
+        "allowed_values": "400~800",
+        "unit": "㎜",
+        "required": true,
+        "ask": "말뚝의 직경은 몇 ㎜입니까? (400~800)",
+        "source": "PDF 172쪽 1. 적용범위 표"
+      },
+      {
+        "name": "drilling_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "천공 길이는 몇 m입니까?",
+        "source": "PDF 175쪽 4. 장비편성 ③ 전용장비 규격 기준 표"
+      },
+      {
+        "name": "bit_type",
+        "type": "enum",
+        "allowed_values": [
+          "오거비트",
+          "개량형비트",
+          "해머비트"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용할 비트의 종류는 무엇입니까?",
+        "source": "PDF 175~176쪽 5. 작업소요시간 지층별 굴착시간 표"
+      },
+      {
+        "name": "casing_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "케이싱을 사용합니까?",
+        "source": "PDF 174쪽 4. 장비편성 [주] ② 소모자재 요율 표 및 PDF 175쪽 5. 작업소요시간 t3"
+      },
+      {
+        "name": "pile_joint_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "말뚝이음 작업이 필요합니까?",
+        "source": "PDF 174쪽 3. 인력편성 표 및 4. 장비편성 [주] ①, ② 요율 표"
+      },
+      {
+        "name": "foundation_type",
+        "type": "enum",
+        "allowed_values": [
+          "도로/철도 교량기초",
+          "건축기초"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기초의 종류는 무엇입니까?",
+        "source": "PDF 175쪽 5. 작업소요시간 f(작업계수)"
+      },
+      {
+        "name": "leader_length_over_30m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "파일천공전용장비의 리더부가 30m를 초과합니까?",
+        "source": "PDF 173쪽 2. 장비조립·해체 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p172-t3",
+        "role": "적용범위 (말뚝 종류 및 직경)",
+        "source": "PDF 172쪽 1. 적용범위 표",
+        "values": {
+          "강관말뚝": {
+            "말 뚝 직 경(㎜)": "400∼800"
+          },
+          "기성콘크리트말뚝": {
+            "말 뚝 직 경(㎜)": "400∼800"
+          }
+        },
+        "cite": {
+          "table_id": "p172-t3"
+        }
+      },
+      {
+        "id": "p174-t0",
+        "role": "인력편성",
+        "source": "PDF 174쪽 3. 인력편성 표",
+        "unit": "인",
+        "values": {
+          "보링공": {
+            "수량": "1"
+          },
+          "기계설비공": {
+            "수량": "1"
+          },
+          "특별인부": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "용접공": {
+            "말뚝이음필요": "1.5",
+            "말뚝이음불필요": "0.5"
+          }
+        },
+        "cite": {
+          "table_id": "p174-t0"
+        }
+      },
+      {
+        "id": "p174-t2",
+        "role": "부속장비 경비 요율",
+        "source": "PDF 174쪽 4. 장비편성 [주] ① 표",
+        "unit": "%",
+        "values": {
+          "요율": {
+            "단말뚝": "15%",
+            "이음말뚝": "13%"
+          }
+        },
+        "cite": {
+          "table_id": "p174-t2"
+        }
+      },
+      {
+        "id": "p174-t3",
+        "role": "소모자재 손료 요율",
+        "source": "PDF 174쪽 4. 장비편성 [주] ② 표",
+        "unit": "%",
+        "values": {
+          "케이싱사용시": {
+            "단말뚝": "21%",
+            "이음말뚝": "24%"
+          },
+          "케이싱 미사용시": {
+            "단말뚝": "17%",
+            "이음말뚝": "19%"
+          }
+        },
+        "cite": {
+          "table_id": "p174-t3"
+        }
+      },
+      {
+        "id": "p175-t2",
+        "role": "그라우팅 소요시간",
+        "source": "PDF 175쪽 5. 작업소요시간 t4 표",
+        "unit": "min",
+        "values": {
+          "10m미만": {
+            "400∼600": "2",
+            "700∼800": "4"
+          },
+          "10∼20미만": {
+            "400∼600": "4",
+            "700∼800": "6"
+          },
+          "20∼30미만": {
+            "400∼600": "6",
+            "700∼800": "8"
+          }
+        },
+        "cite": {
+          "table_id": "p175-t2"
+        }
+      },
+      {
+        "id": "p175-t3",
+        "role": "용접 소요시간",
+        "source": "PDF 175쪽 5. 작업소요시간 t5 표",
+        "unit": "min",
+        "values": {
+          "시간(min)": {
+            "400": "15",
+            "450": "16",
+            "500": "18",
+            "600": "22",
+            "700": "25",
+            "800": "29"
+          }
+        },
+        "cite": {
+          "table_id": "p175-t3"
+        }
+      },
+      {
+        "id": "p175-t4",
+        "role": "오거비트 지층별 굴착시간",
+        "source": "PDF 175쪽 5. 작업소요시간 지층별 굴착시간 표 (오거비트)",
+        "unit": "min/m",
+        "values": {
+          "500미만": {
+            "토사 점질토": "0.74",
+            "토사 사질토": "0.96",
+            "풍화암": "4.08"
+          },
+          "500∼600": {
+            "토사 점질토": "0.91",
+            "토사 사질토": "1.18",
+            "풍화암": "4.99"
+          },
+          "700∼800": {
+            "토사 점질토": "1.24",
+            "토사 사질토": "1.61",
+            "풍화암": "6.80"
+          }
+        },
+        "cite": {
+          "table_id": "p175-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "지층별 굴착연장과 비트 종류에 따라 천공시간(t2)을 계산한다.",
+        "준비시간(t1), 말뚝근입/항타시간(t3), 그라우팅시간(t4), 용접시간(t5)을 합산하여 본당 소요시간(T)을 구한다.",
+        "작업계수(f)를 적용하여 최종 본당 소요시간을 산출한다.",
+        "산출된 본당 소요시간을 바탕으로 일일 시공량을 역산하여 인력 및 장비 편성을 적용한다."
+      ],
+      "source": "PDF 175쪽 5. 작업소요시간",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "지층이 복합적으로 구성되어 단일 굴착시간 적용이 어려운 경우",
+        "reason": "원문 공식 t2 = ∑(L1×a1)은 여러 지층의 연장과 굴착시간을 각각 곱해 더해야 하므로, 단순 입력 모델로는 자동 계산이 불가능함",
+        "source": "PDF 175쪽 5. 작업소요시간 t2 산출방법",
+        "cite": [
+          {
+            "table_id": "p175-t1",
+            "row": "t 2",
+            "column": "산출방법",
+            "value": "t : ∑(L ×a )"
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "서비스케이싱 천공 및 설치",
+        "source": "PDF 174쪽 2. 장비조립·해체 [주] ③",
+        "cite": {
+          "chunk_id": "p174-x0",
+          "quote": "말뚝이음을 위한 서비스케이싱 천공 및 설치는 별도 계상한다."
+        }
+      },
+      {
+        "item": "해머비트(개량형 비트 포함)의 손료",
+        "source": "PDF 174쪽 4. 장비편성 [주] ※",
+        "cite": {
+          "chunk_id": "p174-x30",
+          "quote": "해머비트(개량형 비트 포함)의 손료는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p174-x0",
+          "quote": "공구손료 및 경장비(발전기, 전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "본당 작업소요시간을 지층별 굴착연장과 비트 종류에 따라 복합적으로 계산(∑(L1×a1))해야 하며, 이를 통한 일일시공량 산출 기준(일 작업시간 등)이 명시되어 있지 않아 자동 계산 모델을 적용하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p172-t3"
+    },
+    {
+      "table_id": "p174-t0"
+    },
+    {
+      "table_id": "p174-t2"
+    },
+    {
+      "table_id": "p174-t3"
+    },
+    {
+      "table_id": "p175-t2"
+    },
+    {
+      "table_id": "p175-t3"
+    },
+    {
+      "table_id": "p175-t4"
+    },
+    {
+      "table_id": "p175-t1",
+      "row": "t 2",
+      "column": "산출방법",
+      "value": "t : ∑(L ×a )"
+    },
+    {
+      "chunk_id": "p174-x0",
+      "quote": "말뚝이음을 위한 서비스케이싱 천공 및 설치는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p174-x30",
+      "quote": "해머비트(개량형 비트 포함)의 손료는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p174-x0",
+      "quote": "공구손료 및 경장비(발전기, 전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "본당 작업소요시간(T)을 구한 후, 이를 바탕으로 하루 시공량(본/일)을 산출하기 위한 기준 작업시간(예: 480분)이 원문에 명시되어 있지 않습니다.",
+    "지층별 굴착연장(L1)이 여러 개일 경우, 이를 배열 형태로 입력받아 각각의 굴착시간(a1)과 곱하여 합산하는 로직이 현재 모델 구조상 구현하기 어렵습니다.",
+    "부속장비 및 소모자재 요율이 단말뚝/이음말뚝, 케이싱 사용 여부에 따라 달라지는데, 이를 cost_rules에 동적으로 반영할 수 있는 구조가 필요합니다."
+  ],
+  "questions": [
+    "말뚝 직경 500mm, 천공길이 15m일 때 파일천공전용장비 규격은 어떻게 되나요?",
+    "지층이 점질토 5m, 풍화암 3m로 섞여 있을 때 천공시간 계산은 어떻게 하나요?",
+    "케이싱을 사용하는 경우 소모자재 요율은 얼마를 적용해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:19:55.365826+00:00",
+    "input_tokens": 18311,
+    "output_tokens": 4003,
+    "source_pages": [
+      172,
+      173,
+      174,
+      175,
+      176,
+      177
+    ],
+    "prompt_sha256": "24b64433db35af2878c71aae0624e513b49b28b375ec23e1f90a02011b7991fd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/9-3-3/주각부무수축모르타르충전",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "9-3-3",
+    "title": "주각부 무수축 모르타르 충전",
+    "work": "주각부 무수축 모르타르 충전 품 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      627
+    ],
+    "inputs": [
+      {
+        "name": "size",
+        "type": "enum",
+        "allowed_values": [
+          "400×400(㎜)",
+          "500×500(㎜)",
+          "600×600(㎜)",
+          "700×700(㎜)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "주각부 규격은 무엇입니까?",
+        "source": "PDF 627쪽 9-3-3 표",
+        "synonyms": {
+          "400×400(㎜)": [
+            "400x400",
+            "400*400"
+          ],
+          "500×500(㎜)": [
+            "500x500",
+            "500*500"
+          ],
+          "600×600(㎜)": [
+            "600x600",
+            "600*600"
+          ],
+          "700×700(㎜)": [
+            "700x700",
+            "700*700"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "시공할 개소 수는 몇 개소입니까?",
+        "source": "PDF 627쪽 9-3-3 표 단위 (개소당)"
+      },
+      {
+        "name": "thickness",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎜",
+        "required": true,
+        "ask": "모르타르 타설 두께는 몇 ㎜입니까? (기준은 50㎜입니다)",
+        "source": "PDF 627쪽 9-3-3 [주] ①"
+      },
+      {
+        "name": "material_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "무수축 모르타르는 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "일반적인 재료비 처리 기준"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p683-t1",
+        "role": "규격별 인력 품",
+        "source": "PDF 627쪽 9-3-3 첫 번째 표",
+        "unit": "인/개소",
+        "values": {
+          "미장공": {
+            "400×400(㎜)": "0.16",
+            "500×500(㎜)": "0.20",
+            "600×600(㎜)": "0.23",
+            "700×700(㎜)": "0.27"
+          },
+          "보통인부": {
+            "400×400(㎜)": "0.05",
+            "500×500(㎜)": "0.06",
+            "600×600(㎜)": "0.07",
+            "700×700(㎜)": "0.09"
+          }
+        },
+        "cite": {
+          "table_id": "p683-t1"
+        }
+      },
+      {
+        "id": "p683-t2",
+        "role": "규격별 무수축 모르타르 재료량",
+        "source": "PDF 627쪽 9-3-3 두 번째 표",
+        "unit": "㎏/개소",
+        "values": {
+          "무수축모르타르": {
+            "400×400(㎜)": "15.6",
+            "500×500(㎜)": "24.4",
+            "600×600(㎜)": "35.1"
+          }
+        },
+        "cite": {
+          "table_id": "p683-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p683-t1",
+          "column_input": "size",
+          "trades": [
+            "미장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p683-t1에서 규격(size)에 따른 미장공, 보통인부의 단위당 품을 찾는다.",
+        "p683-t2에서 규격(size)에 따른 무수축 모르타르의 단위당 재료량을 찾는다.",
+        "단위당 품과 재료량에 물량(quantity)을 곱하여 총 투입량을 구한다."
+      ],
+      "source": "PDF 627쪽 9-3-3 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "모르타르 두께가 50㎜가 아닌 경우",
+        "blocked_if": {
+          "input": "thickness",
+          "op": "!=",
+          "value": 50
+        },
+        "reason": "원문은 모르타르 두께 50㎜를 기준으로 하며, 두께 증감에 따른 품 및 재료량 보정 기준이 명시되어 있지 않음",
+        "source": "PDF 627쪽 9-3-3 [주] ①",
+        "cite": {
+          "chunk_id": "p683-x7",
+          "quote": "모르타르 두께는 50㎜를 기준한"
+        }
+      },
+      {
+        "condition": "규격이 700×700(㎜)인 경우의 재료량 산정",
+        "blocked_if": {
+          "input": "size",
+          "op": "==",
+          "value": "700×700(㎜)"
+        },
+        "reason": "파싱 결과에 700×700(㎜) 규격의 무수축 모르타르 재료량이 누락되어 있어 자동 계산 불가",
+        "source": "파싱 결과 누락",
+        "cite": {
+          "table_id": "p683-t2"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [
+      {
+        "item": "무수축 모르타르",
+        "input": "material_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "미산정",
+            "reason": "무수축 모르타르 단가 미입력"
+          }
+        },
+        "source": "일반적인 재료비 처리 기준",
+        "cite": []
+      }
+    ],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소)당 직종별 인원과 재료량이 표에 직접 명시되어 있으므로 per_unit 모델이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p683-t1",
+      "row": "미장공",
+      "column": "400×400(㎜)",
+      "value": "0.16"
+    },
+    {
+      "table_id": "p683-t1",
+      "row": "보통인부",
+      "column": "400×400(㎜)",
+      "value": "0.05"
+    },
+    {
+      "table_id": "p683-t2",
+      "row": "무수축모르타르",
+      "column": "400×400(㎜)",
+      "value": "15.6"
+    },
+    {
+      "chunk_id": "p683-x7",
+      "quote": "모르타르 두께는 50㎜를 기준한"
+    },
+    {
+      "chunk_id": "p683-x7",
+      "quote": "설치위치 확인, 형틀설치, 모르타르 비빔 및 타설 작업이 포함된 것이다."
+    }
+  ],
+  "open_questions": [
+    "모르타르 두께가 50㎜가 아닐 경우, 품과 재료량을 두께에 비례하여 증감해야 하는지 원문에 명시되어 있지 않습니다.",
+    "파싱 결과(p683-t2)에 700×700(㎜) 규격의 무수축 모르타르 재료량(원문 47.8㎏)이 누락되어 있어 해당 규격 선택 시 재료량 계산이 차단됩니다."
+  ],
+  "questions": [
+    "무수축 모르타르 충전 시 500x500 규격 10개소를 시공하면 미장공 품은 얼마나 드나요?",
+    "모르타르 두께가 100mm인 경우 품과 재료량을 2배로 적용해도 되나요?",
+    "주각부 무수축 모르타르 충전 품을 계산해 주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:09:11.294779+00:00",
+    "input_tokens": 11761,
+    "output_tokens": 2634,
+    "source_pages": [
+      683,
+      684
+    ],
+    "prompt_sha256": "d7494a0e4769abd8d584f49a609c6e06ceb1bc3af4cf02d158cdd33b1d6eaf15",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

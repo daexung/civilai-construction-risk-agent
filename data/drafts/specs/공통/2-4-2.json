@@ -1,0 +1,349 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-4-2/H형강지주설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-4-2",
+    "title": "H형강 지주 설치 및 해체",
+    "work": "H형강 지주 설치 및 해체 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      42
+    ],
+    "inputs": [
+      {
+        "name": "height",
+        "type": "enum",
+        "allowed_values": [
+          "지주높이 4m이하",
+          "지주높이 7m이하",
+          "지주높이 11m이하"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "지주높이는 어느 구간에 해당합니까?",
+        "source": "PDF 42쪽 2-4-2 표 시공량 구분",
+        "synonyms": {
+          "지주높이 4m이하": [
+            "4m이하",
+            "4m 이하"
+          ],
+          "지주높이 7m이하": [
+            "7m이하",
+            "7m 이하"
+          ],
+          "지주높이 11m이하": [
+            "11m이하",
+            "11m 이하"
+          ]
+        }
+      },
+      {
+        "name": "operation",
+        "type": "enum",
+        "allowed_values": [
+          "설치",
+          "해체"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치 작업입니까, 해체 작업입니까?",
+        "source": "PDF 42쪽 2-4-2 표 시공량 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "시공 물량은 몇 m입니까?",
+        "source": "PDF 42쪽 2-4-2 표 시공량 단위"
+      },
+      {
+        "name": "spacing_is_2m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지주간격이 2.0m 기준입니까?",
+        "source": "PDF 42쪽 [주] ①"
+      },
+      {
+        "name": "drilling_required",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "H형강 설치를 위한 천공 작업이 필요합니까?",
+        "source": "PDF 42쪽 [주] ③"
+      },
+      {
+        "name": "extra_works_required",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "콘크리트 기초, 출입구문, 방진망 작업이 포함되어 있습니까?",
+        "source": "PDF 42쪽 [주] ④"
+      },
+      {
+        "name": "aerial_lift_required",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장여건에 따라 고소작업차가 필요합니까?",
+        "source": "PDF 42쪽 [주] ⑥"
+      },
+      {
+        "name": "crane_spec",
+        "type": "enum",
+        "allowed_values": [
+          "10t",
+          "25t",
+          "50t",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업여건 및 안전율을 고려하여 적용할 크레인의 규격은 무엇입니까?",
+        "source": "PDF 42쪽 [주] ⑦ (품셈에 명시된 규격이 없어 대표 톤수 예시 제공)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p98-t0",
+        "role": "작업조 인원 및 장비 대수, 기준 일일시공량",
+        "source": "PDF 42쪽 2-4-2 표",
+        "unit": "인, 대, m/일",
+        "values": {
+          "비계공": {
+            "수량": "3"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "굴착기": {
+            "수량": "0.5"
+          },
+          "크레인": {
+            "수량": "1"
+          },
+          "지주높이 4m이하": {
+            "설치": "70",
+            "해체": "170"
+          },
+          "지주높이 7m이하": {
+            "설치": "40",
+            "해체": "100"
+          },
+          "지주높이 11m이하": {
+            "설치": "25",
+            "해체": "65"
+          }
+        },
+        "cite": {
+          "table_id": "p98-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p98-t0",
+          "row_input": "height",
+          "column_input": "operation"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p98-t0",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "비계공": "1015",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": [
+          {
+            "name": "굴착기",
+            "table": "p98-t0",
+            "unit": "대·일",
+            "operator_rate_code": "1048"
+          },
+          {
+            "name": "크레인",
+            "table": "p98-t0",
+            "unit": "대·일",
+            "machine_code_input": "crane_spec",
+            "operator_rate_code": "1048"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p98-t0에서 지주높이와 작업종류(설치/해체)에 따른 기준 일일시공량을 찾는다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량(비계공 3, 보통인부 1)을 구한다.",
+        "장비 대·일 = 작업일수 × 표의 장비별 수량(굴착기 0.5, 크레인 1)을 구한다."
+      ],
+      "source": "PDF 42쪽 2-4-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "지주간격이 2.0m가 아님",
+        "blocked_if": {
+          "input": "spacing_is_2m",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 지주간격 2.0m 기준이며, 다를 경우의 보정 기준이 명시되어 있지 않음",
+        "source": "PDF 42쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p98-x5",
+          "quote": "본 품은 H형강을 사용한 지주(지주간격 2.0m)의 설치 및 해체 작업 기준이다."
+        }
+      },
+      {
+        "condition": "천공 작업 필요",
+        "blocked_if": {
+          "input": "drilling_required",
+          "op": "==",
+          "value": true
+        },
+        "reason": "H형강 설치를 위한 천공 작업은 제외되어 있으므로 별도 계상 필요",
+        "source": "PDF 42쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p98-x5",
+          "quote": "H형강 설치를 위한 천공 작업은 제외되어 있다."
+        }
+      },
+      {
+        "condition": "콘크리트 기초 등 추가 작업 포함",
+        "blocked_if": {
+          "input": "extra_works_required",
+          "op": "==",
+          "value": true
+        },
+        "reason": "콘크리트 기초, 출입구문, 방진망 작업은 별도 계상 필요",
+        "source": "PDF 42쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p98-x5",
+          "quote": "콘크리트 기초, 출입구문, 방진망 작업은 별도 계상한다."
+        }
+      },
+      {
+        "condition": "고소작업차 필요",
+        "blocked_if": {
+          "input": "aerial_lift_required",
+          "op": "==",
+          "value": true
+        },
+        "reason": "현장여건에 따라 고소작업차가 필요할 경우 기계경비는 별도 계상 필요",
+        "source": "PDF 42쪽 [주] ⑥",
+        "cite": {
+          "chunk_id": "p98-x5",
+          "quote": "현장여건에 따라 고소작업차가 필요할 경우 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p98-x5",
+          "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수가 고정되어 있고, 조건(높이, 설치/해체)에 따른 일일 시공량이 표로 제시되어 있어 작업일수를 구하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p98-t0",
+      "row": "지주높이 4m이하",
+      "column": "설치",
+      "value": "70"
+    },
+    {
+      "table_id": "p98-t0",
+      "row": "비계공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "chunk_id": "p98-x5",
+      "quote": "본 품은 H형강을 사용한 지주(지주간격 2.0m)의 설치 및 해체 작업 기준이다."
+    },
+    {
+      "chunk_id": "p98-x5",
+      "quote": "H형강 설치를 위한 천공 작업은 제외되어 있다."
+    },
+    {
+      "chunk_id": "p98-x5",
+      "quote": "콘크리트 기초, 출입구문, 방진망 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p98-x5",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p98-x5",
+      "quote": "현장여건에 따라 고소작업차가 필요할 경우 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p98-x5",
+      "quote": "장비(크레인)의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율(적정하중, 작업반경 등)을 고려하여 적합한 규격을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "크레인 규격이 구체적으로 명시되지 않아 사용자 입력으로 처리하였으나, 단가 산출을 위해 정확한 장비 코드 매핑이 필요할 수 있습니다.",
+    "adjusted_daily_crew 모델에서 crew와 equipment의 수량이 고정값일 때, column_input을 생략하고 처리하는 방식이 스펙에 완벽히 부합하는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "지주높이가 5m일 때 설치 품은 어떻게 되나요?",
+    "크레인 규격은 어떤 기준으로 선택해야 하나요?",
+    "천공 작업이 필요한데 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:14:59.113954+00:00",
+    "input_tokens": 11859,
+    "output_tokens": 3406,
+    "source_pages": [
+      98,
+      99
+    ],
+    "prompt_sha256": "3da7fd30c83ec9d9b82537de8bc2662c55e15970dcc829745b0002e48c707c56",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p98-x5 조각 텍스트에 없음"
+    ]
+  }
+}

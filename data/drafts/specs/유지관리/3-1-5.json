@@ -1,0 +1,126 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-1-5/석축헐기",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-1-5",
+    "title": "석축 헐기(인력)",
+    "work": "석축 헐기 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      913
+    ],
+    "inputs": [],
+    "tables": [
+      {
+        "id": "p969-t0",
+        "role": "석축 헐기 인력 품 (파싱 누락으로 불완전)",
+        "source": "PDF 913쪽 3-1-5 표",
+        "values": {
+          "구분": {
+            "단위 ㎥당": "할석공(인) 0.1"
+          }
+        },
+        "cite": {
+          "table_id": "p969-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과 누락으로 계산 불가"
+      ],
+      "source": "PDF 913쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "기준높이 3.6m 초과",
+        "reason": "작업 안전설비 및 특수 조건에 대한 품은 별도 계상",
+        "source": "PDF 913쪽 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p969-x2",
+            "quote": "① 본 품은 기준높이 3.6m일 때의 인력헐기를 기준한 것이며, 그 이상일 때의 작업 안전설비 및 특수\n설명 | 조건에 대한 품은 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "condition": "발생품 재사용 또는 제자리 고르기",
+        "reason": "별도 계상",
+        "source": "PDF 913쪽 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p969-x2",
+            "quote": "② 발생품을 재사용코자 할 때나 제자리 고르기를 할 경우는 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "잡재료",
+        "category": "재료비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": [
+          {
+            "chunk_id": "p969-x2",
+            "quote": "④ 잡재료는 인력품의 5%이내에서 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에 표의 행(구분)과 보통인부 수치 등 핵심 데이터가 누락되어 계산 명세를 작성할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p969-t0",
+      "row": "구분",
+      "column": "단위 ㎥당",
+      "value": "할석공(인) 0.1"
+    },
+    {
+      "chunk_id": "p969-x2",
+      "quote": "① 본 품은 기준높이 3.6m일 때의 인력헐기를 기준한 것이며, 그 이상일 때의 작업 안전설비 및 특수\n설명 | 조건에 대한 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p969-x2",
+      "quote": "② 발생품을 재사용코자 할 때나 제자리 고르기를 할 경우는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p969-x2",
+      "quote": "④ 잡재료는 인력품의 5%이내에서 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p969-t0에 '메쌓기 뒷길이 45~60㎝', '메쌓기 뒷길이 60~90㎝', '찰 쌓 기', '절 석 ( 마 름 돌 ) 쌓 기' 행과 보통인부 수치가 누락되어 있어 표를 재구성할 수 없습니다."
+  ],
+  "questions": [
+    "석축 헐기 시 기준높이가 4m인 경우 품을 어떻게 계산하나요?",
+    "발생품을 제자리 고르기에 사용할 때 품셈 적용 방법은?",
+    "석축 헐기 물량은 어떻게 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:29.970833+00:00",
+    "input_tokens": 23334,
+    "output_tokens": 3811,
+    "source_pages": [
+      969,
+      970
+    ],
+    "prompt_sha256": "c93df8159f8c598f17949ef5a21f51981532c167e12120e368b9a5105ecac729",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

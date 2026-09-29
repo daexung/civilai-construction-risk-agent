@@ -1,0 +1,289 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-10-2/축척변경측량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-10-2",
+    "title": "축척변경 측량(도해지역에서 수치지역으로)('25년 보완)",
+    "work": "축척변경 측량 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      595,
+      596
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "필지",
+        "required": true,
+        "ask": "측량할 필지 수는 몇 필지입니까?",
+        "source": "PDF 595쪽 [주] ② 면적계수 기준 (1필지당)"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "1필지당 대상면적은 몇 ㎡입니까?",
+        "source": "PDF 595쪽 [주] ② 면적계수"
+      },
+      {
+        "name": "region",
+        "type": "enum",
+        "allowed_values": [
+          "면",
+          "읍",
+          "동 시",
+          "동 구"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량 지역의 행정구역은 어디에 해당합니까?",
+        "decision_table": "p596-t0",
+        "source": "PDF 596쪽 ③ 지역구분계수"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p595-t0",
+        "role": "축척변경 측량 작업별 품",
+        "source": "PDF 595쪽 9-10-2 표",
+        "unit": "인",
+        "values": {
+          "합계": {
+            "지적기사": "0.72",
+            "지적산업기사": "0.80",
+            "지적기능사": "0.45"
+          }
+        },
+        "cite": {
+          "table_id": "p595-t0"
+        }
+      },
+      {
+        "id": "p595-t1",
+        "role": "면적계수",
+        "source": "PDF 595쪽 [주] ② 면적계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "0회": "1.0",
+            "1회": "1.3",
+            "2회이상": "1.2+(0.10×n)"
+          }
+        },
+        "cite": {
+          "table_id": "p595-t1"
+        }
+      },
+      {
+        "id": "p596-t0",
+        "role": "지역구분계수",
+        "source": "PDF 596쪽 ③ 지역구분계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "면": "1.00",
+            "읍": "1.10",
+            "동 시": "1.30",
+            "동 구": "1.40"
+          }
+        },
+        "cite": {
+          "table_id": "p596-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p595-t0",
+          "row_input": "합계",
+          "trades": [
+            "지적기사",
+            "지적산업기사",
+            "지적기능사"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "1필지당 1,500㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고, 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다. n은 가산횟수로 (대상면적-기준면적) ÷ 기준면적",
+            "source": "PDF 595쪽 [주] ② 면적계수"
+          },
+          {
+            "when": {},
+            "change": "행정구역이 다를 경우 다음의 계수를 곱하여 품을 계상한다.",
+            "source": "PDF 596쪽 ③ 지역구분계수"
+          }
+        ]
+      },
+      "steps": [
+        "p595-t0에서 합계 품을 가져온다.",
+        "입력된 area를 바탕으로 1,500㎡ 기준 초과 여부를 판단하여 p595-t1의 면적계수를 계산 및 곱한다.",
+        "입력된 region에 따라 p596-t0의 지역구분계수를 곱한다.",
+        "최종 산출된 단위당 품에 quantity(필지 수)를 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 595~596쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 596쪽 ⑤ 기타사항 ㉰",
+        "cite": {
+          "chunk_id": "p596-x3"
+        }
+      },
+      {
+        "item": "지적측량기준점 설치비",
+        "source": "PDF 596쪽 ⑤ 기타사항 ㉱",
+        "cite": {
+          "chunk_id": "p596-x3"
+        }
+      },
+      {
+        "item": "선박 임차료 실비",
+        "source": "PDF 596쪽 ⑤ 기타사항 ㉲",
+        "cite": {
+          "chunk_id": "p596-x3"
+        }
+      },
+      {
+        "item": "외업에 필요한 여비",
+        "source": "PDF 596쪽 ⑤ 기타사항 ㉳",
+        "cite": {
+          "chunk_id": "p596-x3"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(필지)당 품이 표에 직접 제시되어 있고, 면적 및 지역에 따른 할증 계수를 곱하여 계산하는 방식이므로 per_unit이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p595-t0",
+      "row": "합계",
+      "column": "지적기사",
+      "value": "0.72"
+    },
+    {
+      "table_id": "p595-t0",
+      "row": "합계",
+      "column": "지적산업기사",
+      "value": "0.80"
+    },
+    {
+      "table_id": "p595-t0",
+      "row": "합계",
+      "column": "지적기능사",
+      "value": "0.45"
+    },
+    {
+      "table_id": "p595-t1",
+      "row": "계수",
+      "column": "0회",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p595-t1",
+      "row": "계수",
+      "column": "1회",
+      "value": "1.3"
+    },
+    {
+      "table_id": "p595-t1",
+      "row": "계수",
+      "column": "2회이상",
+      "value": "1.2+(0.10×n)"
+    },
+    {
+      "table_id": "p596-t0",
+      "row": "계수",
+      "column": "면",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p596-t0",
+      "row": "계수",
+      "column": "읍",
+      "value": "1.10"
+    },
+    {
+      "table_id": "p596-t0",
+      "row": "계수",
+      "column": "동 시",
+      "value": "1.30"
+    },
+    {
+      "table_id": "p596-t0",
+      "row": "계수",
+      "column": "동 구",
+      "value": "1.40"
+    },
+    {
+      "chunk_id": "p595-x13",
+      "quote": "본 품은 1필지당 1,500㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고, 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다."
+    },
+    {
+      "chunk_id": "p595-x17",
+      "quote": "※ n은 가산횟수로 (대상면적-기준면적) ÷ 기준면적"
+    },
+    {
+      "chunk_id": "p596-x0",
+      "quote": "본 품은 면지역을 기준으로 하였으며, 행정구역이 다를 경우 다음의 계수를 곱하여 품을 계상한다."
+    },
+    {
+      "chunk_id": "p596-x3",
+      "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p596-x3",
+      "quote": "작업상 지적측량기준점을 설치할 경우에는 지적측량기준점 설치비를 별도 계상한다."
+    },
+    {
+      "chunk_id": "p596-x3",
+      "quote": "도서지역 등의 측량을 위하여 선박 등을 임차할 경우에는 임차료 실비를 별도 계상한다."
+    },
+    {
+      "chunk_id": "p596-x3",
+      "quote": "본 품의 외업에 필요한 여비는 공무원여비규정에 의한 국내여행자의 일비를 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p595-t0의 텍스트가 여러 행의 값이 섞여 있어 원문 표의 구조를 완벽히 반영하기 어려움. 합계 행의 값만 추출하여 사용함.",
+    "가산횟수 n을 계산할 때 소수점 이하 처리에 대한 명확한 기준(올림, 버림 등)이 원문에 명시되어 있지 않음."
+  ],
+  "questions": [
+    "축척변경 측량 시 1필지 면적이 1,000㎡인 경우 면적계수는 얼마인가요?",
+    "대상면적이 3,500㎡일 때 가산횟수 n은 소수점으로 계산하나요, 아니면 정수로 반올림하나요?",
+    "측량할 지역이 '시'의 '동' 지역인데, 지역구분계수는 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:05:38.574078+00:00",
+    "input_tokens": 13426,
+    "output_tokens": 2944,
+    "source_pages": [
+      595,
+      596,
+      597
+    ],
+    "prompt_sha256": "1fd5b6a0bebce6b97fa6d43bdb72840bc10d7fae35dd917692d5260f01e518c0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

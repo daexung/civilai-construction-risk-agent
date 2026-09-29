@@ -1,0 +1,216 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-5-4/목재_평_귀규준틀_설치_및_철거",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-5-4",
+    "title": "목재 평･귀규준틀 설치 및 철거('26년 보완)",
+    "work": "목재 평･귀규준틀 설치 및 철거",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      44
+    ],
+    "inputs": [
+      {
+        "name": "type",
+        "type": "enum",
+        "allowed_values": [
+          "종별 평규준틀",
+          "종별 귀규준틀"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "규준틀의 종별은 평규준틀과 귀규준틀 중 무엇입니까?",
+        "source": "PDF 44쪽 2-5-4 표",
+        "synonyms": {
+          "종별 평규준틀": [
+            "평규준틀",
+            "평 규준틀"
+          ],
+          "종별 귀규준틀": [
+            "귀규준틀",
+            "귀 규준틀"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치 및 철거할 규준틀의 수량은 몇 개소입니까?",
+        "source": "PDF 44쪽 2-5-4 표 (개소당)"
+      },
+      {
+        "name": "wood_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "목재는 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "일반적인 재료비 처리 기준",
+        "synonyms": {
+          "관급": [
+            "관급자재",
+            "지급자재",
+            "발주처 지급"
+          ],
+          "사급": [
+            "사급자재",
+            "시공사 구매",
+            "자체 구매"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p100-t3",
+        "role": "목재 평･귀규준틀 설치 및 철거 품",
+        "source": "PDF 44쪽 2-5-4 표",
+        "unit": "㎥/개소, 인/개소",
+        "values": {
+          "목재": {
+            "종별 평규준틀": "0.014",
+            "종별 귀규준틀": "0.022"
+          },
+          "건축목공": {
+            "종별 평규준틀": "0.15",
+            "종별 귀규준틀": "0.30"
+          },
+          "보통인부": {
+            "종별 평규준틀": "0.30",
+            "종별 귀규준틀": "0.45"
+          }
+        },
+        "cite": {
+          "table_id": "p100-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p100-t3",
+          "column_input": "type",
+          "trades": [
+            "건축목공",
+            "보통인부"
+          ],
+          "materials": [
+            "목재"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p100-t3 표에서 종별에 따른 단위당 품(목재, 건축목공, 보통인부)을 고른다.",
+        "물량(개소)을 곱해 총 투입량을 구한다."
+      ],
+      "source": "PDF 44쪽 2-5-4 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [
+      {
+        "item": "목재",
+        "input": "wood_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "산정",
+            "reason": "사급자재 — 시공사 일위대가에 포함"
+          }
+        },
+        "source": "일반적인 재료비 처리 기준",
+        "cite": {
+          "table_id": "p100-t3"
+        }
+      }
+    ],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소)당 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p100-t3",
+      "row": "목재",
+      "column": "종별 평규준틀",
+      "value": "0.014"
+    },
+    {
+      "table_id": "p100-t3",
+      "row": "건축목공",
+      "column": "종별 평규준틀",
+      "value": "0.15"
+    },
+    {
+      "table_id": "p100-t3",
+      "row": "보통인부",
+      "column": "종별 평규준틀",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p100-t3",
+      "row": "목재",
+      "column": "종별 귀규준틀",
+      "value": "0.022"
+    },
+    {
+      "table_id": "p100-t3",
+      "row": "건축목공",
+      "column": "종별 귀규준틀",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p100-t3",
+      "row": "보통인부",
+      "column": "종별 귀규준틀",
+      "value": "0.45"
+    },
+    {
+      "chunk_id": "p100-x15",
+      "quote": "[주] ① 본 품은 규준틀을 설치 및 철거하는 기준이다."
+    },
+    {
+      "chunk_id": "p100-x15",
+      "quote": "② 규준틀의 제작, 도색, 가설, 철거작업을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "평규준틀 5개소를 설치 및 철거할 때 건축목공과 보통인부의 품은 어떻게 되나요?",
+    "규준틀의 제작, 도색, 가설, 철거작업이 모두 포함된 품인가요?",
+    "규준틀의 종류(평규준틀, 귀규준틀)와 수량(개소)을 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:21.058611+00:00",
+    "input_tokens": 11547,
+    "output_tokens": 1968,
+    "source_pages": [
+      100,
+      101
+    ],
+    "prompt_sha256": "1e45db16ada1461fcb47828690aac4e3ed5944fd81609c23f335a35d78a574bb",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

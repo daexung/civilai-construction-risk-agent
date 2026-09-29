@@ -1,0 +1,235 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/9-1-4/표면마무리",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "9-1-4",
+    "title": "표면 마무리",
+    "work": "바닥 모르타르 타설 후 표면 마감",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      624
+    ],
+    "inputs": [
+      {
+        "name": "finish_method",
+        "type": "enum",
+        "allowed_values": [
+          "인력마감",
+          "기계마감"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "마감 방식은 인력마감과 기계마감 중 무엇입니까?",
+        "source": "PDF 624쪽 9-1-4 표면 마무리 표",
+        "synonyms": {
+          "인력마감": [
+            "인력",
+            "수작업"
+          ],
+          "기계마감": [
+            "기계",
+            "장비마감"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "표면 마무리 면적은 몇 ㎡입니까?",
+        "source": "PDF 624쪽 9-1-4 표면 마무리 표 단위 (100㎡당)"
+      },
+      {
+        "name": "waiting_time_occurred",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 조건에 따라 작업대기 등이 발생하였습니까?",
+        "source": "PDF 624쪽 9-1-4 표면 마무리 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p680-t2",
+        "role": "표면 마무리 단위당 품",
+        "source": "PDF 624쪽 9-1-4 표면 마무리",
+        "unit": "인/100㎡",
+        "values": {
+          "미장공": {
+            "인력마감": "0.30",
+            "기계마감": "0.22"
+          }
+        },
+        "cite": {
+          "table_id": "p680-t2"
+        }
+      },
+      {
+        "id": "p680-t3",
+        "role": "작업대기 발생 시 할증률",
+        "source": "PDF 624쪽 9-1-4 표면 마무리 비고",
+        "unit": "%",
+        "values": {
+          "할증": {
+            "인력마감": "55%",
+            "기계마감": "75%"
+          }
+        },
+        "cite": {
+          "table_id": "p680-t3"
+        }
+      },
+      {
+        "id": "p680-t4",
+        "role": "기계경비 요율",
+        "source": "PDF 624쪽 9-1-4 표면 마무리 [주] ②",
+        "unit": "%",
+        "values": {
+          "요율": {
+            "기계마감": "9%"
+          }
+        },
+        "cite": {
+          "table_id": "p680-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p680-t2",
+          "row_input": "미장공",
+          "column_input": "finish_method",
+          "trades": [
+            "미장공"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [
+          {
+            "when": {
+              "waiting_time_occurred": true,
+              "finish_method": "인력마감"
+            },
+            "rate": "0.55",
+            "applies_to": [
+              "미장공"
+            ],
+            "source": "PDF 624쪽 9-1-4 비고 및 p680-t3"
+          },
+          {
+            "when": {
+              "waiting_time_occurred": true,
+              "finish_method": "기계마감"
+            },
+            "rate": "0.75",
+            "applies_to": [
+              "미장공"
+            ],
+            "source": "PDF 624쪽 9-1-4 비고 및 p680-t3"
+          }
+        ],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p680-t2에서 마감 방식에 따른 미장공의 단위당 품을 찾는다.",
+        "작업대기 발생 시 마감 방식에 따라 p680-t3의 할증률을 적용한다.",
+        "물량(area)을 100으로 나누어 단위당 품에 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 624쪽 9-1-4",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(기계마감 시)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.09",
+        "cite": {
+          "section_no": "9-1-4",
+          "marker": "②"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(100㎡)당 미장공의 품이 표에 직접 제시되어 있으므로 per_unit 모델이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p680-t2",
+      "row": "미장공",
+      "column": "인력마감",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p680-t2",
+      "row": "미장공",
+      "column": "기계마감",
+      "value": "0.22"
+    },
+    {
+      "table_id": "p680-t3",
+      "row": "할증",
+      "column": "인력마감",
+      "value": "55%"
+    },
+    {
+      "table_id": "p680-t3",
+      "row": "할증",
+      "column": "기계마감",
+      "value": "75%"
+    },
+    {
+      "table_id": "p680-t4",
+      "row": "요율",
+      "column": "기계마감",
+      "value": "9%"
+    },
+    {
+      "chunk_id": "p680-x18",
+      "quote": "공구손료 및 경장비(미장기계 등)의 기계경비는 인력품에 다음 요율을 적용한다."
+    },
+    {
+      "table_id": "p680-t2",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 현장 조건에 따라 작업대기 등이 발생되는 경우, 인력품에 다음 할증까지 가산하여 적용한다."
+    }
+  ],
+  "open_questions": [
+    "기계마감 시 공구손료 및 경장비 요율 9%가 적용되는데, 현재 cost_rules 스키마에 조건부(when) 적용 기능이 없어 이름에만 명시해 두었습니다. 기계마감이 아닐 때 이 경비가 계산되지 않도록 처리할 방법이 필요합니다."
+  ],
+  "questions": [
+    "표면 마무리 작업에서 인력마감과 기계마감의 미장공 품은 각각 얼마인가요?",
+    "현장 조건에 따라 작업대기가 발생할 경우 할증은 어떻게 적용되나요?",
+    "마감 면적(㎡) 입력이 누락되었습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:08:16.019433+00:00",
+    "input_tokens": 11771,
+    "output_tokens": 2160,
+    "source_pages": [
+      680,
+      681
+    ],
+    "prompt_sha256": "d5683bd55548e96b23401ffb774ffd941b8938b2c5fa65077603428b2338b2d5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-3-1/철제조립식가설건축물",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-3-1",
+    "title": "철제조립식 가설건축물 설치 및 해체",
+    "work": "설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      41
+    ],
+    "inputs": [
+      {
+        "name": "building_type",
+        "type": "enum",
+        "allowed_values": [
+          "사무실",
+          "창고"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "가설건축물의 용도는 사무실입니까, 창고입니까?",
+        "source": "PDF 41쪽 2-3-1 표 (p97-t0)",
+        "synonyms": {
+          "사무실": [
+            "사무동"
+          ],
+          "창고": [
+            "창고동"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "가설건축물의 바닥면적은 몇 ㎡입니까?",
+        "source": "PDF 41쪽 2-3-1 표 (p97-t0) 기준 (바닥면적 ㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p97-t0",
+        "role": "철제조립식 가설건축물 설치 및 해체 품",
+        "source": "PDF 41쪽 2-3-1 표",
+        "unit": "인/㎡, hr/㎡",
+        "values": {
+          "건축목공": {
+            "사무실": "0.26",
+            "창고": "0.20"
+          },
+          "보통인부": {
+            "사무실": "0.11",
+            "창고": "0.09"
+          },
+          "크레인": {
+            "사무실": "0.19",
+            "창고": "0.15"
+          }
+        },
+        "cite": {
+          "table_id": "p97-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p97-t0",
+          "row_input": null,
+          "column_input": "building_type",
+          "trades": [
+            "건축목공",
+            "보통인부",
+            "크레인"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p97-t0에서 건물 용도(사무실/창고)에 따른 단위당 품을 고른다.",
+        "바닥면적(area)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 41쪽 2-3-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기초공사, 창호 및 유리공사, 수장공사, 전기 및 기계설비공사",
+        "source": "PDF 41쪽 2-3-1 [주] ④",
+        "cite": {
+          "chunk_id": "p97-x4",
+          "quote": "④ 기초공사, 창호 및 유리공사, 수장공사, 전기 및 기계설비공사는 별도 계상한다."
+        }
+      },
+      {
+        "item": "크레인 규격 변경에 따른 품 조정",
+        "source": "PDF 41쪽 2-3-1 [주] ⑤",
+        "cite": {
+          "chunk_id": "p97-x4",
+          "quote": "⑤ 크레인 규격은 작업여건(작업범위, 위치 등)에 따라 변경할 수 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p97-x4",
+          "quote": "⑥ 공구손료 및 경장비(절단기, 발전기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "바닥면적 ㎡당 인력 및 장비 품이 표에 직접 제시되어 있어 단위당 품 계산 방식을 적용합니다.",
+  "citations": [
+    {
+      "table_id": "p97-t0",
+      "row": "건축목공",
+      "column": "사무실",
+      "value": "0.26"
+    },
+    {
+      "table_id": "p97-t0",
+      "row": "보통인부",
+      "column": "사무실",
+      "value": "0.11"
+    },
+    {
+      "table_id": "p97-t0",
+      "row": "크레인",
+      "column": "사무실",
+      "value": "0.19"
+    },
+    {
+      "table_id": "p97-t0",
+      "row": "건축목공",
+      "column": "창고",
+      "value": "0.20"
+    },
+    {
+      "table_id": "p97-t0",
+      "row": "보통인부",
+      "column": "창고",
+      "value": "0.09"
+    },
+    {
+      "table_id": "p97-t0",
+      "row": "크레인",
+      "column": "창고",
+      "value": "0.15"
+    },
+    {
+      "chunk_id": "p97-x4",
+      "quote": "④ 기초공사, 창호 및 유리공사, 수장공사, 전기 및 기계설비공사는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p97-x4",
+      "quote": "⑤ 크레인 규격은 작업여건(작업범위, 위치 등)에 따라 변경할 수 있다."
+    },
+    {
+      "chunk_id": "p97-x4",
+      "quote": "⑥ 공구손료 및 경장비(절단기, 발전기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "크레인 규격을 10ton에서 다른 규격으로 변경할 경우, 품(hr) 수치도 비례하여 조정해야 하는지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "가설건축물의 용도가 사무실인지 창고인지 어떻게 구분하나요?",
+    "크레인 규격을 10ton이 아닌 다른 장비로 변경하려면 어떻게 적용해야 하나요?",
+    "가설건축물의 바닥면적은 몇 ㎡입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:12:41.092577+00:00",
+    "input_tokens": 11686,
+    "output_tokens": 1970,
+    "source_pages": [
+      97,
+      98
+    ],
+    "prompt_sha256": "e4bdd97ad5b6eafd7cb60f132dd2b526862ebd4170aff38e70aebfcfd4ad472d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

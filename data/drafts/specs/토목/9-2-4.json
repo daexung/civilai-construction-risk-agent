@@ -1,0 +1,491 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-2-4/3급수준측량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-2-4",
+    "title": "3급 수준측량('26년 신설)",
+    "work": "3급 수준측량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      423,
+      424,
+      425
+    ],
+    "inputs": [
+      {
+        "name": "total_distance",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "km",
+        "required": true,
+        "ask": "총 작업량(거리)은 몇 km입니까?",
+        "source": "PDF 423쪽 ⑥ 작업량에 따른 계수(P) 및 물량 산정 기준"
+      },
+      {
+        "name": "standard_terrain_distance",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 수",
+        "unit": "km",
+        "required": true,
+        "ask": "표준지형에 해당하는 거리는 몇 km입니까?",
+        "source": "PDF 423쪽 ⑤ 지형/표고차 유형에 따른 계수(K) 가중평균용"
+      },
+      {
+        "name": "mountain_terrain_distance",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 수",
+        "unit": "km",
+        "required": true,
+        "ask": "산악지에 해당하는 거리는 몇 km입니까?",
+        "source": "PDF 423쪽 ⑤ 지형/표고차 유형에 따른 계수(K) 가중평균용"
+      },
+      {
+        "name": "city_terrain_distance",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 수",
+        "unit": "km",
+        "required": true,
+        "ask": "시가지에 해당하는 거리는 몇 km입니까?",
+        "source": "PDF 423쪽 ⑤ 지형/표고차 유형에 따른 계수(K) 가중평균용"
+      },
+      {
+        "name": "standard_elevation_diff",
+        "type": "enum",
+        "allowed_values": [
+          "100m 이하",
+          "100m 초과 200m 이하",
+          "200m 초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "표준지형의 수준점간 표고차는 어느 범위입니까?",
+        "source": "PDF 423쪽 p479-t1"
+      },
+      {
+        "name": "mountain_elevation_diff",
+        "type": "enum",
+        "allowed_values": [
+          "100m 이하",
+          "100m 초과 200m 이하",
+          "200m 초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "산악지의 수준점간 표고차는 어느 범위입니까?",
+        "source": "PDF 423쪽 p479-t1"
+      },
+      {
+        "name": "city_elevation_diff",
+        "type": "enum",
+        "allowed_values": [
+          "100m 이하",
+          "100m 초과 200m 이하",
+          "200m 초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시가지의 수준점간 표고차는 어느 범위입니까?",
+        "source": "PDF 423쪽 p479-t1"
+      },
+      {
+        "name": "seonjeom_pyoseok_points",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "점",
+        "required": true,
+        "ask": "선점 표석 점수는 몇 점입니까?",
+        "source": "PDF 423쪽 p479-t0"
+      },
+      {
+        "name": "maeseol_dongpan_points",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "점",
+        "required": true,
+        "ask": "매설 동판 점수는 몇 점입니까?",
+        "source": "PDF 423쪽 p479-t0"
+      },
+      {
+        "name": "maeseol_pyoseok_points",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "점",
+        "required": true,
+        "ask": "매설 표석 점수는 몇 점입니까?",
+        "source": "PDF 423쪽 p479-t0"
+      },
+      {
+        "name": "tunnel_bridge_ratio_over_70",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "노선의 70% 이상이 터널, 교량에 해당합니까?",
+        "source": "PDF 424쪽 [주] ⑭"
+      },
+      {
+        "name": "is_basic_leveling",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기본 수준측량과 같은 정확도와 방식으로 시행합니까?",
+        "source": "PDF 424쪽 [주] ⑮"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p479-t0",
+        "role": "3급 수준측량 작업구분별 단위당 품",
+        "source": "PDF 423쪽 9-2-4 표",
+        "unit": "인/15km 또는 인/점",
+        "values": {
+          "답사": {
+            "고급기술자": "(1.00) 0.81",
+            "중급기술자": "0.81"
+          },
+          "선점 | 작업구분 표석 | 단위 15km 점": {
+            "고급기술자": "(1.00) 2.00",
+            "중급기술자": "2.00"
+          },
+          "매설 | 작업구분 동판": {
+            "중급기술자": "0.05",
+            "초급기술자": "0.05"
+          },
+          "매설 | 작업구분 표석": {
+            "중급기술자": "1.50",
+            "초급기술자": "1.50",
+            "인부": "3.00"
+          },
+          "관측 | 단위 15km 15km": {
+            "특급기술자": "(1.00) 2.14",
+            "고급기술자": "(1.00) 7.15",
+            "중급기술자": "7.15",
+            "초급기술자": "14.30",
+            "인부": "7.15"
+          },
+          "계산": {
+            "고급기술자": "(1.00) (0.34)",
+            "중급기술자": "(0.34)"
+          },
+          "성과정리": {
+            "특급기술자": "(1.00) (0.45)",
+            "고급기술자": "(1.00) (0.45)",
+            "중급기술자": "(0.45)"
+          },
+          "계 | 작업구분 답사/관측 | 단위 15km 15km": {
+            "특급기술자": "(1.00) 2.14",
+            "고급기술자": "(1.00) 7.96",
+            "중급기술자": "7.96",
+            "초급기술자": "14.30",
+            "인부": "7.15"
+          },
+          "계 | 작업구분 내업 | 단위 15km 15km": {
+            "특급기술자": "(1.00) (1.45)",
+            "고급기술자": "(1.00) (1.79)",
+            "중급기술자": "(0.79)",
+            "초급기술자": "14.30",
+            "인부": "7.15"
+          },
+          "계 | 작업구분 표석 | 작업구분 선점/매설 | 단위 15km 점": {
+            "고급기술자": "(1.00) 2.00",
+            "중급기술자": "3.50",
+            "초급기술자": "1.50",
+            "인부": "3.00"
+          },
+          "계 | 작업구분 동판 | 작업구분 매설": {
+            "중급기술자": "0.05",
+            "초급기술자": "0.05"
+          }
+        },
+        "cite": {
+          "table_id": "p479-t0"
+        }
+      },
+      {
+        "id": "p479-t1",
+        "role": "지형/표고차 유형에 따른 계수(K)",
+        "source": "PDF 423쪽 ⑤ 지형/표고차 유형에 따른 계수(K) 표",
+        "unit": "무차원",
+        "values": {
+          "표준 | 표고차 100m 이하": {
+            "계수": "1.00"
+          },
+          "표준 | 표고차 100m 초과 200m 이하": {
+            "계수": "1.10"
+          },
+          "표준 | 표고차 200m 초과": {
+            "계수": "1.20"
+          },
+          "산악지 | 표고차 100m 이하": {
+            "계수": "1.25"
+          },
+          "산악지 | 표고차 100m 초과 200m 이하": {
+            "계수": "1.35"
+          },
+          "산악지 | 표고차 200m 초과": {
+            "계수": "1.45"
+          },
+          "시가지 | 표고차 100m 이하": {
+            "계수": "1.25"
+          },
+          "시가지 | 표고차 100m 초과 200m 이하": {
+            "계수": "1.40"
+          },
+          "시가지 | 표고차 200m 초과": {
+            "계수": "1.55"
+          }
+        },
+        "cite": {
+          "table_id": "p479-t1"
+        }
+      },
+      {
+        "id": "p479-t2",
+        "role": "작업량에 따른 계수(P)",
+        "source": "PDF 423쪽 ⑥ 작업량에 따른 계수(P) 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "15이내": "1",
+            "20": "0.95",
+            "25": "0.92",
+            "30": "0.9"
+          }
+        },
+        "cite": {
+          "table_id": "p479-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p479-t0",
+          "row_input": "작업구분",
+          "column_input": "직종",
+          "trades": [
+            "특급기술자",
+            "고급기술자",
+            "중급기술자",
+            "초급기술자",
+            "인부"
+          ]
+        },
+        "quantity_input": "total_distance",
+        "surcharges": [
+          {
+            "when": {
+              "tunnel_bridge_ratio_over_70": true
+            },
+            "rate": "0.6",
+            "applies_to": [
+              "관측 공정"
+            ],
+            "source": "PDF 424쪽 [주] ⑭"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "관측 공정에 지형/표고차 계수(K) 가중평균 적용",
+            "source": "PDF 423쪽 [주] ⑤"
+          },
+          {
+            "when": {},
+            "change": "선점, 매설 제외한 공정에 작업량 계수(P) 적용",
+            "source": "PDF 423쪽 [주] ⑥"
+          }
+        ]
+      },
+      "steps": [
+        "1. p479-t0에서 각 작업구분별 단위당 품을 찾는다.",
+        "2. 관측 공정의 경우, 지형별 거리(standard_terrain_distance 등) 비율을 가중치로 하여 p479-t1의 K 계수를 가중평균한다.",
+        "3. 총 거리(total_distance)에 대해 p479-t2 또는 수식(0.8 + 3/거리)을 통해 P 계수를 구한다.",
+        "4. 관측 공정 수량 = 기본품 × (total_distance / 15) × 가중평균 K × P",
+        "5. 내업 등 기타 km 단위 공정 수량 = 기본품 × (total_distance / 15) × P",
+        "6. 선점, 매설 등 점 단위 공정 수량 = 기본품 × 해당 점수 (K, P 계수 미적용)",
+        "7. tunnel_bridge_ratio_over_70이 true이면 관측 공정에 60% 할증을 적용한다."
+      ],
+      "source": "PDF 423~425쪽 수량(T) 산정식 및 계산예",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "기본 수준측량과 같은 정확도와 방식으로 시행",
+        "blocked_if": {
+          "input": "is_basic_leveling",
+          "op": "==",
+          "value": true
+        },
+        "reason": "'기본 수준측량' 품을 적용해야 함",
+        "source": "PDF 424쪽 [주] ⑮",
+        "cite": {
+          "chunk_id": "p480-x0",
+          "quote": "기본 수준측량과 같은 정확도와 방식으로 시행할 때에는 “기본 수준측량” 품을 적용하여야 한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "측량표 설치 자재운반 차량비",
+        "source": "PDF 424쪽 [주] ⑦",
+        "cite": {
+          "chunk_id": "p480-x0",
+          "quote": "측량표의 설치 자재운반에 따르는 차량비 등은 실정에 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "보상비, 재료비, 소모품비, 차량비",
+        "source": "PDF 424쪽 [주] ⑧",
+        "cite": {
+          "chunk_id": "p480-x0",
+          "quote": "보상비, 재료비, 소모품비, 차량비 등은 실정에 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "도해(하) 수준측량 측표, 재료비, 용선료",
+        "source": "PDF 424쪽 [주] ⑨",
+        "cite": {
+          "chunk_id": "p480-x0",
+          "quote": "도해(하) 수준측량은 거리에 관계없이 1구간당 2∼3시간 소요되는 것으로 보며, 이에 소요되는 측표,\n설명 | 재료비 및 용선료 등은 별도 계상한다."
+        }
+      },
+      {
+        "item": "기지점 연결 측량비",
+        "source": "PDF 424쪽 [주] ⑩",
+        "cite": {
+          "chunk_id": "p480-x0",
+          "quote": "기지점과 작업지역을 연결하기 위한 측량은 별도 계상한다."
+        }
+      },
+      {
+        "item": "기술인원 여비",
+        "source": "PDF 424쪽 [주] ⑪",
+        "cite": {
+          "chunk_id": "p480-x0",
+          "quote": "본 품의 외업에 동원되는 기술인원에 대한 여비는 국토지리정보원장이 고시한 측량대가의 기준에\n설명 | 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "점검측량 및 성과심사비",
+        "source": "PDF 424쪽 [주] ⑫",
+        "cite": {
+          "chunk_id": "p480-x0",
+          "quote": "본 품에서 점검측량 및 성과심사에 소요되는 비용은 별도 계상한다."
+        }
+      },
+      {
+        "item": "측량기기 상각비, 정비비",
+        "source": "PDF 424쪽 [주] ⑬",
+        "cite": {
+          "chunk_id": "p480-x0",
+          "quote": "본 품에서 사용되는 측량기기의 상각비･정비비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품이 표에 직접 제시되어 있으며, 물량(거리, 점수)과 각종 계수(K, P)를 곱하여 총 품을 산정하는 구조이므로 per_unit 모델을 확장하여 적용합니다.",
+  "citations": [
+    {
+      "table_id": "p479-t0"
+    },
+    {
+      "table_id": "p479-t1"
+    },
+    {
+      "table_id": "p479-t2"
+    },
+    {
+      "chunk_id": "p479-x11",
+      "quote": "본 품은 표준지형 수준점간 표고차 100m이하 기준으로 한 것이며, 관측의 경우 지형/표고차 유형에\n설명 | 따라 다음의 계수 값 이내를 가산한다."
+    },
+    {
+      "chunk_id": "p479-x27",
+      "quote": "본 품은 15Km (왕복 30Km) 구간을 기준으로 한 것이므로 작업량에 따라 다음의 값을 가산한다.\n설명 | (선점, 매설품은 제외)"
+    },
+    {
+      "chunk_id": "p479-x31",
+      "quote": "◦ 작업량에 따른 계수(P) = 0.8 + 작업량점수"
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "작업량이 30km 이상인 경우에도 작업량계수(P)는 0.90으로 적용한다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "노선의 70% 이상이 터널, 교량에 해당하는 경우 관측 공정에 60%의 할증을 적용할 수 있다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "기본 수준측량과 같은 정확도와 방식으로 시행할 때에는 “기본 수준측량” 품을 적용하여야 한다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "측량표의 설치 자재운반에 따르는 차량비 등은 실정에 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "보상비, 재료비, 소모품비, 차량비 등은 실정에 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "도해(하) 수준측량은 거리에 관계없이 1구간당 2∼3시간 소요되는 것으로 보며, 이에 소요되는 측표,\n설명 | 재료비 및 용선료 등은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "기지점과 작업지역을 연결하기 위한 측량은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "본 품의 외업에 동원되는 기술인원에 대한 여비는 국토지리정보원장이 고시한 측량대가의 기준에\n설명 | 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "본 품에서 점검측량 및 성과심사에 소요되는 비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p480-x0",
+      "quote": "본 품에서 사용되는 측량기기의 상각비･정비비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "원문의 '작업량(점수)'라는 표현이 오타로 보이며, 계산예를 볼 때 '작업량(km)'를 의미하는 것으로 추정됩니다.",
+    "p479-t0 표의 파싱 결과에서 '계획준비' 항목이 '답사' 행에 병합되어 파싱된 것으로 보입니다. 원문 표의 구조를 정확히 반영하기 위한 추가 처리가 필요할 수 있습니다."
+  ],
+  "questions": [
+    "작업량이 25km일 때 작업량 계수(P)는 얼마인가요?",
+    "작업량 계수 계산식에서 '작업량(점수)'는 구체적으로 어떤 값을 넣어야 하나요?",
+    "관측 공정에서 터널과 교량이 차지하는 비율이 70% 이상인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:11:15.898423+00:00",
+    "input_tokens": 17131,
+    "output_tokens": 5699,
+    "source_pages": [
+      479,
+      480,
+      481,
+      482
+    ],
+    "prompt_sha256": "8afe79a2566da75dd2403de4d38c1e3f4ea284d710ccbe4ab5418b24120d4242",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-33/보차도_및_도로경계블록_재설치",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-33",
+    "title": "보차도 및 도로경계블록 재설치",
+    "work": "보차도 및 도로경계블록 재설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      892,
+      893
+    ],
+    "inputs": [
+      {
+        "name": "type_class",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건에 따른 구분(A-Type, B-Type)은 무엇입니까? 적용기준 표를 참고해주세요.",
+        "decision_table": "p949-t0",
+        "source": "PDF 892쪽 p948-t2 구분 및 893쪽 p949-t0 적용기준"
+      },
+      {
+        "name": "size",
+        "type": "enum",
+        "allowed_values": [
+          "300미만",
+          "350미만",
+          "400미만",
+          "500미만",
+          "500이상"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "경계블록의 규격(아래폭+높이)은 얼마입니까?",
+        "source": "PDF 892쪽 p948-t2 규격(아래폭+높이㎜)"
+      },
+      {
+        "name": "section_type",
+        "type": "enum",
+        "allowed_values": [
+          "직선구간",
+          "곡선구간"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 구간은 직선구간입니까, 곡선구간입니까?",
+        "source": "PDF 892쪽 p948-t2 시공량(m) 직선구간/곡선구간"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "재설치할 보차도 및 도로경계블록의 물량은 몇 m입니까?",
+        "source": "PDF 892쪽 p948-t2 시공량 단위(m)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p948-t2",
+        "role": "구분 및 규격별 작업조 인원, 장비 대수 및 일일시공량",
+        "source": "PDF 892쪽 2-1-33 표",
+        "unit": "인, 대, m/일",
+        "values": {
+          "A-Type_특별인부": {
+            "수량": "3"
+          },
+          "A-Type_보통인부": {
+            "수량": "1"
+          },
+          "A-Type_굴착기_0.4㎥": {
+            "수량": "1"
+          },
+          "A-Type_트럭_2.5ton": {
+            "수량": "1"
+          },
+          "A-Type_300미만": {
+            "직선구간": "150",
+            "곡선구간": "130"
+          },
+          "A-Type_350미만": {
+            "직선구간": "120",
+            "곡선구간": "110"
+          },
+          "A-Type_400미만": {
+            "직선구간": "110",
+            "곡선구간": "95"
+          },
+          "A-Type_500미만": {
+            "직선구간": "80",
+            "곡선구간": "65"
+          },
+          "A-Type_500이상": {
+            "직선구간": "50",
+            "곡선구간": "45"
+          },
+          "B-Type_특별인부": {
+            "수량": "2"
+          },
+          "B-Type_보통인부": {
+            "수량": "1"
+          },
+          "B-Type_굴착기_0.2㎥": {
+            "수량": "1"
+          },
+          "B-Type_트럭_2.5ton": {
+            "수량": "1"
+          },
+          "B-Type_300미만": {
+            "직선구간": "110",
+            "곡선구간": "95"
+          },
+          "B-Type_350미만": {
+            "직선구간": "85",
+            "곡선구간": "75"
+          },
+          "B-Type_400미만": {
+            "직선구간": "80",
+            "곡선구간": "70"
+          },
+          "B-Type_500미만": {
+            "직선구간": "55",
+            "곡선구간": "40"
+          },
+          "B-Type_500이상": {
+            "직선구간": "40",
+            "곡선구간": "30"
+          }
+        },
+        "cite": {
+          "table_id": "p948-t2"
+        }
+      },
+      {
+        "id": "p949-t0",
+        "role": "구분(A-Type, B-Type) 적용기준",
+        "source": "PDF 893쪽 현장 여건별 적용기준 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+          },
+          "B-Type": {
+            "적용기준": "차도인접, 주택가 보도 등 장비이동 및 적재 공간이 협소한 구간"
+          }
+        },
+        "cite": {
+          "table_id": "p949-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "입력받은 type_class(A-Type/B-Type), size(규격), section_type(직선/곡선)에 따라 p948-t2에서 일일시공량을 찾는다.",
+        "작업일수 = quantity ÷ 일일시공량으로 계산한다.",
+        "p948-t2에서 type_class에 해당하는 직종별 인원(특별인부, 보통인부)과 장비 대수(굴착기, 트럭)를 찾는다.",
+        "직종별 인·일 = 작업일수 × 인원, 장비 대·일 = 작업일수 × 대수로 총 투입량을 구한다.",
+        "공구손료 및 경장비는 노무비 합계의 2%로 계상한다."
+      ],
+      "source": "PDF 892쪽 p948-t2 및 893쪽 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기초 콘크리트, 거푸집, 터파기 및 되메우기, 잔토처리",
+        "source": "PDF 893쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p949-x4",
+          "quote": "기초 콘크리트, 거푸집, 터파기 및 되메우기, 잔토처리는 현장 여건에 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "도심지 할증",
+        "source": "PDF 893쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p949-x0",
+          "quote": "‘[공통부문] 1-4-4 지세/지형 2.도심지’ 할증을 적용하지 않는다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p949-x4",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "작업조에 굴착기와 트럭 2종의 장비가 투입되나, 현재 명세 형식의 adjusted_daily_crew 모델은 단일 장비(equipment 객체)만 지원하는 것으로 보여 자동 계산 대신 not_calculable로 분류했습니다.",
+  "citations": [
+    {
+      "table_id": "p948-t2"
+    },
+    {
+      "table_id": "p949-t0"
+    },
+    {
+      "chunk_id": "p949-x0",
+      "quote": "본 품은 기존에 설치되었던 블록이 철거된 상태에서 신규블록을 재설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p949-x0",
+      "quote": "‘[공통부문] 1-4-4 지세/지형 2.도심지’ 할증을 적용하지 않는다."
+    },
+    {
+      "chunk_id": "p949-x4",
+      "quote": "기초 콘크리트, 거푸집, 터파기 및 되메우기, 잔토처리는 현장 여건에 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p949-x4",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "작업조에 굴착기와 트럭 2종의 장비가 투입되는데, 명세 형식의 adjusted_daily_crew 모델이 단일 장비(equipment 객체)만 지원하는 것으로 보여 자동 계산(calc_type: daily_crew) 대신 not_calculable로 분류했습니다. 다중 장비 지원 여부 확인이 필요합니다.",
+    "파싱 결과(p948-t2) 텍스트에 '보통인부' 행이 누락되어 있으나 OCR 원문에는 존재하여 tables에 반영했습니다."
+  ],
+  "questions": [
+    "보차도경계블록 재설치 시 A-Type과 B-Type의 기준은 무엇인가요?",
+    "기존 블록 철거 비용도 이 품에 포함되어 있나요?",
+    "곡선구간의 시공량은 직선구간과 어떻게 다른가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:51:50.443899+00:00",
+    "input_tokens": 13169,
+    "output_tokens": 2899,
+    "source_pages": [
+      948,
+      949,
+      950
+    ],
+    "prompt_sha256": "3b1355f65d0539e44f7a3e7a3d4fcad27c582a82e4c57ba1414066f09e8ad8d0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,259 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/9-2-2/녹막이페인트칠",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "9-2-2",
+    "title": "녹막이페인트 칠('15년 보완)",
+    "work": "기본 칠 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø50㎜ 이하",
+          "ø100㎜ 이하",
+          "ø200㎜ 이하",
+          "ø300㎜ 이하"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "배관 규격은 얼마입니까?",
+        "source": "PDF 1쪽 p758-t2 표 헤더",
+        "synonyms": {
+          "ø50㎜ 이하": [
+            "50mm 이하",
+            "50미리 이하"
+          ],
+          "ø100㎜ 이하": [
+            "100mm 이하",
+            "100미리 이하"
+          ],
+          "ø200㎜ 이하": [
+            "200mm 이하",
+            "200미리 이하"
+          ],
+          "ø300㎜ 이하": [
+            "300mm 이하",
+            "300미리 이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "녹막이페인트 칠 물량은 몇 m입니까?",
+        "source": "PDF 1쪽 p758-t2 표 단위 (m당)"
+      },
+      {
+        "name": "scaffold_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계를 사용합니까?",
+        "source": "PDF 1쪽 [주] ④"
+      },
+      {
+        "name": "height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "작업 높이는 몇 m입니까? (비계 사용 시 할증 계산에 필요)",
+        "source": "PDF 1쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p758-t2",
+        "role": "배관 규격별 녹막이페인트 칠 단위당 품",
+        "source": "PDF 1쪽 9-2-2 녹막이페인트 칠 표",
+        "unit": "인/m",
+        "values": {
+          "도장공": {
+            "ø50㎜ 이하": "0.010",
+            "ø100㎜ 이하": "0.015",
+            "ø200㎜ 이하": "0.024",
+            "ø300㎜ 이하": "0.034"
+          },
+          "보통인부": {
+            "ø50㎜ 이하": "0.002",
+            "ø100㎜ 이하": "0.003",
+            "ø200㎜ 이하": "0.004",
+            "ø300㎜ 이하": "0.006"
+          }
+        },
+        "cite": {
+          "table_id": "p758-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p758-t2",
+          "column_input": "pipe_diameter",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "scaffold_used": true
+            },
+            "change": "높이 6∼9m까지는 품을 15% 가산하고 높이 9m를 초과하는 경우 매 3m 증가마다 품을 5%씩 가산한다.",
+            "source": "PDF 1쪽 [주] ④",
+            "cite": {
+              "chunk_id": "p758-x19",
+              "quote": "비계사용시에는 높이 6∼9m까지는 품을 15% 가산하고 높이 9m를 초과하는 경우 매 3m 증가마다\n설명 | 품을 5%씩 가산한다."
+            }
+          }
+        ]
+      },
+      "steps": [
+        "p758-t2 표에서 배관 규격에 해당하는 도장공, 보통인부의 단위당 품을 찾는다.",
+        "단위당 품에 물량(quantity)을 곱하여 기본 총 품을 구한다.",
+        "비계를 사용하는 경우(scaffold_used=true), 작업 높이(height)에 따라 [주] ④의 할증을 적용하여 품을 가산한다."
+      ],
+      "source": "PDF 1쪽 9-2-2 표 및 [주] ④",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "도료 재료량",
+        "source": "PDF 1쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p758-x19",
+          "quote": "재료량은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 잡재료비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p758-x19",
+          "quote": "공구손료 및 잡재료비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m)당 직종별 인·일 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합하다.",
+  "citations": [
+    {
+      "table_id": "p758-t2",
+      "row": "도장공",
+      "column": "ø50㎜ 이하",
+      "value": "0.010"
+    },
+    {
+      "table_id": "p758-t2",
+      "row": "도장공",
+      "column": "ø100㎜ 이하",
+      "value": "0.015"
+    },
+    {
+      "table_id": "p758-t2",
+      "row": "도장공",
+      "column": "ø200㎜ 이하",
+      "value": "0.024"
+    },
+    {
+      "table_id": "p758-t2",
+      "row": "도장공",
+      "column": "ø300㎜ 이하",
+      "value": "0.034"
+    },
+    {
+      "table_id": "p758-t2",
+      "row": "보통인부",
+      "column": "ø50㎜ 이하",
+      "value": "0.002"
+    },
+    {
+      "table_id": "p758-t2",
+      "row": "보통인부",
+      "column": "ø100㎜ 이하",
+      "value": "0.003"
+    },
+    {
+      "table_id": "p758-t2",
+      "row": "보통인부",
+      "column": "ø200㎜ 이하",
+      "value": "0.004"
+    },
+    {
+      "table_id": "p758-t2",
+      "row": "보통인부",
+      "column": "ø300㎜ 이하",
+      "value": "0.006"
+    },
+    {
+      "chunk_id": "p758-x19",
+      "quote": "본 품은 기계설비 배관에 방청 페인트를 붓으로 1회 칠하는 기준이다."
+    },
+    {
+      "chunk_id": "p758-x19",
+      "quote": "본 품은 붓칠 및 마무리 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p758-x19",
+      "quote": "재료량은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+    },
+    {
+      "chunk_id": "p758-x19",
+      "quote": "비계사용시에는 높이 6∼9m까지는 품을 15% 가산하고 높이 9m를 초과하는 경우 매 3m 증가마다\n설명 | 품을 5%씩 가산한다."
+    },
+    {
+      "chunk_id": "p758-x19",
+      "quote": "공구손료 및 잡재료비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "높이 9m 초과 시 '매 3m 증가마다'의 기준이 9.1m부터 바로 5% 가산인지, 12m 도달 시 가산인지 명확하지 않음."
+  ],
+  "questions": [
+    "배관 규격이 150mm인 경우 품은 어떻게 적용하나요?",
+    "비계를 사용하여 10m 높이에서 작업할 때 할증은 어떻게 계산하나요?",
+    "도료(페인트) 재료비는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:38.406206+00:00",
+    "input_tokens": 11672,
+    "output_tokens": 2621,
+    "source_pages": [
+      758,
+      759
+    ],
+    "prompt_sha256": "cef7e22d1a2dce6229baa961fe9766b7ec8a0feb72c11d52cee5efae46d07be5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

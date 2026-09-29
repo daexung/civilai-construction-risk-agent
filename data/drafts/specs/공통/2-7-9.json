@@ -1,0 +1,176 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-7-9/비계용브라켓설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-7-9",
+    "title": "비계용 브라켓 설치 및 해체('16, '26년 보완)",
+    "work": "비계용 브라켓 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      50
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "비계용 브라켓 설치 또는 해체 물량은 몇 개소입니까?",
+        "source": "PDF 50쪽 2-7-9 표 기준 (10개소당)"
+      },
+      {
+        "name": "bracket_type",
+        "type": "enum",
+        "allowed_values": [
+          "벽용",
+          "슬래브발코니, 난간용"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "브라켓이 설치되는 위치(용도)는 어디입니까?",
+        "source": "PDF 50쪽 2-7-9 표 헤더 및 [주] ①",
+        "synonyms": {
+          "벽용": [
+            "벽",
+            "벽체용"
+          ],
+          "슬래브발코니, 난간용": [
+            "슬래브",
+            "발코니",
+            "난간",
+            "슬래브발코니"
+          ]
+        }
+      },
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "설치",
+          "해체"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "수행할 작업은 설치입니까, 해체입니까?",
+        "source": "PDF 50쪽 2-7-9 표 헤더 및 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p106-t1",
+        "role": "비계용 브라켓 설치 및 해체 품 (10개소당)",
+        "source": "PDF 50쪽 2-7-9 표",
+        "unit": "인/10개소",
+        "values": {
+          "벽용": {
+            "설치": "0.45",
+            "해체": "0.34"
+          },
+          "슬래브발코니, 난간용": {
+            "설치": "0.34",
+            "해체": "0.26"
+          }
+        },
+        "cite": {
+          "table_id": "p106-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p106-t1",
+          "row_input": "bracket_type",
+          "column_input": "work_type",
+          "trades": [
+            "비계공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p106-t1에서 브라켓 용도(bracket_type)와 작업 종류(work_type)에 해당하는 비계공 품을 찾는다.",
+        "표의 기준이 10개소당이므로, 입력된 물량(quantity)을 10으로 나눈 값을 단위당 품에 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 50쪽 2-7-9 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "section_no": "2-7-9",
+          "marker": "②"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(10개소)당 비계공의 인·일 품이 표에 직접 제시되어 있어, 물량에 비례하여 계산하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p106-t1",
+      "row": "벽용",
+      "column": "설치",
+      "value": "0.45"
+    },
+    {
+      "table_id": "p106-t1",
+      "row": "벽용",
+      "column": "해체",
+      "value": "0.34"
+    },
+    {
+      "table_id": "p106-t1",
+      "row": "슬래브발코니, 난간용",
+      "column": "설치",
+      "value": "0.34"
+    },
+    {
+      "table_id": "p106-t1",
+      "row": "슬래브발코니, 난간용",
+      "column": "해체",
+      "value": "0.26"
+    },
+    {
+      "chunk_id": "p106-x10",
+      "quote": "② 공구손료 및 경장비(드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트가 1차원적으로 나열되어 있어('수량 벽용 설치', '수량 해체' 등), 원문 표의 2단 헤더(벽용/난간용 -> 설치/해체)를 복원하기 위해 파싱 텍스트의 부분 문자열을 추출하여 행/열 이름으로 사용했습니다. 파싱 결과의 구조적 개선이 필요할 수 있습니다."
+  ],
+  "questions": [
+    "비계용 브라켓 50개소를 벽에 설치하려고 합니다. 비계공 품은 얼마나 되나요?",
+    "브라켓 설치와 해체를 동시에 진행하는 경우 품을 합산해서 계산하나요?",
+    "브라켓의 규격이나 무게에 따라 품이 달라지나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:15:13.496593+00:00",
+    "input_tokens": 11528,
+    "output_tokens": 1708,
+    "source_pages": [
+      106,
+      107
+    ],
+    "prompt_sha256": "48eedfe99182ab866ffe4d5a8a783fcc6e8f1abbb4d8b27afefd1b67d0596669",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-3-2/바탕처리_철재면",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-3-2",
+    "title": "재도장 시 바탕처리(철재면)('21년 신설)",
+    "work": "철재면 재도장 시 바탕처리",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      918
+    ],
+    "inputs": [
+      {
+        "name": "surface_condition",
+        "type": "enum",
+        "allowed_values": [
+          "A급",
+          "B급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "대상면의 상태는 A급과 B급 중 어디에 해당합니까?",
+        "decision_table": "p974-t2",
+        "source": "PDF 918쪽 3-3-2 [주] ③"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "바탕처리할 철재면의 면적은 몇 ㎡입니까?",
+        "source": "PDF 918쪽 3-3-2 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p974-t1",
+        "role": "작업조 인원 및 시공량",
+        "source": "PDF 918쪽 3-3-2 표",
+        "unit": "인, ㎡",
+        "values": {
+          "도장공 보통인부": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎡) A급": "20",
+            "시공량(㎡) B급": "60"
+          }
+        },
+        "cite": {
+          "table_id": "p974-t1"
+        }
+      },
+      {
+        "id": "p974-t2",
+        "role": "대상면 상태 적용기준",
+        "source": "PDF 918쪽 3-3-2 [주] ③ 표",
+        "values": {
+          "A급": {
+            "적용기준": "- 재래도장의 탈락이 심하고 부분적으로 부식되어 약품을 사용하여 도막 및 기타 부착물의"
+          },
+          "B급": {
+            "적용기준": "- 재래도장의 부출되어 있는 녹을 제거하고 와이어 브러쉬로 청소할 정도"
+          }
+        },
+        "cite": {
+          "table_id": "p974-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "대상면의 상태(A급, B급)에 따라 일당 시공량을 결정한다.",
+        "물량을 일당 시공량으로 나누어 작업일수를 구한다.",
+        "작업일수에 도장공 2인, 보통인부 1인을 곱하여 직종별 인·일을 산출한다."
+      ],
+      "source": "PDF 918쪽 3-3-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 잡재료비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p974-x14"
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에서 p974-t1 표의 직종(도장공, 보통인부)이 하나의 행 이름으로 병합되어 직종별 투입 인원을 기계적으로 구분할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p974-t1",
+      "row": "도장공 보통인부",
+      "column": "시공량(㎡) A급",
+      "value": "20"
+    },
+    {
+      "table_id": "p974-t1",
+      "row": "도장공 보통인부",
+      "column": "시공량(㎡) B급",
+      "value": "60"
+    },
+    {
+      "table_id": "p974-t2",
+      "row": "A급",
+      "column": "적용기준",
+      "value": "- 재래도장의 탈락이 심하고 부분적으로 부식되어 약품을 사용하여 도막 및 기타 부착물의"
+    },
+    {
+      "table_id": "p974-t2",
+      "row": "B급",
+      "column": "적용기준",
+      "value": "- 재래도장의 부출되어 있는 녹을 제거하고 와이어 브러쉬로 청소할 정도"
+    },
+    {
+      "chunk_id": "p974-x14",
+      "quote": "공구손료 및 잡재료비(연마지 등)는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p974-x9",
+      "quote": "본 품은 철재면 재도장 시 바탕처리하는 기준이다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 p974-t1 표의 직종(도장공, 보통인부)이 '도장공 보통인부'라는 하나의 행으로 병합되어 있고, 수량이 2인 행과 1인 행이 구분되지 않아 기계적인 계산 모델을 구성할 수 없습니다.",
+    "p974-t2 표의 A급 적용기준 텍스트가 두 줄로 나뉘어 파싱되어, 첫 번째 줄만 values에 포함했습니다."
+  ],
+  "questions": [
+    "바탕처리할 철재면의 면적은 몇 ㎡입니까?",
+    "대상면의 상태는 A급과 B급 중 어디에 해당합니까?",
+    "기존 도장면의 오염이나 부착물 제거 외에 추가적인 바탕처리가 필요한 상태입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:04.900715+00:00",
+    "input_tokens": 23670,
+    "output_tokens": 3591,
+    "source_pages": [
+      974,
+      975
+    ],
+    "prompt_sha256": "a15c184ec47ca547eecf1554c8e00c08baddc4d5f1113dcd7ecdbefbc686f7b1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

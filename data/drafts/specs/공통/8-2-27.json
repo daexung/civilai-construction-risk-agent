@@ -1,0 +1,308 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-27/수중펌프",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-27",
+    "title": "수중펌프",
+    "work": "수중펌프 운전 및 설치·해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      216,
+      217
+    ],
+    "inputs": [
+      {
+        "name": "operation_condition",
+        "type": "enum",
+        "allowed_values": [
+          "작업시배수 상용전원",
+          "작업시배수 발전기",
+          "상시배수 상용전원",
+          "상시배수 발전기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배수 방법과 전원 조건은 무엇입니까?",
+        "source": "PDF 217쪽 2. 펌프 운전공 표 및 4. 잡재료 비율 표",
+        "synonyms": {
+          "작업시배수 상용전원": [
+            "작업시 배수 상용전원"
+          ],
+          "작업시배수 발전기": [
+            "작업시 배수 발전기"
+          ],
+          "상시배수 상용전원": [
+            "상시 배수 상용전원"
+          ],
+          "상시배수 발전기": [
+            "상시 배수 발전기"
+          ]
+        }
+      },
+      {
+        "name": "locations",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "배수 현장의 개소 수는 몇 개소입니까?",
+        "source": "PDF 217쪽 2. 펌프 운전공 및 5. 펌프설치 및 해체 기준"
+      },
+      {
+        "name": "operating_days",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "일",
+        "required": true,
+        "ask": "펌프 운전 일수는 며칠입니까?",
+        "source": "PDF 217쪽 2. 펌프 운전공 단위 (인/1개소·일)"
+      },
+      {
+        "name": "pump_count_per_location",
+        "type": "nonnegative_integer",
+        "allowed_values": "1 이상 5 이하의 정수",
+        "unit": "대",
+        "required": true,
+        "ask": "1개소당 펌프 대수는 몇 대입니까? (1~5대 기준)",
+        "source": "PDF 217쪽 2. 펌프 운전공 [주] ③ 및 5. 펌프설치 및 해체 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p272-t3",
+        "role": "펌프의 선정 규격",
+        "source": "PDF 216쪽 1. 펌프의 선정",
+        "values": {
+          "100": {
+            "규격 양정(m)": "0∼10이하",
+            "규격 전동기출력": "3.7㎾"
+          },
+          "150": {
+            "규격 양정(m)": "0∼10이하",
+            "규격 전동기출력": "7.5㎾"
+          }
+        },
+        "cite": {
+          "table_id": "p272-t3"
+        }
+      },
+      {
+        "id": "p273-t0",
+        "role": "펌프 운전공 품",
+        "source": "PDF 217쪽 2. 펌프 운전공",
+        "unit": "인/1개소·일",
+        "values": {
+          "수중펌프": {
+            "작업시배수 상용전원": "0.12",
+            "작업시배수 발전기": "0.16",
+            "상시배수 상용전원": "0.17",
+            "상시배수 발전기": "0.24"
+          }
+        },
+        "cite": {
+          "table_id": "p273-t0"
+        }
+      },
+      {
+        "id": "p273-t1",
+        "role": "잡재료 비율",
+        "source": "PDF 217쪽 4. 잡재료 비율(%)",
+        "unit": "%",
+        "values": {
+          "비율": {
+            "작업시배수 상용전원": "3",
+            "작업시배수 발전기": "1",
+            "상시배수 상용전원": "1",
+            "상시배수 발전기": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p273-t1"
+        }
+      },
+      {
+        "id": "p273-t2",
+        "role": "펌프설치 및 해체 품",
+        "source": "PDF 217쪽 5. 펌프설치 및 해체",
+        "unit": "인/1개소",
+        "values": {
+          "작업반장": {
+            "수량": "0.2"
+          },
+          "보통인부": {
+            "수량": "2.8"
+          }
+        },
+        "cite": {
+          "table_id": "p273-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p273-t0",
+          "row_input": "수중펌프",
+          "column_input": "operation_condition",
+          "trades": [
+            "수중펌프"
+          ]
+        },
+        "quantity_input": "operating_days",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p273-t0에서 조건에 맞는 펌프 운전공(인/1개소·일) 품을 찾는다.",
+        "운전공 총 품 = 단위당 품 × locations(개소) × operating_days(일)로 구한다.",
+        "p273-t2에서 펌프설치 및 해체(인/1개소) 품을 찾는다.",
+        "설치 및 해체 총 품 = 단위당 품 × locations(개소)로 구한다."
+      ],
+      "source": "PDF 217쪽 2. 펌프 운전공 및 5. 펌프설치 및 해체",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "1개소당 펌프대수가 1~5대 범위를 벗어나는 경우",
+        "blocked_if": {
+          "input": "pump_count_per_location",
+          "op": ">",
+          "value": 5
+        },
+        "reason": "운전노무비 및 설치/해체 품은 1개소당 펌프대수 1~5대를 기준으로 함",
+        "source": "PDF 217쪽 2. 펌프 운전공 [주] ③ 및 5. 펌프설치 및 해체 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p273-x5",
+            "quote": "배수현장 1개소당 펌프대수가 1∼5대의 운전노무비를 표준으로 한 것"
+          },
+          {
+            "chunk_id": "p273-x15",
+            "quote": "인력품 및 운전일수는 한 개소당 펌프설치, 철거대수가 1∼5대를 기준한다."
+          }
+        ]
+      },
+      {
+        "condition": "1개소당 펌프대수가 1~5대 범위를 벗어나는 경우",
+        "blocked_if": {
+          "input": "pump_count_per_location",
+          "op": "<",
+          "value": 1
+        },
+        "reason": "운전노무비 및 설치/해체 품은 1개소당 펌프대수 1~5대를 기준으로 함",
+        "source": "PDF 217쪽 2. 펌프 운전공 [주] ③ 및 5. 펌프설치 및 해체 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p273-x5",
+            "quote": "배수현장 1개소당 펌프대수가 1∼5대의 운전노무비를 표준으로 한 것"
+          },
+          {
+            "chunk_id": "p273-x15",
+            "quote": "인력품 및 운전일수는 한 개소당 펌프설치, 철거대수가 1∼5대를 기준한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "잡재료비",
+        "source": "PDF 217쪽 4. 잡재료 비율(%) [주]",
+        "cite": {
+          "chunk_id": "p273-x11",
+          "quote": "잡재료비=노무비, 기계손료 및 운전경비의 합×잡재료비율"
+        }
+      },
+      {
+        "item": "펌프설치 및 해체시 소운반비",
+        "source": "PDF 217쪽 5. 펌프설치 및 해체 [주] ②",
+        "cite": {
+          "chunk_id": "p273-x15",
+          "quote": "펌프설치 및 해체시 소운반비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "전력소비량",
+        "source": "PDF 217쪽 3. 전력소비량",
+        "cite": {
+          "chunk_id": "p273-x8",
+          "quote": "작업시 배수 8시간, 상시배수 24시간"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "운전공(1개소·일당) 및 설치/해체(1개소당) 품이 표에 직접 제시되어 있어 단위당 품 계산 방식을 따릅니다.",
+  "citations": [
+    {
+      "table_id": "p272-t3",
+      "row": "100",
+      "column": "규격 양정(m)",
+      "value": "0∼10이하"
+    },
+    {
+      "table_id": "p273-t0",
+      "row": "수중펌프",
+      "column": "작업시배수 상용전원",
+      "value": "0.12"
+    },
+    {
+      "table_id": "p273-t1",
+      "row": "작업시배수 상용전원",
+      "column": "3",
+      "value": "3"
+    },
+    {
+      "table_id": "p273-t2",
+      "row": "작업반장",
+      "column": "수량",
+      "value": "0.2"
+    },
+    {
+      "chunk_id": "p273-x0",
+      "quote": "작업시 배수는 작업전(1∼3시간)부터 배수를 시작하여 작업종료 후에는 배수를 중지하는 방법이다."
+    },
+    {
+      "chunk_id": "p273-x5",
+      "quote": "배수현장 1개소당 펌프대수가 1∼5대의 운전노무비를 표준으로 한 것"
+    },
+    {
+      "chunk_id": "p273-x11",
+      "quote": "잡재료비=노무비, 기계손료 및 운전경비의 합×잡재료비율"
+    },
+    {
+      "chunk_id": "p273-x15",
+      "quote": "인력품 및 운전일수는 한 개소당 펌프설치, 철거대수가 1∼5대를 기준한다."
+    }
+  ],
+  "open_questions": [
+    "잡재료비의 산출 기준이 '노무비, 기계손료 및 운전경비의 합'으로 되어 있어, 현재 노무비 합계 기준만 지원하는 cost_rules에 적용할 수 없습니다.",
+    "운전공(개소·일당)과 설치/해체(개소당)의 산출 단위가 달라 하나의 per_unit 모델로 완벽히 표현하기 어려워 steps에 계산 과정을 분리하여 명시했습니다."
+  ],
+  "questions": [
+    "수중펌프 운전공 품은 어떻게 계산하나요?",
+    "펌프 대수가 1개소에 6대인 경우는 어떻게 적용하나요?",
+    "잡재료비 계산 시 기계손료와 운전경비는 어디서 가져오나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:21.018060+00:00",
+    "input_tokens": 13107,
+    "output_tokens": 3390,
+    "source_pages": [
+      272,
+      273,
+      274
+    ],
+    "prompt_sha256": "8cf8ac977fb236560f49f3aec32b77b6e7fc434004a5b70a43c0db32ad1e09f9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

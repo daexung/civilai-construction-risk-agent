@@ -1,0 +1,137 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-9-2/건설용리프트방호선반설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-9-2",
+    "title": "건설용리프트 방호선반 설치 및 해체('23년 신설)",
+    "work": "방호선반 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      56
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "건설용리프트 방호선반 설치 및 해체 물량은 몇 개소입니까?",
+        "source": "PDF 56쪽 2-9-2 표 단위 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p112-t3",
+        "role": "건설용리프트 방호선반 설치 및 해체 품",
+        "source": "PDF 56쪽 2-9-2 표",
+        "unit": "인/개소",
+        "values": {
+          "비계공": {
+            "수량": "0.95"
+          },
+          "보통인부": {
+            "수량": "0.26"
+          }
+        },
+        "cite": {
+          "table_id": "p112-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p112-t3",
+          "column_input": "수량",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 56쪽 2-9-2 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "공사안내판 및 보호망의 작업",
+        "source": "PDF 56쪽 2-9-2 [주] ③",
+        "cite": {
+          "section_no": "2-9-2",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "section_no": "2-9-2",
+          "marker": "④"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당)당 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p112-t3",
+      "row": "비계공",
+      "column": "수량",
+      "value": "0.95"
+    },
+    {
+      "table_id": "p112-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.26"
+    },
+    {
+      "chunk_id": "p112-x15",
+      "quote": "공사안내판 및 보호망의 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p112-x15",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "건설용리프트 방호선반 설치 물량은 몇 개소입니까?",
+    "공사안내판 및 보호망 설치 비용은 어떻게 별도로 계산하나요?",
+    "건설용리프트의 규격이 싱글 1.2ton이 아닌 경우 품을 어떻게 조정해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:15:32.827990+00:00",
+    "input_tokens": 11559,
+    "output_tokens": 1196,
+    "source_pages": [
+      112,
+      113
+    ],
+    "prompt_sha256": "f67ac3020af898864369467529c52c85f5ffad886b1b9cfbb44b052a4d8d2c77",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

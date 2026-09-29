@@ -1,0 +1,477 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-1-4/펌프차타설",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-1-4",
+    "title": "콘크리트 펌프차 타설",
+    "work": "기본 타설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      130,
+      131
+    ],
+    "inputs": [
+      {
+        "name": "structure_type_crew",
+        "type": "enum",
+        "allowed_values": [
+          "작업조 무근콘크리트",
+          "작업조 철근콘크리트"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "인력편성 기준이 되는 구조물 종류는 무엇입니까?",
+        "source": "130쪽 2. 인력편성 표"
+      },
+      {
+        "name": "structure_type_output",
+        "type": "enum",
+        "allowed_values": [
+          "기준 시공량(㎥) 무근구조물",
+          "기준 시공량(㎥) 철근구조물"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "일일시공량 기준이 되는 구조물 종류는 무엇입니까?",
+        "source": "131쪽 3. 일일시공량 표"
+      },
+      {
+        "name": "slump",
+        "type": "enum",
+        "allowed_values": [
+          "8~12㎝",
+          "15㎝",
+          "18㎝이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "콘크리트 슬럼프는 얼마입니까?",
+        "source": "131쪽 3. 일일시공량 표"
+      },
+      {
+        "name": "facility_type",
+        "type": "enum",
+        "allowed_values": [
+          "Type-Ⅰ",
+          "Type-Ⅱ",
+          "Type-Ⅲ",
+          "Type-Ⅳ"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시설유형(f1)은 무엇입니까?",
+        "source": "131쪽 3. 일일시공량 가. 시설유형(f1) 표",
+        "decision_table": "p187-t2"
+      },
+      {
+        "name": "site_condition",
+        "type": "enum",
+        "allowed_values": [
+          "Type-Ⅰ",
+          "Type-Ⅱ",
+          "Type-Ⅲ"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장조건(f2)은 무엇입니까?",
+        "source": "131쪽 3. 일일시공량 나. 현장조건(f2) 표",
+        "decision_table": "p187-t4"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "타설 물량 (양수)",
+        "unit": "㎥",
+        "required": true,
+        "ask": "콘크리트 타설 물량은 얼마입니까?",
+        "source": "130쪽 1. 적용범위"
+      },
+      {
+        "name": "use_vibrator",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "콘크리트 진동기를 사용합니까?",
+        "source": "130쪽 2. 인력편성 [주] ①"
+      },
+      {
+        "name": "pipe_casting",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배관타설을 합니까?",
+        "source": "130쪽 2. 인력편성 표 비고"
+      },
+      {
+        "name": "reset_count",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "회",
+        "required": true,
+        "ask": "펌프차 이동 및 재셋팅 횟수는 몇 회입니까?",
+        "source": "131쪽 3. 일일시공량 [주] ②"
+      },
+      {
+        "name": "pump_car_code",
+        "type": "enum",
+        "allowed_values": [
+          "80㎥/hr 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "콘크리트 펌프차 규격은 무엇입니까?",
+        "source": "130쪽 2. 인력편성 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p186-t1",
+        "role": "인력편성",
+        "source": "130쪽 2. 인력편성",
+        "unit": "인, 대",
+        "values": {
+          "콘크리트공": {
+            "작업조 무근콘크리트": "3",
+            "작업조 철근콘크리트": "4",
+            "비고": "타설/진동기/면정리"
+          },
+          "특별인부": {
+            "작업조 무근콘크리트": "1",
+            "작업조 철근콘크리트": "1",
+            "비고": "배관타설 : 1인 추가"
+          },
+          "형틀목공": {
+            "작업조 무근콘크리트": "1",
+            "작업조 철근콘크리트": "1",
+            "비고": "거푸집 및 동바리 작업"
+          },
+          "보통인부": {
+            "작업조 무근콘크리트": "1",
+            "작업조 철근콘크리트": "1",
+            "비고": "현장정리/보조"
+          },
+          "콘크리트펌프차": {
+            "작업조 무근콘크리트": "1대(80㎥/hr 이상)",
+            "비고": "시공조건에 따른 규격 선정"
+          }
+        },
+        "cite": {
+          "table_id": "p186-t1"
+        }
+      },
+      {
+        "id": "p187-t0",
+        "role": "기준 시공량",
+        "source": "131쪽 3. 일일시공량",
+        "unit": "㎥",
+        "values": {
+          "8~12㎝": {
+            "기준 시공량(㎥) 무근구조물": "130",
+            "기준 시공량(㎥) 철근구조물": "125"
+          },
+          "15㎝": {
+            "기준 시공량(㎥) 무근구조물": "135",
+            "기준 시공량(㎥) 철근구조물": "130"
+          },
+          "18㎝이상": {
+            "기준 시공량(㎥) 무근구조물": "145",
+            "기준 시공량(㎥) 철근구조물": "140"
+          }
+        },
+        "cite": {
+          "table_id": "p187-t0"
+        }
+      },
+      {
+        "id": "p187-t1",
+        "role": "시설유형(f1) 계수",
+        "source": "131쪽 3. 일일시공량 가. 시설유형(f1)",
+        "values": {
+          "f1": {
+            "Type-Ⅰ": "1.4",
+            "Type-Ⅱ": "1.0",
+            "Type-Ⅲ": "0.8",
+            "Type-Ⅳ": "0.3"
+          }
+        },
+        "cite": {
+          "table_id": "p187-t1"
+        }
+      },
+      {
+        "id": "p187-t2",
+        "role": "시설유형 적용기준",
+        "source": "131쪽 3. 일일시공량 가. 시설유형(f1) [주]",
+        "values": {
+          "Type-Ⅰ": {
+            "적용기준": "- 매트기초 등 펌프차 작업에 제약이 없는 시설물"
+          },
+          "Type-Ⅱ": {
+            "적용기준": "- 벽, 기둥, 보, 슬라브, 교대, 교각 등 펌프차 작업에 큰 지장이 없어 일반적인 시공이\n가능한 시설물"
+          },
+          "Type-Ⅲ": {
+            "적용기준": "- 옹벽, 줄기초, 슬래브 없는[월거더:wall girder]구조의 기둥과 보 등 펌프차 작업에 제약을\n받는 타설부위가 좁거나 깊은 시설물"
+          },
+          "Type-Ⅳ": {
+            "적용기준": "- 절･성토부 비탈면에 시공되는 구조물 등 펌프차 작업에 제약이 매우 큰 시설물"
+          }
+        },
+        "cite": {
+          "table_id": "p187-t2"
+        }
+      },
+      {
+        "id": "p187-t3",
+        "role": "현장조건(f2) 계수",
+        "source": "131쪽 3. 일일시공량 나. 현장조건(f2)",
+        "values": {
+          "f2": {
+            "Type-Ⅰ": "1.2",
+            "Type-Ⅱ": "1.0",
+            "Type-Ⅲ": "0.8"
+          }
+        },
+        "cite": {
+          "table_id": "p187-t3"
+        }
+      },
+      {
+        "id": "p187-t4",
+        "role": "현장조건 적용기준",
+        "source": "131쪽 3. 일일시공량 나. 현장조건(f2) [주]",
+        "values": {
+          "Type-Ⅰ": {
+            "적용기준": "- 대기공간이 충분히 넓어 믹서트럭 2대가 병렬로 타설준비가 가능하며 지속적인 타설을\n수행하는 경우"
+          },
+          "Type-Ⅱ": {
+            "적용기준": "- 믹서트럭이 1대씩 직렬로 대기하며 순차적으로 타설준비하여 타설하는 일반적인 경우"
+          },
+          "Type-Ⅲ": {
+            "적용기준": "- 믹서트럭의 대기공간이 매우 협소하고 진출입 길이가 길어 연속적인 타설이 어려운 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p187-t4"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "use_vibrator": false
+        },
+        "when_text": "진동기를 사용하지 않는 경우",
+        "change": {
+          "콘크리트공": "-1",
+          "특별인부": "-1"
+        },
+        "source": "130쪽 2. 인력편성 [주] ①",
+        "cite": {
+          "chunk_id": "p186-x16",
+          "quote": "① 본 편성인력은 콘크리트 진동기 사용 기준으로 진동기를 사용하지 않는 경우 콘크리트공과 특별인부를\n설명 | 각 1인 제외한다."
+        }
+      },
+      {
+        "when": {
+          "pipe_casting": true
+        },
+        "when_text": "배관타설을 하는 경우",
+        "change": {
+          "특별인부": "+1"
+        },
+        "source": "130쪽 2. 인력편성 표 비고",
+        "cite": {
+          "table_id": "p186-t1",
+          "row": "특별인부",
+          "column": "비고",
+          "value": "배관타설 : 1인 추가"
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p187-t0",
+          "row_input": "slump",
+          "column_input": "structure_type_output"
+        },
+        "coefficients": [
+          {
+            "table": "p187-t1",
+            "row": "f1",
+            "input": "facility_type"
+          },
+          {
+            "table": "p187-t3",
+            "row": "f2",
+            "input": "site_condition"
+          }
+        ],
+        "crew": {
+          "table": "p186-t1",
+          "column_input": "structure_type_crew",
+          "trades": [
+            "콘크리트공",
+            "특별인부",
+            "형틀목공",
+            "보통인부"
+          ]
+        },
+        "equipment": {
+          "name": "콘크리트펌프차",
+          "table": "p186-t1",
+          "unit": "대",
+          "machine_code_input": "pump_car_code"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "기준 시공량 표에서 슬럼프와 구조물 종류에 맞는 기준 시공량을 찾는다.",
+        "시설유형(f1)과 현장조건(f2)에 따른 계수를 기준 시공량에 곱하여 일당시공량을 구한다.",
+        "타설 물량을 일당시공량으로 나누어 작업일수를 계산한다.",
+        "인력편성 표에서 구조물 종류에 맞는 직종별 인원을 찾고, 조건에 따라 인원을 가감한다.",
+        "조정된 직종별 인원에 작업일수를 곱하여 총 투입 인·일을 산출한다."
+      ],
+      "source": "130~131쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "펌프차 이동 및 재셋팅이 필요한 경우",
+        "blocked_if": {
+          "input": "reset_count",
+          "op": ">",
+          "value": 0
+        },
+        "reason": "회당 시공량의 5% 감산은 현재 계산 모델에서 동적 계수 적용이 불가능하여 보류함",
+        "source": "131쪽 3. 일일시공량 [주] ②",
+        "cite": {
+          "chunk_id": "p187-x5",
+          "quote": "※ 펌프차의 타설범위(타설높이 및 수평거리)를 초과하여 펌프차 이동 및 재셋팅이 필요한 경우 회당\n설명 | 시공량의 5%을 감하여 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "표면 마무리",
+        "source": "130쪽 1. 적용범위 마.",
+        "cite": {
+          "chunk_id": "p186-x6",
+          "quote": "마. 타설 후 별도의 표면 마무리가 필요한 경우 ‘[공통부문] 6-1-3 표면 마무리’를 따른다."
+        }
+      },
+      {
+        "item": "압송관 설치 및 철거",
+        "source": "130쪽 1. 적용범위 바.",
+        "cite": {
+          "chunk_id": "p186-x6",
+          "quote": "배관의 설치 및 철거는 '4.압송관 설치 및 철거'를 따른다."
+        }
+      },
+      {
+        "item": "양생 및 소모재료",
+        "source": "130쪽 1. 적용범위 사., 아.",
+        "cite": {
+          "chunk_id": "p186-x6",
+          "quote": "사. 양생은 양생방법 및 시간을 고려하여 별도 계상한다. 아. 소모재료(양생제 등)가 필요한 경우 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "chunk_id": "p186-x16",
+          "quote": "② 공구손료 및 경장비(콘크리트 진동기 등)의 기계경비는 편성인력 노무비의 5%를 적용한다."
+        }
+      },
+      {
+        "name": "잔여 콘크리트",
+        "category": "재료비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "chunk_id": "p186-x16",
+          "quote": "③ 타설 후 발생하는 잔여 콘크리트(배관 내 잔여물 등)의 재료비는 편성인력 노무비의 5%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "기준 일일시공량에 계수를 곱해 조정 후, 물량 ÷ 일당시공량 = 작업일수를 구하고, 직종별 인원 × 작업일수로 인·일을 내는 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p186-t1",
+      "row": "특별인부",
+      "column": "비고",
+      "value": "배관타설 : 1인 추가"
+    },
+    {
+      "chunk_id": "p186-x16",
+      "quote": "① 본 편성인력은 콘크리트 진동기 사용 기준으로 진동기를 사용하지 않는 경우 콘크리트공과 특별인부를\n설명 | 각 1인 제외한다."
+    },
+    {
+      "chunk_id": "p186-x16",
+      "quote": "② 공구손료 및 경장비(콘크리트 진동기 등)의 기계경비는 편성인력 노무비의 5%를 적용한다."
+    },
+    {
+      "chunk_id": "p186-x16",
+      "quote": "③ 타설 후 발생하는 잔여 콘크리트(배관 내 잔여물 등)의 재료비는 편성인력 노무비의 5%로 계상한다."
+    },
+    {
+      "chunk_id": "p187-x5",
+      "quote": "※ 펌프차의 타설범위(타설높이 및 수평거리)를 초과하여 펌프차 이동 및 재셋팅이 필요한 경우 회당\n설명 | 시공량의 5%을 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p186-x6",
+      "quote": "마. 타설 후 별도의 표면 마무리가 필요한 경우 ‘[공통부문] 6-1-3 표면 마무리’를 따른다."
+    },
+    {
+      "chunk_id": "p186-x6",
+      "quote": "배관의 설치 및 철거는 '4.압송관 설치 및 철거'를 따른다."
+    },
+    {
+      "chunk_id": "p186-x6",
+      "quote": "사. 양생은 양생방법 및 시간을 고려하여 별도 계상한다. 아. 소모재료(양생제 등)가 필요한 경우 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "펌프차 이동 및 재셋팅이 여러 번 발생할 경우 5% 감산이 누적(복리)되는지, 단리인지 명확하지 않아 계산에서 제외하고 blocked 처리함."
+  ],
+  "questions": [
+    "콘크리트 펌프차 타설 시 무근콘크리트 15cm 슬럼프의 기준 시공량은 얼마인가요?",
+    "펌프차 이동 및 재셋팅이 2회 발생하면 시공량 감산은 어떻게 적용하나요?",
+    "진동기를 사용하지 않을 때 인력 편성에서 제외되는 직종은 무엇인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:29:15.059416+00:00",
+    "input_tokens": 16932,
+    "output_tokens": 9785,
+    "source_pages": [
+      186,
+      187,
+      188
+    ],
+    "prompt_sha256": "708c6a30ef3392be588e0c9b6554da307e9d0027f4f7f1dc509823731618ab30",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

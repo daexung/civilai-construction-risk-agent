@@ -1,0 +1,224 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/11-2-3/수성페인트뿜칠",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "11-2-3",
+    "title": "수성페인트 뿜칠",
+    "work": "수성페인트 뿜칠 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      637
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "수성페인트 뿜칠 물량은 몇 ㎡입니까?",
+        "source": "표 p693-t2 기준 (10㎡당)"
+      },
+      {
+        "name": "is_ceiling",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "천장 부위입니까?",
+        "source": "표 p693-t2 비고"
+      },
+      {
+        "name": "paint_coats",
+        "type": "nonnegative_integer",
+        "allowed_values": "1 이상의 정수",
+        "unit": "회",
+        "required": true,
+        "ask": "수성페인트 칠 횟수는 몇 회입니까?",
+        "source": "p693-x16 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p693-t2",
+        "role": "수성페인트 뿜칠 단위당 품",
+        "source": "11-2-3 수성페인트 뿜칠 표",
+        "unit": "인/10㎡",
+        "values": {
+          "도장공": {
+            "수량": "0.027"
+          },
+          "보통인부": {
+            "수량": "0.013"
+          }
+        },
+        "cite": {
+          "table_id": "p693-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p693-t2",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "is_ceiling": true
+            },
+            "rate": "0.2",
+            "applies_to": [
+              "도장공",
+              "보통인부"
+            ],
+            "source": "표 p693-t2 비고"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "paint_coats": ">1"
+            },
+            "change": "칠 횟수에 비례하여 품 가산 (1회 기준이므로 횟수만큼 곱함)",
+            "source": "p693-x16 [주] ①"
+          }
+        ]
+      },
+      "steps": [
+        "p693-t2에서 직종별 단위당 품을 찾는다.",
+        "물량(quantity)을 10으로 나누어 10㎡ 단위로 환산한 후 단위당 품에 곱한다.",
+        "is_ceiling이 true이면 20%를 가산한다.",
+        "paint_coats가 1이 아니면 해당 횟수만큼 곱하여 조정한다."
+      ],
+      "source": "11-2-3 수성페인트 뿜칠 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "바탕만들기",
+        "source": "p693-x16 [주] ③",
+        "cite": {
+          "chunk_id": "p693-x16",
+          "quote": "③ 바탕만들기는 ‘[건축부문] 11-1 공통공사/바탕만들기’에 준하여 별도 계상한다."
+        }
+      },
+      {
+        "item": "비계사용시 높이별 품 할증",
+        "source": "p693-x16 [주] ④",
+        "cite": {
+          "chunk_id": "p693-x16",
+          "quote": "④비계사용시 높이별 품 할증은 ‘[건축부문] 11-1-1 콘크리트･모르타르면 바탕만들기’에 준하여 별도\n설명 | 계상한다."
+        }
+      },
+      {
+        "item": "분진방지용 시설비용",
+        "source": "p693-x16 [주] ⑤",
+        "cite": {
+          "chunk_id": "p693-x16",
+          "quote": "⑤ 스프레이 도장 시 분진방지용 시설비용은 별도 계상한다."
+        }
+      },
+      {
+        "item": "재료량(페인트 등)",
+        "source": "p693-x16 [주] ⑦",
+        "cite": {
+          "chunk_id": "p693-x16",
+          "quote": "⑦ 재료량(페인트 등)은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(엔진식 도장기 등)의 기계경비와 잡재료비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.12",
+        "cite": {
+          "chunk_id": "p693-x16",
+          "quote": "⑥ 공구손료 및 경장비(엔진식 도장기 등)의 기계경비와 잡재료비는 인력품의 12%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당(10㎡당) 품이 표에 직접 제시되어 있으며, 물량에 비례하여 계산하는 방식이므로 per_unit이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p693-t2",
+      "row": "도장공",
+      "column": "수량",
+      "value": "0.027"
+    },
+    {
+      "table_id": "p693-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.013"
+    },
+    {
+      "table_id": "p693-t2"
+    },
+    {
+      "chunk_id": "p693-x16",
+      "quote": "① 본 품은 수성페인트를 1회 칠하는 기준이다."
+    },
+    {
+      "chunk_id": "p693-x16",
+      "quote": "③ 바탕만들기는 ‘[건축부문] 11-1 공통공사/바탕만들기’에 준하여 별도 계상한다."
+    },
+    {
+      "chunk_id": "p693-x16",
+      "quote": "④비계사용시 높이별 품 할증은 ‘[건축부문] 11-1-1 콘크리트･모르타르면 바탕만들기’에 준하여 별도\n설명 | 계상한다."
+    },
+    {
+      "chunk_id": "p693-x16",
+      "quote": "⑤ 스프레이 도장 시 분진방지용 시설비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p693-x16",
+      "quote": "⑥ 공구손료 및 경장비(엔진식 도장기 등)의 기계경비와 잡재료비는 인력품의 12%로 계상한다."
+    },
+    {
+      "chunk_id": "p693-x16",
+      "quote": "⑦ 재료량(페인트 등)은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "수성페인트 뿜칠 물량은 몇 ㎡입니까?",
+    "천장 부위에 뿜칠을 합니까?",
+    "수성페인트 칠 횟수는 몇 회입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:56:13.366889+00:00",
+    "input_tokens": 23442,
+    "output_tokens": 4609,
+    "source_pages": [
+      693,
+      694
+    ],
+    "prompt_sha256": "d987d573be71070d0459f71578af9d0d1fd330b5f640b389689816c4c0d52f57",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

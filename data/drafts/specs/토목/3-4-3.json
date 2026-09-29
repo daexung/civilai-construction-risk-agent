@@ -1,0 +1,209 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/3-4-3/터널바닥암반청소",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "3-4-3",
+    "title": "터널바닥 암반청소('13년 신설, '20년 보완)",
+    "work": "터널바닥 암반청소 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      343
+    ],
+    "inputs": [
+      {
+        "name": "section_type",
+        "type": "enum",
+        "allowed_values": [
+          "공동구",
+          "바닥/인버트"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "터널바닥 암반청소 구간은 어디입니까? (공동구 / 바닥/인버트)",
+        "source": "PDF 343쪽 3-4-3 표의 수량 구분",
+        "synonyms": {
+          "공동구": [
+            "공동구 구간"
+          ],
+          "바닥/인버트": [
+            "바닥",
+            "인버트",
+            "바닥 및 인버트"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "터널바닥 암반청소 면적은 몇 ㎡입니까?",
+        "source": "PDF 343쪽 3-4-3 표 단위 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p399-t3",
+        "role": "터널바닥 암반청소 단위당 품",
+        "source": "PDF 343쪽 3-4-3 표",
+        "unit": "인/㎡, hr/㎡",
+        "values": {
+          "특별인부": {
+            "공동구": "0.014",
+            "바닥/인버트": "0.009"
+          },
+          "보통인부": {
+            "공동구": "0.134",
+            "바닥/인버트": "0.085"
+          },
+          "굴착기(0.2㎥)": {
+            "공동구": "0.141",
+            "바닥/인버트": "-"
+          },
+          "굴착기(0.6㎥)": {
+            "공동구": "-",
+            "바닥/인버트": "0.085"
+          },
+          "물탱크(살수차)": {
+            "공동구": "0.123",
+            "바닥/인버트": "0.074"
+          },
+          "동력분무기": {
+            "공동구": "0.123",
+            "바닥/인버트": "0.074"
+          }
+        },
+        "cite": {
+          "table_id": "p399-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p399-t3",
+          "row_input": null,
+          "column_input": "section_type",
+          "trades": [
+            "특별인부",
+            "보통인부",
+            "굴착기(0.2㎥)",
+            "굴착기(0.6㎥)",
+            "물탱크(살수차)",
+            "동력분무기"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p399-t3 표에서 구간(공동구 또는 바닥/인버트)에 해당하는 단위당 품을 찾는다.",
+        "찾은 단위당 품에 면적(area)을 곱하여 총 투입량을 구한다."
+      ],
+      "source": "PDF 343쪽 3-4-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인원 및 장비 시간이 표에 직접 제시되어 있으므로 per_unit 방식을 사용한다.",
+  "citations": [
+    {
+      "table_id": "p399-t3",
+      "row": "특별인부",
+      "column": "공동구",
+      "value": "0.014"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "특별인부",
+      "column": "바닥/인버트",
+      "value": "0.009"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "보통인부",
+      "column": "공동구",
+      "value": "0.134"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "보통인부",
+      "column": "바닥/인버트",
+      "value": "0.085"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "굴착기",
+      "column": "공동구",
+      "value": "0.141"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "굴착기",
+      "column": "바닥/인버트",
+      "value": "0.085"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "물탱크(살수차)",
+      "column": "공동구",
+      "value": "0.123"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "물탱크(살수차)",
+      "column": "바닥/인버트",
+      "value": "0.074"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "동력분무기",
+      "column": "공동구",
+      "value": "0.123"
+    },
+    {
+      "table_id": "p399-t3",
+      "row": "동력분무기",
+      "column": "바닥/인버트",
+      "value": "0.074"
+    },
+    {
+      "chunk_id": "p399-x22",
+      "quote": "[주] 터널 바닥, 공동구, 인버트 등 콘크리트를 타설하는 구간에 적용한다."
+    }
+  ],
+  "open_questions": [
+    "표에서 굴착기의 규격이 0.2㎥와 0.6㎥로 나뉘어 있는데, 현장 여건에 따라 다른 규격의 굴착기를 사용할 경우 품을 어떻게 조정해야 하는지 명시되어 있지 않음."
+  ],
+  "questions": [
+    "공동구 구간의 암반청소 시 굴착기 규격은 무엇을 적용하나요?",
+    "바닥/인버트 구간에 0.2㎥ 굴착기를 사용할 수 있나요?",
+    "청소할 면적(㎡)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:56:53.011023+00:00",
+    "input_tokens": 12253,
+    "output_tokens": 2005,
+    "source_pages": [
+      399,
+      400,
+      401
+    ],
+    "prompt_sha256": "e11d73a78c19dd6dbc2d4505e07f253bc31a95838bcd32312074d37f82017bed",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

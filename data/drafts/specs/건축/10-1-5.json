@@ -1,0 +1,222 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/10-1-5/합성수지창호설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "10-1-5",
+    "title": "합성수지창호 설치('14년 신설, '20년 보완)",
+    "work": "합성수지창호 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      630
+    ],
+    "inputs": [
+      {
+        "name": "window_style",
+        "type": "enum",
+        "allowed_values": [
+          "미서기",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "창호의 개폐 방식은 미서기입니까, 기타 방식입니까?",
+        "source": "PDF 630쪽 [주] ①"
+      },
+      {
+        "name": "window_type",
+        "type": "enum",
+        "allowed_values": [
+          "단창",
+          "이중창"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 창호는 단창입니까, 이중창입니까?",
+        "source": "PDF 630쪽 10-1-5 표 구분"
+      },
+      {
+        "name": "area_band",
+        "type": "enum",
+        "allowed_values": [
+          "1.0㎡이하",
+          "1.0~3.0㎡이하",
+          "3.0~6.0㎡이하",
+          "6.0~9.0㎡이하",
+          "9.0~12.0㎡이하"
+        ],
+        "unit": "㎡",
+        "required": true,
+        "ask": "창호의 면적은 어느 구간에 해당합니까?",
+        "source": "PDF 630쪽 10-1-5 표 수량 구간",
+        "synonyms": {
+          "1.0㎡이하": [
+            "수량 1.0㎡이하"
+          ],
+          "1.0~3.0㎡이하": [
+            "수량 1.0∼3.0㎡\n이하",
+            "1.0~3.0㎡"
+          ],
+          "3.0~6.0㎡이하": [
+            "수량 3.0∼6.0㎡\n이하",
+            "3.0~6.0㎡"
+          ],
+          "6.0~9.0㎡이하": [
+            "수량 6.0∼9.0㎡\n이하",
+            "6.0~9.0㎡"
+          ],
+          "9.0~12.0㎡이하": [
+            "수량 9.0∼12.0㎡\n이하",
+            "9.0~12.0㎡"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 창호의 개소 수는 몇 개소입니까?",
+        "source": "PDF 630쪽 10-1-5 표 단위 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p686-t1",
+        "role": "합성수지창호 설치 개소당 품",
+        "source": "PDF 630쪽 10-1-5 표",
+        "unit": "인/개소",
+        "values": {
+          "단창 | 창호공": {
+            "수량 1.0㎡이하": "0.169",
+            "수량 1.0∼3.0㎡\n이하": "0.210",
+            "수량 3.0∼6.0㎡\n이하": "0.337",
+            "수량 6.0∼9.0㎡\n이하": "0.413",
+            "수량 9.0∼12.0㎡\n이하": "0.468"
+          },
+          "단창 | 보통인부": {
+            "수량 1.0㎡이하": "0.037",
+            "수량 1.0∼3.0㎡\n이하": "0.046",
+            "수량 3.0∼6.0㎡\n이하": "0.068",
+            "수량 6.0∼9.0㎡\n이하": "0.091",
+            "수량 9.0∼12.0㎡\n이하": "0.104"
+          },
+          "이중창 | 창호공": {
+            "수량 1.0㎡이하": "0.200",
+            "수량 1.0∼3.0㎡\n이하": "0.247",
+            "수량 3.0∼6.0㎡\n이하": "0.381",
+            "수량 6.0∼9.0㎡\n이하": "0.476",
+            "수량 9.0∼12.0㎡\n이하": "0.542"
+          },
+          "이중창 | 보통인부": {
+            "수량 1.0㎡이하": "0.044",
+            "수량 1.0∼3.0㎡\n이하": "0.055",
+            "수량 3.0∼6.0㎡\n이하": "0.085",
+            "수량 6.0∼9.0㎡\n이하": "0.106",
+            "수량 9.0∼12.0㎡\n이하": "0.121"
+          }
+        },
+        "cite": {
+          "table_id": "p686-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p686-t1",
+          "row_input": "window_type",
+          "column_input": "area_band",
+          "trades": [
+            "창호공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p686-t1 표에서 window_type과 직종(창호공, 보통인부)을 조합하여 행을 찾고, area_band로 열을 찾아 단위당 품을 고른다.",
+        "물량(quantity)을 곱해 직종별 총 품을 구한다."
+      ],
+      "source": "PDF 630쪽 10-1-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "window_style != 미서기",
+        "blocked_if": {
+          "input": "window_style",
+          "op": "!=",
+          "value": "미서기"
+        },
+        "reason": "본 품은 미서기 합성수지창호 설치 기준이므로 기타 개폐 방식은 적용할 수 없습니다.",
+        "source": "PDF 630쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p686-x13",
+          "quote": "① 본 품은 미서기 합성수지창호 설치 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p686-x13",
+          "quote": "③ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당)당 직종별 품이 표에 직접 명시되어 있어 물량을 곱해 계산하는 방식이므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p686-t1",
+      "row": "단창 | 창호공",
+      "column": "수량 1.0㎡이하",
+      "value": "0.169"
+    },
+    {
+      "chunk_id": "p686-x13",
+      "quote": "① 본 품은 미서기 합성수지창호 설치 기준이다."
+    },
+    {
+      "chunk_id": "p686-x13",
+      "quote": "③ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표의 행 이름이 '단창 | 창호공' 형태로 파싱되어 있어, per_unit 모델에서 window_type 입력과 직종(trades)을 조합하여 행을 찾는 로직이 필요함."
+  ],
+  "questions": [
+    "단창 2.5㎡ 창호 10개소 설치 시 품은 어떻게 되나요?",
+    "미서기 창호가 아닌 프로젝트 창호의 경우에도 이 품을 적용할 수 있나요?",
+    "창호 설치 개소 수는 몇 개입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:50:07.091662+00:00",
+    "input_tokens": 11946,
+    "output_tokens": 2508,
+    "source_pages": [
+      686,
+      687
+    ],
+    "prompt_sha256": "3b28a33cbd379bc1022f4a3ca01e3ede053ccb25d3873472a76e696454b32ed8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

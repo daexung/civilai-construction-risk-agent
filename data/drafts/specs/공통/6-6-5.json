@@ -1,0 +1,282 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-6-5/교량점검시설점검통로설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-6-5",
+    "title": "교량점검시설 점검통로 설치",
+    "work": "점검통로 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      153,
+      154
+    ],
+    "inputs": [
+      {
+        "name": "height",
+        "type": "enum",
+        "allowed_values": [
+          "높이 20m이하",
+          "높이 40m이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 높이는 20m 이하입니까, 40m 이하입니까?",
+        "source": "PDF 153쪽 6-6-5 표의 시공량 구분",
+        "synonyms": {
+          "높이 20m이하": [
+            "20m이하",
+            "20m 이하"
+          ],
+          "높이 40m이하": [
+            "40m이하",
+            "40m 이하"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "설치할 점검통로의 발판면적은 몇 ㎡입니까?",
+        "source": "PDF 153쪽 6-6-5 표의 시공량 단위"
+      },
+      {
+        "name": "work_condition",
+        "type": "enum",
+        "allowed_values": [
+          "육상 크레인 시공",
+          "비계 설치 시공",
+          "교량상판 위 시공",
+          "해상 시공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 방법 및 조건은 무엇입니까? (육상 크레인 시공 / 비계 설치 시공 / 교량상판 위 시공 / 해상 시공)",
+        "source": "PDF 154쪽 [주] ③"
+      },
+      {
+        "name": "crane_spec",
+        "type": "enum",
+        "allowed_values": [
+          "작업여건에 적합한 규격"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "크레인의 규격은 무엇입니까? (작업여건 및 안전율을 고려하여 적합한 규격 적용)",
+        "source": "PDF 154쪽 [주] ④"
+      },
+      {
+        "name": "aerial_lift_spec",
+        "type": "enum",
+        "allowed_values": [
+          "작업여건에 적합한 규격"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "고소작업차의 규격은 무엇입니까? (작업여건 및 안전율을 고려하여 적합한 규격 적용)",
+        "source": "PDF 154쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p209-t2",
+        "role": "작업조 인원, 장비 대수 및 기준 일일시공량",
+        "source": "PDF 153쪽 6-6-5 표",
+        "unit": "인/작업조; 대/작업조; ㎡/일",
+        "values": {
+          "철공": {
+            "수량": "3"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "크레인": {
+            "수량": "1"
+          },
+          "고소작업차": {
+            "수량": "1"
+          },
+          "시공량": {
+            "높이 20m이하": "65",
+            "높이 40m이하": "50"
+          }
+        },
+        "cite": {
+          "table_id": "p209-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p209-t2",
+          "row": "시공량",
+          "column_input": "height"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p209-t2",
+          "column": "수량",
+          "trades": [
+            "철공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "철공": "1015",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": [
+          {
+            "name": "크레인",
+            "table": "p209-t2",
+            "unit": "대·일",
+            "machine_code_input": "crane_spec",
+            "operator_rate_code": "1048"
+          },
+          {
+            "name": "고소작업차",
+            "table": "p209-t2",
+            "unit": "대·일",
+            "machine_code_input": "aerial_lift_spec",
+            "operator_rate_code": "1048"
+          }
+        ],
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p209-t2에서 시공 높이에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = area ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(수량 열), 장비 대·일 = 작업일수 × 장비 대수(수량 열)로 구한다."
+      ],
+      "source": "PDF 153쪽 6-6-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "work_condition != 육상 크레인 시공",
+        "blocked_if": {
+          "input": "work_condition",
+          "op": "!=",
+          "value": "육상 크레인 시공"
+        },
+        "reason": "크레인 진입이 불가하여 비계를 설치하거나 교량상판 위, 해상에서 작업하는 경우 각각의 시공방법에 맞도록 별도 계상해야 함",
+        "source": "PDF 154쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p210-x0",
+          "quote": "③ 본 품은 육상에서 크레인을 이용하여 시공하는 경우를 기준한 것으로, 크레인 진입이 불가하여 비계를\n설명 | 설치하여 작업하는 경우 및 교량상판 위에서 작업하는 경우, 육상이 아닌 해상에서 작업하는 경우 등에 있어서는 각각의 시공방법에 맞도록 별도로 계상하여야 한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "교량 점검시설 제작비",
+        "source": "PDF 154쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p210-x0",
+          "quote": "① 본 품은 교량의 점검 및 유지관리를 위해 제작이 완료된 교량 점검시설을 교대 및 교각 등에 설치하는\n설명 | 기준이다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p210-x0",
+          "quote": "⑤ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수가 고정되어 있고, 조건(높이)에 따른 일일 시공량이 표로 제시되어 있으므로 일당 작업조형 계산이 적합함.",
+  "citations": [
+    {
+      "table_id": "p209-t2",
+      "row": "철공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p209-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p209-t2",
+      "row": "크레인",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p209-t2",
+      "row": "고소작업차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p209-t2",
+      "row": "시공량",
+      "column": "높이 20m이하",
+      "value": "65"
+    },
+    {
+      "table_id": "p209-t2",
+      "row": "시공량",
+      "column": "높이 40m이하",
+      "value": "50"
+    },
+    {
+      "chunk_id": "p210-x0",
+      "quote": "① 본 품은 교량의 점검 및 유지관리를 위해 제작이 완료된 교량 점검시설을 교대 및 교각 등에 설치하는\n설명 | 기준이다."
+    },
+    {
+      "chunk_id": "p210-x0",
+      "quote": "③ 본 품은 육상에서 크레인을 이용하여 시공하는 경우를 기준한 것으로, 크레인 진입이 불가하여 비계를\n설명 | 설치하여 작업하는 경우 및 교량상판 위에서 작업하는 경우, 육상이 아닌 해상에서 작업하는 경우 등에 있어서는 각각의 시공방법에 맞도록 별도로 계상하여야 한다."
+    },
+    {
+      "chunk_id": "p210-x0",
+      "quote": "④ 크레인 및 고소작업차의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율(적정하중, 작업반경 등)을\n설명 | 고려하여 적합한 규격을 적용한다."
+    },
+    {
+      "chunk_id": "p210-x0",
+      "quote": "⑤ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "명세 형식 예시에서 `equipment`는 단일 객체로 되어 있으나, 본 절에서는 크레인과 고소작업차 2종의 장비가 투입되므로 `equipment`를 배열로 확장하여 작성함. 시스템에서 배열 처리가 지원되는지 확인 필요.",
+    "작업조 인원 및 장비 수량이 조건에 따라 변하지 않고 고정된 단일 열('수량')로 존재하여, `crew` 파라미터에 `column_input` 대신 `column`을 사용함."
+  ],
+  "questions": [
+    "높이 15m 교량에 점검통로 100㎡를 설치할 때 품은 어떻게 되나요?",
+    "해상 교량에서 바지선 위에 크레인을 올려서 점검통로를 설치하는 경우 품셈 적용이 가능한가요?",
+    "크레인과 고소작업차의 규격은 어떤 기준으로 선정해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:39:50.809608+00:00",
+    "input_tokens": 12336,
+    "output_tokens": 3050,
+    "source_pages": [
+      209,
+      210,
+      211
+    ],
+    "prompt_sha256": "4bb5fc307619a2e3bab21ce6704015bc1388f6ab2a95306dc0ef63e312984c53",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

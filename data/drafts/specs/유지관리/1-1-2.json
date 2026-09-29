@@ -1,0 +1,195 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/1-1-2/지압판블록설치",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "1-1-2",
+    "title": "지압판블록 설치",
+    "work": "지압판블록 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      914
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "지압판블록 설치 물량은 몇 개소입니까?",
+        "source": "1-1-2 지압판블록 설치 표 시공량 단위"
+      },
+      {
+        "name": "is_block_under_2ton",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "프리캐스트 콘크리트 블록의 무게가 2ton 이하입니까?",
+        "source": "1-1-2 [주] ①"
+      },
+      {
+        "name": "is_standard_condition",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비탈경사 1:1.5 이하, 수직고 30m 이하의 기준을 만족합니까?",
+        "source": "1-1-2 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p914-t0",
+        "role": "지압판블록 설치 일당 작업조 및 시공량",
+        "source": "1-1-2 지압판블록 설치 표",
+        "unit": "인, 대, 개소",
+        "values": {
+          "중급기술자": {
+            "수량": "1"
+          },
+          "보링공": {
+            "수량": "1"
+          },
+          "특별인부": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "2"
+          },
+          "크레인": {
+            "수량": "1"
+          },
+          "고소작업차": {
+            "수량": "1"
+          },
+          "강연선인장기": {
+            "수량": "1"
+          },
+          "시공량": {
+            "개소": "9"
+          }
+        },
+        "cite": {
+          "table_id": "p914-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p914-t0에서 기준 일일시공량(9개소)을 확인한다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 인원, 장비 대·일 = 작업일수 × 표의 장비 대수로 구한다."
+      ],
+      "source": "1-1-2 지압판블록 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "블록 무게가 2ton을 초과하는 경우",
+        "blocked_if": {
+          "input": "is_block_under_2ton",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 2ton 이하 블록 설치 기준이므로 초과 시 별도 산정 필요",
+        "source": "1-1-2 [주] ①",
+        "cite": {
+          "section_no": "1-1-2",
+          "marker": "①"
+        }
+      },
+      {
+        "condition": "비탈경사 1:1.5 초과 또는 수직고 30m 초과인 경우",
+        "blocked_if": {
+          "input": "is_standard_condition",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 비탈경사 1:1.5 이하, 수직고 30m까지 기준이므로 초과 시 별도 산정 필요",
+        "source": "1-1-2 [주] ③",
+        "cite": {
+          "section_no": "1-1-2",
+          "marker": "③"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.06",
+        "cite": {
+          "section_no": "1-1-2",
+          "marker": "⑥"
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "일당 작업조에 크레인, 고소작업차, 강연선인장기 등 여러 대의 장비가 투입되나, 현재 adjusted_daily_crew 모델은 단일 장비만 지원하므로 자동 계산이 제한됩니다.",
+  "citations": [
+    {
+      "table_id": "p914-t0",
+      "row": "중급기술자",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p914-t0",
+      "row": "시공량(개소)",
+      "column": "시공량(개소)",
+      "value": "9"
+    },
+    {
+      "chunk_id": "p914-x9",
+      "quote": "① 본 품은 비탈면에 앵커를 사용한 프리캐스트 콘크리트 블록(2ton이하) 설치 기준이다."
+    },
+    {
+      "chunk_id": "p914-x9",
+      "quote": "③ 비탈경사 1:1.5이하, 수직고 30m까지 기준이다."
+    },
+    {
+      "chunk_id": "p914-x9",
+      "quote": "⑥ 공구손료 및 경장비(절단기, 발전기 등)의 기계경비는 인력품의 6%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "작업조에 크레인, 고소작업차, 강연선인장기 등 여러 장비가 포함되어 있으나, 현재 명세 형식의 adjusted_daily_crew 모델은 단일 장비(equipment 객체)만 지원하여 완벽한 모델링이 불가능합니다.",
+    "파싱 결과 p914-t0의 텍스트 구조가 원문 표와 다르게 뭉개져 있어, 행/열 이름을 추출하여 재구성했습니다."
+  ],
+  "questions": [
+    "지압판블록 설치 물량은 몇 개소입니까?",
+    "프리캐스트 콘크리트 블록의 무게가 2ton을 초과합니까?",
+    "비탈경사가 1:1.5를 초과하거나 수직고가 30m를 초과하는 현장입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:48:32.537628+00:00",
+    "input_tokens": 23569,
+    "output_tokens": 5087,
+    "source_pages": [
+      914,
+      915
+    ],
+    "prompt_sha256": "9a8eac52d631a57985588f737aa9aa4d4b8a753740b872acef9e6b4d48fad549",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

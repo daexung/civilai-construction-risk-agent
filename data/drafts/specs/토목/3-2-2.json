@@ -1,0 +1,142 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/3-2-2/기계굴착의능력",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "3-2-2",
+    "title": "기계굴착의 능력('07, '20년 보완)",
+    "work": "기계굴착 작업능력",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      339
+    ],
+    "inputs": [
+      {
+        "name": "equipment",
+        "type": "enum",
+        "allowed_values": [
+          "소형브레이커( 1 . 3 ㎥/ m i n )",
+          "대형브레이커 +굴착기0.7㎥"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용할 장비는 무엇입니까?",
+        "source": "PDF 339쪽 3-2-2 표의 구분",
+        "synonyms": {
+          "소형브레이커( 1 . 3 ㎥/ m i n )": [
+            "소형브레이커",
+            "소형 브레이커"
+          ],
+          "대형브레이커 +굴착기0.7㎥": [
+            "대형브레이커",
+            "대형 브레이커",
+            "대형브레이커+굴착기"
+          ]
+        }
+      },
+      {
+        "name": "rock_type",
+        "type": "enum",
+        "allowed_values": [
+          "풍화암",
+          "연암",
+          "보통암",
+          "경암"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "암질은 무엇입니까?",
+        "source": "PDF 339쪽 3-2-2 표의 구분"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p395-t1",
+        "role": "기계굴착의 작업능력",
+        "source": "PDF 339쪽 3-2-2 기계굴착의 능력 표",
+        "unit": "㎥/hr",
+        "values": {
+          "소형브레이커( 1 . 3 ㎥/ m i n )": {
+            "풍화암": "0.38"
+          },
+          "대형브레이커 +굴착기0.7㎥": {
+            "풍화암": "5.6∼6.8",
+            "연암": "4.5∼5.5",
+            "보통암": "3.1∼3.7",
+            "경암": "2.3∼2.9"
+          }
+        },
+        "cite": {
+          "table_id": "p395-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 장비와 암질에 따라 p395-t1 표에서 작업능력(㎥/hr)을 찾는다."
+      ],
+      "source": "PDF 339쪽 3-2-2 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "장비가 소형브레이커이고 암질이 풍화암이 아닌 경우",
+        "reason": "소형브레이커는 풍화암에 대한 작업능력만 표에 제시되어 있습니다.",
+        "source": "PDF 339쪽 3-2-2 표",
+        "cite": {
+          "table_id": "p395-t1"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "이 절은 조건(장비, 암질)에 따른 기계굴착의 작업능력(㎥/hr)을 표에서 찾아주는 역할만 하므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p395-t1",
+      "row": "소형브레이커( 1 . 3 ㎥/ m i n )",
+      "column": "풍화암",
+      "value": "0.38"
+    },
+    {
+      "table_id": "p395-t1",
+      "row": "대형브레이커 +굴착기0.7㎥",
+      "column": "풍화암",
+      "value": "5.6∼6.8"
+    },
+    {
+      "chunk_id": "p395-x22",
+      "quote": "현장조건에 따라 사용장비를 변경하여 적용할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "대형브레이커의 작업능력이 범위(예: 5.6~6.8)로 주어져 있는데, 정확한 단일 값을 어떻게 결정해야 하는지 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "대형브레이커와 굴착기 조합으로 연암을 굴착할 때 작업능력은 얼마인가요?",
+    "대형브레이커 작업능력이 5.6~6.8로 범위로 나와있는데, 이 중 어떤 값을 적용해야 하나요?",
+    "소형브레이커로 연암을 굴착할 때의 작업능력은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:42.255264+00:00",
+    "input_tokens": 11665,
+    "output_tokens": 1390,
+    "source_pages": [
+      395,
+      396
+    ],
+    "prompt_sha256": "c4af91d7c45807d6c493004918bdef7856e8ea9ed1351ec1865b6a99fbf93bae",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

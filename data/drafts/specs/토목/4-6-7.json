@@ -1,0 +1,118 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-6-7/교상발판설치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-6-7",
+    "title": "교상발판 설치('12년 보완)",
+    "work": "교상발판 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      352
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "10m",
+        "required": true,
+        "ask": "교상발판 설치 물량은 몇 10m입니까? (예: 30m인 경우 3 입력)",
+        "source": "PDF 352쪽 4-6-7 표 단위 (10m당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p408-t2",
+        "role": "교상발판 설치 단위당 품",
+        "source": "PDF 352쪽 4-6-7 표",
+        "unit": "인/10m",
+        "values": {
+          "궤도공": {
+            "수량": "0.687"
+          },
+          "보통인부": {
+            "수량": "0.344"
+          }
+        },
+        "cite": {
+          "table_id": "p408-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p408-t2",
+          "row_input": "직종",
+          "column_input": "수량",
+          "trades": [
+            "궤도공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 352쪽 4-6-7 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(10m당)에 대한 직종별 품이 표에 직접 제시되어 있으므로 per_unit 모델이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p408-t2",
+      "row": "궤도공",
+      "column": "수량",
+      "value": "0.687"
+    },
+    {
+      "table_id": "p408-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.344"
+    },
+    {
+      "chunk_id": "p408-x14",
+      "quote": "본 품은 교량상에 작업자의 이동을 위한 발판을 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p408-x14",
+      "quote": "발판설치, 발판고정 품을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "교상발판 50m를 설치할 때 품은 어떻게 되나요?",
+    "발판고정 작업도 이 품에 포함되나요?",
+    "물량 입력 시 단위를 m로 해야 하나요, 10m로 해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:58:23.402349+00:00",
+    "input_tokens": 11456,
+    "output_tokens": 1018,
+    "source_pages": [
+      408,
+      409
+    ],
+    "prompt_sha256": "3c2d04bdb2915e64bd0b5b00d59a935b1741748e024b99cdd43e62824640f0f9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

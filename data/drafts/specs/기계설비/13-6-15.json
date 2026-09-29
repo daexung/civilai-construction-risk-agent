@@ -1,0 +1,121 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-15/Trash_Rack_제작",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-15",
+    "title": "Trash Rack 제작",
+    "work": "Trash Rack 제작 (ton당)",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      819,
+      820
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Trash Rack 제작 물량은 몇 ton입니까?",
+        "source": "PDF 819쪽 1. 공정별 제작품 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p876-t0",
+        "role": "공정별 제작품 (용접~보조)",
+        "source": "PDF 820쪽 1. 공정별 제작품",
+        "unit": "인/ton",
+        "values": {
+          "용접": {
+            "직종": "플랜트용접공",
+            "수량": "4.46"
+          },
+          "교정": {
+            "직종": "플랜트제관공",
+            "수량": "0.75"
+          },
+          "조작": {
+            "직종": "특수비계공",
+            "수량": "3.3"
+          },
+          "소운반": {
+            "직종": "인부",
+            "수량": "1"
+          },
+          "보조(기능)": {
+            "직종": "특별인부",
+            "수량": "37.68"
+          }
+        },
+        "cite": {
+          "table_id": "p876-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "Trash Rack 제작 물량(ton)을 입력받는다.",
+        "표에 제시된 직종별 수량(ton당)을 물량에 곱하여 총 품을 산출해야 하나, 파싱 결과의 한계로 전체 직종에 대한 자동 계산이 불가하다."
+      ],
+      "source": "PDF 819~820쪽 1. 공정별 제작품",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "소모자재 (산소, 아세틸렌 등)",
+        "source": "PDF 820쪽 2. 소모자재",
+        "cite": {
+          "table_id": "p876-t1"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에서 공정별 행 이름이 하나로 병합되어 있고, 동일 직종(예: 플랜트제관공)이 여러 번 등장하여 JSON 객체의 키로 고유하게 식별할 수 없어 자동 계산 명세로 구성하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p876-t0",
+      "row": "용접",
+      "column": "수량",
+      "value": "4.46"
+    },
+    {
+      "chunk_id": "p876-x15",
+      "quote": "산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 `p875-t2`와 `p876-t1`의 행 이름이 여러 공정명으로 병합되어 있고, 동일 직종/품명이 여러 번 등장하여 JSON 객체의 키로 고유하게 식별할 수 없습니다. 직종별 합산 수량이 명확히 파싱되어야 자동 계산이 가능합니다."
+  ],
+  "questions": [
+    "Trash Rack 제작 물량이 10ton일 때, 플랜트용접공의 총 투입 인력은 어떻게 계산하나요?",
+    "표에 플랜트제관공이 여러 공정에 걸쳐 나뉘어 있는데, 전체 투입 인력을 구하려면 어떻게 합산해야 하나요?",
+    "소모자재인 산소와 아세틸렌의 수량은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:33:35.772840+00:00",
+    "input_tokens": 13245,
+    "output_tokens": 1212,
+    "source_pages": [
+      875,
+      876,
+      877
+    ],
+    "prompt_sha256": "872e03fc6e2bc6055d20d6132e3b3a9fe80e767032e6c0998d0f4b86bd3bf833",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-8-5/교량_낙하물방지망_설치_및_해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-8-5",
+    "title": "교량 낙하물방지망 설치 및 해체",
+    "work": "설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      52
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "설치 및 해체할 교량 낙하물방지망의 면적은 몇 ㎡입니까?",
+        "source": "PDF 52쪽 2-8-5 표의 시공량 단위(㎡)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p108-t1",
+        "role": "작업조 인원 및 장비 대수, 일일시공량",
+        "source": "PDF 52쪽 2-8-5 표",
+        "unit": "인/일, 대/일, ㎡/일",
+        "values": {
+          "비계공": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎡)": "180"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(㎡)": "180"
+          },
+          "고소작업차": {
+            "단위": "대",
+            "수량": "1",
+            "시공량(㎡)": "180"
+          }
+        },
+        "cite": {
+          "table_id": "p108-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p108-t1",
+          "row": "비계공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p108-t1",
+          "column": "수량",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "equipment": {
+          "name": "고소작업차",
+          "table": "p108-t1",
+          "unit": "대·일",
+          "column": "수량"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p108-t1에서 일당 시공량(180㎡)을 가져온다.",
+        "작업일수 = quantity ÷ 일당 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 수량, 고소작업차 대·일 = 작업일수 × 표의 수량으로 구한다."
+      ],
+      "source": "PDF 52쪽 2-8-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p108-x13",
+          "quote": "공구손료 및 경장비(와이어윈치 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량(180㎡)과 그에 따른 작업조(비계공, 보통인부, 고소작업차)가 표로 명확히 제시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p108-t1",
+      "row": "비계공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p108-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p108-t1",
+      "row": "고소작업차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p108-t1",
+      "row": "비계공",
+      "column": "시공량(㎡)",
+      "value": "180"
+    },
+    {
+      "chunk_id": "p108-x13",
+      "quote": "공구손료 및 경장비(와이어윈치 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "고소작업차의 규격은 작업여건에 따라 적합한 규격을 적용하라고 되어 있으나, 구체적인 규격 판정 기준이 없어 사용자가 직접 단가를 선택해야 할 수 있습니다."
+  ],
+  "questions": [
+    "교량 낙하물방지망 500㎡를 설치 및 해체할 때 필요한 비계공과 보통인부의 품은 얼마인가요?",
+    "고소작업차의 규격은 어떻게 결정해야 하나요?",
+    "공구손료 및 경장비 비용은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:15:58.430096+00:00",
+    "input_tokens": 11624,
+    "output_tokens": 1544,
+    "source_pages": [
+      108,
+      109
+    ],
+    "prompt_sha256": "ae650a2354fa207f0057e4bbda68e44232e2f9c0aacdc2416626326708479474",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-32/보차도 및 도로경계블록 철거",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-32",
+    "title": "보차도 및 도로경계블록 철거",
+    "work": "기본 철거 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      892
+    ],
+    "inputs": [
+      {
+        "name": "type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건에 따른 적용기준은 A-Type과 B-Type 중 무엇입니까? 장비이동 및 적재 공간 여건을 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p948-t1",
+        "source": "PDF 892쪽 p948-t0 및 p948-t1",
+        "synonyms": {
+          "A-Type": [
+            "A타입",
+            "A형"
+          ],
+          "B-Type": [
+            "B타입",
+            "B형"
+          ]
+        }
+      },
+      {
+        "name": "size",
+        "type": "enum",
+        "allowed_values": [
+          "300미만",
+          "350미만",
+          "400미만",
+          "500미만",
+          "500이상"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "경계블록의 규격(아래폭+높이)은 얼마입니까?",
+        "source": "PDF 892쪽 p948-t0",
+        "synonyms": {
+          "300미만": [
+            "300 미만"
+          ],
+          "350미만": [
+            "350 미만"
+          ],
+          "400미만": [
+            "400 미만"
+          ],
+          "500미만": [
+            "500 미만"
+          ],
+          "500이상": [
+            "500 이상"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "철거할 보차도 및 도로경계블록의 물량은 몇 m입니까?",
+        "source": "PDF 892쪽 p948-t0 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p948-t0",
+        "role": "구분 및 규격별 시공량, 작업조 인원 및 장비 대수",
+        "source": "PDF 892쪽 2-1-32 표",
+        "unit": "시공량: m/일, 인원: 인/작업조, 장비: 대/작업조",
+        "values": {
+          "300미만": {
+            "A-Type": "500",
+            "B-Type": "400"
+          },
+          "350미만": {
+            "A-Type": "420",
+            "B-Type": "335"
+          },
+          "400미만": {
+            "A-Type": "390",
+            "B-Type": "310"
+          },
+          "500미만": {
+            "A-Type": "270",
+            "B-Type": "215"
+          },
+          "500이상": {
+            "A-Type": "170",
+            "B-Type": "130"
+          },
+          "특별인부": {
+            "A-Type": "2",
+            "B-Type": "2"
+          },
+          "보통인부": {
+            "A-Type": "1",
+            "B-Type": "1"
+          },
+          "굴착기(0.4㎥)": {
+            "A-Type": "1"
+          },
+          "굴착기(0.2㎥)": {
+            "B-Type": "1"
+          },
+          "트럭(2.5ton)": {
+            "A-Type": "1",
+            "B-Type": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p948-t0"
+        }
+      },
+      {
+        "id": "p948-t1",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 892쪽 [주] ③ 표",
+        "values": {
+          "적용기준": {
+            "A-Type": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간",
+            "B-Type": "- 차도인접, 주택가 보도 등 장비이동 및 적재 공간이 협소한 구간"
+          }
+        },
+        "cite": {
+          "table_id": "p948-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p948-t0",
+          "row_input": "size",
+          "column_input": "type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p948-t0",
+          "column_input": "type",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": [
+          {
+            "name": "굴착기(0.4㎥)",
+            "table": "p948-t0",
+            "column_input": "type",
+            "unit": "대·일",
+            "operator_rate_code": "1048"
+          },
+          {
+            "name": "굴착기(0.2㎥)",
+            "table": "p948-t0",
+            "column_input": "type",
+            "unit": "대·일",
+            "operator_rate_code": "1048"
+          },
+          {
+            "name": "트럭(2.5ton)",
+            "table": "p948-t0",
+            "column_input": "type",
+            "unit": "대·일",
+            "operator_rate_code": "1048"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p948-t0에서 type과 size에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "p948-t0에서 type에 따른 직종별 인원과 장비 대수를 고른다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 892쪽 p948-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "콘크리트 절단 및 깨기, 터파기 및 되메우기, 잔토처리",
+        "source": "PDF 892쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p948-x19",
+          "quote": "콘크리트 절단 및 깨기, 터파기 및 되메우기, 잔토처리는 현장 여건에 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "폐기물처리",
+        "source": "PDF 892쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p948-x19",
+          "quote": "폐기물처리는 별도 계상한다."
+        }
+      },
+      {
+        "item": "도심지 할증",
+        "source": "PDF 892쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p948-x15",
+          "quote": "‘[공통부문] 1-4-4 지세/지형 2.도심지’ 할증을 적용하지 않는다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(인원 및 장비)와 일일시공량이 표에 제시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구하고 인·일을 산출하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p948-t0",
+      "row": "300미만",
+      "column": "A-Type",
+      "value": "500"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "특별인부",
+      "column": "A-Type",
+      "value": "2"
+    },
+    {
+      "table_id": "p948-t1",
+      "row": "적용기준",
+      "column": "A-Type",
+      "value": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+    },
+    {
+      "chunk_id": "p948-x15",
+      "quote": "본 품은 장비를 사용하여 화강암 및 콘크리트 경계블록을 철거하는 기준이다."
+    },
+    {
+      "chunk_id": "p948-x19",
+      "quote": "콘크리트 절단 및 깨기, 터파기 및 되메우기, 잔토처리는 현장 여건에 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p948-x19",
+      "quote": "폐기물처리는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p948-x15",
+      "quote": "‘[공통부문] 1-4-4 지세/지형 2.도심지’ 할증을 적용하지 않는다."
+    }
+  ],
+  "open_questions": [
+    "원문 [주] ⑥에 '장비의 종류 및 규격은 현장여건에 따라 변경할 수 있다'고 명시되어 있으나, 변경 시 품셈 조정 방식이나 대체 장비 기준이 없어 기본 장비로만 계산하도록 구성했습니다."
+  ],
+  "questions": [
+    "A-Type과 B-Type의 차이는 무엇인가요?",
+    "현장 여건에 따라 장비 규격을 변경하면 품은 어떻게 계산하나요?",
+    "철거할 경계블록의 물량은 어디에 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:51:20.180858+00:00",
+    "input_tokens": 12396,
+    "output_tokens": 2924,
+    "source_pages": [
+      948,
+      949
+    ],
+    "prompt_sha256": "a3760d91d2abcf3fa2cefee53429cef638c902fa4d9afe2e832af6ee3d0d7815",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

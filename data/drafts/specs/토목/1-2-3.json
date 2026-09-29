@@ -1,0 +1,217 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-2-3/기계포설_본선",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-2-3",
+    "title": "기계포설(본선)",
+    "work": "동상방지층 포설 및 다짐",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      308
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "동상방지층 포설 물량은 몇 ㎥입니까?",
+        "source": "PDF 308쪽 1-2-3 표 시공량(㎥)"
+      },
+      {
+        "name": "manual_watering",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "순수 인력 살수를 진행합니까?",
+        "source": "PDF 308쪽 1-2-3 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p364-t1",
+        "role": "기계포설(본선) 일당 작업조 및 시공량",
+        "source": "PDF 308쪽 1-2-3 기계포설(본선) 표",
+        "unit": "인/작업조, 대/작업조, ㎥/일",
+        "values": {
+          "포설공": {
+            "수량": "2",
+            "시공량(㎥)": "600"
+          },
+          "모터그레이더": {
+            "수량": "1"
+          },
+          "진동롤러": {
+            "수량": "1"
+          },
+          "살수차": {
+            "수량": "0.5"
+          },
+          "비고": {
+            "내용": "- 순수 인력 살수시에는 살수품을 100㎡당 1인 가산한다."
+          }
+        },
+        "cite": {
+          "table_id": "p364-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p364-t1",
+          "row": "포설공",
+          "column": "시공량(㎥)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p364-t1",
+          "column": "수량",
+          "trades": [
+            "포설공"
+          ],
+          "rate_codes": {
+            "포설공": null
+          }
+        },
+        "equipment": [
+          {
+            "name": "모터그레이더",
+            "table": "p364-t1",
+            "unit": "대·일",
+            "machine_code_input": null,
+            "operator_rate_code": null
+          },
+          {
+            "name": "진동롤러",
+            "table": "p364-t1",
+            "unit": "대·일",
+            "machine_code_input": null,
+            "operator_rate_code": null
+          },
+          {
+            "name": "살수차",
+            "table": "p364-t1",
+            "unit": "대·일",
+            "machine_code_input": null,
+            "operator_rate_code": null
+          }
+        ],
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p364-t1에서 기준 일일시공량(600㎥)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 308쪽 1-2-3 기계포설(본선) 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "순수 인력 살수 진행 시",
+        "blocked_if": {
+          "input": "manual_watering",
+          "op": "==",
+          "value": true
+        },
+        "reason": "순수 인력 살수 시 100㎡당 1인을 가산해야 하나, 현재 계산 모델은 면적 비례 동적 인원 가산을 지원하지 않음",
+        "source": "PDF 308쪽 1-2-3 표 비고",
+        "cite": {
+          "table_id": "p364-t1",
+          "row": "비고"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "살수용 물(ton) 재료비",
+        "source": "PDF 308쪽 1-2-3 [주] ④",
+        "cite": {
+          "chunk_id": "p364-x14",
+          "quote": "두께 20㎝일 때 100㎡당 살수량은 일반적으로 2ton을 표준으로 한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "기준 일일시공량(600㎥)과 작업조 인원/장비 대수가 표로 주어져 있어, 물량을 일일시공량으로 나누어 작업일수를 구하는 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p364-t1",
+      "row": "포설공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p364-t1",
+      "row": "포설공",
+      "column": "시공량(㎥)",
+      "value": "600"
+    },
+    {
+      "table_id": "p364-t1",
+      "row": "모터그레이더",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p364-t1",
+      "row": "진동롤러",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p364-t1",
+      "row": "살수차",
+      "column": "수량",
+      "value": "0.5"
+    },
+    {
+      "chunk_id": "p364-x14",
+      "quote": "본 품은 모터그레이더를 사용한 본선구간의 동상방지층 포설 및 다짐 기준이다."
+    },
+    {
+      "chunk_id": "p364-x14",
+      "quote": "순수 인력 살수시에는 살수품을 100㎡당 1인 가산한다."
+    }
+  ],
+  "open_questions": [
+    "순수 인력 살수 시 100㎡당 1인 가산 규칙을 `crew_rules`로 처리할 수 없어 `blocked` 처리했습니다. 면적 비례 인원 가산을 지원하는 모델 확장이 필요합니다.",
+    "`equipment` 필드가 스펙 예시에는 단일 객체로 되어 있으나, 본 절에는 장비가 3종류이므로 배열로 작성했습니다. 스펙상 허용되는지 확인이 필요합니다.",
+    "`base_output`에서 입력값에 따른 선택이 아닌 고정된 행/열(포설공/시공량)을 참조하도록 `row`, `column`을 직접 지정했습니다."
+  ],
+  "questions": [
+    "기계포설(본선) 작업의 일일 시공량은 얼마인가요?",
+    "순수 인력 살수를 할 경우 인원 가산은 어떻게 계산하나요?",
+    "포설할 동상방지층의 총 물량(㎥)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:56.865392+00:00",
+    "input_tokens": 11609,
+    "output_tokens": 2142,
+    "source_pages": [
+      364,
+      365
+    ],
+    "prompt_sha256": "e8155baa0987964fc9cb989a96ef23637d2ae08614578bf6482e470542c861d5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p364-x14 조각 텍스트에 없음"
+    ]
+  }
+}

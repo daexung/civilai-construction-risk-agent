@@ -1,0 +1,181 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-2-1/금속기와해체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-2-1",
+    "title": "금속기와 해체('22년 신설)",
+    "work": "금속기와 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      914
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "금속기와 해체 물량은 몇 ㎡입니까?",
+        "source": "단위 (㎡당)"
+      },
+      {
+        "name": "is_reused",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해체하는 금속기와 지붕을 재사용할 계획입니까?",
+        "source": "[주] ① 본 품은 금속기와 지붕을 재사용하지 아니하는 때의 절단하여 해체하는 기준이다."
+      }
+    ],
+    "tables": [
+      {
+        "id": "p970-t0",
+        "role": "금속기와 해체 단위당 품",
+        "source": "3-2-1 금속기와 해체 표",
+        "unit": "인/㎡",
+        "values": {
+          "지붕잇기공": {
+            "수량": "0.018"
+          },
+          "보통인부": {
+            "수량": "0.012"
+          }
+        },
+        "cite": {
+          "table_id": "p970-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p970-t0",
+          "row_input": null,
+          "column_input": "수량",
+          "trades": [
+            "지붕잇기공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "3-2-1 금속기와 해체 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "금속기와 지붕을 재사용하는 경우",
+        "blocked_if": {
+          "input": "is_reused",
+          "op": "==",
+          "value": true
+        },
+        "reason": "본 품은 금속기와 지붕을 재사용하지 아니하는 때의 절단하여 해체하는 기준이므로, 재사용 시에는 적용할 수 없습니다.",
+        "source": "[주] ①",
+        "cite": {
+          "chunk_id": "p970-x3",
+          "quote": "본 품은 금속기와 지붕을 재사용하지 아니하는 때의 절단하여 해체하는 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비산방지, 보호 및 안전시설 등의 설치비",
+        "source": "[주] ③",
+        "cite": {
+          "chunk_id": "p970-x3",
+          "quote": "비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "폐기물 처리비용",
+        "source": "[주] ④",
+        "cite": {
+          "chunk_id": "p970-x3",
+          "quote": "폐기물 처리비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(절단기 등)의 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p970-x3",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 ㎡당 직종별 인원이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p970-t0",
+      "row": "지붕잇기공",
+      "column": "수량",
+      "value": "0.018"
+    },
+    {
+      "table_id": "p970-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.012"
+    },
+    {
+      "chunk_id": "p970-x3",
+      "quote": "본 품은 금속기와 지붕을 재사용하지 아니하는 때의 절단하여 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p970-x3",
+      "quote": "비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p970-x3",
+      "quote": "폐기물 처리비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p970-x3",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "금속기와 해체 물량은 몇 ㎡입니까?",
+    "해체한 금속기와를 재사용할 계획입니까?",
+    "공구손료 외에 추가로 계상해야 할 기계경비가 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:32.697372+00:00",
+    "input_tokens": 11531,
+    "output_tokens": 1680,
+    "source_pages": [
+      970,
+      971
+    ],
+    "prompt_sha256": "61634c1f02a9218292f2056ea771848add575ac64f30859c65022b29684d4e03",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

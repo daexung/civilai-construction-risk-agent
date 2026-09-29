@@ -1,0 +1,207 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/11-3-3/직독식가스미터설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "11-3-3",
+    "title": "직독식 가스미터 설치('15년 보완)",
+    "work": "직독식 가스미터 설치 품 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      2
+    ],
+    "inputs": [
+      {
+        "name": "meter_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø15㎜",
+          "ø20 ∼ 25㎜"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "가스미터의 구경은 얼마입니까?",
+        "source": "PDF 2쪽 p772-t1",
+        "synonyms": {
+          "ø15㎜": [
+            "15mm",
+            "15미리",
+            "ø15"
+          ],
+          "ø20 ∼ 25㎜": [
+            "20~25mm",
+            "20-25미리",
+            "ø20∼25"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "가스미터 설치 수량은 몇 개소입니까?",
+        "source": "PDF 2쪽 p772-t1 기준 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p772-t1",
+        "role": "직독식 가스미터 설치 인력 품",
+        "source": "PDF 2쪽 11-3-3 직독식 가스미터 설치 표",
+        "unit": "인/개소",
+        "values": {
+          "배관공": {
+            "ø15㎜": "0.209",
+            "ø20 ∼ 25㎜": "0.250"
+          },
+          "보통인부": {
+            "ø15㎜": "0.052",
+            "ø20 ∼ 25㎜": "0.063"
+          }
+        },
+        "cite": {
+          "table_id": "p772-t1"
+        }
+      },
+      {
+        "id": "p772-t2",
+        "role": "직독식 가스미터 설치 재료량",
+        "source": "PDF 2쪽 11-3-3 직독식 가스미터 설치 재료량 표",
+        "unit": "㎝, g",
+        "values": {
+          "ø15": {
+            "스레트실테이프(㎝)": "45.7",
+            "컴파운드(g)": "4"
+          },
+          "ø20∼25": {
+            "스레트실테이프(㎝)": "68.6",
+            "컴파운드(g)": "6"
+          }
+        },
+        "cite": {
+          "table_id": "p772-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p772-t1",
+          "row_input": "고정 행이름",
+          "column_input": "meter_size",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p772-t1에서 구경별 배관공, 보통인부의 단위당 품을 찾는다.",
+        "p772-t2에서 구경별 스레트실테이프, 컴파운드의 단위당 재료량을 찾는다.",
+        "단위당 품과 재료량에 수량(quantity)을 곱하여 총 투입량을 구한다."
+      ],
+      "source": "PDF 2쪽 11-3-3",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소)당 인력 품과 재료량이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p772-t1",
+      "row": "배관공",
+      "column": "ø15㎜",
+      "value": "0.209"
+    },
+    {
+      "table_id": "p772-t1",
+      "row": "배관공",
+      "column": "ø20 ∼ 25㎜",
+      "value": "0.250"
+    },
+    {
+      "table_id": "p772-t1",
+      "row": "보통인부",
+      "column": "ø15㎜",
+      "value": "0.052"
+    },
+    {
+      "table_id": "p772-t1",
+      "row": "보통인부",
+      "column": "ø20 ∼ 25㎜",
+      "value": "0.063"
+    },
+    {
+      "table_id": "p772-t2",
+      "row": "ø15",
+      "column": "스레트실테이프(㎝)",
+      "value": "45.7"
+    },
+    {
+      "table_id": "p772-t2",
+      "row": "ø15",
+      "column": "컴파운드(g)",
+      "value": "4"
+    },
+    {
+      "table_id": "p772-t2",
+      "row": "ø20∼25",
+      "column": "스레트실테이프(㎝)",
+      "value": "68.6"
+    },
+    {
+      "table_id": "p772-t2",
+      "row": "ø20∼25",
+      "column": "컴파운드(g)",
+      "value": "6"
+    },
+    {
+      "chunk_id": "p772-x15",
+      "quote": "① 본 품은 가스미터를 세대내에 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p772-x15",
+      "quote": "② 가스미터 설치 및 고정, 작동시험 및 마무리 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p772-x15",
+      "quote": "③ 재료량은 다음과 같다."
+    }
+  ],
+  "open_questions": [
+    "재료량 표(p772-t2)의 행 이름이 'ø15', 'ø20∼25'로 인력 품 표(p772-t1)의 열 이름 'ø15㎜', 'ø20 ∼ 25㎜'와 약간 다르게 표기되어 있어 매핑 처리가 필요함."
+  ],
+  "questions": [
+    "가스미터 구경이 15mm일 때 배관공 품은 얼마인가요?",
+    "가스미터 설치 시 스레트실테이프와 컴파운드 외에 다른 부속자재는 어떻게 계상하나요?",
+    "가스미터 설치 수량을 입력하지 않았습니다. 몇 개소 설치하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:45:27.519328+00:00",
+    "input_tokens": 12440,
+    "output_tokens": 2042,
+    "source_pages": [
+      699,
+      772,
+      773
+    ],
+    "prompt_sha256": "379af40d0f85af2ef5b7e42eabd42a4ab52d43fce57100e4ecbbe41fcb003024",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

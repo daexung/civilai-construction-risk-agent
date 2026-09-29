@@ -1,0 +1,267 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-1-6/Oil_Flushing",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-1-6",
+    "title": "Oil Flushing",
+    "work": "Oil Flushing 품량 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      739
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø8",
+          "10",
+          "15",
+          "20",
+          "25",
+          "32",
+          "40",
+          "50",
+          "ø65",
+          "80",
+          "100",
+          "125",
+          "150",
+          "200",
+          "250",
+          "300"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "배관 규격은 몇 ㎜입니까?",
+        "source": "PDF 739쪽 13-1-6 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Oil Flushing 물량은 몇 ton입니까?",
+        "source": "PDF 739쪽 13-1-6 표 단위"
+      },
+      {
+        "name": "scale_roughness",
+        "type": "enum",
+        "allowed_values": [
+          "200#",
+          "100#",
+          "50#",
+          "50# 미만"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Scale의 조도는 얼마입니까?",
+        "source": "PDF 739쪽 [주] ①, ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p795-t0",
+        "role": "규격별 Oil Flushing 단위당 품",
+        "source": "PDF 739쪽 13-1-6 표",
+        "unit": "인/ton",
+        "values": {
+          "ø8": {
+            "플랜트\n배관공": "7.43",
+            "보통\n인부": "141.19"
+          },
+          "10": {
+            "플랜트\n배관공": "6.32",
+            "보통\n인부": "120.00"
+          },
+          "15": {
+            "플랜트\n배관공": "4.94",
+            "보통\n인부": "93.89"
+          },
+          "20": {
+            "플랜트\n배관공": "4.38",
+            "보통\n인부": "83.30"
+          },
+          "25": {
+            "플랜트\n배관공": "3.72",
+            "보통\n인부": "70.59"
+          },
+          "32": {
+            "플랜트\n배관공": "2.75",
+            "보통\n인부": "52.29"
+          },
+          "40": {
+            "플랜트\n배관공": "2.33",
+            "보통\n인부": "44.25"
+          },
+          "50": {
+            "플랜트\n배관공": "1.76",
+            "보통\n인부": "33.35"
+          },
+          "ø65": {
+            "플랜트\n배관공": "1.05",
+            "보통\n인부": "19.89"
+          },
+          "80": {
+            "플랜트\n배관공": "0.85",
+            "보통\n인부": "16.05"
+          },
+          "100": {
+            "플랜트\n배관공": "0.60",
+            "보통\n인부": "11.33"
+          },
+          "125": {
+            "플랜트\n배관공": "0.44",
+            "보통\n인부": "8.31"
+          },
+          "150": {
+            "플랜트\n배관공": "0.34",
+            "보통\n인부": "6.55"
+          },
+          "200": {
+            "플랜트\n배관공": "0.23",
+            "보통\n인부": "4.30"
+          },
+          "250": {
+            "플랜트\n배관공": "0.16",
+            "보통\n인부": "3.06"
+          },
+          "300": {
+            "플랜트\n배관공": "0.12",
+            "보통\n인부": "2.31"
+          }
+        },
+        "cite": {
+          "table_id": "p795-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p795-t0",
+          "row_input": "pipe_size",
+          "trades": [
+            "플랜트\n배관공",
+            "보통\n인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "scale_roughness": "100#"
+            },
+            "change": "-10%",
+            "source": "PDF 739쪽 [주] ②"
+          },
+          {
+            "when": {
+              "scale_roughness": "50#"
+            },
+            "change": "-20%",
+            "source": "PDF 739쪽 [주] ②"
+          }
+        ]
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "note_adjustments를 원문 순서대로 적용하여 조도에 따른 감산을 수행한다."
+      ],
+      "source": "PDF 739쪽 13-1-6",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [
+      {
+        "condition": "Scale의 조도가 50# 미만인 경우",
+        "blocked_if": {
+          "input": "scale_roughness",
+          "op": "==",
+          "value": "50# 미만"
+        },
+        "reason": "본 품은 Scale의 조도가 50# 이상인 경우에 한하여 적용함",
+        "source": "PDF 739쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p795-x9",
+          "quote": "본 품은 Scale의 조도가 50# 이상인 경우에 한하여 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "Flushing을 위한 가배관 및 철거품",
+        "source": "PDF 739쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p795-x9",
+          "quote": "Flushing을 위한 가배관 및 철거품은 별도 계상한다."
+        }
+      },
+      {
+        "item": "장비 및 공구손료",
+        "source": "PDF 739쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p795-x9",
+          "quote": "장비 및 공구손료는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 품이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p795-t0",
+      "row": "100",
+      "column": "플랜트\n배관공",
+      "value": "0.60"
+    },
+    {
+      "chunk_id": "p795-x9",
+      "quote": "본 품은 Scale의 조도가 50# 이상인 경우에 한하여 적용한다."
+    },
+    {
+      "chunk_id": "p795-x9",
+      "quote": "본 품은 Scale의 조도가 200#를 기준한 것으로 100#까지 10%, 50#까지 20%를 감한다."
+    },
+    {
+      "chunk_id": "p795-x9",
+      "quote": "Flushing을 위한 가배관 및 철거품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p795-x9",
+      "quote": "장비 및 공구손료는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "Scale 조도가 100#와 200# 사이(예: 150#)이거나 50#와 100# 사이인 경우 보간을 해야 하는지, 아니면 구간별로 일괄 적용해야 하는지 명확하지 않습니다."
+  ],
+  "questions": [
+    "배관 규격이 100mm일 때 플랜트배관공 품은 얼마인가요?",
+    "Scale 조도가 150#인 경우 감산 비율은 어떻게 적용해야 하나요?",
+    "Scale 조도가 몇 #인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:45:31.845005+00:00",
+    "input_tokens": 12171,
+    "output_tokens": 2560,
+    "source_pages": [
+      795,
+      796
+    ],
+    "prompt_sha256": "e386e0996c241591006d3c73b7d1b268e5e51188b0ddc9215830f77815706d10",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

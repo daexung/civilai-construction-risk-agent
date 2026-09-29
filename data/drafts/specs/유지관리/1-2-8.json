@@ -1,0 +1,163 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/1-2-8/인력관수",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "1-2-8",
+    "title": "인력관수('19, '22년 보완)",
+    "work": "인력에 의한 교목관수",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      862
+    ],
+    "inputs": [
+      {
+        "name": "tree_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "10㎝미만",
+          "10∼20㎝미만",
+          "20∼30㎝미만",
+          "30∼40㎝미만",
+          "40㎝이상"
+        ],
+        "unit": "㎝",
+        "required": true,
+        "ask": "관수할 교목의 흉고직경은 얼마입니까?",
+        "source": "PDF 862쪽 1-2-8 표의 흉고직경 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "주",
+        "required": true,
+        "ask": "관수할 수목의 수량은 몇 주입니까?",
+        "source": "PDF 862쪽 1-2-8 표의 시공량 단위(주)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p918-t1",
+        "role": "흉고직경별 일일시공량 및 인력편성",
+        "source": "PDF 862쪽 1-2-8 표",
+        "unit": "주/일, 인/일",
+        "values": {
+          "보통인부": {
+            "수량": "1",
+            "10㎝미만": "33",
+            "10∼20㎝미만": "25",
+            "20∼30㎝미만": "17",
+            "30∼40㎝미만": "13",
+            "40㎝이상": "10"
+          }
+        },
+        "cite": {
+          "table_id": "p918-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p918-t1",
+          "row": "보통인부",
+          "column_input": "tree_diameter"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p918-t1",
+          "column": "수량",
+          "trades": [
+            "보통인부"
+          ],
+          "rate_codes": {
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p918-t1에서 흉고직경에 따른 기준 일일시공량을 찾는다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "보통인부 인·일 = 작업일수 × 1(수량)로 구한다."
+      ],
+      "source": "PDF 862쪽 1-2-8 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(보통인부 1인)와 흉고직경별 일일시공량이 표로 제시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p918-t1",
+      "row": "보통인부",
+      "column": "10㎝미만",
+      "value": "33"
+    },
+    {
+      "table_id": "p918-t1",
+      "row": "보통인부",
+      "column": "10∼20㎝미만",
+      "value": "25"
+    },
+    {
+      "table_id": "p918-t1",
+      "row": "보통인부",
+      "column": "20∼30㎝미만",
+      "value": "17"
+    },
+    {
+      "table_id": "p918-t1",
+      "row": "보통인부",
+      "column": "30∼40㎝미만",
+      "value": "13"
+    },
+    {
+      "table_id": "p918-t1",
+      "row": "보통인부",
+      "column": "40㎝이상",
+      "value": "10"
+    },
+    {
+      "table_id": "p918-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p918-x11",
+      "quote": "[주] 본 품은 인력에 의한 교목관수 기준이다."
+    }
+  ],
+  "open_questions": [
+    "관수에 필요한 물(용수)의 비용이나 운반비에 대한 언급이 없어, 이를 별도로 계상해야 하는지 명확하지 않습니다."
+  ],
+  "questions": [
+    "흉고직경이 25cm인 교목 50주를 인력으로 관수할 때 보통인부 품은 어떻게 되나요?",
+    "관목이나 초화류에 인력관수를 할 때도 이 품을 적용할 수 있나요?",
+    "관수에 필요한 물(용수) 비용이나 운반비는 어떻게 계상하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:47:17.824021+00:00",
+    "input_tokens": 11507,
+    "output_tokens": 1571,
+    "source_pages": [
+      918,
+      919
+    ],
+    "prompt_sha256": "f1e874e47ad7d6142d069c1128c7b0520cbe94eb7ad802782eda15b0da933080",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

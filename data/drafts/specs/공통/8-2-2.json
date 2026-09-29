@@ -1,0 +1,272 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-2/리퍼(유압식)",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-2",
+    "title": "리퍼(유압식)('25년 보완)",
+    "work": "시간당 파쇄량(Q) 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      170,
+      171
+    ],
+    "inputs": [
+      {
+        "name": "tractor_size",
+        "type": "enum",
+        "allowed_values": [
+          "20",
+          "30"
+        ],
+        "unit": "ton",
+        "required": true,
+        "ask": "트랙터의 규격은 몇 ton입니까?",
+        "source": "PDF 171쪽 1. 1회 리핑단면적(An) 표"
+      },
+      {
+        "name": "ripping_teeth",
+        "type": "enum",
+        "allowed_values": [
+          "1본",
+          "2본",
+          "3본"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "발톱수는 몇 본입니까?",
+        "source": "PDF 171쪽 1. 1회 리핑단면적(An) 표 및 2. 작업효율(E) 표"
+      },
+      {
+        "name": "rock_type",
+        "type": "enum",
+        "allowed_values": [
+          "연질",
+          "중질",
+          "경질"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "암질은 무엇입니까?",
+        "source": "PDF 171쪽 2. 작업효율(E) 표"
+      },
+      {
+        "name": "seismic_velocity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m/sec",
+        "required": true,
+        "ask": "탄성파속도는 몇 m/sec 입니까?",
+        "source": "PDF 171쪽 2. 작업효율(E) 표"
+      },
+      {
+        "name": "work_distance",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "1회의 작업거리(ℓ)는 몇 m 입니까?",
+        "source": "PDF 170쪽 본문 Q 산정식"
+      },
+      {
+        "name": "volume_conversion_factor",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": null,
+        "required": true,
+        "ask": "체적환산계수(f)는 얼마입니까?",
+        "source": "PDF 170쪽 본문 Q 산정식"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p227-t0",
+        "role": "1회 리핑단면적(An)",
+        "source": "PDF 171쪽 1. 1회 리핑단면적(An) 표",
+        "unit": "㎡",
+        "values": {
+          "20": {
+            "1회당 리핑단면적(㎡) 1본": "0.15",
+            "1회당 리핑단면적(㎡) 2본": "0.30",
+            "1회당 리핑단면적(㎡) 3본": "0.45"
+          },
+          "30": {
+            "1회당 리핑단면적(㎡) 1본": "0.20",
+            "1회당 리핑단면적(㎡) 2본": "0.40",
+            "1회당 리핑단면적(㎡) 3본": "0.60"
+          }
+        },
+        "cite": {
+          "table_id": "p227-t0"
+        }
+      },
+      {
+        "id": "p227-t1",
+        "role": "작업효율(E)",
+        "source": "PDF 171쪽 2. 작업효율(E) 표",
+        "unit": "무차원",
+        "values": {
+          "연질_3본_500_600": {
+            "20 ton 급 E": "0.85",
+            "30 ton 급 E": "0.85"
+          },
+          "연질_3본_700_800": {
+            "20 ton 급 E": "0.65",
+            "30 ton 급 E": "0.65"
+          },
+          "연질_3본_900_1000": {
+            "20 ton 급 E": "0.50",
+            "30 ton 급 E": "0.45"
+          },
+          "중질_2본_700_900": {
+            "20 ton 급 E": "0.80",
+            "30 ton 급 E": "0.70"
+          },
+          "중질_2본_900_1200": {
+            "20 ton 급 E": "0.60",
+            "30 ton 급 E": "0.50"
+          },
+          "중질_2본_1200_1400": {
+            "20 ton 급 E": "0.40",
+            "30 ton 급 E": "0.40"
+          },
+          "경질_1본_1000_1200": {
+            "20 ton 급 E": "0.70",
+            "30 ton 급 E": "0.80"
+          },
+          "경질_1본_1300_1500": {
+            "20 ton 급 E": "0.50",
+            "30 ton 급 E": "0.50"
+          },
+          "경질_1본_1600_1800": {
+            "20 ton 급 E": "0.30",
+            "30 ton 급 E": "0.30"
+          }
+        },
+        "cite": {
+          "table_id": "p227-t1"
+        }
+      },
+      {
+        "id": "p227-t2",
+        "role": "암질과 탄성파속도와의 관계",
+        "source": "PDF 171쪽 2. 작업효율(E) [주] 표",
+        "unit": "m/sec",
+        "values": {
+          "사암(砂岩)": {
+            "탄 성 파 속 도(m/sec) 연질": "1,000 이하",
+            "탄 성 파 속 도(m/sec) 중질": "1,000∼1,500",
+            "탄 성 파 속 도(m/sec) 경질": "1,500∼2,000"
+          },
+          "점판암(粘板岩)": {
+            "탄 성 파 속 도(m/sec) 연질": "1,000",
+            "탄 성 파 속 도(m/sec) 중질": "1,000∼1,500",
+            "탄 성 파 속 도(m/sec) 경질": "1,500∼2,000"
+          },
+          "석영반암(石英班岩)": {
+            "탄 성 파 속 도(m/sec) 연질": "900",
+            "탄 성 파 속 도(m/sec) 중질": "900∼1,200",
+            "탄 성 파 속 도(m/sec) 경질": "1,200∼1,500"
+          },
+          "석회암( 石灰巖) , 혈암( 頁岩)": {
+            "탄 성 파 속 도(m/sec) 연질": "600",
+            "탄 성 파 속 도(m/sec) 중질": "600∼1,000",
+            "탄 성 파 속 도(m/sec) 경질": "1,100∼1,500"
+          },
+          "화강암(花崗岩)": {
+            "탄 성 파 속 도(m/sec) 연질": "600",
+            "탄 성 파 속 도(m/sec) 중질": "600∼1,000",
+            "탄 성 파 속 도(m/sec) 경질": "1,100∼1,500"
+          }
+        },
+        "cite": {
+          "table_id": "p227-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "1회의 작업거리(ℓ)를 입력받아 1회 싸이클 시간(cm = 0.05ℓ+0.25)을 계산한다.",
+        "트랙터 규격과 발톱수에 따라 p227-t0에서 1회 리핑단면적(An)을 구한다.",
+        "암질, 발톱수, 트랙터 규격, 탄성파속도에 따라 p227-t1에서 작업효율(E)을 구한다.",
+        "공식 Q = (60 * An * ℓ * f * E) / cm 을 통해 시간당 파쇄량을 산출한다."
+      ],
+      "source": "PDF 170쪽 본문 및 171쪽 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "굴착(깎기, 터파기)작업에 리퍼(유압식)를 활용하며, 제3장 토공사의 작업조건과 상이하지 않은 경우",
+        "reason": "'[공통부문] 제3장 토공사'를 우선 적용해야 함",
+        "source": "PDF 170쪽 본문 ※",
+        "cite": {
+          "chunk_id": "p226-x16",
+          "quote": "※ 굴착(깎기, 터파기)작업에 리퍼(유압식)를 활용하는 하는 경우 ‘[공통부문] 제3장 토공사’를 우선\n적용하며"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 장비의 시간당 작업량(Q)을 구하는 공식과 계수만 제공하며, 직접적인 인·일 산출을 위한 작업조나 단위당 품 표가 없어 자동 계산 명세로 구성하기 어렵습니다.",
+  "citations": [
+    {
+      "chunk_id": "p226-x16",
+      "quote": "Q = cm\n⋅An⋅⋅f⋅E"
+    },
+    {
+      "chunk_id": "p226-x16",
+      "quote": "cm : 0.05ℓ+0.25"
+    },
+    {
+      "table_id": "p227-t0"
+    },
+    {
+      "table_id": "p227-t1"
+    },
+    {
+      "table_id": "p227-t2"
+    },
+    {
+      "chunk_id": "p226-x16",
+      "quote": "※ 굴착(깎기, 터파기)작업에 리퍼(유압식)를 활용하는 하는 경우 ‘[공통부문] 제3장 토공사’를 우선\n적용하며"
+    },
+    {
+      "chunk_id": "p227-x3",
+      "quote": "작업(전진)시에는 1단\n속도가 0.6∼0.9정도로 감소되므로 일반적으로 위의 산정식을 사용토록 한다."
+    }
+  ],
+  "open_questions": [
+    "작업(전진)시 1단 속도가 0.6~0.9 정도로 감소된다는 주석(p227-x3)이 cm 산정식(0.05ℓ+0.25)에 어떻게 구체적으로 반영되는지 명확하지 않음."
+  ],
+  "questions": [
+    "트랙터 규격이 20ton, 30ton 외의 규격일 경우 리핑단면적은 어떻게 적용하나요?",
+    "탄성파속도가 표에 명시된 값들의 중간값일 경우 작업효율(E)은 보간하여 적용하나요?",
+    "체적환산계수(f)는 어떤 값을 기준으로 입력해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:25:00.311297+00:00",
+    "input_tokens": 13762,
+    "output_tokens": 3255,
+    "source_pages": [
+      226,
+      227,
+      228
+    ],
+    "prompt_sha256": "9b1740abb938b042516fd66b78d7b81cbf97c5a6e870325e32a43adbc58a0d5a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p226-x16 조각 텍스트에 없음",
+      "quote가 p227-x3 조각 텍스트에 없음"
+    ]
+  }
+}

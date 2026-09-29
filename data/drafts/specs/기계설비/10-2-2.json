@@ -1,0 +1,187 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/10-2-2/준비작동식밸브설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "10-2-2",
+    "title": "준비작동식밸브 설치",
+    "work": "준비작동식밸브 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      708
+    ],
+    "inputs": [
+      {
+        "name": "valve_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø 80",
+          "100",
+          "125",
+          "150"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "준비작동식밸브의 규격은 무엇입니까?",
+        "source": "10-2-2 표",
+        "synonyms": {
+          "ø 80": [
+            "80",
+            "80mm",
+            "80A"
+          ],
+          "100": [
+            "100mm",
+            "100A"
+          ],
+          "125": [
+            "125mm",
+            "125A"
+          ],
+          "150": [
+            "150mm",
+            "150A"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "조",
+        "required": true,
+        "ask": "설치할 준비작동식밸브의 수량은 몇 조입니까?",
+        "source": "10-2-2 표 단위 (조당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p764-t0",
+        "role": "준비작동식밸브 설치 품",
+        "source": "10-2-2 표",
+        "unit": "인/조",
+        "values": {
+          "ø 80": {
+            "배 관 공(인)": "1.830"
+          },
+          "100": {
+            "배 관 공(인)": "2.010"
+          },
+          "125": {
+            "배 관 공(인)": "2.190",
+            "보통인부(인)": "0.190"
+          },
+          "150": {
+            "배 관 공(인)": "2.440",
+            "보통인부(인)": "0.190"
+          }
+        },
+        "cite": {
+          "table_id": "p764-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p764-t0",
+          "row_input": "valve_size",
+          "trades": [
+            "배 관 공(인)",
+            "보통인부(인)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "10-2-2 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "템퍼스위치결선, 종단저항설치, 주위배관 및 보온",
+        "source": "10-2-2 [주] ④",
+        "cite": {
+          "chunk_id": "p764-x5",
+          "quote": "템퍼스위치결선, 종단저항설치, 주위배관 및 보온은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(조)당 직종별 인원이 표에 직접 명시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p764-t0",
+      "row": "ø 80",
+      "column": "배 관 공(인)",
+      "value": "1.830"
+    },
+    {
+      "table_id": "p764-t0",
+      "row": "100",
+      "column": "배 관 공(인)",
+      "value": "2.010"
+    },
+    {
+      "table_id": "p764-t0",
+      "row": "125",
+      "column": "배 관 공(인)",
+      "value": "2.190"
+    },
+    {
+      "table_id": "p764-t0",
+      "row": "125",
+      "column": "보통인부(인)",
+      "value": "0.190"
+    },
+    {
+      "table_id": "p764-t0",
+      "row": "150",
+      "column": "배 관 공(인)",
+      "value": "2.440"
+    },
+    {
+      "table_id": "p764-t0",
+      "row": "150",
+      "column": "보통인부(인)",
+      "value": "0.190"
+    },
+    {
+      "chunk_id": "p764-x5",
+      "quote": "템퍼스위치결선, 종단저항설치, 주위배관 및 보온은 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "준비작동식밸브 100 규격을 5조 설치할 때 배관공 품은 얼마인가요?",
+    "경보밸브장치에 압력스위치 설치 품이 포함되어 있나요?",
+    "템퍼스위치결선 작업은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:39:36.978865+00:00",
+    "input_tokens": 11631,
+    "output_tokens": 1641,
+    "source_pages": [
+      764,
+      765
+    ],
+    "prompt_sha256": "2e196871fc001fb95233abfa7a8668b3603d5f29f376bbe0a0ac9be9f85269c9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

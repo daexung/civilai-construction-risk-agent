@@ -1,0 +1,169 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-3-8/벽체용배수판설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-3-8",
+    "title": "벽체용 배수판 설치('26년 신설)",
+    "work": "벽체용 배수판 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      598
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "벽체용 배수판 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 598쪽 5-3-8 표 시공량 단위"
+      },
+      {
+        "name": "panel_size",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "설치할 배수판 1개의 규격(면적)은 몇 ㎡입니까?",
+        "source": "PDF 598쪽 5-3-8 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p654-t2",
+        "role": "작업조 인원 및 일일 시공량",
+        "source": "PDF 598쪽 5-3-8 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "내장공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "시공량": {
+            "시공량(㎡)": "50"
+          }
+        },
+        "cite": {
+          "table_id": "p654-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p654-t2",
+          "row": "시공량",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p654-t2",
+          "column": "수량",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ]
+        },
+        "equipment": {},
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p654-t2에서 기준 일일시공량(50㎡)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p654-t2의 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 598쪽 5-3-8 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "배수판 규격이 0.5㎡ 초과",
+        "blocked_if": {
+          "input": "panel_size",
+          "op": ">",
+          "value": 0.5
+        },
+        "reason": "본 품은 규격 0.5㎡ 이하의 배수판을 설치하는 기준이며, 초과 규격에 대한 할증이나 별도 기준이 명시되어 있지 않음",
+        "source": "PDF 598쪽 5-3-8 [주] ①",
+        "cite": {
+          "section_no": "5-3-8",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "section_no": "5-3-8",
+          "marker": "③"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 직종별 일일 투입 인원과 일일 시공량이 명시되어 있어, 물량을 일일 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p654-t2",
+      "row": "내장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p654-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p654-t2",
+      "row": "시공량",
+      "column": "시공량(㎡)",
+      "value": "50"
+    },
+    {
+      "chunk_id": "p654-x11",
+      "quote": "본 품은 결로방지 및 누수처리를 위해 구조체벽에 배수판(규격 0.5㎡이하)을 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p654-x11",
+      "quote": "공구손료 및 경장비(절단기, 타정기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "배수판 규격이 0.5㎡를 초과하는 경우의 품셈 적용 기준이 명시되어 있지 않아 차단 조건으로 설정했습니다."
+  ],
+  "questions": [
+    "벽체용 배수판 설치 물량은 몇 ㎡입니까?",
+    "배수판 규격이 0.5㎡를 초과하는데 이 품셈을 적용할 수 있나요?",
+    "배수판 설치 시 바탕정리나 몰딩 작업 품은 별도로 계산해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:02:38.801145+00:00",
+    "input_tokens": 11540,
+    "output_tokens": 1638,
+    "source_pages": [
+      654,
+      655
+    ],
+    "prompt_sha256": "ab68f613810c8c9de177324641f7fe4542fbb7a6241c2d4cd269027c61ae00a9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-11-5/비산먼지발생억제살수",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-11-5",
+    "title": "비산먼지 발생 억제를 위한 살수('02년 신설, '09년 보완)",
+    "work": "살수차 운용 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      62
+    ],
+    "inputs": [
+      {
+        "name": "spray_area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "총 살수면적은 몇 ㎡입니까? (살수면적 = 폭 × 길이 × 1일 살수횟수 × 살수 일수)",
+        "source": "PDF 62쪽 [주] ③ 및 <살수면적 계산 예>"
+      },
+      {
+        "name": "water_supply_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "살수에 필요한 물을 현장에서 구득하기 어려워 급수시설을 설치하거나 상수도 등을 이용해야 합니까?",
+        "source": "PDF 62쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p118-t1",
+        "role": "살수차 운용 품",
+        "source": "PDF 62쪽 2-11-5 표",
+        "unit": "시간/100㎡",
+        "values": {
+          "물탱크(살수차)": {
+            "16,000ℓ": "0.008"
+          }
+        },
+        "cite": {
+          "table_id": "p118-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과에 표의 수량(0.008)이 누락되어 있어 자동 계산 명세를 작성하지 않습니다.",
+        "총 살수면적을 100으로 나눈 후 표의 수량을 곱하여 살수차 사용 시간을 산출합니다."
+      ],
+      "source": "PDF 62쪽 2-11-5 표 및 [주] ③",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "급수시설 설치 또는 상수도 이용 비용",
+        "source": "PDF 62쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p118-x8",
+          "quote": "살수에 필요한 물을 현장에서 구득하기 어려워 급수시설을 설치하거나 상수도 등을 이용해야 할 경우에는\n설명 | 그 비용을 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에 표의 수량(0.008)과 항목명(물탱크(살수차))이 누락되어 있어 정확한 인용 및 자동 계산 명세 작성이 불가능합니다.",
+  "citations": [
+    {
+      "table_id": "p118-t1"
+    },
+    {
+      "chunk_id": "p118-x8",
+      "quote": "본 품은 1회당의 살수작업을 기준한 것이므로, 살수면적은 살수횟수를 감안하여 산출해야 하며,"
+    },
+    {
+      "chunk_id": "p118-x8",
+      "quote": "살수에 필요한 물을 현장에서 구득하기 어려워 급수시설을 설치하거나 상수도 등을 이용해야 할 경우에는\n설명 | 그 비용을 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p118-t1에 '물탱크(살수차)', '0.008' 등의 텍스트가 누락되어 있어 정확한 인용이 불가능합니다."
+  ],
+  "questions": [
+    "살수면적은 어떻게 계산하나요?",
+    "살수차 규격이 16,000ℓ가 아닌 경우 어떻게 적용하나요?",
+    "급수시설 설치 비용은 어떻게 처리하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:27.828823+00:00",
+    "input_tokens": 23512,
+    "output_tokens": 2541,
+    "source_pages": [
+      118,
+      119
+    ],
+    "prompt_sha256": "59ac1da2973500d32b702d454ca9beaea97d06f8c349c22cc319cffe20103907",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

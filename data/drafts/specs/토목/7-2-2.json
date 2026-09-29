@@ -1,0 +1,170 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-2-2/해상투하",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-2-2",
+    "title": "해상투하",
+    "work": "해상투하 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      390
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "해상투하 물량은 몇 ㎥입니까?",
+        "source": "PDF 390쪽 7-2-2 표 단위 (10㎥당)"
+      },
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "0.03㎥ 이하 굴착기 투하",
+          "0.1㎥ 이상 크레인 투하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "투하 방법 및 규격은 무엇입니까?",
+        "source": "PDF 390쪽 7-2-2 표 열 이름",
+        "synonyms": {
+          "0.03㎥ 이하 굴착기 투하": [
+            "굴착기 투하",
+            "0.03루베 이하 굴착기"
+          ],
+          "0.1㎥ 이상 크레인 투하": [
+            "크레인 투하",
+            "0.1루베 이상 크레인"
+          ]
+        }
+      },
+      {
+        "name": "is_underwater",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "투하 위치가 수중입니까? (아니오 선택 시 수상부분으로 간주하여 잠수부 미계상)",
+        "source": "PDF 390쪽 7-2-2 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p446-t0",
+        "role": "투하 방법별 단위당 품",
+        "source": "PDF 390쪽 7-2-2 표",
+        "unit": "조/10㎥, 인/10㎥",
+        "values": {
+          "잠수부": {
+            "0.03㎥ 이하 굴착기 투하": "0.07",
+            "0.1㎥ 이상 크레인 투하": "0.09"
+          },
+          "특별인부": {
+            "0.03㎥ 이하 굴착기 투하": "0.04",
+            "0.1㎥ 이상 크레인 투하": "0.20"
+          },
+          "보통인부": {
+            "0.03㎥ 이하 굴착기 투하": "0.12",
+            "0.1㎥ 이상 크레인 투하": "0.22"
+          }
+        },
+        "cite": {
+          "table_id": "p446-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p446-t0",
+          "column_input": "method",
+          "trades": [
+            "잠수부",
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_underwater": false
+            },
+            "change": "잠수부를 계상하지 않는다",
+            "source": "PDF 390쪽 7-2-2 [주] ③"
+          }
+        ]
+      },
+      "steps": [
+        "p446-t0에서 투하 방법에 따른 단위당 품을 고른다.",
+        "물량을 10으로 나누어 적용 배수를 구한다. (기준 단위 10㎥)",
+        "적용 배수를 단위당 품에 곱해 총 품을 구한다.",
+        "수상부분(is_underwater=false)인 경우 잠수부 품을 제외한다."
+      ],
+      "source": "PDF 390쪽 7-2-2 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기계경비",
+        "source": "PDF 390쪽 7-2-2 [주] ④",
+        "cite": {
+          "chunk_id": "p446-x4",
+          "quote": "④ 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 물량(10㎥)당 직종별 인·일 및 조가 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p446-t0"
+    },
+    {
+      "chunk_id": "p446-x4",
+      "quote": "③ 수상부분은 잠수부를 계상하지 않는다."
+    },
+    {
+      "chunk_id": "p446-x4",
+      "quote": "④ 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트에 '잠수부', '특별인부', '보통인부' 행 이름과 '0.1㎥ 이상 크레인 투하' 열이 누락되어 있어 OCR 원문을 기준으로 표를 구성했습니다."
+  ],
+  "questions": [
+    "해상투하 물량이 50㎥이고 0.03㎥ 이하 굴착기로 투하할 때 품은 어떻게 되나요?",
+    "수상부분에 투하하는 경우 잠수부 품은 어떻게 처리하나요?",
+    "크레인 투하 시 크레인 장비 비용은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:02:12.302439+00:00",
+    "input_tokens": 11531,
+    "output_tokens": 1639,
+    "source_pages": [
+      446,
+      447
+    ],
+    "prompt_sha256": "04f6acea27f42b4cc1d2d0bdfecafd056282222d3bba8d776607a7b389165041",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

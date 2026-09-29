@@ -1,0 +1,219 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-2-2/궤광철거",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-2-2",
+    "title": "궤광철거",
+    "work": "궤광철거 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      950
+    ],
+    "inputs": [
+      {
+        "name": "track_type",
+        "type": "enum",
+        "allowed_values": [
+          "목침목",
+          "PCT",
+          "터널교량"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철거 구간의 구분은 무엇입니까? (목침목 / PCT / 터널교량)",
+        "source": "PDF 2-2-2 궤광철거 표의 구분",
+        "synonyms": {
+          "터널교량": [
+            "터널",
+            "교량",
+            "터널 및 교량"
+          ]
+        }
+      },
+      {
+        "name": "rail_spec",
+        "type": "enum",
+        "allowed_values": [
+          "37㎏/m",
+          "50㎏/m"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "레일 규격은 무엇입니까? (37㎏/m / 50㎏/m)",
+        "source": "PDF 2-2-2 궤광철거 표의 수량(레일규격)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "km",
+        "required": true,
+        "ask": "궤광철거 물량은 몇 km입니까?",
+        "source": "PDF 2-2-2 궤광철거 표의 기준 단위 (km당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p950-t0",
+        "role": "궤광철거 단위당 품",
+        "source": "PDF 2-2-2 궤광철거 표",
+        "unit": "인/km, hr/km",
+        "values": {
+          "목침목_궤도공": {
+            "37㎏/m": "41",
+            "50㎏/m": "49"
+          },
+          "목침목_보통인부": {
+            "37㎏/m": "9",
+            "50㎏/m": "11"
+          },
+          "목침목_굴착기+부착용집게": {
+            "37㎏/m": "51",
+            "50㎏/m": "61"
+          },
+          "PCT_궤도공": {
+            "37㎏/m": "42",
+            "50㎏/m": "51"
+          },
+          "PCT_보통인부": {
+            "37㎏/m": "10",
+            "50㎏/m": "12"
+          },
+          "PCT_굴착기+부착용집게": {
+            "37㎏/m": "54",
+            "50㎏/m": "66"
+          },
+          "터널교량_궤도공": {
+            "37㎏/m": "50",
+            "50㎏/m": "61"
+          },
+          "터널교량_보통인부": {
+            "37㎏/m": "12",
+            "50㎏/m": "14"
+          },
+          "터널교량_굴착기+부착용집게": {
+            "37㎏/m": "65",
+            "50㎏/m": "78"
+          }
+        },
+        "cite": {
+          "table_id": "p950-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p950-t0",
+          "row_input": "track_type",
+          "column_input": "rail_spec",
+          "trades": [
+            "궤도공",
+            "보통인부",
+            "굴착기+부착용집게"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "입력된 track_type과 직종/장비 이름을 조합하여 p950-t0 표의 행을 찾는다. (예: '목침목_궤도공')",
+        "입력된 rail_spec으로 열을 찾아 단위당 품을 구한다.",
+        "단위당 품에 quantity를 곱하여 총 품을 계산한다."
+      ],
+      "source": "PDF 2-2-2 궤광철거 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "운반",
+        "source": "PDF 2-2-2 [주] ③",
+        "cite": {
+          "chunk_id": "p950-x11",
+          "quote": "③ 운반은 별도 계상한다."
+        }
+      },
+      {
+        "item": "레일 절단",
+        "source": "PDF 2-2-2 [주] ④",
+        "cite": {
+          "chunk_id": "p950-x11",
+          "quote": "④ 레일 절단에 소요되는 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(km)당 소요되는 인력과 장비 품이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p950-t0",
+      "row": "목침목 | 궤도공",
+      "column": "수 량(레일규격) 37㎏/m",
+      "value": "41"
+    },
+    {
+      "table_id": "p950-t0",
+      "row": "목침목 | 보통인부",
+      "column": "수 량(레일규격) 50㎏/m",
+      "value": "11"
+    },
+    {
+      "table_id": "p950-t0",
+      "row": "터널 교량 | 굴착기+부착용집게",
+      "column": "수 량(레일규격) 50㎏/m",
+      "value": "78"
+    },
+    {
+      "chunk_id": "p950-x11",
+      "quote": "① 본 품은 자갈도상 구간의 궤광을 해체, 철거하는 기준이다."
+    },
+    {
+      "chunk_id": "p950-x11",
+      "quote": "② 철거작업으로 발생된 자재의 상차 및 하화, 정리를 포함한다."
+    },
+    {
+      "chunk_id": "p950-x11",
+      "quote": "③ 운반은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p950-x11",
+      "quote": "④ 레일 절단에 소요되는 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p950-x11",
+      "quote": "⑤ 투입장비는 작업여건에 따라 장비조합을 변경하여 적용할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "[주] ⑤에서 '투입장비는 작업여건에 따라 장비조합을 변경하여 적용할 수 있다'고 명시되어 있으나, 구체적인 변경 기준이나 대체 장비에 대한 정보가 없어 기본 장비(굴착기+부착용집게)로만 산정하도록 구성했습니다."
+  ],
+  "questions": [
+    "목침목 구간에서 50kg/m 레일 2km를 철거할 때 필요한 궤도공과 보통인부의 품은 어떻게 되나요?",
+    "터널 구간에서 궤광 철거 시 현장 여건상 굴착기 대신 다른 장비를 사용해야 한다면 품셈 적용을 어떻게 변경해야 하나요?",
+    "철거된 궤광 자재를 외부로 반출하기 위한 운반 비용은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:35:43.838044+00:00",
+    "input_tokens": 11986,
+    "output_tokens": 2237,
+    "source_pages": [
+      950,
+      951
+    ],
+    "prompt_sha256": "a52b0ce7aae55b3f93e8126cf7a232b5570c0f8b3a4680386f23adce9ed38c83",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

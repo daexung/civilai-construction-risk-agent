@@ -1,0 +1,308 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-2-5/기계적이음",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-2-5",
+    "title": "철근의 기계적 이음",
+    "work": "기계적 이음 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      135
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "기계적 이음 개소 수는 몇 개소입니까?",
+        "source": "PDF 135쪽 6-2-5 표 우측 상단 (개소당)"
+      },
+      {
+        "name": "rebar_diameter",
+        "type": "nonnegative_integer",
+        "allowed_values": "35 이상의 정수",
+        "unit": "㎜",
+        "required": true,
+        "ask": "철근 두께는 몇 ㎜입니까? (본 품은 D35㎜ 이상 기준입니다)",
+        "source": "PDF 135쪽 6-2-5 표 비고 및 [주] ①"
+      },
+      {
+        "name": "work_height",
+        "type": "enum",
+        "allowed_values": [
+          "10m 미만",
+          "10m~20m 미만",
+          "20m 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 높이는 어디에 해당합니까?",
+        "source": "PDF 135쪽 6-2-5 표 비고 및 요율 표",
+        "synonyms": {
+          "10m 미만": [
+            "10미터 미만"
+          ],
+          "10m~20m 미만": [
+            "10~20m 미만",
+            "10미터에서 20미터 미만",
+            "10m∼20m미만"
+          ],
+          "20m 이상": [
+            "20미터 이상"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p191-t0",
+        "role": "철근 기계적 이음 개소당 품",
+        "source": "PDF 135쪽 6-2-5 표",
+        "unit": "ℓ, 인",
+        "values": {
+          "아세틸렌": {
+            "수량": "133"
+          },
+          "산소": {
+            "수량": "744"
+          },
+          "용접공": {
+            "수량": "0.06"
+          },
+          "연마공": {
+            "수량": "0.15"
+          },
+          "절단공": {
+            "수량": "0.09"
+          },
+          "조력공": {
+            "수량": "0.11"
+          }
+        },
+        "cite": {
+          "table_id": "p191-t0"
+        }
+      },
+      {
+        "id": "p191-t1",
+        "role": "작업 높이에 따른 인력품 할증 요율",
+        "source": "PDF 135쪽 6-2-5 표 비고 내 요율 표",
+        "unit": "%",
+        "values": {
+          "요율": {
+            "10m∼20m미만": "10%",
+            "20m 이상": "20%"
+          }
+        },
+        "cite": {
+          "table_id": "p191-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p191-t0",
+          "column_input": "수량",
+          "trades": [
+            "용접공",
+            "연마공",
+            "절단공",
+            "조력공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "work_height": "10m~20m 미만"
+            },
+            "rate": "0.1",
+            "applies_to": [
+              "용접공",
+              "연마공",
+              "절단공",
+              "조력공"
+            ],
+            "source": "PDF 135쪽 6-2-5 표 비고 및 요율 표"
+          },
+          {
+            "when": {
+              "work_height": "20m 이상"
+            },
+            "rate": "0.2",
+            "applies_to": [
+              "용접공",
+              "연마공",
+              "절단공",
+              "조력공"
+            ],
+            "source": "PDF 135쪽 6-2-5 표 비고 및 요율 표"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "rebar_diameter": "> 35"
+            },
+            "change": "철근 두께 3㎜증가시마다 인력품의 5%를 가산한다.",
+            "source": "PDF 135쪽 6-2-5 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p191-t0에서 단위(개소)당 재료 및 인력 품을 가져온다.",
+        "물량(quantity)을 곱하여 총 품을 구한다.",
+        "작업 높이(work_height)에 따라 인력품에 할증(10% 또는 20%)을 적용한다.",
+        "철근 두께(rebar_diameter)가 35㎜를 초과하는 경우, 3㎜ 증가시마다 인력품에 5%를 가산한다."
+      ],
+      "source": "PDF 135쪽 6-2-5 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "철근 두께가 35㎜ 미만인 경우",
+        "blocked_if": {
+          "input": "rebar_diameter",
+          "op": "<",
+          "value": 35
+        },
+        "reason": "본 품은 D35㎜이상 철근의 기계적 이음 기준임",
+        "source": "PDF 135쪽 6-2-5 [주] ①",
+        "cite": {
+          "section_no": "6-2-5",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "공구 손료 및 잡재료비",
+        "source": "PDF 135쪽 6-2-5 [주] ②",
+        "cite": {
+          "section_no": "6-2-5",
+          "marker": "②"
+        }
+      },
+      {
+        "item": "이음자재(Splices Kit)",
+        "source": "PDF 135쪽 6-2-5 [주] ③",
+        "cite": {
+          "section_no": "6-2-5",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "품질관리를 위한 검사비용",
+        "source": "PDF 135쪽 6-2-5 [주] ④",
+        "cite": {
+          "section_no": "6-2-5",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당) 품이 표에 직접 제시되어 있으며, 물량(개소)을 곱하여 계산하는 방식이므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p191-t0",
+      "row": "아세틸렌",
+      "column": "수량",
+      "value": "133"
+    },
+    {
+      "table_id": "p191-t0",
+      "row": "산소",
+      "column": "수량",
+      "value": "744"
+    },
+    {
+      "table_id": "p191-t0",
+      "row": "용접공",
+      "column": "수량",
+      "value": "0.06"
+    },
+    {
+      "table_id": "p191-t0",
+      "row": "연마공",
+      "column": "수량",
+      "value": "0.15"
+    },
+    {
+      "table_id": "p191-t0",
+      "row": "절단공",
+      "column": "수량",
+      "value": "0.09"
+    },
+    {
+      "table_id": "p191-t0",
+      "row": "조력공",
+      "column": "수량",
+      "value": "0.11"
+    },
+    {
+      "table_id": "p191-t1",
+      "row": "요율",
+      "column": "10m∼20m미만",
+      "value": "10%"
+    },
+    {
+      "table_id": "p191-t1",
+      "row": "요율",
+      "column": "20m 이상",
+      "value": "20%"
+    },
+    {
+      "chunk_id": "p191-x8",
+      "quote": "본 품은 D35㎜이상 철근의 기계적 이음 중 화약을 이용하여 용접하는 품이다."
+    },
+    {
+      "chunk_id": "p191-x8",
+      "quote": "공구 손료 및 잡재료비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p191-x8",
+      "quote": "이음자재(Splices Kit)는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p191-x8",
+      "quote": "품질관리를 위한 검사비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p191-x8",
+      "quote": "본 품은 원자로 격납시설물 등 특수구조물의 철근 이음을 하는 경우 적용한다."
+    }
+  ],
+  "open_questions": [
+    "철근 두께 3㎜ 증가시마다 인력품 5% 가산의 기준이 35㎜ 초과분부터인지, 아니면 35㎜를 기준으로 정확히 38㎜, 41㎜ 등 3㎜ 단위로 떨어질 때만 가산하는지, 혹은 보간하여 적용하는지 명확하지 않음."
+  ],
+  "questions": [
+    "철근 기계적 이음 100개소를 시공할 때 필요한 용접공 품은 얼마인가요?",
+    "철근 두께가 40㎜인 경우 인력품 할증은 어떻게 계산하나요?",
+    "작업 높이가 15m일 때 할증률은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:31:42.034150+00:00",
+    "input_tokens": 11896,
+    "output_tokens": 2928,
+    "source_pages": [
+      191,
+      192
+    ],
+    "prompt_sha256": "c2c33c9330a43da34e0f45dcf5d3bcf286b45544d551fff695ec7c7c62eb71c0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

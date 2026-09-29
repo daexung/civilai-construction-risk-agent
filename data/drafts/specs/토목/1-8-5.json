@@ -1,0 +1,211 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-8-5/시선유도표지설치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-8-5",
+    "title": "시선유도표지 설치",
+    "work": "시선유도표지 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      321,
+      322
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 시선유도표지 물량은 몇 개소입니까?",
+        "source": "1-8-5 시선유도표지 설치 표 시공량 단위"
+      },
+      {
+        "name": "installation_type",
+        "type": "enum",
+        "allowed_values": [
+          "흙속매설용",
+          "가드레일용",
+          "옹벽용"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시선유도표지 설치 유형은 무엇입니까?",
+        "source": "1-8-5 시선유도표지 설치 표 시공량 구분"
+      },
+      {
+        "name": "foundation_type",
+        "type": "enum",
+        "allowed_values": [
+          "지주 매설",
+          "콘크리트 기초"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "흙속 매설용의 경우 기초 유형은 무엇입니까? (콘크리트 기초 설치 시 별도 계상)",
+        "source": "1-8-5 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p377-t4",
+        "role": "시선유도표지 설치 일당 작업조 및 시공량",
+        "source": "1-8-5 시선유도표지 설치 표",
+        "unit": "인/일, 개소/일",
+        "values": {
+          "특별인부": {
+            "수량": "1"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "시공량(개소)": {
+            "흙속매설용": "60",
+            "가드레일용": "150",
+            "옹벽용": "60"
+          }
+        },
+        "cite": {
+          "table_id": "p377-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p377-t4",
+          "row": "시공량(개소)",
+          "column_input": "installation_type"
+        },
+        "crew": {
+          "table": "p377-t4",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p377-t4에서 설치 유형별 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "1-8-5 시선유도표지 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "콘크리트 기초를 두어 설치하는 경우",
+        "blocked_if": {
+          "input": "foundation_type",
+          "op": "==",
+          "value": "콘크리트 기초"
+        },
+        "reason": "콘크리트 기초를 두어 설치하는 경우에는 별도로 계상한다.",
+        "source": "1-8-5 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p378-x0",
+            "quote": "콘크리트 기초를 두어 설치하는 경우에는 별도로 계상한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": [
+          {
+            "chunk_id": "p378-x0",
+            "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 표에 명시되어 있어, 물량을 일일 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p377-t4",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p377-t4",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p377-t4",
+      "row": "시공량(개소)",
+      "column": "흙속매설용",
+      "value": "60"
+    },
+    {
+      "table_id": "p377-t4",
+      "row": "시공량(개소)",
+      "column": "가드레일용",
+      "value": "150"
+    },
+    {
+      "table_id": "p377-t4",
+      "row": "시공량(개소)",
+      "column": "옹벽용",
+      "value": "60"
+    },
+    {
+      "chunk_id": "p378-x0",
+      "quote": "본 품은 시선유도표지 설치 기준이다."
+    },
+    {
+      "chunk_id": "p378-x0",
+      "quote": "흙속 매설용은 지주를 박아서 매설하는 경우 또는 터파기 후 되메우기 하여 매설하는 경우에 적용하는"
+    },
+    {
+      "chunk_id": "p378-x0",
+      "quote": "콘크리트 기초를 두어 설치하는 경우에는 별도로 계상한다."
+    },
+    {
+      "chunk_id": "p378-x0",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트 구조상 직종별 인원과 시공량이 한 줄로 나열되어 있어, 이를 논리적인 표 구조(행: 직종/시공량, 열: 수량/설치유형)로 재구성하여 적용함."
+  ],
+  "questions": [
+    "가드레일용 시선유도표지 300개소를 설치할 때 필요한 인력은 어떻게 되나요?",
+    "흙속매설용 시선유도표지를 콘크리트 기초로 설치할 경우 품셈 적용이 가능한가요?",
+    "시선유도표지 설치 시 공구손료는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:37.478747+00:00",
+    "input_tokens": 12105,
+    "output_tokens": 2025,
+    "source_pages": [
+      377,
+      378,
+      379
+    ],
+    "prompt_sha256": "cfa87be49a55f33a726a262a05f1fcd7ac94674188a07c1ae1e92026202c64f3",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

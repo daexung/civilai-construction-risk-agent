@@ -1,0 +1,135 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-8-16/개구부수평보호덮개설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-8-16",
+    "title": "개구부 수평보호덮개 설치 및 해체('22년 신설)",
+    "work": "개구부 수평보호덮개 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      55
+    ],
+    "inputs": [
+      {
+        "name": "area_size",
+        "type": "enum",
+        "allowed_values": [
+          "1.0㎡이하",
+          "3.0㎡이하"
+        ],
+        "unit": "㎡",
+        "required": true,
+        "ask": "개당 면적은 1.0㎡이하와 3.0㎡이하 중 어디에 해당합니까?",
+        "source": "PDF 55쪽 2-8-16 표",
+        "synonyms": {
+          "1.0㎡이하": [
+            "1.0이하",
+            "1헤베이하",
+            "1m2이하"
+          ],
+          "3.0㎡이하": [
+            "3.0이하",
+            "3헤베이하",
+            "3m2이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치 및 해체할 수평보호덮개의 개수는 몇 개입니까?",
+        "source": "PDF 55쪽 2-8-16 표 단위 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p111-t4",
+        "role": "개구부 수평보호덮개 설치 및 해체 품",
+        "source": "PDF 55쪽 2-8-16 표",
+        "unit": "인/개",
+        "values": {
+          "비계공": {
+            "1.0㎡이하": "0.05",
+            "3.0㎡이하": "0.07"
+          }
+        },
+        "cite": {
+          "table_id": "p111-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p111-t4",
+          "row_input": "비계공",
+          "column_input": "area_size",
+          "trades": [
+            "비계공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p111-t4에서 면적에 따른 비계공의 단위당 품을 고른다.",
+        "물량(개수)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 55쪽 2-8-16 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당)당 비계공의 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p111-t4",
+      "row": "비계공",
+      "column": "1.0㎡이하",
+      "value": "0.05"
+    },
+    {
+      "table_id": "p111-t4",
+      "row": "비계공",
+      "column": "3.0㎡이하",
+      "value": "0.07"
+    },
+    {
+      "chunk_id": "p111-x17",
+      "quote": "본 품은 추락 등의 위험이 있는 수평개구부에 보호덮개를 설치 및 해체하는 기준이다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "개구부 수평보호덮개 면적이 1.0㎡이하일 때 비계공 품은 얼마인가요?",
+    "면적이 2.0㎡인 수평보호덮개의 품은 어떻게 적용하나요?",
+    "설치할 수평보호덮개의 총 개수는 몇 개인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:14:01.708476+00:00",
+    "input_tokens": 11467,
+    "output_tokens": 1235,
+    "source_pages": [
+      111,
+      112
+    ],
+    "prompt_sha256": "eef2f4a23dfb776a5bc1bfe013497650ecea3d16546dfdf7032db4b9ab532f78",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

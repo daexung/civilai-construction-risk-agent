@@ -1,0 +1,212 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-7-13/Castable_Spray_공사",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-7-13",
+    "title": "Castable Spray 공사",
+    "work": "기본 시공 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      829
+    ],
+    "inputs": [
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "15",
+          "25",
+          "40",
+          "50",
+          "65",
+          "80",
+          "100"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "시공 두께는 얼마입니까? (15 / 25 / 40 / 50 / 65 / 80 / 100)",
+        "source": "PDF 829쪽 13-7-13 표 두께"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 물량은 몇 ㎡입니까?",
+        "source": "PDF 829쪽 13-7-13 표 단위 (인/㎡)"
+      },
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "벽/천장",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위가 벽 또는 천장입니까, 아니면 기타(바닥 등)입니까?",
+        "source": "PDF 829쪽 13-7-13 표 비고"
+      },
+      {
+        "name": "scaffold_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계를 사용합니까?",
+        "source": "PDF 829쪽 13-7-13 표 비고"
+      },
+      {
+        "name": "scaffold_height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "비계 사용 시 높이는 몇 m입니까?",
+        "source": "PDF 829쪽 13-7-13 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p885-t1",
+        "role": "두께별 직종 인원",
+        "source": "PDF 829쪽 13-7-13 표",
+        "unit": "인/㎡",
+        "values": {
+          "보온공": {
+            "15": "0.18",
+            "25": "0.245",
+            "40": "0.336",
+            "50": "0.396",
+            "65": "0.48",
+            "80": "0.576",
+            "100": "0.656"
+          },
+          "특별인부": {
+            "15": "0.36",
+            "25": "0.490",
+            "40": "0.672",
+            "50": "0.632",
+            "65": "0.96",
+            "80": "1.152",
+            "100": "1.312"
+          }
+        },
+        "cite": {
+          "table_id": "p885-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p885-t1",
+          "row_input": "trades",
+          "column_input": "thickness",
+          "trades": [
+            "보온공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "surface_type": "벽/천장"
+            },
+            "change": "본 품의 15% 가산",
+            "source": "PDF 829쪽 13-7-13 표 비고"
+          },
+          {
+            "when": {
+              "scaffold_used": true
+            },
+            "change": "높이 6~9m까지 15% 가산하고, 9m초과하는 경우 매 3m 증가마다 품의 5%씩 가산",
+            "source": "PDF 829쪽 13-7-13 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "surcharges/note_adjustments를 원문 순서대로 적용한다."
+      ],
+      "source": "PDF 829쪽 13-7-13",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [
+      {
+        "condition": "비계 높이가 9m를 초과하는 경우",
+        "blocked_if": {
+          "input": "scaffold_height",
+          "op": ">",
+          "value": 9
+        },
+        "reason": "'매 3m 증가마다 품의 5%씩 가산'의 정확한 계산 방식(구간 올림/내림 등)이 명시되지 않음",
+        "source": "PDF 829쪽 13-7-13 표 비고",
+        "cite": {
+          "table_id": "p885-t1"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "공구손료 및 경비",
+        "source": "PDF 829쪽 13-7-13 [주] ②",
+        "cite": {
+          "chunk_id": "p885-x9",
+          "quote": "② 공구손료 및 경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인·일 품이 표에 직접 제시되어 있고, 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p885-t1",
+      "row": "보온공",
+      "column": "15",
+      "value": "0.18"
+    },
+    {
+      "chunk_id": "p885-x9",
+      "quote": "② 공구손료 및 경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비계 높이 9m 초과 시 '매 3m 증가마다'가 정확히 어떤 구간(예: 9~12m, 9.1~12m 등)을 의미하는지 명확하지 않습니다.",
+    "표에서 특별인부 두께 50의 값이 0.632로, 두께 40의 0.672보다 작게 기재되어 있는데 원문 오타인지 확인이 필요합니다."
+  ],
+  "questions": [
+    "두께 40mm 바닥에 Castable Spray를 시공할 때 보온공 품은 얼마인가요?",
+    "비계 높이가 10m일 때 할증률은 15%인가요, 아니면 15%+5%=20%인가요?",
+    "시공 부위가 벽이나 천장인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:45:09.986789+00:00",
+    "input_tokens": 11673,
+    "output_tokens": 2083,
+    "source_pages": [
+      885,
+      886
+    ],
+    "prompt_sha256": "28dd9adcf64067a4695a62af48114e7c95ba8dd60807b51dba26bdcbb79457f9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

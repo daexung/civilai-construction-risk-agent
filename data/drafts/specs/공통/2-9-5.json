@@ -1,0 +1,121 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-9-5/PE가설방호벽설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-9-5",
+    "title": "PE가설방호벽 설치 및 해체('22년 신설)",
+    "work": "PE가설방호벽 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "PE가설방호벽 설치 및 해체 물량은 몇 개입니까?",
+        "source": "PDF 1쪽 2-9-5 표 단위 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p113-t2",
+        "role": "PE가설방호벽 설치 및 해체 개당 품",
+        "source": "PDF 1쪽 2-9-5 표",
+        "unit": "개당",
+        "values": {
+          "특별인부": {
+            "단위": "인",
+            "수량": "0.09"
+          },
+          "살수차": {
+            "규격": "1,800ℓ",
+            "단위": "hr",
+            "수량": "0.03"
+          }
+        },
+        "cite": {
+          "table_id": "p113-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p113-t2",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "특별인부",
+            "살수차"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 1쪽 2-9-5 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 명시되어 있어 물량을 곱하는 방식으로 계산합니다.",
+  "citations": [
+    {
+      "table_id": "p113-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.09"
+    },
+    {
+      "table_id": "p113-t2",
+      "row": "살수차",
+      "column": "수량",
+      "value": "0.03"
+    },
+    {
+      "chunk_id": "p113-x11",
+      "quote": "본 품은 가설 PE방호벽을 설치 및 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p113-x11",
+      "quote": "본 품은 PE방호벽 설치 및 해체, 물충전 작업을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "PE가설방호벽 설치 물량은 몇 개입니까?",
+    "물충전 작업 외에 별도의 고정 작업이 필요한 경우 품이 추가되나요?",
+    "살수차의 규격이 1,800ℓ가 아닌 경우 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:15:39.532543+00:00",
+    "input_tokens": 11474,
+    "output_tokens": 1037,
+    "source_pages": [
+      113,
+      114
+    ],
+    "prompt_sha256": "b621d6716dce15954e94566100704c4f0ac7a50db58ad9429c7e63a93505d1c0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

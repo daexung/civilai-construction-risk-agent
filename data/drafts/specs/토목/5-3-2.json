@@ -1,0 +1,398 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/5-3-2/강재거더가설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "5-3-2",
+    "title": "강재거더 가설",
+    "work": "강재거더 가설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      417,
+      418
+    ],
+    "inputs": [
+      {
+        "name": "girder_type",
+        "type": "enum",
+        "allowed_values": [
+          "개구제형",
+          "폐합형"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "가설할 거더의 단면 형상은 무엇입니까?",
+        "source": "p417-t1"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ea",
+        "required": true,
+        "ask": "가설할 거더의 개수는 몇 개입니까?",
+        "source": "p417-t1 가설 개수(ea)"
+      },
+      {
+        "name": "location",
+        "type": "enum",
+        "allowed_values": [
+          "육상",
+          "해상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "가설 위치는 육상입니까, 해상입니까?",
+        "source": "주석 ⑥"
+      },
+      {
+        "name": "direct_lifting",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "공장에서 제작된 단일 강재거더를 지조립 없이 직접 인양하여 가설합니까?",
+        "source": "주석 ②"
+      },
+      {
+        "name": "special_condition",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "교량을 확폭하거나, 과도교, 과선교 지하 통로내(낙석, 낙설방지)에서 작업합니까?",
+        "source": "주석 ⑤"
+      },
+      {
+        "name": "crane_size",
+        "type": "enum",
+        "allowed_values": [
+          "100~300ton"
+        ],
+        "unit": "ton",
+        "required": true,
+        "ask": "크레인 규격은 무엇입니까?",
+        "source": "p417-t1"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p417-t1",
+        "role": "강재거더 가설 인력, 장비 및 일당 가설 개수",
+        "source": "5-3-2 강재거더 가설 표",
+        "unit": "인, 대, 개/일당",
+        "values": {
+          "철공": {
+            "수량": "6"
+          },
+          "비계공": {
+            "수량": "2"
+          },
+          "특별인부": {
+            "수량": "2"
+          },
+          "용접공": {
+            "수량": "2"
+          },
+          "크레인": {
+            "수량": "2"
+          },
+          "고소작업차": {
+            "수량": "1"
+          },
+          "가설 개수(ea)": {
+            "개구제형": "4.0",
+            "폐합형": "3.0"
+          }
+        },
+        "cite": {
+          "table_id": "p417-t1"
+        }
+      },
+      {
+        "id": "p418-t0",
+        "role": "공구손료 및 경장비의 기계경비 비율",
+        "source": "5-3-2 강재거더 가설 <공구손료 및 경장비의 기계경비> 표",
+        "unit": "%",
+        "values": {
+          "인력품대비(%)": {
+            "육상 개구제형": "7",
+            "육상 폐합형": "5",
+            "해상 개구제형": "6",
+            "해상 폐합형": "4"
+          }
+        },
+        "cite": {
+          "table_id": "p418-t0"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "location": "해상"
+        },
+        "when_text": "location = 해상",
+        "change": {
+          "비계공": "+2",
+          "특별인부": "+2"
+        },
+        "source": "주석 ⑥",
+        "cite": {
+          "chunk_id": "p417-x12"
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p417-t1",
+          "row": "가설 개수(ea)",
+          "column_input": "girder_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p417-t1",
+          "column": "수량",
+          "trades": [
+            "철공",
+            "비계공",
+            "특별인부",
+            "용접공"
+          ],
+          "rate_codes": {
+            "철공": "1014",
+            "비계공": "1015",
+            "특별인부": "1003",
+            "용접공": "1016"
+          }
+        },
+        "equipment": {
+          "name": "크레인",
+          "table": "p417-t1",
+          "unit": "대·일",
+          "machine_code_input": "crane_size",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p417-t1에서 거더 단면 형상(girder_type)에 따른 기준 일당 가설 개수를 고른다.",
+        "작업일수 = quantity ÷ 일당 가설 개수로 구한다.",
+        "p417-t1의 직종별 수량에 해상 작업 시 비계공, 특별인부 추가(주석 ⑥)를 적용하여 조정된 인원을 구한다.",
+        "직종별 인·일 = 작업일수 × 조정된 직종별 인원으로 구한다.",
+        "장비 대·일 = 작업일수 × 크레인 수량(2대), 고소작업차 대·일 = 작업일수 × 고소작업차 수량(1대)으로 구한다."
+      ],
+      "source": "p417-t1 및 주석 ⑥",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "지조립 없이 직접 인양하여 가설하는 경우",
+        "blocked_if": {
+          "input": "direct_lifting",
+          "op": "==",
+          "value": true
+        },
+        "reason": "일당시공량 1개 추가 계상은 현재 계산 모델(비율 곱셈)에서 덧셈 보정을 지원하지 않아 자동 계산 보류",
+        "source": "주석 ②",
+        "cite": {
+          "chunk_id": "p417-x12"
+        }
+      },
+      {
+        "condition": "교량 확폭, 과도교, 과선교 지하 통로내인 경우",
+        "blocked_if": {
+          "input": "special_condition",
+          "op": "==",
+          "value": true
+        },
+        "reason": "일당 가설 개수 1개 차감은 현재 계산 모델에서 뺄셈 보정을 지원하지 않아 자동 계산 보류",
+        "source": "주석 ⑤",
+        "cite": {
+          "chunk_id": "p417-x12"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "크레인의 운반 및 조립",
+        "source": "주석 ③",
+        "cite": {
+          "chunk_id": "p417-x12"
+        }
+      },
+      {
+        "item": "가설 지점까지의 현장내 소운반(2차운반)",
+        "source": "주석 ④",
+        "cite": {
+          "chunk_id": "p417-x12"
+        }
+      },
+      {
+        "item": "바지선, 예인선 등 가설을 위한 추가 장비",
+        "source": "주석 ⑥",
+        "cite": {
+          "chunk_id": "p417-x12"
+        }
+      },
+      {
+        "item": "300ton급 초과 대형크레인 투입 시 가설품 및 크레인 대수 조정",
+        "source": "주석 ⑩",
+        "cite": {
+          "chunk_id": "p417-x12"
+        }
+      },
+      {
+        "item": "크레인, 트레일러 등 반입을 위한 토공사 및 가시설 설치, 가교각",
+        "source": "주석 ⑫",
+        "cite": {
+          "chunk_id": "p418-x2"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 가설 개수(기준 일일시공량)와 작업조 인원/장비 대수가 표로 주어져 있어 일당 작업조형 계산이 적합함.",
+  "citations": [
+    {
+      "table_id": "p417-t1",
+      "row": "가설 개수(ea)",
+      "column": "개구제형",
+      "value": "4.0"
+    },
+    {
+      "table_id": "p417-t1",
+      "row": "가설 개수(ea)",
+      "column": "폐합형",
+      "value": "3.0"
+    },
+    {
+      "table_id": "p417-t1",
+      "row": "철공",
+      "column": "수량",
+      "value": "6"
+    },
+    {
+      "table_id": "p417-t1",
+      "row": "비계공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p417-t1",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p417-t1",
+      "row": "용접공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p417-t1",
+      "row": "크레인",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p417-t1",
+      "row": "고소작업차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p418-t0",
+      "row": "인력품대비(%)",
+      "column": "육상 개구제형",
+      "value": "7"
+    },
+    {
+      "table_id": "p418-t0",
+      "row": "인력품대비(%)",
+      "column": "육상 폐합형",
+      "value": "5"
+    },
+    {
+      "table_id": "p418-t0",
+      "row": "인력품대비(%)",
+      "column": "해상 개구제형",
+      "value": "6"
+    },
+    {
+      "table_id": "p418-t0",
+      "row": "인력품대비(%)",
+      "column": "해상 폐합형",
+      "value": "4"
+    },
+    {
+      "chunk_id": "p417-x12",
+      "quote": "② 공장에서 제작된 단일 강재거더를 가설 현장에서 지조립 없이 직접 인양하여 가설하는 경우에는 일당시공량\n설명 | 1개를 추가 계상한다."
+    },
+    {
+      "chunk_id": "p417-x12",
+      "quote": "③ 본 품은 현장에 반입되어 조립이 완료된 크레인에 의하여 강재거더를 가설하는 기준이며, 크레인의\n설명 | 운반 및 조립은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p417-x12",
+      "quote": "④ 본 품은 교량하부까지 운반이 완료된 상태의 거더를 가설하는 기준이며, 가설 지점까지의 현장내\n설명 | 소운반(2차운반)이 발생하는 경우는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p417-x12",
+      "quote": "⑤ 교량을 확폭하거나, 과도교, 과선교 지하 통로내(낙석, 낙설방지)인 때는 일당 가설 개수를 1개씩\n설명 | 차감한다."
+    },
+    {
+      "chunk_id": "p417-x12",
+      "quote": "⑥ 교량아래 해상에서 장비(크레인)로 가설하는 경우에는 비계공 2인, 특별인부 2인을 추가 계상한다."
+    },
+    {
+      "chunk_id": "p417-x12",
+      "quote": "이 경우 바지선, 예인선 등 가설을 위해 추가 장비가 필요한 경우 별도로 계상한다."
+    },
+    {
+      "chunk_id": "p417-x12",
+      "quote": "⑩거더 가설위치가 하천통과구간, 지장물에 의한 저촉 등 가설조건이 불량한 경우 현장여건에 따라\n설명 | 300ton급을 초과하는 대형크레인의 적용이 가능하며, 300ton급을 초과하는 대형크레인이 투입될 경우 가설품과 크레인의 대수는 인양하중, 거더중량, 강교 거더 가설계획에 따라 조정하여 별도 계상한다."
+    },
+    {
+      "chunk_id": "p418-x2",
+      "quote": "⑫ 크레인, 트레일러 등의 반입을 위한 토공사 및 가시설 설치 및 빔 가설용 가교각이 필요한 경우에는\n설명 | 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "공구손료 및 경장비 기계경비 비율이 육상/해상 및 개구제형/폐합형에 따라 다르나(p418-t0), 현재 cost_rules 스키마가 조건부 비율을 지원하지 않아 명세에서 제외함.",
+    "장비가 크레인과 고소작업차 2종류인데, quantity_model.params.equipment가 단일 객체만 지원하는지 불명확하여 크레인만 명시하고 고소작업차는 steps에 기재함."
+  ],
+  "questions": [
+    "강재거더 가설 시 해상에서 작업할 경우 인력 할증은 어떻게 되나요?",
+    "공장에서 제작된 단일 강재거더를 지조립 없이 직접 인양할 때 일당시공량은 어떻게 조정하나요?",
+    "가설할 거더의 단면 형상(개구제형/폐합형)은 무엇인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:02:02.189268+00:00",
+    "input_tokens": 26156,
+    "output_tokens": 7375,
+    "source_pages": [
+      417,
+      418,
+      419
+    ],
+    "prompt_sha256": "bc2331f5feea1a73ec2e7bb3972a43ff616a4305494e677e221fefd806a39496",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

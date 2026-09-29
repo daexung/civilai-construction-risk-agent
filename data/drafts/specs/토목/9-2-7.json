@@ -1,0 +1,286 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-2-7/4급_GNSS_높이측량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-2-7",
+    "title": "4급 GNSS 높이측량('21년 신설)",
+    "work": "4급 GNSS 높이측량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      430,
+      431
+    ],
+    "inputs": [
+      {
+        "name": "points_to_find",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "점",
+        "required": true,
+        "ask": "구하는 점은 몇 점입니까?",
+        "source": "PDF 430쪽 [주] ⑤"
+      },
+      {
+        "name": "points_given",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "점",
+        "required": true,
+        "ask": "주어진 점은 몇 점입니까?",
+        "source": "PDF 430쪽 [주] ⑤"
+      },
+      {
+        "name": "terrain_type",
+        "type": "enum",
+        "allowed_values": [
+          "평지",
+          "산지",
+          "산악지"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지형구분은 무엇입니까?",
+        "decision_table": "p486-t2",
+        "source": "PDF 430쪽 [주] ③ 및 지형 유형에 따른 계수(K) 표"
+      },
+      {
+        "name": "eccentric_point_installed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "GNSS 위성신호 수신장애로 편심점을 설치합니까?",
+        "source": "PDF 430쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p486-t1",
+        "role": "작업구분별 투입 인원",
+        "source": "PDF 430쪽 9-2-7 표",
+        "unit": "인",
+        "values": {
+          "계": {
+            "합계 특급\n기술자 (1.0) 2.0": "2.0",
+            "합계 고급\n기술자 (1.2) 3.6": "3.6",
+            "합계 중급\n기술자 3.1": "3.1",
+            "합계 초급\n기술자 9.3": "9.3"
+          }
+        },
+        "cite": {
+          "table_id": "p486-t1"
+        }
+      },
+      {
+        "id": "p486-t2",
+        "role": "지형 유형에 따른 계수(K)",
+        "source": "PDF 430쪽 지형 유형에 따른 계수(K) 표",
+        "unit": "무차원",
+        "values": {
+          "평지": {
+            "계수(K) 1.00": "1.00"
+          },
+          "산지": {
+            "계수(K) 1.10": "1.10"
+          },
+          "산악지": {
+            "계수(K) 1.20": "1.20"
+          }
+        },
+        "cite": {
+          "table_id": "p486-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p486-t1",
+          "row_input": "계",
+          "column_input": "직종",
+          "trades": [
+            "특급기술자",
+            "고급기술자",
+            "중급기술자",
+            "초급기술자"
+          ]
+        },
+        "quantity_input": "표준작업량",
+        "surcharges": [
+          {
+            "when": {},
+            "rate": "terrain_type에 따른 계수(K)",
+            "applies_to": [
+              "특급기술자",
+              "고급기술자",
+              "중급기술자",
+              "초급기술자"
+            ],
+            "source": "PDF 430쪽 [주] ③"
+          }
+        ],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p486-t1에서 직종별 합계 인원을 고른다.",
+        "표준작업량 = (구하는 점 + 주어진 점) / 15 로 계산한다.",
+        "p486-t2에서 지형구분에 따른 계수 K를 찾는다.",
+        "수량(T) = 인원수 × 표준작업량 × K 로 총 품을 구한다."
+      ],
+      "source": "PDF 430쪽 9-2-7 표 및 [주] ③, ⑤, PDF 431쪽 수량(T) 산정식",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "편심점을 설치할 경우",
+        "blocked_if": {
+          "input": "eccentric_point_installed",
+          "op": "==",
+          "value": true
+        },
+        "reason": "해당 등급의 수준측량을 적용하여 별도의 품으로 계상해야 함",
+        "source": "PDF 430쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p486-x23",
+          "quote": "기지점 및 미지점에서 GNSS 위성신호의 수신장애가 발생하여 편심점을 설치할 경우 해당 등급의\n설명 | 수준측량을 적용하여 별도의 품으로 계상한다."
+        }
+      },
+      {
+        "condition": "구하는 점과 주어진 점의 합이 15점을 초과하는 경우",
+        "reason": "최대 15점을 1작업단위로 한다고 명시되어 있으나, 초과 시 여러 작업단위로 나누는지 비례 계산하는지 명확하지 않음",
+        "source": "PDF 430쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p486-x23",
+          "quote": "본 품의 작업은 구하는 점 10점, 주어진 점 5점 또는 주어진 점과 구하는 점을 합한 최대 15점을\n설명 | 1작업단위로 한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "측량표의 설치, 자재운반에 따르는 차량비 등",
+        "source": "PDF 430쪽 [주] ⑥",
+        "cite": {
+          "chunk_id": "p486-x23",
+          "quote": "측량표의 설치, 자재운반에 따르는 차량비 등은 별도 계상한다."
+        }
+      },
+      {
+        "item": "보상비, 재료비, 소모품비, 차량비 등",
+        "source": "PDF 430쪽 [주] ⑦",
+        "cite": {
+          "chunk_id": "p486-x23",
+          "quote": "보상비, 재료비, 소모품비, 차량비 등은 별도 계상한다."
+        }
+      },
+      {
+        "item": "외업에 동원되는 기술인원에 대한 여비",
+        "source": "PDF 430쪽 [주] ⑧",
+        "cite": {
+          "chunk_id": "p486-x23",
+          "quote": "본 품의 외업에 동원되는 기술인원에 대한 여비는 국토교통부장관이 고시한 측량대가의 기준에 따라\n설명 | 별도 계상한다."
+        }
+      },
+      {
+        "item": "성과심사에 소요되는 비용",
+        "source": "PDF 430쪽 [주] ⑨",
+        "cite": {
+          "chunk_id": "p486-x23",
+          "quote": "본 품에서 성과심사에 소요되는 비용은 국토지리정보원장이 고시한 측량성과 심사수탁기관의 심사업무\n설명 | 및 지정절차 등에 관한 규정에 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "측량기기의 상각비･정비비",
+        "source": "PDF 431쪽 [주] ⑩",
+        "cite": {
+          "chunk_id": "p487-x0",
+          "quote": "본 품에서 사용되는 측량기기의 상각비･정비비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "15점 기준의 인원이 표로 주어지고, 점수 비율(표준작업량)과 지형 계수를 곱하여 단위당 품을 산정하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "chunk_id": "p486-x23",
+      "quote": "기지점 및 미지점에서 GNSS 위성신호의 수신장애가 발생하여 편심점을 설치할 경우 해당 등급의\n설명 | 수준측량을 적용하여 별도의 품으로 계상한다."
+    },
+    {
+      "chunk_id": "p486-x23",
+      "quote": "본 품의 작업은 구하는 점 10점, 주어진 점 5점 또는 주어진 점과 구하는 점을 합한 최대 15점을\n설명 | 1작업단위로 한다."
+    },
+    {
+      "chunk_id": "p486-x23",
+      "quote": "측량표의 설치, 자재운반에 따르는 차량비 등은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p486-x23",
+      "quote": "보상비, 재료비, 소모품비, 차량비 등은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p486-x23",
+      "quote": "본 품의 외업에 동원되는 기술인원에 대한 여비는 국토교통부장관이 고시한 측량대가의 기준에 따라\n설명 | 별도 계상한다."
+    },
+    {
+      "chunk_id": "p486-x23",
+      "quote": "본 품에서 성과심사에 소요되는 비용은 국토지리정보원장이 고시한 측량성과 심사수탁기관의 심사업무\n설명 | 및 지정절차 등에 관한 규정에 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p487-x0",
+      "quote": "본 품에서 사용되는 측량기기의 상각비･정비비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p486-x18",
+      "quote": "본 품은 평지를 기준으로 한 것이며, 지형의 유형에 따라 다음의 계수 값 이내를 가산한다."
+    },
+    {
+      "chunk_id": "p487-x12",
+      "quote": "수량(T) 산정식은 다음과 같다. T = 4급 GNSS 높이측량 인원수 × 표준작업량 × K"
+    },
+    {
+      "table_id": "p486-t1",
+      "row": "계",
+      "column": "합계 특급\n기술자 (1.0) 2.0",
+      "value": "2.0"
+    },
+    {
+      "table_id": "p486-t2",
+      "row": "평지",
+      "column": "계수(K) 1.00",
+      "value": "1.00"
+    }
+  ],
+  "open_questions": [
+    "구하는 점과 주어진 점의 합이 15점을 초과할 경우, 15점 단위로 여러 작업단위로 나누어 계산해야 하는지, 아니면 단순히 비례하여 계산(예: 20/15)해도 되는지 원문에 명확히 서술되어 있지 않습니다."
+  ],
+  "questions": [
+    "4급 GNSS 높이측량에서 산악지 지형일 때 적용되는 계수는 얼마인가요?",
+    "구하는 점이 12점이고 주어진 점이 6점이라 합이 18점인 경우, 15점을 초과하는데 품셈 계산을 어떻게 적용해야 하나요?",
+    "GNSS 위성신호 수신장애로 편심점을 설치해야 하는데, 이 비용은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T03:17:25.587637+00:00",
+    "input_tokens": 28109,
+    "output_tokens": 6417,
+    "source_pages": [
+      486,
+      487,
+      488
+    ],
+    "prompt_sha256": "7ad1f3c3a06cffec2e02b1ee60f5d8a38c60d54d3ce7183fbf63e05c78f580c7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

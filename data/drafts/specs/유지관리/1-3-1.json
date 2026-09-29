@@ -1,0 +1,186 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/1-3-1/표면처리공법",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "1-3-1",
+    "title": "콘크리트 균열 보수(표면처리공법)",
+    "work": "표면처리공법 보수 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      867
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "콘크리트 균열 보수 물량은 몇 m입니까?",
+        "source": "1-3-1 표 시공량(m)"
+      },
+      {
+        "name": "crack_width",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "mm",
+        "required": true,
+        "ask": "균열폭은 몇 mm입니까?",
+        "source": "1-3-1 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p923-t2",
+        "role": "콘크리트 균열 보수(표면처리공법) 일당 시공량 및 인원",
+        "source": "1-3-1 표",
+        "unit": "인/일, m/일",
+        "values": {
+          "미장공": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(m)": "110"
+          }
+        },
+        "cite": {
+          "table_id": "p923-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p923-t2",
+          "row": "미장공",
+          "column": "시공량(m)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p923-t2",
+          "column": "수량",
+          "trades": [
+            "미장공"
+          ],
+          "rate_codes": {
+            "미장공": "1000"
+          }
+        },
+        "equipment": {},
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p923-t2에서 일당 시공량(110m)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "미장공 인·일 = 작업일수 × 1(수량)로 구한다."
+      ],
+      "source": "1-3-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "균열폭이 10mm를 초과하는 경우",
+        "blocked_if": {
+          "input": "crack_width",
+          "op": ">",
+          "value": 10
+        },
+        "reason": "균열폭은 10㎜까지를 기준으로 한 것이며, 균열의 폭이나 형태가 다양하여 본 품에 준할 수 없을 때에는 적의 산출한다.",
+        "source": "1-3-1 [주] ③",
+        "cite": {
+          "section_no": "1-3-1",
+          "marker": "③"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "주재료(표면처리재) 및 잡재료/소모재료",
+        "source": "1-3-1 [주] ⑤",
+        "cite": {
+          "section_no": "1-3-1",
+          "marker": "⑤"
+        }
+      },
+      {
+        "item": "고소작업 등 인력인상 장비 기계경비",
+        "source": "1-3-1 [주] ⑥",
+        "cite": {
+          "section_no": "1-3-1",
+          "marker": "⑥"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "section_no": "1-3-1",
+          "marker": "④"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량과 작업조 인원이 표로 주어져 있어, 물량을 일당 시공량으로 나누어 작업일수를 구하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p923-t2",
+      "row": "미장공",
+      "column": "시공량(m)",
+      "value": "110"
+    },
+    {
+      "table_id": "p923-t2",
+      "row": "미장공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p923-x15",
+      "quote": "③ 균열폭은 10㎜까지를 기준으로 한 것이며, 균열의 폭이나 형태가 다양하여 본 품에 준할 수 없을"
+    },
+    {
+      "chunk_id": "p923-x15",
+      "quote": "④ 공구손료 및 경장비(믹서 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p923-x15",
+      "quote": "⑤ 주재료(표면처리재)는 설계수량에 따르며, 잡재료 및 소모재료는 주재료의 5%까지 계상한다."
+    },
+    {
+      "chunk_id": "p923-x15",
+      "quote": "⑥ 현장 여건상 고소작업 등의 인력인상에 장비가 필요할 시 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "잡재료 및 소모재료는 주재료의 5%까지 계상한다고 되어 있으나, 현재 명세 형식의 cost_rules는 노무비(labor_subtotal) 기준만 지원하므로 이를 자동 계산식에 포함하지 못하고 not_calculated로 처리했습니다."
+  ],
+  "questions": [
+    "균열 보수 물량이 50m일 때 미장공 품은 어떻게 되나요?",
+    "균열폭이 12mm인 경우 이 품셈을 적용할 수 있나요?",
+    "표면처리재(주재료) 수량과 비용은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:27.712569+00:00",
+    "input_tokens": 23390,
+    "output_tokens": 3810,
+    "source_pages": [
+      923,
+      924
+    ],
+    "prompt_sha256": "ee99da4b565cdb2e1cfaf1f7816381ae5a208837add3669f8ef8d3f812c6e841",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

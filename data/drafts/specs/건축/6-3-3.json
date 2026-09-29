@@ -1,0 +1,161 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-3-3/자착식시트붙임",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-3-3",
+    "title": "자착식시트 붙임",
+    "work": "자착식시트 붙임 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      605
+    ],
+    "inputs": [
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "바닥",
+          "수직부"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위가 바닥입니까, 수직부입니까?",
+        "source": "PDF 605쪽 6-3-3 표의 열 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "자착식시트 붙임 물량은 몇 ㎡입니까?",
+        "source": "PDF 605쪽 6-3-3 표 단위 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p661-t3",
+        "role": "자착식시트 붙임 단위당 품",
+        "source": "PDF 605쪽 6-3-3 표",
+        "unit": "인/㎡",
+        "values": {
+          "방수공": {
+            "바닥": "0.026",
+            "수직부": "0.036"
+          },
+          "보통인부": {
+            "바닥": "0.016",
+            "수직부": "0.020"
+          }
+        },
+        "cite": {
+          "table_id": "p661-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p661-t3",
+          "column_input": "surface_type",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p661-t3 표에서 시공 부위(바닥/수직부)에 해당하는 단위당 품을 찾는다.",
+        "물량을 곱하여 총 투입 인·일을 계산한다."
+      ],
+      "source": "PDF 605쪽 6-3-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료량",
+        "source": "PDF 605쪽 6-3-3 [주] ④",
+        "cite": {
+          "chunk_id": "p661-x15"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 직종별 투입 인원이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p661-t3",
+      "row": "방수공",
+      "column": "바닥",
+      "value": "0.026"
+    },
+    {
+      "table_id": "p661-t3",
+      "row": "방수공",
+      "column": "수직부",
+      "value": "0.036"
+    },
+    {
+      "table_id": "p661-t3",
+      "row": "보통인부",
+      "column": "바닥",
+      "value": "0.016"
+    },
+    {
+      "table_id": "p661-t3",
+      "row": "보통인부",
+      "column": "수직부",
+      "value": "0.020"
+    },
+    {
+      "chunk_id": "p661-x15",
+      "quote": "본 품은 접착 성능을 가진 자착형 방수시트를 1겹 붙임하는 기준이다."
+    },
+    {
+      "chunk_id": "p661-x15",
+      "quote": "방수시트는 두께 1.4~3.0㎜, 폭 1.0m 기준이다."
+    },
+    {
+      "chunk_id": "p661-x15",
+      "quote": "본 품은 치켜올림 부위, 드레인 주위, 시트접합부 등에 방수재 덧바름 및 덧붙임 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p661-x15",
+      "quote": "재료량은 ‘[건축부문] 6-3-1 가열식시트 붙임’을 참고하여 적용한다."
+    }
+  ],
+  "open_questions": [
+    "6-3-1(가열식)과 6-3-2(접착식)에는 공구손료(인력품의 3% 또는 2%)가 명시되어 있으나, 6-3-3(자착식)에는 공구손료에 대한 언급이 없습니다. 의도적인 누락인지 확인이 필요합니다."
+  ],
+  "questions": [
+    "자착식시트 바닥 100㎡ 시공 시 품은 어떻게 되나요?",
+    "치켜올림 부위나 드레인 주위 작업은 별도로 품을 가산해야 하나요?",
+    "시공할 부위가 바닥인지 수직부인지 입력이 필요합니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:03:42.035922+00:00",
+    "input_tokens": 11576,
+    "output_tokens": 1579,
+    "source_pages": [
+      661,
+      662
+    ],
+    "prompt_sha256": "20737840aa82a67aeca4d8f24c16339b3d53b0d153c06cc5a2d41a93927bde6e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

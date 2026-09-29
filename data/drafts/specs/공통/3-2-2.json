@@ -1,0 +1,190 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-2-2/굴착(인력/암반)",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-2-2",
+    "title": "굴착(인력/암반)('20년 보완)",
+    "work": "굴착 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      68
+    ],
+    "inputs": [
+      {
+        "name": "rock_type",
+        "type": "enum",
+        "allowed_values": [
+          "풍화암 연암 보통암 경암"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "암질은 무엇입니까?",
+        "source": "파싱 결과 표 p124-t0 행 이름"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "굴착 물량은 몇 ㎥입니까?",
+        "source": "표 p124-t0 기준 (㎥당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p124-t0",
+        "role": "암질별 굴착 단위당 품",
+        "source": "3-2-2 굴착(인력/암반) 표",
+        "unit": "인/㎥, 시간/㎥",
+        "values": {
+          "풍화암 연암 보통암 경암": {
+            "착암공\n(인)": "0.33",
+            "보통인부\n(인)": "0.16",
+            "공기압축기\n(시간)": "0.30",
+            "소형브레이커\n(시간)": "1.26"
+          }
+        },
+        "cite": {
+          "table_id": "p124-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p124-t0",
+          "row_input": "rock_type",
+          "column_input": null,
+          "trades": [
+            "착암공\n(인)",
+            "보통인부\n(인)"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "3-2-2 굴착(인력/암반) 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "굴착토량이 단위개소당 10㎥ 이상이면서 대형브레이커나 화약사용이 가능한 경우",
+        "reason": "굴착토량은 단위개소당 10㎥미만의 경우 또는 대형브레이커나 화약사용이 불가능한 경우에 적용함",
+        "source": "[주] ②",
+        "cite": {
+          "chunk_id": "p124-x6",
+          "quote": "② 굴착토량은 단위개소당 10㎥미만의 경우 또는 대형브레이커나 화약사용이 불가능한 경우에 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "버럭적재 및 운반",
+        "source": "[주] ①",
+        "cite": {
+          "chunk_id": "p124-x6",
+          "quote": "① 버럭적재 및 운반은 별도 계상한다."
+        }
+      },
+      {
+        "item": "기계 및 기구 경비",
+        "source": "[주] ③",
+        "cite": {
+          "chunk_id": "p124-x6",
+          "quote": "③ 기계 및 기구 경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "잡재료",
+        "category": "재료비",
+        "base": "labor_subtotal",
+        "rate": "0.01",
+        "cite": {
+          "chunk_id": "p124-x6",
+          "quote": "④ 잡재료는 인력품의 1%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 ㎥당 인력 및 장비 품이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p124-t0",
+      "row": "풍화암 연암 보통암 경암",
+      "column": "착암공\n(인)",
+      "value": "0.33"
+    },
+    {
+      "table_id": "p124-t0",
+      "row": "풍화암 연암 보통암 경암",
+      "column": "보통인부\n(인)",
+      "value": "0.16"
+    },
+    {
+      "table_id": "p124-t0",
+      "row": "풍화암 연암 보통암 경암",
+      "column": "공기압축기\n(시간)",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p124-t0",
+      "row": "풍화암 연암 보통암 경암",
+      "column": "소형브레이커\n(시간)",
+      "value": "1.26"
+    },
+    {
+      "chunk_id": "p124-x6",
+      "quote": "① 버럭적재 및 운반은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p124-x6",
+      "quote": "② 굴착토량은 단위개소당 10㎥미만의 경우 또는 대형브레이커나 화약사용이 불가능한 경우에 적용한다."
+    },
+    {
+      "chunk_id": "p124-x6",
+      "quote": "③ 기계 및 기구 경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p124-x6",
+      "quote": "④ 잡재료는 인력품의 1%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에 연암, 보통암, 경암의 품(0.41, 0.21, 0.48, 1.68 등)이 누락되어 있어 표에 반영하지 못했습니다.",
+    "파싱 결과의 행 이름이 '풍화암 연암 보통암 경암'으로 합쳐져 있어 개별 암질 선택이 어렵습니다."
+  ],
+  "questions": [
+    "잡재료비는 어떻게 계산하나요?",
+    "단위개소당 10㎥ 이상이지만 화약사용이 불가능한 경우 이 품을 적용할 수 있나요?",
+    "굴착할 암질(풍화암, 연암 등)은 무엇인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:53.987326+00:00",
+    "input_tokens": 23915,
+    "output_tokens": 4121,
+    "source_pages": [
+      124,
+      125
+    ],
+    "prompt_sha256": "57db78beb2ebe5374ffcbfb37f34b37621033ace4c6b2ab312a1ed9a17a88514",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

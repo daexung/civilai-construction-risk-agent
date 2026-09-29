@@ -1,0 +1,111 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8201-0100/지능형다짐공시스템",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8201-0100",
+    "title": "(8205) 지능형 다짐공 시스템('26년 신설)",
+    "work": "기계손료 계수 조회",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      270
+    ],
+    "inputs": [
+      {
+        "name": "equipment_code",
+        "type": "enum",
+        "allowed_values": [
+          "8205-0100"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 장비의 분류 번호는 무엇입니까?",
+        "source": "PDF 270쪽 p326-t0",
+        "synonyms": {
+          "8205-0100": [
+            "지능형 다짐공 시스템"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p326-t0",
+        "role": "지능형 다짐공 시스템 기계손료 계수",
+        "source": "PDF 270쪽 (8205) 지능형 다짐공 시스템('26년 신설) 표",
+        "unit": "시간당(10-7)",
+        "values": {
+          "8205-0100": {
+            "규격 (㎥)": "지능형 다짐공 시스템",
+            "내용 시간": "5,000",
+            "연간표준 가동시간": "1,250",
+            "상각 비율": "0.9",
+            "정비 비율": "0.8",
+            "연간 관리 비율": "0.1",
+            "시 간 당(10-7) 상각비 계수": "1,800",
+            "시 간 당(10-7) 정비비 계수": "1,600",
+            "시 간 당(10-7) 관리비 계수": "530",
+            "시 간 당(10-7) 계": "3,930"
+          }
+        },
+        "cite": {
+          "table_id": "p326-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 장비 분류 번호에 해당하는 기계손료 계수(상각비, 정비비, 관리비)를 표에서 찾는다."
+      ],
+      "source": "PDF 270쪽 p326-t0",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "이 절은 건설기계의 시간당 손료 계수를 제공하는 표로, 특정 물량에 대한 품을 계산하는 것이 아니라 장비의 계수를 조회하는 용도입니다.",
+  "citations": [
+    {
+      "table_id": "p326-t0",
+      "row": "8205-0100",
+      "column": "시 간 당(10-7) 상각비 계수",
+      "value": "1,800"
+    },
+    {
+      "chunk_id": "p326-x3",
+      "quote": "지능형 다짐공 시스템은 다짐 롤러에 탑재된 지능형 다짐 시스템(GNSS, 가속도계 센서, 관제 장치 등)을 이용하여 다짐 횟수, 지반 강성 등을 실시간으로 관리하고, 그 기록을 데이터화하는 지능형 다짐 시스템을 말한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에 '8201-0100 3D GNSS MG'라는 텍스트가 섞여 있으나, 실제 표와 내용은 '8205-0100 지능형 다짐공 시스템'에 대한 것입니다. 프롬프트의 대상 절 번호(8201-0100)와 실제 내용(8205-0100) 간의 불일치가 있어 id는 프롬프트를 따랐으나 확인이 필요합니다."
+  ],
+  "questions": [
+    "지능형 다짐공 시스템의 시간당 상각비 계수는 얼마인가요?",
+    "지능형 다짐공 시스템의 정의는 무엇인가요?",
+    "지능형 다짐공 시스템의 연간표준 가동시간은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:24:53.172037+00:00",
+    "input_tokens": 11875,
+    "output_tokens": 1222,
+    "source_pages": [
+      326,
+      327
+    ],
+    "prompt_sha256": "c50b5ce404b83b1c0ada10303f98aef75e8c002106f4b2ea0e9de86e8cf69d4f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p326-x3 조각 텍스트에 없음"
+    ]
+  }
+}

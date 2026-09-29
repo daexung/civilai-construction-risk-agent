@@ -1,0 +1,242 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-4-5/단열재타정부착",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-4-5",
+    "title": "단열재 타정 부착('22년 신설, '24년 보완)",
+    "work": "단열재 타정 부착 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      600
+    ],
+    "inputs": [
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "50이하",
+          "100이하",
+          "200이하",
+          "300이하"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "단열두께는 얼마입니까? (50이하 / 100이하 / 200이하 / 300이하)",
+        "source": "PDF 600쪽 5-4-5 표 단열두께(mm)",
+        "synonyms": {
+          "50이하": [
+            "50mm 이하",
+            "50"
+          ],
+          "100이하": [
+            "100mm 이하",
+            "100"
+          ],
+          "200이하": [
+            "200mm 이하",
+            "200"
+          ],
+          "300이하": [
+            "300mm 이하",
+            "300"
+          ]
+        }
+      },
+      {
+        "name": "surface",
+        "type": "enum",
+        "allowed_values": [
+          "벽",
+          "천장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위는 벽입니까, 천장입니까?",
+        "source": "PDF 600쪽 5-4-5 표 시공량(㎡) 구분",
+        "synonyms": {
+          "벽": [
+            "벽면"
+          ],
+          "천장": [
+            "천정"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "단열재 타정 부착 시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 600쪽 5-4-5 표 시공량 단위(㎡)"
+      },
+      {
+        "name": "layers",
+        "type": "enum",
+        "allowed_values": [
+          "1겹",
+          "2겹 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단열재는 몇 겹으로 붙입니까?",
+        "source": "PDF 600쪽 5-4-5 [주] ② 1겹 붙임 기준"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p656-t2",
+        "role": "단열재 타정 부착 작업조 인원 및 일일시공량",
+        "source": "PDF 600쪽 5-4-5 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "내장공": {
+            "벽": "2",
+            "천장": "2"
+          },
+          "보통인부": {
+            "벽": "1",
+            "천장": "1"
+          },
+          "50이하": {
+            "벽": "50",
+            "천장": "42"
+          },
+          "100이하": {
+            "벽": "45",
+            "천장": "38"
+          },
+          "200이하": {
+            "벽": "42",
+            "천장": "35"
+          },
+          "300이하": {
+            "벽": "40",
+            "천장": "33"
+          }
+        },
+        "cite": {
+          "table_id": "p656-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p656-t2",
+          "row_input": "thickness",
+          "column_input": "surface"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p656-t2",
+          "column_input": "surface",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "내장공": "1018",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": null,
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p656-t2에서 단열두께와 시공부위에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(내장공 2인, 보통인부 1인)으로 구한다."
+      ],
+      "source": "PDF 600쪽 5-4-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "단열재를 2겹 이상 붙이는 경우",
+        "blocked_if": {
+          "input": "layers",
+          "op": "==",
+          "value": "2겹 이상"
+        },
+        "reason": "본 품은 1겹 붙임 기준이므로 2겹 이상 시공 시 별도의 품셈 적용이나 할증 판단이 필요함",
+        "source": "PDF 600쪽 5-4-5 [주] ②",
+        "cite": {
+          "chunk_id": "p656-x16",
+          "quote": "경질우레탄폼, 패놀폼(PF) 단열재의 1겹 붙임 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p656-x16",
+          "quote": "공구손료 및 경장비(타정기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 일당 작업조 인원과 일일 시공량이 명시되어 있어, 물량을 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p656-t2",
+      "row": "50이하",
+      "column": "벽",
+      "value": "50"
+    },
+    {
+      "table_id": "p656-t2",
+      "row": "100이하",
+      "column": "천장",
+      "value": "38"
+    },
+    {
+      "chunk_id": "p656-x16",
+      "quote": "본 품은 화스너로 타정하여 단열재를 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p656-x16",
+      "quote": "경질우레탄폼, 패놀폼(PF) 단열재의 1겹 붙임 기준이다."
+    },
+    {
+      "chunk_id": "p656-x16",
+      "quote": "공구손료 및 경장비(타정기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "원문 표에는 작업조 인원이 시공부위(벽/천장)와 무관하게 고정되어 있으나, adjusted_daily_crew 모델의 구조적 호환성을 위해 tables 구성 시 인원 행에도 벽/천장 열을 임의로 매핑하여 동일한 값을 넣었습니다. 이 방식이 시스템에서 올바르게 처리되는지 확인이 필요합니다.",
+    "파싱 결과 텍스트(p656-t2)에 보통인부의 수량(1)이 누락되어 병합된 형태로 나타나 있으나, OCR 원문을 기준으로 내장공 2인, 보통인부 1인으로 분리하여 표를 구성했습니다."
+  ],
+  "questions": [
+    "단열두께 100mm 이하를 벽에 타정 부착할 때 일일 시공량은 얼마인가요?",
+    "단열재를 2겹으로 붙여야 하는 경우 이 품셈을 어떻게 적용해야 하나요?",
+    "단열재 타정 부착 물량이 몇 ㎡인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:02:33.577745+00:00",
+    "input_tokens": 11722,
+    "output_tokens": 2384,
+    "source_pages": [
+      656,
+      657
+    ],
+    "prompt_sha256": "1609b378e70b3e6ce79764d9e06305842b4fd319a6af2b32206fa866880da0a7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

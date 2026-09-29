@@ -1,0 +1,177 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-7-10/전등_Mud_Gun_설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-7-10",
+    "title": "전등 Mud Gun 설치",
+    "work": "전등 Mud Gun 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      828
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "설치할 전등 Mud Gun의 중량은 몇 ton입니까?",
+        "source": "PDF 828쪽 13-7-10 표 우측 상단 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p884-t0",
+        "role": "직종별 수량",
+        "source": "PDF 828쪽 13-7-10 표",
+        "unit": "인/ton",
+        "values": {
+          "기계기사": {
+            "수량": "0.58"
+          },
+          "플랜트기계설치공": {
+            "수량": "5.46"
+          },
+          "플랜트제관공": {
+            "수량": "0.44"
+          },
+          "플랜트용접공": {
+            "수량": "1.06"
+          },
+          "비계공": {
+            "수량": "0.63"
+          },
+          "특별인부": {
+            "수량": "3.18"
+          }
+        },
+        "cite": {
+          "table_id": "p884-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p884-t0",
+          "row_input": null,
+          "column_input": "수량",
+          "trades": [
+            "기계기사",
+            "플랜트기계설치공",
+            "플랜트제관공",
+            "플랜트용접공",
+            "비계공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p884-t0에서 직종별 단위당 품을 가져온다.",
+        "물량(quantity)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 828쪽 13-7-10 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "소운반 및 도장품",
+        "source": "PDF 828쪽 13-7-10 [주] ④",
+        "cite": {
+          "chunk_id": "p884-x6",
+          "quote": "④ 본 품에는 소운반 및 도장품이 제외되어 있다."
+        }
+      },
+      {
+        "item": "배관공사",
+        "source": "PDF 828쪽 13-7-10 [주] ⑤",
+        "cite": {
+          "chunk_id": "p884-x6",
+          "quote": "⑤ 본 품에는 배관공사는 제외되어 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 품이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p884-t0",
+      "row": "기계기사",
+      "column": "수량",
+      "value": "0.58"
+    },
+    {
+      "table_id": "p884-t0",
+      "row": "플랜트기계설치공",
+      "column": "수량",
+      "value": "5.46"
+    },
+    {
+      "table_id": "p884-t0",
+      "row": "플랜트제관공",
+      "column": "수량",
+      "value": "0.44"
+    },
+    {
+      "table_id": "p884-t0",
+      "row": "플랜트용접공",
+      "column": "수량",
+      "value": "1.06"
+    },
+    {
+      "table_id": "p884-t0",
+      "row": "비계공",
+      "column": "수량",
+      "value": "0.63"
+    },
+    {
+      "table_id": "p884-t0",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "3.18"
+    },
+    {
+      "chunk_id": "p884-x6",
+      "quote": "④ 본 품에는 소운반 및 도장품이 제외되어 있다."
+    },
+    {
+      "chunk_id": "p884-x6",
+      "quote": "⑤ 본 품에는 배관공사는 제외되어 있다."
+    }
+  ],
+  "open_questions": [
+    "원문에 '전등 Mud Gun'이라고 표기되어 있으나, '전동 Mud Gun'의 오타일 가능성이 있는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "전등 Mud Gun 10ton을 설치할 때 플랜트기계설치공의 품은 얼마인가요?",
+    "기초공사인 Foundation Chipping 작업은 별도로 품을 계산해야 하나요?",
+    "설치할 Mud Gun의 중량을 입력하지 않았습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:48.820927+00:00",
+    "input_tokens": 11558,
+    "output_tokens": 1606,
+    "source_pages": [
+      884,
+      885
+    ],
+    "prompt_sha256": "2a63c1ff719a4d2d180a2aea74402064b07180764c31238aa5e74a33d8791c93",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

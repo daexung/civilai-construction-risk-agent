@@ -1,0 +1,180 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/5-1-1/강교기본제작공수",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "5-1-1",
+    "title": "강교 기본제작공수('24년 보완)",
+    "work": "강교 기본제작공수 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      355
+    ],
+    "inputs": [
+      {
+        "name": "bridge_type",
+        "type": "enum",
+        "allowed_values": [
+          "플레이트거더",
+          "박스거더",
+          "강바닥판 플레이트거더",
+          "강바닥판박스거더",
+          "트러스",
+          "아치",
+          "라멘"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "강교 형식은 무엇입니까?",
+        "source": "표 p411-t0"
+      },
+      {
+        "name": "weight",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "제작중량은 몇 ton입니까?",
+        "source": "주석 ②, ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p411-t0",
+        "role": "강교 형식별 기본제작공수",
+        "source": "5-1-1 강교 기본제작공수 표",
+        "unit": "인/ton",
+        "values": {
+          "플레이트거더": {
+            "절단, 용접 및 단품제작 철판공": "1.02",
+            "절단, 용접 및 단품제작 용접공": "1.62",
+            "가조립\n(철공)": "0.97"
+          },
+          "박스거더": {
+            "절단, 용접 및 단품제작 철판공": "0.95",
+            "절단, 용접 및 단품제작 용접공": "1.62",
+            "가조립\n(철공)": "1.16"
+          },
+          "강바닥판 플레이트거더": {
+            "절단, 용접 및 단품제작 철판공": "2.00",
+            "절단, 용접 및 단품제작 용접공": "1.28",
+            "가조립\n(철공)": "1.19"
+          },
+          "강바닥판박스거더": {
+            "절단, 용접 및 단품제작 철판공": "1.87",
+            "절단, 용접 및 단품제작 용접공": "1.28",
+            "가조립\n(철공)": "1.42"
+          },
+          "트러스": {
+            "절단, 용접 및 단품제작 철판공": "1.40",
+            "절단, 용접 및 단품제작 용접공": "0.98",
+            "가조립\n(철공)": "1.08"
+          },
+          "아치": {
+            "절단, 용접 및 단품제작 철판공": "2.26",
+            "절단, 용접 및 단품제작 용접공": "1.30",
+            "가조립\n(철공)": "1.60"
+          },
+          "라멘": {
+            "절단, 용접 및 단품제작 철판공": "2.36",
+            "절단, 용접 및 단품제작 용접공": "1.31",
+            "가조립\n(철공)": "1.65"
+          }
+        },
+        "cite": {
+          "table_id": "p411-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p411-t0",
+          "row_input": "bridge_type",
+          "trades": [
+            "절단, 용접 및 단품제작 철판공",
+            "절단, 용접 및 단품제작 용접공",
+            "가조립\n(철공)"
+          ]
+        },
+        "quantity_input": "weight",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p411-t0에서 강교 형식별 단위당 품을 고른다.",
+        "제작중량(ton)을 곱해 총 품을 구한다."
+      ],
+      "source": "5-1-1 강교 기본제작공수 표 및 주석 ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "고강도강 상당품 사용 및 강교 본체 조건에 따른 보정",
+        "source": "5-1-2 강교 제작공수 산정방법",
+        "cite": {
+          "chunk_id": "p411-x7",
+          "quote": "본 기본제작공수는 KS 강재 규격에 의한 강종 SS 275, SM 275, SM 355, SM 420, HSB 380 등을\n설명 | 사용하는 강교를 제작하는 경우에 기준으로 한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "제경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.60",
+        "cite": {
+          "chunk_id": "p411-x7",
+          "quote": "공장제작에 따른 제경비는 표준제작공수의 60%로 계상하며"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 품(인)이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p411-t0",
+      "row": "플레이트거더",
+      "column": "절단, 용접 및 단품제작 철판공",
+      "value": "1.02"
+    },
+    {
+      "chunk_id": "p411-x7",
+      "quote": "본 기본제작공수는 절단, 용접 및 단품제작과 가조립 작업의 제작중량(ton) 당 철판공, 용접공, 철공의\n설명 | 기본공수로 단위는 “인/ton”이다."
+    },
+    {
+      "chunk_id": "p411-x7",
+      "quote": "공장제작에 따른 제경비는 표준제작공수의 60%로 계상하며"
+    }
+  ],
+  "open_questions": [
+    "5-1-2의 보정계수 적용은 별도의 명세로 분리할지, 아니면 이 명세에 통합하여 계산할지 결정이 필요합니다. 현재는 5-1-1 기본제작공수만 산정하도록 작성되었습니다."
+  ],
+  "questions": [
+    "강교 형식이 박스거더일 때 기본제작공수는 어떻게 되나요?",
+    "제작중량 산정 시 영구부재 외의 부재는 어떻게 처리하나요?",
+    "강교 제작에 사용되는 강종이 무엇인지 입력받지 않았는데, 고강도강을 사용할 경우 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:59:08.540337+00:00",
+    "input_tokens": 12262,
+    "output_tokens": 2006,
+    "source_pages": [
+      411,
+      412
+    ],
+    "prompt_sha256": "ae6c81723fca916d1cc1ea6b320918575bf58ebb420d0d1e5f1e8e6fd0cc4566",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

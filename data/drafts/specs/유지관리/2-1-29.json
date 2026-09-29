@@ -1,0 +1,219 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-29/보도용블록재설치_소형",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-29",
+    "title": "보도용 블록 재설치(소형)('21년 신설, '24년, ‘25년 보완)",
+    "work": "보도용 블록 재설치(소형) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      890
+    ],
+    "inputs": [
+      {
+        "name": "site_type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건별 적용기준은 A-Type과 B-Type 중 무엇입니까? 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p946-t1",
+        "source": "PDF 890쪽 p946-t1"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "보도용 블록 재설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 890쪽 p946-t0 시공량 단위"
+      },
+      {
+        "name": "tactile_block",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "유도･점자블록을 설치합니까?",
+        "source": "PDF 890쪽 p946-t0 비고"
+      },
+      {
+        "name": "precision_cut",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "블록 정밀절단(전동절단기)에 의한 시공입니까?",
+        "source": "PDF 890쪽 p946-t0 비고 및 p946-x13"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p946-t0",
+        "role": "작업조 인원 및 장비 대수, 시공량",
+        "source": "PDF 890쪽 표",
+        "values": {
+          "포장공 특별인부 보통인부": {
+            "단위": "인",
+            "A-Type 수량": "2",
+            "A-Type 시공량(㎡)": "260",
+            "B-Type 수량": "1",
+            "B-Type 시공량(㎡)": "180"
+          },
+          "굴착기": {
+            "규격": "0.2㎥",
+            "단위": "대",
+            "B-Type 수량": "1"
+          },
+          "플레이트콤팩터": {
+            "규격": "1.5ton",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1"
+          },
+          "트럭": {
+            "규격": "2.5ton",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1"
+          },
+          "비고": {
+            "비고": "- 유도･점자블록을 설치하는 경우 시공량의 10%를 감하여 적용한다. - 블록 정밀절단(전동절단기)에 의한 시공이 아닌 경우, 특별인부 1인을 감하여 적용한다."
+          }
+        },
+        "cite": {
+          "table_id": "p946-t0"
+        }
+      },
+      {
+        "id": "p946-t1",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 890쪽 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+          },
+          "B-Type": {
+            "적용기준": "- 차도인접, 주택가 보도 등 장비이동 및 적재 공간이 협소한 구간"
+          }
+        },
+        "cite": {
+          "table_id": "p946-t1"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "precision_cut": false
+        },
+        "when_text": "precision_cut = false",
+        "change": {
+          "특별인부": "-1"
+        },
+        "source": "PDF 890쪽 p946-t0 비고",
+        "cite": {
+          "table_id": "p946-t0"
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p946-t0에서 site_type에 따른 시공량과 작업조 인원, 장비 대수를 확인한다.",
+        "tactile_block이 true이면 시공량의 10%를 감한다.",
+        "precision_cut이 false이면 특별인부 1인을 감한다.",
+        "작업일수 = area ÷ 조정된 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 조정된 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 890쪽 p946-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "기계경비율 조건부 적용",
+        "reason": "정밀절단 여부에 따라 기계경비율이 5% 또는 2%로 달라지나, 현재 cost_rules는 조건부 비율을 지원하지 않음",
+        "source": "PDF 890쪽 p946-x13",
+        "cite": {
+          "chunk_id": "p946-x13"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "안정처리기층 및 지반침하방지",
+        "source": "PDF 890쪽 p946-x13",
+        "cite": {
+          "chunk_id": "p946-x13"
+        }
+      },
+      {
+        "item": "도심지 할증 제외",
+        "source": "PDF 890쪽 p946-x9",
+        "cite": {
+          "chunk_id": "p946-x9"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에서 직종(포장공, 특별인부, 보통인부)이 한 행 이름으로 병합되어 있어 자동 계산 모델에 직종별로 매핑할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p946-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 유도･점자블록을 설치하는 경우 시공량의 10%를 감하여 적용한다. - 블록 정밀절단(전동절단기)에 의한 시공이 아닌 경우, 특별인부 1인을 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p946-x13",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 5%, 블록 정밀절단(전동절단기)에 의한 시공이\n설명 | 아닌 경우 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p946-x13",
+      "quote": "기층에 콘크리트나 아스팔트 등의 안정처리기층을 사용하거나, 지반침하방지가 필요한 경우 별도\n설명 | 계상한다."
+    },
+    {
+      "chunk_id": "p946-x9",
+      "quote": "‘[공통부문] 1-4-4 지세/지형 2.도심지’ 할증을 적용하지 않는다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 직종(포장공, 특별인부, 보통인부)이 한 행으로 병합되어 있고, 굴착기 행이 중복되어 있어 정확한 표 데이터를 구성할 수 없습니다."
+  ],
+  "questions": [
+    "보도용 블록 재설치(소형) 작업의 현장조건(A-Type, B-Type)은 어떻게 되나요?",
+    "블록 정밀절단(전동절단기) 시공 여부에 따라 기계경비율이 달라지는데, 어떻게 적용해야 하나요?",
+    "유도·점자블록 설치 시 시공량 감산은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:51:48.062059+00:00",
+    "input_tokens": 24572,
+    "output_tokens": 5008,
+    "source_pages": [
+      946,
+      947
+    ],
+    "prompt_sha256": "cf8d0fa6dcda666abb9b4ea166bf83c50be9362143a325026578fe9cc1049d5e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

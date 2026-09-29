@@ -1,0 +1,215 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-8-15/L형측구설치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-8-15",
+    "title": "L형측구 설치(포설식)",
+    "work": "L형측구 포설",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      327
+    ],
+    "inputs": [
+      {
+        "name": "height",
+        "type": "enum",
+        "allowed_values": [
+          "H=0.5m이하",
+          "H=1.2m"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "L형측구의 높이는 얼마입니까?",
+        "source": "PDF 327쪽 p383-t3 시공량 구분",
+        "synonyms": {
+          "H=0.5m이하": [
+            "0.5m 이하",
+            "0.5m이하"
+          ],
+          "H=1.2m": [
+            "1.2m"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "L형측구 설치 물량은 몇 m입니까?",
+        "source": "PDF 327쪽 p383-t3 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p383-t3",
+        "role": "작업조 인원, 장비 대수 및 기준 일일시공량",
+        "source": "PDF 327쪽 1-8-15 표",
+        "unit": "인/작업조, 대/작업조, m/일",
+        "values": {
+          "포장공": {
+            "단위": "인",
+            "수량": "3",
+            "H=0.5m이하": "550",
+            "H=1.2m": "350"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "2",
+            "H=0.5m이하": "550",
+            "H=1.2m": "350"
+          },
+          "콘크리트 페이버": {
+            "규격": "105.9㎾",
+            "단위": "대",
+            "수량": "1"
+          },
+          "굴착기": {
+            "규격": "0.6㎥",
+            "단위": "대",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p383-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p383-t3",
+          "row": "포장공",
+          "column_input": "height"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p383-t3",
+          "column": "수량",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "포장공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": [
+          {
+            "name": "콘크리트 페이버",
+            "table": "p383-t3",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "굴착기",
+            "table": "p383-t3",
+            "column": "수량",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p383-t3에서 높이(height)에 따른 기준시공량을 고른다 (포장공 행의 시공량 값 참조).",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p383-t3의 직종별 수량으로 구한다.",
+        "장비별 대·일 = 작업일수 × p383-t3의 장비별 수량으로 구한다."
+      ],
+      "source": "PDF 327쪽 p383-t3",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "유도선 설치, 터파기 및 되메우기, 균열유발이음(수축줄눈) 설치 작업",
+        "source": "PDF 327쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p383-x17",
+          "quote": "유도선 설치, 터파기 및 되메우기, 균열유발이음(수축줄눈) 설치 작업은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "작업조(인원 및 장비)와 그에 따른 일일시공량이 표로 제시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구한 뒤 인·일을 산출하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p383-t3",
+      "row": "포장공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p383-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p383-t3",
+      "row": "콘크리트 페이버",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p383-t3",
+      "row": "굴착기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p383-t3",
+      "row": "포장공",
+      "column": "H=0.5m이하",
+      "value": "550"
+    },
+    {
+      "table_id": "p383-t3",
+      "row": "포장공",
+      "column": "H=1.2m",
+      "value": "350"
+    },
+    {
+      "chunk_id": "p383-x17",
+      "quote": "본 품은 콘크리트 페이버를 사용한 L형측구 포설 기준이며, H=1.2m는 2회 포설하는 기준이다."
+    },
+    {
+      "chunk_id": "p383-x17",
+      "quote": "유도선 설치, 터파기 및 되메우기, 균열유발이음(수축줄눈) 설치 작업은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "명세 형식의 `quantity_model.params.equipment`는 단일 객체로 예시되어 있으나, 본 절은 장비가 2종(콘크리트 페이버, 굴착기) 투입되므로 배열로 작성하였습니다. 파서에서 배열 처리가 지원되는지 확인이 필요합니다.",
+    "작업조 인원과 장비 수량이 시공량(높이)에 관계없이 고정되어 있어, `crew` 파라미터에 `column_input` 대신 고정 열 이름 `column`을 사용하였습니다.",
+    "H=1.2m일 때 2회 포설한다고 명시되어 있는데, 입력받는 물량(quantity)이 완성된 연장 기준인지 1회 포설 연장 기준인지 명확하지 않아 완성된 연장 기준으로 가정하고 계산식을 구성하였습니다."
+  ],
+  "questions": [
+    "L형측구 높이가 0.5m 이하일 때 하루 시공량은 몇 m인가요?",
+    "H=1.2m일 때 2회 포설한다고 되어 있는데, 물량 입력 시 2배로 입력해야 하나요, 아니면 완성된 연장만 입력하면 되나요?",
+    "콘크리트 페이버와 굴착기의 유류비 및 조종원 인건비는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:55:56.020700+00:00",
+    "input_tokens": 11713,
+    "output_tokens": 2260,
+    "source_pages": [
+      383,
+      384
+    ],
+    "prompt_sha256": "9af6a0c7e9668816d1e4b3d0092be25810a42fb5694bcc301d9cd36673dd35d6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

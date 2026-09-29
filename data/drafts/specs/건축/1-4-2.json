@@ -1,0 +1,197 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-4-2/스터드볼트설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-4-2",
+    "title": "스터드볼트(Stud bolt) 설치",
+    "work": "스터드볼트 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      576
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "스터드볼트 설치 수량은 몇 개입니까?",
+        "source": "PDF 576쪽 1-4-2 표 단위 (1,000개당)"
+      },
+      {
+        "name": "installation_type",
+        "type": "enum",
+        "allowed_values": [
+          "데크플레이트 자동용접",
+          "데크플레이트 수동용접",
+          "지하 철골 기둥 자동용접",
+          "지하 철골 기둥 수동용접"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치 부위 및 용접 방식은 무엇입니까?",
+        "source": "PDF 576쪽 1-4-2 표 구분",
+        "synonyms": {
+          "데크플레이트 자동용접": [
+            "데크 자동",
+            "데크플레이트 자동"
+          ],
+          "데크플레이트 수동용접": [
+            "데크 수동",
+            "데크플레이트 수동"
+          ],
+          "지하 철골 기둥 자동용접": [
+            "지하철골 자동",
+            "기둥 자동"
+          ],
+          "지하 철골 기둥 수동용접": [
+            "지하철골 수동",
+            "기둥 수동"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p632-t1",
+        "role": "스터드볼트 설치 단위당 품",
+        "source": "PDF 576쪽 1-4-2 표",
+        "unit": "인/1,000개",
+        "values": {
+          "용접공": {
+            "데크플레이트 자동용접": "1.52",
+            "데크플레이트 수동용접": "2.67",
+            "지하 철골 기둥 자동용접": "0.94",
+            "지하 철골 기둥 수동용접": "1.65"
+          },
+          "특별인부": {
+            "데크플레이트 자동용접": "0.90",
+            "데크플레이트 수동용접": "1.58",
+            "지하 철골 기둥 자동용접": "0.63",
+            "지하 철골 기둥 수동용접": "1.11"
+          }
+        },
+        "cite": {
+          "table_id": "p632-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p632-t1",
+          "row_input": "고정 행이름",
+          "column_input": "installation_type",
+          "trades": [
+            "용접공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "수량(개)을 1,000으로 나누어 적용",
+            "source": "표 단위 (1,000개당)"
+          }
+        ]
+      },
+      "steps": [
+        "p632-t1에서 설치 부위 및 용접 방식에 따른 단위당 품을 고른다.",
+        "물량(개)을 1,000으로 나누어 적용 수량을 구한다.",
+        "적용 수량을 단위당 품에 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 576쪽 1-4-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "잡재료비",
+        "source": "PDF 576쪽 1-4-2 [주] ⑥ (주재료비의 5%로 계상하나, 현재 시스템은 노무비 기준 경비율만 지원함)",
+        "cite": {
+          "section_no": "1-4-2",
+          "marker": "⑥"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 (자동용접)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.22",
+        "cite": {
+          "section_no": "1-4-2",
+          "marker": "⑤"
+        }
+      },
+      {
+        "name": "공구손료 및 경장비 (수동용접)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.18",
+        "cite": {
+          "section_no": "1-4-2",
+          "marker": "⑤"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(1,000개)당 직종별 인·일이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p632-t1",
+      "row": "용접공",
+      "column": "데크플레이트 자동용접",
+      "value": "1.52"
+    },
+    {
+      "table_id": "p632-t1",
+      "row": "특별인부",
+      "column": "지하 철골 기둥 수동용접",
+      "value": "1.11"
+    },
+    {
+      "chunk_id": "p632-x9",
+      "quote": "공구손료 및 경장비(용접기 등)는 자동용접인 경우 인력품의 22%, 수동용접인 경우 인력품의 18%로"
+    },
+    {
+      "chunk_id": "p632-x9",
+      "quote": "잡재료는 주재료비의 5%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "데크플레이트 스터드볼트 용접이 2열이 아닌 경우(예: 1열)의 품 조정 방식이 명시되어 있지 않습니다.",
+    "지하 철골 기둥이 탑다운공법이 아닌 다른 공법으로 설치된 경우 품을 어떻게 적용해야 하는지 명확하지 않습니다.",
+    "cost_rules 스키마에 조건부(when) 필드가 없어 자동용접과 수동용접의 공구손료 비율을 분리하여 기재했습니다. 실제 계산 시 용접 방식에 맞는 비율만 선택 적용해야 합니다."
+  ],
+  "questions": [
+    "스터드볼트 5,000개를 데크플레이트에 자동용접으로 설치할 때 용접공 품은 얼마인가요?",
+    "데크플레이트에 스터드볼트를 1열로 용접하는 경우 품을 어떻게 적용해야 하나요?",
+    "스터드볼트 설치 수량은 몇 개인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:48:11.032829+00:00",
+    "input_tokens": 11729,
+    "output_tokens": 1993,
+    "source_pages": [
+      632,
+      633
+    ],
+    "prompt_sha256": "ca98cd1acebf028876a2b72aa56fa2781d444d583a8a0c3e31ef3f8c65274b45",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

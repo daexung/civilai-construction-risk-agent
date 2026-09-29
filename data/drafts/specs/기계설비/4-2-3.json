@@ -1,0 +1,166 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/4-2-3/욕실배기팬설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "4-2-3",
+    "title": "욕실배기팬 설치",
+    "work": "욕실배기팬 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      673
+    ],
+    "inputs": [
+      {
+        "name": "fan_size",
+        "type": "enum",
+        "allowed_values": [
+          "Ø100㎜이하",
+          "Ø200㎜이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "욕실배기팬의 규격은 무엇입니까?",
+        "source": "PDF 673쪽 4-2-3 표",
+        "synonyms": {
+          "Ø100㎜이하": [
+            "100mm이하",
+            "100이하"
+          ],
+          "Ø200㎜이하": [
+            "200mm이하",
+            "200이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 욕실배기팬의 수량은 몇 개입니까?",
+        "source": "PDF 673쪽 4-2-3 표 단위 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p729-t1",
+        "role": "욕실배기팬 설치 단위당 품",
+        "source": "PDF 673쪽 4-2-3 표",
+        "unit": "인/개",
+        "values": {
+          "기계설비공": {
+            "Ø100㎜이하": "0.083",
+            "Ø200㎜이하": "0.111"
+          },
+          "보통인부": {
+            "Ø100㎜이하": "0.042",
+            "Ø200㎜이하": "0.056"
+          }
+        },
+        "cite": {
+          "table_id": "p729-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p729-t1",
+          "column_input": "fan_size",
+          "trades": [
+            "기계설비공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p729-t1에서 규격별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 673쪽 4-2-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "플렉시블덕트 및 댐퍼 설치",
+        "source": "PDF 673쪽 4-2-3 [주] ③",
+        "cite": {
+          "chunk_id": "p729-x9",
+          "quote": "플렉시블덕트 및 댐퍼 설치는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 개당 인·일이 직접 명시되어 있어 단위당 품 계산 방식(per_unit)을 적용합니다.",
+  "citations": [
+    {
+      "table_id": "p729-t1",
+      "row": "기계설비공",
+      "column": "Ø100㎜이하",
+      "value": "0.083"
+    },
+    {
+      "table_id": "p729-t1",
+      "row": "기계설비공",
+      "column": "Ø200㎜이하",
+      "value": "0.111"
+    },
+    {
+      "table_id": "p729-t1",
+      "row": "보통인부",
+      "column": "Ø100㎜이하",
+      "value": "0.042"
+    },
+    {
+      "table_id": "p729-t1",
+      "row": "보통인부",
+      "column": "Ø200㎜이하",
+      "value": "0.056"
+    },
+    {
+      "chunk_id": "p729-x9",
+      "quote": "본 품은 욕실 천장에 설치하는 원심형 환풍기 기준이다."
+    },
+    {
+      "chunk_id": "p729-x9",
+      "quote": "본 품은 덕트 연결, 환풍기(프라켓 및 커버) 설치, 결선, 작동시험을 포함한다."
+    },
+    {
+      "chunk_id": "p729-x9",
+      "quote": "플렉시블덕트 및 댐퍼 설치는 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "욕실배기팬 100mm 이하 10개를 설치할 때 품이 얼마나 드나요?",
+    "플렉시블덕트 설치도 이 품에 포함되나요?",
+    "욕실배기팬을 설치하려고 합니다. 품을 계산해주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:02.901244+00:00",
+    "input_tokens": 11533,
+    "output_tokens": 1541,
+    "source_pages": [
+      729,
+      730
+    ],
+    "prompt_sha256": "6500da35fd0f484d0d1a6a8722ab58374831ed3e18881ab9686f8610a9fff750",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

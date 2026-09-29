@@ -1,0 +1,124 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/10-3-2/지상식설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "10-3-2",
+    "title": "지상식 설치",
+    "work": "지상식 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      709
+    ],
+    "inputs": [
+      {
+        "name": "spec",
+        "type": "enum",
+        "allowed_values": [
+          "단구형",
+          "쌍구형"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지상식의 규격은 무엇입니까?",
+        "source": "PDF 709쪽 10-3-2 표의 규격"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "조",
+        "required": true,
+        "ask": "설치할 지상식의 수량은 몇 조입니까?",
+        "source": "PDF 709쪽 10-3-2 표 단위 (조당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p765-t0",
+        "role": "지상식 설치 규격별 배관공 품",
+        "source": "PDF 709쪽 10-3-2 지상식 설치 표",
+        "unit": "인/조",
+        "values": {
+          "단구형": {
+            "배 관 공(인)": "0.620"
+          },
+          "쌍구형": {
+            "배 관 공(인)": "1.500"
+          }
+        },
+        "cite": {
+          "table_id": "p765-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p765-t0",
+          "row_input": "spec",
+          "trades": [
+            "배 관 공(인)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p765-t0 표에서 규격에 해당하는 배관공의 단위당 품을 찾는다.",
+        "물량(조)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 709쪽 10-3-2 지상식 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(조)당 배관공 품이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p765-t0",
+      "row": "단구형",
+      "column": "배 관 공(인)",
+      "value": "0.620"
+    },
+    {
+      "table_id": "p765-t0",
+      "row": "쌍구형",
+      "column": "배 관 공(인)",
+      "value": "1.500"
+    },
+    {
+      "chunk_id": "p765-x3",
+      "quote": "[주] 본 품은 소운반, 설비 설치품을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "지상식 단구형 5조를 설치할 때 배관공 품은 얼마인가요?",
+    "소운반 비용은 따로 계산해야 하나요?",
+    "설치할 지상식의 규격(단구형/쌍구형)과 수량은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:39:41.393845+00:00",
+    "input_tokens": 11438,
+    "output_tokens": 1095,
+    "source_pages": [
+      765,
+      766
+    ],
+    "prompt_sha256": "d149d32e8af094f021d4b6820b5a00090a2900769f9f8bbccffd07a07a671f59",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

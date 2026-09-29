@@ -1,0 +1,220 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-9-1/벌목",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-9-1",
+    "title": "벌목('08, '18, '20년 보완)",
+    "work": "벌목",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "tree_height",
+        "type": "enum",
+        "allowed_values": [
+          "나무높이 5m미만",
+          "나무높이 5m이상∼8m미만",
+          "나무높이 8m이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "나무높이는 어느 범위에 해당합니까?",
+        "source": "PDF 1쪽 3-9-1 표",
+        "synonyms": {
+          "나무높이 5m미만": [
+            "5m미만",
+            "5미터 미만"
+          ],
+          "나무높이 5m이상∼8m미만": [
+            "5m이상 8m미만",
+            "5~8m"
+          ],
+          "나무높이 8m이상": [
+            "8m이상",
+            "8미터 이상"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "벌목 면적은 몇 ㎡입니까? (계산 시 1,000㎡ 단위로 환산됩니다)",
+        "source": "PDF 1쪽 3-9-1 표 우상단 (1,000㎡당)"
+      },
+      {
+        "name": "skidding_distance",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "집재거리는 몇 m입니까?",
+        "source": "PDF 1쪽 3-9-1 표 비고"
+      },
+      {
+        "name": "is_hazardous_area",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "위험지역(가옥주변, 기존도로 인접구간 등)입니까?",
+        "source": "PDF 1쪽 3-9-1 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p140-t0",
+        "role": "벌목 품 (1,000㎡당)",
+        "source": "PDF 1쪽 3-9-1 표",
+        "unit": "인, hr / 1,000㎡",
+        "values": {
+          "벌목부": {
+            "나무높이 5m미만": "2.14",
+            "나무높이 5m이상∼8m미만": "2.80",
+            "나무높이 8m이상": "3.65"
+          },
+          "보통인부": {
+            "나무높이 5m미만": "0.51",
+            "나무높이 5m이상∼8m미만": "0.66",
+            "나무높이 8m이상": "0.87"
+          },
+          "굴착기+ 부착용집게": {
+            "나무높이 5m미만": "2.71",
+            "나무높이 5m이상∼8m미만": "3.54",
+            "나무높이 8m이상": "4.61"
+          }
+        },
+        "cite": {
+          "table_id": "p140-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p140-t0",
+          "row_input": "고정 행이름",
+          "column_input": "tree_height",
+          "trades": [
+            "벌목부",
+            "보통인부",
+            "굴착기+ 부착용집게"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "skidding_distance": "> 100"
+            },
+            "change": "매 100m 증가마다 품을 30%씩 가산",
+            "source": "PDF 1쪽 3-9-1 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p140-t0에서 나무높이에 따른 단위당 품을 고른다.",
+        "면적(area)을 1,000으로 나누어 적용 수량을 구하고, 단위당 품에 곱한다.",
+        "집재거리가 100m를 초과하는 경우, 초과하는 매 100m마다 품을 30%씩 가산한다."
+      ],
+      "source": "PDF 1쪽 3-9-1 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "위험지역(가옥주변, 기존도로 인접구간 등)인 경우",
+        "blocked_if": {
+          "input": "is_hazardous_area",
+          "op": "==",
+          "value": true
+        },
+        "reason": "장비를 추가 반영할 수 있다고 명시되어 있으나, 구체적인 추가 기준이 없어 자동 계산 불가",
+        "source": "PDF 1쪽 3-9-1 [주] ④",
+        "cite": {
+          "chunk_id": "p140-x4",
+          "quote": "④ 위험지역(가옥주변, 기존도로 인접구간 등)의 수목은 장비를 추가 반영 할 수 있다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.1",
+        "cite": {
+          "chunk_id": "p140-x4",
+          "quote": "⑤ 공구손료 및 경장비(엔진톱, 톱날, 휘발유 등)의 기계경비는 인력품의 10%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "1,000㎡당 직종별 인원과 장비 시간이 표에 직접 제시되어 있으며, 물량에 비례하여 계산하는 방식이므로 per_unit을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p140-t0",
+      "row": "벌목부",
+      "column": "나무높이 5m미만",
+      "value": "2.14"
+    },
+    {
+      "table_id": "p140-t0",
+      "row": "보통인부",
+      "column": "나무높이 5m미만",
+      "value": "0.51"
+    },
+    {
+      "table_id": "p140-t0",
+      "row": "굴착기+ 부착용집게",
+      "column": "나무높이 5m미만",
+      "value": "2.71"
+    },
+    {
+      "chunk_id": "p140-x4",
+      "quote": "④ 위험지역(가옥주변, 기존도로 인접구간 등)의 수목은 장비를 추가 반영 할 수 있다."
+    },
+    {
+      "chunk_id": "p140-x4",
+      "quote": "⑤ 공구손료 및 경장비(엔진톱, 톱날, 휘발유 등)의 기계경비는 인력품의 10%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "집재거리 100m 초과 시 '매 100m 증가마다 품을 30%씩 가산'의 정확한 계산 방식(예: 101m~200m 구간 전체에 30% 가산인지, 비례 계산인지)이 명확하지 않습니다.",
+    "장비의 규격을 작업여건에 따라 변경할 수 있다고 되어 있으나, 변경 기준이 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "나무높이가 6m이고 벌목 면적이 2,000㎡일 때 벌목부 인력은 얼마나 필요한가요?",
+    "집재거리가 150m일 때 품 가산은 30%인가요, 아니면 비례해서 15%인가요?",
+    "위험지역에서 벌목 작업을 할 때 장비는 얼마나 추가로 반영해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:35.514030+00:00",
+    "input_tokens": 11759,
+    "output_tokens": 2356,
+    "source_pages": [
+      140,
+      141
+    ],
+    "prompt_sha256": "c781214af9b657461dc275773776324cc941cdf03fe6d76e2e2038582d6d34e8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

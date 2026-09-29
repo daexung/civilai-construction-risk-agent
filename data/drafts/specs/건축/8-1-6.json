@@ -1,0 +1,203 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/8-1-6/천장점검구설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "8-1-6",
+    "title": "천장점검구 설치",
+    "work": "천장점검구 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      618
+    ],
+    "inputs": [
+      {
+        "name": "size",
+        "type": "enum",
+        "allowed_values": [
+          "450×450",
+          "600×600"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "천장점검구의 규격은 무엇입니까? (450×450 / 600×600)",
+        "source": "PDF 618쪽 8-1-6 표",
+        "synonyms": {
+          "450×450": [
+            "450x450",
+            "450*450"
+          ],
+          "600×600": [
+            "600x600",
+            "600*600"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 천장점검구의 수량은 몇 개소입니까?",
+        "source": "PDF 618쪽 8-1-6 표 단위 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p674-t4",
+        "role": "천장점검구 설치 인력품",
+        "source": "PDF 618쪽 8-1-6 표",
+        "unit": "인/개소",
+        "values": {
+          "내장공": {
+            "450×450": "0.308",
+            "600×600": "0.343"
+          },
+          "보통인부": {
+            "450×450": "0.057",
+            "600×600": "0.063"
+          }
+        },
+        "cite": {
+          "table_id": "p674-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p674-t4",
+          "column_input": "size",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p674-t4에서 규격별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 618쪽 8-1-6 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "규격이 0.6×0.6m (600×600㎜) 초과인 경우",
+        "reason": "본 품은 천장점검구(규격 0.6×0.6m 이하)의 설치 기준임",
+        "source": "PDF 618쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p674-x16",
+          "quote": "본 품은 천장점검구(규격 0.6×0.6m 이하)의 설치 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "천장점검구 보강을 위한 천장틀과 천장틀받이재",
+        "source": "PDF 618쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p674-x16",
+          "quote": "천장점검구 보강을 위한 천장틀과 천장틀받이재는 별도 계상한다."
+        }
+      },
+      {
+        "item": "잡재료 및 소모재료(고정철물 등)",
+        "source": "PDF 618쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p674-x16",
+          "quote": "잡재료 및 소모재료(고정철물 등)는 주재료비의 3%로 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p674-x16",
+          "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당)당 품(인)이 표에 직접 명시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p674-t4",
+      "row": "내장공",
+      "column": "450×450",
+      "value": "0.308"
+    },
+    {
+      "table_id": "p674-t4",
+      "row": "내장공",
+      "column": "600×600",
+      "value": "0.343"
+    },
+    {
+      "table_id": "p674-t4",
+      "row": "보통인부",
+      "column": "450×450",
+      "value": "0.057"
+    },
+    {
+      "table_id": "p674-t4",
+      "row": "보통인부",
+      "column": "600×600",
+      "value": "0.063"
+    },
+    {
+      "chunk_id": "p674-x16",
+      "quote": "본 품은 천장점검구(규격 0.6×0.6m 이하)의 설치 기준이다."
+    },
+    {
+      "chunk_id": "p674-x16",
+      "quote": "본 품은 천장타공, 점검구 보강, 점검구 설치 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p674-x16",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p674-x16",
+      "quote": "천장점검구 보강을 위한 천장틀과 천장틀받이재는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p674-x16",
+      "quote": "잡재료 및 소모재료(고정철물 등)는 주재료비의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "잡재료 및 소모재료는 주재료비의 3%로 계상하도록 되어 있으나, 현재 명세 형식의 cost_rules는 labor_subtotal만 지원하므로 자동 계산에서 제외(not_calculated) 처리함."
+  ],
+  "questions": [
+    "천장점검구 450x450 규격을 10개소 설치할 때 내장공 품은 어떻게 되나요?",
+    "천장점검구 규격이 500x500인 경우 품셈 적용을 어떻게 해야 하나요?",
+    "천장점검구 설치 시 천장틀 보강 작업 비용도 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:06:08.302381+00:00",
+    "input_tokens": 11623,
+    "output_tokens": 2151,
+    "source_pages": [
+      674,
+      675
+    ],
+    "prompt_sha256": "f1d368955b105367b42123ca61e246dcf0801065080f9d29551010044d5b0ad2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

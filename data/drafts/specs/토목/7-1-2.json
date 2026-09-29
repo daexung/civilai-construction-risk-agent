@@ -1,0 +1,195 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-1-2/예인선조합",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-1-2",
+    "title": "예인선 조합",
+    "work": "회항시 예인선 조합 기준",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      387
+    ],
+    "inputs": [
+      {
+        "name": "towed_vessel_type",
+        "type": "enum",
+        "allowed_values": [
+          "펌프준설선",
+          "그래브준설선",
+          "토운선"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "회항하는 피예인선의 종류는 무엇입니까?",
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표"
+      },
+      {
+        "name": "pump_dredger_power",
+        "type": "enum",
+        "allowed_values": [
+          "448이하",
+          "746∼1,492",
+          "1,641∼5,968",
+          "8,952이상"
+        ],
+        "unit": "㎾",
+        "required": true,
+        "ask": "펌프준설선의 출력은 어느 범위에 해당합니까?",
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표"
+      },
+      {
+        "name": "grab_dredger_power",
+        "type": "enum",
+        "allowed_values": [
+          "75∼1,492"
+        ],
+        "unit": "㎾",
+        "required": true,
+        "ask": "그래브준설선의 출력은 어느 범위에 해당합니까?",
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표"
+      },
+      {
+        "name": "barge_capacity",
+        "type": "enum",
+        "allowed_values": [
+          "60㎥∼300㎥",
+          "300㎥이상"
+        ],
+        "unit": "㎥",
+        "required": true,
+        "ask": "토운선의 용량은 어느 범위에 해당합니까?",
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p443-t2",
+        "role": "피예인선 종류 및 규격에 따른 예인선 출력 기준",
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표",
+        "unit": "㎾",
+        "values": {
+          "펌프준설선": {
+            "448이하": "119∼336",
+            "746∼1,492": "373∼746",
+            "1,641∼5,968": "746∼1,790",
+            "8,952이상": "1,790이상"
+          },
+          "그래브준설선": {
+            "75∼1,492": "187∼336"
+          },
+          "토운선": {
+            "60㎥∼300㎥": "119∼187",
+            "300㎥이상": "187∼1,790"
+          }
+        },
+        "cite": {
+          "table_id": "p443-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "피예인선의 종류(towed_vessel_type)를 확인한다.",
+        "해당 피예인선의 규격(출력 또는 용량)에 맞는 예인선 출력을 표(p443-t2)에서 찾는다."
+      ],
+      "source": "PDF 387쪽 7-1-2 예인선 조합 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "표에 명시되지 않은 규격의 피예인선",
+        "reason": "펌프준설선 448~746㎾ 등 표에 누락된 구간에 대한 예인선 조합 기준이 없음",
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표",
+        "cite": {
+          "table_id": "p443-t2"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "이 절은 회항 시 피예인선의 종류와 규격에 따라 필요한 예인선의 출력을 표에서 찾아 보여주기만 하는 기준이므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p443-t2",
+      "row": "펌프준설선",
+      "column": "448이하",
+      "value": "119∼336"
+    },
+    {
+      "table_id": "p443-t2",
+      "row": "펌프준설선",
+      "column": "746∼1,492",
+      "value": "373∼746"
+    },
+    {
+      "table_id": "p443-t2",
+      "row": "펌프준설선",
+      "column": "1,641∼5,968",
+      "value": "746∼1,790"
+    },
+    {
+      "table_id": "p443-t2",
+      "row": "펌프준설선",
+      "column": "8,952이상",
+      "value": "1,790이상"
+    },
+    {
+      "table_id": "p443-t2",
+      "row": "그래브준설선",
+      "column": "75∼1,492",
+      "value": "187∼336"
+    },
+    {
+      "table_id": "p443-t2",
+      "row": "토운선",
+      "column": "60㎥∼300㎥",
+      "value": "119∼187"
+    },
+    {
+      "table_id": "p443-t2",
+      "row": "토운선",
+      "column": "300㎥이상",
+      "value": "187∼1,790"
+    },
+    {
+      "chunk_id": "p443-x9",
+      "quote": "회항시에 예인선의 조합은 다음을 표준으로 한다."
+    },
+    {
+      "chunk_id": "p443-x18",
+      "quote": "[주] 토운선과 예선의 조합은 공사규모 및 현장여건 등을 감안하여 조정할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "펌프준설선 출력 448~746㎾, 1492~1641㎾, 5968~8952㎾ 구간과 그래브준설선 75㎾ 미만, 1492㎾ 초과 구간, 토운선 60㎥ 미만 구간에 대한 예인선 조합 기준이 표에 누락되어 있어 처리가 모호함.",
+    "[주]에서 토운선과 예선의 조합을 공사규모 및 현장여건에 따라 조정할 수 있다고 하였으나, 구체적인 조정 비율이나 기준이 명시되어 있지 않음."
+  ],
+  "questions": [
+    "펌프준설선 출력이 1,000kW일 때 필요한 예인선 출력은 얼마인가요?",
+    "펌프준설선 출력이 600kW인데 표에 해당 구간이 없습니다. 어떤 예인선을 조합해야 하나요?",
+    "토운선 용량을 입력하지 않았는데 예인선 출력을 알 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:03:01.698022+00:00",
+    "input_tokens": 11699,
+    "output_tokens": 2092,
+    "source_pages": [
+      443,
+      444
+    ],
+    "prompt_sha256": "2ae03a3411729133b30e8e8041e092e4b2675fd28f93e78fbca5c01406b5ad89",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

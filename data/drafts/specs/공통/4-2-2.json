@@ -1,0 +1,214 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/4-2-2/식재_단식",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "4-2-2",
+    "title": "식재(단식(單植))",
+    "work": "관목수종 단식 식재 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      93
+    ],
+    "inputs": [
+      {
+        "name": "effective_height_band",
+        "type": "enum",
+        "allowed_values": [
+          "0.3미만",
+          "0.3~0.7이하",
+          "0.8~1.1이하",
+          "1.2~1.5이하",
+          "1.5초과"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "나무높이와 수관폭 중 더 큰 값을 기준으로, 어느 구간에 해당합니까?",
+        "source": "PDF 93쪽 4-2-2 표 및 [주] ③, ④"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "주",
+        "required": true,
+        "ask": "식재 수량은 몇 주입니까?",
+        "source": "PDF 93쪽 4-2-2 표 시공량(주)"
+      },
+      {
+        "name": "is_special_planting",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "암반식재, 부적기식재 등 특수식재입니까?",
+        "source": "PDF 93쪽 4-2-2 [주] ⑦"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p149-t1",
+        "role": "나무높이별 시공량",
+        "source": "PDF 93쪽 4-2-2 표",
+        "unit": "주/일",
+        "values": {
+          "0.3미만": {
+            "시공량(주)": "160"
+          },
+          "0.3~0.7이하": {
+            "시공량(주)": "125"
+          },
+          "0.8~1.1이하": {
+            "시공량(주)": "75"
+          },
+          "1.2~1.5이하": {
+            "시공량(주)": "55"
+          }
+        },
+        "cite": {
+          "table_id": "p149-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "나무높이와 수관폭 중 큰 값을 적용 나무높이로 결정한다.",
+        "적용 나무높이가 1.5m를 초과하면 비례하여 시공량을 감산한다 (구체적 수식 미비).",
+        "p149-t1에서 적용 나무높이 구간에 해당하는 시공량을 찾는다.",
+        "작업일수 = 식재 수량 ÷ 시공량",
+        "조경공 인·일 = 작업일수 × 3, 보통인부 인·일 = 작업일수 × 1 (파싱 결과에는 보통인부 1 누락됨)"
+      ],
+      "source": "PDF 93쪽 4-2-2 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "나무높이(또는 수관폭)가 1.5m 초과",
+        "blocked_if": {
+          "input": "effective_height_band",
+          "op": "==",
+          "value": "1.5초과"
+        },
+        "reason": "나무높이에 비례하여 시공량을 감할 수 있다고 명시되어 있으나, 정확한 감산 공식이 없어 자동 계산 보류",
+        "source": "PDF 93쪽 4-2-2 [주] ③",
+        "cite": {
+          "chunk_id": "p149-x12",
+          "quote": "나무높이가 1.5m를 초과할 때는 나무높이에 비례하여 시공량을 감할 수 있다."
+        }
+      },
+      {
+        "condition": "특수식재 (암반식재, 부적기식재 등)",
+        "blocked_if": {
+          "input": "is_special_planting",
+          "op": "==",
+          "value": true
+        },
+        "reason": "품을 별도 계상함",
+        "source": "PDF 93쪽 4-2-2 [주] ⑦",
+        "cite": {
+          "chunk_id": "p149-x12",
+          "quote": "암반식재, 부적기식재 등 특수식재는 품을 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "유지관리",
+        "source": "PDF 93쪽 4-2-2 [주] ⑤",
+        "cite": {
+          "chunk_id": "p149-x12",
+          "quote": "유지관리는 ‘[유지관리부문] 1-2 조경공사’에 따라\n설명 | 별도 계상한다."
+        }
+      },
+      {
+        "item": "살수차 등 장비 기계경비",
+        "source": "PDF 93쪽 4-2-2 [주] ⑥",
+        "cite": {
+          "chunk_id": "p149-x12",
+          "quote": "물주기를 위해 살수차 등의 장비가 필요한 경우 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과 표(p149-t1)에 직종별 인원(조경공 3, 보통인부 1)이 명확히 분리되어 있지 않고 누락된 정보가 있어, 일당 작업조형(daily_crew) 자동 계산 모델을 적용할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p149-t1",
+      "row": "0.3미만",
+      "column": "시공량(주)",
+      "value": "160"
+    },
+    {
+      "table_id": "p149-t1",
+      "row": "0.3~0.7이하",
+      "column": "시공량(주)",
+      "value": "125"
+    },
+    {
+      "table_id": "p149-t1",
+      "row": "0.8~1.1이하",
+      "column": "시공량(주)",
+      "value": "75"
+    },
+    {
+      "table_id": "p149-t1",
+      "row": "1.2~1.5이하",
+      "column": "시공량(주)",
+      "value": "55"
+    },
+    {
+      "chunk_id": "p149-x12",
+      "quote": "나무높이가 1.5m를 초과할 때는 나무높이에 비례하여 시공량을 감할 수 있다."
+    },
+    {
+      "chunk_id": "p149-x12",
+      "quote": "나무높이보다 수관폭이 더 클 때에는 그 수관폭을 나무높이로 본다."
+    },
+    {
+      "chunk_id": "p149-x12",
+      "quote": "유지관리는 ‘[유지관리부문] 1-2 조경공사’에 따라\n설명 | 별도 계상한다."
+    },
+    {
+      "chunk_id": "p149-x12",
+      "quote": "물주기를 위해 살수차 등의 장비가 필요한 경우 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p149-x12",
+      "quote": "암반식재, 부적기식재 등 특수식재는 품을 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 표(p149-t1)에 보통인부 수량(1인)이 누락되어 있고 조경공과 보통인부가 한 셀에 뭉쳐 있어, 자동 계산을 위한 인원 표 구성이 불가능합니다.",
+    "[주] ③의 '나무높이에 비례하여 시공량을 감할 수 있다'에 대한 정확한 계산식(예: 기준 시공량 × (1.5 / 실제높이) 등)이 명시되지 않아 추측이 필요합니다."
+  ],
+  "questions": [
+    "나무높이가 1.0m이고 수관폭이 0.5m인 관목 100주를 식재할 때 품은 어떻게 되나요?",
+    "나무높이가 1.8m인 관목을 식재할 때 시공량은 어떻게 비례 감산해야 하나요?",
+    "관목 식재 시 물주기를 위해 살수차를 사용했는데 기계경비는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:18:41.994158+00:00",
+    "input_tokens": 11791,
+    "output_tokens": 2433,
+    "source_pages": [
+      149,
+      150
+    ],
+    "prompt_sha256": "6141f0b6cf47c89da7d7bb270bc6067e4acc513db880f134c4b51a5cf989106b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

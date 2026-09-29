@@ -1,0 +1,260 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/4-3-2/굴취_나무높이",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "4-3-2",
+    "title": "굴취(나무높이)('13, '19, '24년 보완)",
+    "work": "굴취(나무높이) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      95
+    ],
+    "inputs": [
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "인력시공",
+          "기계시공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 방법은 인력시공과 기계시공 중 무엇입니까?",
+        "source": "PDF 95쪽 4-3-2 표",
+        "machine_codes": {
+          "기계시공": "굴착기_0.4㎥"
+        }
+      },
+      {
+        "name": "tree_height",
+        "type": "enum",
+        "allowed_values": [
+          "2.0이하",
+          "3.0이하",
+          "5.0이하"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "나무높이는 몇 m 이하입니까? (2.0이하 / 3.0이하 / 5.0이하)",
+        "source": "PDF 95쪽 4-3-2 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "주",
+        "required": true,
+        "ask": "굴취할 수목의 수량은 몇 주입니까?",
+        "source": "PDF 95쪽 4-3-2 표 시공량(주)"
+      },
+      {
+        "name": "has_root_ball",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "분이 있습니까?",
+        "source": "PDF 95쪽 4-3-2 비고"
+      },
+      {
+        "name": "is_wild",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "야생 수목입니까?",
+        "source": "PDF 95쪽 4-3-2 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p151-t0",
+        "role": "시공방법 및 나무높이별 작업조와 시공량",
+        "source": "PDF 95쪽 4-3-2 표",
+        "values": {
+          "조경공": {
+            "인력시공": "4",
+            "기계시공": "3"
+          },
+          "보통인부": {
+            "인력시공": "2",
+            "기계시공": "1"
+          },
+          "굴착기": {
+            "인력시공": "0",
+            "기계시공": "1"
+          },
+          "2.0이하": {
+            "인력시공": "70",
+            "기계시공": "90"
+          },
+          "3.0이하": {
+            "인력시공": "45",
+            "기계시공": "60"
+          },
+          "5.0이하": {
+            "인력시공": "30",
+            "기계시공": "40"
+          }
+        },
+        "cite": {
+          "table_id": "p151-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p151-t0",
+          "row_input": "tree_height",
+          "column_input": "method"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p151-t0",
+          "column_input": "method",
+          "trades": [
+            "조경공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "조경공": "1013",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "굴착기",
+          "table": "p151-t0",
+          "unit": "대·일",
+          "machine_code_input": "method",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p151-t0에서 시공방법과 나무높이에 따른 기준 일일시공량을 찾는다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p151-t0의 시공방법별 인원, 굴착기 대·일 = 작업일수 × p151-t0의 시공방법별 대수로 구한다."
+      ],
+      "source": "PDF 95쪽 4-3-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "분이 없는 경우",
+        "blocked_if": {
+          "input": "has_root_ball",
+          "op": "==",
+          "value": false
+        },
+        "reason": "시공량의 25%를 가산해야 하나, 현재 계산 모델에 시공량 할증 파라미터가 없어 자동 계산을 보류합니다.",
+        "source": "PDF 95쪽 4-3-2 비고",
+        "cite": {
+          "table_id": "p151-t0"
+        }
+      },
+      {
+        "condition": "야생 수목인 경우",
+        "blocked_if": {
+          "input": "is_wild",
+          "op": "==",
+          "value": true
+        },
+        "reason": "시공량의 17% 범위 내에서 감하여 적용하라고 되어 있어, 정확한 감산 비율을 확정할 수 없습니다.",
+        "source": "PDF 95쪽 4-3-2 [주] ④",
+        "cite": {
+          "chunk_id": "p151-x8",
+          "quote": "굴취시 야생일 경우에는 시공량의 17% 범위 내에서 감하여 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "운반로 개설 비용",
+        "source": "PDF 95쪽 4-3-2 [주] ⑤",
+        "cite": {
+          "chunk_id": "p151-x8",
+          "quote": "굴취수목의 운반을 위하여 운반로를 개설하여야 하는 경우에는 그 비용을 별도 계상한다."
+        }
+      },
+      {
+        "item": "분뜨기, 운반준비 재료비",
+        "source": "PDF 95쪽 4-3-2 [주] ⑥",
+        "cite": {
+          "chunk_id": "p151-x8",
+          "quote": "분뜨기, 운반준비를 위한 재료비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수가 정해져 있고, 나무높이에 따른 일당 시공량이 표로 제시되어 있으므로 일당 작업조형으로 계산합니다.",
+  "citations": [
+    {
+      "table_id": "p151-t0",
+      "row": "인력시공",
+      "column": "조경공",
+      "value": "4"
+    },
+    {
+      "table_id": "p151-t0",
+      "row": "기계시공",
+      "column": "조경공",
+      "value": "3"
+    },
+    {
+      "table_id": "p151-t0",
+      "row": "인력시공",
+      "column": "나무높이(m) 2.0이하",
+      "value": "70"
+    },
+    {
+      "chunk_id": "p151-x8",
+      "quote": "굴취시 야생일 경우에는 시공량의 17% 범위 내에서 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p151-x8",
+      "quote": "굴취수목의 운반을 위하여 운반로를 개설하여야 하는 경우에는 그 비용을 별도 계상한다."
+    },
+    {
+      "chunk_id": "p151-x8",
+      "quote": "분뜨기, 운반준비를 위한 재료비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "분이 없는 경우 시공량의 25% 가산 규칙을 adjusted_daily_crew 모델에서 처리할 수 있는 파라미터(예: surcharges)가 필요합니다.",
+    "야생일 경우 '17% 범위 내에서 감하여 적용'이라는 조건은 정확한 감산 비율을 확정할 수 없어 계산을 보류했습니다."
+  ],
+  "questions": [
+    "나무높이가 2.5m이면 어떤 규격을 적용하나요?",
+    "야생 수목 굴취 시 17% 범위 내에서 감산하라고 되어 있는데, 정확히 몇 %를 적용해야 하나요?",
+    "분이 없는 경우 시공량 25% 가산은 어떻게 계산에 반영되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:18:34.328022+00:00",
+    "input_tokens": 11836,
+    "output_tokens": 2571,
+    "source_pages": [
+      151,
+      152
+    ],
+    "prompt_sha256": "5a4ca6018ad9e4d6f337e4c017043e46777baf07b5619ec7489f39c61d53102c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

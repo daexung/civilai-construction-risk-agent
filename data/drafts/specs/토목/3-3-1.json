@@ -1,0 +1,214 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/3-3-1/터널철재거푸집설치해체이동",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "3-3-1",
+    "title": "터널 철재거푸집 설치･해체･이동",
+    "work": "1span(2차로급 도로 또는 복선급 철도) 기준 설치, 타설, 해체, 이동",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      342
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "회",
+        "required": true,
+        "ask": "작업 횟수(span 수)는 몇 회입니까?",
+        "source": "PDF 342쪽 3-3-1 표 단위 (회당)"
+      },
+      {
+        "name": "tunnel_type",
+        "type": "enum",
+        "allowed_values": [
+          "2차로급 도로",
+          "복선급 철도",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "터널의 단면 규모는 어떻게 됩니까? (2차로급 도로 / 복선급 철도 / 기타)",
+        "source": "PDF 342쪽 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p398-t1",
+        "role": "회당 직종별 인원 및 장비 대수",
+        "source": "PDF 342쪽 3-3-1 표",
+        "unit": "인/회, 대/회, 일/회",
+        "values": {
+          "형틀목공": {
+            "수량": "6"
+          },
+          "콘크리트공": {
+            "수량": "2"
+          },
+          "특별인부": {
+            "수량": "1"
+          },
+          "보통인부": {
+            "수량": "2"
+          },
+          "콘크리트펌프(차)": {
+            "수량": "1"
+          },
+          "소요일수 (설치/콘크리트타설/해체/이동)": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p398-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p398-t1",
+          "column_input": "수량",
+          "trades": [
+            "형틀목공",
+            "콘크리트공",
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p398-t1에서 회당 품(인원 및 장비 대수)을 가져온다.",
+        "작업 횟수(물량)를 곱하여 총 투입 인·일 및 장비 대·일을 구한다."
+      ],
+      "source": "PDF 342쪽 3-3-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "tunnel_type == 기타",
+        "blocked_if": {
+          "input": "tunnel_type",
+          "op": "==",
+          "value": "기타"
+        },
+        "reason": "본 품은 2차로급 도로 또는 복선급 철도 기준이므로, 단면 규모가 다를 경우 적용 불가",
+        "source": "PDF 342쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p398-x14",
+          "quote": "1span(2차로급 도로 또는 복선급 철도)을 방수면에 설치"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "거푸집 표면처리(샌딩) 작업",
+        "source": "PDF 342쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p398-x14",
+          "quote": "거푸집 표면처리(샌딩) 작업은 제외되어 있다."
+        }
+      },
+      {
+        "item": "철제레일, 침목, 박리재 등 소요자재",
+        "source": "PDF 342쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p398-x14",
+          "quote": "철제레일, 침목, 박리재 등 소요자재는 제외되어 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 회당(단위당) 품이 직접 명시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p398-t1",
+      "row": "형틀목공",
+      "column": "수량",
+      "value": "6"
+    },
+    {
+      "table_id": "p398-t1",
+      "row": "콘크리트공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p398-t1",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p398-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p398-t1",
+      "row": "콘크리트펌프(차)",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p398-t1",
+      "row": "소요일수 (설치/콘크리트타설/해체/이동)",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p398-x14",
+      "quote": "1span(2차로급 도로 또는 복선급 철도)을 방수면에 설치"
+    },
+    {
+      "chunk_id": "p398-x14",
+      "quote": "거푸집 표면처리(샌딩) 작업은 제외되어 있다."
+    },
+    {
+      "chunk_id": "p398-x14",
+      "quote": "콘크리트 펌프차 규격은 타설능력 및 현장조건을 고려하여 적용한다."
+    },
+    {
+      "chunk_id": "p398-x14",
+      "quote": "철제레일, 침목, 박리재 등 소요자재는 제외되어 있다."
+    }
+  ],
+  "open_questions": [
+    "콘크리트 펌프차 규격은 타설능력 및 현장조건을 고려하여 적용하라고 되어 있으나, 구체적인 규격 선택지가 없어 입력으로 정의하지 못함.",
+    "1span의 구체적인 길이(m)가 명시되어 있지 않아, 전체 터널 연장(m)을 입력받아 span 수(회)로 환산하는 로직을 추가할 수 없음. 사용자가 직접 회(span) 수를 입력해야 함."
+  ],
+  "questions": [
+    "터널 철재거푸집 1span 설치 및 타설에 필요한 형틀목공 품은 얼마인가요?",
+    "거푸집 표면처리(샌딩) 작업이나 철제레일 자재비도 이 품에 포함되나요?",
+    "터널 연장이 100m일 때 몇 회로 계산해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:42:19.441859+00:00",
+    "input_tokens": 11694,
+    "output_tokens": 2112,
+    "source_pages": [
+      398,
+      399
+    ],
+    "prompt_sha256": "93c18c3d287cfefa0547b0228b70fe60ba6f287b4b7f3ba399ce4a5336c478d6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p398-x14 조각 텍스트에 없음",
+      "quote가 p398-x14 조각 텍스트에 없음"
+    ]
+  }
+}

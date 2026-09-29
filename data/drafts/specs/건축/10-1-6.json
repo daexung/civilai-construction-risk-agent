@@ -1,0 +1,209 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/10-1-6/셔터설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "10-1-6",
+    "title": "셔터설치(장치포함)",
+    "work": "셔터설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      630
+    ],
+    "inputs": [
+      {
+        "name": "area_band",
+        "type": "enum",
+        "allowed_values": [
+          "5㎡미만",
+          "5∼10㎡미만",
+          "10∼15㎡미만",
+          "15∼20㎡미만",
+          "20∼25㎡미만"
+        ],
+        "unit": "㎡",
+        "required": true,
+        "ask": "셔터의 면적은 어느 구간에 해당합니까?",
+        "source": "PDF 630쪽 10-1-6 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 셔터의 개소 수는 몇 개소입니까?",
+        "source": "PDF 630쪽 10-1-6 표 단위 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p686-t2",
+        "role": "면적별 셔터설치 품",
+        "source": "PDF 630쪽 10-1-6 표",
+        "unit": "인/개소",
+        "values": {
+          "창호공": {
+            "5㎡미만": "2.35",
+            "5∼10㎡미만": "2.94",
+            "10∼15㎡미만": "3.53",
+            "15∼20㎡미만": "4.12",
+            "20∼25㎡미만": "4.71"
+          },
+          "보통인부": {
+            "5㎡미만": "0.79",
+            "5∼10㎡미만": "0.99",
+            "10∼15㎡미만": "1.19",
+            "15∼20㎡미만": "1.39",
+            "20∼25㎡미만": "1.58"
+          }
+        },
+        "cite": {
+          "table_id": "p686-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p686-t2",
+          "row_input": "고정 행이름(직종)",
+          "column_input": "area_band",
+          "trades": [
+            "창호공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 630쪽 10-1-6 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [
+      {
+        "condition": "셔터 면적이 25㎡ 이상인 경우",
+        "reason": "표에 25㎡ 이상에 대한 품이 명시되어 있지 않음",
+        "source": "PDF 630쪽 10-1-6 표",
+        "cite": [
+          {
+            "table_id": "p686-t2"
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p686-x18",
+          "quote": "공구손료 및 경장비(용접기, 전기그라인더 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당) 품이 표에 직접 명시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p686-t2",
+      "row": "창호공",
+      "column": "5㎡미만",
+      "value": "2.35"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "창호공",
+      "column": "5∼10㎡미만",
+      "value": "2.94"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "창호공",
+      "column": "10∼15㎡미만",
+      "value": "3.53"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "창호공",
+      "column": "15∼20㎡미만",
+      "value": "4.12"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "창호공",
+      "column": "20∼25㎡미만",
+      "value": "4.71"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "보통인부",
+      "column": "5㎡미만",
+      "value": "0.79"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "보통인부",
+      "column": "5∼10㎡미만",
+      "value": "0.99"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "보통인부",
+      "column": "10∼15㎡미만",
+      "value": "1.19"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "보통인부",
+      "column": "15∼20㎡미만",
+      "value": "1.39"
+    },
+    {
+      "table_id": "p686-t2",
+      "row": "보통인부",
+      "column": "20∼25㎡미만",
+      "value": "1.58"
+    },
+    {
+      "chunk_id": "p686-x18",
+      "quote": "공구손료 및 경장비(용접기, 전기그라인더 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "셔터 면적이 25㎡ 이상인 경우의 품 산정 방식이 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "면적이 12㎡인 전동셔터 3개소를 설치할 때 필요한 창호공과 보통인부의 품은 얼마인가요?",
+    "셔터 면적이 25㎡ 이상인 대형 셔터를 설치할 때는 품을 어떻게 계산해야 하나요?",
+    "셔터설치 시 공구손료 및 경장비 비용은 어떻게 계상하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:50:37.254573+00:00",
+    "input_tokens": 11676,
+    "output_tokens": 2018,
+    "source_pages": [
+      686,
+      687
+    ],
+    "prompt_sha256": "832d169d47cacd6da8484642a5cd2dd985409ed85ca6330cff0e4f789c65d20a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

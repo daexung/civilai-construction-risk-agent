@@ -1,0 +1,203 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-12-1/건설용리프트_설치_및_해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-12-1",
+    "title": "건설용리프트 설치 및 해체('09, '23년 보완)",
+    "work": "건설용리프트(싱글 1.2ton) 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      64
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치 및 해체할 건설용리프트(싱글 1.2ton)는 몇 대입니까?",
+        "source": "PDF 64쪽 2-12-1 표 (대당)"
+      },
+      {
+        "name": "forklift_access",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장에 지게차 진입이 가능합니까?",
+        "source": "PDF 64쪽 [주] ⑤"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p120-t0",
+        "role": "건설용리프트 대당 설치 및 해체 품",
+        "source": "PDF 64쪽 2-12-1 표",
+        "unit": "인/대, hr/대",
+        "values": {
+          "기계설비공": {
+            "수량": "1.31"
+          },
+          "비계공": {
+            "수량": "2.04"
+          },
+          "보통인부": {
+            "수량": "0.87"
+          },
+          "지게차": {
+            "수량": "1.95"
+          }
+        },
+        "cite": {
+          "table_id": "p120-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p120-t0",
+          "row_input": null,
+          "column_input": "수량",
+          "trades": [
+            "기계설비공",
+            "비계공",
+            "보통인부",
+            "지게차"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p120-t0에서 대당 직종별 인원 및 장비 수량을 가져온다.",
+        "물량(대수)을 곱해 총 투입 품을 구한다."
+      ],
+      "source": "PDF 64쪽 2-12-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "지게차 진입이 불가능한 경우",
+        "blocked_if": {
+          "input": "forklift_access",
+          "op": "==",
+          "value": false
+        },
+        "reason": "지게차 진입이 불가능한 경우 크레인 등 장비를 변경할 수 있으나, 구체적인 장비 규격 및 수량 산정 기준이 명시되어 있지 않아 자동 계산이 불가함",
+        "source": "PDF 64쪽 [주] ⑤",
+        "cite": {
+          "section_no": "2-12-1",
+          "marker": "⑤"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기초콘크리트 및 전기 인입공사",
+        "source": "PDF 64쪽 [주] ③",
+        "cite": {
+          "section_no": "2-12-1",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "낙하물 방지를 위한 방호선반 설치 및 해체",
+        "source": "PDF 64쪽 [주] ④",
+        "cite": {
+          "section_no": "2-12-1",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(윈치 등) 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "section_no": "2-12-1",
+          "marker": "⑥"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p120-t0",
+      "row": "기계설비공",
+      "column": "수량",
+      "value": "1.31"
+    },
+    {
+      "table_id": "p120-t0",
+      "row": "비계공",
+      "column": "수량",
+      "value": "2.04"
+    },
+    {
+      "table_id": "p120-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.87"
+    },
+    {
+      "table_id": "p120-t0",
+      "row": "지게차",
+      "column": "수량",
+      "value": "1.95"
+    },
+    {
+      "chunk_id": "p120-x5",
+      "quote": "③ 기초콘크리트 및 전기 인입공사는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p120-x5",
+      "quote": "④ 낙하물 방지를 위한 방호선반은 ‘[공통부문] 2-9-2 건설용리프트 방호선반 설치 및 해체’를 따른다."
+    },
+    {
+      "chunk_id": "p120-x5",
+      "quote": "⑤ 지게차의 진입이 불가능 한 경우 크레인 등 장비를 변경할 수 있다."
+    },
+    {
+      "chunk_id": "p120-x5",
+      "quote": "⑥ 공구손료 및 경장비(윈치 등)의 기계경비는 인력품이 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "지게차 진입 불가 시 크레인 등 장비로 변경할 때, 구체적인 장비 규격과 수량 산정 기준이 명시되어 있지 않아 자동 계산이 불가능합니다."
+  ],
+  "questions": [
+    "건설용리프트 2대를 설치할 때 필요한 비계공 품은 얼마인가요?",
+    "지게차가 진입할 수 없는 현장인데 장비 품은 어떻게 계산하나요?",
+    "기초콘크리트 공사 비용도 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:12:40.150847+00:00",
+    "input_tokens": 11643,
+    "output_tokens": 1937,
+    "source_pages": [
+      120,
+      121
+    ],
+    "prompt_sha256": "7868a85713680daa51f79d97ff00cfb64930c36763840cfdcc867d125101717d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

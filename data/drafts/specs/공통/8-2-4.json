@@ -1,0 +1,248 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-4/트랜처",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-4",
+    "title": "트랜처",
+    "work": "시간당 작업량 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      173,
+      174
+    ],
+    "inputs": [
+      {
+        "name": "L",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "1열 실작업거리(편도)는 몇 m입니까?",
+        "source": "PDF 173쪽 2. 작업능력 산정 공식"
+      },
+      {
+        "name": "depth",
+        "type": "enum",
+        "allowed_values": [
+          "0.6m",
+          "0.7m",
+          "0.8m",
+          "0.9m",
+          "1.0m",
+          "1.1m"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "굴착심도는 얼마입니까?",
+        "source": "PDF 173쪽 가. 굴착심도 계수(d) 표"
+      },
+      {
+        "name": "soil_type",
+        "type": "enum",
+        "allowed_values": [
+          "사질토",
+          "점질토"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질은 사질토와 점질토 중 무엇입니까?",
+        "source": "PDF 173쪽 나. 작업효율(E) 표"
+      },
+      {
+        "name": "condition",
+        "type": "enum",
+        "allowed_values": [
+          "양호",
+          "보통",
+          "불량"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장조건은 양호, 보통, 불량 중 무엇입니까?",
+        "source": "PDF 173쪽 나. 작업효율(E) 표"
+      },
+      {
+        "name": "filter_material",
+        "type": "enum",
+        "allowed_values": [
+          "왕겨",
+          "모래",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "소수재의 종류는 무엇입니까?",
+        "source": "PDF 174쪽 [주] ⑤"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p229-t2",
+        "role": "굴착심도 계수(d)",
+        "source": "PDF 173쪽 가. 굴착심도 계수(d)",
+        "unit": "무차원",
+        "values": {
+          "d": {
+            "0.6m": "1.29",
+            "0.7m": "1.13",
+            "0.8m": "1.00",
+            "0.9m": "0.90",
+            "1.0m": "0.82",
+            "1.1m": "0.69"
+          }
+        },
+        "cite": {
+          "table_id": "p229-t2"
+        }
+      },
+      {
+        "id": "p229-t3",
+        "role": "작업효율(E)",
+        "source": "PDF 173쪽 나. 작업효율(E)",
+        "unit": "무차원",
+        "values": {
+          "사질토": {
+            "양호": "0.8",
+            "보통": "0.65",
+            "불량": "0.50"
+          },
+          "점질토": {
+            "양호": "0.7",
+            "보통": "0.55",
+            "불량": "0.40"
+          }
+        },
+        "cite": {
+          "table_id": "p229-t3"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {},
+        "when_text": "항상 적용",
+        "change": {
+          "작업보조인부": "+4"
+        },
+        "source": "PDF 174쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p230-x0",
+          "quote": "① 작업보조인부는 트랜처에 왕겨적재 2인, 조절 1인, 유공관유도조정 1인 등 4인 1조이다."
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "1열 실작업거리(L)와 전진/후진 속도를 이용해 1열 왕복시간(t2)을 구한다.",
+        "흡수관 삽입 및 수평조절시간(t1)과 회전 및 기어 변속시간 등(t3)을 더해 1회 싸이클시간(cm)을 구한다.",
+        "굴착심도 계수(d)와 작업효율(E)을 표에서 찾는다.",
+        "공식 Q = (60 * L * d * E) / cm 을 통해 시간당 작업량을 산정한다."
+      ],
+      "source": "PDF 173~174쪽 2. 작업능력 산정",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "소수재가 왕겨가 아닌 경우",
+        "blocked_if": {
+          "input": "filter_material",
+          "op": "!=",
+          "value": "왕겨"
+        },
+        "reason": "본 품은 소수재를 왕겨로 기준한 것이므로 모래 등일 때는 별도 산출한다.",
+        "source": "PDF 174쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p230-x0",
+          "quote": "⑤ 본 품은 소수재를 왕겨로 기준한 것이므로 모래 등일 때는 별도 산출한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "소요자재(유공관 등)",
+        "source": "PDF 174쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p230-x0",
+          "quote": "② 소요자재(유공관 등)는 별도 계상한다."
+        }
+      },
+      {
+        "item": "자재의 소운반",
+        "source": "PDF 174쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p230-x0",
+          "quote": "③ 자재의 소운반은 별도 계상한다."
+        }
+      },
+      {
+        "item": "되메우기 및 잔토처리",
+        "source": "PDF 174쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p230-x0",
+          "quote": "④ 되메우기 및 잔토처리는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "장비의 시간당 작업량(Q)을 산정하는 공식과 계수만 제공하며, 직종별 인·일이나 단위당 품을 직접 계산하는 표준 모델(daily_crew 등)에 맞지 않습니다.",
+  "citations": [
+    {
+      "table_id": "p229-t2"
+    },
+    {
+      "table_id": "p229-t3"
+    },
+    {
+      "chunk_id": "p230-x0",
+      "quote": "① 작업보조인부는 트랜처에 왕겨적재 2인, 조절 1인, 유공관유도조정 1인 등 4인 1조이다."
+    },
+    {
+      "chunk_id": "p230-x0",
+      "quote": "② 소요자재(유공관 등)는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p230-x0",
+      "quote": "③ 자재의 소운반은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p230-x0",
+      "quote": "④ 되메우기 및 잔토처리는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p230-x0",
+      "quote": "⑤ 본 품은 소수재를 왕겨로 기준한 것이므로 모래 등일 때는 별도 산출한다."
+    }
+  ],
+  "open_questions": [
+    "작업보조인부 4인의 정확한 직종(보통인부, 특별인부 등)이 명시되지 않았습니다.",
+    "전진속도(V1)가 d=0.7m 일때 기준으로 5.3m/분이라고 되어 있는데, 다른 굴착심도일 때의 전진속도 산정 방법이 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "트랜처 작업 시 굴착심도가 0.8m일 때 굴착심도 계수는 얼마인가요?",
+    "소수재로 모래를 사용할 경우 품을 어떻게 산정해야 하나요?",
+    "1열 실작업거리가 주어지지 않았을 때 시간당 작업량을 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:28.519497+00:00",
+    "input_tokens": 12800,
+    "output_tokens": 2474,
+    "source_pages": [
+      229,
+      230,
+      231
+    ],
+    "prompt_sha256": "07f95f58f99f61ac4e6960c7d8b78715b41fd9269d47c042f124e2e942011bb6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

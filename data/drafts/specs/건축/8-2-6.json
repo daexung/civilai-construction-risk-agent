@@ -1,0 +1,233 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/8-2-6/금속패널설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "8-2-6",
+    "title": "금속패널 설치",
+    "work": "금속패널 및 하지철물 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      621
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "하지철물 설치",
+          "패널설치"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까? (하지철물 설치 / 패널설치)",
+        "source": "PDF 621쪽 8-2-6 표의 구분",
+        "synonyms": {
+          "하지철물 설치": [
+            "하지철물",
+            "하지철물설치"
+          ],
+          "패널설치": [
+            "패널 설치",
+            "금속패널설치"
+          ]
+        }
+      },
+      {
+        "name": "location",
+        "type": "enum",
+        "allowed_values": [
+          "벽",
+          "천장 및 지붕"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위는 어디입니까? (벽 / 천장 및 지붕)",
+        "source": "PDF 621쪽 8-2-6 표의 시공량 구분",
+        "synonyms": {
+          "벽": [
+            "벽체"
+          ],
+          "천장 및 지붕": [
+            "천장",
+            "지붕",
+            "천정"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 621쪽 8-2-6 표의 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p677-t0",
+        "role": "작업 구분 및 시공 부위별 작업조 인원과 일일 시공량",
+        "source": "PDF 621쪽 8-2-6 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "용접공": {
+            "하지철물 설치": "2",
+            "패널설치": "0"
+          },
+          "철공": {
+            "하지철물 설치": "3",
+            "패널설치": "3"
+          },
+          "보통인부": {
+            "하지철물 설치": "0",
+            "패널설치": "1"
+          },
+          "벽": {
+            "하지철물 설치": "23",
+            "패널설치": "65"
+          },
+          "천장 및 지붕": {
+            "하지철물 설치": "20",
+            "패널설치": "55"
+          }
+        },
+        "cite": {
+          "table_id": "p677-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p677-t0",
+          "row_input": "location",
+          "column_input": "work_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p677-t0",
+          "column_input": "work_type",
+          "trades": [
+            "용접공",
+            "철공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "용접공": "1016",
+            "철공": "1015",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p677-t0에서 작업 구분(work_type)과 시공 부위(location)에 따른 일일 시공량을 찾는다.",
+        "작업일수 = area ÷ 일일 시공량으로 구한다.",
+        "p677-t0에서 작업 구분(work_type)에 따른 직종별 인원을 찾는다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 621쪽 8-2-6 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "단열재 설치",
+        "source": "PDF 621쪽 8-2-6 [주] ③",
+        "cite": {
+          "section_no": "8-2-6",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "비계매기 또는 고소작업차 비용",
+        "source": "PDF 621쪽 8-2-6 [주] ④",
+        "cite": {
+          "section_no": "8-2-6",
+          "marker": "④"
+        }
+      },
+      {
+        "item": "외벽 높이에 따른 할증",
+        "source": "PDF 621쪽 8-2-6 [주] ⑤",
+        "cite": {
+          "section_no": "8-2-6",
+          "marker": "⑤"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "section_no": "8-2-6",
+          "marker": "⑥"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 표로 주어져 있어, 물량을 일일 시공량으로 나누어 작업일수를 구한 뒤 인원을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p677-t0",
+      "row": "하지철물 설치",
+      "column": "용접공",
+      "value": "2"
+    },
+    {
+      "table_id": "p677-t0",
+      "row": "패널설치",
+      "column": "시공량(㎡) 벽",
+      "value": "65"
+    },
+    {
+      "chunk_id": "p677-x5",
+      "quote": "공구손료 및 경장비(절단기, 용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p677-x5",
+      "quote": "단열재를 설치하는 경우 ‘[건축부문] 5-4 단열’을 따른다."
+    },
+    {
+      "chunk_id": "p677-x5",
+      "quote": "비계매기 또는 고소작업차 비용은 필요 시 별도 계상한다."
+    },
+    {
+      "chunk_id": "p677-x5",
+      "quote": "외벽의 높이에 따른 할증은 ‘[공통부문] 1-4-5 위험’을 따른다."
+    }
+  ],
+  "open_questions": [
+    "하지철물 설치와 패널설치가 별도의 작업으로 구분되어 있는데, 일반적으로 두 작업을 동시에 수행하는지 아니면 각각 별도로 물량을 산출하여 합산해야 하는지 명시되어 있지 않아 사용자가 각각 선택하여 계산하도록 구성함."
+  ],
+  "questions": [
+    "금속패널 설치 시 공구손료는 어떻게 계산하나요?",
+    "하지철물과 패널을 모두 설치할 경우 각각 물량을 입력해서 합산해야 하나요?",
+    "외벽 높이가 30m인 경우 할증은 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:06:49.582172+00:00",
+    "input_tokens": 11751,
+    "output_tokens": 2166,
+    "source_pages": [
+      677,
+      678
+    ],
+    "prompt_sha256": "eecb08cc51b06b6e5a3f4c0ef439e9de90a06936a0ab1961fafbc083960abab8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

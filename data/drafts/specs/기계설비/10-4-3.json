@@ -1,0 +1,108 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/10-4-3/연결송수구설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "10-4-3",
+    "title": "연결송수구설치",
+    "work": "연결송수구 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      709
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "연결송수구 설치 수량은 몇 대입니까?",
+        "source": "PDF 709쪽 10-4-3 연결송수구설치 표 (대당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p765-t3",
+        "role": "연결송수구설치 단위당 품",
+        "source": "PDF 709쪽 10-4-3 연결송수구설치 표",
+        "unit": "인/대",
+        "values": {
+          "연결송수구": {
+            "배 관 공(인)": "0.620"
+          }
+        },
+        "cite": {
+          "table_id": "p765-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p765-t3",
+          "row_input": "연결송수구",
+          "column_input": "배 관 공(인)",
+          "trades": [
+            "배관공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 709쪽 10-4-3 연결송수구설치 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대)당 배관공의 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p765-t3",
+      "row": "연결송수구",
+      "column": "배 관 공(인)",
+      "value": "0.620"
+    },
+    {
+      "chunk_id": "p765-x16",
+      "quote": "본 품은 스프링클러 시스템의 설비별 설치 품 기준이다."
+    },
+    {
+      "chunk_id": "p765-x16",
+      "quote": "본 품에는 소운반, 설비별 설치품을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "연결송수구 설치 수량은 몇 대입니까?",
+    "이 품셈은 스프링클러 시스템 외의 다른 소화설비 연결송수구에도 동일하게 적용할 수 있습니까?",
+    "소운반 거리가 매우 먼 경우 추가 품을 계상할 수 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:27:52.599971+00:00",
+    "input_tokens": 11439,
+    "output_tokens": 955,
+    "source_pages": [
+      765,
+      766
+    ],
+    "prompt_sha256": "431f19af31315011bc8d7605d49d747c9a4c1e3e61c742328603f4e146bd811a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/3-1-2/타일줄눈설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "3-1-2",
+    "title": "타일줄눈 설치",
+    "work": "타일줄눈 설치 품 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      585
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "타일줄눈 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 585쪽 p641-t1, p641-t2 기준 단위 (㎡당)"
+      },
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "바닥면",
+          "벽면"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위는 바닥면과 벽면 중 어디입니까?",
+        "source": "PDF 585쪽 p641-t1 행 구분"
+      },
+      {
+        "name": "tile_size",
+        "type": "enum",
+        "allowed_values": [
+          "0.04~0.10㎡이하",
+          "0.11~0.20㎡이하",
+          "0.21~0.40㎡이하"
+        ],
+        "unit": "㎡",
+        "required": true,
+        "ask": "타일 규격은 어디에 해당합니까? (0.04~0.10㎡이하 / 0.11~0.20㎡이하 / 0.21~0.40㎡이하)",
+        "source": "PDF 585쪽 p641-t1 열 구분"
+      },
+      {
+        "name": "attach_method",
+        "type": "enum",
+        "allowed_values": [
+          "떠붙이기",
+          "압착붙이기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "타일 붙임 공법은 무엇입니까? (떠붙이기 / 압착붙이기)",
+        "source": "PDF 585쪽 p641-t2 열 구분"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p641-t1",
+        "role": "시공 부위 및 타일 규격별 줄눈공 품",
+        "source": "PDF 585쪽 3-1-2 타일줄눈 설치 표",
+        "unit": "인/㎡",
+        "values": {
+          "바닥면": {
+            "0.04~0.10㎡이하": "0.016",
+            "0.11~0.20㎡이하": "0.013",
+            "0.21~0.40㎡이하": "0.011"
+          },
+          "벽면": {
+            "0.04~0.10㎡이하": "0.020",
+            "0.11~0.20㎡이하": "0.017",
+            "0.21~0.40㎡이하": "0.015"
+          }
+        },
+        "cite": {
+          "table_id": "p641-t1"
+        }
+      },
+      {
+        "id": "p641-t2",
+        "role": "붙임 공법별 줄눈 모르타르 소요량",
+        "source": "PDF 585쪽 3-1-2 타일줄눈 설치 [주] ③ 재료량 표",
+        "unit": "㎥/㎡",
+        "values": {
+          "줄눈 모르타르량(㎥)": {
+            "떠붙이기": "0.005",
+            "압착붙이기": "0.001"
+          }
+        },
+        "cite": {
+          "table_id": "p641-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p641-t1",
+          "row_input": "surface_type",
+          "column_input": "tile_size",
+          "trades": [
+            "줄눈공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p641-t1에서 시공 부위와 타일 규격에 따른 줄눈공 단위당 품을 찾는다.",
+        "물량을 곱해 총 노무 품을 구한다.",
+        "p641-t2에서 붙임 공법에 따른 줄눈 모르타르 단위당 소요량을 찾고 물량을 곱해 총 재료량을 구한다."
+      ],
+      "source": "PDF 585쪽 p641-t1, p641-t2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 줄눈공 인원과 재료량이 표에 직접 제시되어 있으므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p641-t1",
+      "row": "바닥면",
+      "column": "0.04~0.10㎡이하",
+      "value": "0.016"
+    },
+    {
+      "table_id": "p641-t1",
+      "row": "바닥면",
+      "column": "0.11~0.20㎡이하",
+      "value": "0.013"
+    },
+    {
+      "table_id": "p641-t1",
+      "row": "바닥면",
+      "column": "0.21~0.40㎡이하",
+      "value": "0.011"
+    },
+    {
+      "table_id": "p641-t1",
+      "row": "벽면",
+      "column": "0.04~0.10㎡이하",
+      "value": "0.020"
+    },
+    {
+      "table_id": "p641-t1",
+      "row": "벽면",
+      "column": "0.11~0.20㎡이하",
+      "value": "0.017"
+    },
+    {
+      "table_id": "p641-t1",
+      "row": "벽면",
+      "column": "0.21~0.40㎡이하",
+      "value": "0.015"
+    },
+    {
+      "table_id": "p641-t2",
+      "row": "줄눈 모르타르량(㎥)",
+      "column": "떠붙이기",
+      "value": "0.005"
+    },
+    {
+      "table_id": "p641-t2",
+      "row": "줄눈 모르타르량(㎥)",
+      "column": "압착붙이기",
+      "value": "0.001"
+    },
+    {
+      "chunk_id": "p641-x7",
+      "quote": "① 본 품은 배합이 완료된 상태의 줄눈재로 타일의 줄눈을 설치(도포)하는 기준이다."
+    },
+    {
+      "chunk_id": "p641-x7",
+      "quote": "② 본 품은 줄눈재 비빔, 줄눈설치 및 마무리 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p641-x11",
+      "quote": "※ 배합비 1:1 기준하며, 재료할증은 포함되어 있다."
+    }
+  ],
+  "open_questions": [
+    "타일 규격이 0.04㎡ 미만이거나 0.40㎡를 초과하는 경우에 대한 품 산정 기준이 명시되어 있지 않음."
+  ],
+  "questions": [
+    "바닥면에 0.15㎡ 크기의 타일 줄눈을 설치할 때 품은 어떻게 되나요?",
+    "타일 규격이 0.04㎡ 미만이거나 0.40㎡를 초과하는 경우에는 어떤 기준을 적용해야 하나요?",
+    "타일줄눈 설치 물량이 100㎡일 때 줄눈 모르타르 소요량은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:58:05.266783+00:00",
+    "input_tokens": 11802,
+    "output_tokens": 2292,
+    "source_pages": [
+      641,
+      642
+    ],
+    "prompt_sha256": "789cce3f70c7a343723b0ca261418156bfb7fdcd5ca13227f6f1912c5e5189a3",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

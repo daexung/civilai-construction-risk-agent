@@ -1,0 +1,178 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-4-1/지붕덧씌우기",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-4-1",
+    "title": "지붕 덧씌우기('22년 신설)",
+    "work": "지붕 덧씌우기",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      919
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "지붕 덧씌우기 시공 물량은 몇 ㎡입니까?",
+        "source": "PDF 919쪽 3-4-1 표 시공량 단위"
+      },
+      {
+        "name": "roof_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반지붕",
+          "맞배지붕"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지붕의 형태는 일반지붕입니까, 맞배지붕(경사를 짓는 지붕면이 2개소)입니까?",
+        "source": "PDF 919쪽 3-4-1 표 비고",
+        "synonyms": {
+          "일반지붕": [
+            "일반"
+          ],
+          "맞배지붕": [
+            "맞배"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p975-t0",
+        "role": "지붕 덧씌우기 일당 작업조 및 시공량",
+        "source": "PDF 919쪽 3-4-1 표",
+        "unit": "인/일, ㎡/일",
+        "values": {
+          "지붕잇기공": {
+            "단위": "인",
+            "수량": "4",
+            "시공량(㎡)": "85"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎡)": "85"
+          }
+        },
+        "cite": {
+          "table_id": "p975-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p975-t0에서 기준 일일시공량(85㎡)과 작업조 인원을 확인한다.",
+        "맞배지붕인 경우 시공량을 20% 가산한다 (85 * 1.2 = 102㎡).",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(수량)으로 구한다."
+      ],
+      "source": "PDF 919쪽 3-4-1 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "맞배지붕인 경우",
+        "blocked_if": {
+          "input": "roof_type",
+          "op": "==",
+          "value": "맞배지붕"
+        },
+        "reason": "맞배지붕은 시공량을 20% 가산해야 하나, 현재 계산 모델(adjusted_daily_crew)에서 비고란의 조건부 가산을 처리할 계수표 구조가 없어 자동 계산 보류",
+        "source": "PDF 919쪽 3-4-1 표 비고",
+        "cite": {
+          "table_id": "p975-t0",
+          "row": "비고",
+          "value": "- 맞배지붕(경사를 짓는 지붕면이 2개소)은 시공량을 20% 가산하여 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "홈통 및 빗물받이 설치",
+        "source": "PDF 919쪽 3-4-1 [주] ③",
+        "cite": {
+          "chunk_id": "p975-x4",
+          "quote": "홈통 및 빗물받이 설치는 ‘[건축부문] 7-2 홈통’을 따른다."
+        }
+      },
+      {
+        "item": "비계매기, 비산방지, 보호 및 안전시설의 설치비",
+        "source": "PDF 919쪽 3-4-1 [주] ④",
+        "cite": {
+          "chunk_id": "p975-x4",
+          "quote": "비계매기, 비산방지, 보호 및 안전시설의 설치비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p975-x4",
+          "quote": "공구손료 및 경장비(에어콤프, 절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "맞배지붕 시공량 20% 가산 규칙을 adjusted_daily_crew의 계수표 참조 방식으로 표현할 수 없어 자동 계산 모델 적용이 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p975-t0"
+    },
+    {
+      "table_id": "p975-t0",
+      "row": "비고",
+      "value": "- 맞배지붕(경사를 짓는 지붕면이 2개소)은 시공량을 20% 가산하여 적용한다."
+    },
+    {
+      "chunk_id": "p975-x4",
+      "quote": "홈통 및 빗물받이 설치는 ‘[건축부문] 7-2 홈통’을 따른다."
+    },
+    {
+      "chunk_id": "p975-x4",
+      "quote": "비계매기, 비산방지, 보호 및 안전시설의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p975-x4",
+      "quote": "공구손료 및 경장비(에어콤프, 절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트에 '지붕잇기공 보통인부'가 한 줄로 합쳐져 있고 수량이 4와 2로 두 번 나타나는 파싱 오류가 있어, 표 데이터를 원문 이미지 기준으로 '지붕잇기공', '보통인부'로 분리하여 작성했습니다.",
+    "맞배지붕 시공량 20% 가산 규칙을 adjusted_daily_crew의 coefficients 표 참조 방식으로 표현할 수 없어 not_calculable로 분류했습니다."
+  ],
+  "questions": [
+    "지붕 덧씌우기 시공 물량은 몇 ㎡입니까?",
+    "지붕의 형태가 맞배지붕(경사를 짓는 지붕면이 2개소)에 해당합니까?",
+    "기존 지붕재 철거 작업이 포함되어 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:32.742568+00:00",
+    "input_tokens": 23385,
+    "output_tokens": 4168,
+    "source_pages": [
+      975,
+      976
+    ],
+    "prompt_sha256": "ac6ae9202cb4ef23d97a43ba4df0b0adcd5e2d0a1550f27bfaf3e7b290e0a28c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-16/Trash_Rack_설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-16",
+    "title": "Trash Rack 설치",
+    "work": "공정별 설치품 및 소모자재",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      820,
+      821
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Trash Rack 설치 물량은 몇 ton입니까?",
+        "source": "PDF 820쪽 1. 공정별 설치품 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p876-t2",
+        "role": "공정별 설치품 (1)",
+        "source": "PDF 820쪽 1. 공정별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업": {
+            "기계기사": "1.66",
+            "플랜트기계설치공": "0.05",
+            "특별인부": "0.175",
+            "산소절단공": "0.047",
+            "석공": "0.1",
+            "특수비계공": "0.18",
+            "측량사": "0.14"
+          }
+        },
+        "cite": {
+          "table_id": "p876-t2"
+        }
+      },
+      {
+        "id": "p877-t0",
+        "role": "공정별 설치품 (2)",
+        "source": "PDF 821쪽 1. 공정별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "1차센터링 턴버클용접 Beam 완 전 고 정 Trash Rack 설 치 1차조립 2차센터링 검사 도장준비 도장 강재거푸집철거 뒷정리 전원조작": {
+            "측량조수": "0.087",
+            "특수비계공": "0.59",
+            "특별인부": "0.52",
+            "플랜트기계설치공": "0.035",
+            "플랜트용접공": "0.017",
+            "산소절단공": "0.017",
+            "측량사": "0.087",
+            "플랜트제관공": "2.98",
+            "도장공": "2.98",
+            "플랜트전공": "0.52"
+          }
+        },
+        "cite": {
+          "table_id": "p877-t0"
+        }
+      },
+      {
+        "id": "p877-t1",
+        "role": "소모자재",
+        "source": "PDF 821쪽 2. 소모자재",
+        "unit": "단위/ton",
+        "values": {
+          "수정･절단 용접 도장 동력": {
+            "산소": "0.029",
+            "아세틸렌": "0.012",
+            "용접봉": "5.95",
+            "Tar Epoxy": "7.06",
+            "시너": "1.58"
+          }
+        },
+        "cite": {
+          "table_id": "p877-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p876-t2",
+          "row_input": "고정",
+          "column_input": "직종",
+          "trades": [
+            "기계기사",
+            "플랜트기계설치공",
+            "특별인부",
+            "산소절단공",
+            "석공",
+            "특수비계공",
+            "측량사",
+            "측량조수",
+            "플랜트용접공",
+            "플랜트제관공",
+            "도장공",
+            "플랜트전공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p876-t2와 p877-t0에서 직종별 단위당 품을 확인하여 합산한다.",
+        "p877-t1에서 소모자재의 단위당 수량을 확인한다.",
+        "물량(quantity)을 곱해 총 품과 총 소모자재 수량을 구한다."
+      ],
+      "source": "PDF 820~821쪽 1. 공정별 설치품 및 2. 소모자재",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 인원과 소모자재 수량이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p876-t2",
+      "row": "기술관리 운반검측 수정 설치준비철근정리 Chipping Beam 설 치 Crane 작 업 Beam 설 치 c r a n e 작 업",
+      "column": "기계기사",
+      "value": "1.66"
+    },
+    {
+      "table_id": "p877-t0",
+      "row": "1차센터링 턴버클용접 Beam 완 전 고 정 Trash Rack 설 치 1차조립 2차센터링 검사 도장준비 도장 강재거푸집철거 뒷정리 전원조작",
+      "column": "측량조수",
+      "value": "0.14"
+    },
+    {
+      "table_id": "p877-t1",
+      "row": "수정･절단 용접 도장 동력",
+      "column": "산소",
+      "value": "0.029"
+    },
+    {
+      "chunk_id": "p877-x34",
+      "quote": "※ 산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 공정별 행 이름이 모두 하나로 뭉쳐져 있습니다. 실제 계산 시에는 직종별로 수량을 합산하는 방식으로 처리해야 할 것으로 보입니다.",
+    "p876-t2와 p877-t0는 원문상 하나의 표가 페이지를 넘어가며 나뉜 것인데, 파싱 결과에서는 두 개의 표로 분리되어 있습니다.",
+    "파싱 결과의 특성상 동일한 직종(예: 특별인부, 산소절단공 등)이 여러 번 등장할 때 JSON 객체의 키 중복 문제로 인해 마지막 값만 저장되는 현상이 있습니다. 정확한 합산을 위해서는 원문 표의 모든 수량을 누적해야 합니다."
+  ],
+  "questions": [
+    "Trash Rack 설치 물량은 몇 ton입니까?",
+    "산소량 규격의 기준은 무엇입니까?",
+    "Trash Rack 설치 시 소모되는 Tar Epoxy의 수량은 어떻게 계산합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:43:29.611226+00:00",
+    "input_tokens": 14849,
+    "output_tokens": 2027,
+    "source_pages": [
+      876,
+      877,
+      878
+    ],
+    "prompt_sha256": "f2b8d9676bf3ee2d5928c546c4538c4be467e812d92ec68c744980837e22fa97",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-2-3/육상투하",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-2-3",
+    "title": "육상투하",
+    "work": "육상투하 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      390
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "투하 물량은 몇 ㎥입니까?",
+        "source": "7-2-3 육상투하 기준 (10㎥당)"
+      },
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "수량 0.03㎥ 이하\n덤프트럭+굴착기 투하",
+          "수량 0.1㎥ 이상\n크레인 투하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "투하 방법 및 규격은 무엇입니까?",
+        "source": "p446-t1 열 이름"
+      },
+      {
+        "name": "slope",
+        "type": "enum",
+        "allowed_values": [
+          "1:1 이하",
+          "1:1보다 급함"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "경사도는 1:1 이하입니까, 1:1보다 급합니까? (0.03㎥ 이하 규격인 경우)",
+        "source": "p446-x10 주 ①, ②"
+      },
+      {
+        "name": "is_underwater",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "수중부분입니까? (아니오 선택 시 수상부분으로 간주하여 잠수부 제외)",
+        "source": "p446-x10 주 ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p446-t1",
+        "role": "육상투하 단위당 품",
+        "source": "7-2-3 육상투하 표",
+        "unit": "인, 조 / 10㎥",
+        "values": {
+          "잠수부": {
+            "수량 0.1㎥ 이상\n크레인 투하": "0.09"
+          },
+          "특별인부": {
+            "수량 0.1㎥ 이상\n크레인 투하": "0.13"
+          },
+          "보통인부": {
+            "수량 0.03㎥ 이하\n덤프트럭+굴착기 투하": "0.008",
+            "수량 0.1㎥ 이상\n크레인 투하": "0.13"
+          }
+        },
+        "cite": {
+          "table_id": "p446-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p446-t1",
+          "row_input": "고정",
+          "column_input": "method",
+          "trades": [
+            "잠수부",
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_underwater": false
+            },
+            "change": "잠수부 제외",
+            "source": "p446-x10 주 ④"
+          }
+        ]
+      },
+      "steps": [
+        "p446-t1에서 투하 방법에 따른 단위당 품을 찾는다.",
+        "물량을 10으로 나누어 곱해 총 품을 구한다.",
+        "수상부분인 경우 잠수부 품을 제외한다."
+      ],
+      "source": "7-2-3 육상투하",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [
+      {
+        "condition": "0.03㎥ 이하 규격에서 경사도 1:1보다 급한 경우",
+        "blocked_if": {
+          "input": "slope",
+          "op": "==",
+          "value": "1:1보다 급함"
+        },
+        "reason": "별도 계상",
+        "source": "p446-x10 주 ②",
+        "cite": {
+          "chunk_id": "p446-x10",
+          "quote": "② 0.03㎥ 이하 규격에서 경사도 1:1보다 급한 경우, 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기계경비",
+        "source": "p446-x10 주 ⑤",
+        "cite": {
+          "chunk_id": "p446-x10",
+          "quote": "⑤ 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당(10㎥당) 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p446-t1",
+      "row": "잠수부",
+      "column": "수량 0.1㎥ 이상\n크레인 투하",
+      "value": "0.09"
+    },
+    {
+      "table_id": "p446-t1",
+      "row": "특별인부",
+      "column": "수량 0.1㎥ 이상\n크레인 투하",
+      "value": "0.13"
+    },
+    {
+      "table_id": "p446-t1",
+      "row": "보통인부",
+      "column": "수량 0.03㎥ 이하\n덤프트럭+굴착기 투하",
+      "value": "0.008"
+    },
+    {
+      "table_id": "p446-t1",
+      "row": "보통인부",
+      "column": "수량 0.1㎥ 이상\n크레인 투하",
+      "value": "0.13"
+    },
+    {
+      "chunk_id": "p446-x10",
+      "quote": "② 0.03㎥ 이하 규격에서 경사도 1:1보다 급한 경우, 별도 계상한다."
+    },
+    {
+      "chunk_id": "p446-x10",
+      "quote": "④ 수상부분은 잠수부를 계상하지 않는다."
+    },
+    {
+      "chunk_id": "p446-x10",
+      "quote": "⑤ 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "육상투하 물량이 100㎥이고 0.1㎥ 이상 크레인 투하일 때 품은 어떻게 되나요?",
+    "0.03㎥ 이하 규격인데 경사도가 1:1보다 급한 경우 어떻게 계산하나요?",
+    "수상부분에 투하할 때 잠수부 품은 어떻게 처리하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:45:55.880513+00:00",
+    "input_tokens": 23402,
+    "output_tokens": 4423,
+    "source_pages": [
+      446,
+      447
+    ],
+    "prompt_sha256": "c8f6ebe9834a62b2fd5750273c6b25a9137c63fa56886c689593651b0e2bc2e6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

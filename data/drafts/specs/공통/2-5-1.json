@@ -1,0 +1,159 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-5-1/목재비탈규준틀설치및철거",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-5-1",
+    "title": "목재 비탈 규준틀 설치 및 철거",
+    "work": "설치 및 철거",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      43
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치 및 철거할 목재 비탈 규준틀은 몇 개소입니까?",
+        "source": "PDF 43쪽 2-5-1 표 단위 (개소당)"
+      },
+      {
+        "name": "is_standard_height",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "규준틀의 높이가 0.5m 기준입니까?",
+        "source": "PDF 43쪽 2-5-1 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p99-t1",
+        "role": "목재 비탈 규준틀 설치 및 철거 단위당 품",
+        "source": "PDF 43쪽 2-5-1 표",
+        "unit": "인/개소",
+        "values": {
+          "건축목공": {
+            "수량": "0.16"
+          },
+          "보통인부": {
+            "수량": "0.14"
+          }
+        },
+        "cite": {
+          "table_id": "p99-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p99-t1",
+          "column_input": "수량",
+          "trades": [
+            "건축목공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p99-t1 표에서 직종별 단위당 품을 가져온다.",
+        "입력된 물량(quantity)을 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "PDF 43쪽 2-5-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "높이가 0.5m가 아닌 경우",
+        "blocked_if": {
+          "input": "is_standard_height",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 높이 0.5m 규준틀 기준이며, 다른 높이에 대한 품의 증감이나 보정 기준이 원문에 명시되어 있지 않음",
+        "source": "PDF 43쪽 2-5-1 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p99-x12",
+            "quote": "본 품은 높이 0.5m 규준틀을 설치 및 철거하는 기준이다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "규준틀 재료비 (목재, 표지판, 지주말뚝 등)",
+        "source": "PDF 43쪽 2-5-1 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p99-x12",
+            "quote": "비탈규준틀의 제작, 도색, 가설, 철거작업을 포함한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소)당 직종별 투입 인원이 표에 직접 명시되어 있어, 물량을 곱하여 바로 계산하는 방식이므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p99-t1",
+      "row": "건축목공",
+      "column": "수량",
+      "value": "0.16"
+    },
+    {
+      "table_id": "p99-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.14"
+    },
+    {
+      "chunk_id": "p99-x12",
+      "quote": "본 품은 높이 0.5m 규준틀을 설치 및 철거하는 기준이다."
+    },
+    {
+      "chunk_id": "p99-x12",
+      "quote": "비탈규준틀의 제작, 도색, 가설, 철거작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "규준틀의 높이가 0.5m가 아닐 경우 품을 어떻게 조정해야 하는지 원문에 명시되어 있지 않음."
+  ],
+  "questions": [
+    "설치 및 철거할 목재 비탈 규준틀은 총 몇 개소입니까?",
+    "규준틀의 높이가 0.5m가 아닌 경우 품셈 적용을 어떻게 해야 합니까?",
+    "규준틀 제작에 필요한 목재 등의 재료비는 별도로 어떻게 산정합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:12:41.799235+00:00",
+    "input_tokens": 11499,
+    "output_tokens": 1502,
+    "source_pages": [
+      99,
+      100
+    ],
+    "prompt_sha256": "e759d5b4531da1d3cd235351c3f16d2e1fdf7e603c7d4eba130a1010fb92a292",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

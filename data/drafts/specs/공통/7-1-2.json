@@ -1,0 +1,254 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/7-1-2/찰쌓기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "7-1-2",
+    "title": "찰쌓기",
+    "work": "찰쌓기 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      159
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "석재의 전면면적은 몇 ㎡입니까?",
+        "source": "PDF 159쪽 7-1-2 [주] ③"
+      },
+      {
+        "name": "depth",
+        "type": "enum",
+        "allowed_values": [
+          "35cm이하",
+          "55cm이하",
+          "75cm이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "뒷길이는 얼마입니까? (35cm이하 / 55cm이하 / 75cm이하)",
+        "source": "PDF 159쪽 7-1-2 표"
+      },
+      {
+        "name": "slope_steep",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "경사도가 1:1 보다 급합니까?",
+        "source": "PDF 159쪽 7-1-2 [주] ②"
+      },
+      {
+        "name": "height_under_3m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "높이가 3m 이하입니까?",
+        "source": "PDF 159쪽 7-1-2 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p215-t1",
+        "role": "찰쌓기 일당 작업조 인원, 장비 대수 및 시공량",
+        "source": "PDF 159쪽 7-1-2 표",
+        "unit": "인/작업조; 대/작업조; ㎡/일",
+        "values": {
+          "석공": {
+            "35cm이하": "3",
+            "55cm이하": "3",
+            "75cm이하": "3"
+          },
+          "보통인부": {
+            "35cm이하": "1",
+            "55cm이하": "1",
+            "75cm이하": "1"
+          },
+          "굴착기+ 부착용집게": {
+            "35cm이하": "1",
+            "55cm이하": "1",
+            "75cm이하": "1"
+          },
+          "시공량(㎡)": {
+            "35cm이하": "27",
+            "55cm이하": "30",
+            "75cm이하": "34"
+          }
+        },
+        "cite": {
+          "table_id": "p215-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p215-t1",
+          "row_input": "시공량(㎡)",
+          "column_input": "depth"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p215-t1",
+          "column_input": "depth",
+          "trades": [
+            "석공",
+            "보통인부"
+          ]
+        },
+        "equipment": {
+          "name": "굴착기+ 부착용집게",
+          "table": "p215-t1",
+          "unit": "대·일"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p215-t1에서 뒷길이에 따른 시공량을 고른다.",
+        "작업일수 = quantity ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 159쪽 7-1-2 표 및 [주] ③",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "경사도가 1:1 보다 완만한 경우",
+        "blocked_if": {
+          "input": "slope_steep",
+          "op": "==",
+          "value": false
+        },
+        "reason": "경사도가 1:1 보다 완만한 경우는 7-2-2 찰붙임 등 다른 기준을 적용해야 할 수 있습니다.",
+        "source": "PDF 159쪽 7-1-2 [주] ②",
+        "cite": {
+          "section_no": "7-1-2",
+          "marker": "②"
+        }
+      },
+      {
+        "condition": "높이가 3m를 초과하는 경우",
+        "blocked_if": {
+          "input": "height_under_3m",
+          "op": "==",
+          "value": false
+        },
+        "reason": "높이 3m 초과 시 본 품을 그대로 적용할 수 없습니다.",
+        "source": "PDF 159쪽 7-1-2 [주] ②",
+        "cite": {
+          "section_no": "7-1-2",
+          "marker": "②"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기초콘크리트, 뒤채움 및 다짐",
+        "source": "PDF 159쪽 7-1-2 [주] ⑤",
+        "cite": {
+          "section_no": "7-1-2",
+          "marker": "⑤"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수가 주어지고, 뒷길이에 따른 일일 시공량이 제시되어 있어 작업일수를 구한 뒤 인·일을 산출하는 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p215-t1",
+      "row": "석공",
+      "column": "35cm이하",
+      "value": "3"
+    },
+    {
+      "table_id": "p215-t1",
+      "row": "보통인부",
+      "column": "35cm이하",
+      "value": "1"
+    },
+    {
+      "table_id": "p215-t1",
+      "row": "굴착기+ 부착용집게",
+      "column": "35cm이하",
+      "value": "1"
+    },
+    {
+      "table_id": "p215-t1",
+      "row": "시공량(㎡)",
+      "column": "35cm이하",
+      "value": "27"
+    },
+    {
+      "table_id": "p215-t1",
+      "row": "시공량(㎡)",
+      "column": "55cm이하",
+      "value": "30"
+    },
+    {
+      "table_id": "p215-t1",
+      "row": "시공량(㎡)",
+      "column": "75cm이하",
+      "value": "34"
+    },
+    {
+      "chunk_id": "p215-x12",
+      "quote": "① 본 품은 콘크리트를 채움재로 사용하는 깬돌 및 깬잡석의 골쌓기 기준이다."
+    },
+    {
+      "chunk_id": "p215-x12",
+      "quote": "② 경사도가 1:1 보다 급한 경우이며, 높이 3m이하 기준이다."
+    },
+    {
+      "chunk_id": "p215-x12",
+      "quote": "③ 시공량은 석재의 전면면적(㎡)을 기준한다."
+    },
+    {
+      "chunk_id": "p215-x12",
+      "quote": "⑤ 기초콘크리트, 뒤채움 및 다짐은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p215-x12",
+      "quote": "⑥ 장비의 규격은 작업여건(작업범위, 위치 등)에 따라 변경할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "주 ⑥에서 장비의 규격을 작업여건에 따라 변경할 수 있다고 하였으나, 구체적인 변경 기준이나 대체 장비 목록이 없어 기본 장비(굴착기+부착용집게)로만 계산하도록 두었습니다."
+  ],
+  "questions": [
+    "뒷길이가 55cm 이하일 때 찰쌓기 시공량은 얼마인가요?",
+    "경사도가 1:1보다 완만한 경우에도 이 품을 적용할 수 있나요?",
+    "찰쌓기 물량(전면면적)이 몇 ㎡인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:13.994922+00:00",
+    "input_tokens": 11683,
+    "output_tokens": 2475,
+    "source_pages": [
+      215,
+      216
+    ],
+    "prompt_sha256": "7844cf3184b3a653b88bf86d63ae2a651eefde7214f24a8382910bcd9a7a4dd2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

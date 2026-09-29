@@ -1,0 +1,110 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/10-5-2/마중물탱크설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "10-5-2",
+    "title": "마중물탱크설치",
+    "work": "마중물탱크 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      710
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 마중물탱크(100~150ℓ)의 수량은 몇 대입니까?",
+        "source": "10-5-2 마중물탱크설치 표 기준 (대당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p766-t0",
+        "role": "마중물탱크설치 단위당 품",
+        "source": "10-5-2 마중물탱크설치 표",
+        "unit": "인/대",
+        "values": {
+          "구분": {
+            "배 관 공(인)": "2.060"
+          }
+        },
+        "cite": {
+          "table_id": "p766-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p766-t0",
+          "row_input": "구분",
+          "column_input": "배 관 공(인)",
+          "trades": [
+            "배관공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "10-5-2 마중물탱크설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대)당 배관공의 품이 표에 직접 명시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p766-t0",
+      "row": "구분",
+      "column": "배 관 공(인)",
+      "value": "2.060"
+    },
+    {
+      "chunk_id": "p766-x2",
+      "quote": "본 품은 스프링클러 시스템의 설비별 설치 품 기준이다."
+    },
+    {
+      "chunk_id": "p766-x2",
+      "quote": "본 품에는 소운반, 설비별 설치품을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 표 텍스트에 원문의 '마중물탱크' 행 이름이 누락되어 있어, 파싱 결과에 존재하는 '구분'을 임시 행 이름으로 사용했습니다."
+  ],
+  "questions": [
+    "마중물탱크 100~150ℓ 규격 1대 설치 시 배관공 품은 얼마인가요?",
+    "마중물탱크 설치 시 소운반 비용은 별도로 계상해야 하나요?",
+    "설치할 마중물탱크의 수량은 몇 대인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:44:12.492066+00:00",
+    "input_tokens": 11449,
+    "output_tokens": 1014,
+    "source_pages": [
+      766,
+      767
+    ],
+    "prompt_sha256": "1414e8cd8f73c27effe551abb547085133758151bc922d1cb60555babe6c55f8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-2-6/앵커볼트설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-2-6",
+    "title": "앵커 볼트 설치",
+    "work": "앵커 볼트 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      574
+    ],
+    "inputs": [
+      {
+        "name": "bolt_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø16이하",
+          "ø20이하",
+          "ø24이하",
+          "ø28이하",
+          "ø32이하",
+          "ø40이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "앵커 볼트의 직경은 얼마입니까?",
+        "source": "표 p630-t1 열 이름"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 앵커 볼트의 수량은 몇 개입니까?",
+        "source": "표 p630-t1 단위 (개당)"
+      },
+      {
+        "name": "poor_scaffold",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "콘크리트 독립주 위에서나 기타 비계가 양호치 못한 장소입니까?",
+        "source": "주 ⑥"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p630-t1",
+        "role": "앵커 볼트 설치 수량 (개당)",
+        "source": "PDF 574쪽 1-2-6 표",
+        "unit": "인/개",
+        "values": {
+          "철골공": {
+            "ø16이하": "0.05",
+            "ø20이하": "0.08",
+            "ø24이하": "0.12",
+            "ø28이하": "0.16",
+            "ø32이하": "0.20",
+            "ø40이하": "0.23"
+          },
+          "특별인부": {
+            "ø16이하": "0.02",
+            "ø20이하": "0.03",
+            "ø24이하": "0.05",
+            "ø28이하": "0.06",
+            "ø32이하": "0.07",
+            "ø40이하": "0.09"
+          }
+        },
+        "cite": {
+          "table_id": "p630-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p630-t1",
+          "column_input": "bolt_diameter",
+          "trades": [
+            "철골공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "poor_scaffold": true
+            },
+            "change": "20%까지 가산",
+            "source": "주 ⑥"
+          }
+        ]
+      },
+      "steps": [
+        "p630-t1에서 앵커 볼트 직경에 따른 개당 철골공, 특별인부 품을 고른다.",
+        "물량(개)을 곱해 총 품을 구한다.",
+        "비계가 양호치 못한 장소일 경우 총 품에 최대 20%까지 가산한다."
+      ],
+      "source": "PDF 574쪽 1-2-6 표 및 주 ⑥",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "별도의 철제틀 제작",
+        "source": "주 ③",
+        "cite": {
+          "chunk_id": "p630-x5",
+          "quote": "별도의 철제틀이 필요한 경우에는 철물 제작품을 적용한다."
+        }
+      },
+      {
+        "item": "기계설치 적용",
+        "source": "주 ④",
+        "cite": {
+          "chunk_id": "p630-x5",
+          "quote": "일반철골공사에 적용하고 기계설치에는 적용하지 않는다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p630-x5",
+          "quote": "공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개)당 직종별 인력 품이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p630-t1",
+      "row": "철골공",
+      "column": "ø16이하",
+      "value": "0.05"
+    },
+    {
+      "table_id": "p630-t1",
+      "row": "특별인부",
+      "column": "ø16이하",
+      "value": "0.02"
+    },
+    {
+      "chunk_id": "p630-x5",
+      "quote": "콘크리트 독립주 위에서나 기타 비계가 양호치 못한 장소에서는 본 품의 20%까지 가산한다."
+    },
+    {
+      "chunk_id": "p630-x5",
+      "quote": "공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p630-x5",
+      "quote": "별도의 철제틀이 필요한 경우에는 철물 제작품을 적용한다."
+    },
+    {
+      "chunk_id": "p630-x5",
+      "quote": "일반철골공사에 적용하고 기계설치에는 적용하지 않는다."
+    }
+  ],
+  "open_questions": [
+    "주 ⑥의 '20%까지 가산한다'에서 정확히 몇 %를 가산할지 현장 조건에 따라 어떻게 결정하는지 명확하지 않음."
+  ],
+  "questions": [
+    "앵커볼트 ø24 100개 설치 시 철골공 품은 어떻게 되나요?",
+    "비계가 양호하지 못한 장소인데 할증률을 10%로 적용해도 되나요?",
+    "앵커볼트 50개 설치 품을 계산해줘."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:46:34.150961+00:00",
+    "input_tokens": 11701,
+    "output_tokens": 1930,
+    "source_pages": [
+      630,
+      631
+    ],
+    "prompt_sha256": "d39525bb28c31371eac0ea3e282090bebec14616e1f808cb23b275721f32961e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

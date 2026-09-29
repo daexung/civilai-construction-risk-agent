@@ -1,0 +1,272 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-3-9/수중발파",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-3-9",
+    "title": "수중발파",
+    "work": "수중발파 단위당 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      74
+    ],
+    "inputs": [
+      {
+        "name": "blast_type",
+        "type": "enum",
+        "allowed_values": [
+          "우물통발파",
+          "우물통발파 이외"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "발파 유형은 무엇입니까?",
+        "source": "PDF 74쪽 p130-t0 표 열 구분"
+      },
+      {
+        "name": "drilling_method",
+        "type": "enum",
+        "allowed_values": [
+          "일반 천공",
+          "잠수부 천공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "천공 방식은 일반 천공입니까, 잠수부 천공입니까?",
+        "source": "PDF 74쪽 [주] ①"
+      },
+      {
+        "name": "water_depth",
+        "type": "enum",
+        "allowed_values": [
+          "2.5m 미만",
+          "2.5m 이상~8m 미만",
+          "8m 이상~15m 미만",
+          "15m 이상"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "수심은 어느 범위에 해당합니까?",
+        "source": "PDF 74쪽 [주] ②"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "수중발파 물량은 몇 ㎥입니까?",
+        "source": "PDF 74쪽 3-3-9 단위 (㎥당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p130-t0",
+        "role": "수중발파 단위당 품",
+        "source": "PDF 74쪽 3-3-9 수중발파 표",
+        "unit": "㎥당",
+        "values": {
+          "폭약": {
+            "우물통발파": "0.96",
+            "우물통발파 이외": "0.92"
+          },
+          "뇌관": {
+            "우물통발파": "3.0",
+            "우물통발파 이외": "1.2"
+          },
+          "비트": {
+            "우물통발파": "0.009",
+            "우물통발파 이외": "0.006"
+          },
+          "화약취급공": {
+            "우물통발파": "0.11",
+            "우물통발파 이외": "0.07"
+          },
+          "착암공": {
+            "우물통발파": "0.094(0)",
+            "우물통발파 이외": "0.064(0)"
+          },
+          "보통인부": {
+            "우물통발파": "0.19",
+            "우물통발파 이외": "0.11"
+          },
+          "잠수부": {
+            "우물통발파": "0.5(1.0)",
+            "우물통발파 이외": "0.3(0.6)"
+          },
+          "소형브레이커": {
+            "우물통발파": "0.474",
+            "우물통발파 이외": "0.313"
+          },
+          "공기압축기": {
+            "우물통발파": "0.158",
+            "우물통발파 이외": "0.104"
+          }
+        },
+        "cite": {
+          "table_id": "p130-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p130-t0",
+          "row_input": "고정 행이름",
+          "column_input": "blast_type",
+          "trades": [
+            "화약취급공",
+            "착암공",
+            "보통인부",
+            "잠수부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [
+          {
+            "when": {
+              "water_depth": "2.5m 미만"
+            },
+            "rate": "-0.2",
+            "applies_to": [
+              "비트",
+              "화약취급공",
+              "착암공",
+              "보통인부",
+              "잠수부",
+              "소형브레이커",
+              "공기압축기"
+            ],
+            "source": "PDF 74쪽 [주] ②"
+          },
+          {
+            "when": {
+              "water_depth": "8m 이상~15m 미만"
+            },
+            "rate": "0.5",
+            "applies_to": [
+              "비트",
+              "화약취급공",
+              "착암공",
+              "보통인부",
+              "잠수부",
+              "소형브레이커",
+              "공기압축기"
+            ],
+            "source": "PDF 74쪽 [주] ②"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "drilling_method": "잠수부 천공"
+            },
+            "change": "표의 ( )내는 잠수부 천공시의 품이다.",
+            "source": "PDF 74쪽 [주] ①"
+          }
+        ]
+      },
+      "steps": [
+        "p130-t0에서 발파 유형에 따른 단위당 품을 고른다.",
+        "잠수부 천공인 경우 착암공과 잠수부의 품은 괄호 안의 수치를 적용한다.",
+        "수심에 따라 재료비(폭약, 뇌관)를 제외한 품에 할증 또는 할인을 적용한다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 74쪽 3-3-9 수중발파",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "수심 15m 이상",
+        "blocked_if": {
+          "input": "water_depth",
+          "op": "==",
+          "value": "15m 이상"
+        },
+        "reason": "수심 15m 이상에 대한 품의 할증 기준이 명시되어 있지 않음",
+        "source": "PDF 74쪽 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p130-x10",
+            "quote": "수심이 8m이상~15m미만에서는 재료비(폭약, 뇌관)를 제외한 품의 50%를 가산할 수 있다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "작업용 선박이나 가시설 등",
+        "source": "PDF 74쪽 [주] ③",
+        "cite": [
+          {
+            "chunk_id": "p130-x10",
+            "quote": "작업용 선박이나 가시설 등이 필요한 경우에는 별도로 계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎥)당 재료, 노무, 기계 품이 표에 직접 명시되어 있으므로 per_unit 분류를 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p130-t0",
+      "row": "폭약",
+      "column": "수량 우물통발파",
+      "value": "0.96"
+    },
+    {
+      "table_id": "p130-t0",
+      "row": "착암공",
+      "column": "수량 우물통발파",
+      "value": "0.094(0)"
+    },
+    {
+      "table_id": "p130-t0",
+      "row": "잠수부",
+      "column": "수량 우물통발파",
+      "value": "0.5(1.0)"
+    },
+    {
+      "chunk_id": "p130-x10",
+      "quote": "본 품은 천공발파를 기준한 것으로, ( )내는 잠수부 천공시의 품이다."
+    },
+    {
+      "chunk_id": "p130-x10",
+      "quote": "본 품은 수심 2.5m이상~8m미만을 기준한 것으로, 수심 2.5m미만에서는 재료비(폭약, 뇌관)를 제외한\n설명 | 품의 20%를 감할 수 있으며, 수심이 8m이상~15m미만에서는 재료비(폭약, 뇌관)를 제외한 품의 50%를 가산할 수 있다."
+    },
+    {
+      "chunk_id": "p130-x10",
+      "quote": "작업용 선박이나 가시설 등이 필요한 경우에는 별도로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "수심 15m 이상일 경우의 할증률 기준이 원문에 명시되어 있지 않습니다.",
+    "[주] ②에서 '재료비(폭약, 뇌관)를 제외한 품'이라고 명시되어 있는데, 비트(재료)도 제외 대상에 포함해야 하는지 명확하지 않아 원문 괄호 표기대로 폭약과 뇌관만 제외하는 것으로 처리했습니다."
+  ],
+  "questions": [
+    "수중발파 물량이 100㎥이고 수심이 5m일 때 품을 계산해줘.",
+    "잠수부 천공으로 우물통발파를 할 때 착암공과 잠수부 품은 어떻게 적용되나요?",
+    "수심이 12m인 경우 폭약과 뇌관의 수량도 50% 할증되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:13.839649+00:00",
+    "input_tokens": 11895,
+    "output_tokens": 2733,
+    "source_pages": [
+      130,
+      131
+    ],
+    "prompt_sha256": "8fd46632581f319a4b039297186990c7409c682c684ea0236724990de16828ac",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

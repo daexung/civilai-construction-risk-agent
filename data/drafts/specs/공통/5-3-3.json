@@ -1,0 +1,264 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/5-3-3/말뚝두부정리(강관)",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "5-3-3",
+    "title": "말뚝두부정리(강관)('08, '09, '15, '20, '26년 보완)",
+    "work": "강관말뚝 두부정리 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      122,
+      123
+    ],
+    "inputs": [
+      {
+        "name": "pile_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø400",
+          "ø500",
+          "ø600",
+          "ø700",
+          "ø800"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "강관말뚝의 직경은 얼마입니까?",
+        "source": "PDF 122쪽 p178-t3 시공량(본) 규격",
+        "synonyms": {
+          "ø400": [
+            "400",
+            "400mm"
+          ],
+          "ø500": [
+            "500",
+            "500mm"
+          ],
+          "ø600": [
+            "600",
+            "600mm"
+          ],
+          "ø700": [
+            "700",
+            "700mm"
+          ],
+          "ø800": [
+            "800",
+            "800mm"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "본",
+        "required": true,
+        "ask": "말뚝두부정리 수량은 몇 본입니까?",
+        "source": "PDF 122쪽 p178-t3 시공량(본)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p178-t3",
+        "role": "일당 작업조 인원 및 장비 대수, 규격별 일일시공량",
+        "source": "PDF 122쪽 5-3-3 말뚝두부정리(강관) 표",
+        "unit": "인/작업조, 대/작업조, 본/일",
+        "values": {
+          "시공량(본)": {
+            "ø400": "35",
+            "ø500": "30",
+            "ø600": "24",
+            "ø700": "20",
+            "ø800": "18"
+          },
+          "용접공": {
+            "수량": "1"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "굴착기": {
+            "수량": "0.5"
+          }
+        },
+        "cite": {
+          "table_id": "p178-t3"
+        }
+      },
+      {
+        "id": "p179-t0",
+        "role": "절단자재 소모량",
+        "source": "PDF 123쪽 ⑤ 절단자재 소모량 표",
+        "unit": "산소: ℓ, LPG: ㎏",
+        "values": {
+          "산소": {
+            "ø400": "95",
+            "ø500": "113",
+            "ø600": "138",
+            "ø700": "185",
+            "ø800": "220"
+          },
+          "LPG": {
+            "ø400": "0.1",
+            "ø500": "0.13",
+            "ø600": "0.15",
+            "ø700": "0.18",
+            "ø800": "0.21"
+          }
+        },
+        "cite": {
+          "table_id": "p179-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p178-t3",
+          "row": "시공량(본)",
+          "column_input": "pile_diameter"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p178-t3",
+          "column": "수량",
+          "trades": [
+            "용접공",
+            "보통인부"
+          ]
+        },
+        "equipment": {
+          "name": "굴착기",
+          "table": "p178-t3",
+          "unit": "대·일",
+          "machine_code_input": null,
+          "operator_rate_code": null
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p178-t3에서 말뚝 직경별 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 수량, 굴착기 대·일 = 작업일수 × 0.5로 구한다.",
+        "p179-t0에서 말뚝 직경별 산소, LPG 소모량을 찾아 quantity를 곱해 총 소모량을 구한다. (단, 소모량이 본당 기준인지 일당 기준인지 원문에 명시되지 않아 본당으로 가정함)"
+      ],
+      "source": "PDF 122쪽 p178-t3, 123쪽 p179-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "말뚝머리 보강에 필요한 품",
+        "source": "PDF 122쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p178-x23",
+          "quote": "말뚝머리 보강에 필요한 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.04",
+        "cite": {
+          "chunk_id": "p179-x0",
+          "quote": "공구손료 및 경장비(자동절단기 등)의 기계경비는 인력품의 4%로 계상한다."
+        }
+      },
+      {
+        "name": "잡재료 및 소모재료",
+        "category": "재료비",
+        "base": "labor_subtotal",
+        "rate": "0.06",
+        "cite": {
+          "chunk_id": "p179-x0",
+          "quote": "잡재료 및 소모재료(철선, 파일캡 등)는 인력품의 6%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원 및 장비 대수와 규격별 일일시공량이 표로 제시되어 있어 일당 작업조형 계산이 적합함.",
+  "citations": [
+    {
+      "table_id": "p178-t3",
+      "row": "시공량(본)",
+      "column": "ø400",
+      "value": "35"
+    },
+    {
+      "table_id": "p178-t3",
+      "row": "용접공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p178-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p178-t3",
+      "row": "굴착기",
+      "column": "수량",
+      "value": "0.5"
+    },
+    {
+      "table_id": "p179-t0",
+      "row": "산소",
+      "column": "ø400",
+      "value": "95"
+    },
+    {
+      "table_id": "p179-t0",
+      "row": "LPG",
+      "column": "ø400",
+      "value": "0.1"
+    },
+    {
+      "chunk_id": "p178-x23",
+      "quote": "말뚝머리 보강에 필요한 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p179-x0",
+      "quote": "공구손료 및 경장비(자동절단기 등)의 기계경비는 인력품의 4%로 계상한다."
+    },
+    {
+      "chunk_id": "p179-x0",
+      "quote": "잡재료 및 소모재료(철선, 파일캡 등)는 인력품의 6%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "p179-t0의 절단자재(산소, LPG) 소모량이 1본당 소모량인지, 1일(작업조) 소모량인지 원문에 명확히 기재되어 있지 않음. (일반적으로 본당 소모량으로 추정되나 확인 필요)"
+  ],
+  "questions": [
+    "강관말뚝 직경 500mm 100본 두부정리 시 필요한 용접공과 보통인부 품은 어떻게 되나요?",
+    "절단자재 소모량 표에 있는 산소 113ℓ는 1본당 기준인가요, 아니면 하루 작업량 기준인가요?",
+    "말뚝머리 보강 작업은 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:19:48.250696+00:00",
+    "input_tokens": 12736,
+    "output_tokens": 2640,
+    "source_pages": [
+      178,
+      179,
+      180
+    ],
+    "prompt_sha256": "cb9f0a32a47aa743e2abb1bd76f65896ddb8fe1cd6538e786ac06774f7df172d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

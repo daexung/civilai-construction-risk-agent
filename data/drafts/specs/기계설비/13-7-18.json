@@ -1,0 +1,234 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-7-18/가열로_및_균열로_부속기기_조립설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-7-18",
+    "title": "가열로 및 균열로 부속기기 조립설치",
+    "work": "가열로 및 균열로 부속기기 조립설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      831
+    ],
+    "inputs": [
+      {
+        "name": "quantity_ton",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "조립설치 물량은 몇 ton입니까?",
+        "source": "PDF 831쪽 13-7-18 표 기준 (톤당)"
+      },
+      {
+        "name": "quantity_sqm",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "표면손질 물량은 몇 ㎡입니까?",
+        "source": "PDF 831쪽 13-7-18 표 표면손질 단위 (인/㎡)"
+      },
+      {
+        "name": "quantity_day",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "일",
+        "required": true,
+        "ask": "기술관리 작업일수는 며칠입니까?",
+        "source": "PDF 831쪽 13-7-18 표 기술관리 단위 (인/일)"
+      },
+      {
+        "name": "apply_inspection",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "검사 및 교정 작업을 수행합니까?",
+        "source": "PDF 831쪽 13-7-18 표 검사 및 교정"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p887-t1",
+        "role": "가열로 및 균열로 부속기기 조립설치 품",
+        "source": "PDF 831쪽 13-7-18 표",
+        "values": {
+          "기계기사": {
+            "인/일": "0.70"
+          },
+          "특별인부": {
+            "인/㎡": "0.10",
+            "〃": "1.803"
+          },
+          "플랜트기계설치공": {
+            "인/ton": "3.245"
+          },
+          "비계공": {
+            "〃": "1.622"
+          },
+          "플랜트용접공": {
+            "〃": "0.541"
+          },
+          "검사및교정": {
+            "직종": "기술관리를 제외한 본 품의 10%"
+          }
+        },
+        "cite": {
+          "table_id": "p887-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p887-t1",
+          "trades": [
+            "기계기사",
+            "특별인부",
+            "플랜트기계설치공",
+            "비계공",
+            "플랜트용접공"
+          ]
+        },
+        "quantity_input": "quantity_ton",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "apply_inspection": true
+            },
+            "change": "기술관리를 제외한 본 품의 10% 가산",
+            "source": "PDF 831쪽 13-7-18 표 검사 및 교정"
+          }
+        ]
+      },
+      "steps": [
+        "표에서 직종별 단위당 품을 확인한다.",
+        "각 직종의 단위에 맞는 물량(ton, ㎡, 일)을 곱하여 품을 산출한다.",
+        "검사 및 교정 적용 시, 기술관리를 제외한 나머지 품의 10%를 가산한다."
+      ],
+      "source": "PDF 831쪽 13-7-18 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "현장가공 품",
+        "reason": "별도 계상",
+        "source": "PDF 831쪽 13-7-18 [주] ⑤",
+        "cite": {
+          "chunk_id": "p887-x17",
+          "quote": "⑤ 현장가공 품은 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "포장해체 및 소운반",
+        "source": "PDF 831쪽 13-7-18 [주] ②",
+        "cite": {
+          "chunk_id": "p887-x17",
+          "quote": "② 본 품에는 포장해체 및 소운반이 제외되어 있다."
+        }
+      },
+      {
+        "item": "전기 배선공사",
+        "source": "PDF 831쪽 13-7-18 [주] ④",
+        "cite": {
+          "chunk_id": "p887-x17",
+          "quote": "④ 본 품에는 전기 배선공사는 제외되어 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품이 표에 직접 제시되어 있으며, 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p887-t1",
+      "row": "기계기사",
+      "column": "인/일",
+      "value": "0.70"
+    },
+    {
+      "table_id": "p887-t1",
+      "row": "특별인부",
+      "column": "인/㎡",
+      "value": "0.10"
+    },
+    {
+      "table_id": "p887-t1",
+      "row": "플랜트기계설치공",
+      "column": "인/ton",
+      "value": "3.245"
+    },
+    {
+      "table_id": "p887-t1",
+      "row": "비계공",
+      "column": "〃",
+      "value": "1.622"
+    },
+    {
+      "table_id": "p887-t1",
+      "row": "플랜트용접공",
+      "column": "〃",
+      "value": "0.541"
+    },
+    {
+      "table_id": "p887-t1",
+      "row": "특별인부",
+      "column": "〃",
+      "value": "1.803"
+    },
+    {
+      "table_id": "p887-t1",
+      "row": "검사및교정",
+      "column": "직종",
+      "value": "기술관리를 제외한 본 품의 10%"
+    },
+    {
+      "chunk_id": "p887-x17",
+      "quote": "② 본 품에는 포장해체 및 소운반이 제외되어 있다."
+    },
+    {
+      "chunk_id": "p887-x17",
+      "quote": "④ 본 품에는 전기 배선공사는 제외되어 있다."
+    },
+    {
+      "chunk_id": "p887-x17",
+      "quote": "⑤ 현장가공 품은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표의 기준이 (톤당)임에도 기술관리(인/일)와 표면손질(인/㎡) 품이 포함되어 있어, 이들의 물량을 전체 톤수에 비례하여 산정하는지 별도로 산출해야 하는지 원문만으로는 불명확함.",
+    "파싱 결과에서 작업구분 행이 '기술관리 표면손질 조립설치'로 병합되어 있어, JSON tables 구성 시 직종을 행 이름으로, 단위를 열 이름으로 사용하여 재구성함."
+  ],
+  "questions": [
+    "검사 및 교정 작업이 포함되어 있나요?",
+    "기술관리(인/일)와 표면손질(인/㎡)의 물량은 조립설치 물량(ton)과 어떻게 연동되나요?",
+    "현장가공이 필요한 경우 어떻게 처리하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:29.800114+00:00",
+    "input_tokens": 11775,
+    "output_tokens": 2341,
+    "source_pages": [
+      887,
+      888
+    ],
+    "prompt_sha256": "493025c72c6dca1b678747b6e3168e7a348333ff0cc3f27f5ea2e7e369fa5b6a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/1-6-3/가교화_폴리에틸렌관_접합_및_배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "1-6-3",
+    "title": "가교화 폴리에틸렌관 접합 및 배관('13, '19년 보완)",
+    "work": "기본 배관 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      657
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø16mm",
+          "ø20mm"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "가교화 폴리에틸렌관의 규격은 무엇입니까?",
+        "source": "PDF 657쪽 1-6-3 표",
+        "synonyms": {
+          "ø16mm": [
+            "16mm",
+            "16파이"
+          ],
+          "ø20mm": [
+            "20mm",
+            "20파이"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "배관 물량은 몇 m입니까?",
+        "source": "PDF 657쪽 1-6-3 표 단위 (m당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p713-t1",
+        "role": "가교화 폴리에틸렌관 접합 및 배관 품",
+        "source": "PDF 657쪽 1-6-3 표",
+        "unit": "인/m",
+        "values": {
+          "배관공": {
+            "ø16mm": "0.029",
+            "ø20mm": "0.036"
+          },
+          "보통인부": {
+            "ø16mm": "0.014",
+            "ø20mm": "0.018"
+          }
+        },
+        "cite": {
+          "table_id": "p713-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p713-t1",
+          "row_input": "고정 행이름",
+          "column_input": "pipe_size",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p713-t1에서 규격별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 657쪽 1-6-3 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비의 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.01",
+        "cite": {
+          "chunk_id": "p713-x8",
+          "quote": "공구손료 및 경장비의 기계경비는 인력품의 1%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m)당 직종별 인·일이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p713-t1",
+      "row": "배관공",
+      "column": "ø16mm",
+      "value": "0.029"
+    },
+    {
+      "table_id": "p713-t1",
+      "row": "배관공",
+      "column": "ø20mm",
+      "value": "0.036"
+    },
+    {
+      "table_id": "p713-t1",
+      "row": "보통인부",
+      "column": "ø16mm",
+      "value": "0.014"
+    },
+    {
+      "table_id": "p713-t1",
+      "row": "보통인부",
+      "column": "ø20mm",
+      "value": "0.018"
+    },
+    {
+      "chunk_id": "p713-x8",
+      "quote": "공구손료 및 경장비의 기계경비는 인력품의 1%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "옥내난방배관이 아닌 다른 용도의 배관일 경우 품을 어떻게 조정해야 하는지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "가교화 폴리에틸렌관 20mm 규격 100m 배관 시 배관공 품은 얼마인가요?",
+    "옥내난방배관이 아닌 일반 급수배관일 경우에도 이 품을 그대로 적용할 수 있나요?",
+    "배관시험에 필요한 장비나 재료비는 별도로 산정해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:44:28.491799+00:00",
+    "input_tokens": 11540,
+    "output_tokens": 1492,
+    "source_pages": [
+      713,
+      714
+    ],
+    "prompt_sha256": "6833ab87c72e96543336078de5832b7f93a9d041608058d2bb6275bb95def011",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '배관공'이 p713-t1 조각 텍스트에 없음",
+      "row '배관공'이 p713-t1 조각 텍스트에 없음",
+      "row '보통인부'이 p713-t1 조각 텍스트에 없음",
+      "row '보통인부'이 p713-t1 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-11-7/슬러지제거",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-11-7",
+    "title": "슬러지 제거('19년 신설)",
+    "work": "슬러지 제거",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      63
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "회",
+        "required": true,
+        "ask": "슬러지 제거 작업 횟수는 몇 회입니까?",
+        "source": "PDF 63쪽 2-11-7 표 단위 (회당)"
+      }
+    ],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과에 표의 수량 데이터가 누락되어 계산할 수 없습니다."
+      ],
+      "source": "PDF 63쪽 2-11-7",
+      "rounding": "단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.07",
+        "cite": [
+          {
+            "chunk_id": "p119-x3",
+            "quote": "③ 공구손료 및 경장비(살수장비, 양수기 등)의 기계경비는 인력품의 7%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과 표(p119-t0)에 직종(특별인부, 굴착기) 및 수량(0.63, 1.00) 데이터가 누락되어 단위당 품을 계산할 수 없습니다.",
+  "citations": [
+    {
+      "chunk_id": "p119-x3",
+      "quote": "③ 공구손료 및 경장비(살수장비, 양수기 등)의 기계경비는 인력품의 7%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 표(p119-t0)에 '특별인부', '굴착기' 행과 해당 수량(0.63, 1.00)이 누락되어 있어 단위당 품을 계산식에 포함할 수 없습니다.",
+    "자동세륜기 슬러지함 규격이 2.0×1.2×1.2m가 아닌 경우 품을 어떻게 조정해야 하는지 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "슬러지 제거 작업 1회당 특별인부와 굴착기 품은 어떻게 되나요?",
+    "자동세륜기 슬러지함 규격이 2.0×1.2×1.2m가 아닌 경우 품을 어떻게 조정해야 하나요?",
+    "슬러지 제거 횟수는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:14.073775+00:00",
+    "input_tokens": 23142,
+    "output_tokens": 2136,
+    "source_pages": [
+      119,
+      120
+    ],
+    "prompt_sha256": "b7e6ee913cf1211a204d2fe840776af569cd4ca6a4a03c5b0543ac4bd3fd7440",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

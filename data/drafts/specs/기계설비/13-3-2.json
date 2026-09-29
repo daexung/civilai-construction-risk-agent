@@ -1,0 +1,459 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-3-2/기기보온",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-3-2",
+    "title": "기기보온",
+    "work": "기기보온 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      819,
+      820
+    ],
+    "inputs": [
+      {
+        "name": "equipment_type",
+        "type": "enum",
+        "allowed_values": [
+          "Boiler 본체",
+          "Duct",
+          "일반기기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "보온 대상 기기 종류는 무엇입니까?",
+        "source": "PDF 819쪽 1. Boiler 본체보온, PDF 820쪽 2. Duct보온, PDF 819쪽 비고 (일반기기)"
+      },
+      {
+        "name": "thickness_boiler",
+        "type": "enum",
+        "allowed_values": [
+          "60이하",
+          "50+60",
+          "50+75",
+          "75+75",
+          "100+100",
+          "240",
+          "300",
+          "350"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "Boiler 본체 보온 두께는 얼마입니까? (Boiler 본체인 경우 선택)",
+        "source": "PDF 819쪽 p819-t1"
+      },
+      {
+        "name": "thickness_duct",
+        "type": "enum",
+        "allowed_values": [
+          "35이하",
+          "60",
+          "50+60",
+          "40+75",
+          "70+70",
+          "75+75"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "Duct 또는 일반기기 보온 두께는 얼마입니까? (Duct 또는 일반기기인 경우 선택)",
+        "source": "PDF 820쪽 p820-t0"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "보온 면적은 몇 ㎡입니까?",
+        "source": "PDF 819쪽, 820쪽 표 우측 상단 (㎡당)"
+      },
+      {
+        "name": "material_shape",
+        "type": "enum",
+        "allowed_values": [
+          "Blanket",
+          "Block"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용하는 보온재의 형태는 무엇입니까?",
+        "source": "PDF 819쪽 비고 첫 번째 항목"
+      },
+      {
+        "name": "lagging_sheet_made_on_site",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "원자재(Raw Material)로 Lagging Sheet를 제작하여 시공합니까?",
+        "source": "PDF 819쪽 비고 세 번째 항목"
+      },
+      {
+        "name": "lagging_sheet_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "보일러 본체 보온 중 Lagging Sheet를 사용합니까?",
+        "source": "PDF 819쪽 비고 네 번째 항목"
+      },
+      {
+        "name": "finishing_work_required",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "마감작업(Seal Gasket취부, Hard Cement 충전)이 필요합니까?",
+        "source": "PDF 819쪽 비고 다섯 번째 항목"
+      },
+      {
+        "name": "insulation_layers",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "겹",
+        "required": true,
+        "ask": "보온작업은 몇 겹으로 진행합니까?",
+        "source": "PDF 819쪽 비고 여섯 번째 항목"
+      },
+      {
+        "name": "outdoor_boiler",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "옥외형 보일러 외벽 보온작업입니까?",
+        "source": "PDF 819쪽 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p819-t1",
+        "role": "Boiler 본체보온 단위당 품",
+        "source": "PDF 819쪽 1. Boiler 본체보온 표",
+        "unit": "인/㎡",
+        "values": {
+          "60이하": {
+            "용접공": "0.01",
+            "보온공": "0.104",
+            "함석공": "0.173",
+            "특별인부": "0.02"
+          },
+          "50+60": {
+            "용접공": "0.01",
+            "보온공": "0.208",
+            "함석공": "0.173",
+            "특별인부": "0.03"
+          },
+          "50+75": {
+            "용접공": "0.01",
+            "보온공": "0.229",
+            "함석공": "0.173",
+            "특별인부": "0.035"
+          },
+          "75+75": {
+            "용접공": "0.01",
+            "보온공": "0.266",
+            "함석공": "0.173",
+            "특별인부": "0.04"
+          },
+          "100+100": {
+            "용접공": "0.01",
+            "보온공": "0.397",
+            "함석공": "0.173",
+            "특별인부": "0.05"
+          },
+          "240": {
+            "용접공": "0.01",
+            "보온공": "0.453",
+            "함석공": "0.173",
+            "특별인부": "0.06"
+          },
+          "300": {
+            "용접공": "0.01",
+            "보온공": "0.567",
+            "함석공": "0.173",
+            "특별인부": "0.07"
+          },
+          "350": {
+            "용접공": "0.01",
+            "보온공": "0.652",
+            "함석공": "0.173",
+            "특별인부": "0.072"
+          }
+        },
+        "cite": {
+          "table_id": "p819-t1"
+        }
+      },
+      {
+        "id": "p820-t0",
+        "role": "Duct보온 단위당 품",
+        "source": "PDF 820쪽 2. Duct보온 표",
+        "unit": "인/㎡",
+        "values": {
+          "35이하": {
+            "용접공": "0.007",
+            "보온공": "0.104",
+            "함석공": "0.116",
+            "특별인부": "0.012"
+          },
+          "60": {
+            "용접공": "0.007",
+            "보온공": "0.104",
+            "함석공": "0.116",
+            "특별인부": "0.020"
+          },
+          "50+60": {
+            "용접공": "0.007",
+            "보온공": "0.208",
+            "함석공": "0.116",
+            "특별인부": "0.030"
+          },
+          "40+75": {
+            "용접공": "0.007",
+            "보온공": "0.215",
+            "함석공": "0.116",
+            "특별인부": "0.031"
+          },
+          "70+70": {
+            "용접공": "0.007",
+            "보온공": "0.216",
+            "함석공": "0.116",
+            "특별인부": "0.033"
+          },
+          "75+75": {
+            "용접공": "0.007",
+            "보온공": "0.266",
+            "함석공": "0.116",
+            "특별인부": "0.034"
+          }
+        },
+        "cite": {
+          "table_id": "p820-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p819-t1",
+          "row_input": "thickness_boiler",
+          "column_input": "직종",
+          "trades": [
+            "용접공",
+            "보온공",
+            "함석공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "material_shape": "Block"
+            },
+            "rate": "0.4",
+            "applies_to": [
+              "용접공",
+              "보온공",
+              "함석공",
+              "특별인부"
+            ],
+            "source": "PDF 819쪽 비고"
+          },
+          {
+            "when": {
+              "equipment_type": "일반기기"
+            },
+            "rate": "1.0",
+            "applies_to": [
+              "용접공",
+              "보온공",
+              "함석공",
+              "특별인부"
+            ],
+            "source": "PDF 819쪽 비고"
+          },
+          {
+            "when": {
+              "lagging_sheet_made_on_site": true
+            },
+            "rate": "0.5",
+            "applies_to": [
+              "함석공",
+              "특별인부"
+            ],
+            "source": "PDF 819쪽 비고"
+          },
+          {
+            "when": {
+              "finishing_work_required": true
+            },
+            "rate": "0.5",
+            "applies_to": [
+              "특별인부"
+            ],
+            "source": "PDF 819쪽 비고"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "lagging_sheet_used": false
+            },
+            "change": "함석공 0.173인, 특별인부 0.008인 감산",
+            "source": "PDF 819쪽 비고"
+          }
+        ]
+      },
+      "steps": [
+        "기기 종류에 따라 p819-t1 또는 p820-t0에서 두께별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "surcharges/note_adjustments를 원문 순서대로 적용한다."
+      ],
+      "source": "PDF 819쪽, 820쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "insulation_layers >= 3",
+        "blocked_if": {
+          "input": "insulation_layers",
+          "op": ">=",
+          "value": 3
+        },
+        "reason": "원문에 '3겹이상 보온작업시는 보온공 품을 0.04인씩 가산한다'고 되어 있으나, '0.04인씩'이 겹수당 가산인지 3겹 이상일 때 일괄 가산인지 불분명함",
+        "source": "PDF 819쪽 비고",
+        "cite": {
+          "table_id": "p819-t1",
+          "row": "비고",
+          "column": "비고",
+          "value": "- 3겹이상 보온작업시는 보온공 품을 0.04인씩 가산한다."
+        }
+      },
+      {
+        "condition": "outdoor_boiler == true",
+        "blocked_if": {
+          "input": "outdoor_boiler",
+          "op": "==",
+          "value": true
+        },
+        "reason": "옥외형 보일러 외벽 보온작업 시 위험할증을 적용한다고 명시되어 있으나, 구체적인 할증률이 본 절에 없음 (공통부문 참조 필요)",
+        "source": "PDF 819쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p819-x20",
+          "quote": "② 옥외형 보일러 외벽 보온작업 시 위험할증을 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 직종별 인원이 표에 직접 제시되어 있으며, 물량을 곱하고 조건에 따라 할증 및 감산을 적용하는 방식이므로 per_unit 모델이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p819-t1",
+      "row": "60이하",
+      "column": "용접공",
+      "value": "0.01"
+    },
+    {
+      "table_id": "p819-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 본 보온품은 Blanket을 사용하는 품이므로 Block을 사용할 때에는 본 품에 40% 가산한다."
+    },
+    {
+      "table_id": "p819-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 일반기기 보온은 Duct 보온품에 100% 가산한다."
+    },
+    {
+      "table_id": "p819-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 원자재(Raw Material)로 Lagging Sheet를 제작하여 시공할 때에는 본 품의 함석공과 특별인부품의 50% 가산한다."
+    },
+    {
+      "table_id": "p819-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 보일러 본체 보온중 Lagging Sheet를 사용하지 않는 경우 함석공 0.173인 특별인부 0.008인을 감한다."
+    },
+    {
+      "table_id": "p819-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 본 품은 보온 기본사양{모재+Pin용접+보온+Lagging Sheet (Pipe연결)}을 기준한 것이므로 마감작업(Seal Gasket취부, Hard Cement 충전) 필요시는 특별인부 품의 50%를 가산한다."
+    },
+    {
+      "table_id": "p819-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 3겹이상 보온작업시는 보온공 품을 0.04인씩 가산한다."
+    },
+    {
+      "chunk_id": "p819-x20",
+      "quote": "① 보온재는 Blanket 형태를 사용하여 보온하는 품이다."
+    },
+    {
+      "chunk_id": "p819-x20",
+      "quote": "② 옥외형 보일러 외벽 보온작업 시 위험할증을 적용한다."
+    },
+    {
+      "table_id": "p820-t0",
+      "row": "35이하",
+      "column": "용접공",
+      "value": "0.007"
+    },
+    {
+      "chunk_id": "p820-x7",
+      "quote": "[주] ‘1. Boiler 본체 보온’의 [주]와 같이 적용한다."
+    }
+  ],
+  "open_questions": [
+    "비고의 '3겹이상 보온작업시는 보온공 품을 0.04인씩 가산한다'에서 '0.04인씩'이 겹수당 0.04인 가산인지, 아니면 3겹 이상일 때 일괄적으로 0.04인을 가산하는 것인지 명확하지 않습니다.",
+    "일반기기 보온 시 Duct 보온품에 100% 가산한다고 되어 있는데, 이때 두께 기준은 Duct 보온의 두께 기준을 따르는 것이 맞는지 확인이 필요합니다.",
+    "옥외형 보일러 외벽 보온작업 시 적용하는 위험할증의 구체적인 할증률이 본 절에 명시되어 있지 않아 공통부문의 어떤 기준을 적용해야 하는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "보일러 본체 보온 면적이 100㎡이고 두께가 60㎜ 이하일 때, 필요한 보온공의 인·일은 얼마인가요?",
+    "보일러 본체 보온을 4겹으로 작업할 경우, 보온공 품 가산은 어떻게 계산해야 하나요?",
+    "옥외형 보일러 외벽 보온작업을 할 때 위험할증률은 몇 %를 적용해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:35:46.092323+00:00",
+    "input_tokens": 13361,
+    "output_tokens": 4703,
+    "source_pages": [
+      819,
+      820,
+      821
+    ],
+    "prompt_sha256": "1ce906290707c9d123b9cf726c1c7e587dcdf679d72e2cf0b698d2ef00a9c0d6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

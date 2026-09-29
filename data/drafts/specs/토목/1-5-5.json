@@ -1,0 +1,289 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-5-5/아스팔트표층소규모포설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-5-5",
+    "title": "아스팔트 표층 소규모포설('08년 보완)",
+    "work": "소규모 아스팔트 표층 및 중간층 포설",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      312
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "아스팔트 포설 면적은 몇 ㎡입니까?",
+        "source": "PDF 312쪽 p368-t1 시공량 단위"
+      },
+      {
+        "name": "finisher_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "피니셔를 사용하여 포설합니까?",
+        "source": "PDF 312쪽 [주] ①"
+      },
+      {
+        "name": "thickness",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎝",
+        "required": true,
+        "ask": "1층 포설두께는 몇 ㎝입니까?",
+        "source": "PDF 312쪽 [주] ②"
+      },
+      {
+        "name": "layer_type",
+        "type": "enum",
+        "allowed_values": [
+          "표층",
+          "중간층",
+          "기층"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "포설하는 층은 무엇입니까?",
+        "source": "PDF 312쪽 [주] ①",
+        "excluded": {
+          "기층": "본 품은 표층 및 중간층 포설 기준임"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p368-t1",
+        "role": "인력 및 장비 투입량, 기준 일일시공량",
+        "source": "PDF 312쪽 1-5-5 표",
+        "unit": "인/일, 대/일, ㎡/일",
+        "values": {
+          "포장공": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎡)": "300"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1"
+          },
+          "플레이트콤팩터": {
+            "규격": "1.5ton",
+            "단위": "대",
+            "수량": "1"
+          },
+          "진동롤러( 핸드가이드식)": {
+            "규격": "0.7ton",
+            "단위": "대",
+            "수량": "1"
+          },
+          "로더(타이어)": {
+            "규격": "0.57㎥",
+            "단위": "대",
+            "수량": "1"
+          },
+          "살수차": {
+            "규격": "5,500L",
+            "단위": "대",
+            "수량": "0.5"
+          }
+        },
+        "cite": {
+          "table_id": "p368-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p368-t1",
+          "row": "포장공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p368-t1",
+          "column": "수량",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "플레이트콤팩터",
+            "table": "p368-t1",
+            "unit": "대·일",
+            "column": "수량"
+          },
+          {
+            "name": "진동롤러( 핸드가이드식)",
+            "table": "p368-t1",
+            "unit": "대·일",
+            "column": "수량"
+          },
+          {
+            "name": "로더(타이어)",
+            "table": "p368-t1",
+            "unit": "대·일",
+            "column": "수량"
+          },
+          {
+            "name": "살수차",
+            "table": "p368-t1",
+            "unit": "대·일",
+            "column": "수량"
+          }
+        ],
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p368-t1에서 기준 일일시공량(300㎡)을 가져온다.",
+        "작업일수 = area ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량으로 구한다.",
+        "장비별 대·일 = 작업일수 × 표의 장비별 수량으로 구한다."
+      ],
+      "source": "PDF 312쪽 p368-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "피니셔를 사용하는 경우",
+        "blocked_if": {
+          "input": "finisher_used",
+          "op": "==",
+          "value": true
+        },
+        "reason": "본 품은 피니셔를 사용하지 못하는 소규모 포설 기준이므로, 피니셔 사용 시 대형장비 또는 소형장비 기계포설 품을 적용해야 함",
+        "source": "PDF 312쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p368-x14",
+          "quote": "본 품은 소로, 주택가내 도로 등 피니셔를 사용하지 못하는 소규모 아스팔트 표층 및 중간층 포설 기준이다."
+        }
+      },
+      {
+        "condition": "1층 포설두께가 7.5cm를 초과하는 경우",
+        "blocked_if": {
+          "input": "thickness",
+          "op": ">",
+          "value": 7.5
+        },
+        "reason": "1층 포설두께는 7.5cm 이하 기준임",
+        "source": "PDF 312쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p368-x14",
+          "quote": "1층 포설두께는 7.5㎝이하 기준이다."
+        }
+      },
+      {
+        "condition": "포설 층이 기층인 경우",
+        "blocked_if": {
+          "input": "layer_type",
+          "op": "==",
+          "value": "기층"
+        },
+        "reason": "본 품은 표층 및 중간층 포설 기준임",
+        "source": "PDF 312쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p368-x14",
+          "quote": "본 품은 소로, 주택가내 도로 등 피니셔를 사용하지 못하는 소규모 아스팔트 표층 및 중간층 포설 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 기준의 인원 및 장비 투입량과 고정된 일일시공량이 제시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구하는 전형적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p368-t1",
+      "row": "포장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p368-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t1",
+      "row": "포장공",
+      "column": "시공량(㎡)",
+      "value": "300"
+    },
+    {
+      "table_id": "p368-t1",
+      "row": "플레이트콤팩터",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t1",
+      "row": "진동롤러( 핸드가이드식)",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t1",
+      "row": "로더(타이어)",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t1",
+      "row": "살수차",
+      "column": "수량",
+      "value": "0.5"
+    },
+    {
+      "chunk_id": "p368-x14",
+      "quote": "본 품은 소로, 주택가내 도로 등 피니셔를 사용하지 못하는 소규모 아스팔트 표층 및 중간층 포설 기준이다."
+    },
+    {
+      "chunk_id": "p368-x14",
+      "quote": "1층 포설두께는 7.5㎝이하 기준이다."
+    },
+    {
+      "chunk_id": "p368-x14",
+      "quote": "본 품은 포설 및 고르기, 다짐 작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트에 '포장공 보통인부'가 합쳐져서 나오는데, 원문 표에 따라 '포장공', '보통인부'로 분리하여 행을 구성했습니다. 파싱 오류로 보입니다.",
+    "장비가 여러 대 투입되므로 quantity_model.params.equipment를 배열로 구성했습니다. 스키마가 단일 객체만 허용한다면 수정이 필요합니다."
+  ],
+  "questions": [
+    "아스팔트 표층 소규모포설 시공량이 500㎡일 때 인력과 장비 품은 어떻게 되나요?",
+    "포설 두께가 10cm인 경우 이 품셈을 적용할 수 있나요?",
+    "피니셔를 사용할 수 없는 소규모 현장인데, 포설 층이 기층인 경우에도 이 기준을 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:55:31.447883+00:00",
+    "input_tokens": 11660,
+    "output_tokens": 2845,
+    "source_pages": [
+      368,
+      369
+    ],
+    "prompt_sha256": "86d976d86a05817b20a378ef6a01d021f9b19bb577301495ef1635bc4c329697",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/0301-0057/로더(무한궤도)",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "0301-0057",
+    "title": "로더(무한궤도)",
+    "work": "기계경비 산출 기초자료 조회",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      276
+    ],
+    "inputs": [],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "기계 규격에 따른 주연료, 잡재료, 조종원 수를 표에서 확인한다.",
+        "파싱 결과의 표 구조 오류로 인해 자동 조회가 불가능하므로 원문 표를 직접 참조해야 한다."
+      ],
+      "source": "PDF 276쪽",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "제공된 파싱 결과에서 표의 행 이름이 모든 기계 분류번호의 병합된 문자열로 동일하게 인식되어, 규격별로 고유한 행을 식별하고 값을 조회할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p332-t0"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 표(p332-t0)에서 첫 번째 열의 텍스트가 모든 행의 분류번호를 합친 문자열로 잘못 인식되어 있어, 행을 고유하게 식별할 수 없습니다. 파싱 로직의 수정이 필요합니다."
+  ],
+  "questions": [
+    "로더(무한궤도) 1.53 규격의 주연료 소비량은 얼마인가요?",
+    "로더(타이어) 0.25㎥ 규격의 잡재료 비율은 어떻게 되나요?",
+    "기계경비 산출 시 조종원의 노임 단가는 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:08:41.716646+00:00",
+    "input_tokens": 17376,
+    "output_tokens": 581,
+    "source_pages": [
+      332,
+      333
+    ],
+    "prompt_sha256": "a1fd820a5e933255dd9d8dd13f3fe64bbbd23cbbf3e345f44f238fad326b8e22",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/4-1-7/일반기계설비_철거_및_이설",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "4-1-7",
+    "title": "일반기계설비 철거 및 이설('93, '26년 보완)",
+    "work": "일반기계설비 철거 및 이설 품 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      923,
+      924
+    ],
+    "inputs": [
+      {
+        "name": "equipment_type",
+        "type": "enum",
+        "allowed_values": [
+          "1. 기 기 류",
+          "2. 철 골 류",
+          "3. 배 관 류",
+          "4. B E L T C O N V E Y O R 류",
+          "5. 보 온 재",
+          "6. H E A T E R & T A N K 류",
+          "7. P U M P & F A N 류",
+          "8. C R A N E 류"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철거 및 이설 대상 설비의 구분은 무엇입니까?",
+        "source": "p979-t2"
+      },
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "철거(재사용 고려)",
+          "철거(재사용 안함)",
+          "이설(동일구내)",
+          "타장소 재설치"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 구분은 무엇입니까?",
+        "source": "p979-t2 및 p980-x0 ⑤"
+      },
+      {
+        "name": "base_labor",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "인",
+        "required": true,
+        "ask": "해당 설비의 신설(설치) 품은 얼마입니까?",
+        "source": "p980-x0 ③"
+      },
+      {
+        "name": "is_special_equipment",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "특수기기입니까?",
+        "source": "p980-x0 ④"
+      },
+      {
+        "name": "is_prior_item",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "4-1-1 배관 해체 ~ 4-1-6 펌프 해체 항목에 해당합니까?",
+        "source": "p979-x23 ①"
+      },
+      {
+        "name": "is_item_6",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "주기 ⑥항에 명시된 특정 항목(주철관 기계식 접합 등)입니까?",
+        "source": "p980-x0 ⑥"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p979-t2",
+        "role": "일반기계설비 철거 및 이설 비율",
+        "source": "4-1-7 일반기계설비 철거 및 이설 표",
+        "unit": "%",
+        "values": {
+          "1. 기 기 류": {
+            "철거 재사용을\n고려할 경우": "80",
+            "철거 재사용을\n고려 안할 경우": "60",
+            "동일구내\n(인접장소)\n이설": "160"
+          },
+          "2. 철 골 류": {
+            "철거 재사용을\n고려할 경우": "70",
+            "철거 재사용을\n고려 안할 경우": "50",
+            "동일구내\n(인접장소)\n이설": "150"
+          },
+          "3. 배 관 류": {
+            "철거 재사용을\n고려할 경우": "60",
+            "철거 재사용을\n고려 안할 경우": "40",
+            "동일구내\n(인접장소)\n이설": "140"
+          },
+          "4. B E L T C O N V E Y O R 류": {
+            "철거 재사용을\n고려할 경우": "80",
+            "철거 재사용을\n고려 안할 경우": "60",
+            "동일구내\n(인접장소)\n이설": "160"
+          },
+          "5. 보 온 재": {
+            "철거 재사용을\n고려할 경우": "60",
+            "철거 재사용을\n고려 안할 경우": "40",
+            "동일구내\n(인접장소)\n이설": "140"
+          },
+          "6. H E A T E R & T A N K 류": {
+            "철거 재사용을\n고려할 경우": "70",
+            "철거 재사용을\n고려 안할 경우": "50",
+            "동일구내\n(인접장소)\n이설": "150"
+          },
+          "7. P U M P & F A N 류": {
+            "철거 재사용을\n고려할 경우": "60",
+            "철거 재사용을\n고려 안할 경우": "40",
+            "동일구내\n(인접장소)\n이설": "140"
+          },
+          "8. C R A N E 류": {
+            "철거 재사용을\n고려할 경우": "70",
+            "철거 재사용을\n고려 안할 경우": "50",
+            "동일구내\n(인접장소)\n이설": "150"
+          }
+        },
+        "cite": {
+          "table_id": "p979-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "rate",
+      "params": {},
+      "steps": [
+        "입력된 base_labor(설치품)에 표 p979-t2의 비율(%)을 곱하여 철거 및 이설 품을 산정한다.",
+        "타장소 재설치의 경우, 설치품(100%) + 철거품(재사용 고려 비율)으로 산정한다."
+      ],
+      "source": "p979-t2 및 p980-x0",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "is_special_equipment == true",
+        "blocked_if": {
+          "input": "is_special_equipment",
+          "op": "==",
+          "value": true
+        },
+        "reason": "특수기기에 대하여는 별도 계상한다.",
+        "source": "p980-x0 ④",
+        "cite": {
+          "chunk_id": "p980-x0",
+          "quote": "④ 특수기기에 대하여는 별도 계상한다."
+        }
+      },
+      {
+        "condition": "is_prior_item == true",
+        "blocked_if": {
+          "input": "is_prior_item",
+          "op": "==",
+          "value": true
+        },
+        "reason": "4-1-1 배관 해체~4-1-6 펌프 해체의 각 항목을 우선 적용한다.",
+        "source": "p979-x23 ①",
+        "cite": {
+          "chunk_id": "p979-x23",
+          "quote": "① ‘4-1-1 배관 해체~4-1-6 펌프 해체’의 각 항목을 우선 적용하며, 외의 항목은 상기류 유사폼목에 적용할\n설명 | 수 있다."
+        }
+      },
+      {
+        "condition": "is_item_6 == true",
+        "blocked_if": {
+          "input": "is_item_6",
+          "op": "==",
+          "value": true
+        },
+        "reason": "주기 ⑥항에 명시된 항목의 철거는 신설의 50%(재사용을 고려치 않을 경우)로 계상한다.",
+        "source": "p980-x0 ⑥",
+        "cite": {
+          "chunk_id": "p980-x0",
+          "quote": "⑥ 다음 항목의 철거는 신설의 50%(재사용을 고려치 않을 경우)로 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "공구손료 및 소모재료",
+        "source": "p980-x0 ②",
+        "cite": {
+          "chunk_id": "p980-x0",
+          "quote": "② 공구손료 및 소모재료는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "rate",
+  "calc_type_raw": "rate",
+  "calc_type_reason": "설치품을 기준으로 표에 제시된 비율(%)을 곱하여 철거 및 이설 품을 산정하는 방식이므로 rate가 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p979-t2",
+      "row": "1. 기 기 류",
+      "column": "철거 재사용을\n고려할 경우",
+      "value": "80"
+    },
+    {
+      "chunk_id": "p980-x0",
+      "quote": "③ 상기의 율은 설치를 100%로 볼 때이다."
+    },
+    {
+      "chunk_id": "p980-x0",
+      "quote": "④ 특수기기에 대하여는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p980-x0",
+      "quote": "⑤ 철거한 설비를 동일구내 또한 인접한 장소가 아닌 곳에 재 설치할 경우에는 설치품+철거품(재사용을\n설명 | 고려할 경우)으로 계상한다."
+    },
+    {
+      "chunk_id": "p980-x0",
+      "quote": "⑥ 다음 항목의 철거는 신설의 50%(재사용을 고려치 않을 경우)로 계상한다."
+    },
+    {
+      "chunk_id": "p979-x23",
+      "quote": "① ‘4-1-1 배관 해체~4-1-6 펌프 해체’의 각 항목을 우선 적용하며, 외의 항목은 상기류 유사폼목에 적용할\n설명 | 수 있다."
+    },
+    {
+      "chunk_id": "p980-x0",
+      "quote": "② 공구손료 및 소모재료는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "주기 ⑥항에 해당하는 '다음 항목'의 구체적인 리스트가 파싱 결과 텍스트에 포함되어 있지 않아, 사용자가 직접 판단하도록 boolean 입력으로 처리했습니다."
+  ],
+  "questions": [
+    "배관류를 재사용 고려하여 철거할 때 적용되는 비율은 얼마인가요?",
+    "철거한 설비를 동일구내가 아닌 다른 장소에 재설치할 경우 품 산정은 어떻게 하나요?",
+    "특수기기를 철거할 때 이 표의 비율을 적용할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:55:12.755658+00:00",
+    "input_tokens": 25571,
+    "output_tokens": 5984,
+    "source_pages": [
+      979,
+      980,
+      981
+    ],
+    "prompt_sha256": "48656f3a42934f345d18495579ceb5af3f4290cd16b86dbf8d223e2fe46ace98",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

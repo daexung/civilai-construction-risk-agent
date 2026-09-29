@@ -1,0 +1,190 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/8-2-5/경량벽체철골틀설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "8-2-5",
+    "title": "경량벽체철골틀 설치",
+    "work": "경량벽체철골틀 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      620
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "경량벽체철골틀 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 620쪽 8-2-5 표 시공량 단위"
+      },
+      {
+        "name": "stud_width",
+        "type": "enum",
+        "allowed_values": [
+          "150mm이하",
+          "150mm초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용하는 경량철골(스터드)의 폭은 150mm 이하입니까?",
+        "source": "PDF 620쪽 8-2-5 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p676-t2",
+        "role": "일당 작업조 인원 및 시공량",
+        "source": "PDF 620쪽 8-2-5 표",
+        "unit": "인/일, ㎡/일",
+        "values": {
+          "내장공": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎡)": "65"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(㎡)": "65"
+          }
+        },
+        "cite": {
+          "table_id": "p676-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p676-t2",
+          "row": "내장공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p676-t2",
+          "column": "수량",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "내장공": "1026",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p676-t2에서 기준 일일시공량(65㎡)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 620쪽 8-2-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "스터드 폭 150mm 초과",
+        "blocked_if": {
+          "input": "stud_width",
+          "op": "==",
+          "value": "150mm초과"
+        },
+        "reason": "본 품은 폭 150mm이하 설치 기준이므로 초과 시 별도 산정 필요",
+        "source": "PDF 620쪽 8-2-5 [주] ①",
+        "cite": {
+          "chunk_id": "p676-x16",
+          "quote": "본 품은 경량철골(스터드)을 사용한 벽체틀(폭 150mm이하) 설치 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "단열재 및 마감재(합판, 석고보드 등) 설치",
+        "source": "PDF 620쪽 8-2-5 [주] ③",
+        "cite": {
+          "chunk_id": "p676-x16",
+          "quote": "단열재 및 마감재(합판, 석고보드 등) 설치는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.06",
+        "cite": {
+          "chunk_id": "p676-x16",
+          "quote": "공구손료 및 경장비(절단기, 타정기 등)의 기계경비는 인력품의 6%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(내장공 2인, 보통인부 1인)와 일일 시공량(65㎡)이 명시되어 있어, 물량을 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p676-t2",
+      "row": "내장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p676-t2",
+      "row": "내장공",
+      "column": "시공량(㎡)",
+      "value": "65"
+    },
+    {
+      "table_id": "p676-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p676-x16",
+      "quote": "본 품은 경량철골(스터드)을 사용한 벽체틀(폭 150mm이하) 설치 기준이다."
+    },
+    {
+      "chunk_id": "p676-x16",
+      "quote": "단열재 및 마감재(합판, 석고보드 등) 설치는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p676-x16",
+      "quote": "공구손료 및 경장비(절단기, 타정기 등)의 기계경비는 인력품의 6%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 table_id와 chunk_id가 p676으로 시작하나 실제 PDF 페이지는 620쪽입니다. 파싱 결과를 그대로 따랐습니다.",
+    "adjusted_daily_crew 모델에서 base_output을 지정할 때, 입력값에 의존하지 않는 고정값(내장공 행의 시공량)을 가져오기 위해 row_input 대신 row를 사용했습니다."
+  ],
+  "questions": [
+    "경량벽체철골틀 설치 시 공구손료는 어떻게 계산하나요?",
+    "스터드 폭이 150mm를 초과하는 경우에는 품을 어떻게 적용해야 하나요?",
+    "설치할 벽체의 면적(물량)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:06:44.580689+00:00",
+    "input_tokens": 11582,
+    "output_tokens": 1966,
+    "source_pages": [
+      676,
+      677
+    ],
+    "prompt_sha256": "44265f511564475a819815c93a412dca501751e3dc80170eefc3984765edccdb",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

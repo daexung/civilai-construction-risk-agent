@@ -1,0 +1,175 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/3-1-2/터널여굴량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "3-1-2",
+    "title": "터널 여굴(餘掘)량('07, '13, '17년 보완)",
+    "work": "터널 여굴량 기준",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      337,
+      338
+    ],
+    "inputs": [
+      {
+        "name": "tunnel_part",
+        "type": "enum",
+        "allowed_values": [
+          "아치",
+          "측벽",
+          "바닥 및 인버트"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "터널의 어느 부위입니까?",
+        "source": "PDF 337쪽 3-1-2 표"
+      },
+      {
+        "name": "excavation_method",
+        "type": "enum",
+        "allowed_values": [
+          "발파공법(NATM)",
+          "기타 공법"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "적용된 굴착 공법이 발파공법(NATM)입니까?",
+        "source": "PDF 338쪽 [주] ①"
+      },
+      {
+        "name": "rock_condition",
+        "type": "enum",
+        "allowed_values": [
+          "일반",
+          "과다 여굴 발생(절리/풍화 발달 등)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "암질의 절리 및 풍화 발달 등으로 과다 여굴이 발생하거나 터널보강이 필요한 조건입니까?",
+        "source": "PDF 338쪽 [주] ②"
+      },
+      {
+        "name": "tunnel_size",
+        "type": "enum",
+        "allowed_values": [
+          "일반",
+          "수로터널 등 단면이 적은 경우"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "수로터널 등 단면이 적은 경우에 해당합니까?",
+        "source": "PDF 338쪽 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p393-t2",
+        "role": "터널 부위별 여굴두께 기준",
+        "source": "PDF 337쪽 3-1-2 표",
+        "unit": "㎝",
+        "values": {
+          "여굴두께(㎝)": {
+            "아치": "12∼19",
+            "측벽": "12∼18",
+            "바닥 및 인버트": "10∼15"
+          }
+        },
+        "cite": {
+          "table_id": "p393-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "터널 부위별 여굴두께 기준을 표에서 확인한다.",
+        "암질 조건 및 터널 단면 크기에 따라 추가 여굴(20% 범위 내) 또는 예외 기준(5㎝ 이내)을 적용한다."
+      ],
+      "source": "PDF 337~338쪽 3-1-2",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "발파공법(NATM)이 아닌 경우",
+        "blocked_if": {
+          "input": "excavation_method",
+          "op": "!=",
+          "value": "발파공법(NATM)"
+        },
+        "reason": "본 여굴량은 발파공법(NATM)을 기준으로 한 것이므로 타 공법 적용 시 별도 기준이 필요함",
+        "source": "PDF 338쪽 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p394-x0"
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "여굴량이 고정값이 아닌 범위(예: 12~19cm)로 제시되어 있고, 현장 여건에 따른 추가 적용(20% 범위 내) 등 판단이 필요하여 자동 계산이 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p393-t2",
+      "row": "여굴두께(㎝)",
+      "column": "아치",
+      "value": "12∼19"
+    },
+    {
+      "table_id": "p393-t2",
+      "row": "여굴두께(㎝)",
+      "column": "측벽",
+      "value": "12∼18"
+    },
+    {
+      "table_id": "p393-t2",
+      "row": "여굴두께(㎝)",
+      "column": "바닥 및 인버트",
+      "value": "10∼15"
+    },
+    {
+      "chunk_id": "p394-x0",
+      "quote": "본 여굴량은 발파공법(NATM)을 기준으로 한 것이다."
+    },
+    {
+      "chunk_id": "p394-x0",
+      "quote": "여굴기준의 20% 범위 내에서 추가 적용한다."
+    },
+    {
+      "chunk_id": "p394-x0",
+      "quote": "수로터널 등 단면이 적은 경우는 5㎝이내에서 현장 여건에 따라 적용한다."
+    }
+  ],
+  "open_questions": [
+    "여굴두께가 범위(예: 12~19cm)로 주어졌을 때, 정확한 값을 결정하는 기준이 명시되어 있지 않습니다.",
+    "여굴기준의 20% 범위 내에서 추가 적용할 때, 구체적으로 몇 %를 적용할지 결정하는 기준이 모호합니다."
+  ],
+  "questions": [
+    "아치 부위의 기본 여굴두께 기준은 얼마인가요?",
+    "암질이 불량하여 과다 여굴이 발생할 경우 여굴량을 얼마나 추가로 인정받을 수 있나요?",
+    "발파공법(NATM)이 아닌 TBM 공법을 사용할 경우 여굴량 기준은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:10.469310+00:00",
+    "input_tokens": 12230,
+    "output_tokens": 1677,
+    "source_pages": [
+      393,
+      394,
+      395
+    ],
+    "prompt_sha256": "82b48b9a8668fc2f4db8eaa6cd3c09b8b112af2b21f2e7f719d320373df88cf4",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

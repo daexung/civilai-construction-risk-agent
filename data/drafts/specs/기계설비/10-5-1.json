@@ -1,0 +1,115 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/10-5-1/압력공기탱크설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "10-5-1",
+    "title": "압력공기탱크설치",
+    "work": "압력공기탱크 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      709
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 압력공기탱크의 수량은 몇 개입니까?",
+        "source": "PDF 709쪽 10-5-1 표 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p765-t4",
+        "role": "압력공기탱크설치 단위당 품",
+        "source": "PDF 709쪽 10-5-1 압력공기탱크설치 표",
+        "unit": "인/개",
+        "values": {
+          "압력공기탱크": {
+            "배 관 공(인)": "1.782",
+            "보통인부(인)": "0.718"
+          }
+        },
+        "cite": {
+          "table_id": "p765-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p765-t4",
+          "row_input": "압력공기탱크",
+          "trades": [
+            "배 관 공(인)",
+            "보통인부(인)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 709쪽 10-5-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당)당 배관공과 보통인부의 품이 표에 직접 명시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p765-t4",
+      "row": "압력공기탱크",
+      "column": "배 관 공(인)",
+      "value": "1.782"
+    },
+    {
+      "table_id": "p765-t4",
+      "row": "압력공기탱크",
+      "column": "보통인부(인)",
+      "value": "0.718"
+    },
+    {
+      "chunk_id": "p765-x20",
+      "quote": "① 본 품은 스프링클러 시스템의 설비별 설치 품 기준이다."
+    },
+    {
+      "chunk_id": "p765-x20",
+      "quote": "② 본 품에는 소운반, 설비별 설치품을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "압력공기탱크 5개를 설치할 때 배관공과 보통인부의 품은 어떻게 되나요?",
+    "스프링클러 시스템 외의 다른 소화설비에 압력공기탱크를 설치할 때도 이 품을 적용할 수 있나요?",
+    "설치할 압력공기탱크의 개수는 몇 개인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:44:04.032607+00:00",
+    "input_tokens": 11457,
+    "output_tokens": 1078,
+    "source_pages": [
+      765,
+      766
+    ],
+    "prompt_sha256": "285292b71a9985c2a64ce2178821e8db0db28b6ef15eefbbdc8d94e45ef1d1a5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

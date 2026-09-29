@@ -1,0 +1,174 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-1-5/Flange취부",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-1-5",
+    "title": "Flange 취부",
+    "work": "Flange 취부 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      736,
+      737,
+      738
+    ],
+    "inputs": [
+      {
+        "name": "flange_type",
+        "type": "enum",
+        "allowed_values": [
+          "Screwed Type",
+          "Seal Welded Screwed Type",
+          "Slip-on Flange Welded Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "플랜지 타입은 무엇입니까?",
+        "source": "PDF 736~738쪽 1, 2, 3항 제목"
+      },
+      {
+        "name": "diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø25이하",
+          "32",
+          "40",
+          "50",
+          "65",
+          "80",
+          "90",
+          "100",
+          "125",
+          "150",
+          "200",
+          "250",
+          "300",
+          "350",
+          "400",
+          "450",
+          "500",
+          "600"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "구경은 몇 ㎜입니까?",
+        "source": "각 표의 구경(㎜) 열"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "조",
+        "required": true,
+        "ask": "수량은 몇 조입니까?",
+        "source": "각 표의 기준 (조당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p792-t1",
+        "role": "1. Screwed Type (ø50~100)",
+        "source": "PDF 736쪽 1. Screwed Type 표",
+        "unit": "인/조",
+        "values": {
+          "ø50": {
+            "사용압력범위(Flange) 10.5㎏/㎠ Steel\n및 8.8㎏/㎠ 주철 플랜트배관공": "0.100",
+            "사용압력범위(Flange) 특별인부": "0.050",
+            "사용압력범위(Flange) 21㎏/㎠ Steel\n및 17.5㎏/㎠ 주철 플랜트배관공": "0.120"
+          }
+        },
+        "cite": {
+          "table_id": "p792-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "플랜지 타입에 따라 해당하는 표(1. Screwed Type, 2. Seal Welded Screwed Type, 3. Slip-on Flange Welded Type)를 선택한다.",
+        "구경과 사용압력범위에 해당하는 플랜트배관공과 특별인부의 단위당 품을 찾는다.",
+        "수량을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 736~738쪽 각 표",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "공구손료 및 장비사용료",
+        "source": "PDF 737쪽 [주] ③, 738쪽 [주] ③",
+        "cite": [
+          {
+            "chunk_id": "p793-x10",
+            "quote": "③ 공구손료 및 장비사용료는 별도 계상한다."
+          },
+          {
+            "chunk_id": "p794-x0",
+            "quote": "③ 공구손료 및 장비사용료는 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "플랜지 타입별로 참조하는 표가 다르고, 파싱 결과에서 압력별 특별인부 열 이름이 중복되어 기계적인 표 조회가 불가능합니다.",
+  "citations": [
+    {
+      "table_id": "p792-t1",
+      "row": "ø50",
+      "column": "사용압력범위(Flange) 10.5㎏/㎠ Steel\n및 8.8㎏/㎠ 주철 플랜트배관공",
+      "value": "0.100"
+    },
+    {
+      "table_id": "p792-t1",
+      "row": "ø50",
+      "column": "사용압력범위(Flange) 특별인부",
+      "value": "0.050"
+    },
+    {
+      "table_id": "p792-t1",
+      "row": "ø50",
+      "column": "사용압력범위(Flange) 21㎏/㎠ Steel\n및 17.5㎏/㎠ 주철 플랜트배관공",
+      "value": "0.120"
+    },
+    {
+      "chunk_id": "p793-x10",
+      "quote": "③ 공구손료 및 장비사용료는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p794-x0",
+      "quote": "③ 공구손료 및 장비사용료는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 압력별 '특별인부' 열 이름이 중복되어(예: '사용압력범위(Flange) 특별인부') 표를 정확히 구성하기 어렵습니다.",
+    "플랜지 타입(Screwed, Seal Welded, Slip-on)에 따라 참조하는 표가 다르고, 각 표의 압력 범위 기준이 달라 단일 계산식으로 통합하기 어렵습니다."
+  ],
+  "questions": [
+    "Screwed Type 플랜지 취부 시 구경 100mm, 압력 10.5kg/cm2일 때 품은 어떻게 되나요?",
+    "Seal Welded Screwed Type과 Slip-on Flange Welded Type의 품에는 Pipe 절단 및 Threading 작업이 포함되어 있나요?",
+    "플랜지 취부 작업 시 공구손료는 어떻게 계상해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:44:23.900969+00:00",
+    "input_tokens": 50741,
+    "output_tokens": 13422,
+    "source_pages": [
+      792,
+      793,
+      794,
+      795
+    ],
+    "prompt_sha256": "7656fceee13f10d4985a0312092add4facdee9fcb73321692774824febf7db98",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-10/시간당생산능력",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-10",
+    "title": "아스팔트 플랜트",
+    "work": "시간당 생산능력 표준",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      185
+    ],
+    "inputs": [
+      {
+        "name": "plant_size",
+        "type": "enum",
+        "allowed_values": [
+          "40",
+          "60",
+          "80",
+          "100",
+          "120"
+        ],
+        "unit": "ton",
+        "required": true,
+        "ask": "플랜트 규격은 몇 ton입니까?",
+        "source": "1. 시간당 생산능력 표준 표"
+      },
+      {
+        "name": "mixture_type",
+        "type": "enum",
+        "allowed_values": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "혼합재의 종류는 무엇입니까? (A: 밀 조립식 안정처리, B: 아스팔트(콘크리트), C: 소일아스팔트, D: 샌드 아스팔트)",
+        "source": "1. 시간당 생산능력 표준 표 및 [주] ②",
+        "synonyms": {
+          "A": [
+            "밀 조립식 안정처리"
+          ],
+          "B": [
+            "아스팔트",
+            "콘크리트",
+            "아스팔트(콘크리트)"
+          ],
+          "C": [
+            "소일아스팔트"
+          ],
+          "D": [
+            "샌드 아스팔트"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p241-t0",
+        "role": "시간당 생산능력 표준",
+        "source": "1. 시간당 생산능력 표준(ton/hr)",
+        "unit": "ton/hr",
+        "values": {
+          "40": {
+            "A": "32.0",
+            "B": "28.8",
+            "C": "25.6",
+            "D": "19.2"
+          },
+          "60": {
+            "A": "48.0",
+            "B": "43.2",
+            "C": "38.4",
+            "D": "28.8"
+          },
+          "80": {
+            "A": "64.0",
+            "B": "57.6",
+            "C": "51.2",
+            "D": "38.4"
+          },
+          "100": {
+            "A": "80.0",
+            "B": "72.0",
+            "C": "64.0",
+            "D": "48.0"
+          },
+          "120": {
+            "A": "96.0",
+            "B": "86.4",
+            "C": "76.8",
+            "D": "57.6"
+          }
+        },
+        "cite": {
+          "table_id": "p241-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "플랜트 규격과 혼합재 종류에 따라 시간당 생산능력을 표에서 찾는다.",
+        "일생산시간은 6시간으로 적용한다."
+      ],
+      "source": "1. 시간당 생산능력 표준 표 및 2. 아스팔트 플랜트의 실작업시간",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "이 절은 아스팔트 플랜트의 시간당 생산능력을 표에서 찾는 기준만을 제공하며, 별도의 인력이나 장비 대수 계산식이 없으므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p241-t0",
+      "row": "80",
+      "column": "B",
+      "value": "57.6"
+    },
+    {
+      "chunk_id": "p241-x6",
+      "quote": "A. 밀 조립식 안정처리 B. 아스팔트(콘크리트) C. 소일아스팔트(현지 흙을 사용할 경우) D. 샌드 아스팔트"
+    },
+    {
+      "chunk_id": "p241-x10",
+      "quote": "일생산시간은 6시간으로 한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "플랜트 규격 80ton, 아스팔트(콘크리트) 혼합재의 시간당 생산능력은 얼마인가요?",
+    "일생산시간은 몇 시간으로 계산해야 하나요?",
+    "플랜트 규격이 표에 없는 50ton인 경우는 어떻게 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:14.009068+00:00",
+    "input_tokens": 11959,
+    "output_tokens": 1418,
+    "source_pages": [
+      241,
+      242
+    ],
+    "prompt_sha256": "431a3aa7cf48322dda5b6e64a987a8bb50f9a24781b6ceffc540b7363632343c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

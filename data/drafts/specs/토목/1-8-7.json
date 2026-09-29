@@ -1,0 +1,187 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-8-7/주차블록설치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-8-7",
+    "title": "주차 블록 설치",
+    "work": "주차 블록 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      322
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 주차 블록의 수량은 몇 개소입니까?",
+        "source": "PDF 322쪽 1-8-7 표의 시공량 단위"
+      },
+      {
+        "name": "block_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "mm",
+        "required": true,
+        "ask": "설치할 주차 블록의 길이는 몇 mm입니까?",
+        "source": "PDF 322쪽 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p378-t1",
+        "role": "주차 블록 설치 일당 작업조 및 시공량",
+        "source": "PDF 322쪽 1-8-7 표",
+        "unit": "인/일, 개소/일",
+        "values": {
+          "특별인부": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(개소)": "90"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(개소)": "90"
+          }
+        },
+        "cite": {
+          "table_id": "p378-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p378-t1",
+          "row": "특별인부",
+          "column": "시공량(개소)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p378-t1",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p378-t1에서 일당 시공량(90개소)을 가져온다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p378-t1의 직종별 수량으로 구한다."
+      ],
+      "source": "PDF 322쪽 1-8-7 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "주차 블록 길이가 750mm 미만인 경우",
+        "blocked_if": {
+          "input": "block_length",
+          "op": "<",
+          "value": 750
+        },
+        "reason": "본 품은 길이 750~1000mm 기준이며, 범위를 벗어나는 경우의 기준이 명시되어 있지 않음",
+        "source": "PDF 322쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p378-x11",
+          "quote": "본 품은 길이 750∼1000㎜의 주차블록 설치 기준이다."
+        }
+      },
+      {
+        "condition": "주차 블록 길이가 1000mm 초과인 경우",
+        "blocked_if": {
+          "input": "block_length",
+          "op": ">",
+          "value": 1000
+        },
+        "reason": "본 품은 길이 750~1000mm 기준이며, 범위를 벗어나는 경우의 기준이 명시되어 있지 않음",
+        "source": "PDF 322쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p378-x11",
+          "quote": "본 품은 길이 750∼1000㎜의 주차블록 설치 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "chunk_id": "p378-x11",
+          "quote": "공구손료 및 경장비(전동드릴, 발전기 등)의 기계경비는 인력품의 5%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량(90개소)과 그에 따른 작업조 인원(특별인부 2인, 보통인부 1인)이 표로 제시되어 있으므로 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p378-t1",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p378-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p378-t1",
+      "row": "특별인부",
+      "column": "시공량(개소)",
+      "value": "90"
+    },
+    {
+      "chunk_id": "p378-x11",
+      "quote": "본 품은 길이 750∼1000㎜의 주차블록 설치 기준이다."
+    },
+    {
+      "chunk_id": "p378-x11",
+      "quote": "공구손료 및 경장비(전동드릴, 발전기 등)의 기계경비는 인력품의 5%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "주차 블록 길이가 750~1000mm 범위를 벗어나는 경우의 품셈 적용 기준이 명시되어 있지 않아 계산을 보류(blocked) 처리함."
+  ],
+  "questions": [
+    "주차 블록 50개소를 설치할 때 필요한 특별인부와 보통인부의 품은 어떻게 되나요?",
+    "주차 블록 길이가 1200mm인 경우 이 품셈을 적용할 수 있나요?",
+    "주차 블록 설치 시 천공 및 앵커고정 작업에 대한 품은 별도로 계산해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:56:40.399953+00:00",
+    "input_tokens": 11535,
+    "output_tokens": 1903,
+    "source_pages": [
+      378,
+      379
+    ],
+    "prompt_sha256": "149dcfb42d0e0da9e34b491fd2e74fa337f9acf891cf514fdc5f0178cf36f2d7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

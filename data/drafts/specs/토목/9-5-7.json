@@ -1,0 +1,269 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-5-7/토지이용현황도제작",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-5-7",
+    "title": "토지이용 현황도 제작",
+    "work": "지리조사 및 편집·제작 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      515
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "현지조사",
+          "편집",
+          "제도"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까?",
+        "source": "PDF 515쪽 1. 지리조사 및 2. 편집 및 제작 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "도엽",
+        "required": true,
+        "ask": "작업 물량은 몇 도엽입니까? (1:25,000도엽 기준)",
+        "source": "PDF 515쪽 표 기준 (1:25,000도엽당)"
+      },
+      {
+        "name": "terrain",
+        "type": "enum",
+        "allowed_values": [
+          "시가지",
+          "교외지",
+          "농경지",
+          "구릉지",
+          "산악지"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지형은 어디에 해당합니까?",
+        "source": "PDF 515쪽 1. 지리조사 [주] ③ 및 지형별 계수 표"
+      },
+      {
+        "name": "scale_differs",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도면의 축척이 1:25,000과 다릅니까?",
+        "source": "PDF 515쪽 2. 편집 및 제작 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p571-t0",
+        "role": "지리조사 작업별 인원",
+        "source": "PDF 515쪽 1. 지리조사 표",
+        "unit": "인/도엽",
+        "values": {
+          "현지조사": {
+            "고급기술자": "10.22",
+            "초급기술자": "9.17",
+            "중급기능사(지도제작)": "9.17"
+          }
+        },
+        "cite": {
+          "table_id": "p571-t0"
+        }
+      },
+      {
+        "id": "p571-t1",
+        "role": "지형별 계수",
+        "source": "PDF 515쪽 1. 지리조사 지형별 계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "시가지": "1.5",
+            "교외지": "1.3",
+            "농경지": "1.0",
+            "구릉지": "0.9",
+            "산악지": "0.85"
+          }
+        },
+        "cite": {
+          "table_id": "p571-t1"
+        }
+      },
+      {
+        "id": "p571-t2",
+        "role": "편집 및 제작 작업별 인원",
+        "source": "PDF 515쪽 2. 편집 및 제작 표",
+        "unit": "인/도엽",
+        "values": {
+          "편집": {
+            "중급\n기술자": "1.5",
+            "초급\n기술자": "10",
+            "중급\n기능사\n(지도제작)": "3",
+            "사진\n제판공": "1"
+          },
+          "제도": {
+            "중급\n기술자": "1.5",
+            "초급\n기술자": "6",
+            "중급\n기능사\n(지도제작)": "30",
+            "초급\n기능사\n(지도제작)": "22.5",
+            "사진\n제판공": "5",
+            "사진\n식자공": "1",
+            "옵셋\n인쇄공": "2"
+          }
+        },
+        "cite": {
+          "table_id": "p571-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p571-t0",
+          "row_input": "work_type",
+          "column_input": null,
+          "trades": []
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "work_type": "현지조사"
+            },
+            "change": "지형(terrain)에 따라 p571-t1의 계수를 곱함",
+            "source": "PDF 515쪽 1. 지리조사 [주] ③"
+          }
+        ]
+      },
+      "steps": [
+        "작업 종류(work_type)가 '현지조사'인 경우 p571-t0에서, '편집' 또는 '제도'인 경우 p571-t2에서 단위당 품을 찾는다.",
+        "현지조사인 경우, 지형(terrain)에 따라 p571-t1의 계수를 단위당 품에 곱한다.",
+        "물량(quantity)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 515쪽 1. 지리조사 및 2. 편집 및 제작",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "도면의 축척이 1:25,000과 다름",
+        "blocked_if": {
+          "input": "scale_differs",
+          "op": "==",
+          "value": true
+        },
+        "reason": "도면의 축척이 다를 때에는 '[토목부문] 9-5-6/1./가. 지형도제작 [주] ⑤항'에 의한 계수를 적용해야 하므로 다른 절의 참조가 필요함",
+        "source": "PDF 515쪽 2. 편집 및 제작 [주] ②",
+        "cite": {
+          "chunk_id": "p571-x16",
+          "quote": "설명 | ② 본 품은 1:25,000 지도규격 55.5㎝×44.5㎝를 기준으로 한 것이며, 도면의 축척이 다를 때에는\n설명 | ‘[토목부문] 9-5-6/1./가. 지형도제작 [주] ⑤항’에 의한 계수를 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "차량비, 재료비 및 소모품비",
+        "source": "PDF 515쪽 1. 지리조사 [주] ① 및 2. 편집 및 제작 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p571-x7",
+            "quote": "설명 | [주] ① 차량비, 재료비 및 소모품비는 별도 계상한다."
+          },
+          {
+            "chunk_id": "p571-x16",
+            "quote": "설명 | [주] ① 재료비 및 소모품비는 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "현지 측량비",
+        "source": "PDF 515쪽 1. 지리조사 [주] ②",
+        "cite": {
+          "chunk_id": "p571-x7",
+          "quote": "설명 | ② 현지 측량이 필요할 때는 별도 계상한다."
+        }
+      },
+      {
+        "item": "외업 동원 기술인원 여비",
+        "source": "PDF 515쪽 1. 지리조사 [주] ④",
+        "cite": {
+          "chunk_id": "p571-x10",
+          "quote": "설명 | ④ 본 품의 외업에 동원되는 기술인원에 대한 여비는 국토교통부장관이 고시한 측량용역대가기준에 따라\n설명 | 별도 계상한다."
+        }
+      },
+      {
+        "item": "성과심사 소요 비용",
+        "source": "PDF 515쪽 2. 편집 및 제작 [주] ③",
+        "cite": {
+          "chunk_id": "p571-x16",
+          "quote": "③ 본 품에서 성과심사에 소요되는 비용은 국토교통부장관이 고시한 측량성과 심사수탁기관의 심사업무\n설명 | 및 지정절차 등에 관한 규정에 따라 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(1:25,000도엽당)당 품이 표에 직접 제시되어 있으며, 물량과 계수를 곱하여 계산하는 방식이므로 per_unit이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p571-t0",
+      "row": "현지조사",
+      "column": "고급기술자",
+      "value": "10.22"
+    },
+    {
+      "table_id": "p571-t1",
+      "row": "계수",
+      "column": "시가지",
+      "value": "1.5"
+    },
+    {
+      "table_id": "p571-t2",
+      "row": "편집",
+      "column": "중급\n기술자",
+      "value": "1.5"
+    },
+    {
+      "chunk_id": "p571-x7",
+      "quote": "③ 본 품은 농경지를 기준으로 한 것이며, 지형이 다를 때에는 다음 계수를 곱하여 계상한다."
+    },
+    {
+      "chunk_id": "p571-x16",
+      "quote": "설명 | ② 본 품은 1:25,000 지도규격 55.5㎝×44.5㎝를 기준으로 한 것이며, 도면의 축척이 다를 때에는\n설명 | ‘[토목부문] 9-5-6/1./가. 지형도제작 [주] ⑤항’에 의한 계수를 적용한다."
+    }
+  ],
+  "open_questions": [
+    "작업 종류(현지조사, 편집, 제도)를 한 번에 모두 계산할지, 개별적으로 선택하여 계산할지 명확하지 않아 work_type 입력으로 분리했습니다."
+  ],
+  "questions": [
+    "토지이용 현황도 제작 시 현지조사 물량이 2도엽이고 지형이 농경지일 때 품은 어떻게 되나요?",
+    "도면의 축척이 1:5,000인 경우 편집 및 제작 품은 어떻게 계산하나요?",
+    "현지조사 시 차량비와 재료비는 어떻게 처리해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:20:36.169640+00:00",
+    "input_tokens": 24522,
+    "output_tokens": 6118,
+    "source_pages": [
+      571,
+      572
+    ],
+    "prompt_sha256": "f918965316312ca2990058c0820279b613810516511299033403cab84aa9d944",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

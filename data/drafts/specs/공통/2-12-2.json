@@ -1,0 +1,318 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-12-2/마스트설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-12-2",
+    "title": "마스트 설치 및 해체('23년 신설)",
+    "work": "마스트 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      64
+    ],
+    "inputs": [
+      {
+        "name": "floor_count",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "층",
+        "required": true,
+        "ask": "설치 및 해체할 마스트의 층수는 몇 층입니까?",
+        "source": "PDF 64쪽 2-12-2 표 (층당)"
+      },
+      {
+        "name": "floor_level",
+        "type": "enum",
+        "allowed_values": [
+          "지하층 및 1∼3층",
+          "4∼6층",
+          "7∼9층",
+          "10∼12층",
+          "13∼15층",
+          "16∼18층",
+          "19층 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업하는 층의 높이 구간은 어디입니까?",
+        "source": "PDF 64쪽 2-12-2 [주] ③ 표"
+      },
+      {
+        "name": "floor_distinguishable",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "외벽에서 층의 구분을 할 수 있습니까? (없을 경우 층고 3.6m 기준으로 환산합니다)",
+        "source": "PDF 64쪽 2-12-2 [주] ③ ※"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p120-t1",
+        "role": "마스트 설치 및 해체 층당 품",
+        "source": "PDF 64쪽 2-12-2 표",
+        "unit": "인/층",
+        "values": {
+          "비계공": {
+            "수량": "0.80"
+          },
+          "보통인부": {
+            "수량": "0.27"
+          }
+        },
+        "cite": {
+          "table_id": "p120-t1"
+        }
+      },
+      {
+        "id": "p120-t2",
+        "role": "높이에 따른 할증률",
+        "source": "PDF 64쪽 2-12-2 [주] ③ 표",
+        "unit": "비율",
+        "values": {
+          "할증률": {
+            "지하층 및 1∼3층": "0",
+            "4∼6층": "0.05",
+            "7∼9층": "0.08",
+            "10∼12층": "0.12",
+            "13∼15층": "0.16",
+            "16∼18층": "0.20"
+          }
+        },
+        "cite": {
+          "table_id": "p120-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p120-t1",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "floor_count",
+        "surcharges": [
+          {
+            "when": {
+              "floor_level": "4∼6층"
+            },
+            "rate": "0.05",
+            "applies_to": [
+              "비계공",
+              "보통인부"
+            ],
+            "source": "PDF 64쪽 [주] ③"
+          },
+          {
+            "when": {
+              "floor_level": "7∼9층"
+            },
+            "rate": "0.08",
+            "applies_to": [
+              "비계공",
+              "보통인부"
+            ],
+            "source": "PDF 64쪽 [주] ③"
+          },
+          {
+            "when": {
+              "floor_level": "10∼12층"
+            },
+            "rate": "0.12",
+            "applies_to": [
+              "비계공",
+              "보통인부"
+            ],
+            "source": "PDF 64쪽 [주] ③"
+          },
+          {
+            "when": {
+              "floor_level": "13∼15층"
+            },
+            "rate": "0.16",
+            "applies_to": [
+              "비계공",
+              "보통인부"
+            ],
+            "source": "PDF 64쪽 [주] ③"
+          },
+          {
+            "when": {
+              "floor_level": "16∼18층"
+            },
+            "rate": "0.20",
+            "applies_to": [
+              "비계공",
+              "보통인부"
+            ],
+            "source": "PDF 64쪽 [주] ③"
+          }
+        ],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p120-t1에서 비계공과 보통인부의 층당 품을 확인한다.",
+        "floor_level에 따라 p120-t2의 할증률을 적용한다.",
+        "단위당 품에 (1 + 할증률)을 곱하고, 전체 층수(floor_count)를 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 64쪽 2-12-2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "19층 이상",
+        "blocked_if": {
+          "input": "floor_level",
+          "op": "==",
+          "value": "19층 이상"
+        },
+        "reason": "19층 이상은 매 3층 증가마다 4%씩 가산하는 동적 할증률 계산이 필요하여 자동 계산 보류",
+        "source": "PDF 64쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p120-x10"
+        }
+      },
+      {
+        "condition": "외벽에서 층 구분 불가",
+        "blocked_if": {
+          "input": "floor_distinguishable",
+          "op": "==",
+          "value": false
+        },
+        "reason": "층고 3.6m 기준으로 층수를 환산 적용해야 하므로, 환산된 층수를 직접 입력받거나 별도 계산 필요",
+        "source": "PDF 64쪽 [주] ③ ※",
+        "cite": {
+          "chunk_id": "p120-x13"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "건설용리프트(싱글 1.2ton) 본체 설치 및 해체",
+        "source": "PDF 64쪽 2-12-1",
+        "cite": {
+          "chunk_id": "p120-x10"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p120-x13"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(층)당 인력 품이 표에 직접 제시되어 있으며, 물량(층수)을 곱하여 계산하는 방식이므로 per_unit이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p120-t1",
+      "row": "비계공",
+      "column": "수량",
+      "value": "0.80"
+    },
+    {
+      "table_id": "p120-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.27"
+    },
+    {
+      "table_id": "p120-t2",
+      "row": "지하층 및\n1∼3층",
+      "column": "0",
+      "value": "0"
+    },
+    {
+      "table_id": "p120-t2",
+      "row": "4∼6층",
+      "column": "5%",
+      "value": "5%"
+    },
+    {
+      "table_id": "p120-t2",
+      "row": "7∼9층",
+      "column": "8%",
+      "value": "8%"
+    },
+    {
+      "table_id": "p120-t2",
+      "row": "10∼12층",
+      "column": "12%",
+      "value": "12%"
+    },
+    {
+      "table_id": "p120-t2",
+      "row": "13∼15층",
+      "column": "16%",
+      "value": "16%"
+    },
+    {
+      "table_id": "p120-t2",
+      "row": "16∼18층",
+      "column": "20%",
+      "value": "20%"
+    },
+    {
+      "chunk_id": "p120-x10",
+      "quote": "본 품은 건설용리프트(싱글 1.2ton)의 마스트를 설치 및 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p120-x10",
+      "quote": "본 품은 마스트 설치, 층간 출입구 및 작동센서 설치와 해체 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p120-x10",
+      "quote": "높이에 따라 다음 할증률에 의한 품을 가산할 수 있으며 19층 이상은 매 3층 증가마다 4%씩 가산한다."
+    },
+    {
+      "chunk_id": "p120-x13",
+      "quote": "외벽에서 층의 구분을 할 수 없을 때에는 층고를 3.6m로 기준하여 층수를 환산 적용한다."
+    },
+    {
+      "chunk_id": "p120-x13",
+      "quote": "공구손료 및 경장비(윈치 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "19층 이상일 때 '매 3층 증가마다 4%씩 가산'의 정확한 수식(예: 19~21층 24%, 22~24층 28% 등)이 명시되지 않아 추측을 배제하고 blocked 처리함."
+  ],
+  "questions": [
+    "마스트 설치 시 비계공과 보통인부의 층당 품은 얼마인가요?",
+    "19층 이상일 때 할증률은 어떻게 계산하나요?",
+    "외벽에서 층 구분이 안 될 때는 어떻게 층수를 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:06.316839+00:00",
+    "input_tokens": 11763,
+    "output_tokens": 3020,
+    "source_pages": [
+      120,
+      121
+    ],
+    "prompt_sha256": "4bf56266e6b582949691847fa39dd83ee8675889253212d2714eb20a1fad0bdc",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/9-3-1/창호주위모르타르충전",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "9-3-1",
+    "title": "창호주위 모르타르 충전",
+    "work": "창호주위 모르타르 충전 인력 품 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      626
+    ],
+    "inputs": [
+      {
+        "name": "length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "창호주위 모르타르 충전 길이는 몇 m입니까?",
+        "source": "PDF 626쪽 9-3-1 표 기준 (10m당)"
+      },
+      {
+        "name": "material_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "모르타르 재료(시멘트, 모래)는 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "일반적인 재료비 처리 지침",
+        "synonyms": {
+          "관급": [
+            "관급자재",
+            "지급자재",
+            "발주처 지급"
+          ],
+          "사급": [
+            "사급자재",
+            "시공사 구매",
+            "자체 구매"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p682-t2",
+        "role": "10m당 인력 품",
+        "source": "PDF 626쪽 9-3-1 표",
+        "unit": "인/10m",
+        "values": {
+          "미장공": {
+            "수량": "0.14"
+          },
+          "보통인부": {
+            "수량": "0.04"
+          }
+        },
+        "cite": {
+          "table_id": "p682-t2"
+        }
+      },
+      {
+        "id": "p682-t3",
+        "role": "10m당 재료량",
+        "source": "PDF 626쪽 9-3-1 재료량 표",
+        "unit": "시멘트 ㎏/10m, 모래 ㎥/10m",
+        "values": {
+          "시멘트": {
+            "수량": "27.3"
+          },
+          "모래": {
+            "수량": "0.06"
+          }
+        },
+        "cite": {
+          "table_id": "p682-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p682-t2",
+          "column_input": "수량",
+          "trades": [
+            "미장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "length",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p682-t2에서 10m당 인력 품을 확인한다.",
+        "p682-t3에서 10m당 재료량을 확인한다.",
+        "입력된 길이(m)를 10으로 나누어 물량 계수를 구한다.",
+        "물량 계수를 단위당 품과 재료량에 곱하여 총 투입량을 구한다."
+      ],
+      "source": "PDF 626쪽 9-3-1 표 및 재료량 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "방수 코킹",
+        "source": "PDF 626쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p682-x15",
+          "quote": "③ 방수 코킹은 ‘[건축부문] 6-6-1 수밀코킹’을 따른다."
+        }
+      }
+    ],
+    "supply_rules": [
+      {
+        "item": "모르타르 재료(시멘트, 모래)",
+        "input": "material_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "산정",
+            "reason": "사급자재 — 시공사 일위대가에 포함"
+          }
+        },
+        "source": "일반적인 재료비 처리 지침",
+        "cite": []
+      }
+    ],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p682-x15",
+          "quote": "④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(10m)당 인력 품과 재료량이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p682-t2",
+      "row": "미장공",
+      "column": "수량",
+      "value": "0.14"
+    },
+    {
+      "table_id": "p682-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.04"
+    },
+    {
+      "table_id": "p682-t3",
+      "row": "시멘트",
+      "column": "수량",
+      "value": "27.3"
+    },
+    {
+      "table_id": "p682-t3",
+      "row": "모래",
+      "column": "수량",
+      "value": "0.06"
+    },
+    {
+      "chunk_id": "p682-x15",
+      "quote": "③ 방수 코킹은 ‘[건축부문] 6-6-1 수밀코킹’을 따른다."
+    },
+    {
+      "chunk_id": "p682-x15",
+      "quote": "④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "창호주위 모르타르 충전 길이가 50m일 때 미장공 품은 얼마인가요?",
+    "방수 코킹 작업도 이 품셈에 포함되나요?",
+    "모르타르 비빔에 사용되는 기계경비는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:07:35.778170+00:00",
+    "input_tokens": 11719,
+    "output_tokens": 1966,
+    "source_pages": [
+      682,
+      683
+    ],
+    "prompt_sha256": "007992464a0c8f1887eadfb3c6ec41cf55471fa16bc6bb1e37ef06b7dda5cc16",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

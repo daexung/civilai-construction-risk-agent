@@ -1,0 +1,204 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-1-3/철골재철거_인력",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-1-3",
+    "title": "철골재 철거(인력)",
+    "work": "철골재 철거 및 발생재 정리",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      912
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "철골재 철거 물량은 몇 ton입니까?",
+        "source": "p968-t0 시공량 단위 및 p968-t1 재료량 단위"
+      },
+      {
+        "name": "gas_type",
+        "type": "enum",
+        "allowed_values": [
+          "아세틸렌",
+          "LPG"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "절단 가스로 아세틸렌과 LPG 중 어느 것을 사용합니까?",
+        "source": "p968-x11 ※ 아세틸렌(산소포함) 또는 L.P.G 중 한가지만 선택 사용한다."
+      }
+    ],
+    "tables": [
+      {
+        "id": "p968-t0",
+        "role": "일당 작업조 인원 및 시공량",
+        "source": "PDF 912쪽 3-1-3 철골재 철거(인력) 기준 (일당)",
+        "unit": "인/일, ton/일",
+        "values": {
+          "용접공": {
+            "수량": "3",
+            "시공량(ton)": "1.4"
+          },
+          "보통인부": {
+            "수량": "2",
+            "시공량(ton)": "1.4"
+          }
+        },
+        "cite": {
+          "table_id": "p968-t0"
+        }
+      },
+      {
+        "id": "p968-t1",
+        "role": "ton당 재료량",
+        "source": "PDF 912쪽 3-1-3 철골재 철거(인력) 기준 (ton당)",
+        "unit": "병/ton, ㎏/ton",
+        "values": {
+          "산소": {
+            "수량": "0.7"
+          },
+          "아세틸렌": {
+            "수량": "2.5"
+          },
+          "LPG": {
+            "수량": "2.0"
+          }
+        },
+        "cite": {
+          "table_id": "p968-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p968-t0",
+          "row": "용접공",
+          "column": "시공량(ton)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p968-t0",
+          "column": "수량",
+          "trades": [
+            "용접공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "용접공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p968-t0에서 기준 일일시공량(1.4 ton)을 가져온다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p968-t0의 직종별 인원으로 구한다.",
+        "재료량은 quantity × p968-t1의 ton당 수량으로 구하되, gas_type에 따라 아세틸렌 또는 LPG를 선택하여 적용한다."
+      ],
+      "source": "PDF 912쪽 p968-t0, p968-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "공사장의 보호 및 안전시설 설치비",
+        "source": "PDF 912쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p968-x5",
+          "quote": "공사장의 보호 및 안전시설 설치비"
+        }
+      },
+      {
+        "item": "폐기물 상차 및 운반, 폐기물 처리비용",
+        "source": "PDF 912쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p968-x5",
+          "quote": "폐기물 상차 및 운반, 폐기물 처리비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 주어져 있어 작업일수를 구한 뒤 인·일을 산출하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p968-t0",
+      "row": "용접공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p968-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p968-t0",
+      "row": "용접공",
+      "column": "시공량(ton)",
+      "value": "1.4"
+    },
+    {
+      "table_id": "p968-t1",
+      "row": "산소",
+      "column": "수량",
+      "value": "0.7"
+    },
+    {
+      "table_id": "p968-t1",
+      "row": "아세틸렌",
+      "column": "수량",
+      "value": "2.5"
+    },
+    {
+      "table_id": "p968-t1",
+      "row": "LPG",
+      "column": "수량",
+      "value": "2.0"
+    },
+    {
+      "chunk_id": "p968-x11",
+      "quote": "아세틸렌(산소포함) 또는 L.P.G 중 한가지만 선택 사용한다."
+    },
+    {
+      "chunk_id": "p968-x5",
+      "quote": "공사장의 보호 및 안전시설 설치비, 폐기물 상차 및 운반, 폐기물 처리비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "재료량(산소, 아세틸렌, LPG) 계산이 adjusted_daily_crew 모델의 기본 파라미터에 포함되지 않아 steps에만 명시했습니다. 재료량 계산을 위한 별도 모델 확장이 필요한지 확인이 필요합니다."
+  ],
+  "questions": [
+    "철골재 철거 물량이 10ton일 때 용접공과 보통인부의 품은 어떻게 되나요?",
+    "아세틸렌 대신 LPG를 사용할 경우 재료량 산출은 어떻게 달라지나요?",
+    "폐기물 처리비용은 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:30.287900+00:00",
+    "input_tokens": 11771,
+    "output_tokens": 2001,
+    "source_pages": [
+      968,
+      969
+    ],
+    "prompt_sha256": "096b3620feb280e6ad4ec591faa3d18c52d0d64f243f89ccd2e81c68203325e2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

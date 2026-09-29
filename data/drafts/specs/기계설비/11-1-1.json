@@ -1,0 +1,238 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/11-1-1/용접접합",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "11-1-1",
+    "title": "용접접합('15년 보완)",
+    "work": "가스용 강관 용접접합 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      713
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø15",
+          "20",
+          "25",
+          "32",
+          "40",
+          "50",
+          "65",
+          "80",
+          "100",
+          "125",
+          "150",
+          "200",
+          "250",
+          "300",
+          "350",
+          "400"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "강관의 규격(㎜)은 얼마입니까?",
+        "source": "PDF 713쪽 11-1-1 표 p769-t0",
+        "synonyms": {
+          "ø15": [
+            "15",
+            "15mm"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "용접 개소는 몇 개소입니까?",
+        "source": "PDF 713쪽 11-1-1 표 단위 (용접개소당)"
+      },
+      {
+        "name": "welding_method",
+        "type": "enum",
+        "allowed_values": [
+          "알곤용접",
+          "아크용접"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "용접 방법은 무엇입니까? (알곤용접 / 아크용접)",
+        "source": "PDF 713쪽 11-1-1 표 비고 및 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p769-t0",
+        "role": "규격별 플랜트용접공 단위당 품",
+        "source": "PDF 713쪽 11-1-1 표",
+        "unit": "인/개소",
+        "values": {
+          "ø15": {
+            "플랜트용접공(인)": "0.044"
+          },
+          "20": {
+            "플랜트용접공(인)": "0.049"
+          },
+          "25": {
+            "플랜트용접공(인)": "0.058"
+          },
+          "32": {
+            "플랜트용접공(인)": "0.069"
+          },
+          "40": {
+            "플랜트용접공(인)": "0.076"
+          },
+          "50": {
+            "플랜트용접공(인)": "0.091"
+          },
+          "65": {
+            "플랜트용접공(인)": "0.111"
+          },
+          "80": {
+            "플랜트용접공(인)": "0.127"
+          },
+          "100": {
+            "플랜트용접공(인)": "0.159"
+          },
+          "125": {
+            "플랜트용접공(인)": "0.191"
+          },
+          "150": {
+            "플랜트용접공(인)": "0.223"
+          },
+          "200": {
+            "플랜트용접공(인)": "0.287"
+          },
+          "250": {
+            "플랜트용접공(인)": "0.351"
+          },
+          "300": {
+            "플랜트용접공(인)": "0.415"
+          },
+          "350": {
+            "플랜트용접공(인)": "0.462"
+          },
+          "400": {
+            "플랜트용접공(인)": "0.526"
+          }
+        },
+        "cite": {
+          "table_id": "p769-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p769-t0",
+          "row_input": "pipe_size",
+          "column_input": "플랜트용접공(인)",
+          "trades": [
+            "플랜트용접공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "welding_method": "아크용접"
+            },
+            "change": "본 품의 5%를 감한다",
+            "source": "PDF 713쪽 11-1-1 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p769-t0에서 규격별 플랜트용접공의 단위당 품을 고른다.",
+        "용접 방법이 아크용접인 경우 단위당 품에서 5%를 감산한다.",
+        "물량(용접 개소)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 713쪽 11-1-1 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "용접접합에 필요한 부자재",
+        "source": "PDF 713쪽 11-1-1 [주] ②",
+        "cite": {
+          "chunk_id": "p769-x9",
+          "quote": "② 용접접합에 필요한 부자재는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(용접기 등)의 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p769-x9",
+          "quote": "③ 공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "규격별 개소당 플랜트용접공의 품이 표에 직접 제시되어 있으므로 단위당 품 계산 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p769-t0",
+      "row": "ø15",
+      "column": "플랜트용접공(인)",
+      "value": "0.044"
+    },
+    {
+      "table_id": "p769-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 아크용접으로 가스용 강관을 접합하는 경우는 본 품의 5%를 감한다."
+    },
+    {
+      "chunk_id": "p769-x9",
+      "quote": "① 본 품은 알곤용접으로 가스용 강관을 접합하는 기준이다."
+    },
+    {
+      "chunk_id": "p769-x9",
+      "quote": "② 용접접합에 필요한 부자재는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p769-x9",
+      "quote": "③ 공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 테이블 텍스트에 '규 격(㎜) 20'과 같이 불필요한 텍스트가 포함되어 있어, 실제 키값으로 '20'을 사용하도록 정제했습니다."
+  ],
+  "questions": [
+    "강관의 규격(mm)과 용접 개소는 어떻게 됩니까?",
+    "용접 방법이 알곤용접입니까, 아니면 아크용접입니까?",
+    "용접접합에 필요한 부자재 비용은 별도로 산정하셨습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:40:26.204625+00:00",
+    "input_tokens": 11857,
+    "output_tokens": 2323,
+    "source_pages": [
+      769,
+      770
+    ],
+    "prompt_sha256": "e838d4930e033fe362f6bff80f52a8d355f85e3abc593d404dc75eb3f0def5f8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

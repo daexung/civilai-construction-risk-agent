@@ -1,0 +1,110 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-9-8/PE가설휀스설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-9-8",
+    "title": "PE가설휀스 설치 및 해체('23년 신설)",
+    "work": "PE가설휀스 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      58
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치 및 해체할 PE가설휀스의 수량은 몇 개입니까?",
+        "source": "PDF 58쪽 2-9-8 표 단위 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p114-t0",
+        "role": "PE가설휀스 설치 및 해체 단위당 품",
+        "source": "PDF 58쪽 2-9-8 표",
+        "unit": "인/개",
+        "values": {
+          "특별인부": {
+            "수량": "0.02"
+          }
+        },
+        "cite": {
+          "table_id": "p114-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p114-t0",
+          "row_input": "특별인부",
+          "column_input": "수량",
+          "trades": [
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 58쪽 2-9-8 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 개당 특별인부 품이 직접 명시되어 있어 단위당 품 계산 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p114-t0",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.02"
+    },
+    {
+      "chunk_id": "p114-x4",
+      "quote": "[주] ① 본 품은 PE가설휀스(L1.5xH0.9m)를 설치 및 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p114-x4",
+      "quote": "② 본 품은 휀스 조립 및 설치, 하부 보강(강관파이프, 모래주머니) 작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "PE가설휀스의 규격이 L1.5xH0.9m가 아닌 경우 품을 어떻게 조정해야 하는지 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "PE가설휀스 50개를 설치하고 해체할 때 필요한 특별인부 품은 얼마인가요?",
+    "PE가설휀스 규격이 L2.0xH1.0m인 경우에도 이 품을 그대로 적용하나요?",
+    "설치할 PE가설휀스의 개수를 입력하지 않았습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:15:54.683451+00:00",
+    "input_tokens": 11468,
+    "output_tokens": 1019,
+    "source_pages": [
+      114,
+      115
+    ],
+    "prompt_sha256": "f84f38a0dc200d3c3abf9d1c82a563eb3ef8ed6f0e71774a02698ff598044c72",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

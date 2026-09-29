@@ -1,0 +1,158 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/8-2-7/콘관입시험",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "8-2-7",
+    "title": "콘관입시험('09년 신설)",
+    "work": "콘관입시험 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "콘관입시험을 수행할 개소 수는 몇 개소입니까?",
+        "source": "PDF 1쪽 8-2-7 표 우측 상단 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p456-t2",
+        "role": "콘관입시험 직종별 인원",
+        "source": "PDF 1쪽 8-2-7 표",
+        "unit": "인/개소",
+        "values": {
+          "중급기술자": {
+            "수량": "1.5"
+          },
+          "고급숙련기술자": {
+            "수량": "1.5"
+          },
+          "중급숙련기술자": {
+            "수량": "1.0"
+          },
+          "초급숙련기술자": {
+            "수량": "1.0"
+          }
+        },
+        "cite": {
+          "table_id": "p456-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p456-t2",
+          "column_input": "수량",
+          "trades": [
+            "중급기술자",
+            "고급숙련기술자",
+            "중급숙련기술자",
+            "초급숙련기술자"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 1쪽 8-2-7 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료비, 동력비, 기계기구손료 및 경비",
+        "source": "PDF 1쪽 8-2-7 [주] ②",
+        "cite": {
+          "section_no": "8-2-7",
+          "marker": "②"
+        }
+      },
+      {
+        "item": "간극수압 소산시험",
+        "source": "PDF 1쪽 8-2-7 [주] ③",
+        "cite": {
+          "section_no": "8-2-7",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 개소당 인원이 직접 명시되어 있어 단위당 품 계산 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p456-t2",
+      "row": "중급기술자",
+      "column": "수량",
+      "value": "1.5"
+    },
+    {
+      "table_id": "p456-t2",
+      "row": "고급숙련기술자",
+      "column": "수량",
+      "value": "1.5"
+    },
+    {
+      "table_id": "p456-t2",
+      "row": "중급숙련기술자",
+      "column": "수량",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p456-t2",
+      "row": "초급숙련기술자",
+      "column": "수량",
+      "value": "1.0"
+    },
+    {
+      "chunk_id": "p456-x19",
+      "quote": "점성토 지반을 대상으로 하는 원위치 시험으로 본 품은 정적콘관입시험 중 전기식 콘관입시험에 해당한다."
+    },
+    {
+      "chunk_id": "p456-x19",
+      "quote": "재료비, 동력비, 기계기구손료 및 경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p456-x19",
+      "quote": "간극수압 소산시험은 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "콘관입시험을 수행할 개소 수는 몇 개소입니까?",
+    "간극수압 소산시험이 포함되어 있습니까? (별도 계상 대상이므로 확인 필요)",
+    "재료비나 기계기구손료 등 별도 계상 항목의 내역이 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:45:31.206444+00:00",
+    "input_tokens": 11532,
+    "output_tokens": 1405,
+    "source_pages": [
+      456,
+      457
+    ],
+    "prompt_sha256": "b289e02873c40cade64b82464b9a7b6119d0bae1e36fd884567e091bd3515672",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-6-1/성토면고르기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-6-1",
+    "title": "성토면 고르기",
+    "work": "성토면 고르기 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      78
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "성토면 고르기 물량은 몇 ㎡입니까?",
+        "source": "p134-t0 시공량 단위"
+      },
+      {
+        "name": "soil_type",
+        "type": "enum",
+        "allowed_values": [
+          "점토, 점질토, 모래, 사질토",
+          "기타 토질"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질은 점토, 점질토, 모래, 사질토 중 하나입니까, 아니면 기타 토질입니까?",
+        "source": "p134-x4 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p134-t0",
+        "role": "성토면 고르기 장비 수량 및 일일시공량",
+        "source": "3-6-1 성토면 고르기 표",
+        "unit": "대/일, ㎡/일",
+        "values": {
+          "굴착기": {
+            "규격": "1.0㎥",
+            "단위": "대",
+            "수량": "1",
+            "시공량(㎡)": "1,060"
+          }
+        },
+        "cite": {
+          "table_id": "p134-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p134-t0",
+          "row": "굴착기",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "equipment": {
+          "name": "굴착기",
+          "table": "p134-t0",
+          "unit": "대·일",
+          "column": "수량"
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p134-t0에서 굴착기의 기준 일일시공량을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "굴착기 대·일 = 작업일수 × 1(수량)로 구한다."
+      ],
+      "source": "p134-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "soil_type == 기타 토질",
+        "blocked_if": {
+          "input": "soil_type",
+          "op": "==",
+          "value": "기타 토질"
+        },
+        "reason": "본 품은 점토, 점질토, 모래, 사질토 기준이므로 기타 토질(암버력 등)은 적용할 수 없음",
+        "source": "p134-x4 [주] ②",
+        "cite": {
+          "chunk_id": "p134-x4",
+          "quote": "② 본 품은 점토, 점질토, 모래, 사질토 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 장비 투입 수량과 기준 일일시공량이 표로 주어져 있어, 물량을 일일시공량으로 나누어 작업일수를 구하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p134-t0",
+      "row": "굴착기",
+      "column": "시공량(㎡)",
+      "value": "1,060"
+    },
+    {
+      "table_id": "p134-t0",
+      "row": "굴착기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p134-x4",
+      "quote": "② 본 품은 점토, 점질토, 모래, 사질토 기준이다."
+    }
+  ],
+  "open_questions": [
+    "기타 토질(예: 암버력, 자갈 섞인 흙 등)일 경우 품을 어떻게 적용해야 하는지 원문에 명시되어 있지 않음.",
+    "장비(굴착기) 규격이 1.0㎥가 아닌 경우의 환산 방식이 없음."
+  ],
+  "questions": [
+    "성토면 고르기 작업 시 굴착기 1.0㎥의 일일 시공량은 얼마인가요?",
+    "현장 토질이 자갈 섞인 흙인데 이 품을 그대로 적용해도 되나요?",
+    "성토면 고르기 할 전체 면적(㎡)을 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:16:52.581912+00:00",
+    "input_tokens": 11495,
+    "output_tokens": 1428,
+    "source_pages": [
+      134,
+      135
+    ],
+    "prompt_sha256": "adca347ec87672d3044cdf1e598d39c8bca1f947ca321089e9f3faee887209cd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

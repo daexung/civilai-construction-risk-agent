@@ -1,0 +1,59 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-4-8/기타기계",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-4-8",
+    "title": "[70]기타기계('24년 보완)",
+    "work": "기계별 주연료, 잡재료, 조종원 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      283,
+      284
+    ],
+    "inputs": [],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "원문 표에서 기계명과 규격에 맞는 주연료, 잡재료, 조종원 값을 직접 확인해야 합니다."
+      ],
+      "source": "PDF 283~284쪽 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "제공된 파싱 결과에서 표의 행과 열이 심각하게 병합되고 손상되어(모든 기계명이 '고성능착정기'로 나오는 등) 기계별 규격과 값을 구조화하여 계산식에 연동할 수 없습니다.",
+  "citations": [],
+  "open_questions": [
+    "파싱된 표(p339-t0)의 데이터가 원문과 다르게 모든 행의 기계명이 '고성능착정기'로, 잡재료와 조종원이 '50', '1'로 고정되어 있어 수정이 필요합니다.",
+    "[주] ④, ⑤, ⑥에 언급된 크러셔, 불도저, 굴착기, 타워크레인은 본 절(기타기계)의 표에 없는 장비들인데, 이 주석들이 제8장 전체에 적용되는 공통 주석인지 확인이 필요합니다."
+  ],
+  "questions": [
+    "이동식 임목파쇄기 354.35kW의 시간당 연료 소비량은 얼마인가요?",
+    "표에 주연료가 표시되지 않은 장비의 연료는 무엇으로 적용하나요?",
+    "사용하려는 발전기의 규격이 표에 없는 75kW인 경우 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:45:24.119211+00:00",
+    "input_tokens": 45851,
+    "output_tokens": 6972,
+    "source_pages": [
+      339,
+      340
+    ],
+    "prompt_sha256": "091a51f233da7867c5ec5745fe66e38a1b75fe636d5237a488ff730b85440086",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

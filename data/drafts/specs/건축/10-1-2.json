@@ -1,0 +1,218 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/10-1-2/강재창호설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "10-1-2",
+    "title": "강재창호 설치",
+    "work": "강재창호 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      629
+    ],
+    "inputs": [
+      {
+        "name": "area_band",
+        "type": "enum",
+        "allowed_values": [
+          "1.0㎡이하",
+          "1.0∼3.0㎡이하",
+          "3.0∼6.0㎡이하",
+          "6.0∼8.0㎡이하"
+        ],
+        "unit": "㎡",
+        "required": true,
+        "ask": "설치할 강재창호의 면적은 어느 구간에 해당합니까?",
+        "source": "p685-t2 표의 수량 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 강재창호의 수량은 몇 개소입니까?",
+        "source": "p685-t2 표의 기준 (개소당)"
+      },
+      {
+        "name": "door_type",
+        "type": "enum",
+        "allowed_values": [
+          "여닫이",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 강재창호의 개폐 방식은 무엇입니까?",
+        "source": "p685-x13 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p685-t2",
+        "role": "강재창호 설치 면적별 단위당 품",
+        "source": "10-1-2 강재창호 설치 표",
+        "unit": "인/개소",
+        "values": {
+          "창호공": {
+            "1.0㎡이하": "0.393",
+            "1.0∼3.0㎡이하": "0.432",
+            "3.0∼6.0㎡이하": "0.560",
+            "6.0∼8.0㎡이하": "0.658"
+          },
+          "보통인부": {
+            "1.0㎡이하": "0.094",
+            "1.0∼3.0㎡이하": "0.103",
+            "3.0∼6.0㎡이하": "0.134",
+            "6.0∼8.0㎡이하": "0.157"
+          }
+        },
+        "cite": {
+          "table_id": "p685-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p685-t2",
+          "row_input": "고정 행이름",
+          "column_input": "area_band",
+          "trades": [
+            "창호공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p685-t2 표에서 면적 구간(area_band)에 해당하는 창호공과 보통인부의 단위당 품을 찾는다.",
+        "찾은 단위당 품에 수량(quantity)을 곱하여 총 투입 인·일을 계산한다."
+      ],
+      "source": "p685-t2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "여닫이 강재창호가 아닌 경우",
+        "blocked_if": {
+          "input": "door_type",
+          "op": "!=",
+          "value": "여닫이"
+        },
+        "reason": "본 품은 여닫이 강재창호 설치 기준이므로, 미서기 등 기타 개폐 방식의 창호에는 직접 적용할 수 없음",
+        "source": "p685-x13 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p685-x13",
+            "quote": "① 본 품은 여닫이 강재창호 설치 기준이다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": [
+          {
+            "chunk_id": "p685-x13",
+            "quote": "③ 공구손료 및 경장비(용접기, 전동드릴, 그라인더 등)의 기계경비는 인력품의 3%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소)당 직종별 인원이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p685-t2",
+      "row": "창호공",
+      "column": "1.0㎡이하",
+      "value": "0.393"
+    },
+    {
+      "table_id": "p685-t2",
+      "row": "창호공",
+      "column": "1.0∼3.0㎡이하",
+      "value": "0.432"
+    },
+    {
+      "table_id": "p685-t2",
+      "row": "창호공",
+      "column": "3.0∼6.0㎡이하",
+      "value": "0.560"
+    },
+    {
+      "table_id": "p685-t2",
+      "row": "창호공",
+      "column": "6.0∼8.0㎡이하",
+      "value": "0.658"
+    },
+    {
+      "table_id": "p685-t2",
+      "row": "보통인부",
+      "column": "1.0㎡이하",
+      "value": "0.094"
+    },
+    {
+      "table_id": "p685-t2",
+      "row": "보통인부",
+      "column": "1.0∼3.0㎡이하",
+      "value": "0.103"
+    },
+    {
+      "table_id": "p685-t2",
+      "row": "보통인부",
+      "column": "3.0∼6.0㎡이하",
+      "value": "0.134"
+    },
+    {
+      "table_id": "p685-t2",
+      "row": "보통인부",
+      "column": "6.0∼8.0㎡이하",
+      "value": "0.157"
+    },
+    {
+      "chunk_id": "p685-x13",
+      "quote": "① 본 품은 여닫이 강재창호 설치 기준이다."
+    },
+    {
+      "chunk_id": "p685-x13",
+      "quote": "③ 공구손료 및 경장비(용접기, 전동드릴, 그라인더 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "면적이 8.0㎡를 초과하는 강재창호에 대한 품은 명시되어 있지 않아 계산 범위를 벗어납니다."
+  ],
+  "questions": [
+    "면적이 2.5㎡인 여닫이 강재창호 10개소를 설치할 때 필요한 창호공과 보통인부의 품은 얼마인가요?",
+    "미서기 강재창호를 설치하려고 하는데, 이 품을 준용해서 사용할 수 있나요?",
+    "강재창호 5개소를 설치하려고 합니다. 품이 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:49:13.751041+00:00",
+    "input_tokens": 11649,
+    "output_tokens": 2200,
+    "source_pages": [
+      685,
+      686
+    ],
+    "prompt_sha256": "8bffaa95f21715589de4c0f6b799576bafa360feef3c64571295e0729cfa1471",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

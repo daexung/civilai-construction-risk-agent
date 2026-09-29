@@ -1,0 +1,288 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-8-6/여과집진기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-8-6",
+    "title": "여과집진기 설치(Bag filter)",
+    "work": "여과집진기 조립 및 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      841
+    ],
+    "inputs": [
+      {
+        "name": "duration_installation",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "일",
+        "required": true,
+        "ask": "설치공사 기간은 며칠입니까?",
+        "source": "1. 공정별 설치 표의 '기술관리' 공정 단위(인/일)"
+      },
+      {
+        "name": "volume_packaging",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "포장해체 물량은 몇 ㎥입니까?",
+        "source": "1. 공정별 설치 표의 '포장해체' 공정 단위(인/㎥)"
+      },
+      {
+        "name": "weight_foundation",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "기초작업 및 표면손질 물량은 몇 ton입니까?",
+        "source": "1. 공정별 설치 표의 '기초작업 및 표면손질' 공정 단위(인/ton)"
+      },
+      {
+        "name": "weight_main_body",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "본체조립･설치 물량은 몇 ton입니까?",
+        "source": "1. 공정별 설치 표의 '본체조립･설치' 공정 단위(인/ton, 조/ton)"
+      },
+      {
+        "name": "weight_ash_discharge",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "비산재 배출장치 조립･장치 물량은 몇 ton입니까?",
+        "source": "1. 공정별 설치 표의 '비산재 배출장치 조립･장치' 공정 단위(인/ton)"
+      },
+      {
+        "name": "count_filter_bag",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "휠터수",
+        "required": true,
+        "ask": "휠터백 및 백케이지 조립･설치 수량은 몇 개(휠터수)입니까?",
+        "source": "1. 공정별 설치 표의 '휠터백 및 백케이지 조립･설치' 공정 단위(인/휠터수)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p897-t0",
+        "role": "공정별 설치 품",
+        "source": "1. 공정별 설치 표",
+        "unit": "인/일, 인/㎥, 인/ton, 조/ton, 인/휠터수",
+        "values": {
+          "◦ 기술관리 - 설치공사 기간중": {
+            "기계기사": "0.85"
+          },
+          "◦ 포장해체": {
+            "목공": "0.12",
+            "특별인부": "0.12"
+          },
+          "◦ 기초작업 및 표면손질 - Chipping 및 Grouting 등": {
+            "플랜트 기계 설치 공": "0.12",
+            "특별인부": "0.37"
+          },
+          "◦ 본체조립･설치 - Frame, Shell Plate 등 설치포함 - 펄스유닛 조립･설치": {
+            "철골공": "3.39",
+            "비계공": "1.89",
+            "플랜트 기계 설치 공": "3.28",
+            "플랜트용접공": "2.43",
+            "특별인부": "4.02",
+            "건설기계운전조": "0.81"
+          },
+          "◦ 비산재 배출장치 조립･장치 - 비산재 사일로, 시멘트 사일로 설치 포함": {
+            "플랜트 기계 설치 공": "4.61",
+            "비계공": "1.95",
+            "플랜트용접공": "1.66",
+            "특별인부": "3.34"
+          },
+          "◦ 휠터백 및 백케이지 조립･설치 - 지상교정, 조양･기기 설치포함 - Leveling 재교정후 Setting 포함": {
+            "플랜트제관공": "0.05",
+            "비계공": "0.06",
+            "특별인부": "0.08",
+            "플랜트용접공": "0.01"
+          }
+        },
+        "cite": {
+          "table_id": "p897-t0"
+        }
+      },
+      {
+        "id": "p897-t1",
+        "role": "사용장비",
+        "source": "2. 사용장비 표",
+        "unit": "대",
+        "values": {
+          "지게차": {
+            "5톤": "1"
+          },
+          "크레인": {
+            "50톤": "1",
+            "100톤": "1",
+            "200톤": "1"
+          },
+          "타워크레인": {
+            "30톤": "1"
+          },
+          "용접기": {
+            "15KVA": "3"
+          }
+        },
+        "cite": {
+          "table_id": "p897-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p897-t0",
+          "row_input": "공정명",
+          "column_input": "직종",
+          "trades": [
+            "기계기사",
+            "목공",
+            "특별인부",
+            "플랜트 기계 설치 공",
+            "철골공",
+            "비계공",
+            "플랜트용접공",
+            "건설기계운전조",
+            "플랜트제관공"
+          ]
+        },
+        "quantity_input": "각 공정별 물량 입력",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "검사 및 교정(Gas Leak Test 포함)은 기술관리, 포장해체를 제외한 공량의 10% 가산",
+            "source": "1. 공정별 설치 표의 '검사 및 교정' 항목"
+          }
+        ]
+      },
+      "steps": [
+        "각 공정별로 입력된 물량에 p897-t0 표의 단위당 품을 곱하여 직종별 공량을 산출한다.",
+        "기술관리와 포장해체 공정을 제외한 나머지 공정(기초작업, 본체조립, 비산재 배출장치, 휠터백 조립)의 산출된 공량 합계에 10%를 곱하여 '검사 및 교정' 공량을 추가한다."
+      ],
+      "source": "1. 공정별 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "보온 및 도장작업",
+        "source": "1. 공정별 설치 [주] ②",
+        "cite": {
+          "chunk_id": "p897-x21",
+          "quote": "② 보온 및 도장작업이 필요한 경우 별도 계상한다."
+        }
+      },
+      {
+        "item": "사용장비 투입 대수 및 일수",
+        "source": "2. 사용장비 [주]",
+        "cite": {
+          "chunk_id": "p897-x30",
+          "quote": "현장여건 및 작업조건 등에 따라 필요한 장비를 선택하여 적용할 수 있으며, 본 장비 이외에 필요한 장비가 있을 경우 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "각 공정별로 단위당 품(인/일, 인/㎥, 인/ton 등)이 표에 직접 제시되어 있어 물량을 곱하여 산출하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p897-t0",
+      "row": "◦ 기술관리 - 설치공사 기간중",
+      "column": "기계기사",
+      "value": "0.85"
+    },
+    {
+      "table_id": "p897-t0",
+      "row": "◦ 포장해체",
+      "column": "목공",
+      "value": "0.12"
+    },
+    {
+      "table_id": "p897-t0",
+      "row": "◦ 기초작업 및 표면손질 - Chipping 및 Grouting 등",
+      "column": "특별인부",
+      "value": "0.37"
+    },
+    {
+      "table_id": "p897-t0",
+      "row": "◦ 본체조립･설치 - Frame, Shell Plate 등 설치포함 - 펄스유닛 조립･설치",
+      "column": "철골공",
+      "value": "3.39"
+    },
+    {
+      "table_id": "p897-t0",
+      "row": "◦ 비산재 배출장치 조립･장치 - 비산재 사일로, 시멘트 사일로 설치 포함",
+      "column": "플랜트 기계 설치 공",
+      "value": "4.61"
+    },
+    {
+      "table_id": "p897-t0",
+      "row": "◦ 휠터백 및 백케이지 조립･설치 - 지상교정, 조양･기기 설치포함 - Leveling 재교정후 Setting 포함",
+      "column": "플랜트제관공",
+      "value": "0.05"
+    },
+    {
+      "table_id": "p897-t1",
+      "row": "지게차",
+      "column": "5톤",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p897-x21",
+      "quote": "①본 품은 여과집진기 휠터백, 펄스유닛 등 여과집진기의 조립･설치 기준으로 소운반이 포함되어 있다."
+    },
+    {
+      "chunk_id": "p897-x21",
+      "quote": "② 보온 및 도장작업이 필요한 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p897-x21",
+      "quote": "③ 건설기계운전조는 작업조건 및 설치물량 등을 감안하여 편성한다."
+    },
+    {
+      "chunk_id": "p897-x30",
+      "quote": "본 장비는 여과집진기 조립･설치에 대한 기본적인 장비를 나열한 것으로 현장여건 및 작업조건 등에 따라 필요한 장비를 선택하여 적용할 수 있으며, 본 장비 이외에 필요한 장비가 있을 경우 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "검사 및 교정의 '기술관리, 포장해체를 제외한 공량의 10%' 적용 시, 직종별로 각각 10%를 가산하는 것인지, 전체 품의 합계에 대한 것인지 명확하지 않음.",
+    "건설기계운전조의 '작업조건 및 설치물량 등을 감안하여 편성한다'는 구체적인 기준이 없어 자동 계산에 어떻게 반영할지 모호함.",
+    "사용장비 표의 장비들이 기본 장비로 나열되어 있으나, 실제 투입 대수 및 일수는 현장 여건에 따라 선택 적용하므로 자동 산출에 어떻게 반영할지 모호함."
+  ],
+  "questions": [
+    "본체조립 물량이 10ton일 때 철골공 품은 어떻게 되나요?",
+    "검사 및 교정 품을 산정할 때, 제외되는 공량 외의 나머지 공량에 대해 직종별로 10%씩 가산하면 되나요?",
+    "설치공사 기간은 며칠인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:30:31.588424+00:00",
+    "input_tokens": 12792,
+    "output_tokens": 3325,
+    "source_pages": [
+      897,
+      898
+    ],
+    "prompt_sha256": "2020a966a65ef60532fe9e90921d6fe3c1b2885b1bad56539c46bd85f1ced524",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p897-x21 조각 텍스트에 없음",
+      "quote가 p897-x30 조각 텍스트에 없음"
+    ]
+  }
+}

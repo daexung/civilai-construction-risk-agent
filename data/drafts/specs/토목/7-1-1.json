@@ -1,0 +1,107 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-1-1/수중공사_설계기준",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-1-1",
+    "title": "수중공사('10, '11년 보완)",
+    "work": "수중공사 설계기준 및 산출기준",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      387
+    ],
+    "inputs": [],
+    "tables": [
+      {
+        "id": "p443-t0",
+        "role": "기초고르기 여유 폭 기준",
+        "source": "PDF 387쪽 1. 수중공사에 있어서 기초고르기의 여유 폭",
+        "unit": "m",
+        "values": {
+          "케이슨": {
+            "한쪽여유폭(m)": "1.0",
+            "양쪽여유폭(m)": "2.0"
+          },
+          "L형또는방괴": {
+            "한쪽여유폭(m)": "0.5",
+            "양쪽여유폭(m)": "1.0"
+          },
+          "현장콘크리트타설": {
+            "한쪽여유폭(m)": "0.5",
+            "양쪽여유폭(m)": "1.0"
+          }
+        },
+        "cite": {
+          "table_id": "p443-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "이 절은 수중공사의 기초고르기 여유 폭, 수심의 정의, 준설 토량 산출 기준, 예선 운항속도 등 설계 및 산출 기준을 제시합니다.",
+        "직접적인 노무 품이나 장비 투입량을 계산하는 수식이 없으므로 계산 명세를 제공하지 않습니다."
+      ],
+      "source": "PDF 387쪽 7-1-1 전체",
+      "rounding": ""
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 구체적인 품(인·일, 장비 대·일)을 계산하는 표가 없고, 기초고르기 여유 폭이나 예선 운항속도 등 설계 및 수량 산출 기준만을 제시하고 있으므로 자동 계산 명세로 작성할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p443-t0",
+      "row": "케이슨",
+      "column": "한쪽여유폭(m)",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p443-t0",
+      "row": "L형또는방괴",
+      "column": "양쪽여유폭(m)",
+      "value": "1.0"
+    },
+    {
+      "chunk_id": "p443-x5",
+      "quote": "준설 토량은 순 준설 토량의 토질에 따른 여굴 토량과 여쇄량(쇄암 및 발파시)을 가산하여 산출한다."
+    },
+    {
+      "chunk_id": "p443-x5",
+      "quote": "적재 : 5.5km/hr"
+    },
+    {
+      "chunk_id": "p443-x8",
+      "quote": "준설토(암포함) 운반량은 흐트러진 상태의 용량으로 산출한다. 다만, 펌프준설은 제외한다."
+    }
+  ],
+  "open_questions": [
+    "준설 설계 수량에 자연 매몰량을 감안하여 계상할 때, 구체적인 산출 방식이나 적용 비율에 대한 명시가 없어 실무 적용 시 판단이 필요함."
+  ],
+  "questions": [
+    "케이슨 기초고르기 작업 시 양쪽 여유 폭은 몇 m 이내로 적용해야 하나요?",
+    "준설 설계 수량 산출 시 자연 매몰량은 어떻게 감안하여 계상하나요?",
+    "수상 작업 시 예선이 공선(空船) 상태일 때 운항속도 기준은 무엇인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:01:35.293887+00:00",
+    "input_tokens": 11851,
+    "output_tokens": 1118,
+    "source_pages": [
+      443,
+      444
+    ],
+    "prompt_sha256": "a0e47694c675263763f3852b5e3d0ab6cfc4e3fdd2b823f1abd27be44042233c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

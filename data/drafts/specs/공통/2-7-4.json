@@ -1,0 +1,182 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-7-4/강관틀비계설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-7-4",
+    "title": "강관틀 비계 설치 및 해체",
+    "work": "강관틀 비계 설치 및 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      48
+    ],
+    "inputs": [
+      {
+        "name": "height_band",
+        "type": "enum",
+        "allowed_values": [
+          "10m이하",
+          "10m초과∼20m이하"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "비계의 높이는 어느 구간에 해당합니까? (10m이하 / 10m초과∼20m이하)",
+        "source": "표 p104-t1 수량 열 구분",
+        "excluded": {
+          "20m초과": "높이 20m 초과 시 비계설치, 해체 및 비계안전 보강재 설치 품은 별도 계상"
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "강관틀 비계의 설치 면적은 몇 ㎡입니까?",
+        "source": "표 p104-t1 기준 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p104-t1",
+        "role": "높이 구간별 강관틀 비계 설치 및 해체 단위당 품",
+        "source": "2-7-4 강관틀 비계 설치 및 해체 표",
+        "unit": "인/㎡",
+        "values": {
+          "비계공": {
+            "10m이하": "0.02",
+            "10m초과∼20m이하": "0.03"
+          },
+          "보통인부": {
+            "10m이하": "0.01",
+            "10m초과∼20m이하": "0.01"
+          }
+        },
+        "cite": {
+          "table_id": "p104-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p104-t1",
+          "row_input": "고정 행이름(비계공, 보통인부)",
+          "column_input": "height_band",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p104-t1에서 높이 구간(height_band)에 해당하는 비계공과 보통인부의 단위당 품을 찾는다.",
+        "찾은 단위당 품에 비계 면적(area)을 곱하여 총 품을 구한다."
+      ],
+      "source": "2-7-4 강관틀 비계 설치 및 해체 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "높이 20m 초과",
+        "reason": "높이 20m 초과 시 비계설치, 해체 및 비계안전 보강재 설치 품은 별도 계상한다.",
+        "source": "[주] ③",
+        "cite": {
+          "chunk_id": "p104-x17",
+          "quote": "③ 높이 20m 초과 시 비계설치, 해체 및 비계안전 보강재 설치 품은 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "가설계단 및 방호시설",
+        "source": "[주] ④",
+        "cite": {
+          "chunk_id": "p104-x17",
+          "quote": "④ 가설계단 및 방호시설은 별도 계상한다."
+        }
+      },
+      {
+        "item": "비계안전 보강재 설치 품 (20m 초과 시)",
+        "source": "[주] ③",
+        "cite": {
+          "chunk_id": "p104-x17",
+          "quote": "③ 높이 20m 초과 시 비계설치, 해체 및 비계안전 보강재 설치 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 ㎡당 직종별 인원이 직접 명시되어 있어 물량을 곱하는 단위당 품 계산 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p104-t1",
+      "row": "비계공",
+      "column": "10m이하",
+      "value": "0.02"
+    },
+    {
+      "table_id": "p104-t1",
+      "row": "비계공",
+      "column": "10m초과∼20m이하",
+      "value": "0.03"
+    },
+    {
+      "table_id": "p104-t1",
+      "row": "보통인부",
+      "column": "10m이하",
+      "value": "0.01"
+    },
+    {
+      "table_id": "p104-t1",
+      "row": "보통인부",
+      "column": "10m초과∼20m이하",
+      "value": "0.01"
+    },
+    {
+      "chunk_id": "p104-x17",
+      "quote": "① 본 품은 강관틀 비계의 설치 및 해체 작업 기준이다."
+    },
+    {
+      "chunk_id": "p104-x17",
+      "quote": "②본 품은 비계(발판 및 이동용 내부계단) 설치, 해체 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p104-x17",
+      "quote": "③ 높이 20m 초과 시 비계설치, 해체 및 비계안전 보강재 설치 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p104-x17",
+      "quote": "④ 가설계단 및 방호시설은 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "비계 면적이 100㎡이고 높이가 15m일 때 비계공 품은 얼마인가요?",
+    "이동용 내부계단 외에 별도의 가설계단을 설치해야 하는데 품에 포함되나요?",
+    "강관틀 비계의 설치 면적(㎡)을 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:31.493942+00:00",
+    "input_tokens": 11594,
+    "output_tokens": 1885,
+    "source_pages": [
+      104,
+      105
+    ],
+    "prompt_sha256": "726787e50fffa880cf369875ada21e547c71aab45a2b0e8024be1cf3c1035e80",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

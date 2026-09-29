@@ -1,0 +1,246 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-7-1/보도용블록설치_소형",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-7-1",
+    "title": "보도용 블록 설치(소형)('08, '12, '21, '24년 보완)",
+    "work": "기본 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      318
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "보도용 블록 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 318쪽 1-7-1 표 시공량 단위"
+      },
+      {
+        "name": "site_condition",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건은 A-Type과 B-Type 중 무엇입니까? 장비이동 및 적재 공간 여건을 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p374-t1",
+        "source": "PDF 318쪽 1-7-1 표 및 적용기준 표"
+      },
+      {
+        "name": "block_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반블록",
+          "유도･점자블록"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치하는 블록이 일반블록입니까, 유도･점자블록입니까?",
+        "source": "PDF 318쪽 1-7-1 표 비고"
+      },
+      {
+        "name": "cutting_method",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "블록 정밀절단(전동절단기)에 의한 시공입니까?",
+        "source": "PDF 318쪽 1-7-1 표 비고 및 ⑤"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p374-t0",
+        "role": "기준 (일당) 인원 및 장비, 시공량",
+        "source": "PDF 318쪽 1-7-1 표",
+        "values": {
+          "포장공 특별인부 보통인부_1": {
+            "단위": "인",
+            "A-Type 수량": "3",
+            "A-Type 시공량(㎡)": "300",
+            "B-Type 수량": "2",
+            "B-Type 시공량(㎡)": "190"
+          },
+          "포장공 특별인부 보통인부_2": {
+            "단위": "인",
+            "A-Type 수량": "2",
+            "A-Type 시공량(㎡)": "300",
+            "B-Type 수량": "2",
+            "B-Type 시공량(㎡)": "190"
+          },
+          "포장공 특별인부 보통인부_3": {
+            "단위": "인",
+            "A-Type 수량": "2",
+            "A-Type 시공량(㎡)": "300",
+            "B-Type 수량": "1",
+            "B-Type 시공량(㎡)": "190"
+          },
+          "굴착기_0.6": {
+            "규격": "0.6㎥",
+            "단위": "대",
+            "A-Type 수량": "1"
+          },
+          "굴착기_0.4": {
+            "규격": "0.4㎥",
+            "단위": "대",
+            "B-Type 수량": "1"
+          },
+          "플레이트콤팩터": {
+            "규격": "1.5ton",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p374-t0"
+        }
+      },
+      {
+        "id": "p374-t1",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 318쪽 1-7-1 적용기준 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+          },
+          "B-Type": {
+            "적용기준": "- 차도인접, 주택가 보도 등 장비이동 및 적재 공간이 협소한 구간"
+          }
+        },
+        "cite": {
+          "table_id": "p374-t1"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "cutting_method": false
+        },
+        "when_text": "블록 정밀절단(전동절단기)에 의한 시공이 아닌 경우",
+        "change": {
+          "특별인부": "-1"
+        },
+        "source": "PDF 318쪽 1-7-1 표 비고",
+        "cite": {
+          "table_id": "p374-t0",
+          "row": "비고"
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "현장 여건(A-Type, B-Type)에 따라 기준 시공량과 작업조 인원, 장비를 확인한다.",
+        "유도･점자블록 설치 시 시공량의 10%를 감한다.",
+        "전동절단기 미사용 시 특별인부 1인을 감한다."
+      ],
+      "source": "PDF 318쪽 1-7-1 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "안정처리기층 및 지반침하방지",
+        "source": "PDF 318쪽 1-7-1 [주] ④",
+        "cite": [
+          {
+            "chunk_id": "p374-x13",
+            "quote": "④ 기층에 콘크리트나 아스팔트 등의 안정처리기층을 사용하거나, 지반침하방지가 필요한 경우 별도"
+          },
+          {
+            "chunk_id": "p374-x13",
+            "quote": "계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에서 직종별 행 이름이 '포장공 특별인부 보통인부'로 모두 동일하게 추출되어, 직종별 인원을 정확히 매핑하는 자동 계산 모델을 구성하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p374-t0",
+      "row": "포장공 특별인부 보통인부",
+      "column": "A-Type 수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p374-t0",
+      "row": "비고"
+    },
+    {
+      "table_id": "p374-t1",
+      "row": "A-Type",
+      "column": "적용기준",
+      "value": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+    },
+    {
+      "chunk_id": "p374-x13",
+      "quote": "④ 기층에 콘크리트나 아스팔트 등의 안정처리기층을 사용하거나, 지반침하방지가 필요한 경우 별도"
+    },
+    {
+      "chunk_id": "p374-x13",
+      "quote": "계상한다."
+    },
+    {
+      "chunk_id": "p374-x13",
+      "quote": "⑤ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 5%, 블록 정밀절단(전동절단기)에 의한 시공이"
+    },
+    {
+      "chunk_id": "p374-x13",
+      "quote": "아닌 경우 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p374-x8",
+      "quote": "[주] ① 본 품은 규격 0.1㎡이하, 두께 8cm이하 보도용 블록의 설치 기준이다."
+    },
+    {
+      "chunk_id": "p374-x8",
+      "quote": "② 본 품은 모래 부설, 모래층 다짐 및 고르기, 블록 절단 및 설치, 줄눈채움, 블록설치 후 다짐 작업을"
+    },
+    {
+      "chunk_id": "p374-x8",
+      "quote": "포함한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 직종별 행 이름이 '포장공 특별인부 보통인부'로 중복되어 자동 계산 모델을 구성하기 어려움.",
+    "전동절단기 사용 여부에 따라 기계경비율이 5% 또는 2%로 달라지나, cost_rules 스키마에 조건부 적용 기능이 없어 명세에 반영하지 못함."
+  ],
+  "questions": [
+    "보도용 블록(소형) 100㎡를 A-Type 현장에 설치할 때 필요한 포장공 인원은 몇 명인가요?",
+    "유도블록을 설치하고 전동절단기를 사용하지 않는 경우, 시공량과 인원 조정은 어떻게 되나요?",
+    "기층에 아스팔트 안정처리기층을 사용한 경우의 비용은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:35.613938+00:00",
+    "input_tokens": 24418,
+    "output_tokens": 5719,
+    "source_pages": [
+      374,
+      375
+    ],
+    "prompt_sha256": "7768d2d5c584ed7223d6926017eb038408ea2dcf9258dba4dc23e92985050350",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/4-4-3/잔디블록포장",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "4-4-3",
+    "title": "잔디블록 포장",
+    "work": "잔디블록 포장 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      97
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "잔디블록 포장 물량은 몇 ㎡입니까?",
+        "source": "PDF 97쪽 4-4-3 표 시공량(㎡)"
+      },
+      {
+        "name": "use_cutter",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "블록절단 시 절단기를 사용합니까?",
+        "source": "PDF 97쪽 4-4-3 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p153-t2",
+        "role": "잔디블록 포장 일당 작업조 및 시공량",
+        "source": "PDF 97쪽 4-4-3 표",
+        "unit": "인, 대, ㎡",
+        "values": {
+          "조경공": {
+            "단위": "인",
+            "수량": "3",
+            "시공량(㎡)": "65"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1"
+          },
+          "굴착기": {
+            "규격": "0.6㎥",
+            "단위": "대",
+            "수량": "1"
+          },
+          "플레이트콤팩터": {
+            "규격": "1.5ton",
+            "단위": "대",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p153-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p153-t2",
+          "row": "조경공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p153-t2",
+          "column": "수량",
+          "trades": [
+            "조경공",
+            "보통인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "굴착기",
+            "table": "p153-t2",
+            "unit": "대·일",
+            "row": "굴착기",
+            "column": "수량"
+          },
+          {
+            "name": "플레이트콤팩터",
+            "table": "p153-t2",
+            "unit": "대·일",
+            "row": "플레이트콤팩터",
+            "column": "수량"
+          }
+        ],
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p153-t2에서 일당 시공량(65㎡)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량으로 구한다.",
+        "장비별 대·일 = 작업일수 × 표의 장비별 수량으로 구한다."
+      ],
+      "source": "PDF 97쪽 4-4-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "절단기 기계경비",
+        "source": "PDF 97쪽 4-4-3 [주] ④",
+        "cite": {
+          "section_no": "4-4-3",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 일당 시공량(65㎡)과 그에 필요한 직종별 인원 및 장비 대수가 명시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p153-t2",
+      "row": "조경공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p153-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p153-t2",
+      "row": "굴착기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p153-t2",
+      "row": "플레이트콤팩터",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p153-t2",
+      "row": "조경공",
+      "column": "시공량(㎡)",
+      "value": "65"
+    },
+    {
+      "chunk_id": "p153-x14",
+      "quote": "블록절단 시 절단기를 사용할 경우 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "장비가 굴착기와 플레이트콤팩터 2종류 투입되는데, adjusted_daily_crew 모델의 equipment 파라미터가 배열을 지원하는지 확인이 필요합니다.",
+    "파싱 결과 텍스트에서 행 이름이 '조경공 보통인부'로 병합되어 나타나지만, 원문 표에 따라 '조경공'과 '보통인부'로 분리하여 tables에 반영했습니다."
+  ],
+  "questions": [
+    "잔디블록 포장 물량이 100㎡일 때 필요한 인력과 장비는 어떻게 되나요?",
+    "블록 절단기를 사용하면 기계경비는 어떻게 처리해야 하나요?",
+    "모래 부설이나 다짐 작업은 별도로 품을 계산해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:07.557744+00:00",
+    "input_tokens": 11589,
+    "output_tokens": 1746,
+    "source_pages": [
+      153,
+      154
+    ],
+    "prompt_sha256": "3ec556761fa2f051072c0338d498cb63761873f80d81e941c20f2803147e1e5c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

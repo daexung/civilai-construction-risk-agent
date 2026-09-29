@@ -1,0 +1,204 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-2-6/응력제거",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-2-6",
+    "title": "응력제거",
+    "work": "응력제거 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      753,
+      754,
+      755
+    ],
+    "inputs": [
+      {
+        "name": "heating_method",
+        "type": "enum",
+        "allowed_values": [
+          "Induction Heating Device",
+          "Ring Burner, Electric, Resistence Heating Device"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "응력제거 가열 방식은 무엇입니까?",
+        "source": "PDF 753쪽 1. Induction Heating Device, 754쪽 2. Ring Burner..."
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "응력제거 작업 물량은 몇 개소입니까?",
+        "source": "PDF 753쪽, 754쪽 표 단위 (개소)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p809-t2",
+        "role": "1. Induction Heating Device 품 (탄소강, 단철, 합금강 일부)",
+        "source": "PDF 753쪽 1. Induction Heating Device 표",
+        "values": {
+          "P\nNo. 1 | 재질 탄소강": {
+            "두 께 (inch) 0.72": "0.72"
+          },
+          "P\nNo. 3 | 재질 합금강 Cr¾%이하": {
+            "두 께 (inch) 0.72": "0.72"
+          }
+        },
+        "cite": {
+          "table_id": "p809-t2"
+        }
+      },
+      {
+        "id": "p810-t0",
+        "role": "1. Induction Heating Device 품 (합금강 나머지, Stainless)",
+        "source": "PDF 754쪽 1. Induction Heating Device 표 연속",
+        "values": {
+          "P\nNo. 6 | 재질 〃 Martensitic": {
+            "두 께 (inch) 0.85": "0.85"
+          }
+        },
+        "cite": {
+          "table_id": "p810-t0"
+        }
+      },
+      {
+        "id": "p810-t2",
+        "role": "2. Ring Burner... 품 (3~10 inch)",
+        "source": "PDF 754쪽 2. Ring Burner... 표",
+        "values": {
+          "3이하 4 5 6 8 10": {
+            "파 이 프 벽 두 께 (inch) 0.64": "0.64"
+          }
+        },
+        "cite": {
+          "table_id": "p810-t2"
+        }
+      },
+      {
+        "id": "p811-t0",
+        "role": "2. Ring Burner... 품 (12~24 inch)",
+        "source": "PDF 755쪽 2. Ring Burner... 표 연속",
+        "values": {
+          "12 14 16 18 20 22 24": {
+            "파 이 프 벽 두 께 (inch) 1.13": "1.13"
+          }
+        },
+        "cite": {
+          "table_id": "p811-t0"
+        }
+      },
+      {
+        "id": "p811-t1",
+        "role": "재질에 따른 응력제거품 할증율",
+        "source": "PDF 755쪽 [별 표]",
+        "unit": "%",
+        "values": {
+          "MO합금강(A335-P1) Cr합금강 (A335-P2,P3,P11,P12)": {
+            "3": "18.5"
+          }
+        },
+        "cite": {
+          "table_id": "p811-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "가열 방식(heating_method)에 따라 적용할 표가 다릅니다.",
+        "Induction Heating Device의 경우 p809-t2, p810-t0 표에서 재질과 두께에 따른 개소당 품을 찾습니다.",
+        "Ring Burner...의 경우 p810-t2, p811-t0 표에서 파이프 규격과 벽 두께에 따른 개소당 플랜트 용접공 품을 찾습니다.",
+        "Ring Burner... 방식이고 재질이 합금강 등인 경우, p811-t1 표에서 파이프 규격과 재질에 해당하는 할증률(%)을 찾아 기준 품에 가산합니다.",
+        "찾은 단위당 품에 물량(quantity)을 곱하여 총 품을 산출합니다."
+      ],
+      "source": "PDF 753~755쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "Cr 함량 3% 이하의 Low Alloy Steel로서 외경 4인치 이하, 두께 1/2인치 이하이며 특별지시가 없는 경우",
+        "reason": "응력제거를 시행하지 않아도 좋음",
+        "source": "PDF 754쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p810-x5",
+          "quote": "④Cr 함량 3% 이하의 Low Alloy Steel로서 외경 4\"이하의 Pipe중 두께 ½\"이하는 특별지시가 없는 한\n설명 | 응력제거를 시행하지 않아도 좋다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표의 행/열 구조가 심하게 병합되어 있어 기계적인 값 추출이 불가능하며, 1. Induction Heating Device 표의 직종이 명시되어 있지 않아 자동 계산을 구성하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p809-t2",
+      "row": "P\nNo. 1 | 재질 탄소강",
+      "column": "두 께 (inch) 0.72",
+      "value": "0.72"
+    },
+    {
+      "table_id": "p810-t0",
+      "row": "P\nNo. 6 | 재질 〃 Martensitic",
+      "column": "두 께 (inch) 0.85",
+      "value": "0.85"
+    },
+    {
+      "table_id": "p810-t2",
+      "row": "3이하 4 5 6 8 10",
+      "column": "파 이 프 벽 두 께 (inch) 0.64",
+      "value": "0.64"
+    },
+    {
+      "table_id": "p811-t0",
+      "row": "12 14 16 18 20 22 24",
+      "column": "파 이 프 벽 두 께 (inch) 1.13",
+      "value": "1.13"
+    },
+    {
+      "table_id": "p811-t1",
+      "row": "MO합금강(A335-P1) Cr합금강 (A335-P2,P3,P11,P12)",
+      "column": "3",
+      "value": "18.5"
+    },
+    {
+      "chunk_id": "p810-x5",
+      "quote": "④Cr 함량 3% 이하의 Low Alloy Steel로서 외경 4\"이하의 Pipe중 두께 ½\"이하는 특별지시가 없는 한\n설명 | 응력제거를 시행하지 않아도 좋다."
+    }
+  ],
+  "open_questions": [
+    "원문 753쪽 하단의 [주] ①~⑤ 내용(Gas Heating 0.125인 적용, 비계설치비용 별도 계상 등)이 파싱 결과에 누락되어 있어 명세에 반영하지 못했습니다.",
+    "1. Induction Heating Device 표의 단위와 직종이 명시되어 있지 않습니다. 문맥상 '개소당 플랜트 용접공'으로 추정되나 확인이 필요합니다.",
+    "2. Ring Burner... 표의 파싱 결과에서 행 이름(파이프 규격)이 여러 행에 걸쳐 병합되어 인식되는 오류가 있어, 표 데이터를 정확히 재구성하기 어렵습니다."
+  ],
+  "questions": [
+    "탄소강 파이프 8인치, 벽 두께 1.00인치에 Ring Burner 방식으로 응력제거를 하려고 합니다. 품이 어떻게 되나요?",
+    "Induction Heating Device 방식으로 응력제거를 할 때 투입되는 직종은 무엇인가요?",
+    "합금강 파이프 응력제거 품을 계산해주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:31.342268+00:00",
+    "input_tokens": 17982,
+    "output_tokens": 2461,
+    "source_pages": [
+      809,
+      810,
+      811,
+      812
+    ],
+    "prompt_sha256": "8a4daf7660a83d5a1a247c1859ce7fe421ae9cb491f4c58c384b59d62f87214e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

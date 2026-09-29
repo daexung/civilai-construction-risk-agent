@@ -1,0 +1,140 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-2-4/구조물동바리",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-2-4",
+    "title": "구조물 동바리('22, '26년 보완)",
+    "work": "구조물 동바리 손율 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      40
+    ],
+    "inputs": [
+      {
+        "name": "duration",
+        "type": "enum",
+        "allowed_values": [
+          "1개월",
+          "3개월",
+          "6개월"
+        ],
+        "unit": "개월",
+        "required": true,
+        "ask": "사용 기간은 몇 개월입니까?",
+        "source": "파싱 결과 p96-t0 표의 열 이름"
+      },
+      {
+        "name": "support_type",
+        "type": "enum",
+        "allowed_values": [
+          "강관 동바리",
+          "시스템 동바리",
+          "알루미늄 폼 동바리",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "동바리의 종류는 무엇입니까?",
+        "source": "파싱 결과 p96-x1 [주]"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p96-t0",
+        "role": "구조물 동바리 손율",
+        "source": "2-2-4 구조물 동바리",
+        "unit": "%",
+        "values": {
+          "기간 구분": {
+            "1개월": "4",
+            "3개월": "7",
+            "6개월": "11"
+          }
+        },
+        "cite": {
+          "table_id": "p96-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "사용 기간에 따른 손율(%)을 표에서 찾는다."
+      ],
+      "source": "2-2-4 구조물 동바리 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "support_type이 강관, 시스템, 알루미늄 폼 동바리가 아닌 경우",
+        "blocked_if": {
+          "input": "support_type",
+          "op": "==",
+          "value": "기타"
+        },
+        "reason": "원문 [주]에 명시된 적용 대상이 아님",
+        "source": "p96-x1 [주]",
+        "cite": {
+          "chunk_id": "p96-x1"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "조건(기간)에 따라 표에서 손율(%) 값 하나를 찾아 보여주기만 하면 되는 경우입니다.",
+  "citations": [
+    {
+      "table_id": "p96-t0",
+      "row": "기간 구분",
+      "column": "1개월",
+      "value": "4"
+    },
+    {
+      "table_id": "p96-t0",
+      "row": "기간 구분",
+      "column": "3개월",
+      "value": "7"
+    },
+    {
+      "table_id": "p96-t0",
+      "row": "기간 구분",
+      "column": "6개월",
+      "value": "11"
+    },
+    {
+      "chunk_id": "p96-x1",
+      "quote": "[주] 강관 동바리, 시스템 동바리, 알루미늄 폼 동바리 등에 적용한다."
+    }
+  ],
+  "open_questions": [
+    "원문 표에는 12개월(21%) 데이터가 있으나, 파싱 결과 텍스트에는 누락되어 있어 명세에 포함하지 못했습니다.",
+    "파싱 결과 텍스트에 행 이름 '손율(%)'이 없어 '기간 구분'을 행 이름으로 사용했습니다."
+  ],
+  "questions": [
+    "구조물 동바리를 3개월 사용할 때 손율은 얼마인가요?",
+    "원문에는 12개월 손율이 21%로 나와 있는데, 파싱 결과에 없어 계산이 안 됩니다. 어떻게 해야 하나요?",
+    "목재 동바리를 사용할 경우에도 이 표의 손율을 적용할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:12:52.501709+00:00",
+    "input_tokens": 23037,
+    "output_tokens": 2142,
+    "source_pages": [
+      96,
+      97
+    ],
+    "prompt_sha256": "801ce4983faccd4389a09fac16d343f77818c52f31ac308f81fcf57df3971de5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

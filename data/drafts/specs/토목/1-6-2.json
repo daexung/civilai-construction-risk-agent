@@ -1,0 +1,246 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-6-2/표층인력포설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-6-2",
+    "title": "표층 인력포설",
+    "work": "표층 인력포설 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      315
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "콘크리트 타설 물량은 몇 ㎥입니까?",
+        "source": "PDF 315쪽 1-6-2 표"
+      },
+      {
+        "name": "type_and_thickness",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type 20㎝",
+          "A-Type 30㎝",
+          "A-Type 40㎝",
+          "B-Type 20㎝",
+          "B-Type 30㎝",
+          "B-Type 40㎝"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 타입과 두께는 무엇입니까? (A-Type 20㎝ / A-Type 30㎝ / A-Type 40㎝ / B-Type 20㎝ / B-Type 30㎝ / B-Type 40㎝)",
+        "decision_table": "p371-t2",
+        "source": "PDF 315쪽 1-6-2 표 및 [주] ④",
+        "synonyms": {
+          "A-Type 20㎝": [
+            "A타입 20cm",
+            "A-Type 20cm"
+          ],
+          "A-Type 30㎝": [
+            "A타입 30cm",
+            "A-Type 30cm"
+          ],
+          "A-Type 40㎝": [
+            "A타입 40cm",
+            "A-Type 40cm"
+          ],
+          "B-Type 20㎝": [
+            "B타입 20cm",
+            "B-Type 20cm"
+          ],
+          "B-Type 30㎝": [
+            "B타입 30cm",
+            "B-Type 30cm"
+          ],
+          "B-Type 40㎝": [
+            "B타입 40cm",
+            "B-Type 40cm"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p371-t1",
+        "role": "작업조 인원 및 기준 일일시공량",
+        "source": "PDF 315쪽 1-6-2 표",
+        "unit": "인/작업조; ㎥/일",
+        "values": {
+          "시공량": {
+            "A-Type 20㎝": "100",
+            "A-Type 30㎝": "150",
+            "A-Type 40㎝": "200",
+            "B-Type 20㎝": "50",
+            "B-Type 30㎝": "75",
+            "B-Type 40㎝": "100"
+          },
+          "수량": {
+            "포장공": "4",
+            "보통인부": "2"
+          }
+        },
+        "cite": {
+          "table_id": "p371-t1"
+        }
+      },
+      {
+        "id": "p371-t2",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 315쪽 1-6-2 [주] ④ 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "- 콘크리트 믹서트럭으로 직접 타설하는 경우"
+          },
+          "B-Type": {
+            "적용기준": "- 콘크리트 믹서트럭 후진 진입 또는 경운기 등으로 운반하여 타설하는 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p371-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p371-t1",
+          "row": "시공량",
+          "column_input": "type_and_thickness"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p371-t1",
+          "column": "수량",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "포장공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": null,
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p371-t1에서 type_and_thickness에 해당하는 기준 일일시공량을 찾는다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p371-t1의 직종별 수량으로 구한다."
+      ],
+      "source": "PDF 315쪽 1-6-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "거푸집 설치 및 해체, 줄눈작업",
+        "source": "PDF 315쪽 1-6-2 [주] ③",
+        "cite": {
+          "chunk_id": "p371-x10"
+        }
+      },
+      {
+        "item": "경운기 등 기타방법 운반 비용",
+        "source": "PDF 315쪽 1-6-2 [주] ※",
+        "cite": {
+          "chunk_id": "p371-x14"
+        }
+      },
+      {
+        "item": "콘크리트와 노반과의 접착부 처리품(모래층 깔기 등)",
+        "source": "PDF 315쪽 1-6-2 [주] ⑤",
+        "cite": {
+          "chunk_id": "p371-x14"
+        }
+      },
+      {
+        "item": "비닐, 양생재, 철망 등 재료비 및 잡재료비",
+        "source": "PDF 315쪽 1-6-2 [주] ⑦",
+        "cite": {
+          "chunk_id": "p371-x14"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p371-x14"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일시공량이 주어져 있어 작업일수를 구한 뒤 인원을 곱하는 방식이므로 daily_crew를 선택함.",
+  "citations": [
+    {
+      "table_id": "p371-t1",
+      "row": "포장공 보통인부",
+      "column": "수량 4",
+      "value": "4"
+    },
+    {
+      "table_id": "p371-t2",
+      "row": "A-Type",
+      "column": "적용기준",
+      "value": "- 콘크리트 믹서트럭으로 직접 타설하는 경우"
+    },
+    {
+      "chunk_id": "p371-x10",
+      "quote": "③ 거푸집 설치 및 해체, 줄눈작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p371-x14",
+      "quote": "※ 경운기 등 기타방법으로 콘크리트를 운반하는 경우 운반에 소요되는 비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p371-x14",
+      "quote": "⑤ 콘크리트와 노반과의 접착부 처리품(모래층 깔기 등)은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p371-x14",
+      "quote": "⑥ 공구손료 및 경장비(스크리드 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p371-x14",
+      "quote": "⑦ 비닐, 양생재, 철망 등 재료비 및 잡재료비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 표 p371-t1의 행 이름이 '포장공 보통인부'로 병합되어 있어, 명세에서는 '포장공'과 '보통인부'로 분리하여 재구성함.",
+    "모래 부설시 일당시공량이 주석 ⑤에 명시되어 있으나, 본 명세의 작업 범위를 '표층 인력포설'로 한정하고 모래 부설은 미산정 항목으로 처리함."
+  ],
+  "questions": [
+    "콘크리트 표층 인력포설 물량이 100㎥이고, A-Type 20cm 두께로 시공할 때 필요한 포장공과 보통인부의 인·일은 얼마인가요?",
+    "경운기로 콘크리트를 운반하여 타설하는 경우(B-Type) 운반 비용은 어떻게 계산하나요?",
+    "표층 인력포설 시 공구손료 및 경장비 기계경비는 어떻게 계상하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:33.420436+00:00",
+    "input_tokens": 12007,
+    "output_tokens": 2614,
+    "source_pages": [
+      371,
+      372
+    ],
+    "prompt_sha256": "f5ff5fcf47e404d992a81cbca5353f00a45bd5e11c63cc1cf3db2e44513163c0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

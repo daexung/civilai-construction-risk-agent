@@ -1,0 +1,139 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-2-2/보강포붙임",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-2-2",
+    "title": "보강포 붙임('18년 신설)",
+    "work": "보강포 1층(회) 붙임",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      604
+    ],
+    "inputs": [
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "바닥",
+          "수직부"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위는 바닥입니까, 수직부입니까?",
+        "source": "표 p660-t2 열 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "보강포 붙임 물량은 몇 ㎡입니까?",
+        "source": "표 p660-t2 단위 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p660-t2",
+        "role": "보강포 붙임 단위당 품",
+        "source": "6-2-2 보강포 붙임 표",
+        "unit": "인/㎡",
+        "values": {
+          "방수공": {
+            "바닥": "0.010",
+            "수직부": "0.015"
+          },
+          "보통인부": {
+            "바닥": "0.004",
+            "수직부": "0.006"
+          }
+        },
+        "cite": {
+          "table_id": "p660-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p660-t2",
+          "column_input": "surface_type",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p660-t2에서 시공 부위에 따른 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "6-2-2 보강포 붙임 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인원이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p660-t2",
+      "row": "방수공",
+      "column": "바닥",
+      "value": "0.010"
+    },
+    {
+      "table_id": "p660-t2",
+      "row": "방수공",
+      "column": "수직부",
+      "value": "0.015"
+    },
+    {
+      "table_id": "p660-t2",
+      "row": "보통인부",
+      "column": "바닥",
+      "value": "0.004"
+    },
+    {
+      "table_id": "p660-t2",
+      "row": "보통인부",
+      "column": "수직부",
+      "value": "0.006"
+    },
+    {
+      "chunk_id": "p660-x11",
+      "quote": "본 품은 방수층 보강에 사용되는 보강포(부직포 등) 1층(회) 붙임을 기준한 것이다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "보강포 붙임 시공 부위가 바닥인가요, 수직부인가요?",
+    "보강포를 2층 이상 겹쳐 붙일 경우 품을 어떻게 적용해야 하나요?",
+    "보강포 붙임 물량(㎡)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:03:06.585043+00:00",
+    "input_tokens": 11464,
+    "output_tokens": 1221,
+    "source_pages": [
+      660,
+      661
+    ],
+    "prompt_sha256": "f8360701daeb09b7f41ba350f797a4e75295f37e1bfd474692fe6242674d015f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

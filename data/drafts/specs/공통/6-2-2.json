@@ -1,0 +1,184 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-2-2/현장가공",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-2-2",
+    "title": "현장가공('08, '14, '22, '24년 보완)",
+    "work": "철근 현장가공",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      133
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "가공할 철근 수량은 몇 ton입니까? (전체 철근조립 수량 기준)",
+        "source": "PDF 133쪽 6-2-2 현장가공 [주] ①"
+      },
+      {
+        "name": "facility_type",
+        "type": "enum",
+        "allowed_values": [
+          "Type-Ⅰ",
+          "Type-Ⅱ",
+          "Type-Ⅲ"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철근 가공 및 조립의 Type은 무엇입니까?",
+        "source": "PDF 133쪽 6-2-2 현장가공 표",
+        "synonyms": {
+          "Type-Ⅰ": [
+            "Type-I",
+            "타입1",
+            "1유형"
+          ],
+          "Type-Ⅱ": [
+            "Type-II",
+            "타입2",
+            "2유형"
+          ],
+          "Type-Ⅲ": [
+            "Type-III",
+            "타입3",
+            "3유형"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p189-t2",
+        "role": "작업조 인원 및 Type별 일일시공량",
+        "source": "PDF 133쪽 6-2-2 현장가공 표",
+        "unit": "인/작업조; ton/일",
+        "values": {
+          "수량": {
+            "철근공": "3",
+            "보통인부": "1"
+          },
+          "시공량": {
+            "Type-Ⅰ": "4.5",
+            "Type-Ⅱ": "4.0",
+            "Type-Ⅲ": "3.5"
+          }
+        },
+        "cite": {
+          "table_id": "p189-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p189-t2",
+          "row": "시공량",
+          "column_input": "facility_type"
+        },
+        "crew": {
+          "table": "p189-t2",
+          "row": "수량",
+          "trades": [
+            "철근공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "철근공": "1013",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p189-t2에서 Type별 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일일시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p189-t2의 직종별 수량으로 구한다."
+      ],
+      "source": "PDF 133쪽 6-2-2 현장가공 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "크레인 기계경비",
+        "source": "PDF 133쪽 6-2-2 현장가공 [주] ③",
+        "cite": {
+          "section_no": "6-2-2",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.09",
+        "cite": {
+          "section_no": "6-2-2",
+          "marker": "②"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 Type별 일일시공량이 표로 주어져 있어, 물량을 일일시공량으로 나누어 작업일수를 구하는 표준적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p189-t2",
+      "row": "시공량(ton)",
+      "column": "Type-Ⅰ",
+      "value": "4.5"
+    },
+    {
+      "table_id": "p189-t2",
+      "row": "수량",
+      "column": "철근공",
+      "value": "3"
+    },
+    {
+      "chunk_id": "p189-x22",
+      "quote": "가공수량은 전체 철근조립 수량을 기준한다."
+    },
+    {
+      "chunk_id": "p189-x22",
+      "quote": "공구손료 및 경장비(철근 가공기 등)의 기계경비는 인력품의 9%로 계상한다."
+    },
+    {
+      "chunk_id": "p189-x22",
+      "quote": "가공장과 조립 위치의 철근 운반 및 양중에 소요되는 크레인의 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "6-2-1 적용범위에 Type-Ⅰ, Ⅱ, Ⅲ에 대한 상세 분류가 있으나, 6-2-2 명세에서는 사용자가 직접 Type을 선택하도록 구성함. 필요시 6-2-1의 분류표를 decision_table로 연동할 수 있음."
+  ],
+  "questions": [
+    "철근 10ton을 Type-Ⅰ 조건에서 현장가공할 때 필요한 철근공과 보통인부 품은 얼마인가요?",
+    "철근 가공 시 사용되는 철근 절단기나 밴딩기의 기계경비는 어떻게 계산하나요?",
+    "가공된 철근을 조립 위치로 운반하기 위해 크레인을 사용했는데, 이 비용도 포함되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:31:01.512392+00:00",
+    "input_tokens": 11636,
+    "output_tokens": 1760,
+    "source_pages": [
+      189,
+      190
+    ],
+    "prompt_sha256": "62ac08dc85539f09cbcc6eb02ca92d70f432d414b8e6e6342c1777772bff0a51",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

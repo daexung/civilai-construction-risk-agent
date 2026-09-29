@@ -1,0 +1,146 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/7-4-3/강제트러스지지공법",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "7-4-3",
+    "title": "7-4-3 강제트러스 지지공법('19, '26년 보완)",
+    "work": "강제트러스 지지공법 시공 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      162
+    ],
+    "inputs": [
+      {
+        "name": "panel_area",
+        "type": "enum",
+        "allowed_values": [
+          "0.3㎡이하",
+          "0.3㎡초과~0.8㎡이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "석재판의 면적은 어느 구간에 해당합니까?",
+        "source": "p218-t1 시공량 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 물량은 몇 ㎡입니까?",
+        "source": "p218-t1 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p218-t1",
+        "role": "작업별 직종 인원 및 일일시공량",
+        "source": "7-4-3 강제트러스 지지공법 표",
+        "unit": "인, ㎡/일",
+        "values": {
+          "용접공": {
+            "수량": "2",
+            "0.3㎡이하": "11",
+            "0.3㎡초과~0.8㎡이하": "12"
+          },
+          "철공": {
+            "수량": "1",
+            "0.3㎡이하": "11",
+            "0.3㎡초과~0.8㎡이하": "12"
+          },
+          "석공": {
+            "수량": "3",
+            "0.3㎡이하": "13",
+            "0.3㎡초과~0.8㎡이하": "15"
+          },
+          "줄눈공": {
+            "수량": "1",
+            "0.3㎡이하": "13",
+            "0.3㎡초과~0.8㎡이하": "15"
+          },
+          "보통인부": {
+            "수량": "2",
+            "0.3㎡이하": "13",
+            "0.3㎡초과~0.8㎡이하": "15"
+          }
+        },
+        "cite": {
+          "table_id": "p218-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p218-t1에서 석재판 면적에 따른 하지철물 설치(용접공, 철공) 및 석재판 붙임(석공, 줄눈공, 보통인부)의 시공량을 각각 확인한다.",
+        "각 직종별 수량(인원)을 해당 작업의 시공량으로 나누어 ㎡당 품을 산출한다.",
+        "산출된 ㎡당 품에 물량을 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "p218-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p218-x12",
+          "quote": "공구손료 및 경장비(절단기, 용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "하지철물 설치와 석재판 붙임 작업의 일일시공량이 서로 달라 단일 기준시공량을 사용하는 작업조 모델을 적용할 수 없으며, 각 직종별 인원을 해당 작업의 시공량으로 나누어 단위당 품을 산출해야 합니다.",
+  "citations": [
+    {
+      "table_id": "p218-t1",
+      "row": "용접공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p218-t1",
+      "row": "석공",
+      "column": "0.3㎡이하",
+      "value": "13"
+    },
+    {
+      "chunk_id": "p218-x12",
+      "quote": "공구손료 및 경장비(절단기, 용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "하지철물 설치와 석재판 붙임의 시공량이 다르게 제시되어 있는데, 이를 각각의 단위당 품(수량/시공량)으로 환산하여 합산하는 방식이 맞는지 명시적인 계산 지침이 필요함."
+  ],
+  "questions": [
+    "석재판 면적이 0.5㎡일 때 어떤 시공량 기준을 적용하나요?",
+    "하지철물 설치와 석재판 붙임의 시공량이 다른데, 전체 작업일수는 어떻게 산정하나요?",
+    "시공할 전체 면적(㎡) 정보가 필요합니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:23.259598+00:00",
+    "input_tokens": 11831,
+    "output_tokens": 1541,
+    "source_pages": [
+      218,
+      219
+    ],
+    "prompt_sha256": "a5e97d4cc3f19711c22528ba69aad77ee080e72209d7a9b679f2da1d152f704e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

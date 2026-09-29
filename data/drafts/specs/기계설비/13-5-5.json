@@ -1,0 +1,282 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-5-5/공기예열기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-5-5",
+    "title": "공기예열기(Preheater) 설치",
+    "work": "공기예열기 설치 전체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      831,
+      832
+    ],
+    "inputs": [
+      {
+        "name": "duration",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "일",
+        "required": true,
+        "ask": "공사기간은 며칠입니까?",
+        "source": "p831-t2 기술관리"
+      },
+      {
+        "name": "volume_wood",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "포장해체할 목재의 체적은 몇 ㎥입니까?",
+        "source": "p831-t2 포장해체"
+      },
+      {
+        "name": "weight_transport",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "소운반 및 조양할 중량은 몇 ton입니까?",
+        "source": "p831-t2 소운반 및 조양"
+      },
+      {
+        "name": "area_surface",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "표면손질할 면적은 몇 ㎡입니까?",
+        "source": "p832-t0 표면손질"
+      },
+      {
+        "name": "weight_casing",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "casing 조립 설치할 중량은 몇 ton입니까?",
+        "source": "p832-t0 casing 조립 설치"
+      },
+      {
+        "name": "weight_heating_element",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Heating Element 삽입할 중량은 몇 ton입니까?",
+        "source": "p832-t0 Heating Element 삽입"
+      },
+      {
+        "name": "weight_sealing",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Sealing Plate 및 Packing ring 조립 설치할 중량은 몇 ton입니까?",
+        "source": "p832-t0 Sealing Plate 및 Packing ring 조립 설치"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p831-t2",
+        "role": "공기예열기 설치 품 (기술관리, 포장해체, 소운반 및 조양)",
+        "source": "13-5-5 공기예열기(Preheater) 설치",
+        "unit": "인/일, 인/㎥, 인/ton",
+        "values": {
+          "기술관리 공사기간중": {
+            "기계산업기사": "1.0"
+          },
+          "포장해체 수송을 위해 포장된 목재를 해체하고 정위치에 정리": {
+            "목공": "0.02",
+            "특별인부": "0.02"
+          },
+          "소운반 및 조양": {
+            "건설기계운전조": "0.395"
+          },
+          "적재장에서부터 설치장소까지 운반,": {
+            "비계공": "0.915"
+          },
+          "조양함": {
+            "특별인부": "0.270"
+          }
+        },
+        "cite": {
+          "table_id": "p831-t2"
+        }
+      },
+      {
+        "id": "p832-t0",
+        "role": "공기예열기 설치 품 (표면손질, casing 조립, Heating Element 삽입, Sealing Plate 조립, 검사 및 교정)",
+        "source": "13-5-5 공기예열기(Preheater) 설치",
+        "unit": "인/㎡, 인/ton, 조/ton",
+        "values": {
+          "표면손질": {
+            "특별인부": "0.1"
+          },
+          "casing 조립 설치 Support Structure, Rotor inner casing, Outer Casing 등 Heating Element를 제외한 모든 부분의 조립설치": {
+            "플랜트기계설치공": "1.54",
+            "플랜트용접공": "0.324",
+            "플랜트제관공": "0.648",
+            "특별인부": "1.54",
+            "비계공": "1.13",
+            "Crane운전조": "0.35"
+          },
+          "Heating Element 삽입 Hot busket, Interbusker, Cold busket의 삽입": {
+            "플랜트기계설치공": "0.84",
+            "특별인부": "0.84"
+          },
+          "Sealing Plate 및 Packing ring": {
+            "플랜트기계설치공": "13.6"
+          },
+          "조립 설치": {
+            "특별인부": "2.9"
+          },
+          "검사 및 교정": {
+            "기술관리, 포장해체를 제외한 모든 품의 10%": ""
+          }
+        },
+        "cite": {
+          "table_id": "p832-t0"
+        }
+      },
+      {
+        "id": "p832-t1",
+        "role": "사용장비 참고",
+        "source": "13-5-5 공기예열기(Preheater) 설치 [참고]",
+        "unit": "대",
+        "values": {
+          "TRUCK CRANE": {
+            "수량": "1"
+          },
+          "\"": {
+            "수량": "1"
+          },
+          "WINCH": {
+            "수량": "2"
+          },
+          "TRUCK": {
+            "수량": "1"
+          },
+          "A.C WELDER": {
+            "수량": "3"
+          },
+          "TRAILER": {
+            "수량": "1"
+          },
+          "DERRICK": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p832-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {},
+      "steps": [
+        "각 작업 구분별로 해당하는 물량(duration, volume_wood, weight_transport, area_surface, weight_casing, weight_heating_element, weight_sealing)을 표의 단위당 품에 곱하여 직종별 인·일을 구한다.",
+        "검사 및 교정은 기술관리와 포장해체를 제외한 모든 품(소운반 및 조양, 표면손질, casing 조립 설치, Heating Element 삽입, Sealing Plate 및 Packing ring 조립 설치)의 합계에 10%를 곱하여 산출한다."
+      ],
+      "source": "p831-t2, p832-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "사용장비 비용",
+        "source": "p832-t1",
+        "cite": {
+          "table_id": "p832-t1"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품이 표에 직접 제시되어 있으며, 각 작업 구분별로 물량을 곱하여 산출하는 방식이므로 per_unit을 적용합니다.",
+  "citations": [
+    {
+      "table_id": "p831-t2",
+      "row": "기술관리 공사기간중",
+      "column": "기계산업기사",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p831-t2",
+      "row": "포장해체 수송을 위해 포장된 목재를 해체하고 정위치에 정리",
+      "column": "목공",
+      "value": "0.02"
+    },
+    {
+      "table_id": "p831-t2",
+      "row": "소운반 및 조양",
+      "column": "건설기계운전조",
+      "value": "0.395"
+    },
+    {
+      "table_id": "p832-t0",
+      "row": "표면손질",
+      "column": "특별인부",
+      "value": "0.1"
+    },
+    {
+      "table_id": "p832-t0",
+      "row": "casing 조립 설치 Support Structure, Rotor inner casing, Outer Casing 등 Heating Element를 제외한 모든 부분의 조립설치",
+      "column": "플랜트기계설치공",
+      "value": "1.54"
+    },
+    {
+      "table_id": "p832-t0",
+      "row": "Heating Element 삽입 Hot busket, Interbusker, Cold busket의 삽입",
+      "column": "플랜트기계설치공",
+      "value": "0.84"
+    },
+    {
+      "table_id": "p832-t0",
+      "row": "Sealing Plate 및 Packing ring",
+      "column": "플랜트기계설치공",
+      "value": "13.6"
+    },
+    {
+      "table_id": "p832-t0",
+      "row": "검사 및 교정",
+      "column": "기술관리, 포장해체를 제외한 모든 품의 10%",
+      "value": ""
+    },
+    {
+      "table_id": "p832-t1",
+      "row": "TRUCK CRANE",
+      "column": "수량",
+      "value": "1"
+    }
+  ],
+  "open_questions": [
+    "검사 및 교정 품 산정 시, '모든 품의 10%'가 각 직종별로 10%를 가산하는 것인지, 아니면 특정 직종으로 산정하는 것인지 명확하지 않습니다."
+  ],
+  "questions": [
+    "공기예열기 설치 시 각 작업 단계별 물량은 어떻게 입력해야 하나요?",
+    "검사 및 교정 품은 어떻게 계산되나요?",
+    "사용장비 표에 있는 장비들의 비용은 어떻게 처리되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:43:17.928740+00:00",
+    "input_tokens": 12849,
+    "output_tokens": 2892,
+    "source_pages": [
+      831,
+      832,
+      833
+    ],
+    "prompt_sha256": "31c1bc937384b883111304c56f85999b7f776497b78fb6648bead84228ba823a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/8-3-2/경유보일러설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "8-3-2",
+    "title": "경유보일러 설치",
+    "work": "경유보일러 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      696
+    ],
+    "inputs": [
+      {
+        "name": "capacity",
+        "type": "enum",
+        "allowed_values": [
+          "15,000 Kcal/hr"
+        ],
+        "unit": "Kcal/hr",
+        "required": true,
+        "ask": "경유보일러의 규격은 무엇입니까?",
+        "source": "PDF 696쪽 8-3-2 표",
+        "synonyms": {
+          "15,000 Kcal/hr": [
+            "15000",
+            "15,000"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 경유보일러의 수량은 몇 대입니까?",
+        "source": "PDF 696쪽 8-3-2 표 단위 (대당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p752-t2",
+        "role": "경유보일러 설치 단위당 품",
+        "source": "PDF 696쪽 8-3-2 표",
+        "unit": "인/대",
+        "values": {
+          "15,000 Kcal/hr": {
+            "배관공": "1.00",
+            "보통인부": "0.39"
+          }
+        },
+        "cite": {
+          "table_id": "p752-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p752-t2",
+          "row_input": "capacity",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 696쪽 8-3-2 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "소운반",
+        "source": "PDF 696쪽 [주] ②",
+        "cite": {
+          "section_no": "8-3-2",
+          "marker": "②"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대당)당 직종별 인원이 표에 직접 명시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p752-t2",
+      "row": "15,000 Kcal/hr",
+      "column": "배관공",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p752-t2",
+      "row": "15,000 Kcal/hr",
+      "column": "보통인부",
+      "value": "0.39"
+    },
+    {
+      "chunk_id": "p752-x17",
+      "quote": "① 수압시험, 시운전품은 본 품에 포함되어 있다."
+    },
+    {
+      "chunk_id": "p752-x17",
+      "quote": "② 소운반은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표에 15,000 Kcal/hr 규격 하나만 제시되어 있어, 다른 규격의 경유보일러 설치 시 적용할 기준이 명확하지 않습니다."
+  ],
+  "questions": [
+    "경유보일러 설치 시 수압시험과 시운전 품은 따로 계산해야 하나요?",
+    "15,000 Kcal/hr 이외의 규격을 가진 경유보일러를 설치할 때는 어떤 품을 적용해야 하나요?",
+    "설치할 경유보일러의 대수를 입력하지 않았습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:58.666160+00:00",
+    "input_tokens": 11452,
+    "output_tokens": 1272,
+    "source_pages": [
+      752,
+      753
+    ],
+    "prompt_sha256": "21cb176e4c80f445dd1b92a095b92342caa5e491488675b8583e03188188b331",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-2-9/타일해체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-2-9",
+    "title": "타일 해체",
+    "work": "타일 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      916
+    ],
+    "inputs": [
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "떠붙이기",
+          "압착붙이기, 접착붙이기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "타일 해체 방법은 무엇입니까? (떠붙이기 / 압착붙이기, 접착붙이기)",
+        "source": "PDF 916쪽 3-2-9 표",
+        "synonyms": {
+          "압착붙이기, 접착붙이기": [
+            "압착붙이기",
+            "접착붙이기"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "해체할 타일의 면적은 몇 ㎡입니까?",
+        "source": "PDF 916쪽 3-2-9 표 단위 (㎡당)"
+      },
+      {
+        "name": "is_reused",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해체한 타일을 재사용할 예정입니까?",
+        "source": "PDF 916쪽 3-2-9 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p972-t0",
+        "role": "타일 해체 단위당 품",
+        "source": "PDF 916쪽 3-2-9 표",
+        "unit": "인/㎡",
+        "values": {
+          "타일공": {
+            "떠붙이기": "0.037",
+            "압착붙이기, 접착붙이기": "0.041"
+          },
+          "보통인부": {
+            "떠붙이기": "0.024",
+            "압착붙이기, 접착붙이기": "0.027"
+          }
+        },
+        "cite": {
+          "table_id": "p972-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p972-t0",
+          "column_input": "method",
+          "trades": [
+            "타일공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p972-t0 표에서 해체 방법에 따른 직종별 단위당 품을 고른다.",
+        "물량(quantity)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 916쪽 3-2-9 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "타일을 재사용하는 경우",
+        "blocked_if": {
+          "input": "is_reused",
+          "op": "==",
+          "value": true
+        },
+        "reason": "본 품은 타일을 재사용하지 아니하는 때의 해체하는 기준이므로 적용 불가",
+        "source": "PDF 916쪽 3-2-9 [주] ①",
+        "cite": {
+          "chunk_id": "p972-x5",
+          "quote": "본 품은 타일을 재사용하지 아니하는 때의 해체하는 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비산방지, 보호 및 안전시설 등의 설치비",
+        "source": "PDF 916쪽 3-2-9 [주] ③",
+        "cite": {
+          "chunk_id": "p972-x5",
+          "quote": "비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "폐기물 처리비용",
+        "source": "PDF 916쪽 3-2-9 [주] ④",
+        "cite": {
+          "chunk_id": "p972-x5",
+          "quote": "폐기물 처리비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.06",
+        "cite": {
+          "chunk_id": "p972-x5",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 6%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인원이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p972-t0",
+      "row": "타일공",
+      "column": "떠붙이기",
+      "value": "0.037"
+    },
+    {
+      "table_id": "p972-t0",
+      "row": "타일공",
+      "column": "압착붙이기, 접착붙이기",
+      "value": "0.041"
+    },
+    {
+      "table_id": "p972-t0",
+      "row": "보통인부",
+      "column": "떠붙이기",
+      "value": "0.024"
+    },
+    {
+      "table_id": "p972-t0",
+      "row": "보통인부",
+      "column": "압착붙이기, 접착붙이기",
+      "value": "0.027"
+    },
+    {
+      "chunk_id": "p972-x5",
+      "quote": "본 품은 타일을 재사용하지 아니하는 때의 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p972-x5",
+      "quote": "비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p972-x5",
+      "quote": "폐기물 처리비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p972-x5",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 6%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표의 열 이름이 '압착붙이기, 접착붙이기'로 묶여 있는데, 사용자가 '압착붙이기' 또는 '접착붙이기' 중 하나만 입력해도 매칭되도록 synonyms 처리를 하였습니다."
+  ],
+  "questions": [
+    "타일 해체 시 공구손료는 어떻게 계산하나요?",
+    "타일을 재사용하려고 조심스럽게 해체하는 경우 이 품을 적용할 수 있나요?",
+    "해체할 타일의 면적은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:52:45.704117+00:00",
+    "input_tokens": 11553,
+    "output_tokens": 2050,
+    "source_pages": [
+      972,
+      973
+    ],
+    "prompt_sha256": "37befd436fa694bd172778419b451d37f289c4bbf818e323e90a96aca9be98e5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-11-6/자동세륜기_설치_및_해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-11-6",
+    "title": "자동세륜기 설치 및 해체('09, '12, '19년 보완)",
+    "work": "자동세륜기 설치 및 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      62
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "수량 설치",
+          "수량 해체"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치 작업입니까, 해체 작업입니까?",
+        "source": "PDF 62쪽 p118-t2",
+        "synonyms": {
+          "수량 설치": [
+            "설치"
+          ],
+          "수량 해체": [
+            "해체"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "회",
+        "required": true,
+        "ask": "작업 횟수는 몇 회입니까?",
+        "source": "PDF 62쪽 p118-t2 (회당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p118-t2",
+        "role": "자동세륜기 설치 및 해체 품",
+        "source": "PDF 62쪽 2-11-6 표",
+        "unit": "인/회, hr/회",
+        "values": {
+          "특별인부": {
+            "수량 설치": "1.59",
+            "수량 해체": "2.44"
+          },
+          "크레인": {
+            "수량 설치": "2.60",
+            "수량 해체": "3.30"
+          }
+        },
+        "cite": {
+          "table_id": "p118-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p118-t2",
+          "column_input": "work_type",
+          "trades": [
+            "특별인부",
+            "크레인"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p118-t2에서 작업 종류(설치/해체)에 따른 단위당 품을 고른다.",
+        "물량(횟수)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 62쪽 p118-t2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "터파기, 골재포설, 콘크리트 타설 및 깨기 작업",
+        "source": "PDF 62쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p118-x18",
+          "quote": "터파기, 골재포설, 콘크리트 타설 및 깨기 작업은 별도 계상한다."
+        }
+      },
+      {
+        "item": "자동세륜기 가동을 위한 전기배선 및 급수 등에 소요되는 재료 및 품",
+        "source": "PDF 62쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p118-x18",
+          "quote": "자동세륜기 가동을 위한 전기배선 및 급수 등에 소요되는 재료 및 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p118-x18",
+          "quote": "공구손료 및 경장비(살수장비, 양수기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(회당)당 품이 표에 직접 명시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p118-t2",
+      "row": "특별인부",
+      "column": "수량 설치",
+      "value": "1.59"
+    },
+    {
+      "table_id": "p118-t2",
+      "row": "특별인부",
+      "column": "수량 해체",
+      "value": "2.44"
+    },
+    {
+      "table_id": "p118-t2",
+      "row": "크레인",
+      "column": "수량 설치",
+      "value": "2.60"
+    },
+    {
+      "table_id": "p118-t2",
+      "row": "크레인",
+      "column": "수량 해체",
+      "value": "3.30"
+    },
+    {
+      "chunk_id": "p118-x18",
+      "quote": "터파기, 골재포설, 콘크리트 타설 및 깨기 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p118-x18",
+      "quote": "자동세륜기 가동을 위한 전기배선 및 급수 등에 소요되는 재료 및 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p118-x18",
+      "quote": "공구손료 및 경장비(살수장비, 양수기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "자동세륜기 설치 시 특별인부 품은 어떻게 되나요?",
+    "자동세륜기 해체 시 발생하는 슬러지 청소 비용은 별도로 계산해야 하나요?",
+    "자동세륜기 설치 횟수는 몇 회인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:37.925592+00:00",
+    "input_tokens": 11663,
+    "output_tokens": 1748,
+    "source_pages": [
+      118,
+      119
+    ],
+    "prompt_sha256": "60181df55e9eee3eee6a7336bee5ad0f8636e096b58947917721908c4e356fb0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

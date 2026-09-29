@@ -1,0 +1,217 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-28/보도용블록장비사용철거",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-28",
+    "title": "보도용 블록 장비사용 철거",
+    "work": "블록 철거, 블록상차, 현장정리",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      889
+    ],
+    "inputs": [
+      {
+        "name": "site_type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건은 A-Type과 B-Type 중 무엇입니까? 장비이동 및 적재 공간 여건을 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p945-t3",
+        "source": "PDF 889쪽 2-1-28 [주] ③ 및 표",
+        "synonyms": {
+          "A-Type": [
+            "A타입",
+            "A형"
+          ],
+          "B-Type": [
+            "B타입",
+            "B형"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "철거할 보도용 블록의 면적은 몇 ㎡입니까?",
+        "source": "PDF 889쪽 2-1-28 표의 시공량 단위(㎡)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p945-t2",
+        "role": "보도용 블록 장비사용 철거 작업조 및 시공량",
+        "source": "PDF 889쪽 2-1-28 표",
+        "unit": "인, 대, ㎡",
+        "values": {
+          "시공량(㎡)": {
+            "A-Type": "600",
+            "B-Type": "460"
+          },
+          "포장공": {
+            "A-Type": "1",
+            "B-Type": "1"
+          },
+          "보통인부": {
+            "A-Type": "1",
+            "B-Type": "1"
+          },
+          "굴착기 0.4㎥": {
+            "A-Type": "1",
+            "B-Type": "-"
+          },
+          "굴착기 0.2㎥": {
+            "A-Type": "-",
+            "B-Type": "1"
+          },
+          "트럭 2.5ton": {
+            "A-Type": "1",
+            "B-Type": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p945-t2"
+        }
+      },
+      {
+        "id": "p945-t3",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 889쪽 2-1-28 [주] ③ 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+          },
+          "B-Type": {
+            "적용기준": "- 차도인접, 주택가 보도 등 장비이동 및 적재 공간이 협소한 구간"
+          }
+        },
+        "cite": {
+          "table_id": "p945-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p945-t2",
+          "row": "시공량(㎡)",
+          "column_input": "site_type"
+        },
+        "crew": {
+          "table": "p945-t2",
+          "column_input": "site_type",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p945-t2에서 site_type에 따른 시공량(㎡)을 고른다.",
+        "작업일수 = area ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p945-t2의 직종별 인원으로 구한다.",
+        "장비 대·일 = 작업일수 × p945-t2의 장비(굴착기, 트럭) 대수로 구한다."
+      ],
+      "source": "PDF 889쪽 2-1-28 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "도심지 할증",
+        "source": "PDF 889쪽 2-1-28 [주] ③",
+        "cite": {
+          "chunk_id": "p945-x14"
+        }
+      },
+      {
+        "item": "폐기물처리",
+        "source": "PDF 889쪽 2-1-28 [주] ④",
+        "cite": {
+          "chunk_id": "p945-x18"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조의 인원/장비와 일일 시공량이 표로 제시되어 있어, 물량을 시공량으로 나누어 작업일수를 구하는 방식이므로 daily_crew로 분류함.",
+  "citations": [
+    {
+      "table_id": "p945-t2",
+      "row": "포장공 보통인부",
+      "column": "A-Type 시공량(㎡)",
+      "value": "600"
+    },
+    {
+      "table_id": "p945-t2",
+      "row": "포장공 보통인부",
+      "column": "B-Type 시공량(㎡)",
+      "value": "460"
+    },
+    {
+      "table_id": "p945-t2",
+      "row": "굴착기",
+      "column": "A-Type 수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p945-t3",
+      "row": "A-Type",
+      "column": "적용기준",
+      "value": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+    },
+    {
+      "chunk_id": "p945-x14",
+      "quote": "본 품은 장비를 사용하여 보도용 블록을 철거하는 기준이다."
+    },
+    {
+      "chunk_id": "p945-x14",
+      "quote": "본 품은 블록 철거, 블록상차, 현장정리 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p945-x14",
+      "quote": "‘[공통부문] 1-4-4 지세/지형 2.도심지’ 할증을 적용하지 않는다."
+    },
+    {
+      "chunk_id": "p945-x18",
+      "quote": "폐기물처리는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 표(p945-t2)에서 포장공과 보통인부가 한 행으로 병합되어 인식되었으나, 원문은 분리되어 있음. 명세의 tables에는 원문 기준으로 분리하여 작성함.",
+    "adjusted_daily_crew 모델에서 장비가 여러 대(굴착기, 트럭) 투입되는 경우를 완벽히 처리하기 위해 steps에 장비 계산을 명시함."
+  ],
+  "questions": [
+    "보도용 블록 장비 철거 물량이 1000㎡이고 A-Type일 때 품은 어떻게 되나요?",
+    "차도 인접 구간에서 장비로 블록을 철거할 때 도심지 할증을 적용할 수 있나요?",
+    "철거 후 발생하는 폐기물 처리 비용은 이 품에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:51:52.967374+00:00",
+    "input_tokens": 11870,
+    "output_tokens": 2227,
+    "source_pages": [
+      945,
+      946
+    ],
+    "prompt_sha256": "ba402a893cb52350b10f006930d3d0bf806db83d242a4ab54c832ff8dac086d7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

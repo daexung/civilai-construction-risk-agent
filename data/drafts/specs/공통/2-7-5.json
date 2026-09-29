@@ -1,0 +1,180 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-7-5/수평비계설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-7-5",
+    "title": "수평비계 설치 및 해체",
+    "work": "수평비계 설치 및 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      49
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "수평비계의 체적(발판면적(㎡) × 발판까지의 높이(m))은 몇 ㎥입니까?",
+        "source": "[주] ② 단위수량(㎥)은 수평비계의 발판면적(㎡) 및 발판까지의 높이(m)를 기준한다."
+      },
+      {
+        "name": "is_height_over_10m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "수평비계의 높이가 10m를 초과합니까?",
+        "source": "[주] ① 본 품은 천장 작업을 위한 수평비계(높이 10m이하)의 설치 및 해체 작업 기준이다."
+      },
+      {
+        "name": "needs_extra_facilities",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "가설계단 및 방호시설 설치가 필요합니까?",
+        "source": "[주] ④ 가설계단 및 방호시설은 필요 시 별도 계상한다."
+      }
+    ],
+    "tables": [
+      {
+        "id": "p105-t0",
+        "role": "수평비계 설치 및 해체 품 (10㎥당)",
+        "source": "2-7-5 수평비계 설치 및 해체 표",
+        "unit": "인/10㎥",
+        "values": {
+          "비계공": {
+            "수량": "0.41"
+          },
+          "보통인부": {
+            "수량": "0.18"
+          }
+        },
+        "cite": {
+          "table_id": "p105-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p105-t0",
+          "column_input": "수량",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p105-t0에서 직종별 단위당 품을 가져온다.",
+        "입력된 체적(volume)을 10으로 나누어 적용 수량을 구한다. (10㎥당 기준이므로)",
+        "적용 수량에 단위당 품을 곱하여 총 투입 인·일을 계산한다."
+      ],
+      "source": "2-7-5 수평비계 설치 및 해체 표 및 [주] ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "수평비계 높이가 10m 초과",
+        "blocked_if": {
+          "input": "is_height_over_10m",
+          "op": "==",
+          "value": true
+        },
+        "reason": "본 품은 높이 10m 이하의 수평비계에만 적용됩니다. 10m 초과 시 별도 기준이 필요합니다.",
+        "source": "[주] ①",
+        "cite": [
+          {
+            "chunk_id": "p105-x3",
+            "quote": "본 품은 천장 작업을 위한 수평비계(높이 10m이하)의 설치 및 해체 작업 기준이다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "가설계단 및 방호시설",
+        "source": "[주] ④",
+        "cite": [
+          {
+            "chunk_id": "p105-x3",
+            "quote": "가설계단 및 방호시설은 필요 시 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(10㎥)당 직종별 인원이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p105-t0",
+      "row": "비계공",
+      "column": "수량",
+      "value": "0.41"
+    },
+    {
+      "table_id": "p105-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.18"
+    },
+    {
+      "chunk_id": "p105-x3",
+      "quote": "본 품은 천장 작업을 위한 수평비계(높이 10m이하)의 설치 및 해체 작업 기준이다."
+    },
+    {
+      "chunk_id": "p105-x3",
+      "quote": "단위수량(㎥)은 수평비계의 발판면적(㎡) 및 발판까지의 높이(m)를 기준한다."
+    },
+    {
+      "chunk_id": "p105-x3",
+      "quote": "본 품은 비계틀(발판, 내부계단, 난간대 포함) 설치 및 해체 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p105-x3",
+      "quote": "가설계단 및 방호시설은 필요 시 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "높이 10m 초과 시의 할증 또는 별도 품셈 적용 기준이 명시되어 있지 않아 차단 조건으로 처리함."
+  ],
+  "questions": [
+    "수평비계 체적이 50㎥일 때 비계공 품은 얼마인가요?",
+    "수평비계 높이가 12m인 경우 이 품셈을 적용할 수 있나요?",
+    "가설계단 설치 비용도 이 품셈에 포함되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:43.222131+00:00",
+    "input_tokens": 11534,
+    "output_tokens": 1775,
+    "source_pages": [
+      105,
+      106
+    ],
+    "prompt_sha256": "dcb715e95246ef7456a9d460f45de3ff29bc23d75289a429b9679a2f425877a9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

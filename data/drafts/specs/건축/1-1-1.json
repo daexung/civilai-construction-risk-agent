@@ -1,0 +1,217 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-1-1/기본철골공수",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-1-1",
+    "title": "기본철골공수('08, '13년 보완)",
+    "work": "기본철골공수 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      569
+    ],
+    "inputs": [
+      {
+        "name": "total_steel_usage_band",
+        "type": "enum",
+        "allowed_values": [
+          "60미만",
+          "60이상",
+          "100이상",
+          "300이상",
+          "1,000이상",
+          "2,000이상"
+        ],
+        "unit": "t",
+        "required": true,
+        "ask": "강재 총사용량(t)은 어느 구간에 해당합니까?",
+        "source": "PDF 569쪽 p625-t0 표의 열 기준"
+      },
+      {
+        "name": "member_type",
+        "type": "enum",
+        "allowed_values": [
+          "전용접부재",
+          "H형강부재"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "제작할 부재의 종류는 무엇입니까?",
+        "source": "PDF 569쪽 p625-t0 표 비고",
+        "synonyms": {
+          "전용접부재": [
+            "Built up",
+            "빌트업"
+          ],
+          "H형강부재": [
+            "Rolled shape",
+            "롤드셰이프",
+            "H형강"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "t",
+        "required": true,
+        "ask": "제작할 철골 물량(t)은 얼마입니까?",
+        "source": "기본철골공수 단위(인·일/t)에 곱할 물량"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p625-t0",
+        "role": "강재 총사용량에 따른 기본철골공수",
+        "source": "PDF 569쪽 1-1-1 기본철골공수 표",
+        "unit": "인·일/t",
+        "values": {
+          "기본철골공수": {
+            "60미만": "2.48",
+            "60이상": "2.31",
+            "100이상": "2.20",
+            "300이상": "1.97",
+            "1,000이상": "1.75",
+            "2,000이상": "1.63"
+          }
+        },
+        "cite": {
+          "table_id": "p625-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p625-t0",
+          "row_input": "기본철골공수",
+          "column_input": "total_steel_usage_band",
+          "trades": [
+            "철골공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "member_type": "H형강부재"
+            },
+            "change": "기본 철골공수×0.71",
+            "source": "PDF 569쪽 p625-t0 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p625-t0 표에서 강재 총사용량 구간에 해당하는 기본철골공수를 찾는다.",
+        "부재 종류가 H형강부재인 경우 찾은 값에 0.71을 곱한다.",
+        "조정된 단위당 품에 물량(t)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 569쪽 1-1-1 기본철골공수 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "용접품",
+        "source": "PDF 569쪽 1-1-1 [주] ④",
+        "cite": {
+          "section_no": "1-1-1",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공장제작 제경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.60",
+        "cite": {
+          "section_no": "1-1-1",
+          "marker": "②"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(t)당 기본철골공수(인·일)가 표에 직접 제시되어 있으며, 부재 종류에 따른 계수(0.71)를 적용하여 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p625-t0",
+      "row": "기본철골공수",
+      "column": "60미만",
+      "value": "2.48"
+    },
+    {
+      "table_id": "p625-t0",
+      "row": "기본철골공수",
+      "column": "60이상",
+      "value": "2.31"
+    },
+    {
+      "table_id": "p625-t0",
+      "row": "기본철골공수",
+      "column": "100이상",
+      "value": "2.20"
+    },
+    {
+      "table_id": "p625-t0",
+      "row": "기본철골공수",
+      "column": "300이상",
+      "value": "1.97"
+    },
+    {
+      "table_id": "p625-t0",
+      "row": "기본철골공수",
+      "column": "1,000이상",
+      "value": "1.75"
+    },
+    {
+      "table_id": "p625-t0",
+      "row": "기본철골공수",
+      "column": "2,000이상",
+      "value": "1.63"
+    },
+    {
+      "chunk_id": "p625-t0",
+      "quote": "H형강부재 (Rolled shape) 제작의 경우는 기본 철골공수×0.71로 산정한다."
+    },
+    {
+      "chunk_id": "p625-x2",
+      "quote": "공장제작에 따른 제경비는 기본철골공수의 60%이며"
+    },
+    {
+      "chunk_id": "p625-x2",
+      "quote": "용접품은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "기본철골공수에 투입되는 구체적인 직종(예: 철골공, 용접공 등)이 원문에 명시되지 않아 '철골공' 단일 직종으로 임의 가정했습니다. 정확한 직종 확인이 필요합니다."
+  ],
+  "questions": [
+    "강재 총사용량이 150t이고 전용접부재일 때 기본철골공수는 어떻게 되나요?",
+    "H형강부재를 사용할 때 공수 산정은 어떻게 달라지나요?",
+    "공장제작에 따른 제경비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:45:03.213154+00:00",
+    "input_tokens": 11626,
+    "output_tokens": 2086,
+    "source_pages": [
+      625,
+      626
+    ],
+    "prompt_sha256": "31d21c586a956a5dd036366d870623f163914c8a2367fc03e880f5d42a625adf",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

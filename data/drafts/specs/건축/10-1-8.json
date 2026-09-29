@@ -1,0 +1,201 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/10-1-8/커튼월프레임설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "10-1-8",
+    "title": "커튼월 프레임 설치('14, '20, '26년 보완)",
+    "work": "커튼월 프레임 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      631
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "kg",
+        "required": true,
+        "ask": "설치할 커튼월 프레임의 물량은 몇 kg입니까?",
+        "source": "10-1-8 표의 시공량 단위(kg)"
+      },
+      {
+        "name": "processing_type",
+        "type": "enum",
+        "allowed_values": [
+          "현장가공",
+          "공장가공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "프레임 가공 방식은 현장가공과 공장가공 중 무엇입니까?",
+        "source": "10-1-8 표의 시공량 구분 및 [주] ②, ③",
+        "synonyms": {
+          "현장가공": [
+            "현장 가공",
+            "현장제작"
+          ],
+          "공장가공": [
+            "공장 가공",
+            "공장제작"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p687-t1",
+        "role": "가공 방식별 일일시공량 및 작업조 인원",
+        "source": "10-1-8 표",
+        "unit": "시공량: kg/일, 인원: 인/일",
+        "values": {
+          "시공량": {
+            "현장가공": "130",
+            "공장가공": "150"
+          },
+          "창호공": {
+            "현장가공": "3",
+            "공장가공": "3"
+          },
+          "보통인부": {
+            "현장가공": "1",
+            "공장가공": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p687-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p687-t1",
+          "row": "시공량",
+          "column_input": "processing_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p687-t1",
+          "column_input": "processing_type",
+          "trades": [
+            "창호공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "창호공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {},
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p687-t1에서 가공 방식에 따른 일일시공량을 찾는다.",
+        "작업일수 = quantity ÷ 일일시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "10-1-8 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "비계매기 또는 고소작업차 비용",
+        "source": "10-1-8 [주] ⑤",
+        "cite": {
+          "chunk_id": "p687-x9",
+          "quote": "비계매기 또는 고소작업차 비용은 필요시 별도 계상한다."
+        }
+      },
+      {
+        "item": "외벽의 높이에 따른 할증",
+        "source": "10-1-8 [주] ⑥",
+        "cite": {
+          "chunk_id": "p687-x9",
+          "quote": "외벽의 높이에 따른 할증은 ‘[공통부문] 1-4-5 위험’을 따른다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p687-x9",
+          "quote": "공구손료 및 경장비(절단기, 전동드릴 등)의 기계경비는 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 기준의 작업조 인원과 일일시공량이 표로 제시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구하고 인원을 곱하는 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p687-t1",
+      "row": "창호공 보통인부",
+      "column": "수량 3",
+      "value": "3"
+    },
+    {
+      "table_id": "p687-t1",
+      "row": "창호공 보통인부",
+      "column": "수량 1",
+      "value": "1"
+    },
+    {
+      "table_id": "p687-t1",
+      "row": "창호공 보통인부",
+      "column": "시공량(kg) 현장가공",
+      "value": "130"
+    },
+    {
+      "table_id": "p687-t1",
+      "row": "창호공 보통인부",
+      "column": "시공량(kg) 공장가공",
+      "value": "150"
+    },
+    {
+      "chunk_id": "p687-x9",
+      "quote": "공구손료 및 경장비(절단기, 전동드릴 등)의 기계경비는 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p687-x9",
+      "quote": "비계매기 또는 고소작업차 비용은 필요시 별도 계상한다."
+    },
+    {
+      "chunk_id": "p687-x9",
+      "quote": "외벽의 높이에 따른 할증은 ‘[공통부문] 1-4-5 위험’을 따른다."
+    }
+  ],
+  "open_questions": [
+    "원문 [주] ⑦에 '기계경비는 3%로 계상한다'고 되어 있으나 기준 금액(인력품 등)이 명시되어 있지 않아, 통상적인 노무비(인력품) 기준으로 추정하여 적용했습니다."
+  ],
+  "questions": [
+    "현장가공과 공장가공 중 어느 방식으로 프레임을 제작합니까?",
+    "외벽 높이에 따른 할증은 어떻게 적용해야 합니까?",
+    "설치할 커튼월 프레임의 총 중량(kg)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:51:09.213657+00:00",
+    "input_tokens": 11694,
+    "output_tokens": 1976,
+    "source_pages": [
+      687,
+      688
+    ],
+    "prompt_sha256": "07e7e2609964b102926b40de3a09573b2e6b168555abbb3a3cdbb70cd96b9f99",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

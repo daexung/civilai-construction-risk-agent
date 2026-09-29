@@ -1,0 +1,209 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/8-2-6/정재하시험",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "8-2-6",
+    "title": "정재하시험('08년 신설)",
+    "work": "정재하시험 1회당 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "회",
+        "required": true,
+        "ask": "정재하시험 횟수는 몇 회입니까?",
+        "source": "원문 이미지 표 우측 상단 '(회당)' 표기"
+      },
+      {
+        "name": "loading_method",
+        "type": "enum",
+        "allowed_values": [
+          "주변파일 반력 이용",
+          "실하중 재하",
+          "Anchor 반력 이용"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "재하방법은 무엇입니까?",
+        "source": "PDF 1쪽 [주] ①, ②",
+        "synonyms": {
+          "주변파일 반력 이용": [
+            "주변파일",
+            "주변파일 반력"
+          ],
+          "실하중 재하": [
+            "실하중",
+            "실하중 재하방법"
+          ],
+          "Anchor 반력 이용": [
+            "앵커",
+            "Anchor",
+            "앵커 반력"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p456-t1",
+        "role": "정재하시험 회당 소요 인력 및 재료",
+        "source": "PDF 1쪽 8-2-6 표",
+        "unit": "인, 개",
+        "values": {
+          "중급기술자": {
+            "수량": "4.20"
+          },
+          "초급기술자": {
+            "수량": "4.41"
+          },
+          "보통인부": {
+            "수량": "4.10"
+          },
+          "단독콘": {
+            "수량": "72.0"
+          }
+        },
+        "cite": {
+          "table_id": "p456-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p456-t1",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "중급기술자",
+            "초급기술자",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p456-t1에서 직종별 인원 및 단독콘 수량을 가져온다.",
+        "시험 횟수(quantity)를 곱하여 총 소요량을 구한다."
+      ],
+      "source": "PDF 1쪽 8-2-6 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "재하방법이 실하중 재하방법이거나 Anchor의 반력을 이용하는 경우",
+        "blocked_if": {
+          "input": "loading_method",
+          "op": "!=",
+          "value": "주변파일 반력 이용"
+        },
+        "reason": "실하중 재하방법, Anchor의 반력을 이용하는 경우 소요비용은 별도 계상함",
+        "source": "PDF 1쪽 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p456-x13",
+            "quote": "재하방법으로 실하중 재하방법, Anchor의 반력을 이용하는 경우 소요비용은 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "크레인",
+        "source": "PDF 1쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p456-x13",
+          "quote": "크레인은 별도 계상하며 그 규격은 현장 여건에 따라 다르게 적용될 수 있다."
+        }
+      },
+      {
+        "item": "운반비, 잡재료 및 손료",
+        "source": "PDF 1쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p456-x13",
+          "quote": "운반비, 잡재료 및 손료는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "회당 직종별 인원과 재료 수량이 표에 직접 제시되어 있으므로 단위당 품 계산 방식에 해당합니다.",
+  "citations": [
+    {
+      "table_id": "p456-t1",
+      "row": "중급기술자",
+      "column": "수량",
+      "value": "4.20"
+    },
+    {
+      "table_id": "p456-t1",
+      "row": "초급기술자",
+      "column": "수량",
+      "value": "4.41"
+    },
+    {
+      "table_id": "p456-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "4.10"
+    },
+    {
+      "table_id": "p456-t1",
+      "row": "단독콘",
+      "column": "수량",
+      "value": "72.0"
+    },
+    {
+      "chunk_id": "p456-x13",
+      "quote": "본 품은 기초말뚝의 지지력을 평가하기 위하여 주변파일의 반력을 이용하는 방법에 해당한다."
+    },
+    {
+      "chunk_id": "p456-x13",
+      "quote": "재하방법으로 실하중 재하방법, Anchor의 반력을 이용하는 경우 소요비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p456-x13",
+      "quote": "크레인은 별도 계상하며 그 규격은 현장 여건에 따라 다르게 적용될 수 있다."
+    },
+    {
+      "chunk_id": "p456-x13",
+      "quote": "운반비, 잡재료 및 손료는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "단독콘의 규격이나 구체적인 용도가 명시되어 있지 않아, 재료비 산정 시 어떤 단가를 적용해야 할지 확인이 필요합니다."
+  ],
+  "questions": [
+    "정재하시험 3회를 수행할 때 필요한 기술자와 인부의 총 인·일은 어떻게 되나요?",
+    "재하방법을 실하중 재하방법으로 할 경우 이 품셈을 적용할 수 있나요?",
+    "크레인 사용료나 운반비는 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:16.522275+00:00",
+    "input_tokens": 11541,
+    "output_tokens": 1937,
+    "source_pages": [
+      456,
+      457
+    ],
+    "prompt_sha256": "413ebb87495ecdb638febab691cf3f60ac14af3b3d5a3411ba63bd5649080415",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

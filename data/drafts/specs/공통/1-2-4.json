@@ -1,0 +1,130 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/1-2-4/재료및자재의단가",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "1-2-4",
+    "title": "재료 및 자재의 단가",
+    "work": "재료 단위중량, 발생재 공제율, 강관배관 부자재 요율 등 참조",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "inputs": [],
+    "tables": [
+      {
+        "id": "p67-t1",
+        "role": "발생재의 처리 공제율",
+        "source": "PDF 11쪽 5. 발생재의 처리",
+        "values": {
+          "사용고재(시멘트공대및공드람제외)": {
+            "공제율": "90%"
+          },
+          "강재스크랩(Scrap)": {
+            "공제율": "70%"
+          },
+          "기타발생재": {
+            "공제율": "발생량"
+          }
+        },
+        "cite": {
+          "table_id": "p67-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "이 절은 재료의 단위중량, 발생재 공제율, 강관배관 부자재 요율 등 참조용 데이터를 제공합니다.",
+        "자동화된 계산보다는 설계 시 필요한 값을 표에서 직접 찾아 적용해야 합니다."
+      ],
+      "source": "PDF 9~13쪽 전체",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료의 단위 중량",
+        "source": "PDF 10~11쪽 3. 재료의 단위 중량",
+        "cite": {
+          "chunk_id": "p66-x23",
+          "quote": "재료의 단위중량은 입경, 습윤도 등에 따라 달라지므로 시험에 의하여 결정하여야 하며, 일반적인 추정 단위중량은 다음과 같다."
+        }
+      },
+      {
+        "item": "강관배관의 부자재 산정요율",
+        "source": "PDF 12~13쪽 6. 강관배관의 부자재 산정요율",
+        "cite": {
+          "chunk_id": "p68-x1",
+          "quote": "6. 강관배관의 부자재 산정요율"
+        }
+      },
+      {
+        "item": "잡재료 및 소모재료",
+        "source": "PDF 13쪽 7. 잡재료 및 소모재료",
+        "cite": {
+          "chunk_id": "p69-x13",
+          "quote": "주재료비(재료비의 할증수량 제외)의 2∼5%까지 별도 계상하되 산정근거를 명시하여야 한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 재료의 단위중량, 발생재 공제율, 강관배관 부자재 요율 등 다양한 참조용 표를 포함하고 있으며, 파싱 결과의 행/열 구분이 불완전하여 자동화된 조회나 단일 계산 모델을 구성하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p67-t1",
+      "row": "사용고재(시멘트공대및공드람제외)",
+      "column": "공제율",
+      "value": "90%"
+    },
+    {
+      "chunk_id": "p66-x23",
+      "quote": "재료의 단위중량은 입경, 습윤도 등에 따라 달라지므로 시험에 의하여 결정하여야 하며, 일반적인 추정 단위중량은 다음과 같다."
+    },
+    {
+      "chunk_id": "p68-x1",
+      "quote": "6. 강관배관의 부자재 산정요율"
+    },
+    {
+      "chunk_id": "p69-x13",
+      "quote": "주재료비(재료비의 할증수량 제외)의 2∼5%까지 별도 계상하되 산정근거를 명시하여야 한다."
+    }
+  ],
+  "open_questions": [
+    "표 파싱 결과가 원문과 크게 달라(행/열 병합 오류 등) 정확한 데이터 구조화가 어렵습니다. 특히 단위중량 표와 강관배관 요율 표의 파싱 개선이 필요합니다."
+  ],
+  "questions": [
+    "발생재 처리 시 강재 스크랩의 공제율은 얼마인가요?",
+    "잡재료 및 소모재료는 몇 %를 계상해야 하나요?",
+    "강관배관 부자재 산정요율을 계산하려면 어떤 조건이 필요한가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:10:22.505392+00:00",
+    "input_tokens": 21974,
+    "output_tokens": 1323,
+    "source_pages": [
+      65,
+      66,
+      67,
+      68,
+      69,
+      70
+    ],
+    "prompt_sha256": "5b7ec571b87885891b2003e077b1c6eacc7c1867262b1e4c18f00dd8ad8a4b7b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

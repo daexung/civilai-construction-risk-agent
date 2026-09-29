@@ -1,0 +1,168 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-2-2/열경화성수지천장판설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-2-2",
+    "title": "열경화성수지천장판 설치",
+    "work": "열경화성수지천장판 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      651
+    ],
+    "inputs": [
+      {
+        "name": "panel_size",
+        "type": "enum",
+        "allowed_values": [
+          "개당 0.2㎡이하",
+          "개당 0.4㎡이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "천장판의 크기는 어느 기준에 해당합니까?",
+        "source": "5-2-2 표 시공량 기준",
+        "synonyms": {
+          "개당 0.2㎡이하": [
+            "0.2이하",
+            "0.2㎡ 이하"
+          ],
+          "개당 0.4㎡이하": [
+            "0.4이하",
+            "0.4㎡ 이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "열경화성수지천장판 설치 면적은 몇 ㎡입니까?",
+        "source": "5-2-2 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p651-t0",
+        "role": "열경화성수지천장판 설치 인원 및 시공량",
+        "source": "5-2-2 열경화성수지천장판 설치 표",
+        "unit": "인/일, ㎡/일",
+        "values": {
+          "내장공": {
+            "수량": "2",
+            "개당 0.2㎡이하": "45",
+            "개당 0.4㎡이하": "55"
+          },
+          "보통인부": {
+            "수량": "1",
+            "개당 0.2㎡이하": "45",
+            "개당 0.4㎡이하": "55"
+          }
+        },
+        "cite": {
+          "table_id": "p651-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p651-t0",
+          "row": "내장공",
+          "column_input": "panel_size"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p651-t0",
+          "column": "수량",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "내장공": "1024",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p651-t0에서 천장판 크기에 따른 일당 시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(수량)으로 구한다."
+      ],
+      "source": "5-2-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "천장판 및 경량천장철골틀(Clip-BAR) 등 자재비",
+        "source": "5-2-2 [주] ①",
+        "cite": {
+          "section_no": "5-2-2",
+          "marker": "①"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "section_no": "5-2-2",
+          "marker": "③"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 일당 작업조의 인원과 그에 따른 일일 시공량이 명시되어 있어, 물량을 일일 시공량으로 나누어 작업일수를 구하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p651-t0",
+      "row": "내장공",
+      "column": "개당 0.2㎡이하",
+      "value": "45"
+    },
+    {
+      "table_id": "p651-t0",
+      "row": "내장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "chunk_id": "p651-x3",
+      "quote": "공구손료 및 경장비(절단기, 전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "천장판 크기가 0.3㎡이면 시공량 기준을 어떻게 적용하나요?",
+    "천장판 절단 작업이 많아 품이 더 드는 경우 할증을 적용할 수 있나요?",
+    "천장판의 총 시공 면적은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:01:51.913344+00:00",
+    "input_tokens": 11596,
+    "output_tokens": 1543,
+    "source_pages": [
+      651,
+      652
+    ],
+    "prompt_sha256": "593b878a8df4cd56c6fedb8d0002a8a36670a9db6cc200b7a6866343c3b183af",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

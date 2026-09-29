@@ -1,0 +1,165 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/6-5-1/조임식접합및부설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "6-5-1",
+    "title": "조임식 접합 및 부설",
+    "work": "조임식 접합 및 부설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      370
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "32",
+          "40",
+          "50"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "관경은 몇 ㎜입니까? (32 / 40 / 50)",
+        "source": "6-5-1 표 관경(㎜)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "시공 물량은 몇 개소입니까?",
+        "source": "6-5-1 표 시공량(개소)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p426-t0",
+        "role": "관경별 시공량 및 작업조 인원",
+        "source": "6-5-1 조임식 접합 및 부설 표",
+        "unit": "개소/일, 인/일",
+        "values": {
+          "32": {
+            "시공량": "22"
+          },
+          "40": {
+            "시공량": "21"
+          },
+          "50": {
+            "시공량": "17"
+          },
+          "배관공(수도)": {
+            "인원": "2"
+          },
+          "보통인부": {
+            "인원": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p426-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p426-t0",
+          "row_input": "pipe_diameter",
+          "column": "시공량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p426-t0",
+          "column": "인원",
+          "trades": [
+            "배관공(수도)",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공(수도)": "",
+            "보통인부": ""
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p426-t0에서 관경별 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "6-5-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일일 시공량과 작업조 인원이 표로 주어져 있어, 전체 물량을 일일 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p426-t0",
+      "row": "32",
+      "column": "시공량(개소)",
+      "value": "22"
+    },
+    {
+      "table_id": "p426-t0",
+      "row": "40",
+      "column": "시공량(개소)",
+      "value": "21"
+    },
+    {
+      "table_id": "p426-t0",
+      "row": "50",
+      "column": "시공량(개소)",
+      "value": "17"
+    },
+    {
+      "table_id": "p426-t0",
+      "row": "배관공(수도)",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "chunk_id": "p426-x6",
+      "quote": "본 품은 P.E관을 유니온으로 접합하는 기준이다."
+    },
+    {
+      "chunk_id": "p426-x6",
+      "quote": "본 품은 윤활제 바르기, 유니온(캡, 푸셔(pusher), 오링(O-ring)) 삽입 및 결합, 위치 및 구배 확인, 관로표시테이프 부설 작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트(p426-t0)에서 보통인부의 수량이 명확하게 분리되어 표시되지 않아, OCR 원문을 참고하여 배관공(수도) 2인, 보통인부 1인으로 분리하여 표를 구성했습니다.",
+    "adjusted_daily_crew 모델에서 base_output과 crew의 열이 하나뿐일 때 column_input 대신 고정된 열 이름(column)을 사용하는 방식이 시스템에서 지원되는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "관경 40mm P.E관을 조임식으로 100개소 접합할 때 필요한 배관공(수도)와 보통인부의 품은 얼마인가요?",
+    "관로표시테이프 부설 작업은 별도로 품을 계산해야 하나요?",
+    "접합에 사용되는 유니온이나 오링 등의 재료비는 이 품에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:44:37.093399+00:00",
+    "input_tokens": 11594,
+    "output_tokens": 1585,
+    "source_pages": [
+      426,
+      427
+    ],
+    "prompt_sha256": "56d7b8e08ea6e29da186ff27f4b19faeb1009ecae506c1e5edfdc9b2459c0535",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p426-x6 조각 텍스트에 없음"
+    ]
+  }
+}

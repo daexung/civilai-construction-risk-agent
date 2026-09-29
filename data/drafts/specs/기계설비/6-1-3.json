@@ -1,0 +1,107 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/6-1-3/세대용계량기함설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "6-1-3",
+    "title": "세대용 계량기함 설치",
+    "work": "세대용 계량기함 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      680
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 세대용 계량기함은 몇 개소입니까?",
+        "source": "개소당 기준"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p736-t0",
+        "role": "세대용 계량기함 설치 품",
+        "source": "680쪽 6-1-3 표",
+        "unit": "개소당",
+        "values": {},
+        "cite": {
+          "table_id": "p736-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과에 직종별 인원 수량이 누락되어 계산할 수 없습니다."
+      ],
+      "source": "680쪽 6-1-3 표",
+      "rounding": "단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "연결배관 및 밸브, 계량기 설치 작업",
+        "source": "680쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p736-x2",
+          "quote": "연결배관 및 밸브, 계량기 설치 작업은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p736-x2",
+          "quote": "공구손료 및 경장비의 기계경비(드릴 등)는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에 직종별 인원 수량이 누락되어 계산식을 구성할 수 없습니다.",
+  "citations": [
+    {
+      "chunk_id": "p736-x2",
+      "quote": "연결배관 및 밸브, 계량기 설치 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p736-x2",
+      "quote": "공구손료 및 경장비의 기계경비(드릴 등)는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p736-t0)에 배관공, 보통인부의 수량(0.086)이 누락되어 있어 표 값을 추출할 수 없습니다."
+  ],
+  "questions": [
+    "설치할 세대용 계량기함은 몇 개소입니까?",
+    "계량기함 설치 시 앵커 구멍뚫기 작업은 별도로 품을 잡아야 하나요?",
+    "세대용 계량기함 설치 시 공구손료는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:07.283282+00:00",
+    "input_tokens": 23166,
+    "output_tokens": 3063,
+    "source_pages": [
+      736,
+      737
+    ],
+    "prompt_sha256": "a02122f9b212bf8e169db7584ba3685b7dbc42c1c36340f0b6c042c3b07a7cf0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

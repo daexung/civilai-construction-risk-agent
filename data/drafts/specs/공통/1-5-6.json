@@ -1,0 +1,172 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/1-5-6/공사용수",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "1-5-6",
+    "title": "사용료",
+    "work": "공사용수 수량 산출",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      32,
+      33
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "거푸집씻기",
+          "콘크리트혼합및양생",
+          "경량콘크리트혼합및양생",
+          "보통벽돌쌓기",
+          "돌쌓기모르타르",
+          "돌씻기",
+          "미장",
+          "타일붙임모르타르",
+          "타일씻기",
+          "잡용수"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 공종의 공사용수를 산출합니까?",
+        "source": "PDF 33쪽 3. 공사용수 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": null,
+        "required": true,
+        "ask": "해당 공종의 물량은 얼마입니까? (단위는 표의 공종별 단위를 따릅니다. 예: ㎡, ㎥, 1,000매 등)",
+        "source": "PDF 33쪽 3. 공사용수 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p89-t0",
+        "role": "공종별 공사용수 수량",
+        "source": "PDF 33쪽 3. 공사용수 표",
+        "unit": "㎥",
+        "values": {
+          "수량": {
+            "거푸집씻기": "0.04",
+            "콘크리트혼합및양생": "0.27",
+            "경량콘크리트혼합및양생": "0.24",
+            "보통벽돌쌓기": "0.18",
+            "돌쌓기모르타르": "0.06",
+            "돌씻기": "0.17",
+            "미장": "0.02",
+            "타일붙임모르타르": "0.01",
+            "타일씻기": "0.013",
+            "잡용수": "사용량비의 40∼50%"
+          }
+        },
+        "cite": {
+          "table_id": "p89-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p89-t0",
+          "row_input": "work_type",
+          "column_input": "수량",
+          "trades": [
+            "수량"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "표에서 공종별 단위당 공사용수 수량을 찾는다.",
+        "물량을 곱해 총 공사용수 수량을 구한다."
+      ],
+      "source": "PDF 33쪽 3. 공사용수 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "work_type == 잡용수",
+        "blocked_if": {
+          "input": "work_type",
+          "op": "==",
+          "value": "잡용수"
+        },
+        "reason": "잡용수는 '사용량비의 40~50%'로 범위가 주어져 단일 값으로 자동 계산할 수 없음",
+        "source": "PDF 33쪽 3. 공사용수 표",
+        "cite": {
+          "table_id": "p89-t0",
+          "row": "잡용수",
+          "column": "수량"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "특허료, 기술료, 전력비, 수도광열비, 운반비, 기계경비, 가설비, 시험검사비 등",
+        "source": "PDF 32쪽 1-5-6 1, 2항",
+        "cite": {
+          "chunk_id": "p88-x19",
+          "quote": "계약에 따른 특허료와 기술료 등에 대한 비용을 계상한다. 2. 공사에 필요한 경비 중 전력비, 수도광열비, 운반비, 기계경비, 가설비, 시험검사비 등을 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "공종별 단위당 공사용수 수량이 표에 직접 제시되어 있어 물량을 곱해 산출하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p89-t0",
+      "row": "거푸집씻기",
+      "column": "수량",
+      "value": "0.04"
+    },
+    {
+      "table_id": "p89-t0",
+      "row": "잡용수",
+      "column": "수량",
+      "value": "사용량비의 40∼50%"
+    },
+    {
+      "chunk_id": "p88-x19",
+      "quote": "계약에 따른 특허료와 기술료 등에 대한 비용을 계상한다. 2. 공사에 필요한 경비 중 전력비, 수도광열비, 운반비, 기계경비, 가설비, 시험검사비 등을 계상한다."
+    },
+    {
+      "chunk_id": "p89-x11",
+      "quote": "[주] 본 표는 양생에 필요한 물의 양을 포함한 것이다."
+    }
+  ],
+  "open_questions": [
+    "잡용수의 '사용량비'가 구체적으로 어떤 사용량들의 합계를 의미하는지 명확하지 않음."
+  ],
+  "questions": [
+    "콘크리트 혼합 및 양생에 필요한 공사용수는 어떻게 계산하나요?",
+    "잡용수 수량은 어떻게 산정해야 하나요?",
+    "공사용수 산정 시 양생에 필요한 물도 따로 계산해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:10:06.324863+00:00",
+    "input_tokens": 12282,
+    "output_tokens": 1732,
+    "source_pages": [
+      88,
+      89,
+      90
+    ],
+    "prompt_sha256": "cf806b56c49c6959bf83065f5eeea5ca9d39cd0d87b44e92782086220e8b5877",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

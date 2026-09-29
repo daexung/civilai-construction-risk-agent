@@ -1,0 +1,222 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/4-3-3/굴취_근원직경",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "4-3-3",
+    "title": "굴취(근원직경)('19, '24년 보완)",
+    "work": "굴취(근원직경) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      95
+    ],
+    "inputs": [
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "인력시공",
+          "기계시공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 방법은 인력시공과 기계시공 중 무엇입니까?",
+        "source": "PDF 95쪽 4-3-3 표의 구분"
+      },
+      {
+        "name": "diameter",
+        "type": "enum",
+        "allowed_values": [
+          "5(4)이하",
+          "6~7(5~6)",
+          "8~9(7~8)",
+          "10~14(8~12)",
+          "15~19(13~16)",
+          "20~29(17~24)",
+          "30~39(25~32)",
+          "40~49(33~41)",
+          "50~60(42~50)"
+        ],
+        "unit": "㎝",
+        "required": true,
+        "ask": "근원(흉고)직경은 어느 구간에 해당합니까?",
+        "source": "PDF 95쪽 4-3-3 표의 근원(흉고)직경(㎝)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "주",
+        "required": true,
+        "ask": "굴취할 수목의 수량은 몇 주입니까?",
+        "source": "PDF 95쪽 4-3-3 표의 시공량(주) 단위"
+      },
+      {
+        "name": "has_root_ball",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "분이 있습니까? (분이 없는 경우 시공량 가산)",
+        "source": "PDF 95쪽 4-3-3 표 비고"
+      },
+      {
+        "name": "is_wild",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "야생 수목입니까? (야생일 경우 시공량 감산)",
+        "source": "PDF 95쪽 4-3-3 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p151-t1",
+        "role": "시공방법 및 근원직경별 시공량",
+        "source": "PDF 95쪽 4-3-3 표",
+        "unit": "주/일",
+        "values": {
+          "5(4)이하": {
+            "인력시공": "50",
+            "기계시공": "70"
+          },
+          "6~7(5~6)": {
+            "인력시공": "30",
+            "기계시공": "40"
+          },
+          "8~9(7~8)": {
+            "인력시공": "15",
+            "기계시공": "25"
+          },
+          "10~14(8~12)": {
+            "기계시공": "15"
+          },
+          "15~19(13~16)": {
+            "기계시공": "10"
+          },
+          "20~29(17~24)": {
+            "기계시공": "7"
+          },
+          "30~39(25~32)": {
+            "기계시공": "5"
+          },
+          "40~49(33~41)": {
+            "기계시공": "4"
+          },
+          "50~60(42~50)": {
+            "기계시공": "3"
+          }
+        },
+        "cite": {
+          "table_id": "p151-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "표에서 시공방법과 근원직경에 따른 기준 시공량을 찾는다.",
+        "분이 없는 경우 기준 시공량의 25%를 가산하여 조정 시공량을 구한다.",
+        "야생일 경우 조정 시공량의 17% 범위 내에서 감하여 최종 시공량을 구한다.",
+        "물량을 최종 시공량으로 나누어 작업일수를 산출한다.",
+        "작업일수에 작업조 인원 및 장비 대수를 곱하여 총 투입량을 구한다."
+      ],
+      "source": "PDF 95쪽 4-3-3 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "야생 수목인 경우",
+        "blocked_if": {
+          "input": "is_wild",
+          "op": "==",
+          "value": true
+        },
+        "reason": "원문에서 '시공량의 17% 범위 내에서 감하여 적용'한다고 명시되어 있어, 정확한 감산 비율을 확정할 수 없습니다.",
+        "source": "PDF 95쪽 4-3-3 [주] ④",
+        "cite": [
+          {
+            "chunk_id": "p151-x27",
+            "quote": "④ 굴취시 야생일 경우에는 시공량의 17% 범위 내에서 감하여 적용한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "운반로 개설 비용",
+        "source": "PDF 95쪽 4-3-3 [주] ⑤",
+        "cite": {
+          "chunk_id": "p151-x27",
+          "quote": "⑤ 굴취수목의 운반을 위하여 운반로를 개설하여야 하는 경우에는 그 비용을 별도 계상한다."
+        }
+      },
+      {
+        "item": "분뜨기, 운반준비를 위한 재료비",
+        "source": "PDF 95쪽 4-3-3 [주] ⑦",
+        "cite": {
+          "chunk_id": "p151-x27",
+          "quote": "⑦ 분뜨기, 운반준비를 위한 재료비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에 '보통인부' 항목이 누락되어 정확한 작업조 인원 구성이 불가능하며, 기계시공의 장비(굴착기, 크레인)와 근원직경 구간의 매핑이 파싱 결과에서 명확히 분리되지 않아 자동 계산 모델을 적용하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p151-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 분이 없는 경우 시공량의 25%를 가산한다."
+    },
+    {
+      "chunk_id": "p151-x27",
+      "quote": "④ 굴취시 야생일 경우에는 시공량의 17% 범위 내에서 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p151-x27",
+      "quote": "⑤ 굴취수목의 운반을 위하여 운반로를 개설하여야 하는 경우에는 그 비용을 별도 계상한다."
+    },
+    {
+      "chunk_id": "p151-x27",
+      "quote": "⑦ 분뜨기, 운반준비를 위한 재료비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에 원문 표에 존재하는 '보통인부' 행이 완전히 누락되어 있어 작업조 인원을 정확히 구성할 수 없습니다.",
+    "야생 수목일 경우 '17% 범위 내에서 감하여 적용'의 정확한 비율 기준이 명시되지 않아 계산을 보류했습니다."
+  ],
+  "questions": [
+    "근원직경 12cm 나무를 기계로 굴취할 때 일당 시공량은 얼마인가요?",
+    "야생 수목을 굴취할 때 시공량 감산은 정확히 몇 %를 적용해야 하나요?",
+    "분이 없는 나무를 굴취하는데 시공량 할증이 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:18:15.777145+00:00",
+    "input_tokens": 12340,
+    "output_tokens": 2364,
+    "source_pages": [
+      151,
+      152
+    ],
+    "prompt_sha256": "9be68b4caa6965de69aace82b33646076957cd378a63adeeb75aa3d6ea1b1ced",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

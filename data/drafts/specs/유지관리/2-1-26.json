@@ -1,0 +1,239 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-26/시선유도표지_철거",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-26",
+    "title": "시선유도표지 철거",
+    "work": "시선유도표지 철거",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      888
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "철거할 시선유도표지의 수량은 몇 개입니까?",
+        "source": "PDF 888쪽 2-1-26 표의 시공량 단위(개)"
+      },
+      {
+        "name": "type",
+        "type": "enum",
+        "allowed_values": [
+          "흙속 매설용",
+          "가드레일용",
+          "옹벽용"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시선유도표지의 설치 유형은 무엇입니까?",
+        "source": "PDF 888쪽 2-1-26 표의 시공량 구분"
+      },
+      {
+        "name": "foundation_type",
+        "type": "enum",
+        "allowed_values": [
+          "지주 박기 또는 터파기 후 되메우기",
+          "콘크리트 기초",
+          "해당 없음"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "흙속 매설용인 경우, 설치 방식은 무엇입니까? (가드레일용이나 옹벽용인 경우 '해당 없음' 선택)",
+        "source": "PDF 888쪽 2-1-26 [주] ②"
+      },
+      {
+        "name": "truck_size",
+        "type": "enum",
+        "allowed_values": [
+          "2.5ton"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용할 트럭의 규격은 무엇입니까?",
+        "source": "PDF 888쪽 2-1-26 표의 트럭 규격",
+        "machine_codes": {
+          "2.5ton": "truck-0025"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p944-t3",
+        "role": "시선유도표지 철거 작업조 인원, 장비 대수 및 일일시공량",
+        "source": "PDF 888쪽 2-1-26 표",
+        "unit": "인/작업조, 대/작업조, 개/일",
+        "values": {
+          "특별인부": {
+            "흙속 매설용": "1",
+            "가드레일용": "1",
+            "옹벽용": "1"
+          },
+          "보통인부": {
+            "흙속 매설용": "1",
+            "가드레일용": "1",
+            "옹벽용": "1"
+          },
+          "트럭": {
+            "흙속 매설용": "1",
+            "가드레일용": "1",
+            "옹벽용": "1"
+          },
+          "시공량": {
+            "흙속 매설용": "130",
+            "가드레일용": "260",
+            "옹벽용": "130"
+          }
+        },
+        "cite": {
+          "table_id": "p944-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p944-t3",
+          "row": "시공량",
+          "column_input": "type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p944-t3",
+          "column_input": "type",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "트럭",
+          "table": "p944-t3",
+          "unit": "대·일",
+          "machine_code_input": "truck_size",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p944-t3에서 설치 유형별 기준시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 트럭 대·일 = 작업일수 × 1로 구한다."
+      ],
+      "source": "PDF 888쪽 2-1-26 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "foundation_type == 콘크리트 기초",
+        "blocked_if": {
+          "input": "foundation_type",
+          "op": "==",
+          "value": "콘크리트 기초"
+        },
+        "reason": "콘크리트 기초를 두어 설치하는 경우에는 별도로 계상해야 함",
+        "source": "PDF 888쪽 2-1-26 [주] ②",
+        "cite": {
+          "chunk_id": "p944-x17",
+          "quote": "콘크리트 기초를 두어 설치하는 경우에는 별도로 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p944-x17",
+          "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수가 고정되어 있고, 설치 유형별 일일 시공량이 제시되어 있어 물량을 시공량으로 나누어 작업일수를 구하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p944-t3",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p944-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p944-t3",
+      "row": "트럭",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p944-t3",
+      "row": "시공량(개)",
+      "column": "흙속 매설용",
+      "value": "130"
+    },
+    {
+      "table_id": "p944-t3",
+      "row": "시공량(개)",
+      "column": "가드레일용",
+      "value": "260"
+    },
+    {
+      "table_id": "p944-t3",
+      "row": "시공량(개)",
+      "column": "옹벽용",
+      "value": "130"
+    },
+    {
+      "chunk_id": "p944-x17",
+      "quote": "콘크리트 기초를 두어 설치하는 경우에는 별도로 계상한다."
+    },
+    {
+      "chunk_id": "p944-x17",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "원문 표에서 인원과 장비 대수는 설치 유형과 무관하게 1로 고정되어 있으나, 명세 형식의 base_output과 crew 구조를 맞추기 위해 표를 재구성하여 적용했습니다. 이 방식이 시스템에서 올바르게 처리되는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "시선유도표지 철거 물량은 몇 개인가요?",
+    "흙속 매설용 시선유도표지가 콘크리트 기초로 설치되어 있는 경우 어떻게 계산하나요?",
+    "트럭의 규격이 2.5ton이 아닌 경우 품을 어떻게 조정해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:50:12.637843+00:00",
+    "input_tokens": 11623,
+    "output_tokens": 2364,
+    "source_pages": [
+      944,
+      945
+    ],
+    "prompt_sha256": "d35760ecd343b0790bdc3570cfe8f176766a2809fca60cce1bbf7b3030dba994",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}
