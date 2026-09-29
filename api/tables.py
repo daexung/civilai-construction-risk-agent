@@ -147,6 +147,52 @@ def add_tables(response: dict) -> dict:
             "rate_rows": rate_rows(response.get("priced"), response.get("statement"))}
 
 
+def _cost_statement_rows(tables: dict, statement: dict) -> list[list]:
+    """원가계산서의 6개 열을 항상 같은 위치에 채운다."""
+    totals = statement.get("totals", {})
+    contract_amount = totals.get("contract_amount")
+    statement_rows = tables.get("statement_rows", [])
+    by_name = {row["name"]: row for row in statement_rows}
+    output = []
+
+    def add(major: str, minor: str, amount, basis: str = "", status: str = "산정") -> None:
+        excluded = status in ("제외", "미산정")
+        value = None if excluded else _num(amount)
+        ratio = None
+        if value is not None and contract_amount:
+            ratio = float(Decimal(str(value)) / Decimal(str(contract_amount)))
+        output.append([major, minor, value, ratio, basis, status if excluded else ""])
+
+    for category in ("재료비", "노무비", "경비"):
+        lines = [row for row in statement_rows if row.get("category") == category]
+        for row in lines:
+            minor = "소계" if row["name"] in _SUBTOTALS else row["name"]
+            basis = row.get("basis") or row.get("reason") or row.get("note") or ""
+            add(category, minor, row.get("amount"), basis, row.get("status", "산정"))
+        if category == "재료비" and lines:
+            add(category, "소계", totals.get("materials"), "직접재료비 및 재료비 항목 합계")
+
+    summary_names = ("순공사원가", "일반관리비", "이윤", "총원가", "부가가치세", "도급액")
+    for name in summary_names:
+        row = by_name.get(name)
+        if row:
+            major = "합계" if row.get("category") == "합계" else (row.get("category") or "")
+            basis = row.get("basis") or row.get("reason") or row.get("note") or ""
+            if name == "부가가치세" and totals.get("total_cost") is not None:
+                basis = f"총원가 {int(totals['total_cost']):,}원 × 10%"
+            add(major, name, row.get("amount"), basis, row.get("status", "산정"))
+
+    known = {row["name"] for row in statement_rows if row.get("category") in ("재료비", "노무비", "경비")}
+    known.update(summary_names)
+    for row in statement_rows:
+        if row["name"] in known:
+            continue
+        status = row.get("status", "산정")
+        add(row.get("category") or "경비", row["name"], row.get("amount"),
+            row.get("basis") or row.get("reason") or row.get("note") or "", status)
+    return output
+
+
 # ---------- 엑셀 ----------
 
 _HEAD = PatternFill("solid", fgColor="E8EEF7")
@@ -192,14 +238,14 @@ def build_xlsx(response: dict) -> bytes:
            DISCLAIMER]
     book = Workbook()
 
-    rows = []
-    for row in tables["statement_rows"]:
-        rows.append([row["name"], row["basis"], _num(row["amount"]),
-                     row["status"], row.get("reason") or row.get("note") or "", row["category"] or ""])
-    sheet = _sheet(book, "원가계산서", ["비목", "산출 기준", "금액(원)", "상태", "사유·비고", "구분"],
-                   rows, [28, 48, 16, 8, 50, 10], (3,), first=True, top=top)
+    rows = _cost_statement_rows(tables, statement)
+    sheet = _sheet(book, "원가계산서", ["비목(대)", "비목(중)", "금액", "구성비(%)", "산출 근거", "상태"],
+                   rows, [16, 25, 16, 13, 48, 12], (3,), first=True, top=top)
     for row in sheet.iter_rows(min_row=sheet.max_row - len(rows) + 1):
-        if row[0].value == "도급액":
+        if isinstance(row[3].value, (int, float)):
+            row[3].number_format = "0.0%"
+    for row in sheet.iter_rows(min_row=sheet.max_row - len(rows) + 1):
+        if row[1].value in ("순공사원가", "총원가", "도급액"):
             for cell in row:
                 cell.font, cell.fill = Font(bold=True), _STRONG
 

@@ -110,10 +110,16 @@ def main() -> int:
     from openpyxl import load_workbook
     book = load_workbook(BytesIO(exported.content))
     first = book["원가계산서"] if "원가계산서" in book.sheetnames else None
-    contract = next((row for row in first.iter_rows(values_only=True) if row[0] == "도급액"), None) if first else None
+    cost_rows = list(first.iter_rows(values_only=True)) if first else []
+    cost_header = next((row for row in cost_rows if row[0] == "비목(대)"), None)
+    contract = next((row for row in cost_rows if row[1] == "도급액"), None)
+    excluded_rows = [row for row in cost_rows if row[5] == "제외"]
     checks.append(("A13 엑셀", exported.status_code == 200
                    and book.sheetnames == ["원가계산서", "내역서", "일위대가", "단가대비표", "산출근거"]
-                   and contract is not None and contract[2] == 10032436
+                   and cost_header is not None and contract is not None and contract[2] == 10032436
+                   and bool(excluded_rows) and all(row[2] is None for row in excluded_rows)
+                   and all(len(row) == 6 for row in cost_rows[cost_rows.index(cost_header) + 1:]
+                           if any(value is not None for value in row))
                    and "검토 전 참고용" in first["A3"].value + str(first["A4"].value)
                    and CLIENT.get("/api/export/nothing.xlsx").status_code == 404))
 
