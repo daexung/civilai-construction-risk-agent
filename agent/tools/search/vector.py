@@ -45,7 +45,9 @@ class VectorIndex:
         index_config = load_index_config(config_path)
         selected_provider = (index_config["embed_provider"] if config_path is not None else
                              os.environ.get("EMBED_PROVIDER") or index_config["embed_provider"])
-        self.embedding = settings(selected_provider)
+        selected_model = (index_config.get("embed_model") if config_path is not None else
+                          os.environ.get("EMBED_MODEL") or index_config.get("embed_model"))
+        self.embedding = settings(selected_provider, selected_model)
         chunks_path = chunks_path or index_config["chunks"]
         vectors_path = vectors_path or index_config["vectors"]
         self.chunks = [json.loads(line) for line in Path(chunks_path).read_text(encoding="utf-8").splitlines()

@@ -1,0 +1,1 @@
+{"chunks": "data/processed/chunks.jsonl", "vectors": "data/processed/embeddings.6장.text-multilingual-embedding-002.parquet", "embed_provider": "vertex", "embed_model": "text-multilingual-embedding-002"}

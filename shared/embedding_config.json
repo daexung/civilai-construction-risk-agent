@@ -1,1 +1,2 @@
-{"provider": "studio", "model": "gemini-embedding-2", "dim": 3072}
+{"provider": "studio", "model": "gemini-embedding-2", "dim": 3072,
+ "vertex_models": {"gemini-embedding-001": 3072, "text-multilingual-embedding-002": 768}}

@@ -14,6 +14,7 @@ CONFIG = Path(__file__).with_name("embedding_config.json")
 MODEL = "gemini-embedding-2"  # Existing index and saved evaluation metadata.
 DIM = 3072
 MODELS = {"studio": MODEL, "vertex": "gemini-embedding-001"}
+VERTEX_MODEL_DIMS_DEFAULT = {"gemini-embedding-001": 3072, "text-multilingual-embedding-002": 768}
 
 
 @dataclass(frozen=True)
@@ -23,7 +24,7 @@ class EmbeddingSettings:
     dim: int
 
 
-def settings(provider: str | None = None) -> EmbeddingSettings:
+def settings(provider: str | None = None, model: str | None = None) -> EmbeddingSettings:
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     override = provider or os.environ.get("EMBED_PROVIDER")
     selected = override or config["provider"]
@@ -31,13 +32,22 @@ def settings(provider: str | None = None) -> EmbeddingSettings:
         raise ValueError(f"지원하지 않는 EMBED_PROVIDER: {selected}")
     if not override and config["model"] != MODELS[selected]:
         raise ValueError(f"임베딩 설정의 provider/model 조합이 다릅니다: {selected}/{config['model']}")
+    if selected == "vertex":
+        vertex_models = config.get("vertex_models", VERTEX_MODEL_DIMS_DEFAULT)
+        chosen = model or os.environ.get("EMBED_MODEL") or MODELS[selected]
+        if chosen not in vertex_models:
+            raise ValueError(f"지원하지 않는 EMBED_MODEL: {chosen}")
+        return EmbeddingSettings(selected, chosen, int(vertex_models[chosen]))
     return EmbeddingSettings(selected, MODELS[selected], int(config["dim"]))
 
 
 def api_key(config: EmbeddingSettings | None = None) -> str:
     """Read only the selected credential name; never print the credential."""
     selected = config or settings()
-    key_name = "VERTEX_API_KEY" if selected.provider == "vertex" else "GEMINI_API_KEY"
+    if selected.provider == "vertex":
+        key_name = os.environ.get("VERTEX_KEY_NAME", "VERTEX_API_KEY")
+    else:
+        key_name = "GEMINI_API_KEY"
     key = os.environ.get(key_name)
     env = ROOT / ".env"
     if not key and env.exists():
