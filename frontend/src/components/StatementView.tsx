@@ -63,7 +63,7 @@ export function ConditionsBar({ threadId, conditions, disabled, onApply }: {
         <button type="button" className="ghost-btn" disabled={disabled} onClick={() => setOpen((v) => !v)}>
           조건 바꾸기
         </button>
-        <a className="ghost-btn export-link" href={exportUrl(threadId)} download="cost-statement.xlsx">엑셀로 받기</a>
+        <a className="ghost-btn export-link" href={exportUrl(threadId)}>엑셀로 받기</a>
       </div>
       {open && (
         <div className="conditions-panel">

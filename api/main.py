@@ -7,6 +7,7 @@ from datetime import date
 from typing import Optional
 from uuid import uuid4
 from pathlib import Path
+from urllib.parse import quote
 
 from fastapi import FastAPI
 from fastapi import HTTPException
@@ -19,7 +20,7 @@ from agent.graph import build_graph
 from agent.rules.specs import load_specs
 from agent.state import new_state
 from agent.nodes.fill import _common_fields, _valid_for_field
-from api.tables import add_tables, build_xlsx
+from api.tables import add_tables, build_xlsx, estimate_filename
 from agent.tools.source.citation import resolve_cites
 
 GRAPH = build_graph()
@@ -353,9 +354,10 @@ def _change_conditions(payload: ChatRequest) -> dict:
 @app.get("/api/export/{thread_id}.xlsx")
 def export_xlsx(thread_id: str) -> Response:
     response = _build_response(thread_id, _finished_state(thread_id))
+    filename = quote(estimate_filename(response), safe="")
     return Response(build_xlsx(response),
                     media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    headers={"Content-Disposition": 'attachment; filename="cost-statement.xlsx"'})
+                    headers={"Content-Disposition": f'attachment; filename="estimate.xlsx"; filename*=UTF-8\'\'{filename}'})
 
 
 @app.post("/api/chat")

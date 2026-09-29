@@ -136,6 +136,14 @@ def main() -> int:
     checks.append(("A16 일위대가 호표 합계·열순서", unit_headers is not None and unit_title is not None
                    and unit_title[5] == 21734 and unit_headers.index("노무비") < unit_headers.index("재료비")))
 
+    from urllib.parse import unquote
+    disposition = exported.headers.get("content-disposition", "")
+    encoded_name = disposition.partition("filename*=UTF-8''")[2]
+    decoded_name = unquote(encoded_name)
+    checks.append(("A17 공종명 파일명 헤더", 'filename="estimate.xlsx"; filename*=UTF-8\'\'' in disposition
+                   and decoded_name.endswith("_견적서.xlsx")
+                   and "/" not in decoded_name and "\\" not in decoded_name))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

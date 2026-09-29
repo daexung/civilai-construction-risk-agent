@@ -257,6 +257,12 @@ def _work_name(response: dict) -> str:
     return re.sub(r"\s*\(20\d{2}(?:년)?[^)]*\)\s*$", "", title).strip()
 
 
+def estimate_filename(response: dict) -> str:
+    """Build a filesystem-safe estimate filename from the displayed work title."""
+    name = re.sub(r'[\\/:*?"<>|]', "", _work_name(response)).strip()
+    return f"{name or '견적서'}_견적서.xlsx"
+
+
 def _metadata(response: dict) -> str:
     tables = response.get("tables", {})
     bill = tables.get("bill") or {}
