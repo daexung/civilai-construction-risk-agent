@@ -148,7 +148,7 @@ def main() -> int:
                        for row in bill_sheet.iter_rows(min_row=6, min_col=5, max_col=12)
                        for cell in row)
     rate_sheet = book["단가대비표"]
-    rate_numeric = all(cell.value is None or isinstance(cell.value, (int, float))
+    rate_numeric = all(cell.value is None or isinstance(cell.value, (int, float)) or cell.value == "-"
                        for row in rate_sheet.iter_rows(min_row=5, min_col=5, max_col=5)
                        for cell in row)
     basis_sheet = book["산출근거"]
@@ -166,13 +166,18 @@ def main() -> int:
 
     missing_title_row = next((index for index, row in enumerate(cost_rows) if row[0] == "빠진 항목"), None)
     missing_items = set()
+    missing_rows = []
     if missing_title_row is not None:
-        missing_items = {row[0] for row in cost_rows[missing_title_row + 2:] if row[0]}
+        missing_rows = [row for row in cost_rows[missing_title_row + 2:] if row[0]]
+        missing_items = {row[0] for row in missing_rows}
     checks.append(("A20 원가계산서 빠진 항목 분리", contract is not None and missing_title_row is not None
                    and missing_title_row > cost_rows.index(contract)
                    and all(not row[0] for row in cost_rows[cost_rows.index(contract) + 1:missing_title_row])
                    and any("1-2-9" in item for item in missing_items)
-                   and any("살수 양생" in item for item in missing_items)))
+                   and any("살수 양생" in item for item in missing_items)
+                   and all(any(expected in item for item in missing_items) for expected in
+                           ("레미콘", "펌프차 연료", "퇴직공제", "산업안전보건관리비",
+                            "공사이행보증", "건설기계대여대금"))))
 
     contract_row = cost_rows.index(contract) + 1 if contract else 0
     checks.append(("A21 원가계산서 요약 행 병합", contract_row > 0
@@ -191,6 +196,33 @@ def main() -> int:
                    and all(row[1].value in (None, "") for row in labor_rows)
                    and driver_pay[0].number_format == "#,##0.0"
                    and "일 283,323원 ÷ 8시간" in driver_rows[0][12].value))
+
+    all_cells = [cell.value for sheet in book.worksheets for row in sheet.iter_rows() for cell in row]
+    checks.append(("A24 내부 데이터 경로 비노출", not any(isinstance(value, str) and "data/raw/" in value
+                                                        for value in all_cells)))
+
+    rate_values = list(rate_sheet.iter_rows(values_only=True))
+    driver_rate = next((row for row in rate_values if row[1] == "펌프차 운전원"), None)
+    supplied = next((row for row in rate_values if row[0] == "자재"), None)
+    wage_rows = [row for row in rate_values[4:] if row[0] == "노임"]
+    machine_rows = [row for row in rate_values[4:] if row[0] == "기계경비"]
+    checks.append(("A25 단가대비표 실무 열과 단가", rate_values[3] ==
+                   ("구분", "품명", "규격", "단위", "적용 단가", "단가 근거", "적용 기간", "비고")
+                   and driver_rate is not None and driver_rate[3] == "원/인" and driver_rate[4] == 283323
+                   and "35,415.4원" in driver_rate[7]
+                   and bool(wage_rows) and all(row[2] in (None, "") and row[3] == "원/인" for row in wage_rows)
+                   and bool(machine_rows) and all(row[3] == "원/hr" for row in machine_rows)
+                   and supplied is not None and supplied[4] == "-" and supplied[7] == "관급(발주처 지급)"
+                   and all(row[0] != "제비율" for row in rate_values[4:])))
+
+    basis_values = list(basis_sheet.iter_rows(values_only=True))
+    checks.append(("A26 산출근거 범위와 적용 기준", not any(value in ("간접노무비", "산재보험료")
+                   for row in basis_values for value in row)
+                   and any(row[0] == "공구손료 및 경장비 기준액 (원)" and row[1] == 4922974
+                           and "× 5%" in row[2] for row in basis_values)
+                   and sum(row[0] == "적용 기준" for row in basis_values) == 1
+                   and any(row[0] == "공사 규모 판정" for row in basis_values)
+                   and any(row[0] == "안전관리비 기초액" for row in basis_values)))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

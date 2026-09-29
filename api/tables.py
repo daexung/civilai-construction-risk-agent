@@ -148,7 +148,7 @@ def unit_price_rows(priced: dict | None) -> list[dict]:
 
 def rate_rows(priced: dict | None, statement: dict | None,
               conditions: list[dict] | None = None) -> list[dict]:
-    """쓴 단가 목록: 노임, 기계경비, 제비율 버전, 관급 자재."""
+    """실제 적용한 노임·기계 단가와 관급자재를 정리한다."""
     if not priced:
         return []
     labor_version = priced.get("rate_version") or {}
@@ -159,29 +159,26 @@ def rate_rows(priced: dict | None, statement: dict | None,
         if line.get("unit_price") is None:
             continue
         if line.get("kind") == "labor":
-            rows.append({"kind": "노임", "name": line["name"], "spec": line["rate_code"],
-                         "unit": labor_version.get("unit", "원/일"), "price": line["unit_price"],
-                         "source": labor_source, "period": _rate_period(labor_version)})
+            rows.append({"kind": "노임", "name": line["name"], "spec": "",
+                         "unit": "원/인", "price": line["unit_price"],
+                         "source": labor_source, "period": _rate_period(labor_version),
+                         "note": f"일 8시간 · 노임 코드 {line.get('rate_code', '')}"})
         elif line.get("machine_code") and line.get("rate_code"):
-            rows.append({"kind": "노임", "name": line["name"], "spec": line["rate_code"], "unit": "원/hr",
-                         "price": line["unit_price"], "source": labor_source + " 일 노임 ÷ 8시간 환산",
-                         "period": _rate_period(labor_version)})
+            daily_wage = _num(Decimal(str(line["unit_price"])) * 8)
+            hourly = f"{Decimal(str(line['unit_price'])):,.1f}"
+            rows.append({"kind": "노임", "name": line["name"], "spec": "", "unit": "원/인",
+                         "price": daily_wage, "source": labor_source,
+                         "period": _rate_period(labor_version),
+                         "note": f"시간당 {hourly}원 환산(÷8) · 노임 코드 {line['rate_code']}"})
         elif line.get("machine_code"):
             rows.append({"kind": "기계경비", "name": line["name"], "spec": line.get("machine_spec", ""),
                          "unit": "원/hr", "price": line["unit_price"],
                          "source": f"{equipment_version.get('title', '')}({equipment_version.get('publisher', '')})",
-                         "period": _rate_period(equipment_version, equipment=True)})
-    version = (statement or {}).get("overhead_version")
-    if version:
-        group = next((item.get("group") for item in (conditions or [])
-                      if item.get("name") == "work_category"), "")
-        rows.append({"kind": "제비율", "name": "조달청 제비율", "spec": group, "unit": "",
-                     "price": None, "source": ", ".join(version.get("source_files", [])),
-                     "period": version.get("effective_from", "")})
+                         "period": _rate_period(equipment_version, equipment=True), "note": ""})
     for line in priced.get("supply_lines", []):
-        rows.append({"kind": "자재", "name": line["name"], "spec": line.get("status", ""),
-                     "unit": "", "price": None, "source": line.get("reason") or "",
-                     "period": ""})
+        rows.append({"kind": "자재", "name": line["name"], "spec": "",
+                     "unit": line.get("unit", ""), "price": "-", "source": "",
+                     "period": "", "note": "관급(발주처 지급)"})
     return rows
 
 
@@ -365,7 +362,6 @@ def _format_sheet(sheet, last_column: int, header_rows: tuple[int, ...], data_st
                   muted_rows: tuple[int, ...] = (), bold_rows: tuple[int, ...] = (),
                   highlight_rows: tuple[int, ...] = (), footer_row: int | None = None) -> None:
     for row in range(1, sheet.max_row + 1):
-        sheet.row_dimensions[row].height = max(sheet.row_dimensions[row].height or 0, 21)
         for column in range(1, last_column + 1):
             cell = sheet.cell(row, column)
             cell.font = Font(name=_FONT_NAME, size=10)
@@ -432,8 +428,13 @@ def _append_cost_rate_sources(sheet, response: dict) -> tuple[int, int]:
     rows = []
     if overhead:
         effective_from = _korean_date(overhead.get("effective_from"))
-        rows.append(["제비율", f"조달청 {effective_from}, {group}",
-                     ", ".join(overhead.get("source_files", [])), effective_from])
+        for line in statement.get("lines", []):
+            source = line.get("source") or {}
+            if not str(source.get("file") or "").startswith("data/raw/"):
+                continue
+            rate = line.get("rate")
+            label = f"조달청 원가계산 제비율({effective_from}, {group}) · {line['name']}"
+            rows.append(["제비율", f"{rate}%" if rate is not None else "", label, effective_from])
     if labor:
         rows.append(["노임", labor.get("title", ""), labor.get("publisher", ""), _rate_period(labor)])
     if equipment:
@@ -504,11 +505,17 @@ def _unit_export_rows(response: dict, unit_rows: list[dict]) -> tuple[list[list]
 def _basis_rows(response: dict) -> list[list]:
     result = response.get("result") or {}
     statement = response.get("statement") or {}
+    priced = response.get("priced") or {}
     basis = []
     daily = result.get("daily_volume")
     if daily:
         basis.append([f"일일시공량 ({daily['unit']})", _num(daily["value"]), daily["formula"],
                       _citation_source(daily.get("citations")) or "; ".join(daily.get("sources", []))])
+        for citation in daily.get("citations", []):
+            factor = citation.get("row")
+            if factor in ("f1", "f2"):
+                basis.append([f"보정계수 {factor}", _num(citation.get("value")),
+                              citation.get("column") or "", _citation_source([citation])])
     if result.get("work_days"):
         basis.append(["작업일수 (일)", _num(result["work_days"]["value"]), result["work_days"]["formula"], ""])
     for line in result.get("lines", []):
@@ -518,17 +525,24 @@ def _basis_rows(response: dict) -> list[list]:
     for line in result.get("unit_lines", []):
         basis.append([f"{line['name']} 1㎥당 ({line['unit']})", _num(line["applied"]), line["formula"],
                       f"{line['rule']}; {_citation_source(line.get('citations')) or line.get('source', '')}"])
-    for item in result.get("not_calculated", []):
-        basis.append([item["item"], "미산정", "", _citation_source(item.get("citations")) or item["source"]])
-    for line in statement.get("lines", []):
-        status = line.get("status", "산정")
-        value = status if status in ("제외", "미산정") else line.get("amount")
-        source = line.get("source") or {}
-        source_text = ", ".join(part for part in (source.get("file"), source.get("cell")) if part)
-        basis.append([line.get("name", ""), value,
-                      _basis_text(line) or line.get("reason") or line.get("note") or "", source_text])
-    for note in statement.get("basis_notes", []):
-        basis.append(["제비율 적용 기준", "", note, ""])
+    labor_total = (statement.get("totals") or {}).get("labor")
+    for line in priced.get("cost_lines", []):
+        if line.get("kind") != "rate_cost":
+            continue
+        rate = Decimal(str(line.get("rate") or 0)) * 100
+        base_amount = line.get("base_amount")
+        if base_amount is None and line.get("base") == "labor_subtotal":
+            base_amount = labor_total
+        base_label = "노무비 계" if line.get("base") == "labor_subtotal" else str(line.get("base") or "기준액")
+        basis.append([f"{line['name']} 기준액 (원)", _num(base_amount),
+                      f"{base_label} {_num(base_amount):,}원 × {rate.normalize():g}%" if base_amount is not None else "",
+                      _unit_citation_source(line.get("citations"))])
+    notes = statement.get("basis_notes", [])
+    if notes:
+        basis.append(["적용 기준", "", "", ""])
+        for index, note in enumerate(notes[:2]):
+            label = "공사 규모 판정" if index == 0 else "안전관리비 기초액"
+            basis.append([label, "", note, ""])
     return basis
 
 
@@ -667,13 +681,14 @@ def build_xlsx(response: dict) -> bytes:
             unit_sheet.cell(row, 7).number_format = "#,##0.0"
 
     # 단가대비표
-    rate_widths = [16, 34, 26, 18, 16, 56, 22]
+    rate_widths = [16, 34, 24, 14, 16, 52, 20, 44]
     rate_sheet = _new_sheet(book, "단가대비표", "단가대비표", metadata, rate_widths)
-    rate_headers = ["구분", "품명", "규격", "단위", "적용 단가", "출처(문서·쪽)", "기준일/적용기간"]
+    rate_headers = ["구분", "품명", "규격", "단위", "적용 단가", "단가 근거", "적용 기간", "비고"]
     for column, value in enumerate(rate_headers, 1):
         rate_sheet.cell(4, column, value)
     rate_rows = [[row.get("kind", ""), row.get("name", ""), row.get("spec", ""), row.get("unit", ""),
-                  _num(row.get("price")), row.get("source", ""), row.get("period", "")]
+                  "-" if row.get("price") == "-" else _num(row.get("price")),
+                  row.get("source", ""), row.get("period", ""), row.get("note", "")]
                  for row in tables.get("rate_rows", [])]
     for values in rate_rows:
         rate_sheet.append(values)
