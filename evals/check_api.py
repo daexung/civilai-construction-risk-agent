@@ -113,15 +113,28 @@ def main() -> int:
     cost_rows = list(first.iter_rows(values_only=True)) if first else []
     cost_header = next((row for row in cost_rows if row[0] == "비목(대)"), None)
     contract = next((row for row in cost_rows if row[1] == "도급액"), None)
+    net_cost = next((row for row in cost_rows if row[1] == "순공사원가"), None)
     excluded_rows = [row for row in cost_rows if row[5] == "제외"]
-    checks.append(("A13 엑셀", exported.status_code == 200
-                   and book.sheetnames == ["원가계산서", "내역서", "일위대가", "단가대비표", "산출근거"]
-                   and cost_header is not None and contract is not None and contract[2] == 10032436
-                   and bool(excluded_rows) and all(row[2] is None for row in excluded_rows)
-                   and all(len(row) == 6 for row in cost_rows[cost_rows.index(cost_header) + 1:]
-                           if any(value is not None for value in row))
-                   and "검토 전 참고용" in first["A3"].value + str(first["A4"].value)
+    footer_present = any(isinstance(cell.value, str) and "검토 전 참고용" in cell.value
+                         for row in first.iter_rows() for cell in row) if first else False
+    checks.append(("A13 엑셀 시트·열", exported.status_code == 200
+                   and len(book.sheetnames) == 5
+                   and set(book.sheetnames) == {"원가계산서", "내역서", "일위대가", "단가대비표", "산출근거"}
+                   and cost_header is not None and footer_present
                    and CLIENT.get("/api/export/nothing.xlsx").status_code == 404))
+    checks.append(("A14 원가계산서 고정 셀", contract is not None and contract[2] == 10032436
+                   and net_cost is not None and net_cost[2] == 7364857))
+    checks.append(("A15 제외 줄 열 정렬", bool(excluded_rows)
+                   and all(row[2] is None and row[5] == "제외" for row in excluded_rows)
+                   and all(len(row) == 6 for row in cost_rows[cost_rows.index(cost_header) + 1:]
+                           if any(value is not None for value in row))))
+    unit_sheet = book["일위대가"] if "일위대가" in book.sheetnames else None
+    unit_values = list(unit_sheet.iter_rows(values_only=True)) if unit_sheet else []
+    unit_headers = next((row for row in unit_values if row[4] == "계"), None)
+    unit_title = next((row for row in unit_values if isinstance(row[0], str)
+                       and row[0].startswith("제 1호표 ")), None)
+    checks.append(("A16 일위대가 호표 합계·열순서", unit_headers is not None and unit_title is not None
+                   and unit_title[5] == 21734 and unit_headers.index("노무비") < unit_headers.index("재료비")))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
