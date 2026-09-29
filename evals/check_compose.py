@@ -17,7 +17,7 @@ from langgraph.types import Command  # noqa: E402
 
 from agent.graph import build_graph  # noqa: E402
 from agent.nodes.compose import (_josa, build_facts, build_template, compose,
-                                 validate_amount_basis, validate_numbers)  # noqa: E402
+                                 unpriced_names, validate_amount_basis, validate_numbers)  # noqa: E402
 from agent.nodes.compute import compute  # noqa: E402
 from agent.nodes.gate import gate  # noqa: E402
 from agent.nodes.price import price  # noqa: E402
@@ -112,7 +112,7 @@ def main() -> int:
         return (f"{facts['work']['title']} 계산 결과 1㎥당 합계(부분)는 "
                 f"{facts['priced']['1㎥당 합계(부분)']}입니다. "
                 f"260㎥ 기준 참고 금액(부분)은 {facts['priced']['260㎥ 기준 참고 금액(부분)']}입니다. "
-                "미산정 항목이 포함되지 않았습니다. "
+                f"미산정 항목은 {', '.join(unpriced_names(facts))}입니다. "
                 "표준품셈 기준 금액이며 시장 가격과 다를 수 있습니다.")
 
     good = compose(state, generate_fn=good_llm)
@@ -227,6 +227,21 @@ def main() -> int:
     out_of_scope = graph.invoke(new_state("오늘 현장 날씨 어때?"), {"configurable": {"thread_id": "compose-g2"}})
     checks.append(("C10 그래프 전체: OUT_OF_SCOPE도 answer 추가", out_of_scope["status"] == "OUT_OF_SCOPE"
                    and bool(out_of_scope.get("answer"))))
+
+    default_sources = {name: "기본값" for name in ("work_category", "duration", "contractor_type", "project_scale")}
+    default_text = build_template(build_facts({**state, "input_sources": default_sources})).split(". ", 1)[0]
+    chosen_text = build_template(build_facts({**state, "input_sources": {**default_sources, "duration": "선택"}})).split(". ", 1)[0]
+    checks.append(("C-new1 첫 문장에 조건 요약, 기본값이면 기본 조건",
+                   "(기준: 토목 · 1~6개월 · 종합건설업 · 단독 공사, 기본 조건)" in default_text
+                   and "(기준: 토목 · 1~6개월 · 종합건설업 · 단독 공사)" in chosen_text))
+
+    def omit_unpriced_llm(prompt: str, system: str) -> str:
+        return ("1㎥당 합계(부분)는 " + facts["priced"]["1㎥당 합계(부분)"] + "입니다. "
+                "표준품셈 기준 금액이며 시장 가격과 다를 수 있습니다.")
+
+    omitted = compose(state, generate_fn=omit_unpriced_llm)
+    checks.append(("C-new2 미산정 누락이면 template", omitted["answer_source"] == "template"
+                   and omitted["llm_info"]["error"] == "미산정 누락"))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

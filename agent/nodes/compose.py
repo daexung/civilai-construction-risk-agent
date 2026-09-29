@@ -12,6 +12,7 @@ import re
 import time
 from decimal import Decimal
 
+from agent.nodes.fill import _common_fields
 from agent.rules.specs import load_specs
 from agent.state import AgentState
 from agent.tools.llm import client as llm_client
@@ -28,7 +29,10 @@ SYSTEM_PROMPT = (
     "있는 표기를 그대로 쓰고 임의로 반올림하거나 계산하지 마세요. "
     "금액을 말할 때는 반드시 '1㎥당'인지 '전체 물량 기준'인지 밝히세요. "
     "부분 금액이면 무엇이 제외되거나 미산정되어 빠졌는지도 함께 말하세요. "
-    "원가계산서 facts가 있으면 첫 문장은 반드시 '전체 물량 기준 도급액(부가세 포함)'을 말하세요. "
+    "원가계산서 facts가 있으면 첫 문장은 반드시 공종, 물량, '전체 물량 기준 도급액(부가세 포함)', "
+    "그리고 괄호 안에 facts의 condition_summary를 그대로 넣은 '(기준: ...)'을 말하세요. "
+    "condition_default가 true이면 그 괄호에 '기본 조건'이라고도 적으세요. "
+    "unpriced 항목은 하나도 빠짐없이 이름 그대로 문장에 쓰세요. "
     "unit_price처럼 소수점이 긴 값은 가능하면 인용하지 말고 금액·합계 위주로 설명하세요. "
     "계산 금액이 있다면 '표준품셈 기준 금액이며 시장 가격과 다를 수 있다'는 점을 반드시 "
     "언급하고, 제외 항목이나 미산정 항목이 있다면 그 이름과 사유를 반드시 언급하세요."
@@ -68,6 +72,17 @@ def _josa(word: str, pair: str) -> str:
     final = value[-1] if value else ""
     has_batchim = "가" <= final <= "힣" and (ord(final) - 0xAC00) % 28 != 0
     return left if has_batchim else right
+
+
+def condition_summary(inputs: dict) -> str:
+    """'토목 · 1~6개월 · 종합건설업 · 단독 공사' 형태의 조건 요약."""
+    fields = {field["name"]: field for field in _common_fields()}
+    category = inputs.get("work_category", fields["work_category"]["default"])
+    group = next((name for name, values in fields["work_category"]["groups"].items() if category in values), category)
+    scale = inputs.get("project_scale", "이 견적만")
+    scale_text = "단독 공사" if scale == "이 견적만" else f"전체 공사 {int(scale):,}원"
+    return " · ".join([group, inputs.get("duration", fields["duration"]["default"]),
+                       inputs.get("contractor_type", fields["contractor_type"]["default"]), scale_text])
 
 
 def _spec(state: AgentState) -> dict | None:
@@ -203,6 +218,10 @@ def build_facts(state: AgentState) -> dict:
     if status in ("OK", "PARTIAL"):
         priced = state.get("priced") or {}
         facts["inputs"] = _inputs_facts(state, spec)
+        inputs = state.get("inputs", {})
+        sources = state.get("input_sources", {})
+        facts["condition_summary"] = condition_summary(inputs)
+        facts["condition_default"] = all(sources.get(field["name"]) == "기본값" for field in _common_fields())
         facts["input_count"] = len(facts["inputs"])
         facts["priced"] = _priced_facts(priced)
         facts["statement"] = _statement_facts(state.get("statement"))
@@ -236,9 +255,10 @@ def _template_priced(facts: dict) -> str:
         placement = inputs.get("placement")
         subject = (f"{structure} {volume}㎥ 콘크리트 펌프차 {placement}타설 공사비"
                    if volume and placement else "원가계산서 공사비")
+        basis = f"기준: {facts['condition_summary']}" + (", 기본 조건" if facts.get("condition_default") else "")
         sentences.append(
             f"{subject}{_josa(subject, '은/는')} 전체 물량 기준 부가세 포함 총 "
-            f"{contract_amount}(도급액)으로 계산되었습니다."
+            f"{contract_amount}(도급액)으로 계산되었습니다({basis})."
         )
         sentences.append(
             f"전체 물량 기준 재료비 {statement_totals.get('전체 물량 기준 재료비', '0원')}, "
@@ -350,6 +370,20 @@ def validate_amount_basis(text: str) -> bool:
     return True
 
 
+def unpriced_names(facts: dict) -> list[str]:
+    names: list[str] = []
+    for source in (facts.get("priced") or {}, facts.get("statement") or {}):
+        for item in source.get("unpriced") or []:
+            if item["name"] not in names:
+                names.append(item["name"])
+    return names
+
+
+def validate_unpriced(text: str, facts: dict) -> list[str]:
+    """문장에 이름이 나오지 않은 미산정 항목을 돌려준다."""
+    return [name for name in unpriced_names(facts) if name not in text]
+
+
 def _prompt(facts: dict) -> str:
     return "다음 계산 결과를 설명해 주세요.\n\nfacts:\n" + json.dumps(facts, ensure_ascii=False, indent=2)
 
@@ -396,5 +430,8 @@ def compose(state: AgentState, generate_fn=None) -> dict:
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
     if not validate_amount_basis(text):
         llm_info["error"] = "금액 기준 누락"
+        return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
+    if validate_unpriced(text, facts):
+        llm_info["error"] = "미산정 누락"
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
     return {"answer": text, "answer_source": "llm", "llm_info": llm_info}
