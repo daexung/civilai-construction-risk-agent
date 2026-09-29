@@ -6,9 +6,12 @@
 from __future__ import annotations
 
 import io
+import json
 import re
 from datetime import date
 from decimal import Decimal
+from functools import lru_cache
+from pathlib import Path
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -248,10 +251,29 @@ def _missing_cost_rows(response: dict, cost_rows: list[list]) -> list[list[str]]
     rows: list[list[str]] = []
     seen: set[str] = set()
 
+    def display_reason(item: str, reason: str) -> str:
+        if "레미콘" in item:
+            return "관급자재(발주처 지급)"
+        if "연료" in item or "잡재료" in item:
+            return "품셈 8-1-7 유류가격 해당 지역 가격 — 미입력"
+        if "1-2-9" in item:
+            return "품셈 1-2-9 — 이번 계산 범위 밖"
+        if "살수 양생" in item:
+            return "품셈 6-1-4 사. — 별도 계상"
+        if "퇴직공제" in item:
+            return "추정금액 1억 미만"
+        if "산업안전보건관리비" in item:
+            return "총 공사금액 2천만원 미만"
+        if "공사이행보증" in item:
+            return "지방계약법 시행령 제51조 대상 아님"
+        if "건설기계대여대금" in item:
+            return "보증 수수료 산정 방법 확인 필요"
+        return reason
+
     def add(item: str, status: str, reason: str = "") -> None:
         if item and item not in seen:
             seen.add(item)
-            rows.append([item, status, reason])
+            rows.append([item, status, display_reason(item, reason)])
 
     for major, minor, _amount, _ratio, note, status in cost_rows:
         if status in ("제외", "미산정"):
@@ -410,6 +432,48 @@ def _format_sheet(sheet, last_column: int, header_rows: tuple[int, ...], data_st
     sheet.print_area = f"A1:{get_column_letter(last_column)}{sheet.max_row}"
 
 
+@lru_cache(maxsize=1)
+def _overhead_rates() -> dict:
+    path = Path(__file__).resolve().parents[1] / "data" / "rates" / "overhead_rates.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _overhead_rate_entries(version_id: str, work: str) -> dict[str, dict]:
+    version = _overhead_rates().get("versions", {}).get(version_id, {}).get(work, {})
+    entries: dict[str, dict] = {}
+
+    def collect(value) -> None:
+        if isinstance(value, dict):
+            cell = value.get("cell")
+            if cell:
+                entries[cell] = value
+            for child in value.values():
+                collect(child)
+        elif isinstance(value, list):
+            for child in value:
+                collect(child)
+
+    collect(version)
+    return entries
+
+
+def _applied_rate_range(entry: dict, line: dict, work_category: str) -> str:
+    parts = []
+    if entry.get("scale"):
+        parts.append(entry["scale"])
+    if entry.get("period"):
+        parts.append(entry["period"])
+    if entry.get("contractor"):
+        parts.append("종합" if entry["contractor"] == "종합건설업" else "전문")
+    if entry.get("grade"):
+        parts.append(entry["grade"])
+    if entry.get("kind"):
+        parts.append(work_category)
+    if parts:
+        return "·".join(parts)
+    return f"{line.get('base') or '공통 요율'} 기준"
+
+
 def _append_cost_rate_sources(sheet, response: dict) -> tuple[int, int]:
     statement = response.get("statement") or {}
     priced = response.get("priced") or {}
@@ -417,31 +481,43 @@ def _append_cost_rate_sources(sheet, response: dict) -> tuple[int, int]:
     labor = priced.get("rate_version") or {}
     equipment = priced.get("equipment_rate_version") or {}
     conditions = {item["name"]: item for item in response.get("conditions", [])}
-    group = conditions.get("work_category", {}).get("group", "")
+    work_category = conditions.get("work_category", {}).get("value", "")
+    work = "architecture" if work_category in ("재개발·재건축", "주택 신축", "주택 외 건축") else "civil"
+    group = "건축" if work == "architecture" else "토목"
     start = sheet.max_row + 2
     sheet.merge_cells(start_row=start, start_column=1, end_row=start, end_column=5)
     sheet.cell(start, 1, "적용 요율 출처")
     header = start + 1
     sheet.append([]) if sheet.max_row < header - 1 else None
-    for column, value in enumerate(("구분", "적용 기준", "출처", "기준일/적용기간"), 1):
+    for column, value in enumerate(("항목", "요율", "적용 구간", "출처"), 1):
         sheet.cell(header, column, value)
+    sheet.merge_cells(start_row=header, start_column=4, end_row=header, end_column=5)
     rows = []
     if overhead:
         effective_from = _korean_date(overhead.get("effective_from"))
+        rate_entries = _overhead_rate_entries(overhead.get("id", ""), work)
         for line in statement.get("lines", []):
             source = line.get("source") or {}
-            if not str(source.get("file") or "").startswith("data/raw/"):
+            if (line.get("name") == "부가가치세" or line.get("status") != "산정"
+                    or line.get("rate") is None or line.get("amount") is None
+                    or not str(source.get("file") or "").startswith("data/raw/")):
                 continue
-            rate = line.get("rate")
-            label = f"조달청 원가계산 제비율({effective_from}, {group}) · {line['name']}"
-            rows.append(["제비율", f"{rate}%" if rate is not None else "", label, effective_from])
+            entry = rate_entries.get(source.get("cell"), {})
+            rows.append([line["name"], f"{line['rate']}%",
+                         _applied_rate_range(entry, line, work_category),
+                         f"조달청 제비율 {effective_from}, {group}"])
+        if any(line.get("name") == "부가가치세" for line in statement.get("lines", [])):
+            rows.append(["부가가치세", "10%", "-", "부가가치세법"])
     if labor:
-        rows.append(["노임", labor.get("title", ""), labor.get("publisher", ""), _rate_period(labor)])
+        rows.append(["노임", "-", _rate_period(labor),
+                     f"{labor.get('title', '')}({labor.get('publisher', '')})"])
     if equipment:
-        rows.append(["기계경비", equipment.get("title", ""), equipment.get("publisher", ""),
-                     _rate_period(equipment, equipment=True)])
+        rows.append(["기계경비", "-", _rate_period(equipment, equipment=True),
+                     f"{equipment.get('title', '')}({equipment.get('publisher', '')})"])
     for values in rows:
         sheet.append(values + [None])
+        row = sheet.max_row
+        sheet.merge_cells(start_row=row, start_column=4, end_row=row, end_column=5)
     return start, header
 
 

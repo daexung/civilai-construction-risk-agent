@@ -165,10 +165,12 @@ def main() -> int:
                    and [bill_total[index] for index in (5, 7, 9, 11)] == [178360, 4133480, 1339000, 5650840]))
 
     missing_title_row = next((index for index, row in enumerate(cost_rows) if row[0] == "빠진 항목"), None)
+    rate_title_row = next((index for index, row in enumerate(cost_rows) if row[0] == "적용 요율 출처"), None)
     missing_items = set()
     missing_rows = []
     if missing_title_row is not None:
-        missing_rows = [row for row in cost_rows[missing_title_row + 2:] if row[0]]
+        missing_end = rate_title_row if rate_title_row is not None else len(cost_rows)
+        missing_rows = [row for row in cost_rows[missing_title_row + 2:missing_end] if row[0]]
         missing_items = {row[0] for row in missing_rows}
     checks.append(("A20 원가계산서 빠진 항목 분리", contract is not None and missing_title_row is not None
                    and missing_title_row > cost_rows.index(contract)
@@ -223,6 +225,47 @@ def main() -> int:
                    and sum(row[0] == "적용 기준" for row in basis_values) == 1
                    and any(row[0] == "공사 규모 판정" for row in basis_values)
                    and any(row[0] == "안전관리비 기초액" for row in basis_values)))
+
+    source_rows = []
+    source_headers = None
+    if rate_title_row is not None:
+        source_headers = cost_rows[rate_title_row + 1]
+        for row in cost_rows[rate_title_row + 2:]:
+            if row[0] == "표준품셈 기준 금액 · 검토 전 참고용 · 품셈AI":
+                break
+            if row[0]:
+                source_rows.append(row)
+    source_names = {row[0] for row in source_rows}
+    indirect = next((row for row in source_rows if row[0] == "간접노무비"), None)
+    profit_rate = next((row for row in source_rows if row[0] == "이윤"), None)
+    vat_row = next((row for row in source_rows if row[0] == "부가가치세"), None)
+    checks.append(("A27 적용 요율 출처의 실제 적용 행", source_headers is not None
+                   and source_headers[:4] == ("항목", "요율", "적용 구간", "출처")
+                   and indirect is not None and indirect[1] == "19.1%"
+                   and indirect[2] == "10억 미만·6개월 이하"
+                   and indirect[3] == "조달청 제비율 2026.4.13., 토목"
+                   and profit_rate is not None and profit_rate[2] == "50억 미만"
+                   and vat_row is not None and vat_row[1] == "10%" and vat_row[3] == "부가가치세법"
+                   and {"노임", "기계경비"} <= source_names
+                   and not any(any(term in name for term in ("레미콘", "연료", "1-2-9", "살수 양생"))
+                               for name in source_names)))
+
+    missing_by_name = {row[0]: row[2] for row in missing_rows}
+    reasons_ok = (any("레미콘" in name and "관급" in reason for name, reason in missing_by_name.items())
+                  and any("연료" in name and "8-1-7" in reason for name, reason in missing_by_name.items())
+                  and any("1-2-9" in name and "이번 계산 범위 밖" in reason
+                          for name, reason in missing_by_name.items())
+                  and any("살수 양생" in name and "6-1-4 사." in reason
+                          for name, reason in missing_by_name.items()))
+    checks.append(("A28 빠진 항목별 실제 근거", reasons_ok))
+    required_reasons = (("퇴직공제", "추정금액 1억 미만"),
+                        ("산업안전보건관리비", "총 공사금액 2천만원 미만"),
+                        ("공사이행보증", "지방계약법 시행령 제51조"),
+                        ("건설기계대여대금", "산정 방법 확인 필요"))
+    reasons_present = all(any(keyword in name and token in reason
+                              for name, reason in missing_by_name.items())
+                          for keyword, token in required_reasons)
+    checks.append(("A29 제외·미산정 사유", reasons_present))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
