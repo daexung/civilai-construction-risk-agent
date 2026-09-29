@@ -3,7 +3,7 @@
 이어하기 가능: data/drafts/specs/<division>/<section_no>.json이 이미 있으면 건너뛴다(--force로 덮어씀).
 실행 예:
   python -m pipeline.draft_specs --only 공통/6-1-4,공통/6-1-1,공통/6-1-2,공통/6-1-3
-  python -m pipeline.draft_specs --prefix 공통/6- --chunks <원래 폴더>/data/processed/chunks.all.jsonl
+  python -m pipeline.draft_specs --prefix 공통/6- --chunks data/processed/chunks.all.jsonl
   python -m pipeline.draft_specs --dry-run --prefix 공통/6-
 """
 
@@ -22,11 +22,9 @@ from typing import Any, Callable
 from pipeline.validate_drafts import check_citations, chunks_by_id_from_list, file_sha256
 
 ROOT = Path(__file__).resolve().parents[1]
-ORIGINAL_ROOT = Path(r"C:\Users\daeseong\Desktop\PROJECTS\civilai-construction-risk-agent")
-
-DEFAULT_ENV = ORIGINAL_ROOT / ".env"
-DEFAULT_CHUNKS = ORIGINAL_ROOT / "data/processed/chunks.jsonl"
-DEFAULT_PAGE_MAP = ORIGINAL_ROOT / "data/processed/page_map.json"
+DEFAULT_ENV = ROOT / ".env"
+DEFAULT_CHUNKS = ROOT / "data/processed/chunks.all.jsonl"
+DEFAULT_PAGE_MAP = ROOT / "data/processed/page_map.json"
 DEFAULT_PDF = ROOT / "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
 DEFAULT_SPEC_FORMAT = ROOT / "docs/SPEC_FORMAT.md"
 DEFAULT_EXAMPLE_SPEC = ROOT / "agent/rules/specs/common/6-1-4_pump.json"

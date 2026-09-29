@@ -2,7 +2,7 @@
 
 data/drafts/specs/**/*.json을 모두 읽어 형식·출처를 점검하고 data/drafts/report.json에 요약을 남긴다.
 실행: python -m pipeline.validate_drafts
-      python -m pipeline.validate_drafts --chunks <원래 폴더>/data/processed/chunks.all.jsonl
+      python -m pipeline.validate_drafts --chunks data/processed/chunks.all.jsonl
 """
 
 from __future__ import annotations
@@ -14,9 +14,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ORIGINAL_ROOT = Path(r"C:\Users\daeseong\Desktop\PROJECTS\civilai-construction-risk-agent")
-
-DEFAULT_CHUNKS = ORIGINAL_ROOT / "data/processed/chunks.jsonl"  # draft_specs.py 기본값과 동일하게
+DEFAULT_CHUNKS = ROOT / "data/processed/chunks.all.jsonl"  # draft_specs.py 기본값과 동일하게
 DEFAULT_DRAFTS_DIR = ROOT / "data/drafts"
 
 REQUIRED_DRAFT_FIELDS = {"id", "edition", "division", "section_no", "title", "work", "review",
