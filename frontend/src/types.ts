@@ -46,6 +46,7 @@ export interface SearchInfo {
   method: string;
   api_calls: number;
   warnings: string[];
+  raw_warnings?: string[];
 }
 
 export interface ResultLine {
@@ -171,6 +172,60 @@ export interface BlockedResult {
   citations: Citation[];
 }
 
+export interface ConditionField {
+  name: 'work_category' | 'duration' | 'contractor_type' | 'project_scale';
+  label: string;
+  value: string;
+  source: string;
+  type: string;
+  choices: string[];
+  help: Record<string, string>;
+  default: string;
+  groups?: Record<string, string[]>;
+  group?: string;
+}
+
+export interface StatementRow {
+  name: string;
+  category: string | null;
+  basis: string;
+  amount: number | null;
+  status: '산정' | '제외' | '미산정';
+  reason: string | null;
+  note: string | null;
+  kind: 'item' | 'subtotal' | 'total';
+  final: boolean;
+}
+
+export interface BillRow {
+  name: string;
+  spec: string;
+  unit: string;
+  quantity: string;
+  unit_price: Record<'재료비' | '노무비' | '경비', string | null>;
+  amount: Record<'재료비' | '노무비' | '경비', string | null>;
+  total: string | null;
+  partial: boolean;
+}
+
+export interface RateRow {
+  kind: string;
+  name: string;
+  unit: string;
+  price: string | null;
+  source: string;
+}
+
+export interface ResultTables {
+  statement_rows: StatementRow[];
+  bill: BillRow | null;
+  rate_rows: RateRow[];
+}
+
+export interface StatementResult {
+  basis_notes?: string[];
+}
+
 export type ChatStatus = 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR' | 'OK' | 'PARTIAL';
 
 export interface ChatResponse {
@@ -183,6 +238,9 @@ export interface ChatResponse {
   evidence: EvidenceItem[];
   result: ComputedResult | BlockedResult | null;
   priced: PricedResult | null;
+  statement: StatementResult | null;
+  conditions: ConditionField[];
+  tables: ResultTables;
   answer: string | null;
   answer_source: 'llm' | 'template' | null;
   basis_date: string;

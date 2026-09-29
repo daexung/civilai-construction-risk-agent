@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
 import { EXAMPLE_QUESTIONS } from '../examples';
+import { BillTable, ConditionsBar, RateTable, StatementTable } from './StatementView';
 import './ChatArea.css';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
   loading: boolean;
   onSendMessage: (text: string) => void;
   onSendAnswers: (answers: Record<string, ChoiceValue>, summary: string) => void;
+  onChangeConditions: (turnId: string, conditions: Record<string, string>) => void;
   onNewChat: () => void;
   onSendExample: (text: string) => void;
 }
@@ -165,8 +167,9 @@ function CitationList({ citations }: { citations: Citation[] }) {
   );
 }
 
-function ComputedCard({ work, inputs, result, priced }: {
+function ComputedCard({ work, inputs, result, priced, tables }: {
   work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult; priced: PricedResult | null;
+  tables: ChatResponse['tables'];
 }) {
   const notReviewed = result.review_status !== '완료';
   const priceByName = new Map(priced?.lines.map((line) => [line.name, line]) ?? []);
@@ -175,10 +178,12 @@ function ComputedCard({ work, inputs, result, priced }: {
     .map((item) => `${item.label} ${choiceLabel(item.value)}`).join(' · ');
   return (
     <div className="computed-card">
-      <div className="computed-title-row">
-        <strong>일위대가 ({result.unit_basis.per}당)</strong>
-        {notReviewed && <span className="review-badge">검토 전 명세 · 참고용</span>}
-      </div>
+      <details className="fold">
+        <summary>내역서</summary>
+        <BillTable bill={tables.bill} />
+      </details>
+      <details className="fold">
+      <summary>일위대가표 ({result.unit_basis.per}당) {notReviewed && <span className="review-badge">검토 전 명세 · 참고용</span>}</summary>
       <div className="unit-summary">{work?.title}{conditions && ` · ${conditions}`}</div>
       <div className="unit-note">{priced?.rate_version
         ? `노임단가: ${priced.rate_version.id.slice(0, 4)} ${priced.rate_version.id.endsWith('H2') ? '하반기' : '상반기'} (${priced.rate_version.effective_from} 적용)`
@@ -186,7 +191,7 @@ function ComputedCard({ work, inputs, result, priced }: {
       <div className="unit-note">{priced?.equipment_rate_version
         ? `건설기계 경비: ${priced.equipment_rate_version.version}년도 (${priced.equipment_rate_version.published} 공표, ${priced.equipment_rate_version.effective_from}~${priced.equipment_rate_version.effective_to} 적용)`
         : '기준일에 적용 가능한 건설기계 경비산출표 없음'}</div>
-      <table className="inputs-table unit-table">
+      <div className="table-scroll"><table className="inputs-table unit-table">
         <thead>
           <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>1㎥당 금액</th></tr>
         </thead>
@@ -251,23 +256,28 @@ function ComputedCard({ work, inputs, result, priced }: {
             </details> : '—'}</td>
           </tr>)}
         </tbody>
-      </table>
+      </table></div>
       <div className="unit-note">{result.unit_basis.adjustable_note}</div>
-      {priced && <table className="inputs-table price-summary-table"><tbody>
+      {priced && <div className="table-scroll"><table className="inputs-table price-summary-table"><tbody>
         <tr><th>1㎥당 재료비 소계</th><td>{won(priced.subtotals['재료비'])}</td></tr>
         <tr><th>1㎥당 노무비 소계</th><td>{won(priced.subtotals['노무비'])}</td></tr>
         <tr><th>1㎥당 경비 소계</th><td>{won(priced.subtotals['경비'])}</td></tr>
         <tr><th>{priced.partial ? '1㎥당 부분 합계' : '1㎥당 계'}</th>
           <td>{won(priced.total)}{priced.total_exact && ` (계금 버림 전 ${won(priced.total_exact)})`}</td></tr>
-      </tbody></table>}
+      </tbody></table></div>}
       {priced?.reference_amounts?.total != null && <div className="unit-note">
         <strong>{priced.reference_amounts.volume}㎥ 기준 참고 금액({priced.partial ? '부분' : '전체'}): {won(priced.reference_amounts.total)}</strong>
         {priced.partial && <div>빠진 항목: {[...(priced.unpriced ?? []), ...(priced.excluded ?? [])]
           .map((item) => item.name).filter((name, index, names) => names.indexOf(name) === index).join(', ') || '없음'}</div>}
         <div>내역서 작성 전 참고 금액이며, 제외·미산정 항목이 반영되지 않았습니다.</div>
       </div>}
-      <details className="calculation-details">
-        <summary>산출 근거</summary>
+      </details>
+      <details className="fold">
+        <summary>단가대비표</summary>
+        <RateTable rows={tables.rate_rows} />
+      </details>
+      <details className="fold calculation-details">
+        <summary>산출근거</summary>
         <div className="formula-row"><span className="formula-label">일당시공량</span>
           <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
           <span className="formula-text">{result.daily_volume.formula}</span></div>
@@ -275,14 +285,14 @@ function ComputedCard({ work, inputs, result, priced }: {
           <strong>{result.work_days.value} 작업조·일</strong>
           <span className="formula-text">{result.work_days.formula}</span></div>
         <p className="unit-note">작업조 투입량은 실제 공사 기간이 아닙니다.</p>
-        <table className="inputs-table lines-table">
+        <div className="table-scroll"><table className="inputs-table lines-table">
           <thead><tr><th>구분</th><th>항목</th><th>총 투입량</th><th>단위</th><th>작업조 인원</th><th>적용 규칙</th></tr></thead>
           <tbody>{result.lines.map((line) => <tr key={line.name}>
             <td>{line.kind === 'labor' ? '노무' : '장비'}</td><td>{line.name}</td><td>{line.value}</td>
             <td>{line.unit}</td><td>{line.crew ?? '1대'}</td>
             <td>{line.rules.length > 0 ? '인원 조정 적용' : '—'}</td>
           </tr>)}</tbody>
-        </table>
+        </table></div>
         <div className="source-list"><strong>일당시공량 출처</strong>
           <CitationList citations={result.daily_volume.citations} />
           {result.lines.map((line) => <div key={line.name}><strong>{line.name} 작업조·조정 근거</strong>
@@ -310,19 +320,23 @@ function BlockedCard({ result }: { result: BlockedResult }) {
   );
 }
 
-function WarningBanner({ warnings }: { warnings: string[] }) {
+function WarningBanner({ warnings, raw }: { warnings: string[]; raw?: string[] }) {
+  useEffect(() => {
+    if (raw && raw.length > 0) console.warn('[search fallback]', raw);
+  }, [raw]);
   if (warnings.length === 0) return null;
   return (
-    <div className="warning-banner">
+    <div className="search-note">
       {warnings.map((warning, i) => <div key={i}>{warning}</div>)}
     </div>
   );
 }
 
 function AssistantCard({
-  response, interactive, draft, onSelect, onSubmit, loading,
+  response, interactive, draft, onSelect, onSubmit, loading, onChangeConditions,
 }: {
   response: ChatResponse;
+  onChangeConditions: (conditions: Record<string, string>) => void;
   interactive: boolean;
   draft: Record<string, { value: ChoiceValue; label: string }>;
   onSelect: (name: string, value: ChoiceValue, label: string) => void;
@@ -331,7 +345,7 @@ function AssistantCard({
 }) {
   return (
     <div className={`assistant-card status-${response.status.toLowerCase()}`}>
-      <WarningBanner warnings={response.search.warnings} />
+      <WarningBanner warnings={response.search.warnings} raw={response.search.raw_warnings} />
       <div className="assistant-card-header">
         <span className="status-badge">{STATUS_LABEL[response.status]}</span>
         {response.work && <span className="work-badge">{response.work.title}</span>}
@@ -373,9 +387,18 @@ function AssistantCard({
         </div>
       )}
 
+      {['OK', 'PARTIAL'].includes(response.status) && response.tables.statement_rows.length > 0 && (
+        <>
+          <ConditionsBar key={JSON.stringify(response.conditions)} threadId={response.thread_id}
+            conditions={response.conditions} disabled={!interactive || loading}
+            onApply={onChangeConditions} />
+          <StatementTable rows={response.tables.statement_rows} notes={response.statement?.basis_notes ?? []} />
+        </>
+      )}
+
       {['COMPUTED', 'OK', 'PARTIAL'].includes(response.status) && response.result && (
         <ComputedCard work={response.work} inputs={response.inputs} result={response.result as ComputedResult}
-          priced={response.priced} />
+          priced={response.priced} tables={response.tables} />
       )}
 
       {response.status === 'BLOCKED' && response.result && (
@@ -385,7 +408,7 @@ function AssistantCard({
   );
 }
 
-export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers, onNewChat, onSendExample }: Props) {
+export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers, onChangeConditions, onNewChat, onSendExample }: Props) {
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
   const [showExampleMenu, setShowExampleMenu] = useState(false);
@@ -564,6 +587,7 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
                       onSelect={handleSelect}
                       onSubmit={handleSubmitAnswers}
                       loading={loading}
+                      onChangeConditions={(conditions) => onChangeConditions(turn.id, conditions)}
                     />
                   )}
                 </div>

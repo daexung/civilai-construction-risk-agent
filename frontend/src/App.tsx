@@ -46,6 +46,20 @@ export default function App() {
     return send(summary, { answers }, threadId);
   }, [send, threadId]);
 
+  // 결과 카드의 조건만 바꿔 같은 카드를 새 계산으로 교체한다(공종 입력은 서버가 그대로 둔다).
+  const handleChangeConditions = useCallback(async (turnId: string, conditions: Record<string, string>) => {
+    if (!threadId) return;
+    setLoading(true);
+    try {
+      const response = await sendChat({ thread_id: threadId, conditions });
+      setTurns(prev => prev.map(turn => (turn.id === turnId ? { ...turn, response } : turn)));
+    } catch (err) {
+      handleError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [threadId, handleError]);
+
   const handleNewChat = useCallback(() => {
     setThreadId(null);
     setTurns([]);
@@ -65,6 +79,7 @@ export default function App() {
         loading={loading}
         onSendMessage={handleSendMessage}
         onSendAnswers={handleSendAnswers}
+        onChangeConditions={handleChangeConditions}
         onNewChat={handleNewChat}
         onSendExample={handleSendExample}
       />

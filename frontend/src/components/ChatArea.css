@@ -898,3 +898,50 @@
     padding: 6px 12px 0;
   }
 }
+
+/* ── 검색 대체 안내(작은 회색 글씨) ── */
+.search-note {
+  color: var(--text-muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+/* ── 표 가로 스크롤(카드 밖으로 넘치지 않게) ── */
+.assistant-card { min-width: 0; }
+.table-scroll { overflow-x: auto; max-width: 100%; }
+.table-scroll .inputs-table { min-width: 460px; }
+.table-scroll .bill-table, .table-scroll .rate-table { min-width: 640px; }
+.num { text-align: right; white-space: nowrap; }
+.basis { color: var(--text-secondary); font-size: 12px; }
+
+/* ── 조건 바꾸기 ── */
+.conditions-bar { display: flex; flex-direction: column; gap: 8px; }
+.conditions-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; }
+.conditions-current { flex: 1 1 200px; color: var(--text-secondary); }
+.default-tag { font-style: normal; font-size: 11px; font-weight: 600; margin-right: 6px; padding: 1px 7px;
+  border-radius: 999px; background: var(--bg-tertiary); color: var(--text-secondary); }
+.ghost-btn { font-size: 12.5px; padding: 5px 12px; border: 1px solid var(--border-color); border-radius: 8px;
+  background: var(--bg-primary); color: var(--text-primary); cursor: pointer; text-decoration: none; }
+.ghost-btn:disabled { opacity: 0.5; cursor: default; }
+.conditions-panel { display: flex; flex-direction: column; gap: 10px; padding: 12px;
+  border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); }
+.cond-row { display: flex; flex-direction: column; gap: 4px; }
+.cond-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.cond-options { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cond-detail summary { font-size: 12.5px; cursor: pointer; color: var(--text-secondary); }
+.conditions-panel small { color: var(--text-muted); font-size: 11.5px; }
+.scale-input { width: 110px; padding: 5px 8px; border: 1px solid var(--border-color); border-radius: 6px;
+  background: var(--bg-primary); color: var(--text-primary); }
+
+/* ── 원가계산서 표 ── */
+.stmt-table .stmt-group th { text-align: left; background: var(--bg-tertiary); }
+.stmt-table tr.subtotal td, .stmt-table tr.total td { font-weight: 600; background: var(--bg-secondary); }
+.stmt-table tr.dim td { color: var(--text-muted); opacity: 0.7; }
+.stmt-table tr.final td { background: #fff7d6; color: #1a1a1a; font-weight: 700; font-size: 14px; opacity: 1; }
+[data-theme="dark"] .stmt-table tr.final td { background: #4a3f12; color: #fde68a; }
+.stmt-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+/* ── 펼쳐보기 ── */
+.fold { border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; }
+.fold > summary { cursor: pointer; font-weight: 600; font-size: 13.5px; }
+.fold[open] > summary { margin-bottom: 8px; }

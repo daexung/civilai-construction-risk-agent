@@ -7,7 +7,10 @@ export interface ChatRequestBody {
   message?: string;
   answers?: Record<string, ChoiceValue>;
   basis_date?: string;
+  conditions?: Record<string, string>;
 }
+
+export const exportUrl = (threadId: string) => `${API_BASE}/api/export/${threadId}.xlsx`;
 
 export async function sendChat(body: ChatRequestBody): Promise<ChatResponse> {
   let res: Response;
