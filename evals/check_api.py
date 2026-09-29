@@ -76,6 +76,47 @@ def main() -> int:
                    and computed["llm_info"].get("attempts") == 0
                    and "VERTEX_API_KEY" not in str(computed["llm_info"])))
 
+    # 조건 없이 계산: 기본값으로 바로 도급액이 나온다.
+    start = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
+                                             "basis_date": "2026-10-01"}).json()
+    answers = {k: v for k, v in PUMP_ANSWERS.items()
+               if k not in ("work_category", "duration", "contractor_type", "project_scale")}
+    base = CLIENT.post("/api/chat", json={"thread_id": start["thread_id"], "answers": answers}).json()
+    condition_sources = {c["name"]: c["source"] for c in base["conditions"]}
+    checks.append(("A10 기본값 도급액", base["status"] == "PARTIAL"
+                   and base["statement"]["totals"]["contract_amount"] == 10032436
+                   and set(condition_sources.values()) == {"기본값"}
+                   and base["conditions"][0]["group"] == "토목"
+                   and bool(base["conditions"][0]["help"]["기타 토목공사"])))
+
+    exported = CLIENT.get(f"/api/export/{base['thread_id']}.xlsx")  # 조건을 바꾸기 전 상태
+    changed = CLIENT.post("/api/chat", json={"thread_id": base["thread_id"], "conditions": {
+        "work_category": "주택 외 건축", "duration": "13~36개월", "contractor_type": "전문건설업"}}).json()
+    changed_sources = {c["name"]: c["source"] for c in changed["conditions"]}
+    checks.append(("A11 조건 바꾸기", changed["statement"]["totals"]["contract_amount"] == 9947033
+                   and changed["status"] == "PARTIAL" and changed_sources["duration"] == "선택"
+                   and changed_sources["project_scale"] == "기본값"
+                   and changed["result"] == base["result"]
+                   and any(i["name"] == "volume" and i["value"] == "260" for i in changed["inputs"])))
+    group_only = CLIENT.post("/api/chat", json={"thread_id": base["thread_id"],
+                                                  "conditions": {"group": "건축"}}).json()
+    bad = CLIENT.post("/api/chat", json={"thread_id": base["thread_id"],
+                                           "conditions": {"duration": "없는 기간"}})
+    checks.append(("A12 묶음만 바꾸기·잘못된 값", group_only["conditions"][0]["value"] == "주택 외 건축"
+                   and bad.status_code == 422 and CLIENT.post("/api/chat", json={
+                       "thread_id": "nothing", "conditions": {"duration": "1~6개월"}}).status_code == 404))
+
+    from io import BytesIO
+    from openpyxl import load_workbook
+    book = load_workbook(BytesIO(exported.content))
+    first = book["원가계산서"] if "원가계산서" in book.sheetnames else None
+    contract = next((row for row in first.iter_rows(values_only=True) if row[0] == "도급액"), None) if first else None
+    checks.append(("A13 엑셀", exported.status_code == 200
+                   and book.sheetnames == ["원가계산서", "내역서", "일위대가", "단가대비표", "산출근거"]
+                   and contract is not None and contract[2] == 10032436
+                   and "검토 전 참고용" in first["A3"].value + str(first["A4"].value)
+                   and CLIENT.get("/api/export/nothing.xlsx").status_code == 404))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

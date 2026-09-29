@@ -10,7 +10,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi import HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from langgraph.types import Command
 from pydantic import BaseModel
@@ -18,7 +18,8 @@ from pydantic import BaseModel
 from agent.graph import build_graph
 from agent.rules.specs import load_specs
 from agent.state import new_state
-from agent.nodes.fill import _common_fields
+from agent.nodes.fill import _common_fields, _valid_for_field
+from api.tables import add_tables, build_xlsx
 from agent.tools.source.citation import resolve_cites
 
 GRAPH = build_graph()
@@ -45,6 +46,7 @@ class ChatRequest(BaseModel):
     message: Optional[str] = None
     answers: Optional[dict] = None
     basis_date: Optional[date] = None
+    conditions: Optional[dict] = None
 
 
 _FIELD_LABELS = {
@@ -89,6 +91,24 @@ def _inputs_out(state: dict, spec: dict | None) -> list[dict]:
         field = field_by_name.get(name)
         label = _label(field) if field else name
         out.append({"name": name, "label": label, "value": value, "source": sources.get(name, "")})
+    return out
+
+
+def _conditions_out(state: dict) -> list[dict]:
+    """공사 조건 현재 값과 출처, 선택지, 설명. 공사 종류에는 토목/건축 묶음을 붙인다."""
+    sources = state.get("input_sources", {})
+    inputs = state.get("inputs", {})
+    out = []
+    for field in _common_fields():
+        name = field["name"]
+        item = {"name": name, "label": field["label"], "value": inputs.get(name, field["default"]),
+                "source": sources.get(name, "기본값"), "type": field["type"],
+                "choices": field["allowed_values"],
+                "help": field.get("help", {}), "default": field["default"]}
+        if "groups" in field:
+            item["groups"] = field["groups"]
+            item["group"] = next(group for group, values in field["groups"].items() if item["value"] in values)
+        out.append(item)
     return out
 
 
@@ -247,18 +267,20 @@ def _result_out(state: dict, spec: dict | None) -> dict | None:
 def _search_out(state: dict) -> dict:
     search_info = state.get("search_info", {})
     method = search_info.get("method", "")
-    warnings = list(search_info.get("warnings", []))
-    if method and method not in ("hybrid", "bm25(오프라인)") and not warnings:
-        warnings = [f"임베딩 검색이 꺼져 단어 검색({method})으로만 찾았습니다"]
+    raw = list(search_info.get("warnings", []))
+    if method and method not in ("hybrid", "bm25(오프라인)") and not raw:
+        raw = [f"임베딩 검색이 꺼져 단어 검색({method})으로만 찾았습니다"]
+    # 오류 원문은 raw_warnings로만 내리고, 화면에는 쉬운 문장만 보인다.
+    warnings = ["의미 검색이 잠시 안 돼 단어 검색으로 찾았습니다."] if raw else []
     return {"method": method, "api_calls": search_info.get("api_calls", 0), "warnings": warnings,
-            "fallback_reason": search_info.get("fallback_reason")}
+            "raw_warnings": raw, "fallback_reason": search_info.get("fallback_reason")}
 
 
 def _build_response(thread_id: str, state: dict) -> dict:
     status = _status_out(state)
     spec_id = state.get("spec_id", "")
     spec = load_specs().get(spec_id) if spec_id else None
-    return {
+    response = {
         "thread_id": thread_id,
         "status": status,
         "message": _message_out(status, state),
@@ -274,7 +296,10 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "llm_info": state.get("llm_info") or None,
         "basis_date": state.get("basis_date") or date.today().isoformat(),
         "search": _search_out(state),
+        "conditions": _conditions_out(state),
     }
+    response["tables"] = add_tables(response)
+    return response
 
 
 @app.get("/api/health")
@@ -292,8 +317,51 @@ def source_image(table_id: str) -> FileResponse:
     return FileResponse(path, media_type="image/png")
 
 
+def _finished_state(thread_id: str | None) -> dict:
+    """계산이 끝난 thread의 그래프 state. 계산 결과가 없으면 404."""
+    if not thread_id:
+        raise HTTPException(status_code=404, detail="계산 결과가 없는 대화입니다")
+    snapshot = GRAPH.get_state({"configurable": {"thread_id": thread_id}})
+    if snapshot.next or not snapshot.values.get("statement"):
+        raise HTTPException(status_code=404, detail="계산 결과가 없는 대화입니다")
+    return snapshot.values
+
+
+def _change_conditions(payload: ChatRequest) -> dict:
+    """공종 입력은 두고 공사 조건만 바꿔 원가계산서와 설명 문장을 다시 만든다."""
+    values = _finished_state(payload.thread_id)
+    fields = {field["name"]: field for field in _common_fields()}
+    changes = dict(payload.conditions)
+    group = changes.pop("group", None)
+    if group is not None and "work_category" not in changes:
+        defaults = fields["work_category"]["group_default"]
+        if group not in defaults:
+            raise HTTPException(status_code=422, detail=f"알 수 없는 공사 묶음입니다: {group}")
+        changes["work_category"] = defaults[group]
+    for name, value in changes.items():
+        if name not in fields or not _valid_for_field(value, fields[name]):
+            raise HTTPException(status_code=422, detail=f"바꿀 수 없는 조건 값입니다: {name}")
+    inputs = {**values["inputs"], **{name: str(value) if name == "project_scale" else value
+                                     for name, value in changes.items()}}
+    sources = {**values.get("input_sources", {}), **{name: "선택" for name in changes}}
+    config = {"configurable": {"thread_id": payload.thread_id}}
+    # price 다음 노드(statement)부터 다시 돌려 원가계산서와 설명 문장만 새로 만든다.
+    GRAPH.update_state(config, {"inputs": inputs, "input_sources": sources}, as_node="price")
+    return _build_response(payload.thread_id, GRAPH.invoke(None, config))
+
+
+@app.get("/api/export/{thread_id}.xlsx")
+def export_xlsx(thread_id: str) -> Response:
+    response = _build_response(thread_id, _finished_state(thread_id))
+    return Response(build_xlsx(response),
+                    media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    headers={"Content-Disposition": 'attachment; filename="cost-statement.xlsx"'})
+
+
 @app.post("/api/chat")
 def chat(payload: ChatRequest) -> dict:
+    if payload.conditions is not None:
+        return _change_conditions(payload)
     config = None
     if payload.thread_id:
         candidate_config = {"configurable": {"thread_id": payload.thread_id}}
