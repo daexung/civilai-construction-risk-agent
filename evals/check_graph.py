@@ -46,7 +46,7 @@ def main() -> int:
     first_questions = questions(initial)
     facility = next((item for item in first_questions if item["name"] == "facility_type"), {})
     completed = graph.invoke(Command(resume=COMPLETE), config("g3"))
-    checks.append(("G3", len(first_questions) == 11
+    checks.append(("G3", len(first_questions) == 7
                    and facility.get("hint") == {"value": "Type-Ⅱ", "matched": "벽"}
                    and completed["status"] == "PARTIAL" and not questions(completed)
                     and len(completed["inputs"]) == 14
@@ -57,14 +57,14 @@ def main() -> int:
     partial = graph.invoke(Command(resume="15cm 붐"), config("g4"))
     remaining = questions(partial)
     finished = graph.invoke(Command(resume="기타 토목공사 6개월 종합건설업 이 견적만 타입2 현장 2유형 진동기 사용 재셋팅 없음 레미콘 관급"), config("g4"))
-    checks.append(("G4", len(remaining) == 9 and not questions(finished)
+    checks.append(("G4", len(remaining) == 5 and not questions(finished)
                     and len(finished["inputs"]) == 14 and finished["status"] == "PARTIAL"))
 
     graph.invoke(new_state(QUERY), config("g5a"))
     other = graph.invoke(new_state("오늘 현장 날씨 어때?"), config("g5b"))
     saved_a = graph.get_state(config("g5a"))
     saved_b = graph.get_state(config("g5b"))
-    checks.append(("G5", len(saved_a.values["questions"]) == 11
+    checks.append(("G5", len(saved_a.values["questions"]) == 7
                    and saved_a.values["query"] == QUERY
                    and saved_b.values["query"] == "오늘 현장 날씨 어때?"
                    and saved_b.values["status"] == "OUT_OF_SCOPE"

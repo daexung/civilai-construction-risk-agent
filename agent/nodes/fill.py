@@ -87,6 +87,12 @@ def _extract_common_inputs(text: str) -> dict:
             selected = {value for length, value in matches if length == max_length}
             if len(selected) == 1:
                 values[name] = selected.pop()
+        else:
+            # 공사 종류 낱말(아파트·교량·하천 등)로 대표 종류를 고른다. 서로 다른 종류가 섞이면 고르지 않는다.
+            hit = {value for value, words in field.get("keywords", {}).items()
+                   if any(_norm(word) in normalized for word in words)}
+            if len(hit) == 1:
+                values[name] = hit.pop()
     return values
 
 
@@ -346,9 +352,10 @@ def fill(state: AgentState) -> dict:
             sources[name] = "선택"
         else:
             dict_errors[name] = "허용값이 아닙니다"
-    if "project_scale" not in inputs:
-        inputs["project_scale"] = "이 견적만"
-        sources["project_scale"] = "기본값"
+    for field in common_fields:
+        if field["name"] not in inputs:
+            inputs[field["name"]] = field["default"]
+            sources[field["name"]] = "기본값"
     ambiguities = {**ambiguities, **dict_errors}
     questions = []
     if update.get("selection", state.get("selection", {})).get("confirmed") is False:
@@ -379,21 +386,11 @@ def fill(state: AgentState) -> dict:
             if name in ambiguities:
                 question["reason"] = ambiguities[name]
             questions.append(question)
-    missing_common = []
     for field in common_fields:
         name = field["name"]
-        if field["required"] and (name not in inputs or name in ambiguities):
-            question = {"name": name, "ask": field["ask"],
-                        "choices": field.get("allowed_values")}
-            if name in ambiguities:
-                question["reason"] = ambiguities[name]
-            questions.append(question)
-            missing_common.append(name)
-    if missing_common and sources.get("project_scale") == "기본값":
-        scale_field = next(field for field in common_fields if field["name"] == "project_scale")
-        questions.append({"name": "project_scale", "ask": scale_field["ask"],
-                          "choices": scale_field["allowed_values"], "free_input": True,
-                          "default": scale_field["default"], "optional": True})
+        if name in dict_errors:
+            questions.append({"name": name, "ask": field["ask"], "choices": field.get("allowed_values"),
+                              "reason": dict_errors[name]})
     update.update(inputs=inputs, input_sources=sources, questions=questions)
     if questions:
         update.update(status="MISSING_INFO", reason="계산에 필요한 조건을 확인해 주세요")

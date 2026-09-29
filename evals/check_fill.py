@@ -35,9 +35,12 @@ def main() -> int:
     names = [question["name"] for question in first["questions"]]
     pump_size = next(question for question in first["questions"] if question["name"] == "pump_size")
     facility = next(question for question in first["questions"] if question["name"] == "facility_type")
-    checks.append(("F1", first["inputs"] == {"volume": "260", "structure": "철근", "project_scale": "이 견적만"}
-                   and {"work_category", "duration", "contractor_type", "project_scale"}.issubset(names)
-                   and next(q for q in first["questions"] if q["name"] == "project_scale")["default"] == "이 견적만"
+    checks.append(("F1", first["inputs"] == {"volume": "260", "structure": "철근", "work_category": "기타 토목공사",
+                                             "duration": "1~6개월", "contractor_type": "종합건설업",
+                                             "project_scale": "이 견적만"}
+                   and not {"work_category", "duration", "contractor_type", "project_scale"} & set(names)
+                   and all(first["input_sources"][n] == "기본값" for n in
+                           ("work_category", "duration", "contractor_type", "project_scale"))
                    and pump_size["choices"] == ["32m", "36m", "41m", "43m", "47m", "52m"]
                    and facility.get("hint") == {"value": "Type-Ⅱ", "matched": "벽"}))
 
@@ -118,6 +121,19 @@ def main() -> int:
     checks.append(("F13", bad_work["status"] == "MISSING_INFO"
                    and bad_work["questions"][0]["name"] == "work"
                    and bad_work["questions"][0].get("reason") == "선택한 공종을 후보에서 찾을 수 없습니다"))
+
+    apt = fill(state("아파트 철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"))
+    checks.append(("F14 아파트 → 건축", apt["inputs"]["work_category"] == "주택 외 건축"
+                   and apt["input_sources"]["work_category"] == "질문"
+                   and apt["input_sources"]["duration"] == "기본값"))
+    months = fill(state("도로 공사 철근콘크리트 벽체 260㎥ 펌프차로 타설 비용 8개월"))
+    checks.append(("F15 N개월 → 기간 구간", months["inputs"]["duration"] == "7~12개월"
+                   and months["inputs"]["work_category"] == "도로"
+                   and months["input_sources"]["duration"] == "질문"))
+    sub = fill(state("하도급 전문건설 철근콘크리트 벽체 260㎥ 펌프차로 타설 비용 전체 공사 30억"))
+    checks.append(("F16 전문건설·전체 규모", sub["inputs"]["contractor_type"] == "전문건설업"
+                   and sub["inputs"]["project_scale"] == "3000000000"
+                   and sub["input_sources"]["project_scale"] == "질문"))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
