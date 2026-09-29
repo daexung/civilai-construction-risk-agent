@@ -119,7 +119,7 @@ def main() -> int:
                          for row in first.iter_rows() for cell in row) if first else False
     checks.append(("A13 엑셀 시트·열", exported.status_code == 200
                    and len(book.sheetnames) == 5
-                   and set(book.sheetnames) == {"원가계산서", "내역서", "일위대가", "단가대비표", "산출근거"}
+                   and book.sheetnames == ["원가계산서", "내역서", "일위대가", "단가대비표", "산출근거"]
                    and cost_header is not None and footer_present
                    and CLIENT.get("/api/export/nothing.xlsx").status_code == 404))
     checks.append(("A14 원가계산서 고정 셀", contract is not None and contract[2] == 10032436
@@ -143,6 +143,21 @@ def main() -> int:
     checks.append(("A17 공종명 파일명 헤더", 'filename="estimate.xlsx"; filename*=UTF-8\'\'' in disposition
                    and decoded_name.endswith("_견적서.xlsx")
                    and "/" not in decoded_name and "\\" not in decoded_name))
+
+    bill_sheet = book["내역서"]
+    bill_numeric = all(cell.value is None or isinstance(cell.value, (int, float))
+                       for row in bill_sheet.iter_rows(min_row=5, min_col=5, max_col=12)
+                       for cell in row)
+    rate_sheet = book["단가대비표"]
+    rate_numeric = all(cell.value is None or isinstance(cell.value, (int, float))
+                       for row in rate_sheet.iter_rows(min_row=4, min_col=5, max_col=5)
+                       for cell in row)
+    basis_sheet = book["산출근거"]
+    basis_numeric = all(cell.value is None or isinstance(cell.value, (int, float))
+                        or cell.value in ("미산정", "제외")
+                        for row in basis_sheet.iter_rows(min_row=4, min_col=2, max_col=2)
+                        for cell in row)
+    checks.append(("A18 수량·금액 숫자 셀", bill_numeric and rate_numeric and basis_numeric))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

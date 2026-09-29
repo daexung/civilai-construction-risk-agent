@@ -248,7 +248,7 @@ _THIN = Side(style="thin", color="B7B7B7")
 _DOUBLE = Side(style="double", color="595959")
 _BORDER = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
 _MONEY = "#,##0"
-_DECIMAL = "#,##0.####"
+_DECIMAL = "#,##0.0###"
 _FOOTER = "표준품셈 기준 금액 · 검토 전 참고용 · 품셈AI"
 
 
@@ -451,16 +451,16 @@ def _basis_rows(response: dict) -> list[list]:
     basis = []
     daily = result.get("daily_volume")
     if daily:
-        basis.append(["일일시공량", f"{daily['value']} {daily['unit']}", daily["formula"],
+        basis.append([f"일일시공량 ({daily['unit']})", _num(daily["value"]), daily["formula"],
                       _citation_source(daily.get("citations")) or "; ".join(daily.get("sources", []))])
     if result.get("work_days"):
-        basis.append(["작업일수", result["work_days"]["value"], result["work_days"]["formula"], ""])
+        basis.append(["작업일수 (일)", _num(result["work_days"]["value"]), result["work_days"]["formula"], ""])
     for line in result.get("lines", []):
-        basis.append([f"{line['name']} 작업조·투입", f"{line['value']} {line['unit']}",
+        basis.append([f"{line['name']} 작업조·투입 ({line['unit']})", _num(line["value"]),
                       f"작업조 {line['crew']}" if line.get("crew") else "",
                       _citation_source(line.get("citations")) or line.get("source", "")])
     for line in result.get("unit_lines", []):
-        basis.append([f"{line['name']} 1㎥당", f"{line['applied']} {line['unit']}", line["formula"],
+        basis.append([f"{line['name']} 1㎥당 ({line['unit']})", _num(line["applied"]), line["formula"],
                       f"{line['rule']}; {_citation_source(line.get('citations')) or line.get('source', '')}"])
     for item in result.get("not_calculated", []):
         basis.append([item["item"], "미산정", "", _citation_source(item.get("citations")) or item["source"]])
@@ -526,27 +526,6 @@ def build_xlsx(response: dict) -> bytes:
     sheet.print_title_rows = "3:3"
     sheet.page_setup.orientation = "portrait"
 
-    # 일위대가표: 계 → 노무비 → 재료비 → 경비
-    unit_widths = [30, 24, 12, 9, 14, 14, 14, 14, 14, 14, 14, 14, 34]
-    unit_sheet = _new_sheet(book, "일위대가", "일위대가표", metadata, unit_widths)
-    _grouped_header(unit_sheet, len(unit_widths),
-                    [("계", 5, 6), ("노무비", 7, 8), ("재료비", 9, 10), ("경 비", 11, 12)],
-                    [("공 종", 1), ("규 격", 2), ("수 량", 3), ("단 위", 4), ("비 고", 13)])
-    unit_rows, unit_data_start = _unit_export_rows(response, tables.get("unit_rows", []))
-    for values in unit_rows:
-        unit_sheet.append(values)
-    unit_end = unit_sheet.max_row
-    unit_total_rows = (unit_data_start,)
-    unit_muted = tuple(row for row in range(unit_data_start + 1, unit_end + 1)
-                        if str(unit_sheet.cell(row, 13).value or "").startswith(("제외", "미산정")))
-    unit_footer = _footer(unit_sheet, len(unit_widths))
-    unit_sheet.freeze_panes = "A5"
-    unit_sheet.print_title_rows = "3:4"
-    _format_sheet(unit_sheet, len(unit_widths), (3, 4), unit_data_start, unit_end,
-                  numeric_columns=(3, 5, 6, 7, 8, 9, 10, 11, 12),
-                  money_columns=(6, 8, 10, 12), muted_rows=unit_muted,
-                  bold_rows=unit_total_rows, footer_row=unit_footer)
-
     # 공사내역서: 실무 관행에 따라 재료비 → 노무비 → 경비
     bill_widths = [30, 26, 9, 12, 14, 14, 14, 14, 14, 14, 14, 14, 34]
     bill_sheet = _new_sheet(book, "내역서", "공사내역서", metadata, bill_widths, orientation="landscape")
@@ -579,6 +558,27 @@ def build_xlsx(response: dict) -> bytes:
                   numeric_columns=(4, 5, 6, 7, 8, 9, 10, 11, 12),
                   money_columns=(5, 6, 7, 8, 9, 10, 11, 12),
                   bold_rows=(bill_end,) if bill_rows else (), footer_row=bill_footer)
+
+    # 일위대가표: 계 → 노무비 → 재료비 → 경비
+    unit_widths = [30, 24, 12, 9, 14, 14, 14, 14, 14, 14, 14, 14, 34]
+    unit_sheet = _new_sheet(book, "일위대가", "일위대가표", metadata, unit_widths)
+    _grouped_header(unit_sheet, len(unit_widths),
+                    [("계", 5, 6), ("노무비", 7, 8), ("재료비", 9, 10), ("경 비", 11, 12)],
+                    [("공 종", 1), ("규 격", 2), ("수 량", 3), ("단 위", 4), ("비 고", 13)])
+    unit_rows, unit_data_start = _unit_export_rows(response, tables.get("unit_rows", []))
+    for values in unit_rows:
+        unit_sheet.append(values)
+    unit_end = unit_sheet.max_row
+    unit_total_rows = (unit_data_start,)
+    unit_muted = tuple(row for row in range(unit_data_start + 1, unit_end + 1)
+                        if str(unit_sheet.cell(row, 13).value or "").startswith(("제외", "미산정")))
+    unit_footer = _footer(unit_sheet, len(unit_widths))
+    unit_sheet.freeze_panes = "A5"
+    unit_sheet.print_title_rows = "3:4"
+    _format_sheet(unit_sheet, len(unit_widths), (3, 4), unit_data_start, unit_end,
+                  numeric_columns=(3, 5, 6, 7, 8, 9, 10, 11, 12),
+                  money_columns=(6, 8, 10, 12), muted_rows=unit_muted,
+                  bold_rows=unit_total_rows, footer_row=unit_footer)
 
     # 단가대비표
     rate_widths = [16, 34, 26, 18, 16, 56, 22]
