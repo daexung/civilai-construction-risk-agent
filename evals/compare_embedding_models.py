@@ -1,4 +1,4 @@
-"""Compare two model-specific hybrid indexes on unchanged RAG and select questions."""
+"""Compare 2+ model-specific hybrid indexes on legacy and/or draft-derived questions."""
 
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ from evals.check_select import classify, questions as select_questions  # noqa: 
 from shared.embedding import query_input, rate_limit_error, sha256  # noqa: E402
 
 RAG_QUESTIONS = ROOT / "evals/rag_questions.json"
+DRAFT_QUESTIONS = ROOT / "evals/draft_questions.jsonl"
 RESULTS = ROOT / "evals/results"
 QUERY_CACHE = RESULTS / "embedding_query_cache.jsonl"
 
@@ -86,9 +87,9 @@ def _top(hit: dict | None) -> dict | None:
             "label": f"{division} {hit['section']}" if division else hit["section"]}
 
 
-def _search(index: HybridIndex, query: str, cache: dict) -> list[dict]:
+def _search(index: HybridIndex, query: str, cache: dict, k: int = 10) -> list[dict]:
     if query not in cache:
-        cache[query] = [chunk for _score, chunk in index.search(query, 10)]
+        cache[query] = [chunk for _score, chunk in index.search(query, k)]
     return cache[query]
 
 
@@ -103,40 +104,85 @@ def _select_result(case: dict, chunks: list[dict], specs: dict) -> dict:
             "correct": outcome == ("ask" if case["expect"] == "ask" else "correct")}
 
 
-def compare(a_path: Path, b_path: Path, *, pause: float = 0,
-            query_cache_path: Path = QUERY_CACHE) -> dict:
-    indexes = {"A": HybridIndex(config_path=a_path), "B": HybridIndex(config_path=b_path)}
-    if len({index.vector.embedding.model for index in indexes.values()}) != 2:
-        raise ValueError("A와 B가 서로 다른 임베딩 모델이어야 합니다")
+def legacy_questions() -> list[dict]:
+    rag = json.loads(RAG_QUESTIONS.read_text(encoding="utf-8"))
+    rows = [{"id": item["id"], "kind": "legacy", "query": item["query"],
+             "division": "공통", "section_no": item["expect_section"]}
+            for item in rag["questions"] + rag["evidence_checks"]]
+    rows += [{"id": item["id"], "kind": "legacy", "query": None,
+              "division": "공통", "section_no": item["section"],
+              "skip_reason": "적산 사례에 검색 질문이 없음"} for item in rag["estimates"]]
+    return rows
+
+
+def draft_questions(scope: str | None) -> list[dict]:
+    if not DRAFT_QUESTIONS.exists():
+        return []
+    rows = []
+    for line in DRAFT_QUESTIONS.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        item = json.loads(line)
+        if scope and not f"{item['division']}/{item['section_no']}".startswith(scope):
+            continue
+        rows.append({"id": item["id"], "kind": "draft", "query": item["question"],
+                     "division": item["division"], "section_no": item["section_no"]})
+    return rows
+
+
+def _rank_hit(chunks: list[dict], division: str, section_no: str, top_k: int) -> bool:
+    for chunk in chunks[:top_k]:
+        if chunk.get("division", "공통") == division and chunk.get("section_no") == section_no:
+            return True
+    return False
+
+
+def compare(config_paths: list[Path], *, questions: str = "both", scope: str | None = None,
+            pause: float = 0, query_cache_path: Path = QUERY_CACHE) -> dict:
+    if len(config_paths) < 2:
+        raise ValueError("설정 파일은 2개 이상이어야 합니다")
+    names = [chr(ord("A") + i) for i in range(len(config_paths))]
+    indexes = {name: HybridIndex(config_path=path) for name, path in zip(names, config_paths)}
+    models = {index.vector.embedding.model for index in indexes.values()}
+    if len(models) != len(indexes):
+        raise ValueError("설정들이 서로 다른 임베딩 모델이어야 합니다")
     chunk_orders = {tuple(chunk["chunk_id"] for chunk in index.chunks) for index in indexes.values()}
     if len(chunk_orders) != 1 or len(next(iter(chunk_orders))) != 175:
-        raise ValueError("A와 B의 청크 목록이 다릅니다")
+        raise ValueError("설정들의 청크 목록이 다릅니다")
     for name, index in indexes.items():
         if index.vector.stale or index.vector.missing:
             raise ValueError(f"{name} 색인 벡터가 미완성입니다: stale {len(index.vector.stale)}, "
                              f"missing {len(index.vector.missing)}")
+
     query_cache = QueryCache(query_cache_path, pause)
     for index in indexes.values():
         original = index.vector.embed_query
         index.vector.embed_query = lambda query, index=index, original=original: query_cache.embed(index, query, original)
     caches = {name: {} for name in indexes}
     specs = specs_by_section()
-    rag = json.loads(RAG_QUESTIONS.read_text(encoding="utf-8"))
-    rag_rows = []
-    for item in rag["questions"] + rag["evidence_checks"]:
-        row = {"id": item["id"], "query": item["query"],
-               "expected": {"division": "공통", "section_no": item["expect_section"]}}
+
+    retrieval_cases = []
+    if questions in ("legacy", "both"):
+        retrieval_cases += legacy_questions()
+    if questions in ("draft", "both"):
+        retrieval_cases += draft_questions(scope)
+
+    retrieval_rows = []
+    for case in retrieval_cases:
+        row = {"id": case["id"], "kind": case["kind"], "query": case["query"],
+               "expected": {"division": case["division"], "section_no": case["section_no"]}}
+        if "skip_reason" in case:
+            row["skip_reason"] = case["skip_reason"]
+            for name in indexes:
+                row[name] = {"top": None, "top1": None, "top3": None}
+            retrieval_rows.append(row)
+            continue
         for name, index in indexes.items():
-            chunks = _search(index, item["query"], caches[name])
-            top = _top(chunks[0] if chunks else None)
-            row[name] = {"top": top, "correct": bool(top and top["division"] == "공통"
-                                                        and top["section_no"] == item["expect_section"])}
-        rag_rows.append(row)
-    for item in rag["estimates"]:
-        rag_rows.append({"id": item["id"], "query": None,
-                         "expected": {"division": "공통", "section_no": item["section"]},
-                         "A": {"top": None, "correct": None}, "B": {"top": None, "correct": None},
-                         "skip_reason": "적산 사례에 검색 질문이 없음"})
+            chunks = _search(index, case["query"], caches[name])
+            row[name] = {"top": _top(chunks[0] if chunks else None),
+                         "top1": _rank_hit(chunks, case["division"], case["section_no"], 1),
+                         "top3": _rank_hit(chunks, case["division"], case["section_no"], 3)}
+        retrieval_rows.append(row)
 
     select_rows = []
     for case in select_questions():
@@ -147,39 +193,47 @@ def compare(a_path: Path, b_path: Path, *, pause: float = 0,
 
     summary = {}
     for name, index in indexes.items():
+        searchable = [row for row in retrieval_rows if row[name]["top1"] is not None]
         summary[name] = {
             "model": index.vector.embedding.model, "provider": index.vector.embedding.provider,
-            "rag_correct": sum(row[name]["correct"] is True for row in rag_rows),
-            "rag_searchable": sum(row[name]["correct"] is not None for row in rag_rows),
-            "rag_total": len(rag_rows),
+            "retrieval_total": len(retrieval_rows), "retrieval_searchable": len(searchable),
+            "top1_correct": sum(row[name]["top1"] for row in searchable),
+            "top3_correct": sum(row[name]["top3"] for row in searchable),
             "select_correct": sum(row[name]["outcome"] == "correct" for row in select_rows),
             "select_wrong": sum(row[name]["outcome"] == "wrong" for row in select_rows),
             "select_ask": sum(row[name]["outcome"] == "ask" for row in select_rows),
             "select_total": len(select_rows), "api_calls": index.api_calls,
         }
-    return {"date": date.today().isoformat(), "configs": {"A": str(a_path), "B": str(b_path)},
-            "summary": summary, "rag": rag_rows, "select": select_rows}
+    return {"date": date.today().isoformat(), "questions": questions, "scope": scope,
+            "configs": {name: str(path) for name, path in zip(names, config_paths)},
+            "summary": summary, "retrieval": retrieval_rows, "select": select_rows}
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("A", type=Path)
-    parser.add_argument("B", type=Path)
+    parser.add_argument("configs", type=Path, nargs="+", help="비교할 색인 설정 파일(2개 이상)")
+    parser.add_argument("--questions", choices=("legacy", "draft", "both"), default="both")
+    parser.add_argument("--scope", help="초안 질문의 부문/절 접두어 필터, 예: 공통/6-")
     parser.add_argument("--pause", type=float, default=0, help="새 질문 임베딩 호출 사이 대기(초)")
     args = parser.parse_args()
-    result = compare(args.A, args.B, pause=args.pause)
-    for group in ("rag", "select"):
-        for row in result[group]:
-            a, b = row["A"], row["B"]
-            a_top = a["top"]["label"] if a["top"] else "-"
-            b_top = b["top"]["label"] if b["top"] else "-"
-            print(f"{group} {row['id']}: A {a_top} ({a['correct']}) | B {b_top} ({b['correct']})")
+    result = compare(args.configs, questions=args.questions, scope=args.scope, pause=args.pause)
+    names = list(result["configs"])
+    for row in result["retrieval"]:
+        cells = " | ".join(f"{name} {row[name]['top']['label'] if row[name]['top'] else '-'} "
+                           f"(top1={row[name]['top1']}, top3={row[name]['top3']})" for name in names)
+        print(f"retrieval {row['kind']} {row['id']}: {cells}")
+    for row in result["select"]:
+        cells = " | ".join(f"{name} {row[name]['top']['label'] if row[name]['top'] else '-'} "
+                           f"({row[name]['correct']})" for name in names)
+        print(f"select {row['id']}: {cells}")
     for name, summary in result["summary"].items():
-        print(f"{name} {summary['model']}: RAG {summary['rag_correct']}/{summary['rag_searchable']} "
-              f"(전체 {summary['rag_total']}); select 오답 {summary['select_wrong']}, "
+        print(f"{name} {summary['model']}: top1 {summary['top1_correct']}/{summary['retrieval_searchable']} "
+              f"(전체 {summary['retrieval_total']}), top3 {summary['top3_correct']}/{summary['retrieval_searchable']}; "
+              f"select 정답 {summary['select_correct']}, 오답 {summary['select_wrong']}, "
               f"되묻기 {summary['select_ask']}/{summary['select_total']}")
     RESULTS.mkdir(parents=True, exist_ok=True)
-    output = RESULTS / f"embedding_compare_{date.today():%Y%m%d}.json"
+    scope_tag = (args.scope or "all").replace("/", "-")
+    output = RESULTS / f"embedding_compare_{date.today():%Y%m%d}_{scope_tag}.json"
     output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"저장: {output}")
     return 0

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 import tempfile
@@ -17,11 +18,12 @@ from agent.state import new_state  # noqa: E402
 from agent.tools.search.bm25 import Index, load  # noqa: E402
 from agent.tools.search.vector import ModelMismatchError, VectorIndex  # noqa: E402
 from api.main import _search_out  # noqa: E402
+from evals.build_draft_questions import collect as collect_draft_questions  # noqa: E402
 from evals.compare_embedding_models import QueryCache  # noqa: E402
 from pipeline.chunk import page_divisions  # noqa: E402
 from pipeline import embed as embed_pipeline  # noqa: E402
-from shared.embedding import (document_input, document_title, embed_texts,  # noqa: E402
-                              query_input, rate_limit_error, settings)
+from shared.embedding import (api_key, document_fingerprint, document_input, document_title,  # noqa: E402
+                              embed_texts, query_input, rate_limit_error, settings)
 
 
 class FakeModels:
@@ -114,6 +116,67 @@ def main() -> int:
 
     divisions = page_divisions()
     checks.append(("쪽별 부문", divisions[186] == "공통" and divisions[982] == "유지관리"))
+
+    multilingual = settings("vertex", "text-multilingual-embedding-002")
+    checks.append(("vertex 모델 선택·차원", multilingual.model == "text-multilingual-embedding-002"
+                   and multilingual.dim == 768))
+    with patch.dict(os.environ, {"EMBED_PROVIDER": "vertex", "EMBED_MODEL": "text-multilingual-embedding-002"}):
+        checks.append(("EMBED_MODEL 환경변수", settings().dim == 768))
+    try:
+        settings("vertex", "no-such-model")
+    except ValueError:
+        rejects_unknown_model = True
+    else:
+        rejects_unknown_model = False
+    checks.append(("알 수 없는 EMBED_MODEL 거부", rejects_unknown_model))
+
+    with patch.dict(os.environ, {"VERTEX_API_KEY_BULK": "bulk-key", "VERTEX_KEY_NAME": "VERTEX_API_KEY_BULK"}):
+        checks.append(("VERTEX_KEY_NAME 설정", api_key(vertex) == "bulk-key"))
+
+    with tempfile.TemporaryDirectory() as mismatch_dir:
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+
+        chunk = {"chunk_id": "m1", "section": "6-1-1", "subsection": None,
+                 "section_no": "6-1-1", "source": {"pdf": "x", "page": 1, "table_id": None, "bbox": []},
+                 "text": "임베딩 차원 확인용 텍스트"}
+        root = Path(mismatch_dir)
+        chunks_path = root / "chunks.jsonl"
+        chunks_path.write_text(json.dumps(chunk, ensure_ascii=False) + "\n", encoding="utf-8")
+        vectors_path = root / "vectors.parquet"
+        schema = pa.schema([("chunk_id", pa.string()), ("model", pa.string()), ("dim", pa.int32()),
+                            ("text_sha256", pa.string()), ("vector", pa.list_(pa.float32()))])
+        row = {"chunk_id": "m1", "model": multilingual.model, "dim": 3072,  # Wrong dim for this model.
+               "text_sha256": document_fingerprint(chunk, multilingual), "vector": [0.0] * 3072}
+        pq.write_table(pa.Table.from_pylist([row], schema=schema), vectors_path)
+        index_config_path = root / "index_config.json"
+        index_config_path.write_text(json.dumps({
+            "chunks": str(chunks_path), "vectors": str(vectors_path),
+            "embed_provider": "vertex", "embed_model": "text-multilingual-embedding-002",
+        }, ensure_ascii=False), encoding="utf-8")
+        try:
+            VectorIndex(config_path=index_config_path)
+        except ModelMismatchError as exc:
+            dim_mismatch = "차원" in str(exc)
+        else:
+            dim_mismatch = False
+    checks.append(("차원 불일치 오류", dim_mismatch))
+
+    with tempfile.TemporaryDirectory() as drafts_dir:
+        root = Path(drafts_dir)
+        for name, division, section_no, questions in (
+            ("d1.json", "공통", "6-1-1", ["질문 하나", "", "질문 하나", "질문 둘"]),
+            ("d2.json", "토목", "1-2-3", ["다른 질문", "다른 질문", "   "]),
+        ):
+            (root / name).write_text(json.dumps({
+                "draft": {"division": division, "section_no": section_no}, "questions": questions,
+            }, ensure_ascii=False), encoding="utf-8")
+        draft_rows = collect_draft_questions(root)
+        checks.append(("초안 질문 세트 생성", len(draft_rows) == 3
+                       and [row["question"] for row in draft_rows] == ["질문 하나", "질문 둘", "다른 질문"]
+                       and draft_rows[0]["division"] == "공통" and draft_rows[0]["section_no"] == "6-1-1"
+                       and draft_rows[0]["order"] == 1 and draft_rows[1]["order"] == 4
+                       and draft_rows[2]["division"] == "토목"))
 
     checks.append(("429 판별", rate_limit_error(FakeLimitError())
                    and not rate_limit_error(FakeServiceError())))
