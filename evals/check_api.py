@@ -111,10 +111,10 @@ def main() -> int:
     book = load_workbook(BytesIO(exported.content))
     first = book["원가계산서"] if "원가계산서" in book.sheetnames else None
     cost_rows = list(first.iter_rows(values_only=True)) if first else []
-    cost_header = next((row for row in cost_rows if row[0] == "비목(대)"), None)
-    contract = next((row for row in cost_rows if row[1] == "도급액"), None)
-    net_cost = next((row for row in cost_rows if row[1] == "순공사원가"), None)
-    excluded_rows = [row for row in cost_rows if row[5] == "제외"]
+    cost_header = next((row for row in cost_rows if row[0] == "비목"), None)
+    contract = next((row for row in cost_rows if row[0] == "도급액"), None)
+    net_cost = next((row for row in cost_rows if row[0] == "순공사원가"), None)
+    excluded_rows = [row for row in cost_rows if isinstance(row[4], str) and row[4].startswith("제외 ·")]
     footer_present = any(isinstance(cell.value, str) and "검토 전 참고용" in cell.value
                          for row in first.iter_rows() for cell in row) if first else False
     checks.append(("A13 엑셀 시트·열", exported.status_code == 200
@@ -125,9 +125,8 @@ def main() -> int:
     checks.append(("A14 원가계산서 고정 셀", contract is not None and contract[2] == 10032436
                    and net_cost is not None and net_cost[2] == 7364857))
     checks.append(("A15 제외 줄 열 정렬", bool(excluded_rows)
-                   and all(row[2] is None and row[5] == "제외" for row in excluded_rows)
-                   and all(len(row) == 6 for row in cost_rows[cost_rows.index(cost_header) + 1:]
-                           if any(value is not None for value in row))))
+                   and all(row[2] is None and row[4].startswith("제외 ·") for row in excluded_rows)
+                   and all(len(row) == 5 for row in cost_rows)))
     unit_sheet = book["일위대가"] if "일위대가" in book.sheetnames else None
     unit_values = list(unit_sheet.iter_rows(values_only=True)) if unit_sheet else []
     unit_headers = next((row for row in unit_values if row[4] == "계"), None)
@@ -146,18 +145,52 @@ def main() -> int:
 
     bill_sheet = book["내역서"]
     bill_numeric = all(cell.value is None or isinstance(cell.value, (int, float))
-                       for row in bill_sheet.iter_rows(min_row=5, min_col=5, max_col=12)
+                       for row in bill_sheet.iter_rows(min_row=6, min_col=5, max_col=12)
                        for cell in row)
     rate_sheet = book["단가대비표"]
     rate_numeric = all(cell.value is None or isinstance(cell.value, (int, float))
-                       for row in rate_sheet.iter_rows(min_row=4, min_col=5, max_col=5)
+                       for row in rate_sheet.iter_rows(min_row=5, min_col=5, max_col=5)
                        for cell in row)
     basis_sheet = book["산출근거"]
     basis_numeric = all(cell.value is None or isinstance(cell.value, (int, float))
                         or cell.value in ("미산정", "제외")
-                        for row in basis_sheet.iter_rows(min_row=4, min_col=2, max_col=2)
+                        for row in basis_sheet.iter_rows(min_row=5, min_col=2, max_col=2)
                         for cell in row)
     checks.append(("A18 수량·금액 숫자 셀", bill_numeric and rate_numeric and basis_numeric))
+
+    bill_values = list(bill_sheet.iter_rows(values_only=True))
+    bill_total = next((row for row in bill_values if row[0] == "합계"), None)
+    checks.append(("A19 내역서 합계 금액 칸", bill_total is not None
+                   and [bill_total[index] for index in (4, 6, 8, 10)] == [None, None, None, None]
+                   and [bill_total[index] for index in (5, 7, 9, 11)] == [178360, 4133480, 1339000, 5650840]))
+
+    missing_title_row = next((index for index, row in enumerate(cost_rows) if row[0] == "빠진 항목"), None)
+    missing_items = set()
+    if missing_title_row is not None:
+        missing_items = {row[0] for row in cost_rows[missing_title_row + 2:] if row[0]}
+    checks.append(("A20 원가계산서 빠진 항목 분리", contract is not None and missing_title_row is not None
+                   and missing_title_row > cost_rows.index(contract)
+                   and all(not row[0] for row in cost_rows[cost_rows.index(contract) + 1:missing_title_row])
+                   and any("1-2-9" in item for item in missing_items)
+                   and any("살수 양생" in item for item in missing_items)))
+
+    contract_row = cost_rows.index(contract) + 1 if contract else 0
+    checks.append(("A21 원가계산서 요약 행 병합", contract_row > 0
+                   and f"A{contract_row}:B{contract_row}" in {str(rng) for rng in first.merged_cells.ranges}
+                   and "-" in next((row[2] for row in cost_rows if row[1] == "간접재료비(-)"), None)))
+
+    metadata_ok = all(sheet["A2"].value.startswith("공사명:") and sheet["A3"].value.startswith("기준일:")
+                      for sheet in book.worksheets)
+    checks.append(("A22 시트 공통 메타데이터", metadata_ok
+                   and "금액 0.1원 미만 버림(품셈 1-2-2)" in [cell.value for row in unit_sheet.iter_rows() for cell in row]))
+    labor_rows = [row for row in unit_sheet.iter_rows(min_row=6)
+                  if isinstance(row[12].value, str) and "노임 코드" in row[12].value]
+    driver_rows = [row for row in unit_sheet.iter_rows(min_row=6) if row[0].value == "펌프차 운전원"]
+    driver_pay = [cell for row in driver_rows for cell in row[4:12] if cell.value == 35415.375]
+    checks.append(("A23 일위대가 인력 규격·운전원 노임", bool(labor_rows) and bool(driver_pay)
+                   and all(row[1].value in (None, "") for row in labor_rows)
+                   and driver_pay[0].number_format == "#,##0.0"
+                   and "일 283,323원 ÷ 8시간" in driver_rows[0][12].value))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

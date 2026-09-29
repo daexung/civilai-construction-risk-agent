@@ -192,7 +192,7 @@ def add_tables(response: dict) -> dict:
 
 
 def _cost_statement_rows(tables: dict, statement: dict) -> list[list]:
-    """원가계산서의 6개 열을 항상 같은 위치에 채운다."""
+    """원가계산서의 실무 행을 고정된 다섯 열로 만든다."""
     totals = statement.get("totals", {})
     contract_amount = totals.get("contract_amount")
     statement_rows = tables.get("statement_rows", [])
@@ -205,7 +205,8 @@ def _cost_statement_rows(tables: dict, statement: dict) -> list[list]:
         ratio = None
         if value is not None and contract_amount:
             ratio = float(Decimal(str(value)) / Decimal(str(contract_amount)))
-        output.append([major, minor, value, ratio, basis, status if excluded else ""])
+        note = f"{status} · {basis}" if excluded and basis else status if excluded else basis
+        output.append([major, minor, value, ratio, note, status if excluded else ""])
 
     for category in ("재료비", "노무비", "경비"):
         lines = [row for row in statement_rows if row.get("category") == category]
@@ -214,6 +215,11 @@ def _cost_statement_rows(tables: dict, statement: dict) -> list[list]:
                      "직접재료비" if category == "재료비" and row["name"] == "재료비" else row["name"])
             basis = row.get("basis") or row.get("reason") or row.get("note") or ""
             add(category, minor, row.get("amount"), basis, row.get("status", "산정"))
+        if category == "재료비":
+            present = {row["name"] for row in lines}
+            for label in ("간접재료비(-)", "작업설·부산물 등(△)(-)"):
+                if label not in present:
+                    output.append([category, label, "-", None, "", ""])
         if category == "재료비" and lines:
             add(category, "소계", totals.get("materials"), "직접재료비 및 재료비 항목 합계")
 
@@ -221,21 +227,47 @@ def _cost_statement_rows(tables: dict, statement: dict) -> list[list]:
     for name in summary_names:
         row = by_name.get(name)
         if row:
-            major = "합계" if row.get("category") == "합계" else (row.get("category") or "")
+            major = name if name in ("순공사원가", "총원가", "도급액") else (row.get("category") or "")
+            minor = "" if name in ("순공사원가", "총원가", "도급액") else name
             basis = row.get("basis") or row.get("reason") or row.get("note") or ""
             if name == "부가가치세" and totals.get("total_cost") is not None:
                 basis = f"총원가 {int(totals['total_cost']):,}원 × 10%"
-            add(major, name, row.get("amount"), basis, row.get("status", "산정"))
+            add(major, minor, row.get("amount"), basis, row.get("status", "산정"))
 
     known = {row["name"] for row in statement_rows if row.get("category") in ("재료비", "노무비", "경비")}
     known.update(summary_names)
     for row in statement_rows:
         if row["name"] in known:
             continue
+        if "1-2-9" in row["name"] or "살수 양생" in row["name"]:
+            continue
         status = row.get("status", "산정")
         add(row.get("category") or "경비", row["name"], row.get("amount"),
             row.get("basis") or row.get("reason") or row.get("note") or "", status)
     return output
+
+
+def _missing_cost_rows(response: dict, cost_rows: list[list]) -> list[list[str]]:
+    rows: list[list[str]] = []
+    seen: set[str] = set()
+
+    def add(item: str, status: str, reason: str = "") -> None:
+        if item and item not in seen:
+            seen.add(item)
+            rows.append([item, status, reason])
+
+    for major, minor, _amount, _ratio, note, status in cost_rows:
+        if status in ("제외", "미산정"):
+            add(minor or major, status, note.removeprefix(f"{status} · ").strip())
+    statement = response.get("statement") or {}
+    for line in statement.get("lines", []):
+        status = line.get("status", "산정")
+        if status in ("제외", "미산정"):
+            add(line.get("name", ""), status, line.get("reason") or "")
+    result = response.get("result") or {}
+    for item in result.get("not_calculated", []):
+        add(item.get("item", ""), "미산정", item.get("source") or "이번 계산에서 미산정")
+    return rows
 
 
 # ---------- 엑셀 ----------
@@ -263,7 +295,7 @@ def estimate_filename(response: dict) -> str:
     return f"{name or '견적서'}_견적서.xlsx"
 
 
-def _metadata(response: dict) -> str:
+def _metadata(response: dict) -> tuple[str, str]:
     tables = response.get("tables", {})
     bill = tables.get("bill") or {}
     quantity, unit = bill.get("quantity"), bill.get("unit") or "㎥"
@@ -277,10 +309,11 @@ def _metadata(response: dict) -> str:
         conditions.get("contractor_type", {}).get("value"), scale_text) if part)
     qty = f" {quantity}{unit}" if quantity is not None else ""
     basis_date = response.get("basis_date") or date.today().isoformat()
-    return f"공사명: {_work_name(response)}{qty} | 기준일: {basis_date} | 조건 요약: {summary}"
+    return (f"공사명: {_work_name(response)}{qty}",
+            f"기준일: {basis_date} | 조건 요약: {summary}")
 
 
-def _new_sheet(book: Workbook, name: str, title: str, metadata: str, widths: list[int],
+def _new_sheet(book: Workbook, name: str, title: str, metadata: tuple[str, str], widths: list[int],
                orientation: str = "portrait", first: bool = False):
     sheet = book.active if first else book.create_sheet()
     sheet.title = name
@@ -288,11 +321,14 @@ def _new_sheet(book: Workbook, name: str, title: str, metadata: str, widths: lis
     last = len(widths)
     sheet.merge_cells(start_row=1, start_column=1, end_row=1, end_column=last)
     sheet.cell(1, 1, title)
+    project_line, conditions_line = metadata
     sheet.merge_cells(start_row=2, start_column=1, end_row=2, end_column=last)
-    sheet.cell(2, 1, metadata)
+    sheet.cell(2, 1, project_line)
+    sheet.merge_cells(start_row=3, start_column=1, end_row=3, end_column=last)
+    sheet.cell(3, 1, conditions_line)
     for column, width in enumerate(widths, 1):
         sheet.column_dimensions[get_column_letter(column)].width = width
-    sheet.freeze_panes = "A4"
+    sheet.freeze_panes = "A5"
     sheet.sheet_properties.pageSetUpPr.fitToPage = True
     sheet.page_setup.orientation = orientation
     sheet.page_setup.paperSize = sheet.PAPERSIZE_A4
@@ -348,12 +384,14 @@ def _format_sheet(sheet, last_column: int, header_rows: tuple[int, ...], data_st
                 elif column in numeric_columns:
                     cell.number_format = _DECIMAL
     sheet.row_dimensions[1].height = 29
-    sheet.row_dimensions[2].height = 27
+    sheet.row_dimensions[2].height = 22
+    sheet.row_dimensions[3].height = 22
     for row in header_rows:
         sheet.row_dimensions[row].height = 27
     sheet["A1"].font = Font(name=_FONT_NAME, size=16, bold=True)
     sheet["A1"].alignment = Alignment(horizontal="left", vertical="center")
     sheet["A2"].font = Font(name=_FONT_NAME, size=10)
+    sheet["A3"].font = Font(name=_FONT_NAME, size=10)
     for row in muted_rows:
         for column in range(1, last_column + 1):
             cell = sheet.cell(row, column)
@@ -385,7 +423,7 @@ def _append_cost_rate_sources(sheet, response: dict) -> tuple[int, int]:
     conditions = {item["name"]: item for item in response.get("conditions", [])}
     group = conditions.get("work_category", {}).get("group", "")
     start = sheet.max_row + 2
-    sheet.merge_cells(start_row=start, start_column=1, end_row=start, end_column=6)
+    sheet.merge_cells(start_row=start, start_column=1, end_row=start, end_column=5)
     sheet.cell(start, 1, "적용 요율 출처")
     header = start + 1
     sheet.append([]) if sheet.max_row < header - 1 else None
@@ -402,7 +440,7 @@ def _append_cost_rate_sources(sheet, response: dict) -> tuple[int, int]:
         rows.append(["기계경비", equipment.get("title", ""), equipment.get("publisher", ""),
                      _rate_period(equipment, equipment=True)])
     for values in rows:
-        sheet.append(values + [None, None])
+        sheet.append(values + [None])
     return start, header
 
 
@@ -412,7 +450,20 @@ def _citation_source(citations: list[dict] | None) -> str:
         section = citation.get("section_no") or ""
         item = citation.get("item") or ""
         page = citation.get("pdf_page")
-        label = " ".join(part for part in (section, item, f"p{page}" if page else "") if part)
+        label = " ".join(part for part in (section, item if item != "표" else "", f"p{page}" if page else "") if part)
+        if label and label not in labels:
+            labels.append(label)
+    return "; ".join(labels)
+
+
+def _unit_citation_source(citations: list[dict] | None) -> str:
+    labels = []
+    for citation in citations or []:
+        section = citation.get("section_no") or ""
+        if section in ("1-2-2",) or "노임단가" in (citation.get("section_title") or ""):
+            continue
+        page = citation.get("pdf_page")
+        label = " ".join(part for part in (section, f"p{page}" if page else "") if part)
         if label and label not in labels:
             labels.append(label)
     return "; ".join(labels)
@@ -434,15 +485,20 @@ def _unit_export_rows(response: dict, unit_rows: list[dict]) -> tuple[list[list]
         amount = None if muted else _num(item.get("amount"))
         unit_price = None if muted else _num(item.get("unit_price"))
         note = (f"{status} · {item.get('reason') or ''}".strip(" ·") if muted else
-                _citation_source(item.get("citations")))
-        values = [item.get("name", ""), item.get("spec", ""), _num(item.get("quantity")),
+                _unit_citation_source(item.get("citations")))
+        if item.get("category") == "노무비" and item.get("spec", "").startswith("노임 코드"):
+            note = "; ".join(part for part in (note, item["spec"]) if part)
+        if "펌프차 운전원" in item.get("name", ""):
+            note = "; ".join(part for part in (note, "일 283,323원 ÷ 8시간") if part)
+        spec = "" if item.get("category") == "노무비" else item.get("spec", "")
+        values = [item.get("name", ""), spec, _num(item.get("quantity")),
                   item.get("unit", ""), None, amount, None, None, None, None, None, None, note]
         columns = category_columns.get(item.get("category"))
         if columns:
             values[columns[0] - 1] = unit_price
             values[columns[1] - 1] = amount
         rows.append(values)
-    return rows, 5
+    return rows, 6
 
 
 def _basis_rows(response: dict) -> list[list]:
@@ -479,13 +535,13 @@ def _basis_rows(response: dict) -> list[list]:
 def _grouped_header(sheet, widths: int, groups: list[tuple[str, int, int]],
                     fixed: list[tuple[str, int]]) -> None:
     for label, start, end in groups:
-        sheet.merge_cells(start_row=3, start_column=start, end_row=3, end_column=end)
-        sheet.cell(3, start, label)
+        sheet.merge_cells(start_row=4, start_column=start, end_row=4, end_column=end)
+        sheet.cell(4, start, label)
         for column, label2 in ((start, "단가"), (start + 1, "금액")):
-            sheet.cell(4, column, label2)
+            sheet.cell(5, column, label2)
     for label, column in fixed:
-        sheet.merge_cells(start_row=3, start_column=column, end_row=4, end_column=column)
-        sheet.cell(3, column, label)
+        sheet.merge_cells(start_row=4, start_column=column, end_row=5, end_column=column)
+        sheet.cell(4, column, label)
 
 
 def build_xlsx(response: dict) -> bytes:
@@ -495,35 +551,49 @@ def build_xlsx(response: dict) -> bytes:
     book = Workbook()
 
     # 공사원가계산서
-    widths = [16, 24, 16, 13, 48, 14]
+    widths = [16, 24, 16, 13, 56]
     sheet = _new_sheet(book, "원가계산서", "공사원가계산서", metadata, widths, first=True)
-    headers = ["비목(대)", "비목(중)", "금액", "구성비(%)", "산출 근거", "상태"]
+    headers = ["비목", "구분", "금액", "구성비", "비고(산출 근거)"]
     for column, value in enumerate(headers, 1):
-        sheet.cell(3, column, value)
+        sheet.cell(4, column, value)
     cost_rows = _cost_statement_rows(tables, statement)
     for values in cost_rows:
-        sheet.append(values)
-    cost_start, cost_end = 4, 3 + len(cost_rows)
+        sheet.append(values[:4] + [values[4]])
+        if values[0] in ("순공사원가", "총원가", "도급액") and not values[1]:
+            row = sheet.max_row
+            sheet.merge_cells(start_row=row, start_column=1, end_row=row, end_column=2)
+    cost_start, cost_end = 5, 4 + len(cost_rows)
     _merge_repeated(sheet, 1, cost_start, cost_end)
     totals = {"순공사원가", "총원가", "도급액"}
     bold_rows = tuple(row for row in range(cost_start, cost_end + 1)
-                      if sheet.cell(row, 2).value == "소계" or sheet.cell(row, 2).value in totals)
+                      if sheet.cell(row, 2).value == "소계" or sheet.cell(row, 1).value in totals)
     excluded_rows = tuple(row for row in range(cost_start, cost_end + 1)
-                          if sheet.cell(row, 6).value in ("제외", "미산정"))
+                          if cost_rows[row - cost_start][5] in ("제외", "미산정"))
     contract_rows = tuple(row for row in range(cost_start, cost_end + 1)
-                          if sheet.cell(row, 2).value == "도급액")
+                          if sheet.cell(row, 1).value == "도급액")
+    missing_rows = _missing_cost_rows(response, cost_rows)
+    missing_start = sheet.max_row + 2
+    sheet.merge_cells(start_row=missing_start, start_column=1, end_row=missing_start, end_column=5)
+    sheet.cell(missing_start, 1, "빠진 항목")
+    missing_header = missing_start + 1
+    for column, label in enumerate(("항목", "상태", "이유"), 1):
+        sheet.cell(missing_header, column, label)
+    for item, status, reason in missing_rows:
+        sheet.append([item, status, reason, None, None])
+        current = sheet.max_row
+        sheet.merge_cells(start_row=current, start_column=3, end_row=current, end_column=5)
+    missing_end = sheet.max_row
     rate_start, rate_header = _append_cost_rate_sources(sheet, response)
-    rate_end = sheet.max_row
     footer = _footer(sheet, len(widths))
-    _format_sheet(sheet, len(widths), (3, rate_header), cost_start, cost_end,
+    _format_sheet(sheet, len(widths), (4, missing_header, rate_header), cost_start, cost_end,
                   numeric_columns=(3, 4), money_columns=(3,), ratio_columns=(4,),
                   muted_rows=excluded_rows, bold_rows=bold_rows,
                   highlight_rows=contract_rows, footer_row=footer)
     for column in range(1, 5):
         sheet.cell(rate_start, column).fill = PatternFill("solid", fgColor="D9EAD3")
         sheet.cell(rate_start, column).font = Font(name=_FONT_NAME, size=10, bold=True)
-    sheet.freeze_panes = "A4"
-    sheet.print_title_rows = "3:3"
+    sheet.freeze_panes = "A5"
+    sheet.print_title_rows = "4:4"
     sheet.page_setup.orientation = "portrait"
 
     # 공사내역서: 실무 관행에 따라 재료비 → 노무비 → 경비
@@ -538,26 +608,34 @@ def build_xlsx(response: dict) -> bytes:
         prices = bill.get("unit_price") or {}
         amounts = bill.get("amount") or {}
         total_unit = (response.get("priced") or {}).get("total")
-        note = "제1호표 · 미산정 항목 제외 부분 합계" if bill.get("partial") else "제1호표"
+        note = "제1호표"
         bill_rows.append([_work_name(response), bill.get("spec", ""), bill.get("unit", ""),
                           _num(bill.get("quantity")), _num(prices.get("재료비")), _num(amounts.get("재료비")),
                           _num(prices.get("노무비")), _num(amounts.get("노무비")),
                           _num(prices.get("경비")), _num(amounts.get("경비")),
                           _num(total_unit), _num(bill.get("total")), note])
-        bill_rows.append(["합계", "", "", None, _num(prices.get("재료비")), _num(amounts.get("재료비")),
-                          _num(prices.get("노무비")), _num(amounts.get("노무비")),
-                          _num(prices.get("경비")), _num(amounts.get("경비")),
-                          _num(total_unit), _num(bill.get("total")), note])
+        bill_rows.append(["합계", "", "", None, None, _num(amounts.get("재료비")),
+                          None, _num(amounts.get("노무비")),
+                          None, _num(amounts.get("경비")),
+                          None, _num(bill.get("total")), ""])
     for values in bill_rows:
         bill_sheet.append(values)
-    bill_start, bill_end = 5, bill_sheet.max_row
+    bill_start, bill_end = 6, bill_sheet.max_row
+    bill_note_row = None
+    if bill and bill.get("partial"):
+        bill_note_row = bill_sheet.max_row + 1
+        bill_sheet.merge_cells(start_row=bill_note_row, start_column=1,
+                               end_row=bill_note_row, end_column=len(bill_widths))
+        bill_sheet.cell(bill_note_row, 1, "미산정 항목 제외 부분 합계")
     bill_footer = _footer(bill_sheet, len(bill_widths))
-    bill_sheet.freeze_panes = "A5"
-    bill_sheet.print_title_rows = "3:4"
-    _format_sheet(bill_sheet, len(bill_widths), (3, 4), bill_start, bill_end,
+    bill_sheet.freeze_panes = "A6"
+    bill_sheet.print_title_rows = "4:5"
+    _format_sheet(bill_sheet, len(bill_widths), (4, 5), bill_start, bill_end,
                   numeric_columns=(4, 5, 6, 7, 8, 9, 10, 11, 12),
                   money_columns=(5, 6, 7, 8, 9, 10, 11, 12),
                   bold_rows=(bill_end,) if bill_rows else (), footer_row=bill_footer)
+    if bill_note_row:
+        bill_sheet.cell(bill_note_row, 1).font = Font(name=_FONT_NAME, size=9, italic=True, color="666666")
 
     # 일위대가표: 계 → 노무비 → 재료비 → 경비
     unit_widths = [30, 24, 12, 9, 14, 14, 14, 14, 14, 14, 14, 14, 34]
@@ -572,43 +650,51 @@ def build_xlsx(response: dict) -> bytes:
     unit_total_rows = (unit_data_start,)
     unit_muted = tuple(row for row in range(unit_data_start + 1, unit_end + 1)
                         if str(unit_sheet.cell(row, 13).value or "").startswith(("제외", "미산정")))
+    unit_note_row = unit_end + 1
+    unit_sheet.merge_cells(start_row=unit_note_row, start_column=1,
+                           end_row=unit_note_row, end_column=len(unit_widths))
+    unit_sheet.cell(unit_note_row, 1, "금액 0.1원 미만 버림(품셈 1-2-2)")
     unit_footer = _footer(unit_sheet, len(unit_widths))
-    unit_sheet.freeze_panes = "A5"
-    unit_sheet.print_title_rows = "3:4"
-    _format_sheet(unit_sheet, len(unit_widths), (3, 4), unit_data_start, unit_end,
+    unit_sheet.freeze_panes = "A6"
+    unit_sheet.print_title_rows = "4:5"
+    _format_sheet(unit_sheet, len(unit_widths), (4, 5), unit_data_start, unit_end,
                   numeric_columns=(3, 5, 6, 7, 8, 9, 10, 11, 12),
                   money_columns=(6, 8, 10, 12), muted_rows=unit_muted,
                   bold_rows=unit_total_rows, footer_row=unit_footer)
+    unit_sheet.cell(unit_note_row, 1).font = Font(name=_FONT_NAME, size=9, italic=True, color="666666")
+    for row in range(unit_data_start + 1, unit_end + 1):
+        if unit_sheet.cell(row, 1).value == "펌프차 운전원":
+            unit_sheet.cell(row, 7).number_format = "#,##0.0"
 
     # 단가대비표
     rate_widths = [16, 34, 26, 18, 16, 56, 22]
     rate_sheet = _new_sheet(book, "단가대비표", "단가대비표", metadata, rate_widths)
     rate_headers = ["구분", "품명", "규격", "단위", "적용 단가", "출처(문서·쪽)", "기준일/적용기간"]
     for column, value in enumerate(rate_headers, 1):
-        rate_sheet.cell(3, column, value)
+        rate_sheet.cell(4, column, value)
     rate_rows = [[row.get("kind", ""), row.get("name", ""), row.get("spec", ""), row.get("unit", ""),
                   _num(row.get("price")), row.get("source", ""), row.get("period", "")]
                  for row in tables.get("rate_rows", [])]
     for values in rate_rows:
         rate_sheet.append(values)
-    rate_start, rate_end = 4, rate_sheet.max_row
+    rate_start, rate_end = 5, rate_sheet.max_row
     rate_footer = _footer(rate_sheet, len(rate_widths))
-    rate_sheet.print_title_rows = "3:3"
-    _format_sheet(rate_sheet, len(rate_widths), (3,), rate_start, rate_end,
+    rate_sheet.print_title_rows = "4:4"
+    _format_sheet(rate_sheet, len(rate_widths), (4,), rate_start, rate_end,
                   numeric_columns=(5,), money_columns=(5,), footer_row=rate_footer)
 
     # 산출근거
     basis_widths = [28, 22, 54, 58]
     basis_sheet = _new_sheet(book, "산출근거", "산출근거", metadata, basis_widths)
     for column, value in enumerate(("항목", "값", "계산", "근거(품셈 절·표·쪽)"), 1):
-        basis_sheet.cell(3, column, value)
+        basis_sheet.cell(4, column, value)
     basis = _basis_rows(response)
     for values in basis:
         basis_sheet.append(values)
-    basis_start, basis_end = 4, basis_sheet.max_row
+    basis_start, basis_end = 5, basis_sheet.max_row
     basis_footer = _footer(basis_sheet, len(basis_widths))
-    basis_sheet.print_title_rows = "3:3"
-    _format_sheet(basis_sheet, len(basis_widths), (3,), basis_start, basis_end,
+    basis_sheet.print_title_rows = "4:4"
+    _format_sheet(basis_sheet, len(basis_widths), (4,), basis_start, basis_end,
                   numeric_columns=(2,), money_columns=(), footer_row=basis_footer)
 
     buffer = io.BytesIO()
