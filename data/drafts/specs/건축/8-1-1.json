@@ -1,0 +1,166 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/8-1-1/계단논슬립설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "8-1-1",
+    "title": "계단논슬립 설치",
+    "work": "계단논슬립 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      617
+    ],
+    "inputs": [
+      {
+        "name": "stair_type",
+        "type": "enum",
+        "allowed_values": [
+          "목조계단",
+          "콘크리트계단"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "계단 종류는 목조계단과 콘크리트계단 중 무엇입니까?",
+        "source": "PDF 617쪽 8-1-1 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "계단논슬립 설치 물량은 몇 m입니까?",
+        "source": "PDF 617쪽 8-1-1 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p673-t0",
+        "role": "계단 종류별 시공량 및 작업조 인원",
+        "source": "PDF 617쪽 8-1-1 표",
+        "unit": "인/일, m/일",
+        "values": {
+          "내장공": {
+            "단위": "인",
+            "수량": "2",
+            "목조계단": "145",
+            "콘크리트계단": "110"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "목조계단": "145",
+            "콘크리트계단": "110"
+          }
+        },
+        "cite": {
+          "table_id": "p673-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p673-t0",
+          "row": "내장공",
+          "column_input": "stair_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p673-t0",
+          "column": "수량",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "내장공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p673-t0에서 계단 종류에 따른 시공량을 확인한다.",
+        "작업일수 = quantity ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p673-t0의 직종별 수량으로 구한다."
+      ],
+      "source": "PDF 617쪽 8-1-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p673-x3",
+          "quote": "공구손료 및 경장비(전동드릴, 그라인더 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 기준의 시공량과 작업조 인원이 명시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구한 뒤 인원을 곱하는 방식이 적합함.",
+  "citations": [
+    {
+      "table_id": "p673-t0",
+      "row": "내장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p673-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p673-t0",
+      "row": "내장공",
+      "column": "목조계단",
+      "value": "145"
+    },
+    {
+      "table_id": "p673-t0",
+      "row": "내장공",
+      "column": "콘크리트계단",
+      "value": "110"
+    },
+    {
+      "chunk_id": "p673-x3",
+      "quote": "공구손료 및 경장비(전동드릴, 그라인더 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 table_id와 chunk_id가 p673으로 시작하지만 실제 PDF 페이지는 617쪽임.",
+    "표에서 시공량이 목조계단과 콘크리트계단 열에 병합되어 있어, 내장공과 보통인부 행 모두에 동일한 시공량 값을 할당하여 파싱함."
+  ],
+  "questions": [
+    "목조계단에 논슬립을 50m 설치할 때 품은 어떻게 되나요?",
+    "나사볼트가 아닌 접착제로만 시공할 경우 이 품을 적용할 수 있나요?",
+    "계단논슬립 설치 물량이 몇 m인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:05:54.455457+00:00",
+    "input_tokens": 11577,
+    "output_tokens": 1601,
+    "source_pages": [
+      673,
+      674
+    ],
+    "prompt_sha256": "63be93f3a24a7642d48c9fa6b98cd52262dfc0be082bd9dfc9b235297e69e6c0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

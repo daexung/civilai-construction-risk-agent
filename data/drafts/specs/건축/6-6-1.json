@@ -1,0 +1,140 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-6-1/수밀코킹",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-6-1",
+    "title": "수밀코킹",
+    "work": "수밀코킹 시공 품량 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      608
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "수밀코킹 시공 물량은 몇 m입니까?",
+        "source": "PDF 608쪽 6-6-1 수밀코킹 표 기준 단위 (m당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p664-t2",
+        "role": "수밀코킹 노무량",
+        "source": "PDF 608쪽 6-6-1 수밀코킹 표",
+        "unit": "인/m",
+        "values": {
+          "코킹공": {
+            "수량": "0.025"
+          }
+        },
+        "cite": {
+          "table_id": "p664-t2"
+        }
+      },
+      {
+        "id": "p664-t3",
+        "role": "수밀코킹 재료량",
+        "source": "PDF 608쪽 6-6-1 수밀코킹 재료량 표",
+        "unit": "m/m",
+        "values": {
+          "실링재": {
+            "수량": "1.2"
+          }
+        },
+        "cite": {
+          "table_id": "p664-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p664-t2",
+          "row_input": "코킹공",
+          "column_input": "수량",
+          "trades": [
+            "코킹공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p664-t2에서 코킹공의 단위당 품을 확인한다.",
+        "물량을 곱해 총 노무량을 구한다.",
+        "p664-t3에서 실링재의 단위당 재료량을 확인하고 물량을 곱해 총 재료량을 구한다."
+      ],
+      "source": "PDF 608쪽 6-6-1 수밀코킹 표 및 재료량 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "마스킹테이프 재료량",
+        "source": "PDF 608쪽 6-6-1 [주] ②",
+        "cite": {
+          "section_no": "6-6-1",
+          "marker": "②"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m)당 코킹공 인력 품이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p664-t2",
+      "row": "코킹공",
+      "column": "수량",
+      "value": "0.025"
+    },
+    {
+      "table_id": "p664-t3",
+      "row": "실링재",
+      "column": "수량",
+      "value": "1.2"
+    },
+    {
+      "chunk_id": "p664-x14",
+      "quote": "② 본 품은 마스킹테이프 설치 및 제거, 실링재 충전 작업이 포함된 것이다."
+    },
+    {
+      "chunk_id": "p664-x17",
+      "quote": "※ 재료량은 할증이 포함되어 있다."
+    }
+  ],
+  "open_questions": [
+    "마스킹테이프 설치 및 제거 작업은 포함되어 있으나, 마스킹테이프의 재료량은 표에 없어 별도 계상 여부가 불명확함."
+  ],
+  "questions": [
+    "수밀코킹 시공 물량은 몇 m입니까?",
+    "마스킹테이프 재료비는 별도로 산정해야 합니까?",
+    "실링재의 종류나 규격에 따른 품의 변화가 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:05:08.690979+00:00",
+    "input_tokens": 11600,
+    "output_tokens": 1266,
+    "source_pages": [
+      664,
+      665
+    ],
+    "prompt_sha256": "2620eb833d3448b95de0a0cf176a8b0ec01ce4bdfc4739a5772213ed0682a7ae",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

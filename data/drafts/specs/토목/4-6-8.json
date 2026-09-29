@@ -1,0 +1,138 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-6-8/교상가드레일설치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-6-8",
+    "title": "교상가드레일 설치",
+    "work": "교상가드레일 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      352
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "km",
+        "required": true,
+        "ask": "교상가드레일 설치 물량은 몇 km입니까?",
+        "source": "PDF 352쪽 4-6-8 표 기준 (km당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p408-t3",
+        "role": "교상가드레일 설치 단위당 품",
+        "source": "PDF 352쪽 4-6-8 표",
+        "unit": "인/km, hr/km",
+        "values": {
+          "궤도공": {
+            "수량": "36"
+          },
+          "보통인부": {
+            "수량": "14"
+          },
+          "굴착기+부착용집게": {
+            "수량": "46.7"
+          }
+        },
+        "cite": {
+          "table_id": "p408-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p408-t3",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "궤도공",
+            "보통인부",
+            "굴착기+부착용집게"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 352쪽 4-6-8 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "가드레일, 나사 스파이크 등 자재비",
+        "source": "PDF 352쪽 4-6-8 [주] ②",
+        "cite": {
+          "chunk_id": "p408-x20"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당(km당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이 적합함.",
+  "citations": [
+    {
+      "table_id": "p408-t3",
+      "row": "궤도공",
+      "column": "수량",
+      "value": "36"
+    },
+    {
+      "table_id": "p408-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "14"
+    },
+    {
+      "table_id": "p408-t3",
+      "row": "굴착기+부착용집게",
+      "column": "수량",
+      "value": "46.7"
+    },
+    {
+      "chunk_id": "p408-x20",
+      "quote": "본 품은 교상에 가드레일을 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p408-x20",
+      "quote": "가드레일 부설, 침목천공, 나사 스파이크 박기 작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "굴착기+부착용집게의 기계경비 산정 시 주연료 및 잡재료비 산정 기준이 명시되어 있지 않음."
+  ],
+  "questions": [
+    "교상가드레일 설치 물량이 2km일 때 궤도공 품은 얼마인가요?",
+    "굴착기+부착용집게의 유류비는 어떻게 계산하나요?",
+    "설치할 가드레일의 총 길이를 입력하지 않았습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:42:39.909643+00:00",
+    "input_tokens": 11494,
+    "output_tokens": 1239,
+    "source_pages": [
+      408,
+      409
+    ],
+    "prompt_sha256": "d4429fdb118ec2a0a9b3921b06eb3330799b6886f1ef5d8337903656d03d4f8f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

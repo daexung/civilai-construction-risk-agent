@@ -1,0 +1,405 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-26/유압식압입인발기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-26",
+    "title": "유압식 압입 인발기(유압식 압입 인발공)",
+    "work": "강널말뚝 압입 및 인발",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      214,
+      215,
+      216
+    ],
+    "inputs": [
+      {
+        "name": "operation_type",
+        "type": "enum",
+        "allowed_values": [
+          "압입",
+          "인발"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류는 압입입니까, 인발입니까?",
+        "source": "PDF 214쪽 2. 작업 능력 산정"
+      },
+      {
+        "name": "pile_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "파일길이(L)는 몇 m입니까?",
+        "source": "PDF 215쪽 가. 준비 시간(Ts)"
+      },
+      {
+        "name": "driven_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "파일 압입 또는 인발 길이(ℓ)는 몇 m입니까?",
+        "source": "PDF 214쪽 2. 작업 능력 산정 및 PDF 215쪽 나. 압입시간(Tb)"
+      },
+      {
+        "name": "n_max",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": null,
+        "required": true,
+        "ask": "압입길이에 따른 최대 N치는 얼마입니까?",
+        "source": "PDF 215쪽 (1) 압입 단위 작업 시간(γ)"
+      },
+      {
+        "name": "f1_condition",
+        "type": "enum",
+        "allowed_values": [
+          "약간 있다",
+          "없다"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "가옥, 철도, 교량, 도로, 시설, 구조물에 의한 장애의 정도는 어떠합니까?",
+        "decision_table": "p271-t1",
+        "source": "PDF 215쪽 다. 작업계수(F) 표"
+      },
+      {
+        "name": "f2_condition",
+        "type": "enum",
+        "allowed_values": [
+          "불량",
+          "보통"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장의 넓이에 의한 난이도의 정도는 어떠합니까?",
+        "decision_table": "p271-t1",
+        "source": "PDF 215쪽 다. 작업계수(F) 표"
+      },
+      {
+        "name": "f3_condition",
+        "type": "enum",
+        "allowed_values": [
+          "100본 미만",
+          "100본이상 300본미만",
+          "300본 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공규모(1블록)당 파일 수는 어떻게 됩니까?",
+        "decision_table": "p271-t1",
+        "source": "PDF 215쪽 다. 작업계수(F) 표"
+      },
+      {
+        "name": "electric_welding_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "전기용접이 필요합니까?",
+        "source": "PDF 216쪽 5. 배치인원 [주]"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p271-t0",
+        "role": "기종·규격에 의한 계수(k)",
+        "source": "PDF 215쪽 (2) 기종·규격에 의한 계수(k)",
+        "unit": "무차원",
+        "values": {
+          "100∼130ton 급": {
+            "k": "1.00"
+          }
+        },
+        "cite": {
+          "table_id": "p271-t0"
+        }
+      },
+      {
+        "id": "p271-t1",
+        "role": "작업조건에 따른 보정계수",
+        "source": "PDF 215쪽 다. 작업계수(F) 표",
+        "unit": "무차원",
+        "values": {
+          "f 1": {
+            "약간 있다": "-0.05",
+            "없다": "0"
+          },
+          "f 2": {
+            "불량": "-0.05",
+            "보통": "0"
+          },
+          "f 3": {
+            "100본 미만": "-0.05",
+            "100본이상 300본미만": "0",
+            "300본 이상": "+0.05"
+          }
+        },
+        "cite": {
+          "table_id": "p271-t1"
+        }
+      },
+      {
+        "id": "p271-t2",
+        "role": "압입 인발기, 발전기의 조합",
+        "source": "PDF 215쪽 3. 압입 인발기, 발전기의 조합",
+        "unit": "규격",
+        "values": {
+          "기종": {
+            "압입 및 인발": "100∼130ton 급"
+          },
+          "크레인(타이어)(유압식)": {
+            "압입 및 인발": "25ton"
+          },
+          "발전기": {
+            "압입 및 인발": "125㎾"
+          }
+        },
+        "cite": {
+          "table_id": "p271-t2"
+        }
+      },
+      {
+        "id": "p272-t0",
+        "role": "압입 인발기 선정",
+        "source": "PDF 216쪽 4. 압입 인발기 선정",
+        "unit": "조건",
+        "values": {
+          "100∼130ton급": {
+            "압입": "10<N≤30, ℓ≤20",
+            "인발": "10<N≤50, ℓ≤20"
+          }
+        },
+        "cite": {
+          "table_id": "p272-t0"
+        }
+      },
+      {
+        "id": "p272-t1",
+        "role": "배치인원",
+        "source": "PDF 216쪽 5. 배치인원(인/일)",
+        "unit": "인/일",
+        "values": {
+          "비계공": {
+            "인원": "2"
+          },
+          "특별인부": {
+            "인원": "1"
+          },
+          "작업반장": {
+            "인원": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p272-t1"
+        }
+      },
+      {
+        "id": "p272-t2",
+        "role": "유압식 말뚝 압입 인발기의 설치 및 해체",
+        "source": "PDF 216쪽 6. 유압식 말뚝 압입 인발기의 설치 및 해체 나. 설치·해체",
+        "unit": "시간/대당·회당",
+        "values": {
+          "압입 공사착공 및 현장내 이설 설치된 파일이 없는 경우": {
+            "설치 해체 시간": "5.3",
+            "유압식 압입 항타기": "1.8",
+            "트럭 크레인": "2.9",
+            "발동 발전기": "1.8"
+          },
+          "압입 공사착공 및 현장내 이설 설치된 파일이 있는 경우": {
+            "설치 해체 시간": "3.3",
+            "유압식 압입 항타기": "0.8",
+            "트럭 크레인": "1.5",
+            "발동 발전기": "0.8"
+          },
+          "인발 공사착공 및 현장내 이설": {
+            "설치 해체 시간": "3.3",
+            "유압식 압입 항타기": "0.8",
+            "트럭 크레인": "1.5",
+            "발동 발전기": "0.8"
+          }
+        },
+        "cite": {
+          "table_id": "p272-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "작업 종류(압입/인발)에 따라 시공시간(Tc) 공식을 선택한다.",
+        "준비시간(Ts), 압입시간(Tb), 작업계수(F)를 계산하여 1본당 시공시간(분/본)을 구한다.",
+        "일일 작업시간을 시공시간으로 나누어 일일시공량(본/일)을 산출한다.",
+        "총 물량(본)을 일일시공량으로 나누어 작업일수를 구한다.",
+        "작업일수에 배치인원 및 기계조합을 곱하여 총 품을 산출한다."
+      ],
+      "source": "PDF 214~215쪽 2. 작업 능력 산정",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "전기용접이 필요한 경우",
+        "blocked_if": {
+          "input": "electric_welding_needed",
+          "op": "==",
+          "value": true
+        },
+        "reason": "용접공(대당 1인)을 2인 범위 내에서 별도 계상한다고 되어 있어, 정확히 몇 인을 추가할지 기계적으로 확정할 수 없음",
+        "source": "PDF 216쪽 5. 배치인원 [주]",
+        "cite": {
+          "chunk_id": "p272-x4",
+          "quote": "[주] 전기용접이 필요한 경우에는 용접기와 용접공(대당 1인)을 2인 범위 내에서 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "유압식 말뚝 압입 인발기의 설치 및 해체",
+        "source": "PDF 216쪽 6. 유압식 말뚝 압입 인발기의 설치 및 해체",
+        "cite": {
+          "table_id": "p272-t2"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "작업능력이 표 형태의 일일시공량이 아닌, 1본당 시공시간(분/본)을 구하는 수식으로 제시되어 있어 현재의 adjusted_daily_crew 모델로 계산할 수 없습니다.",
+  "citations": [
+    {
+      "chunk_id": "p270-x15",
+      "quote": "압입 Tc =  F\n설명 | Ts Tb (분/본)"
+    },
+    {
+      "chunk_id": "p270-x15",
+      "quote": "인발 Tc =  F (분/본)"
+    },
+    {
+      "chunk_id": "p271-x0",
+      "quote": "Ts : 0.52L+5.12"
+    },
+    {
+      "chunk_id": "p271-x0",
+      "quote": "Tb : γ×ℓ×k"
+    },
+    {
+      "chunk_id": "p271-x0",
+      "quote": "γ : 0.035Nmax+1.02"
+    },
+    {
+      "chunk_id": "p271-x12",
+      "quote": "F=1.0+(f1+f2+f3)"
+    },
+    {
+      "table_id": "p271-t0",
+      "row": "100∼130ton 급",
+      "column": "k",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p271-t1",
+      "row": "f 1",
+      "column": "약간",
+      "value": "-0.05"
+    },
+    {
+      "table_id": "p271-t1",
+      "row": "f 1",
+      "column": "없다",
+      "value": "0"
+    },
+    {
+      "table_id": "p271-t1",
+      "row": "f 2",
+      "column": "불량",
+      "value": "-0.05"
+    },
+    {
+      "table_id": "p271-t1",
+      "row": "f 2",
+      "column": "보통",
+      "value": "0"
+    },
+    {
+      "table_id": "p271-t1",
+      "row": "f 3",
+      "column": "100본",
+      "value": "-0.05"
+    },
+    {
+      "table_id": "p271-t1",
+      "row": "f 3",
+      "column": "100본이상",
+      "value": "0"
+    },
+    {
+      "table_id": "p271-t1",
+      "row": "f 3",
+      "column": "300본",
+      "value": "+0.05"
+    },
+    {
+      "table_id": "p271-t2",
+      "row": "기종",
+      "column": "압입 및 인발",
+      "value": "100∼130ton 급"
+    },
+    {
+      "table_id": "p272-t0",
+      "row": "100∼130ton급",
+      "column": "압입",
+      "value": "10<N≤30, ℓ≤20"
+    },
+    {
+      "table_id": "p272-t1",
+      "row": "비계공",
+      "column": "2",
+      "value": "2"
+    },
+    {
+      "table_id": "p272-t2",
+      "row": "압입",
+      "column": "설치\n해체\n시간",
+      "value": "5.3"
+    },
+    {
+      "chunk_id": "p272-x4",
+      "quote": "[주] 전기용접이 필요한 경우에는 용접기와 용접공(대당 1인)을 2인 범위 내에서 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "전기용접이 필요한 경우 용접공을 '2인 범위 내에서' 별도 계상한다고 되어 있는데, 정확히 1인을 추가할지 2인을 추가할지 결정하는 기준이 명확하지 않습니다.",
+    "시공시간(Tc)을 분/본 단위로 구한 후, 일일시공량(본/일)을 산출하기 위해 하루 작업시간을 몇 분으로 적용해야 하는지(예: 480분) 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "파일 길이가 15m일 때 준비시간(Ts)은 어떻게 계산하나요?",
+    "전기용접이 필요할 때 용접공은 1인을 추가해야 하나요, 2인을 추가해야 하나요?",
+    "압입길이에 따른 최대 N치는 어디서 확인하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:18.807981+00:00",
+    "input_tokens": 15115,
+    "output_tokens": 4181,
+    "source_pages": [
+      270,
+      271,
+      272,
+      273
+    ],
+    "prompt_sha256": "0bab0880441c2a6e87f181bf3a6d8dd46d24cdcb3b84efff884f8962e0d5b53e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

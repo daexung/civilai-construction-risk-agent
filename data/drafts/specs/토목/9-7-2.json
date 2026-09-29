@@ -1,0 +1,260 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-7-2/신규등록측량_수치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-7-2",
+    "title": "신규등록측량(수치)('05년 신설, '25년 보완)",
+    "work": "신규등록측량(수치) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      527,
+      528
+    ],
+    "inputs": [
+      {
+        "name": "parcel_count",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "필지",
+        "required": true,
+        "ask": "측량할 필지 수는 몇 필지입니까?",
+        "source": "PDF 527쪽 [주] ② 면적계수 (1필지당 기준)"
+      },
+      {
+        "name": "land_type",
+        "type": "enum",
+        "allowed_values": [
+          "토지",
+          "임야"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량 대상이 토지입니까, 임야입니까?",
+        "source": "PDF 527쪽 [주] ② 면적계수 (토지 1,500㎡, 임야 5,000㎡ 기준)"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "1필지당 대상면적은 몇 ㎡입니까?",
+        "source": "PDF 527쪽 [주] ② 면적계수 가산횟수 계산용"
+      },
+      {
+        "name": "region_type",
+        "type": "enum",
+        "allowed_values": [
+          "면",
+          "읍",
+          "동 시",
+          "동 구"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "행정구역은 어디에 해당합니까?",
+        "decision_table": "p583-t2",
+        "source": "PDF 527쪽 [주] ③ 지역구분계수",
+        "synonyms": {
+          "동 시": [
+            "동(시)",
+            "시의 동"
+          ],
+          "동 구": [
+            "동(구)",
+            "구의 동"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p583-t0",
+        "role": "신규등록측량(수치) 직종별 기본 품",
+        "source": "PDF 527쪽 작업별 품 표",
+        "unit": "인/필지",
+        "values": {
+          "합계": {
+            "지적기사": "0.52",
+            "지적산업기사": "0.62",
+            "지적기능사": "0.27"
+          }
+        },
+        "cite": {
+          "table_id": "p583-t0"
+        }
+      },
+      {
+        "id": "p583-t1",
+        "role": "가산횟수별 면적계수",
+        "source": "PDF 527쪽 [주] ② 면적계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "0회": "1.0",
+            "1회": "1.3",
+            "2회이상": "1.2+(0.10×n)"
+          }
+        },
+        "cite": {
+          "table_id": "p583-t1"
+        }
+      },
+      {
+        "id": "p583-t2",
+        "role": "지역구분계수",
+        "source": "PDF 527쪽 [주] ③ 지역구분계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "면": "1.00",
+            "읍": "1.10",
+            "동 시": "1.30",
+            "동 구": "1.40"
+          }
+        },
+        "cite": {
+          "table_id": "p583-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p583-t0",
+          "row_input": "합계",
+          "trades": [
+            "지적기사",
+            "지적산업기사",
+            "지적기능사"
+          ]
+        },
+        "quantity_input": "parcel_count",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "land_type에 따라 기준면적(토지 1,500㎡, 임야 5,000㎡)을 정하고, area가 기준면적을 초과할 경우 가산횟수 n=(area-기준면적)/기준면적을 구하여 p583-t1의 면적계수를 곱함",
+            "source": "PDF 527쪽 [주] ② 면적계수"
+          },
+          {
+            "when": {},
+            "change": "region_type에 따라 p583-t2의 지역구분계수를 곱함",
+            "source": "PDF 527쪽 [주] ③ 지역구분계수"
+          }
+        ]
+      },
+      "steps": [
+        "p583-t0에서 직종별 기본 품(합계)을 가져온다.",
+        "land_type과 area를 바탕으로 가산횟수 n을 계산하고, p583-t1에서 해당하는 면적계수를 구하여 곱한다.",
+        "region_type에 따라 p583-t2에서 지역구분계수를 구하여 곱한다.",
+        "조정된 단위당 품에 parcel_count(필지 수)를 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 527쪽 9-7-2 본문 및 [주] ②, ③",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 528쪽 ⑤ 기타사항 ㉯",
+        "cite": {
+          "section_no": "9-7-2",
+          "subsection_no": "5",
+          "marker": "㉯"
+        }
+      },
+      {
+        "item": "지적측량기준점 설치비",
+        "source": "PDF 528쪽 ⑤ 기타사항 ㉰",
+        "cite": {
+          "section_no": "9-7-2",
+          "subsection_no": "5",
+          "marker": "㉰"
+        }
+      },
+      {
+        "item": "선박 등 임차료 실비",
+        "source": "PDF 528쪽 ⑤ 기타사항 ㉱",
+        "cite": {
+          "section_no": "9-7-2",
+          "subsection_no": "5",
+          "marker": "㉱"
+        }
+      },
+      {
+        "item": "국내여행자 일비 (여비)",
+        "source": "PDF 528쪽 ⑤ 기타사항 ㉲",
+        "cite": {
+          "section_no": "9-7-2",
+          "subsection_no": "5",
+          "marker": "㉲"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "1필지당 직종별 품이 표에 직접 제시되어 있으며, 면적 및 지역에 따른 계수를 곱하여 총 품을 산출하는 방식이므로 per_unit이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p583-t0",
+      "row": "합계",
+      "column": "지적기사",
+      "value": "0.52"
+    },
+    {
+      "table_id": "p583-t1",
+      "row": "계수",
+      "column": "1회",
+      "value": "1.3"
+    },
+    {
+      "table_id": "p583-t2",
+      "row": "계수",
+      "column": "면",
+      "value": "1.00"
+    },
+    {
+      "chunk_id": "p583-x10",
+      "quote": "본 품은 1필지당 토지는 1,500㎡, 임야는 5,000㎡를 기준으로 하였으며"
+    },
+    {
+      "chunk_id": "p583-x14",
+      "quote": "n은 가산횟수로 (대상면적-기준면적) ÷ 기준면적"
+    },
+    {
+      "chunk_id": "p584-x0",
+      "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "가산횟수 n을 계산할 때 소수점 이하가 발생할 경우 올림, 버림, 반올림 중 어떤 방식을 적용해야 하는지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "신규등록측량 시 대상 토지가 읍 지역일 경우 품 할증은 어떻게 되나요?",
+    "대상면적이 기준면적을 초과하여 가산횟수 n을 계산했는데 소수점이 나오면 어떻게 처리하나요?",
+    "측량 대상이 임야인지 일반 토지인지에 따라 기준면적이 다른데, 이를 어디에 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:18:05.151253+00:00",
+    "input_tokens": 13425,
+    "output_tokens": 2592,
+    "source_pages": [
+      583,
+      584,
+      585
+    ],
+    "prompt_sha256": "018489c0ac669c045203690c39a1dd91c70a0198179b69f15a184375209bbd23",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-2-4/수상고르기",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-2-4",
+    "title": "수상고르기",
+    "work": "수상고르기 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      390
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "기초고르기",
+          "피복석 고르기",
+          "피복석\n거친고르기",
+          "내부사석\n고르기",
+          "필터사석\n고르기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 종류의 고르기 작업입니까?",
+        "source": "PDF 390쪽 7-2-4 수상고르기 표",
+        "synonyms": {
+          "피복석\n거친고르기": [
+            "피복석 거친고르기"
+          ],
+          "내부사석\n고르기": [
+            "내부사석 고르기"
+          ],
+          "필터사석\n고르기": [
+            "필터사석 고르기"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "수상고르기 면적은 몇 ㎡입니까?",
+        "source": "PDF 390쪽 7-2-4 수상고르기 표 기준 (10㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p446-t2",
+        "role": "수상고르기 단위당 품",
+        "source": "PDF 390쪽 7-2-4 수상고르기 표",
+        "unit": "인/10㎡, hr/10㎡",
+        "values": {
+          "석공": {
+            "기초고르기": "0.70",
+            "피복석 고르기": "0.62",
+            "피복석\n거친고르기": "0.55",
+            "내부사석\n고르기": "0.55",
+            "필터사석\n고르기": "0.07"
+          },
+          "보통인부": {
+            "기초고르기": "0.42",
+            "피복석 고르기": "0.39",
+            "피복석\n거친고르기": "0.36",
+            "내부사석\n고르기": "0.36"
+          },
+          "굴착기": {
+            "기초고르기": "1.72",
+            "내부사석\n고르기": "1.36",
+            "필터사석\n고르기": "0.31"
+          },
+          "크레인": {
+            "피복석 고르기": "1.53",
+            "피복석\n거친고르기": "1.36"
+          }
+        },
+        "cite": {
+          "table_id": "p446-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p446-t2",
+          "row_input": null,
+          "column_input": "work_type",
+          "trades": [
+            "석공",
+            "보통인부",
+            "굴착기",
+            "크레인"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p446-t2에서 고르기 종류(work_type)에 따른 단위당 품을 찾는다.",
+        "물량(area)을 10으로 나누어 총 품을 구한다."
+      ],
+      "source": "PDF 390쪽 7-2-4 수상고르기 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "10㎡당 직종별 인원과 장비 시간이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p446-t2",
+      "row": "석공",
+      "column": "기초고르기",
+      "value": "0.70"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "석공",
+      "column": "피복석 고르기",
+      "value": "0.62"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "석공",
+      "column": "피복석\n거친고르기",
+      "value": "0.55"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "석공",
+      "column": "내부사석\n고르기",
+      "value": "0.55"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "석공",
+      "column": "필터사석\n고르기",
+      "value": "0.07"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "보통인부",
+      "column": "기초고르기",
+      "value": "0.42"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "보통인부",
+      "column": "피복석 고르기",
+      "value": "0.39"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "보통인부",
+      "column": "피복석\n거친고르기",
+      "value": "0.36"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "보통인부",
+      "column": "내부사석\n고르기",
+      "value": "0.36"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "굴착기",
+      "column": "기초고르기",
+      "value": "1.72"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "굴착기",
+      "column": "내부사석\n고르기",
+      "value": "1.36"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "굴착기",
+      "column": "필터사석\n고르기",
+      "value": "0.31"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "크레인",
+      "column": "피복석 고르기",
+      "value": "1.53"
+    },
+    {
+      "table_id": "p446-t2",
+      "row": "크레인",
+      "column": "피복석\n거친고르기",
+      "value": "1.36"
+    }
+  ],
+  "open_questions": [
+    "원문에 7-2-4에 대한 [주]가 명시되어 있지 않아, 기계경비나 잠수부 계상 여부 등 다른 절(7-2-2, 7-2-3)에 있는 공통적인 조건이 7-2-4에도 적용되는지 불확실함."
+  ],
+  "questions": [
+    "기초고르기 100㎡ 작업 시 석공과 보통인부는 몇 명 필요한가요?",
+    "수상고르기 작업 시 잠수부 품은 별도로 계상해야 하나요?",
+    "어떤 종류의 고르기 작업을 하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:02:11.641677+00:00",
+    "input_tokens": 11646,
+    "output_tokens": 2232,
+    "source_pages": [
+      446,
+      447
+    ],
+    "prompt_sha256": "954e7ea632c1256dae26d0b1cb4f6aa4e7c60d7d71cd4aef59648a688ff028d2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-1-2/공사규모구분",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-1-2",
+    "title": "공사규모별 표준건설기계",
+    "work": "공사규모 구분",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      163,
+      164
+    ],
+    "inputs": [],
+    "tables": [
+      {
+        "id": "p219-t2",
+        "role": "공사 규모의 구분",
+        "source": "PDF 163쪽 2. 공사 규모의 구분",
+        "values": {
+          "기준": {
+            "대규모": "공사수량이 100,000㎥ 이상인 경우",
+            "중규모": "공사수량이 100,000㎥ 미만인 경우",
+            "소규모": "공사수량 10,000㎥ 미만인 경우 또는 작업공간이 협소 등 장비운영이 원활하지 않은 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p219-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "이 절은 공사수량 및 현장조건에 따라 공사규모를 대규모, 중규모, 소규모로 구분하는 가이드라인을 제시합니다.",
+        "실제 적용 시에는 공사량, 공사기간, 현장조건 등을 종합적으로 고려하여 판단해야 하므로 자동 계산하지 않습니다."
+      ],
+      "source": "PDF 163쪽 2. 공사 규모의 구분 및 PDF 164쪽 [주]",
+      "rounding": ""
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 특정 품이나 비용을 계산하는 것이 아니라, 공사수량 및 현장 여건에 따라 공사규모(대/중/소)를 판단하기 위한 정성적/정량적 가이드라인을 제시하므로 자동 계산에 적합하지 않습니다.",
+  "citations": [
+    {
+      "table_id": "p219-t2"
+    },
+    {
+      "chunk_id": "p220-x0",
+      "quote": "공사규모의 구분은 편의상 시공량으로 표시한 것인 바, 실제 적용과정에서는 공사량, 공사기간, 현장조건에 따라 공사규모를 판단하여야 한다."
+    }
+  ],
+  "open_questions": [
+    "중규모(100,000㎥ 미만)와 소규모(10,000㎥ 미만)의 기준 수량이 겹치며, 현장조건(작업공간 협소 등)에 따른 정성적 판단이 포함되어 있어 기계적인 규모 판정이 어렵습니다."
+  ],
+  "questions": [
+    "공사수량이 150,000㎥일 때 공사규모는 어떻게 구분하나요?",
+    "공사수량이 8,000㎥인데 작업공간이 넓은 경우 소규모로 봐야 하나요, 중규모로 봐야 하나요?",
+    "선형공사(도로, 철도 등)의 경우 장비규격 선정 시 어떤 점을 고려해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:21:00.524848+00:00",
+    "input_tokens": 12641,
+    "output_tokens": 903,
+    "source_pages": [
+      219,
+      220,
+      221
+    ],
+    "prompt_sha256": "74fb72792d41a689d52fa16350b646a9e91ee3cf9e1762084538b8157f8be189",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p220-x0 조각 텍스트에 없음"
+    ]
+  }
+}

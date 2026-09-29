@@ -1,0 +1,321 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-2-7/타워크레인가설해체",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-2-7",
+    "title": "철골세우기용 장비의 가설 및 해체이동",
+    "work": "타워크레인 가설, 해체정비, 수직이동 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      574
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "가설",
+          "해체정비",
+          "수직이동(1회당)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까?",
+        "source": "PDF 574쪽 1-2-7 표의 공종별"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대 또는 회",
+        "required": true,
+        "ask": "작업 수량(대수 또는 수직이동 횟수)은 얼마입니까?",
+        "source": "PDF 574쪽 1-2-7 표 단위 (대당, 1회당)"
+      },
+      {
+        "name": "is_standard_spec",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "타워크레인 규격이 8ton(권상능력)×50m(작업반경)이고 가설높이가 32.5m입니까?",
+        "source": "PDF 574쪽 [주] ①"
+      },
+      {
+        "name": "is_exterior_fixed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "타워크레인이 건물 외부 고정식입니까?",
+        "source": "PDF 574쪽 [주] ⑤"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p630-t2",
+        "role": "공종별 비계공 품",
+        "source": "PDF 574쪽 1-2-7 첫 번째 표",
+        "unit": "인",
+        "values": {
+          "가설": {
+            "비계공(인)": "42.0"
+          },
+          "해체정비": {
+            "비계공(인)": "42.0"
+          },
+          "수직이동(1회당)": {
+            "비계공(인)": "6.0"
+          }
+        },
+        "cite": {
+          "table_id": "p630-t2"
+        }
+      },
+      {
+        "id": "p630-t3",
+        "role": "소요일수 표준",
+        "source": "PDF 574쪽 1-2-7 두 번째 표",
+        "unit": "일",
+        "values": {
+          "가설": {
+            "소요일수": "5∼8일"
+          },
+          "정비": {
+            "소요일수": "100ton시마다 1일"
+          },
+          "수직이동": {
+            "소요일수": "1일"
+          },
+          "해체": {
+            "소요일수": "4∼7일"
+          }
+        },
+        "cite": {
+          "table_id": "p630-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p630-t2",
+          "row_input": "work_type",
+          "column_input": "비계공(인)",
+          "trades": [
+            "비계공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "본 품의 타워크레인의 가설･해체정비, 수직 이동품은 특수 비계공이며",
+            "source": "PDF 574쪽 [주] ⑥"
+          }
+        ]
+      },
+      "steps": [
+        "p630-t2에서 공종별 비계공 품을 찾는다.",
+        "물량(quantity)을 곱하여 총 품을 구한다.",
+        "산출된 비계공 품은 특수 비계공으로 적용한다."
+      ],
+      "source": "PDF 574쪽 1-2-7 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "타워크레인 규격이 기준(8ton×50m, 가설높이 32.5m)과 다름",
+        "blocked_if": {
+          "input": "is_standard_spec",
+          "op": "==",
+          "value": false
+        },
+        "reason": "원문에 다른 규격에 대한 환산 기준이 없음",
+        "source": "PDF 574쪽 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p630-x10",
+            "quote": "①타워크레인 규격은 8ton(권상능력)×50m(작업반경)이고 가설높이는 32.5m일 때의 기준이다."
+          }
+        ]
+      },
+      {
+        "condition": "건물 외부 고정식이 아님",
+        "blocked_if": {
+          "input": "is_exterior_fixed",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 건물 외부 고정식 기준이며, 다른 방식에 대한 기준이 없음",
+        "source": "PDF 574쪽 [주] ⑤",
+        "cite": [
+          {
+            "chunk_id": "p630-x10",
+            "quote": "⑤ 본 품의 타워크레인은 건물 외부 고정식일 경우이며"
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "가설이동 해체의 장비와 자재운반(부속자재포함) 기계경비",
+        "source": "PDF 574쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p630-x10",
+          "quote": "② 타워크레인의 가설이동 해체의 장비와 자재운반(부속자재포함)의 기계경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "기초설치 및 철거에 소요되는 재료 및 품",
+        "source": "PDF 574쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p630-x10",
+          "quote": "③ 타워크레인의 기초설치 및 철거에 소요되는 재료 및 품은 별도 계상한다."
+        }
+      },
+      {
+        "item": "브레이싱 설치 해체에 대한 재료 및 품",
+        "source": "PDF 574쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p630-x10",
+          "quote": "브레이싱 설치 해체에 대한 재료 및 품은 별도\n설명 | 계상한다."
+        }
+      },
+      {
+        "item": "이외의 필요한 품(전공 등)",
+        "source": "PDF 574쪽 [주] ⑥",
+        "cite": {
+          "chunk_id": "p630-x10",
+          "quote": "이외의 필요한 품(전공 등)은\n설명 | 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p630-x10",
+          "quote": "④ 타워크레인의 가설이동 해체에 소요되는 공구손료는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대당, 회당)당 비계공 품이 표에 직접 명시되어 있어 물량을 곱하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p630-t2",
+      "row": "가설",
+      "column": "비계공(인)",
+      "value": "42.0"
+    },
+    {
+      "table_id": "p630-t2",
+      "row": "해체정비",
+      "column": "비계공(인)",
+      "value": "42.0"
+    },
+    {
+      "table_id": "p630-t2",
+      "row": "수직이동(1회당)",
+      "column": "비계공(인)",
+      "value": "6.0"
+    },
+    {
+      "table_id": "p630-t3",
+      "row": "가설",
+      "column": "소요일수",
+      "value": "5∼8일"
+    },
+    {
+      "table_id": "p630-t3",
+      "row": "정비",
+      "column": "소요일수",
+      "value": "100ton시마다 1일"
+    },
+    {
+      "table_id": "p630-t3",
+      "row": "수직이동",
+      "column": "소요일수",
+      "value": "1일"
+    },
+    {
+      "table_id": "p630-t3",
+      "row": "해체",
+      "column": "소요일수",
+      "value": "4∼7일"
+    },
+    {
+      "chunk_id": "p630-x10",
+      "quote": "①타워크레인 규격은 8ton(권상능력)×50m(작업반경)이고 가설높이는 32.5m일 때의 기준이다."
+    },
+    {
+      "chunk_id": "p630-x10",
+      "quote": "② 타워크레인의 가설이동 해체의 장비와 자재운반(부속자재포함)의 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p630-x10",
+      "quote": "③ 타워크레인의 기초설치 및 철거에 소요되는 재료 및 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p630-x10",
+      "quote": "④ 타워크레인의 가설이동 해체에 소요되는 공구손료는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p630-x10",
+      "quote": "⑤ 본 품의 타워크레인은 건물 외부 고정식일 경우이며"
+    },
+    {
+      "chunk_id": "p630-x10",
+      "quote": "브레이싱 설치 해체에 대한 재료 및 품은 별도\n설명 | 계상한다."
+    },
+    {
+      "chunk_id": "p630-x10",
+      "quote": "⑥ 본 품의 타워크레인의 가설･해체정비, 수직 이동품은 특수 비계공이며"
+    },
+    {
+      "chunk_id": "p630-x10",
+      "quote": "이외의 필요한 품(전공 등)은\n설명 | 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표에는 '비계공(인)'으로 기재되어 있으나 주석 ⑥에서 '특수 비계공'이라고 명시하고 있습니다. 계산 시 직종 코드를 특수 비계공으로 자동 매핑해야 하는지 확인이 필요합니다.",
+    "소요일수 표준 표(p630-t3)가 품 계산에 직접적으로 어떻게 활용되는지(예: 장비대 산정 등) 명확하지 않아 단순 참고용 표로만 포함했습니다."
+  ],
+  "questions": [
+    "타워크레인 가설 시 비계공 품은 얼마인가요?",
+    "타워크레인 규격이 12ton인 경우 품을 어떻게 보정해야 하나요?",
+    "타워크레인이 건물 외부 고정식인가요, 내부 승강식인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:47:20.439839+00:00",
+    "input_tokens": 11902,
+    "output_tokens": 3355,
+    "source_pages": [
+      630,
+      631
+    ],
+    "prompt_sha256": "785cb81b2a36ab2686aac59104e1d0eb391df975ac5dc54f911733b34372bbb5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

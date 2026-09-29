@@ -1,0 +1,232 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-2-4/고장력볼트본조임",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-2-4",
+    "title": "고장력 볼트 본조임",
+    "work": "고장력 볼트 본조임 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      629
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "강재 물량은 몇 ton입니까?",
+        "source": "PDF 629쪽 1-2-4 표 단위 (강재 ton당)"
+      },
+      {
+        "name": "bolt_density_t1",
+        "type": "enum",
+        "allowed_values": [
+          "30본/t 미만",
+          "50본/t 미만",
+          "70본/t 미만",
+          "90본/t 미만",
+          "110본/t 미만",
+          "110본/t 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "1ton당 볼트 본수는 어느 구간에 해당합니까? (기본 품 산정용)",
+        "source": "PDF 629쪽 1-2-4 표 p629-t1 열"
+      },
+      {
+        "name": "total_steel_quantity",
+        "type": "enum",
+        "allowed_values": [
+          "300t 미만",
+          "300t이상 ∼ 500t미만",
+          "500t이상 ∼ 1,000t미만",
+          "1,000t이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철골설계수량(강재 총사용량)은 어느 구간에 해당합니까?",
+        "source": "PDF 629쪽 [주] ④ 및 p629-t2 행"
+      },
+      {
+        "name": "bolt_density_t2",
+        "type": "enum",
+        "allowed_values": [
+          "50본 미만",
+          "50본 이상",
+          "90본 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "1ton당 볼트 본수는 어느 구간에 해당합니까? (보정계수 산정용)",
+        "source": "PDF 629쪽 p629-t2 열"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p629-t1",
+        "role": "고장력 볼트 본조임 기본 품",
+        "source": "PDF 629쪽 1-2-4 표",
+        "unit": "인/ton",
+        "values": {
+          "철골공": {
+            "30본/t 미만": "0.43",
+            "50본/t 미만": "0.52",
+            "70본/t 미만": "0.59",
+            "90본/t 미만": "0.66",
+            "110본/t 미만": "0.72",
+            "110본/t 이상": "0.74"
+          },
+          "특별인부": {
+            "30본/t 미만": "0.12",
+            "50본/t 미만": "0.14",
+            "70본/t 미만": "0.16",
+            "90본/t 미만": "0.18",
+            "110본/t 미만": "0.20",
+            "110본/t 이상": "0.20"
+          }
+        },
+        "cite": {
+          "table_id": "p629-t1"
+        }
+      },
+      {
+        "id": "p629-t2",
+        "role": "고장력 볼트조임 보정계수표(a)",
+        "source": "PDF 629쪽 < 고장력 볼트조임 보정계수표(a) >",
+        "unit": "무차원",
+        "values": {
+          "300t이상 ∼ 500t미만": {
+            "50본 미만": "0.91",
+            "50본 이상": "0.92",
+            "90본 이상": "0.93"
+          },
+          "500t이상 ∼ 1,000t미만": {
+            "50본 미만": "0.87",
+            "50본 이상": "0.88",
+            "90본 이상": "0.89"
+          },
+          "1,000t이상": {
+            "50본 미만": "0.84",
+            "50본 이상": "0.85",
+            "90본 이상": "0.86"
+          }
+        },
+        "cite": {
+          "table_id": "p629-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p629-t1",
+          "column_input": "bolt_density_t1",
+          "trades": [
+            "철골공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "total_steel_quantity": "300t이상 ∼ 500t미만"
+            },
+            "change": "p629-t2에서 bolt_density_t2에 해당하는 보정계수 K를 곱함",
+            "source": "PDF 629쪽 [주] ④"
+          },
+          {
+            "when": {
+              "total_steel_quantity": "500t이상 ∼ 1,000t미만"
+            },
+            "change": "p629-t2에서 bolt_density_t2에 해당하는 보정계수 K를 곱함",
+            "source": "PDF 629쪽 [주] ④"
+          },
+          {
+            "when": {
+              "total_steel_quantity": "1,000t이상"
+            },
+            "change": "p629-t2에서 bolt_density_t2에 해당하는 보정계수 K를 곱함",
+            "source": "PDF 629쪽 [주] ④"
+          }
+        ]
+      },
+      "steps": [
+        "p629-t1에서 bolt_density_t1에 해당하는 단위당 품을 고른다.",
+        "total_steel_quantity가 300t 미만이 아닌 경우, p629-t2에서 보정계수 K를 찾아 단위당 품에 곱한다.",
+        "물량(quantity)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 629쪽 1-2-4 표 및 [주] ④",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p629-x13",
+          "quote": "③ 공구손료 및 경장비(전기드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(강재 ton)당 직종별 인원이 표에 직접 제시되어 있으며, 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p629-t1",
+      "row": "철골공",
+      "column": "30본/t\n미만",
+      "value": "0.43"
+    },
+    {
+      "table_id": "p629-t2",
+      "row": "300t이상 ∼ 500t미만",
+      "column": "50본 미만",
+      "value": "0.91"
+    },
+    {
+      "chunk_id": "p629-x13",
+      "quote": "③ 공구손료 및 경장비(전기드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p629-x13",
+      "quote": "④ 본 품은 철골설계수량 300ton 미만을 표준으로 한 것이며 300ton 이상인 고장력 볼트 본조임은 다음의\n설명 | 보정치를 적용한다."
+    }
+  ],
+  "open_questions": [
+    "1ton당 볼트 본수를 묻는 입력이 기본 품 산정용(bolt_density_t1)과 보정계수 산정용(bolt_density_t2)으로 나뉘어 있어 사용자에게 두 번 질문하게 됩니다. 하나의 정수 입력으로 받아 내부적으로 구간을 매핑하는 기능이 지원되면 개선이 필요합니다."
+  ],
+  "questions": [
+    "강재 100ton에 대해 1ton당 볼트 본수가 40본일 때 고장력 볼트 본조임 품은 어떻게 되나요?",
+    "철골설계수량이 400ton이고 1ton당 볼트 본수가 60본일 때, 보정계수는 어떻게 적용하나요?",
+    "고장력 볼트 본조임 작업 시 공구손료는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:46:22.186625+00:00",
+    "input_tokens": 12025,
+    "output_tokens": 2591,
+    "source_pages": [
+      629,
+      630
+    ],
+    "prompt_sha256": "60465e7045f930640ff6b488636ad27b1c34c5be7d7ca7a5b97592804fead22f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

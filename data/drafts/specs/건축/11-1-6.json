@@ -1,0 +1,169 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/11-1-6/비닐보양",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "11-1-6",
+    "title": "비닐 보양('21년 신설)",
+    "work": "비닐 보양 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      636
+    ],
+    "inputs": [
+      {
+        "name": "length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "비닐보양 테이프의 접착길이는 몇 m입니까?",
+        "source": "PDF 636쪽 11-1-6 [주] ②"
+      },
+      {
+        "name": "facility_type",
+        "type": "enum",
+        "allowed_values": [
+          "창호 및 난간류",
+          "배관류",
+          "차량 등 다면 보양 시설물"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "보양할 시설물의 종류는 무엇입니까?",
+        "source": "PDF 636쪽 11-1-6 표 및 [주] ③"
+      },
+      {
+        "name": "scaffold_or_equipment_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장여건에 따라 비계 또는 장비가 필요합니까?",
+        "source": "PDF 636쪽 11-1-6 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p692-t3",
+        "role": "시설물별 비닐 보양 품",
+        "source": "PDF 636쪽 11-1-6 표",
+        "unit": "인/100m",
+        "values": {
+          "보통인부": {
+            "창호 및 난간류": "0.625",
+            "배관류": "0.912"
+          }
+        },
+        "cite": {
+          "table_id": "p692-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p692-t3",
+          "row_input": "보통인부",
+          "column_input": "facility_type",
+          "trades": [
+            "보통인부"
+          ]
+        },
+        "quantity_input": "length",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p692-t3에서 시설물 종류에 따른 보통인부 품을 찾는다.",
+        "보양길이(m)를 100으로 나누어 100m 단위 수량을 구한다.",
+        "단위당 품에 100m 단위 수량을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 636쪽 11-1-6 표 및 [주] ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "차량 등 다면으로 보양이 필요한 시설물인 경우",
+        "blocked_if": {
+          "input": "facility_type",
+          "op": "==",
+          "value": "차량 등 다면 보양 시설물"
+        },
+        "reason": "별도 계상",
+        "source": "PDF 636쪽 11-1-6 [주] ③",
+        "cite": {
+          "chunk_id": "p692-x18",
+          "quote": "③ 차량 등 다면으로 보양이 필요한 시설물은 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비계 또는 장비 비용",
+        "source": "PDF 636쪽 11-1-6 [주] ④",
+        "cite": {
+          "chunk_id": "p692-x18",
+          "quote": "④ 현장여건에 따라 비계 또는 장비가 필요한 경우에는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(100m)당 보통인부 품이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p692-t3",
+      "row": "보통인부",
+      "column": "창호 및 난간류",
+      "value": "0.625"
+    },
+    {
+      "table_id": "p692-t3",
+      "row": "보통인부",
+      "column": "배관류",
+      "value": "0.912"
+    },
+    {
+      "chunk_id": "p692-x18",
+      "quote": "② 보양길이는 비닐보양 테이프의 접착길이를 적용한다."
+    },
+    {
+      "chunk_id": "p692-x18",
+      "quote": "③ 차량 등 다면으로 보양이 필요한 시설물은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p692-x18",
+      "quote": "④ 현장여건에 따라 비계 또는 장비가 필요한 경우에는 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "창호 보양 길이가 250m일 때 보통인부 품은 얼마인가요?",
+    "차량 보양을 해야 하는데 품셈에 어떻게 적용하나요?",
+    "비계 설치 비용은 보양 품에 포함되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:54:16.501660+00:00",
+    "input_tokens": 11523,
+    "output_tokens": 1608,
+    "source_pages": [
+      692,
+      693
+    ],
+    "prompt_sha256": "e37aa69515208a53493e7bb371219749f5da878fed0b99a6c07bb0005e0f8abd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/7-2-5/손빨래수전설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "7-2-5",
+    "title": "손빨래수전 설치('14, '26년 보완)",
+    "work": "손빨래수전 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 손빨래수전의 수량은 몇 개입니까?",
+        "source": "PDF 1쪽 7-2-5 표 (개당)"
+      },
+      {
+        "name": "faucet_type",
+        "type": "enum",
+        "allowed_values": [
+          "혼합수전",
+          "냉수 또는 온수 전용"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치하는 수전이 혼합수전입니까, 아니면 냉수 또는 온수 전용 수전입니까?",
+        "source": "PDF 1쪽 7-2-5 표 비고 및 [주] ①",
+        "synonyms": {
+          "혼합수전": [
+            "혼합",
+            "냉온수 혼합"
+          ],
+          "냉수 또는 온수 전용": [
+            "냉수 전용",
+            "온수 전용",
+            "단수전"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p742-t1",
+        "role": "손빨래수전 설치 단위당 품",
+        "source": "PDF 1쪽 7-2-5 표",
+        "unit": "인/개",
+        "values": {
+          "위생공": {
+            "단위": "인",
+            "수량": "0.087"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "0.017"
+          },
+          "비고": {
+            "비고": "- 냉수 또는 온수만 전용으로 하는 수전은 30% 감하여 적용한다."
+          }
+        },
+        "cite": {
+          "table_id": "p742-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p742-t1",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "위생공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "faucet_type": "냉수 또는 온수 전용"
+            },
+            "change": "30% 감하여 적용한다.",
+            "source": "PDF 1쪽 7-2-5 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "note_adjustments를 원문 순서대로 적용한다."
+      ],
+      "source": "PDF 1쪽 7-2-5 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "section_no": "7-2-5",
+          "marker": "③"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 제시되어 있고, 물량을 곱하여 계산하는 방식이므로 per_unit에 해당합니다.",
+  "citations": [
+    {
+      "table_id": "p742-t1",
+      "row": "위생공",
+      "column": "수량",
+      "value": "0.087"
+    },
+    {
+      "table_id": "p742-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.017"
+    },
+    {
+      "table_id": "p742-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 냉수 또는 온수만 전용으로 하는 수전은 30% 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p742-x10",
+      "quote": "본 품은 발코니 등 벽붙임 혼합수전을 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p742-x10",
+      "quote": "공구손료 및 경장비의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "설치할 손빨래수전의 수량은 몇 개입니까?",
+    "설치하는 수전이 혼합수전입니까, 아니면 냉수 또는 온수 전용 수전입니까?",
+    "관자금 설치나 기능시험 비용이 별도로 청구되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:40:49.796356+00:00",
+    "input_tokens": 11542,
+    "output_tokens": 1541,
+    "source_pages": [
+      742,
+      743
+    ],
+    "prompt_sha256": "0ecbfcc799410fe5fdfd0ccb0e96e4d329cea71cceed391804d6573d58e4341a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

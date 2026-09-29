@@ -1,0 +1,135 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/4-2-4/무덕트유인팬설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "4-2-4",
+    "title": "무덕트 유인팬 설치('01년 신설, '21년)",
+    "work": "무덕트 유인팬 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      673
+    ],
+    "inputs": [
+      {
+        "name": "fan_capacity",
+        "type": "enum",
+        "allowed_values": [
+          "풍량 1,600㎥/h이하",
+          "풍량 2,400㎥/h이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 무덕트 유인팬의 풍량은 어느 기준에 해당합니까?",
+        "source": "파싱 결과 p729-t2",
+        "synonyms": {
+          "풍량 1,600㎥/h이하": [
+            "1600이하",
+            "1600㎥/h이하"
+          ],
+          "풍량 2,400㎥/h이하": [
+            "2400이하",
+            "2400㎥/h이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 무덕트 유인팬의 수량은 몇 대입니까?",
+        "source": "파싱 결과 p729-t2 기준 (대당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p729-t2",
+        "role": "무덕트 유인팬 설치 단위당 품",
+        "source": "파싱 결과 p729-t2",
+        "unit": "인/대",
+        "values": {
+          "기계설비공": {
+            "풍량 1,600㎥/h이하": "0.230",
+            "풍량 2,400㎥/h이하": "0.246"
+          },
+          "보통인부": {
+            "풍량 1,600㎥/h이하": "0.170",
+            "풍량 2,400㎥/h이하": "0.182"
+          }
+        },
+        "cite": {
+          "table_id": "p729-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p729-t2",
+          "column_input": "fan_capacity",
+          "trades": [
+            "기계설비공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p729-t2에서 풍량에 따른 기계설비공, 보통인부의 단위당 품을 찾는다.",
+        "설치 대수(quantity)를 곱하여 총 품을 구한다."
+      ],
+      "source": "파싱 결과 p729-t2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 대당 인력이 직접 명시되어 있어 단위당 품 계산 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p729-t2",
+      "row": "기계설비공",
+      "column": "풍량 1,600㎥/h이하",
+      "value": "0.230"
+    },
+    {
+      "chunk_id": "p729-x14",
+      "quote": "① 본 품은 천장에 무덕트 유인팬을 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p729-x14",
+      "quote": "② 본 품에는 앵커설치, 가대조립, 유인팬 설치, 작동시험을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "풍량이 1,500㎥/h인 무덕트 유인팬 10대를 설치할 때 품은 어떻게 되나요?",
+    "천장이 아닌 벽면에 설치할 경우에도 이 품을 적용할 수 있나요?",
+    "무덕트 유인팬을 몇 대 설치하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:04.007563+00:00",
+    "input_tokens": 11546,
+    "output_tokens": 1307,
+    "source_pages": [
+      729,
+      730
+    ],
+    "prompt_sha256": "573119a087658ff0f71163310ebbcee3d6d9907ff9067a027d5ac485eb941466",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

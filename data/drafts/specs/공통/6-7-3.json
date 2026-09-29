@@ -1,0 +1,274 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-7-3/PC_BOX_설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-7-3",
+    "title": "PC BOX 설치('23년 신설, '24년 보완)",
+    "work": "PC BOX 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      156
+    ],
+    "inputs": [
+      {
+        "name": "unit_weight",
+        "type": "enum",
+        "allowed_values": [
+          "5ton미만",
+          "10ton미만",
+          "15ton미만"
+        ],
+        "unit": "ton",
+        "required": true,
+        "ask": "단위중량은 얼마입니까?",
+        "source": "6-7-3 표 단위중량(ton)"
+      },
+      {
+        "name": "work_env",
+        "type": "enum",
+        "allowed_values": [
+          "Type-Ⅰ",
+          "Type-Ⅱ"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업환경은 Type-Ⅰ, Type-Ⅱ 중 무엇입니까?",
+        "decision_table": "p212-t2",
+        "source": "6-7-3 표 시공량(개소) 및 [주] ③"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치 개소는 몇 개소입니까?",
+        "source": "6-7-3 표 시공량(개소)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p212-t1",
+        "role": "작업조 인원 및 장비 대수, 단위중량별 시공량",
+        "source": "6-7-3 PC BOX 설치 표",
+        "values": {
+          "기계설비공": {
+            "단위": "인",
+            "수량": "2",
+            "단위중량(ton)": "5ton미만",
+            "시공량(개소) Type-Ⅰ": "20",
+            "시공량(개소) Type-Ⅱ": "15"
+          },
+          "특별인부": {
+            "단위": "인",
+            "수량": "4",
+            "단위중량(ton)": "10ton미만",
+            "시공량(개소) Type-Ⅰ": "16",
+            "시공량(개소) Type-Ⅱ": "12"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "2",
+            "단위중량(ton)": "15ton미만",
+            "시공량(개소) Type-Ⅰ": "14",
+            "시공량(개소) Type-Ⅱ": "11"
+          },
+          "크레인 강연선인장기": {
+            "단위": "대",
+            "규격": "120ton",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p212-t1"
+        }
+      },
+      {
+        "id": "p212-t2",
+        "role": "작업환경 판정 기준",
+        "source": "6-7-3 PC BOX 설치 작업환경 표",
+        "values": {
+          "Type-Ⅰ": {
+            "작업환경": "- PC구조물 인양 및 설치 시 장애물이 없고 연속작업이 가능하거나 이에 준하는"
+          },
+          "Type-Ⅰ ": {
+            "작업환경": "작업환경일 경우"
+          },
+          "Type-Ⅱ": {
+            "작업환경": "- 가설 흙막이, 지장물 등 장애물이 있고 연속작업이 어렵거나 이에 준하는 작업환경일"
+          },
+          "Type-Ⅱ ": {
+            "작업환경": "경우"
+          }
+        },
+        "cite": {
+          "table_id": "p212-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "사용자가 입력한 단위중량과 작업환경에 따라 p212-t1 표에서 시공량(개소)을 찾는다.",
+        "작업일수 = quantity ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p212-t1의 수량(기계설비공 2, 특별인부 4, 보통인부 2)으로 구한다.",
+        "장비 대·일 = 작업일수 × p212-t1의 수량(크레인 1, 강연선인장기 1)으로 구한다."
+      ],
+      "source": "6-7-3 PC BOX 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "토공사 등 별도 계상 작업 (파싱 누락)",
+        "source": "6-7-3 [주] ④ (파싱 결과 일부 누락)",
+        "cite": {
+          "chunk_id": "p212-x18",
+          "quote": "별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.025",
+        "cite": {
+          "chunk_id": "p212-x18",
+          "quote": "공구손료 및 경장비(발전기, 절단기 등) 기계경비는 인력품의 2.5%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표(p212-t1)에서 단위중량과 시공량이 직종 행에 병합되어 있어, 현재의 adjusted_daily_crew 모델 파라미터로 직접 매핑하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p212-t1",
+      "row": "기계설비공",
+      "column": "단위중량(ton)",
+      "value": "5ton미만"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "기계설비공",
+      "column": "시공량(개소) Type-Ⅰ",
+      "value": "20"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "기계설비공",
+      "column": "시공량(개소) Type-Ⅱ",
+      "value": "15"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "특별인부",
+      "column": "단위중량(ton)",
+      "value": "10ton미만"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "특별인부",
+      "column": "시공량(개소) Type-Ⅰ",
+      "value": "16"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "특별인부",
+      "column": "시공량(개소) Type-Ⅱ",
+      "value": "12"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "보통인부",
+      "column": "단위중량(ton)",
+      "value": "15ton미만"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "보통인부",
+      "column": "시공량(개소) Type-Ⅰ",
+      "value": "14"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "보통인부",
+      "column": "시공량(개소) Type-Ⅱ",
+      "value": "11"
+    },
+    {
+      "table_id": "p212-t1",
+      "row": "크레인 강연선인장기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p212-t2",
+      "row": "Type-Ⅰ",
+      "column": "작업환경",
+      "value": "- PC구조물 인양 및 설치 시 장애물이 없고 연속작업이 가능하거나 이에 준하는"
+    },
+    {
+      "table_id": "p212-t2",
+      "row": "Type-Ⅰ ",
+      "column": "작업환경",
+      "value": "작업환경일 경우"
+    },
+    {
+      "table_id": "p212-t2",
+      "row": "Type-Ⅱ",
+      "column": "작업환경",
+      "value": "- 가설 흙막이, 지장물 등 장애물이 있고 연속작업이 어렵거나 이에 준하는 작업환경일"
+    },
+    {
+      "table_id": "p212-t2",
+      "row": "Type-Ⅱ ",
+      "column": "작업환경",
+      "value": "경우"
+    },
+    {
+      "chunk_id": "p212-x12",
+      "quote": "③ PC구조물 인양 및 설치 작업 환경 조건에 따라 Type-Ⅰ 또는 Type-Ⅱ를 적용한다."
+    },
+    {
+      "chunk_id": "p212-x18",
+      "quote": "별도 계상한다."
+    },
+    {
+      "chunk_id": "p212-x18",
+      "quote": "공구손료 및 경장비(발전기, 절단기 등) 기계경비는 인력품의 2.5%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p212-t1에서 크레인과 강연선인장기가 한 행('크레인 강연선인장기')으로 병합되어 있어 장비 대수 분리가 어렵습니다.",
+    "파싱 결과 p212-t1에서 단위중량과 시공량이 직종 행에 병합되어 있어 자동 계산 모델에 직접 매핑하기 어렵습니다.",
+    "파싱 결과 p212-x18에서 [주] ④의 앞부분(토공사 등 별도 계상 항목)이 누락되어 '별도 계상한다.'만 남아 있습니다."
+  ],
+  "questions": [
+    "PC BOX 설치 시 단위중량이 10ton미만이고 Type-I 환경일 때 시공량은 얼마인가요?",
+    "크레인과 강연선인장기의 규격은 어떻게 결정하나요?",
+    "PC BOX 설치 물량(개소)은 몇 개입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:43:11.515669+00:00",
+    "input_tokens": 24185,
+    "output_tokens": 5291,
+    "source_pages": [
+      212,
+      213
+    ],
+    "prompt_sha256": "c4ef2184281a8e0248732ad63f4f3955f9d893fd130dd1b4dc070662f868cfbb",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

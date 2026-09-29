@@ -1,0 +1,193 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-1-1/GNSS기준점측량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-1-1",
+    "title": "GNSS에 의한 기준점 측량('21년 보완)",
+    "work": "GNSS 기준점 측량 인건비",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      407
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "점",
+        "required": true,
+        "ask": "실시작업량(점 수)은 얼마입니까?",
+        "source": "407쪽 주석 5 (작업량 계수 Q)"
+      },
+      {
+        "name": "point_type",
+        "type": "enum",
+        "allowed_values": [
+          "국가기준점",
+          "통합기준점"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량 대상 기준점의 종류는 무엇입니까?",
+        "source": "407쪽 주석 1, 3"
+      },
+      {
+        "name": "elevation",
+        "type": "enum",
+        "allowed_values": [
+          "500m 미만",
+          "500m ~ 1,000m",
+          "1,000m 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업지역의 평균표고는 얼마입니까?",
+        "decision_table": "p463-t1",
+        "source": "407쪽 주석 4 및 표 p463-t1"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p463-t0",
+        "role": "직종별 인원수 합계 (파싱 오류로 행 이름 누락)",
+        "source": "407쪽 9-1-1 표",
+        "values": {
+          "계": {
+            "인원수 합계 특급\n기술자": "(15)\n-\n-\n0.2\n(0.2)\n(20) 0.2",
+            "인원수 고급\n기술자": "(15)\n0.25\n1\n-\n(0.4)\n(20) 1.25",
+            "인원수 중급\n기술자": "(15)\n0.75\n1\n0.4\n(0.2)\n(20) 2.15",
+            "인원수 초급\n기술\n자": "(15)\n0.75\n-\n0.8\n-\n- 1.55",
+            "인원수 인부": "-\n1\n3\n1.4\n-\n- 5.4"
+          }
+        },
+        "cite": {
+          "table_id": "p463-t0"
+        }
+      },
+      {
+        "id": "p463-t1",
+        "role": "평균표고에 따른 증감 계수",
+        "source": "407쪽 주석 4 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "500m 미만": "1.0",
+            "500m ~ 1,000m": "1.2",
+            "1,000m 이상": "1.4"
+          }
+        },
+        "cite": {
+          "table_id": "p463-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "1. 작업구분(계획준비, 답사선점, 복구, 관측, 계산, 정리점검)별로 기준 인원수를 확인한다. (내업은 괄호 표시)",
+        "2. 계획준비 및 정리점검은 100점당 1작업 단위로 환산하고, 작업량 계수 R = 0.8 + 20/Q (최대 0.9)를 곱하여 인원을 산출한다.",
+        "3. 답사선점, 복구, 관측은 통합기준점인 경우 계수 1.0을 적용하고, 그 외는 평균표고에 따라 p463-t1의 계수를 곱하여 인원을 산출한다.",
+        "4. 각 작업별 산출된 인원을 직종별로 합산한다."
+      ],
+      "source": "407쪽 9-1-1 표 및 주석 2~5",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "차량비 (점간 이동 및 자재운반 등)",
+        "source": "407쪽 주석 6",
+        "cite": {
+          "chunk_id": "p463-x6",
+          "quote": "차량비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "보상비, 재료비 및 소모품비",
+        "source": "407쪽 주석 7",
+        "cite": {
+          "chunk_id": "p463-x6",
+          "quote": "보상비, 재료비 및 소모품비 등은 실정에 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "여비",
+        "source": "407쪽 주석 8",
+        "cite": {
+          "chunk_id": "p463-x6",
+          "quote": "별도 계상한다."
+        }
+      },
+      {
+        "item": "측량기기 상각비 및 정비비",
+        "source": "407쪽 주석 9",
+        "cite": {
+          "chunk_id": "p463-x6",
+          "quote": "측량기기의 상각비･정비비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 인원수 표(p463-t0)에 작업구분(계획준비, 답사선점 등) 행 이름이 누락되어 단위당 품을 구조화할 수 없으며, 내업/외업 구분 및 작업량 계수(R) 적용 등 복합적인 계산이 필요하여 현재 구조로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p463-t0",
+      "row": "계",
+      "column": "인원수 합계 특급\n기술자",
+      "value": "(15)\n-\n-\n0.2\n(0.2)\n(20) 0.2"
+    },
+    {
+      "table_id": "p463-t1",
+      "row": "계수",
+      "column": "500m 미만",
+      "value": "1.0"
+    },
+    {
+      "chunk_id": "p463-x2",
+      "quote": "계획준비 및 정리점검은 100점당 1작업 단위임"
+    },
+    {
+      "chunk_id": "p463-x2",
+      "quote": "본 품에서 통합기준점의 경우 평균표고에 의한 증감 계수는 1.0을 적용한다."
+    },
+    {
+      "chunk_id": "p463-x6",
+      "quote": "작업량 계수(R) =0.8+20/Q (단, Q는 실시작업량)"
+    },
+    {
+      "chunk_id": "p463-x6",
+      "quote": "다만, 물량이 많을 경우에도 작업량 계수는 0.9까지만 적용한다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표 p463-t0에 작업구분(계획준비, 답사선점 등) 행 이름이 누락되어 있어, 각 작업별 단위당 품을 정확히 매핑할 수 없습니다.",
+    "내업(괄호)과 외업의 분리 계산, 작업량 계수(R)의 특정 작업(계획준비, 정리점검) 한정 적용 등 복잡한 수식이 필요하여 현재의 per_unit 모델로 완벽히 표현하기 어렵습니다."
+  ],
+  "questions": [
+    "작업지역의 평균표고가 800m일 때 적용되는 할증 계수는 얼마인가요?",
+    "실시작업량이 150점일 때, 계획준비 작업의 작업량 계수(R)는 어떻게 계산되나요?",
+    "측량 대상이 통합기준점인지 국가기준점인지에 따라 계수가 달라지나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:04:00.210369+00:00",
+    "input_tokens": 12327,
+    "output_tokens": 2307,
+    "source_pages": [
+      463,
+      464
+    ],
+    "prompt_sha256": "93dae64617acfb1b53802eb4122537f12e30c8a31517c4b9553166339878e489",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

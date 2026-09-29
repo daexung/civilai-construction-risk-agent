@@ -1,0 +1,237 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-4-2/단열재접착제붙이기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-4-2",
+    "title": "단열재 접착제 붙이기",
+    "work": "단열재 접착제 붙이기 노무량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      599
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "단열재 시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 599쪽 5-4-2 표의 시공량 단위(㎡)"
+      },
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "50이하",
+          "100이하",
+          "200이하",
+          "300이하"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "단열두께는 얼마입니까?",
+        "source": "PDF 599쪽 5-4-2 표의 단열두께(mm)",
+        "synonyms": {
+          "50이하": [
+            "50mm 이하",
+            "50T 이하"
+          ],
+          "100이하": [
+            "100mm 이하",
+            "100T 이하"
+          ],
+          "200이하": [
+            "200mm 이하",
+            "200T 이하"
+          ],
+          "300이하": [
+            "300mm 이하",
+            "300T 이하"
+          ]
+        }
+      },
+      {
+        "name": "location",
+        "type": "enum",
+        "allowed_values": [
+          "벽",
+          "천장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위는 벽과 천장 중 어디입니까?",
+        "source": "PDF 599쪽 5-4-2 표의 시공량 구분(벽, 천장)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p655-t0",
+        "role": "단열두께 및 부위별 일일 시공량과 작업조 인원",
+        "source": "PDF 599쪽 5-4-2 표",
+        "unit": "시공량: ㎡/일, 인원: 인/일",
+        "values": {
+          "50이하": {
+            "벽": "47",
+            "천장": "40"
+          },
+          "100이하": {
+            "벽": "42",
+            "천장": "35"
+          },
+          "200이하": {
+            "벽": "40",
+            "천장": "32"
+          },
+          "300이하": {
+            "벽": "38",
+            "천장": "30"
+          },
+          "내장공": {
+            "벽": "2",
+            "천장": "2"
+          },
+          "보통인부": {
+            "벽": "1",
+            "천장": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p655-t0"
+        }
+      },
+      {
+        "id": "p655-t1",
+        "role": "단위 면적당 재료량 (참고용)",
+        "source": "PDF 599쪽 5-4-2 재료량 표",
+        "unit": "단열재: ㎡, 접착제: kg",
+        "values": {
+          "단열재": {
+            "수량": "1.1"
+          },
+          "접착제": {
+            "수량": "0.3~0.35"
+          }
+        },
+        "cite": {
+          "table_id": "p655-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p655-t0",
+          "row_input": "thickness",
+          "column_input": "location"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p655-t0",
+          "column_input": "location",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "내장공": "1024",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p655-t0에서 단열두께와 시공 부위에 따른 일일 시공량을 찾는다.",
+        "작업일수 = volume ÷ 일일 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p655-t0의 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 599쪽 5-4-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "단열재 및 접착제 재료량",
+        "source": "PDF 599쪽 5-4-2 [주] ④ 및 재료량 표",
+        "cite": [
+          {
+            "section_no": "5-4-2",
+            "marker": "④"
+          },
+          {
+            "table_id": "p655-t1"
+          }
+        ]
+      },
+      {
+        "item": "이음부 마감(우레탄폼 충전 등) 재료량",
+        "source": "PDF 599쪽 5-4-2 [주] ③",
+        "cite": {
+          "section_no": "5-4-2",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 단열두께/부위별 일일 시공량이 표로 제시되어 있어, 물량을 일일 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p655-t0",
+      "row": "50이하",
+      "column": "벽",
+      "value": "47"
+    },
+    {
+      "table_id": "p655-t1",
+      "row": "단열재",
+      "column": "수량",
+      "value": "1.1"
+    },
+    {
+      "chunk_id": "p655-x5",
+      "quote": "본 품은 바탕면에 접착제를 사용하여 단열재를 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p655-x5",
+      "quote": "본 품은 발포폴리스티렌(비드법, 압출법) 단열재의 1겹 붙임 기준이다."
+    },
+    {
+      "chunk_id": "p655-x5",
+      "quote": "본 품은 접착제 바름, 단열재 절단 및 설치, 이음부 마감(우레탄폼 충전 등) 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p655-x9",
+      "quote": "위 재료량은 할증이 포함된 것이다."
+    }
+  ],
+  "open_questions": [
+    "접착제 수량이 0.3~0.35kg으로 범위로 제시되어 있어, 정확한 재료비 산출을 위해서는 특정 값(예: 평균값)을 정하거나 사용자 입력이 필요할 수 있습니다."
+  ],
+  "questions": [
+    "단열두께 100mm 이하를 벽에 시공할 때 일일 시공량은 얼마인가요?",
+    "접착제 수량이 0.3~0.35kg으로 되어 있는데, 내역서 작성 시 어떤 값을 적용해야 하나요?",
+    "시공 부위(벽/천장)를 선택하지 않았습니다. 어디에 시공하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:04:24.874049+00:00",
+    "input_tokens": 11810,
+    "output_tokens": 2225,
+    "source_pages": [
+      655,
+      656
+    ],
+    "prompt_sha256": "18260a6b634284be5eddaa40cf5ecd660156e9951f2be89e8cd35100790a2852",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

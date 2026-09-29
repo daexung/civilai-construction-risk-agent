@@ -1,0 +1,337 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-32/이동식임목파쇄기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-32",
+    "title": "이동식 임목파쇄기('07년 신설, '11년 보완)",
+    "work": "시간당 작업량 및 소모품 산출",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      227,
+      228
+    ],
+    "inputs": [
+      {
+        "name": "machine_spec",
+        "type": "enum",
+        "allowed_values": [
+          "93.25㎾",
+          "354.35㎾",
+          "402.84㎾"
+        ],
+        "unit": "㎾",
+        "required": true,
+        "ask": "이동식 임목파쇄기의 규격은 무엇입니까?",
+        "source": "PDF 227쪽 1. 93.25㎾ 및 2. 354.35 ∼ 402.84㎾"
+      },
+      {
+        "name": "screen_size",
+        "type": "enum",
+        "allowed_values": [
+          "50㎜",
+          "75㎜",
+          "100㎜",
+          "125㎜"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "스크린 규격은 무엇입니까? (354.35~402.84㎾ 규격인 경우)",
+        "decision_table": "p284-t0",
+        "source": "PDF 228쪽 라. 스크린계수(S)"
+      },
+      {
+        "name": "work_condition",
+        "type": "enum",
+        "allowed_values": [
+          "불량",
+          "보통",
+          "양호"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 조건(파쇄 대상)은 어떠합니까? (불량: 뿌리류, 보통: 팔레트류, 양호: 가지/잡목류)",
+        "decision_table": "p284-t1",
+        "source": "PDF 228쪽 마. 작업효율(E)"
+      },
+      {
+        "name": "need_assistant",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업보조인부가 필요합니까?",
+        "source": "PDF 227쪽 1. [주] ④ 및 2. [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p283-t0",
+        "role": "93.25㎾ 소모품 소모량",
+        "source": "PDF 227쪽 1. 나. 소모품 소모량",
+        "unit": "개/hr",
+        "values": {
+          "메인파쇄기날": {
+            "소모율": "0.00125개/hr",
+            "비고": ""
+          },
+          "분쇄기날": {
+            "소모율": "0.005개/hr",
+            "비고": "42개"
+          }
+        },
+        "cite": {
+          "table_id": "p283-t0"
+        }
+      },
+      {
+        "id": "p283-t1",
+        "role": "규격별 능력계수(K)",
+        "source": "PDF 227쪽 2. 다. 규격별 능력계수(K)",
+        "unit": "무차원",
+        "values": {
+          "K": {
+            "354.35㎾": "1.0",
+            "402.84㎾": "1.5"
+          }
+        },
+        "cite": {
+          "table_id": "p283-t1"
+        }
+      },
+      {
+        "id": "p284-t0",
+        "role": "스크린계수(S)",
+        "source": "PDF 228쪽 라. 스크린계수(S)",
+        "unit": "무차원",
+        "values": {
+          "S": {
+            "50㎜": "0.8",
+            "75㎜": "1.0",
+            "100㎜": "1.1",
+            "125㎜": "1.3"
+          }
+        },
+        "cite": {
+          "table_id": "p284-t0"
+        }
+      },
+      {
+        "id": "p284-t1",
+        "role": "작업효율(E)",
+        "source": "PDF 228쪽 마. 작업효율(E)",
+        "unit": "무차원",
+        "values": {
+          "E": {
+            "불량": "0.9",
+            "보통": "1.0",
+            "양호": "1.1"
+          }
+        },
+        "cite": {
+          "table_id": "p284-t1"
+        }
+      },
+      {
+        "id": "p284-t2",
+        "role": "354.35 ∼ 402.84㎾ 소모품 소모량",
+        "source": "PDF 228쪽 바. 소모품 소모량",
+        "unit": "개/hr",
+        "values": {
+          "햄머": {
+            "규격": "HD12/1:Bolt",
+            "소모율": "0.02개/hr",
+            "비고": "20개 1조"
+          },
+          "햄머팁": {
+            "규격": "78×74.5×41.5/1 Hole",
+            "소모율": "1개/hr",
+            "비고": "20개 1조"
+          },
+          "스크린": {
+            "규격": "6×8HL/1",
+            "소모율": "0.005개/hr",
+            "비고": "2개 1조"
+          }
+        },
+        "cite": {
+          "table_id": "p284-t2"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "need_assistant": true,
+          "machine_spec": "93.25㎾"
+        },
+        "when_text": "작업보조인부 필요 시 (93.25㎾)",
+        "change": {
+          "보통인부": "+2"
+        },
+        "source": "PDF 227쪽 1. 93.25㎾ [주] ④",
+        "cite": {
+          "chunk_id": "p283-x3",
+          "quote": "④ 작업보조인부 필요시 보통인부 2인을 별도 계상한다."
+        }
+      },
+      {
+        "when": {
+          "need_assistant": true,
+          "machine_spec": "354.35㎾"
+        },
+        "when_text": "작업보조인부 필요 시 (354.35㎾)",
+        "change": {
+          "보통인부": "+1"
+        },
+        "source": "PDF 227쪽 2. 354.35 ∼ 402.84㎾ [주] ③",
+        "cite": {
+          "chunk_id": "p283-x11",
+          "quote": "③ 작업보조인부 필요시 보통인부 1인을 별도 계상한다."
+        }
+      },
+      {
+        "when": {
+          "need_assistant": true,
+          "machine_spec": "402.84㎾"
+        },
+        "when_text": "작업보조인부 필요 시 (402.84㎾)",
+        "change": {
+          "보통인부": "+1"
+        },
+        "source": "PDF 227쪽 2. 354.35 ∼ 402.84㎾ [주] ③",
+        "cite": {
+          "chunk_id": "p283-x11",
+          "quote": "③ 작업보조인부 필요시 보통인부 1인을 별도 계상한다."
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "93.25㎾ 규격은 시간당 작업량 Q = 6.0 ㎥/hr 로 고정 적용한다.",
+        "354.35~402.84㎾ 규격은 Q = q * K * S * E 공식을 사용하여 시간당 작업량을 산출한다.",
+        "q는 26㎥/hr, K는 p283-t1, S는 p284-t0, E는 p284-t1에서 찾아 곱한다.",
+        "규격별 소모품 소모량은 각각 p283-t0, p284-t2를 참조하여 시간당 소모량을 산출한다."
+      ],
+      "source": "PDF 227~228쪽 8-2-32 이동식 임목파쇄기",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "장비의 운반비",
+        "source": "PDF 227쪽 1. [주] ② 및 2. [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p283-x3",
+            "quote": "② 장비의 운반비는 별도 계상한다."
+          },
+          {
+            "chunk_id": "p283-x11",
+            "quote": "② 장비의 운반비는 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "93.25㎾ 발전기 250㎾ 동력",
+        "source": "PDF 227쪽 1. [주] ③",
+        "cite": {
+          "chunk_id": "p283-x3",
+          "quote": "③ 동력은 발전기 250㎾ 기준으로 한다."
+        }
+      },
+      {
+        "item": "굴착기 부착용집게 투입 작업량",
+        "source": "PDF 227쪽 1. [주] ⑤ 및 2. [주] ④",
+        "cite": [
+          {
+            "chunk_id": "p283-x3",
+            "quote": "⑤ 임목파쇄기에 목재를 투입할 시, 굴착기(0.7㎥)에 부착용집게를 부착하여 투입하고 작업량은 임목파쇄기의 작업량에 준한다."
+          },
+          {
+            "chunk_id": "p283-x11",
+            "quote": "④ 임목파쇄기에 목재를 투입할 시, 굴착기(0.8㎥)에 부착용집게를 부착하여 투입하고, 작업량은 임목파쇄기의 작업량에 준한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "장비의 시간당 작업량(Q)을 산출하는 공식(Q=q*K*S*E)과 소모품 소모량이 주어지는 기계경비 산출 성격의 명세로, 현재 지원하는 daily_crew나 per_unit 모델에 맞지 않아 자동 계산을 보류함.",
+  "citations": [
+    {
+      "table_id": "p283-t0",
+      "row": "메인파쇄기날",
+      "column": "소모율",
+      "value": "0.00125개/hr"
+    },
+    {
+      "table_id": "p283-t1",
+      "row": "K",
+      "column": "354.35㎾",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p284-t0",
+      "row": "S",
+      "column": "50㎜",
+      "value": "0.8"
+    },
+    {
+      "table_id": "p284-t1",
+      "row": "E",
+      "column": "불량",
+      "value": "0.9"
+    },
+    {
+      "table_id": "p284-t2",
+      "row": "햄머",
+      "column": "소모율",
+      "value": "0.02개/hr"
+    },
+    {
+      "chunk_id": "p283-x3",
+      "quote": "Q = 6.0 ㎥/hr"
+    },
+    {
+      "chunk_id": "p283-x11",
+      "quote": "Q = q･K･S･E"
+    },
+    {
+      "chunk_id": "p283-x11",
+      "quote": "나. 354.35㎾의 시간당 표준파쇄량(q) = 26㎥/hr"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p283-t0의 텍스트가 '메인파쇄기날 분쇄기날'로 행이 병합되어 있어, 원문 표의 행 구분을 정확히 반영하기 위해 원문 기준으로 분리하여 작성함."
+  ],
+  "questions": [
+    "이동식 임목파쇄기 93.25㎾의 시간당 작업량은 얼마인가요?",
+    "작업보조인부가 필요할 때 규격별로 몇 명을 계상해야 하나요?",
+    "354.35㎾ 규격의 작업량을 구하려면 스크린 규격과 작업 조건(파쇄 대상) 정보가 필요합니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:50.078555+00:00",
+    "input_tokens": 13397,
+    "output_tokens": 3658,
+    "source_pages": [
+      283,
+      284,
+      285
+    ],
+    "prompt_sha256": "090c99ea50d5fb9f9f4dd6610134f89de716dbb3ee43aa915b9606288fe60f26",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

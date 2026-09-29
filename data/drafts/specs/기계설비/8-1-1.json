@@ -1,0 +1,164 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/8-1-1/냉동기반입",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "8-1-1",
+    "title": "냉동기 반입",
+    "work": "냉동기 반입 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      689
+    ],
+    "inputs": [
+      {
+        "name": "capacity",
+        "type": "enum",
+        "allowed_values": [
+          "10",
+          "20",
+          "30",
+          "50",
+          "80",
+          "100",
+          "150",
+          "200",
+          "300",
+          "400",
+          "500",
+          "600"
+        ],
+        "unit": "U.S. ton",
+        "required": true,
+        "ask": "냉동기 용량은 몇 U.S. ton 입니까?",
+        "source": "PDF 689쪽 p745-t0 행"
+      },
+      {
+        "name": "work_condition",
+        "type": "enum",
+        "allowed_values": [
+          "1회 지하1층",
+          "1회 지하2층",
+          "1회 지하3층",
+          "2회 지하2층",
+          "2회 지하3층",
+          "소운반 10m 거리내",
+          "가조립 설치기초상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 횟수 및 층별 조건은 무엇입니까?",
+        "source": "PDF 689쪽 p745-t0 열"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "반입할 냉동기 수량은 몇 대입니까?",
+        "source": "일반적인 품셈 적용 기준"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p745-t0",
+        "role": "냉동기 반입 품",
+        "source": "PDF 689쪽 8-1-1 냉동기 반입 표",
+        "unit": "인",
+        "values": {
+          "10": {
+            "1회 지하1층 비계공": "3",
+            "1회 특별\n인부": "2",
+            "1회 지하2층 비계공": "3",
+            "1회 지하3층 비계공": "3",
+            "2회 지하2층 비계공": "6",
+            "2회 특별\n인부": "2",
+            "2회 지하3층 비계공": "7",
+            "소운반 10m 거리내 비계공": "1",
+            "가조립 설치기초상 비계공": "2"
+          },
+          "20": {
+            "1회 지하1층 비계공": "4",
+            "1회 특별\n인부": "3",
+            "1회 지하2층 비계공": "4",
+            "1회 지하3층 비계공": "5",
+            "2회 지하2층 비계공": "7",
+            "2회 특별\n인부": "4",
+            "2회 지하3층 비계공": "10",
+            "소운반 10m 거리내 비계공": "2",
+            "가조립 설치기초상 비계공": "3"
+          },
+          "30": {
+            "1회 지하1층 비계공": "5",
+            "1회 특별\n인부": "4",
+            "1회 지하2층 비계공": "5",
+            "1회 지하3층 비계공": "7",
+            "2회 지하2층 비계공": "10",
+            "2회 특별\n인부": "7",
+            "2회 지하3층 비계공": "12",
+            "소운반 10m 거리내 비계공": "2",
+            "가조립 설치기초상 비계공": "4",
+            "가조립 특별\n인부": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p745-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱된 표의 열 이름 중복으로 인해 자동 계산이 불가하므로, 원문 표를 직접 참조하여 품을 산정합니다."
+      ],
+      "source": "PDF 689쪽 p745-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표의 열 이름(예: '1회 특별\\n인부')이 여러 층에 대해 중복되어 고유한 열 식별자로 사용할 수 없어 자동 계산이 불가합니다.",
+  "citations": [
+    {
+      "table_id": "p745-t0",
+      "row": "10",
+      "column": "1회 지하1층 비계공",
+      "value": "3"
+    },
+    {
+      "chunk_id": "p745-t0",
+      "quote": "1회 특별\n인부"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 '1회 특별\\n인부', '2회 특별\\n인부' 등의 열 이름이 여러 층에 대해 중복되어 추출되었기 때문에, 각 층별 특별인부 품을 고유하게 식별할 수 없습니다.",
+    "표의 단위가 명시되어 있지 않으나 일반적인 품셈에 따라 '인'으로 추정됩니다."
+  ],
+  "questions": [
+    "냉동기 용량이 100 U.S. ton일 때 1회 지하1층 반입 시 비계공 품은 얼마인가요?",
+    "표에 없는 120 U.S. ton 냉동기의 경우 품을 어떻게 산정해야 하나요?",
+    "냉동기 반입 작업을 하려고 합니다. 품을 계산해주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:29.888625+00:00",
+    "input_tokens": 13696,
+    "output_tokens": 1673,
+    "source_pages": [
+      745,
+      746
+    ],
+    "prompt_sha256": "f8552ccf3cc878ae30e49e0d51232c821417a3c8ad03512eb66dfb03d20b5fb6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

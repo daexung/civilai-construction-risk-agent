@@ -1,0 +1,176 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-5-6/Soot_Blower설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-5-6",
+    "title": "Soot Blower",
+    "work": "Soot Blower 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      776
+    ],
+    "inputs": [
+      {
+        "name": "blower_type",
+        "type": "enum",
+        "allowed_values": [
+          "Rotary soot blower 설치 포장해체, 운반, 조양, 설치, 시운전 및 교정작업",
+          "Retractable soot blower 설치 포장해체, 운반, 조양, 설치 시운전 및 교정작업"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 Soot Blower의 종류는 무엇입니까? (Rotary / Retractable)",
+        "source": "PDF 776쪽 13-5-6 표의 작업구분",
+        "synonyms": {
+          "Rotary soot blower 설치 포장해체, 운반, 조양, 설치, 시운전 및 교정작업": [
+            "Rotary",
+            "로터리",
+            "Rotary soot blower"
+          ],
+          "Retractable soot blower 설치 포장해체, 운반, 조양, 설치 시운전 및 교정작업": [
+            "Retractable",
+            "리트랙터블",
+            "Retractable soot blower"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 Soot Blower의 수량은 몇 대입니까?",
+        "source": "PDF 776쪽 13-5-6 표 우측 상단 '(대당)'"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p832-t2",
+        "role": "Soot Blower 종류별 설치 품",
+        "source": "PDF 776쪽 13-5-6 표",
+        "unit": "인/대, 조/대",
+        "values": {
+          "Rotary soot blower 설치 포장해체, 운반, 조양, 설치, 시운전 및 교정작업": {
+            "목공": "0.04",
+            "플랜트기계설치공": "1.40",
+            "비계공": "0.68",
+            "특별인부": "1.85",
+            "건설기계운전(조)": "0.27",
+            "플랜트용접공": "0.50"
+          },
+          "Retractable soot blower 설치 포장해체, 운반, 조양, 설치 시운전 및 교정작업": {
+            "목공": "0.12",
+            "플랜트기계설치공": "1.4",
+            "비계공": "0.87",
+            "건설기계운전(조)": "0.34",
+            "특별인부": "3.16",
+            "플랜트용접공": "0.5"
+          }
+        },
+        "cite": {
+          "table_id": "p832-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p832-t2",
+          "row_input": "blower_type",
+          "trades": [
+            "목공",
+            "플랜트기계설치공",
+            "비계공",
+            "특별인부",
+            "건설기계운전(조)",
+            "플랜트용접공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p832-t2 표에서 Soot Blower 종류(blower_type)에 해당하는 직종별 단위당 품을 찾는다.",
+        "찾은 단위당 품에 수량(quantity)을 곱하여 총 품을 계산한다."
+      ],
+      "source": "PDF 776쪽 13-5-6 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "Steam line, Drain line의 배관품",
+        "source": "PDF 776쪽 13-5-6 [주] ②",
+        "cite": {
+          "chunk_id": "p832-x35",
+          "quote": "② Steam line, Drain line의 배관품은 별도 계상한다."
+        }
+      },
+      {
+        "item": "전기배선 품",
+        "source": "PDF 776쪽 13-5-6 [주] ③",
+        "cite": {
+          "chunk_id": "p832-x35",
+          "quote": "③ 전기배선 품은 포함되지 않았다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "Soot Blower 대당 직종별 투입 인력이 표에 직접 명시되어 있어, 물량을 곱하는 단위당 품 계산 방식을 적용합니다.",
+  "citations": [
+    {
+      "table_id": "p832-t2",
+      "row": "Rotary soot blower 설치 포장해체, 운반, 조양, 설치, 시운전 및 교정작업",
+      "column": "목공",
+      "value": "0.04"
+    },
+    {
+      "table_id": "p832-t2",
+      "row": "Retractable soot blower 설치 포장해체, 운반, 조양, 설치 시운전 및 교정작업",
+      "column": "특별인부",
+      "value": "3.16"
+    },
+    {
+      "chunk_id": "p832-x35",
+      "quote": "① 본 품은 Motor와 blower가 assembly로 된 것을 설치하는 품이다."
+    },
+    {
+      "chunk_id": "p832-x35",
+      "quote": "② Steam line, Drain line의 배관품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p832-x35",
+      "quote": "③ 전기배선 품은 포함되지 않았다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "Rotary soot blower 3대를 설치할 때 플랜트기계설치공의 품은 얼마인가요?",
+    "Soot blower 설치 시 전기배선 작업도 이 품셈에 포함되어 있나요?",
+    "Soot blower를 설치하려고 합니다. 품을 계산해주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:42:41.394677+00:00",
+    "input_tokens": 11981,
+    "output_tokens": 1836,
+    "source_pages": [
+      832,
+      833
+    ],
+    "prompt_sha256": "36239cf03f0445639619d9f815c74aae599f5525c389efddc4d7acb3d09df57a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

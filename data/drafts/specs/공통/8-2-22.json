@@ -1,0 +1,118 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-22/디젤파일해머",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-22",
+    "title": "디젤 파일 해머",
+    "work": "파일 1본당 시공시간(Tc) 및 배치인원 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      198,
+      199,
+      200,
+      201,
+      202
+    ],
+    "inputs": [],
+    "tables": [
+      {
+        "id": "p254-t0",
+        "role": "강관파일 토질계수(α)",
+        "source": "1. 강관파일의 경우 (1) 토질계수(α)",
+        "values": {
+          "α": {
+            "점토･부식토": "4.0",
+            "실트･로움･모래": "1.0",
+            "자갈": "1.4"
+          }
+        },
+        "cite": {
+          "table_id": "p254-t0"
+        }
+      },
+      {
+        "id": "p258-t3",
+        "role": "배치인원",
+        "source": "4. 배치인원 (인/일)",
+        "unit": "인/일",
+        "values": {
+          "인원": {
+            "비계공": "3",
+            "보통인부": "2",
+            "용접공": "1(2)"
+          }
+        },
+        "cite": {
+          "table_id": "p258-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파일 1본당 시공시간(Tc)은 타격시간(Tb), 용접시간(Tw), 세우기 및 위치 조정시간(Ts), 이동 및 준비시간(Tt), 기타시간(Te)을 각각의 수식으로 계산하여 합산한 후 작업계수(F)로 나누어 구한다.",
+        "배치인원은 표 4를 참조하여 산정한다."
+      ],
+      "source": "PDF 198~202쪽",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "디젤 파일 해머의 시공시간(Tc)을 구하기 위해 여러 세부 시간(Tb, Tw, Ts, Tt, Te)을 각각의 복잡한 수식과 표를 통해 계산한 후 합산해야 하므로, 현재 지원하는 표준 계산 모델로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "chunk_id": "p254-x0",
+      "quote": "Tc =  F Tb Tw TsTtTe"
+    },
+    {
+      "chunk_id": "p254-x0",
+      "quote": "Tc : 파일 1본당 시공시간(min)"
+    },
+    {
+      "chunk_id": "p258-x14",
+      "quote": "4. 배치인원 (인/일)"
+    },
+    {
+      "table_id": "p254-t0",
+      "row": "α",
+      "column": "점토･부식토",
+      "value": "4.0"
+    }
+  ],
+  "open_questions": [
+    "콘크리트 파일의 해머 계수(β) 표(p258-t0)의 파싱 결과에 행 이름(1.5ton 급, 2.2ton 급)이 누락되어 있어 정확한 값을 참조하기 어렵습니다.",
+    "시공시간(Tc)을 구하는 수식이 매우 복잡하고 조건(강관/콘크리트, 용접 방식 등)에 따라 분기가 많아 단일 계산 모델로 표현하기 어렵습니다."
+  ],
+  "questions": [
+    "강관파일 시공 시 토질이 점토와 모래가 섞여 있을 때 토질계수(α)는 어떻게 산정하나요?",
+    "콘크리트 파일 시공 시 파일세우기 횟수(Ns)는 보통 어떻게 결정되나요?",
+    "블록간 이동에 분해수송이 필요한 경우 소요비용은 어떻게 별도로 계상하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:37.236060+00:00",
+    "input_tokens": 41472,
+    "output_tokens": 5740,
+    "source_pages": [
+      254,
+      255,
+      256,
+      257,
+      258,
+      259
+    ],
+    "prompt_sha256": "686a01867b076affd824b740191aaaac4de8c5e501b552f9516e2a10e0ed555a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/4-2-5/커튼박스설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "4-2-5",
+    "title": "커튼박스 설치",
+    "work": "커튼박스 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      591
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "커튼박스 설치 물량은 몇 m입니까?",
+        "source": "PDF 591쪽 4-2-5 커튼박스 설치 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p647-t1",
+        "role": "커튼박스 설치 단위당 품",
+        "source": "PDF 591쪽 4-2-5 커튼박스 설치 표",
+        "unit": "인/m",
+        "values": {
+          "건축목공": {
+            "수량": "0.037"
+          },
+          "보통인부": {
+            "수량": "0.004"
+          }
+        },
+        "cite": {
+          "table_id": "p647-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p647-t1",
+          "column_input": "수량",
+          "trades": [
+            "건축목공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 591쪽 4-2-5 커튼박스 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "목재 등 재료비",
+        "source": "PDF 591쪽 4-2-5 [주] ①",
+        "cite": {
+          "chunk_id": "p647-x6",
+          "quote": "본 품은 천장에 목재로 커튼박스를 설치하는 기준이다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p647-x6",
+          "quote": "공구손료 및 경장비(절단기, 타정기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m)당 직종별 투입 인원이 표에 직접 명시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p647-t1",
+      "row": "건축목공",
+      "column": "수량",
+      "value": "0.037"
+    },
+    {
+      "table_id": "p647-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.004"
+    },
+    {
+      "chunk_id": "p647-x6",
+      "quote": "공구손료 및 경장비(절단기, 타정기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "커튼박스 설치 물량은 몇 m입니까?",
+    "커튼박스 제작 작업도 이 품에 포함되나요?",
+    "목재 재료비는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:00:09.332470+00:00",
+    "input_tokens": 11474,
+    "output_tokens": 1183,
+    "source_pages": [
+      647,
+      648
+    ],
+    "prompt_sha256": "534447055d3dfffca2ed9f1aaf5c769ca8015cc747826ced7a6005800302ddde",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

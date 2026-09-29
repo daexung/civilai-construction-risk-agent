@@ -1,0 +1,245 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/7-1-1/금속기와잇기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "7-1-1",
+    "title": "금속기와 잇기",
+    "work": "금속기와 지붕재 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      611
+    ],
+    "inputs": [
+      {
+        "name": "area_type",
+        "type": "enum",
+        "allowed_values": [
+          "1.0㎡이하",
+          "1.0㎡초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 면적 기준은 1.0㎡이하입니까, 1.0㎡초과입니까?",
+        "source": "p667-t0 시공량(㎡) 구분"
+      },
+      {
+        "name": "roof_slope",
+        "type": "enum",
+        "allowed_values": [
+          "30°미만",
+          "30°이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지붕경사가 30°이상입니까?",
+        "source": "p667-t0 비고"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 면적은 몇 ㎡입니까?",
+        "source": "p667-t0 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p667-t0",
+        "role": "금속기와 잇기 일당 작업조 및 시공량",
+        "source": "PDF 611쪽 7-1-1 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "지붕잇기공": {
+            "수량": "3",
+            "1.0㎡이하": "65",
+            "1.0㎡초과": "80"
+          },
+          "보통인부": {
+            "수량": "1",
+            "1.0㎡이하": "65",
+            "1.0㎡초과": "80"
+          },
+          "비고": {
+            "비고": "- 지붕경사 30°이상일 경우 시공량의 17%를 감하여 적용한다."
+          }
+        },
+        "cite": {
+          "table_id": "p667-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p667-t0",
+          "row": "지붕잇기공",
+          "column_input": "area_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p667-t0",
+          "column": "수량",
+          "trades": [
+            "지붕잇기공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p667-t0에서 시공 면적 기준(area_type)에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(수량)으로 구한다."
+      ],
+      "source": "PDF 611쪽 p667-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "지붕경사 30°이상",
+        "blocked_if": {
+          "input": "roof_slope",
+          "op": "==",
+          "value": "30°이상"
+        },
+        "reason": "시공량의 17%를 감산해야 하나, 현재 계산 모델(adjusted_daily_crew)에서 표에 없는 임의 비율 감산을 직접 지원하지 않음.",
+        "source": "p667-t0 비고",
+        "cite": {
+          "table_id": "p667-t0",
+          "row": "비고",
+          "column": "비고"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "후레싱 설치",
+        "source": "p667-x4 [주] ③",
+        "cite": {
+          "chunk_id": "p667-x4",
+          "quote": "③ 후레싱 설치는 ‘[건축부문] 7-1-7 후레싱 설치’를 따른다."
+        }
+      },
+      {
+        "item": "방수 및 기와걸이 작업",
+        "source": "p667-x4 [주] ④",
+        "cite": {
+          "chunk_id": "p667-x4",
+          "quote": "④ 방수 및 기와걸이 작업은 별도 계상한다."
+        }
+      },
+      {
+        "item": "가설비계, 안전난간, 추락방지시설 등",
+        "source": "p667-x4 [주] ⑤",
+        "cite": {
+          "chunk_id": "p667-x4",
+          "quote": "⑤ 가설비계, 안전난간, 추락방지시설 등 시설물이 필요한 경우 작업여건을 고려하여 별도 계상한다."
+        }
+      },
+      {
+        "item": "잡재료 및 소모재료(고정철물 등)",
+        "source": "p667-x4 [주] ⑦",
+        "cite": {
+          "chunk_id": "p667-x4",
+          "quote": "⑦ 잡재료 및 소모재료(고정철물 등)는 주재료비의 2%로 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p667-x4",
+          "quote": "⑥ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(지붕잇기공 3인, 보통인부 1인)와 면적에 따른 기준 일일시공량이 표로 제시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p667-t0",
+      "row": "지붕잇기공",
+      "column": "1.0㎡이하",
+      "value": "65"
+    },
+    {
+      "table_id": "p667-t0",
+      "row": "지붕잇기공",
+      "column": "1.0㎡초과",
+      "value": "80"
+    },
+    {
+      "table_id": "p667-t0",
+      "row": "지붕잇기공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p667-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p667-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 지붕경사 30°이상일 경우 시공량의 17%를 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p667-x4",
+      "quote": "③ 후레싱 설치는 ‘[건축부문] 7-1-7 후레싱 설치’를 따른다."
+    },
+    {
+      "chunk_id": "p667-x4",
+      "quote": "④ 방수 및 기와걸이 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p667-x4",
+      "quote": "⑤ 가설비계, 안전난간, 추락방지시설 등 시설물이 필요한 경우 작업여건을 고려하여 별도 계상한다."
+    },
+    {
+      "chunk_id": "p667-x4",
+      "quote": "⑥ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p667-x4",
+      "quote": "⑦ 잡재료 및 소모재료(고정철물 등)는 주재료비의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "지붕경사 30°이상일 때 시공량 17% 감산을 adjusted_daily_crew 모델에서 자동 계산할 수 있는 파라미터 구조가 명확하지 않아 blocked로 처리함."
+  ],
+  "questions": [
+    "시공 면적이 1.0㎡ 이하일 때와 초과일 때 시공량은 어떻게 다른가요?",
+    "지붕경사가 30° 이상일 때 시공량 17% 감산은 어떻게 적용하나요?",
+    "잡재료 및 소모재료비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:05:48.596774+00:00",
+    "input_tokens": 11715,
+    "output_tokens": 2539,
+    "source_pages": [
+      667,
+      668
+    ],
+    "prompt_sha256": "d998a7580e4f70fa29d2bafbc8fd137719b833bba00345fe462c57f09f0b5d1b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

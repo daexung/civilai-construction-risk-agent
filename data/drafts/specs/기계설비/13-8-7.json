@@ -1,0 +1,280 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-8-7/공급설비설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-8-7",
+    "title": "활성탄･반응조제 및 소석회 공급설비 설치",
+    "work": "공정별 설치 및 장비 사용",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      842
+    ],
+    "inputs": [
+      {
+        "name": "duration",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "일",
+        "required": true,
+        "ask": "설치공사 기간은 며칠입니까?",
+        "source": "PDF 842쪽 1. 공정별 설치 표의 기술관리 항목"
+      },
+      {
+        "name": "volume_package",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "포장해체 대상 목재 물량은 몇 ㎥입니까?",
+        "source": "PDF 842쪽 1. 공정별 설치 표의 포장해체 항목"
+      },
+      {
+        "name": "weight_foundation",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "기초작업 및 표면손질 물량은 몇 ton입니까?",
+        "source": "PDF 842쪽 1. 공정별 설치 표의 기초작업 및 표면손질 항목"
+      },
+      {
+        "name": "weight_reaction",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "반응조제 및 탱크류 조립･설치 물량은 몇 ton입니까?",
+        "source": "PDF 842쪽 1. 공정별 설치 표의 반응조제 및 탱크류 조립･설치 항목"
+      },
+      {
+        "name": "weight_lime",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "소석회, 활성탄 공급설비 조립･설치 물량은 몇 ton입니까?",
+        "source": "PDF 842쪽 1. 공정별 설치 표의 소석회, 활성탄 공급설비 조립･설치 항목"
+      },
+      {
+        "name": "weight_mixer",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "혼합기, 이젝터, 로타리밸브 설치 물량은 몇 ton입니까?",
+        "source": "PDF 842쪽 1. 공정별 설치 표의 혼합기, 이젝터, 로타리밸브 설치 항목"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p898-t0",
+        "role": "공정별 설치 품",
+        "source": "PDF 842쪽 1. 공정별 설치 표",
+        "unit": "인/일, 인/㎥, 인/ton, 조/ton",
+        "values": {
+          "◦기술관리 - 설치공사 기간중": {
+            "기계기사": "0.5"
+          },
+          "◦포장해체 - 수송을 위해 포장된 목재를 해체하고 목재를 정리함": {
+            "목공": "0.12",
+            "특별인부": "0.12"
+          },
+          "◦기초작업 및 표면손질 - Chipping 및 Grouting 등": {
+            "플랜트기계설치공": "0.19",
+            "특별인부": "0.39"
+          },
+          "◦반응조제 및 탱크류 조립･설치": {
+            "플랜트제관공": "1.93",
+            "플랜트용접공": "1.93",
+            "플랜트기계설치공": "0.96",
+            "비계공": "0.96",
+            "특별인부": "1.93",
+            "건설기계운전조": "0.96"
+          },
+          "◦소석회, 활성탄 공급설비 조립･설치": {
+            "플랜트기계설치공": "3.47",
+            "비계공": "1.74",
+            "플랜트용접공": "1.74",
+            "특별인부": "2.6",
+            "건설기계운전조": "0.96"
+          },
+          "◦혼합기, 이젝터, 로타리밸브 설치": {
+            "플랜트기계설치공": "2.31",
+            "비계공": "0.57",
+            "플랜트용접공": "0.57",
+            "특별인부": "1.16"
+          },
+          "◦검사 및 교정 - Gas Leak Test 포함": {
+            "기술관리, 포장해체를 제외한 공량의 10%": "10%"
+          }
+        },
+        "cite": {
+          "table_id": "p898-t0"
+        }
+      },
+      {
+        "id": "p898-t1",
+        "role": "사용장비",
+        "source": "PDF 842쪽 2. 사용장비 표",
+        "unit": "대",
+        "values": {
+          "지게차": {
+            "규격": "5톤",
+            "단위": "대",
+            "수량": "1"
+          },
+          "크레인": {
+            "규격": "70톤",
+            "단위": "대",
+            "수량": "1"
+          },
+          "용접기": {
+            "규격": "15KVA",
+            "단위": "대",
+            "수량": "3"
+          }
+        },
+        "cite": {
+          "table_id": "p898-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p898-t0",
+          "row_input": "공정별",
+          "column_input": "직종",
+          "trades": [
+            "기계기사",
+            "목공",
+            "특별인부",
+            "플랜트기계설치공",
+            "플랜트제관공",
+            "플랜트용접공",
+            "비계공",
+            "건설기계운전조"
+          ]
+        },
+        "quantity_input": "각 공정별 물량 입력",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "각 공정별로 입력된 물량(duration, volume_package, weight_foundation, weight_reaction, weight_lime, weight_mixer)에 p898-t0 표의 해당 공정 직종별 수량을 곱하여 품을 구한다.",
+        "검사 및 교정 품은 기술관리와 포장해체를 제외한 나머지 공정(기초작업, 반응조제, 소석회/활성탄, 혼합기 등)에서 산출된 직종별 총 공량의 10%를 가산하여 구한다.",
+        "사용장비는 p898-t1 표를 기준으로 하되, 현장 여건에 따라 조정한다."
+      ],
+      "source": "PDF 842쪽 1. 공정별 설치 표 및 2. 사용장비 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "보온 및 도장작업",
+        "source": "PDF 842쪽 1. 공정별 설치 [주] ②",
+        "cite": {
+          "chunk_id": "p898-x22",
+          "quote": "② 보온 및 도장작업이 필요한 경우 별도 계상한다."
+        }
+      },
+      {
+        "item": "기본 장비 이외에 필요한 장비",
+        "source": "PDF 842쪽 2. 사용장비 [주]",
+        "cite": {
+          "chunk_id": "p898-x28",
+          "quote": "본 장비 이외에 필요한 장비가 있을 경우 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "공정별로 단위당 품이 표에 직접 제시되어 있으며, 각 공정의 물량을 곱하여 합산하는 방식이 주를 이루기 때문입니다.",
+  "citations": [
+    {
+      "table_id": "p898-t0",
+      "row": "◦기술관리 - 설치공사 기간중",
+      "column": "기계기사",
+      "value": "0.5"
+    },
+    {
+      "table_id": "p898-t0",
+      "row": "◦포장해체 - 수송을 위해 포장된 목재를 해체하고 목재를 정리함",
+      "column": "목공",
+      "value": "0.12"
+    },
+    {
+      "table_id": "p898-t0",
+      "row": "◦기초작업 및 표면손질 - Chipping 및 Grouting 등",
+      "column": "플랜트기계설치공",
+      "value": "0.19"
+    },
+    {
+      "table_id": "p898-t0",
+      "row": "◦반응조제 및 탱크류 조립･설치",
+      "column": "플랜트제관공",
+      "value": "1.93"
+    },
+    {
+      "table_id": "p898-t0",
+      "row": "◦소석회, 활성탄 공급설비 조립･설치",
+      "column": "플랜트기계설치공",
+      "value": "3.47"
+    },
+    {
+      "table_id": "p898-t0",
+      "row": "◦혼합기, 이젝터, 로타리밸브 설치",
+      "column": "플랜트기계설치공",
+      "value": "2.31"
+    },
+    {
+      "table_id": "p898-t0",
+      "row": "◦검사 및 교정 - Gas Leak Test 포함",
+      "column": "기술관리, 포장해체를 제외한 공량의 10%",
+      "value": "10%"
+    },
+    {
+      "table_id": "p898-t1",
+      "row": "지게차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p898-x22",
+      "quote": "② 보온 및 도장작업이 필요한 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p898-x28",
+      "quote": "본 장비 이외에 필요한 장비가 있을 경우 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "검사 및 교정 품을 계산할 때 '기술관리, 포장해체를 제외한 공량의 10%'를 적용하는데, 이 공량이 직종별 합계인지 전체 인·일의 합계인지 명확하지 않습니다."
+  ],
+  "questions": [
+    "반응조제 및 탱크류 조립･설치 시 플랜트제관공의 단위당 품은 얼마인가요?",
+    "검사 및 교정 품은 어떤 공정의 공량을 기준으로 10%를 계산하나요?",
+    "기술관리 품을 계산하기 위한 설치공사 기간은 며칠인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:42.289547+00:00",
+    "input_tokens": 12618,
+    "output_tokens": 3143,
+    "source_pages": [
+      898,
+      899
+    ],
+    "prompt_sha256": "d309061220506c29a717dab6568b166f210810f02f24406efd0a3bec9a330c4a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

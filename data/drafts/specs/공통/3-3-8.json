@@ -1,0 +1,181 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-3-8/암파쇄_유압식할암공법",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-3-8",
+    "title": "암파쇄(유압식 할암공법)",
+    "work": "암파쇄(유압식 할암공법) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "암파쇄 물량은 몇 ㎥입니까?",
+        "source": "PDF 1쪽 3-3-8 표 단위 (㎥당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p129-t2",
+        "role": "단위당 품 (㎥당)",
+        "source": "PDF 1쪽 3-3-8 표",
+        "unit": "인, hr",
+        "values": {
+          "기계설비공": {
+            "수량": "0.068"
+          },
+          "특별인부": {
+            "수량": "0.271"
+          },
+          "유압식크롤러드릴": {
+            "수량": "0.121"
+          },
+          "발전기": {
+            "수량": "0.486"
+          },
+          "유압식할암기": {
+            "수량": "0.486"
+          },
+          "굴착기+대형브레이커": {
+            "수량": "0.121"
+          }
+        },
+        "cite": {
+          "table_id": "p129-t2"
+        }
+      },
+      {
+        "id": "p129-t3",
+        "role": "소모자재 비용 요율",
+        "source": "PDF 1쪽 3-3-8 [주] ④ 표",
+        "unit": "%",
+        "values": {
+          "기계경비의": {
+            "유압식 크롤러드릴": "24%",
+            "굴착기+대형브레이커": "2%"
+          }
+        },
+        "cite": {
+          "table_id": "p129-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p129-t2",
+          "column_input": "수량",
+          "trades": [
+            "기계설비공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p129-t2에서 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 1쪽 3-3-8",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "면 고르기품",
+        "source": "PDF 1쪽 3-3-8 [주] ③",
+        "cite": {
+          "section_no": "3-3-8",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "유압할암봉 소모자재 비용",
+        "source": "PDF 1쪽 3-3-8 [주] ⑤",
+        "cite": {
+          "section_no": "3-3-8",
+          "marker": "⑤"
+        }
+      },
+      {
+        "item": "유압식 크롤러드릴 및 대형브레이커 소모자재 비용 (기계경비 요율)",
+        "source": "PDF 1쪽 3-3-8 [주] ④",
+        "cite": {
+          "section_no": "3-3-8",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎥)당 인력 및 장비 투입량이 표에 직접 제시되어 있으므로 per_unit 방식이 적합하다.",
+  "citations": [
+    {
+      "table_id": "p129-t2",
+      "row": "기계설비공",
+      "column": "수량",
+      "value": "0.068"
+    },
+    {
+      "table_id": "p129-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.271"
+    },
+    {
+      "table_id": "p129-t3",
+      "row": "기계경비의",
+      "column": "유압식 크롤러드릴",
+      "value": "24%"
+    },
+    {
+      "chunk_id": "p129-x23",
+      "quote": "③ 시공면의 면 고르기가 필요한 경우에는 면 고르기품을 별도로 계상한다."
+    },
+    {
+      "chunk_id": "p129-x23",
+      "quote": "④ 유압식 크롤러드릴 및 대형브레이커의 소모자재(비트, 로드, 생크로드, 슬리브, 치즐) 비용은 다음과\n설명 | 같이 기계경비의 요율로 계상한다."
+    },
+    {
+      "chunk_id": "p129-x27",
+      "quote": "⑤ 유압할암봉 소모자재 비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "유압식 크롤러드릴 및 대형브레이커의 소모자재 비용은 기계경비의 요율로 계상하도록 되어 있으나, 현재 cost_rules는 노무비 기준(labor_subtotal)만 지원하므로 기계경비 기준 요율 적용을 어떻게 처리할지 확정이 필요하여 미산정 항목으로 분류함."
+  ],
+  "questions": [
+    "암파쇄(유압식 할암공법) 작업 시 굴착기 규격은 어떻게 되나요?",
+    "면 고르기 작업이 필요한 경우 품은 어떻게 추가하나요?",
+    "파쇄할 암반의 물량(㎥)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:15:57.494051+00:00",
+    "input_tokens": 11859,
+    "output_tokens": 1740,
+    "source_pages": [
+      129,
+      130
+    ],
+    "prompt_sha256": "0f48dbd6af31f7a58f2bb6871a2b1c2f2dcacf14db1461d7c223b4ae1a0d871d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

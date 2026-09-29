@@ -1,0 +1,162 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-17/Tainter_Gate_Anchorage_제관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-17",
+    "title": "Tainter Gate Anchorage 제관",
+    "work": "공정별 제작품 및 소모자재",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      822,
+      823
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "제작 물량은 몇 ton입니까?",
+        "source": "PDF 822쪽 1. 공정별 제작품 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p878-t0",
+        "role": "공정별 제작품 (ton당)",
+        "source": "PDF 822쪽 1. 공정별 제작품",
+        "unit": "인/ton",
+        "values": {
+          "기술관리 재료절단사도 현도 괘서 절단 교정 단재가공괘서 절단 Edge 가 공 용접 교정 Holing 부분조립취부조정 용접 절단 부분조립수정 Grinding 가조립조립 해체 도장준비 도장 운반조작 동력조작 보조 검사": {
+            "기계기사": "1.6",
+            "제도공": "0.5",
+            "현도공": "0.2",
+            "마킹공": "1.3",
+            "절단공": "0.28",
+            "플랜트제관공": "0.5",
+            "산소절단공": "0.14",
+            "플랜트용접공": "1.0",
+            "플랜트기계설치공": "2.5",
+            "플랜용접공": "6.8",
+            "연마공(기계)": "0.13",
+            "도장공": "0.49",
+            "특수비계공": "3.3",
+            "플랜트전공": "0.66",
+            "특별인부": "14.3",
+            "인력품의7%": "7%"
+          }
+        },
+        "cite": {
+          "table_id": "p878-t0"
+        }
+      },
+      {
+        "id": "p878-t1",
+        "role": "소모자재 (톤당)",
+        "source": "PDF 822쪽 2. 소모자재",
+        "unit": "톤당",
+        "values": {
+          "절단및수정 현도 용접 도장": {
+            "품명 산소": "2.2",
+            "품명 아세틸렌": "1.5",
+            "품명 함석": "1.2",
+            "품명 용접봉": "30.5",
+            "품명 규사": "0.19"
+          }
+        },
+        "cite": {
+          "table_id": "p878-t1"
+        }
+      },
+      {
+        "id": "p879-t0",
+        "role": "소모자재 (톤당) 계속",
+        "source": "PDF 823쪽 2. 소모자재 계속",
+        "unit": "톤당",
+        "values": {
+          "전력 Grinding": {
+            "중유": "0.019",
+            "노즐": "0.4",
+            "Zinc primer": "0.36",
+            "Tar Epoxy": "3.0",
+            "전력": "420",
+            "그라인더돌": "0.33"
+          }
+        },
+        "cite": {
+          "table_id": "p879-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "단위당 품과 소모자재를 표에서 확인한다.",
+        "물량을 곱하여 총 품과 소모자재를 산출한다.",
+        "파싱 결과의 표 구조가 원문과 크게 달라 자동 계산을 지원하지 않는다."
+      ],
+      "source": "PDF 822~823쪽 1. 공정별 제작품 및 2. 소모자재"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에서 공정별 직종 및 수량 매핑이 훼손되어 동일 직종의 수량을 합산해야 하는지 명확하지 않으며, 소모자재 표의 품명 매핑도 잘못되어 있어 자동 계산을 위한 표 구성이 불가능합니다.",
+  "citations": [
+    {
+      "table_id": "p878-t0",
+      "row": "기술관리 재료절단사도 현도 괘서 절단 교정 단재가공괘서 절단 Edge 가 공 용접 교정 Holing 부분조립취부조정 용접 절단 부분조립수정 Grinding 가조립조립 해체 도장준비 도장 운반조작 동력조작 보조 검사",
+      "column": "기계기사",
+      "value": "1.6"
+    },
+    {
+      "table_id": "p878-t1",
+      "row": "절단및수정 현도 용접 도장",
+      "column": "품명 산소",
+      "value": "2.2병"
+    },
+    {
+      "table_id": "p879-t0",
+      "row": "전력 Grinding",
+      "column": "품명 중유",
+      "value": "0.019D/M"
+    },
+    {
+      "chunk_id": "p879-x6",
+      "quote": "산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 공정별 직종 및 수량 매핑이 훼손되어 동일 직종의 수량을 합산해야 하는지, 공정별로 별도 산정해야 하는지 명확하지 않습니다.",
+    "소모자재 표(p879-t0)의 파싱 결과가 모든 품명을 '중유'로 잘못 매핑하고 있어, JSON 키 중복을 피하기 위해 부득이하게 원문의 품명을 키로 사용했습니다.",
+    "검사 인력 품의 7%가 직종별 품의 합계에 대한 비율인지 명확하지 않습니다."
+  ],
+  "questions": [
+    "Tainter Gate Anchorage 제관 작업의 톤당 플랜트제관공 품은 얼마인가요?",
+    "검사 인력 품의 7%는 어떤 기준으로 계산하나요?",
+    "제작 물량이 10ton일 때 필요한 산소와 아세틸렌의 양은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:43:53.089451+00:00",
+    "input_tokens": 14179,
+    "output_tokens": 1859,
+    "source_pages": [
+      878,
+      879,
+      880
+    ],
+    "prompt_sha256": "5dfbe9a21a61d34aa07707bbb31c41e10963065b991491ef3e6768a9be6a397f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

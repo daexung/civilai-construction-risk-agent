@@ -1,0 +1,225 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-4-1/인력식소규모장비포설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-4-1",
+    "title": "인력식 소규모장비 포설",
+    "work": "입도조정기층 포설 및 다짐",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      309
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "입도조정기층 포설 물량은 몇 ㎥입니까?",
+        "source": "PDF 309쪽 p365-t2 시공량 기준"
+      },
+      {
+        "name": "watering_method",
+        "type": "enum",
+        "allowed_values": [
+          "장비 살수",
+          "순수 인력 살수"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "살수 방법은 장비 살수입니까, 순수 인력 살수입니까?",
+        "source": "PDF 309쪽 p365-t2 비고",
+        "synonyms": {
+          "장비 살수": [
+            "살수차",
+            "장비"
+          ],
+          "순수 인력 살수": [
+            "인력 살수",
+            "인력"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p365-t2",
+        "role": "인력식 소규모장비 포설 일당 작업조 및 시공량",
+        "source": "PDF 309쪽 1-4-1 인력식 소규모장비 포설 표",
+        "unit": "인, 대, ㎥",
+        "values": {
+          "포설공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "2"
+          },
+          "굴착기": {
+            "수량": "1"
+          },
+          "진동롤러( 핸드가이드식)": {
+            "수량": "1"
+          },
+          "살수차": {
+            "수량": "0.5"
+          },
+          "시공량(㎥)": {
+            "수량": "135"
+          }
+        },
+        "cite": {
+          "table_id": "p365-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p365-t2",
+          "row": "시공량(㎥)",
+          "column": "수량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p365-t2",
+          "column": "수량",
+          "trades": [
+            "포설공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "포설공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "굴착기",
+          "table": "p365-t2",
+          "unit": "대·일",
+          "machine_code_input": "null",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p365-t2에서 기준 일일시공량(135㎥)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 인원(포설공 2, 보통인부 2)으로 구한다.",
+        "장비 대·일 = 작업일수 × 표의 장비 대수(굴착기 1, 진동롤러 1, 살수차 0.5)로 구한다."
+      ],
+      "source": "PDF 309쪽 p365-t2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "순수 인력 살수 시",
+        "blocked_if": {
+          "input": "watering_method",
+          "op": "==",
+          "value": "순수 인력 살수"
+        },
+        "reason": "순수 인력 살수 시 100㎡당 1인 가산은 면적당 추가 품으로, 일당 작업조 모델의 고정 인원 증감으로 자동 계산할 수 없어 별도 산정이 필요함",
+        "source": "PDF 309쪽 p365-t2 비고",
+        "cite": {
+          "table_id": "p365-t2",
+          "row": "비고"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "살수량 (물 재료량)",
+        "source": "PDF 309쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p365-x23",
+          "quote": "두께 20㎝일 때 100㎡당 살수량은 일반적으로 2ton을 표준으로 한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "기준 일일시공량(135㎥)과 이에 따른 직종별 인원 및 장비 대수가 표로 주어져 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p365-t2",
+      "row": "포설공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p365-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p365-t2",
+      "row": "굴착기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p365-t2",
+      "row": "진동롤러( 핸드가이드식)",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p365-t2",
+      "row": "살수차",
+      "column": "수량",
+      "value": "0.5"
+    },
+    {
+      "table_id": "p365-t2",
+      "row": "시공량(㎥)",
+      "column": "수량",
+      "value": "135"
+    },
+    {
+      "table_id": "p365-t2",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 순수 인력 살수 시에는 살수품을 100㎡당 1인 가산한다."
+    },
+    {
+      "chunk_id": "p365-x23",
+      "quote": "본 품은 소형 다짐장비를 사용한 소규모구간의 입도조정기층 포설 및 다짐 기준이다."
+    },
+    {
+      "chunk_id": "p365-x23",
+      "quote": "두께 20㎝일 때 100㎡당 살수량은 일반적으로 2ton을 표준으로 한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트에 '포설공 보통인부 | 단위 인 | 수량 2'로 묶여 있어 각각 2인인지 합쳐서 2인인지 파싱 텍스트만으로는 모호하나, 원문 OCR을 참고하여 각각 2인으로 분리하여 표를 구성했습니다.",
+    "장비가 여러 대(굴착기, 진동롤러, 살수차) 투입되는데 adjusted_daily_crew 모델의 equipment 파라미터가 단일 객체만 지원하는지 명확하지 않아 주 장비(굴착기)만 기재하고 나머지는 steps에 명시했습니다."
+  ],
+  "questions": [
+    "입도조정기층 포설 물량이 500㎥일 때 작업일수와 필요한 인력 및 장비 대수는 어떻게 되나요?",
+    "순수 인력 살수를 할 경우 추가되는 인력은 어떻게 계산해야 하나요?",
+    "살수 방법(장비 살수 또는 순수 인력 살수)을 선택하지 않았습니다. 어떤 방법으로 시공하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:54:32.753024+00:00",
+    "input_tokens": 11621,
+    "output_tokens": 2296,
+    "source_pages": [
+      365,
+      366
+    ],
+    "prompt_sha256": "8b397de75cfd3003b2a84167ac253adb823af3d29ebd5c52bc9c9ec5adaa4249",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

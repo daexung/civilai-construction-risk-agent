@@ -1,0 +1,499 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-8-5/탈질설비설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-8-5",
+    "title": "탈질설비 설치",
+    "work": "공정별 설치 및 사용장비",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      839,
+      840
+    ],
+    "inputs": [
+      {
+        "name": "tech_management_days",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "일",
+        "required": true,
+        "ask": "기술관리(설치공사 기간중) 일수는 며칠입니까?",
+        "source": "PDF 839쪽 p895-t2 ◦ 기술관리"
+      },
+      {
+        "name": "unpacking_vol",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "포장해체 물량은 몇 ㎥입니까?",
+        "source": "PDF 839쪽 p895-t2 ◦ 포장해체"
+      },
+      {
+        "name": "surface_prep_area",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "표면손질 물량은 몇 ㎡입니까?",
+        "source": "PDF 839쪽 p895-t2 ◦ 표면손질"
+      },
+      {
+        "name": "transport_weight",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "소운반 물량은 몇 ton입니까?",
+        "source": "PDF 839쪽 p895-t2 ◦ 소운반"
+      },
+      {
+        "name": "foundation_weight",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "기초작업(Chipping 및 Grouting) 물량은 몇 ton입니까?",
+        "source": "PDF 839쪽 p895-t2 ◦ 기초작업"
+      },
+      {
+        "name": "calibration_weight",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "현장교정 물량은 몇 ton입니까?",
+        "source": "PDF 840쪽 p896-t0 ◦ 현장교정"
+      },
+      {
+        "name": "body_assembly_weight",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "본체조립 물량은 몇 ton입니까?",
+        "source": "PDF 840쪽 p896-t0 ◦ 본체조립"
+      },
+      {
+        "name": "inner_plate_weight",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Inner Plate 및 Hanger 조립 물량은 몇 ton입니까?",
+        "source": "PDF 840쪽 p896-t0 ◦ Inner Plate 및 Hanger 조립"
+      },
+      {
+        "name": "weld_prep_weight",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "용접손질 물량은 몇 ton입니까?",
+        "source": "PDF 840쪽 p896-t0 ◦ 용접손질"
+      },
+      {
+        "name": "body_install_weight",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "본체 설치 물량은 몇 ton입니까?",
+        "source": "PDF 840쪽 p896-t0 ◦ 본체 설치"
+      },
+      {
+        "name": "sealing_weld_weight",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Sealing 용접 물량은 몇 ton입니까?",
+        "source": "PDF 840쪽 p896-t0 ◦ Sealing 용접"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p895-t2",
+        "role": "공정별 설치 품 (기술관리~기초작업)",
+        "source": "PDF 839쪽 1. 공정별 설치",
+        "values": {
+          "◦ 기술관리 - 설치공사 기간중": {
+            "기계기사": "0.96"
+          },
+          "◦ 포장해체 - 수송을 위해 포장된 목재를 해체하고 목재를 정리함": {
+            "목공": "0.06",
+            "특별인부": "0.14"
+          },
+          "◦ 표면손질": {
+            "특별인부": "0.24"
+          },
+          "◦ 소운반": {
+            "특별인부": "0.66"
+          },
+          "- 작업위치까지 필요한 자재를 운반": {
+            "건설기계운전조": "0.21"
+          },
+          "◦ 기초작업 - Chipping 및 Grouting": {
+            "플랜트기계설치공": "0.01",
+            "특별인부": "0.01"
+          }
+        },
+        "cite": {
+          "table_id": "p895-t2"
+        }
+      },
+      {
+        "id": "p896-t0",
+        "role": "공정별 설치 품 (현장교정~검사 및 교정)",
+        "source": "PDF 840쪽 1. 공정별 설치",
+        "values": {
+          "◦ 현장교정 - 수송도중 변형된 것을 바로 잡기": {
+            "특별인부": "2.07",
+            "플랜트기계설치공": "0.04"
+          },
+          "◦ 본체조립 - 분리 운반된 Body 조립 포함": {
+            "플랜트제관공": "1.91",
+            "플랜트용접공": "2.04",
+            "특별인부": "3.93",
+            "건설기계운전조": "1.32"
+          },
+          "◦ Inner Plate 및 Hanger 조립 - Suspention Device 조립 포함": {
+            "플랜트제관공": "1.14",
+            "플랜트용접공": "3.36",
+            "특별인부": "3.37"
+          },
+          "◦ 용접손질 - 용접 Joint부위 용접효율을 높이기 위함": {
+            "플랜트제관공": "2.19",
+            "특별인부": "0.07"
+          },
+          "◦ 본체 설치 - Reactor 설치 포함": {
+            "플랜트기계설치공": "4.28",
+            "플랜트제관공": "0.54",
+            "비계공": "1.66",
+            "특별인부": "2.28",
+            "플랜트용접공": "3.97",
+            "건설기계운전조": "4.07"
+          },
+          "◦ Sealing 용접 - 용접용 Support설치 및 운반포함": {
+            "플랜트용접공": "14.74",
+            "플랜트제관공": "4.99",
+            "특별인부": "1.07"
+          },
+          "◦ 검사 및 교정 - Gas Leak Test 포함": {
+            "기술관리, 포장해체를 제외한 전공량의 10%": ""
+          }
+        },
+        "cite": {
+          "table_id": "p896-t0"
+        }
+      },
+      {
+        "id": "p896-t1",
+        "role": "사용장비",
+        "source": "PDF 840쪽 2. 사용장비",
+        "values": {
+          "크레인": {
+            "200톤": "1"
+          },
+          "지게차": {
+            "5톤": "1"
+          },
+          "용접기": {
+            "15KVA": "2"
+          }
+        },
+        "cite": {
+          "table_id": "p896-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p895-t2, p896-t0",
+          "row_input": "각 공정",
+          "column_input": "직종",
+          "trades": [
+            "기계기사",
+            "목공",
+            "특별인부",
+            "건설기계운전조",
+            "플랜트기계설치공",
+            "플랜트제관공",
+            "플랜트용접공",
+            "비계공"
+          ]
+        },
+        "quantity_input": "각 공정별 물량 입력",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "검사 및 교정 품은 기술관리, 포장해체를 제외한 전공량의 10% 가산",
+            "source": "PDF 840쪽 p896-t0 ◦ 검사 및 교정"
+          }
+        ]
+      },
+      "steps": [
+        "각 공정별로 입력된 물량에 표의 단위당 품을 곱하여 직종별 품을 구한다.",
+        "검사 및 교정 품은 기술관리와 포장해체를 제외한 나머지 공정의 총 품의 10%로 계산하여 합산한다."
+      ],
+      "source": "PDF 839~840쪽 1. 공정별 설치",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "보온 및 도장작업",
+        "source": "PDF 840쪽 1. 공정별 설치 [주] ③",
+        "cite": {
+          "chunk_id": "p896-x21",
+          "quote": "③ 보온 및 도장작업이 필요한 경우 별도 계상한다."
+        }
+      },
+      {
+        "item": "명시된 장비 이외에 필요한 장비",
+        "source": "PDF 840쪽 2. 사용장비 [주]",
+        "cite": {
+          "chunk_id": "p896-x27",
+          "quote": "본 장비 이외에 필요한 장비가 있을 경우 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품(인/일, 인/㎥, 인/ton 등)이 공정별로 표에 직접 제시되어 있으며, 각 공정의 물량을 곱하여 산출하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p895-t2",
+      "row": "◦ 기술관리 - 설치공사 기간중",
+      "column": "기계기사",
+      "value": "0.96"
+    },
+    {
+      "table_id": "p895-t2",
+      "row": "◦ 포장해체 - 수송을 위해 포장된 목재를 해체하고 목재를 정리함",
+      "column": "목공",
+      "value": "0.06"
+    },
+    {
+      "table_id": "p895-t2",
+      "row": "◦ 포장해체 - 수송을 위해 포장된 목재를 해체하고 목재를 정리함",
+      "column": "특별인부",
+      "value": "0.14"
+    },
+    {
+      "table_id": "p895-t2",
+      "row": "◦ 표면손질",
+      "column": "특별인부",
+      "value": "0.24"
+    },
+    {
+      "table_id": "p895-t2",
+      "row": "◦ 소운반",
+      "column": "특별인부",
+      "value": "0.66"
+    },
+    {
+      "table_id": "p895-t2",
+      "row": "- 작업위치까지 필요한 자재를 운반",
+      "column": "건설기계운전조",
+      "value": "0.21"
+    },
+    {
+      "table_id": "p895-t2",
+      "row": "◦ 기초작업 - Chipping 및 Grouting",
+      "column": "플랜트기계설치공",
+      "value": "0.01"
+    },
+    {
+      "table_id": "p895-t2",
+      "row": "◦ 기초작업 - Chipping 및 Grouting",
+      "column": "특별인부",
+      "value": "0.01"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 현장교정 - 수송도중 변형된 것을 바로 잡기",
+      "column": "특별인부",
+      "value": "2.07"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 현장교정 - 수송도중 변형된 것을 바로 잡기",
+      "column": "플랜트기계설치공",
+      "value": "0.04"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체조립 - 분리 운반된 Body 조립 포함",
+      "column": "플랜트제관공",
+      "value": "1.91"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체조립 - 분리 운반된 Body 조립 포함",
+      "column": "플랜트용접공",
+      "value": "2.04"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체조립 - 분리 운반된 Body 조립 포함",
+      "column": "특별인부",
+      "value": "3.93"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체조립 - 분리 운반된 Body 조립 포함",
+      "column": "건설기계운전조",
+      "value": "1.32"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ Inner Plate 및 Hanger 조립 - Suspention Device 조립 포함",
+      "column": "플랜트제관공",
+      "value": "1.14"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ Inner Plate 및 Hanger 조립 - Suspention Device 조립 포함",
+      "column": "플랜트용접공",
+      "value": "3.36"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ Inner Plate 및 Hanger 조립 - Suspention Device 조립 포함",
+      "column": "특별인부",
+      "value": "3.37"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 용접손질 - 용접 Joint부위 용접효율을 높이기 위함",
+      "column": "플랜트제관공",
+      "value": "2.19"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 용접손질 - 용접 Joint부위 용접효율을 높이기 위함",
+      "column": "특별인부",
+      "value": "0.07"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체 설치 - Reactor 설치 포함",
+      "column": "플랜트기계설치공",
+      "value": "4.28"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체 설치 - Reactor 설치 포함",
+      "column": "플랜트제관공",
+      "value": "0.54"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체 설치 - Reactor 설치 포함",
+      "column": "비계공",
+      "value": "1.66"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체 설치 - Reactor 설치 포함",
+      "column": "특별인부",
+      "value": "2.28"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체 설치 - Reactor 설치 포함",
+      "column": "플랜트용접공",
+      "value": "3.97"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 본체 설치 - Reactor 설치 포함",
+      "column": "건설기계운전조",
+      "value": "4.07"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ Sealing 용접 - 용접용 Support설치 및 운반포함",
+      "column": "플랜트용접공",
+      "value": "14.74"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ Sealing 용접 - 용접용 Support설치 및 운반포함",
+      "column": "플랜트제관공",
+      "value": "4.99"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ Sealing 용접 - 용접용 Support설치 및 운반포함",
+      "column": "특별인부",
+      "value": "1.07"
+    },
+    {
+      "table_id": "p896-t0",
+      "row": "◦ 검사 및 교정 - Gas Leak Test 포함",
+      "column": "기술관리, 포장해체를 제외한 전공량의 10%",
+      "value": ""
+    },
+    {
+      "table_id": "p896-t1",
+      "row": "크레인",
+      "column": "200톤",
+      "value": "1"
+    },
+    {
+      "table_id": "p896-t1",
+      "row": "지게차",
+      "column": "5톤",
+      "value": "1"
+    },
+    {
+      "table_id": "p896-t1",
+      "row": "용접기",
+      "column": "15KVA",
+      "value": "2"
+    },
+    {
+      "chunk_id": "p896-x21",
+      "quote": "③ 보온 및 도장작업이 필요한 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p896-x27",
+      "quote": "본 장비 이외에 필요한 장비가 있을 경우 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "건설기계운전조는 작업조건 및 설치물량 등을 감안하여 편성한다고 되어 있는데, 표에 제시된 수치(조/ton)를 그대로 곱해서 산출하는 것인지, 아니면 별도의 조정 계수나 편성 기준이 있는지 명확하지 않습니다.",
+    "검사 및 교정 품이 '기술관리, 포장해체를 제외한 전공량의 10%'라고 되어 있는데, 이것이 각 직종별 누적 인·일의 10%를 의미하는지, 아니면 특정 직종으로 환산하는지 명확하지 않습니다."
+  ],
+  "questions": [
+    "본체 설치 시 플랜트기계설치공의 단위당 품은 얼마인가요?",
+    "검사 및 교정 품을 계산할 때 제외되는 공정은 무엇인가요?",
+    "각 공정별로 설치하는 중량(ton)은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:03.274110+00:00",
+    "input_tokens": 13448,
+    "output_tokens": 5390,
+    "source_pages": [
+      895,
+      896,
+      897
+    ],
+    "prompt_sha256": "c6b3f5882a0a9c9aef2a9bbf1e068a6672bcca93a24679012f6de22d78c11bd3",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

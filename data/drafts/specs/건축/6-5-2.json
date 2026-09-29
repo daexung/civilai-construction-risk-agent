@@ -1,0 +1,227 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-5-2/액상형흡수방지방수도포",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-5-2",
+    "title": "액상형 흡수방지방수 도포",
+    "work": "액상형 흡수방지방수 도포 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      607
+    ],
+    "inputs": [
+      {
+        "name": "method_and_layers",
+        "type": "enum",
+        "allowed_values": [
+          "바름 1층(회)",
+          "바름 2층(회)",
+          "뿜칠 1층(회)",
+          "뿜칠 2층(회)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 방법과 도포 층수는 무엇입니까?",
+        "source": "PDF 607쪽 6-5-2 표 (p663-t2)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "도포 면적은 몇 ㎡입니까?",
+        "source": "PDF 607쪽 6-5-2 표 단위 (㎡당)"
+      },
+      {
+        "name": "floor_level",
+        "type": "nonnegative_integer",
+        "allowed_values": "1 이상의 정수",
+        "unit": "층",
+        "required": true,
+        "ask": "외벽의 층수는 몇 층입니까? (층 구분을 할 수 없는 건축물은 1개층의 층고를 3.6m로 기준하여 층수를 환산하여 입력)",
+        "source": "PDF 607쪽 [주] ② 및 ※ (p663-x14, p663-x18)"
+      },
+      {
+        "name": "crane_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "크레인(고소작업차)을 사용합니까?",
+        "source": "PDF 607쪽 [주] ③ (p663-x18)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p663-t2",
+        "role": "시공 방법 및 층수에 따른 단위당 품",
+        "source": "PDF 607쪽 6-5-2 표",
+        "unit": "인/㎡",
+        "values": {
+          "방수공": {
+            "바름 1층(회)": "0.014",
+            "바름 2층(회)": "0.021",
+            "뿜칠 1층(회)": "0.011",
+            "뿜칠 2층(회)": "0.017"
+          },
+          "보통인부": {
+            "바름 1층(회)": "0.003",
+            "바름 2층(회)": "0.005",
+            "뿜칠 1층(회)": "0.003",
+            "뿜칠 2층(회)": "0.004"
+          }
+        },
+        "cite": {
+          "table_id": "p663-t2"
+        }
+      },
+      {
+        "id": "p663-t3",
+        "role": "외벽층에 따른 인력품 할증률",
+        "source": "PDF 607쪽 외벽층 할증률 표",
+        "unit": "%",
+        "values": {
+          "인력품": {
+            "1,2,3층": "0",
+            "4,5,6층": "5%",
+            "7,8,9층": "8%",
+            "10,11,12층": "12%",
+            "13,14,15층": "16%",
+            "16,17,18층": "20%"
+          }
+        },
+        "cite": {
+          "table_id": "p663-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p663-t2",
+          "column_input": "method_and_layers",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "외벽은 높이에 따라 p663-t3의 할증률에 의한 품을 가산하며, 19층 이상은 매 3층 증가마다 4%씩 가산한다. (층 구분을 할 수 없는 건축물은 1개층의 층고를 3.6m로 기준하여 층수를 환산한다.)",
+            "source": "PDF 607쪽 [주] ②, ※"
+          }
+        ]
+      },
+      "steps": [
+        "p663-t2에서 시공 방법 및 층수에 따른 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "외벽 층수에 따른 할증률을 적용하여 품을 가산한다."
+      ],
+      "source": "PDF 607쪽 6-5-2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료량 (발수제 등)",
+        "source": "PDF 607쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p663-x18",
+          "quote": "재료는 별도 계상하며, 뿜칠시공시에는 재료량을 10% 가산한다."
+        }
+      },
+      {
+        "item": "크레인(고소작업차) 기계경비",
+        "source": "PDF 607쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p663-x18",
+          "quote": "크레인(고소작업차)을 사용하는 경우 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 (뿜칠 시)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.04",
+        "cite": {
+          "chunk_id": "p663-x18",
+          "quote": "뿜칠 시 공구손료 및 경장비(엔진식 도장기 등)의 기계경비는 인력품의 4%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 방수공과 보통인부의 품이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p663-t2",
+      "row": "방수공",
+      "column": "바름 1층(회)",
+      "value": "0.014"
+    },
+    {
+      "table_id": "p663-t3",
+      "row": "인력품",
+      "column": "4,5,6층",
+      "value": "5%"
+    },
+    {
+      "chunk_id": "p663-x14",
+      "quote": "외벽은 높이에 따라 다음 할증률에 의한 품을 가산할 수 있으며 19층 이상은 매 3층 증가마다 4%씩"
+    },
+    {
+      "chunk_id": "p663-x18",
+      "quote": "층의 구분을 할 수 없는 건축물은 1개층의 층고를 3.6m로 기준하여 층수를 환산한다."
+    },
+    {
+      "chunk_id": "p663-x18",
+      "quote": "크레인(고소작업차)을 사용하는 경우 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p663-x18",
+      "quote": "뿜칠 시 공구손료 및 경장비(엔진식 도장기 등)의 기계경비는 인력품의 4%로 계상한다."
+    },
+    {
+      "chunk_id": "p663-x18",
+      "quote": "재료는 별도 계상하며, 뿜칠시공시에는 재료량을 10% 가산한다."
+    }
+  ],
+  "open_questions": [
+    "외벽층 할증률 적용 시, 19층 이상의 경우 '매 3층 증가마다 4%씩 가산'의 정확한 수식(예: 19~21층 24%, 22~24층 28% 등)을 자동화하기 위해 별도의 함수나 로직이 필요합니다.",
+    "뿜칠 시 공구손료 4% 계상 조건이 명세 형식의 cost_rules에 조건부(when)로 들어갈 수 없어 이름에 명시했습니다."
+  ],
+  "questions": [
+    "액상형 흡수방지방수를 뿜칠로 2회 도포할 때 ㎡당 품은 얼마인가요?",
+    "외벽 층수가 25층일 때 인력품 할증률은 몇 %를 적용해야 하나요?",
+    "크레인을 사용하여 작업할 경우 기계경비는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:04:17.351423+00:00",
+    "input_tokens": 11948,
+    "output_tokens": 2580,
+    "source_pages": [
+      663,
+      664
+    ],
+    "prompt_sha256": "4ae91afa7eda82ed121ffae38ba9f8e212475212923d98ad4f71aa372d0ea9c2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

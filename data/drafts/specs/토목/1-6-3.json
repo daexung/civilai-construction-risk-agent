@@ -1,0 +1,175 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-6-3/콘크리트표층기계포설_소형장비",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-6-3",
+    "title": "콘크리트 표층 기계포설(소형장비)('20년 보완)",
+    "work": "기본 포설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      316
+    ],
+    "inputs": [
+      {
+        "name": "pavement_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반포장",
+          "터널포장",
+          "공항포장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "포장 종류는 무엇입니까? (일반포장 / 터널포장 / 공항포장)",
+        "source": "PDF 316쪽 1-6-3 표 시공량 구분"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "포설 물량은 몇 ㎥입니까?",
+        "source": "PDF 316쪽 1-6-3 표 시공량 단위"
+      },
+      {
+        "name": "frequent_movement",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "공항포장의 경우, 집수정이나 기초 등 지장물에 의해 이동이 빈번하게 발생하여 연속적인 포설이 불가능합니까?",
+        "source": "PDF 316쪽 1-6-3 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p372-t0",
+        "role": "작업조 인원, 장비 대수 및 시공량",
+        "source": "PDF 316쪽 1-6-3 표",
+        "values": {
+          "포장공": {
+            "수량": "4"
+          },
+          "특별인부": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "2"
+          },
+          "콘크리트페이버": {
+            "수량": "1"
+          },
+          "굴착기": {
+            "수량": "1"
+          },
+          "살수차": {
+            "수량": "0.5"
+          },
+          "시공량": {
+            "일반포장": "300",
+            "터널포장": "270",
+            "공항포장": "275"
+          }
+        },
+        "cite": {
+          "table_id": "p372-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p372-t0 표에서 포장 종류(일반/터널/공항)에 따른 기준 시공량을 확인한다.",
+        "공항포장이며 지장물에 의해 이동이 빈번하여 연속 포설이 불가능한 경우 기준 시공량의 15%를 감산하여 적용 시공량을 구한다.",
+        "전체 물량을 적용 시공량으로 나누어 작업일수를 산출한다.",
+        "작업일수에 표의 직종별 인원 및 장비 대수를 곱하여 총 투입량을 구한다."
+      ],
+      "source": "PDF 316쪽 1-6-3 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "공항포장에서 지장물에 의해 이동이 빈번하여 연속적인 포설이 불가능할 경우",
+        "blocked_if": {
+          "input": "frequent_movement",
+          "op": "==",
+          "value": true
+        },
+        "reason": "시공량의 15%를 감산해야 하나, 현재 계산 모델(adjusted_daily_crew)에서 조건부 시공량 감산을 자동 처리하기 어렵습니다.",
+        "source": "PDF 316쪽 1-6-3 표 비고",
+        "cite": {
+          "table_id": "p372-t0"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "양생제, 마대, 잡품 등 재료비",
+        "source": "PDF 316쪽 1-6-3 [주] ⑤",
+        "cite": {
+          "chunk_id": "p372-x7"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "공항포장에서 지장물에 의한 빈번한 이동 시 시공량 15% 감산 조건이 있으나, 현재 adjusted_daily_crew 모델은 조건부 고정 비율 감산을 지원하지 않아 자동 계산이 불가합니다. 또한 복수의 장비(페이버, 굴착기, 살수차) 투입을 단일 모델로 처리하기 모호합니다.",
+  "citations": [
+    {
+      "table_id": "p372-t0",
+      "row": "포장공 특별인부 보통인부",
+      "column": "수량",
+      "value": "4"
+    },
+    {
+      "table_id": "p372-t0",
+      "row": "콘크리트페이버",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p372-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 공항포장에서 집수정, 기초 등 지장물에 의해 이동이 빈번하게 발생하여 연속적인 포설이 불가능할 경우 시공량의 15%를 감한다."
+    },
+    {
+      "chunk_id": "p372-x7",
+      "quote": "양생제, 마대, 잡품 등 재료비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "공항포장 시공량 15% 감산 조건을 계산 모델에 어떻게 반영할지 (현재 모델 한계)",
+    "굴착기, 살수차 등 복수의 장비를 quantity_model의 equipment 필드에 어떻게 명시할지 (배열 지원 여부)"
+  ],
+  "questions": [
+    "일반포장 1000㎥ 시공 시 필요한 포장공 인원은 몇 명인가요?",
+    "공항포장에서 지장물 이동이 빈번한 기준은 구체적으로 무엇인가요?",
+    "포장 종류(일반/터널/공항)를 알려주셔야 시공량을 결정할 수 있습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:27.619053+00:00",
+    "input_tokens": 11785,
+    "output_tokens": 1830,
+    "source_pages": [
+      372,
+      373
+    ],
+    "prompt_sha256": "524ee6719708c7e6edaf4fc16e01d3add9be4b383402e5f97e91e56b157f9727",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

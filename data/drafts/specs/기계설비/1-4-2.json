@@ -1,0 +1,258 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/1-4-2/수밀밴드접합및배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "1-4-2",
+    "title": "수밀밴드 접합 및 배관",
+    "work": "수밀밴드 접합 및 배관",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      654
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø50",
+          "65",
+          "75",
+          "100",
+          "125",
+          "150",
+          "200"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "관규격은 몇 ㎜입니까?",
+        "source": "PDF 654쪽 1-4-2 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "접합개소는 몇 개소입니까?",
+        "source": "PDF 654쪽 1-4-2 표 시공량 단위"
+      },
+      {
+        "name": "lift_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "자체 추진 고소작업대(시저형)를 사용하여 시공합니까?",
+        "source": "PDF 654쪽 1-4-2 비고 및 [주] ⑤"
+      },
+      {
+        "name": "concrete_insert_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "콘크리트용 인서트를 사용합니까?",
+        "source": "PDF 654쪽 1-4-2 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p710-t1",
+        "role": "관규격별 시공량, 작업조 인원 및 고소작업대 할증 계수",
+        "source": "PDF 654쪽 1-4-2 표 및 비고",
+        "unit": "인/작업조; 접합개소/일; 무차원",
+        "values": {
+          "ø50": {
+            "시공량": "20"
+          },
+          "65": {
+            "시공량": "16"
+          },
+          "75": {
+            "시공량": "14"
+          },
+          "100": {
+            "시공량": "11"
+          },
+          "125": {
+            "시공량": "9.0"
+          },
+          "150": {
+            "시공량": "7.7"
+          },
+          "200": {
+            "시공량": "6.3"
+          },
+          "배관공": {
+            "인원": "3"
+          },
+          "보통인부": {
+            "인원": "1"
+          },
+          "고소작업대_계수": {
+            "true": "1.26",
+            "false": "1.0"
+          }
+        },
+        "cite": {
+          "table_id": "p710-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p710-t1",
+          "row_input": "pipe_size",
+          "column_input": "시공량"
+        },
+        "coefficients": [
+          {
+            "table": "p710-t1",
+            "row": "고소작업대_계수",
+            "input": "lift_used"
+          }
+        ],
+        "crew": {
+          "table": "p710-t1",
+          "column_input": "인원",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공": "1016",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p710-t1에서 관규격별 기준 일일시공량을 고른다.",
+        "고소작업대 사용 여부에 따라 p710-t1의 고소작업대_계수(1.26 또는 1.0)를 곱해 일당시공량을 구한다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p710-t1의 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 654쪽 1-4-2 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "콘크리트용 인서트를 사용하는 경우",
+        "blocked_if": {
+          "input": "concrete_insert_used",
+          "op": "==",
+          "value": true
+        },
+        "reason": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 '[건축부문] 8-1-4 인서트(Insert) 설치'를 따라야 하므로 별도 산정 필요",
+        "source": "PDF 654쪽 1-4-2 [주] ③",
+        "cite": {
+          "chunk_id": "p710-x21",
+          "quote": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "단열 지지대 및 관 지지대 설치",
+        "source": "PDF 654쪽 1-4-2 [주] ④",
+        "cite": {
+          "chunk_id": "p710-x21",
+          "quote": "단열 지지대 및 관 지지대 설치시에는 별도 계상한다."
+        }
+      },
+      {
+        "item": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용",
+        "source": "PDF 654쪽 1-4-2 [주] ⑥",
+        "cite": {
+          "chunk_id": "p710-x21",
+          "quote": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 (인력시공)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p710-x21",
+          "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 인력품의 2%(인력시공)"
+        }
+      },
+      {
+        "name": "공구손료 및 경장비 (고소작업대 시공)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.10",
+        "cite": {
+          "chunk_id": "p710-x21",
+          "quote": "10%(자체 추진 고소작업대(시저형)시공)로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 관규격별 일일시공량이 표로 제시되어 있어 adjusted_daily_crew 모델 적용이 적합함.",
+  "citations": [
+    {
+      "table_id": "p710-t1"
+    },
+    {
+      "chunk_id": "p710-x21",
+      "quote": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+    },
+    {
+      "chunk_id": "p710-x21",
+      "quote": "단열 지지대 및 관 지지대 설치시에는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p710-x21",
+      "quote": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p710-x21",
+      "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 인력품의 2%(인력시공)"
+    },
+    {
+      "chunk_id": "p710-x21",
+      "quote": "10%(자체 추진 고소작업대(시저형)시공)로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "cost_rules에 조건부(고소작업대 사용 여부에 따른 2% 또는 10% 적용)를 표현할 수 없어 두 규칙을 모두 포함함.",
+    "adjusted_daily_crew의 column_input에 고정 문자열('시공량', '인원')을 사용하여 1차원 표를 참조하도록 구성함. 이것이 허용되지 않는다면 calc_type을 not_calculable로 변경해야 함."
+  ],
+  "questions": [
+    "관규격 100mm 수밀밴드 접합 50개소 시공 시 품은 어떻게 되나요?",
+    "고소작업대를 사용하여 시공할 때 기계경비는 어떻게 산정하나요?",
+    "수밀밴드 접합 시공 시 품을 계산해주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:25:40.537756+00:00",
+    "input_tokens": 11978,
+    "output_tokens": 2721,
+    "source_pages": [
+      710,
+      711
+    ],
+    "prompt_sha256": "576ae34192e9cb931d666b3a440dc4483bd5caced184f1698b5541c1675fa79d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

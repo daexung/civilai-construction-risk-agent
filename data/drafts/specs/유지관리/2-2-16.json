@@ -1,0 +1,90 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-2-16/목침목탄성체결장치철거",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-2-16",
+    "title": "목침목 탄성체결장치 철거",
+    "work": "목침목 탄성체결장치 철거 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "작업할 침목 개소는 몇 개입니까?",
+        "source": "PDF 1쪽 2-2-16 표 단위 (침목 개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p957-t1",
+        "role": "목침목 탄성체결장치 철거 품",
+        "source": "PDF 1쪽 2-2-16 표",
+        "unit": "인",
+        "values": {},
+        "cite": {
+          "table_id": "p957-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과에 표의 직종 및 수치 데이터가 누락되어 계산식을 구성할 수 없습니다."
+      ],
+      "source": "PDF 1쪽 2-2-16",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에 표의 직종(궤도공, 보통인부) 및 수치 데이터가 누락되어 단위당 품을 계산식에 포함할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p957-t1"
+    },
+    {
+      "chunk_id": "p957-x7",
+      "quote": "[주] ① 본 품은 목침목에 탄성체결장치를 설치 또는 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p957-x7",
+      "quote": "② 나사 스파이크 풀기, 레일 들기, 체결장치 철거 품을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p957-t1)에 표의 행(궤도공, 보통인부)과 수치(0.028, 0.022)가 누락되어 있어 계산 명세에 포함할 수 없습니다."
+  ],
+  "questions": [
+    "목침목 탄성체결장치 철거 시 단위당 품은 어떻게 되나요?",
+    "탄성체결장치 설치 시에도 이 품을 동일하게 적용하나요?",
+    "작업할 침목 개소는 몇 개입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:53:50.287753+00:00",
+    "input_tokens": 23072,
+    "output_tokens": 2023,
+    "source_pages": [
+      957,
+      958
+    ],
+    "prompt_sha256": "688f2526a048c43865cc077e583ae52ccc2293be28e874478ad6116f264dd816",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

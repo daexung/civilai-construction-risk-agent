@@ -1,0 +1,287 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-1-1/레디믹스트콘크리트타설",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-1-1",
+    "title": "레디믹스트콘크리트 타설('24년 보완)",
+    "work": "기본 타설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      129
+    ],
+    "inputs": [
+      {
+        "name": "placement_method",
+        "type": "enum",
+        "allowed_values": [
+          "인력운반 타설",
+          "장비사용 타설"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "타설 유형은 인력운반 타설과 장비사용 타설 중 무엇입니까?",
+        "source": "PDF 129쪽 6-1-1 표 구분",
+        "synonyms": {
+          "인력운반 타설": [
+            "인력운반",
+            "인력"
+          ],
+          "장비사용 타설": [
+            "장비사용",
+            "장비"
+          ]
+        }
+      },
+      {
+        "name": "structure",
+        "type": "enum",
+        "allowed_values": [
+          "무근구조물",
+          "철근구조물"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "무근구조물과 철근구조물 중 어느 구조물입니까?",
+        "source": "PDF 129쪽 6-1-1 표 시공량 구분",
+        "synonyms": {
+          "무근구조물": [
+            "무근",
+            "무근콘크리트"
+          ],
+          "철근구조물": [
+            "철근",
+            "철근콘크리트",
+            "RC"
+          ]
+        }
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "콘크리트 타설 물량은 몇 ㎥입니까?",
+        "source": "PDF 129쪽 6-1-1 표 시공량 단위"
+      },
+      {
+        "name": "scattered_small_volume",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "개소별 소량(12㎥ 이하)의 타설 위치가 산재되어 있습니까?",
+        "source": "PDF 129쪽 6-1-1 표 비고"
+      },
+      {
+        "name": "concrete_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "레미콘은 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "관급/사급 구분과 처리 방식은 실무 확인 전",
+        "synonyms": {
+          "관급": [
+            "관급자재",
+            "지급자재",
+            "발주처 지급"
+          ],
+          "사급": [
+            "사급자재",
+            "시공사 구매",
+            "자체 구매"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p185-t0",
+        "role": "타설 유형별 작업조 인원/장비 및 기준 일일시공량",
+        "source": "PDF 129쪽 6-1-1 표",
+        "unit": "인/작업조; 대/작업조; ㎥/일",
+        "values": {
+          "무근구조물": {
+            "인력운반 타설": "23",
+            "장비사용 타설": "63"
+          },
+          "철근구조물": {
+            "인력운반 타설": "20",
+            "장비사용 타설": "55"
+          },
+          "콘크리트공": {
+            "인력운반 타설": "3",
+            "장비사용 타설": "3"
+          },
+          "보통인부": {
+            "인력운반 타설": "3",
+            "장비사용 타설": "1"
+          },
+          "굴착기": {
+            "인력운반 타설": "0",
+            "장비사용 타설": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p185-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p185-t0",
+          "row_input": "structure",
+          "column_input": "placement_method"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p185-t0",
+          "column_input": "placement_method",
+          "trades": [
+            "콘크리트공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "콘크리트공": "1013",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "굴착기",
+          "table": "p185-t0",
+          "unit": "대·일",
+          "machine_code_input": "placement_method",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p185-t0에서 타설 유형과 구조물에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 타설 유형별 직종 인원, 장비 대·일 = 작업일수 × 타설 유형별 장비 대수로 구한다."
+      ],
+      "source": "PDF 129쪽 6-1-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "scattered_small_volume == true",
+        "blocked_if": {
+          "input": "scattered_small_volume",
+          "op": "==",
+          "value": true
+        },
+        "reason": "개소별 소량(12㎥ 이하)의 타설 위치가 산재하는 경우 시공량을 '50%까지 감하여' 적용한다고 명시되어 있어, 정확한 감산 비율을 특정할 수 없음",
+        "source": "PDF 129쪽 6-1-1 표 비고",
+        "cite": {
+          "table_id": "p185-t0"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "표면 마무리",
+        "source": "PDF 129쪽 6-1-1 [주] ②",
+        "cite": {
+          "chunk_id": "p185-x8",
+          "quote": "② 미장공에 의한 표면 마무리가 필요한 경우 ‘[공통부문] 6-1-3 표면 마무리’를 따른다."
+        }
+      },
+      {
+        "item": "양생",
+        "source": "PDF 129쪽 6-1-1 [주] ③",
+        "cite": {
+          "chunk_id": "p185-x8",
+          "quote": "③ 양생은 양생방법 및 시간을 고려하여 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [
+      {
+        "item": "레미콘(콘크리트) 재료비",
+        "input": "concrete_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "미산정",
+            "reason": "지역별 레미콘 단가 미입력"
+          }
+        },
+        "source": "관급/사급 구분과 처리 방식은 실무 확인 전",
+        "cite": {
+          "table_id": "p185-t0"
+        }
+      }
+    ],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p185-x8",
+          "quote": "④ 공구손료 및 경장비(콘크리트 진동기 등) 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조의 인원 및 장비와 기준 일일시공량이 표로 제시되어 있어, 물량을 시공량으로 나누어 작업일수를 구하는 방식이 적합함.",
+  "citations": [
+    {
+      "table_id": "p185-t0"
+    },
+    {
+      "chunk_id": "p185-x8",
+      "quote": "② 미장공에 의한 표면 마무리가 필요한 경우 ‘[공통부문] 6-1-3 표면 마무리’를 따른다."
+    },
+    {
+      "chunk_id": "p185-x8",
+      "quote": "③ 양생은 양생방법 및 시간을 고려하여 별도 계상한다."
+    },
+    {
+      "chunk_id": "p185-x8",
+      "quote": "④ 공구손료 및 경장비(콘크리트 진동기 등) 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "'50%까지 감하여'의 정확한 감산 비율 기준이 명시되지 않아 계산을 보류함."
+  ],
+  "questions": [
+    "인력운반 타설과 장비사용 타설의 차이는 무엇인가요?",
+    "개소별 소량 타설 시 '50%까지 감하여' 적용한다고 되어 있는데, 정확히 몇 %를 감해야 하나요?",
+    "레미콘 자재비는 어떻게 처리되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:27:57.092288+00:00",
+    "input_tokens": 11867,
+    "output_tokens": 2766,
+    "source_pages": [
+      185,
+      186
+    ],
+    "prompt_sha256": "559d72cf5e16ad2f68fad5fc1038f5e8077a19b6b84d81e9039e44cfeef6c0d3",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

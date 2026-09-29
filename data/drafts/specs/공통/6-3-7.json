@@ -1,0 +1,198 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-3-7/알루미늄폼_설치_해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-3-7",
+    "title": "알루미늄폼 설치 및 해체",
+    "work": "알루미늄폼 조립 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      141
+    ],
+    "inputs": [
+      {
+        "name": "layer_type",
+        "type": "enum",
+        "allowed_values": [
+          "셋팅층",
+          "마감층",
+          "일반층"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업하는 층은 셋팅층, 마감층, 일반층 중 어디에 해당합니까?",
+        "source": "PDF 141쪽 1. 적용범위 표 및 2. 설치 및 해체 표",
+        "decision_table": "p197-t0"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "적용면적은 몇 ㎡입니까?",
+        "source": "PDF 141쪽 2. 설치 및 해체 표의 시공량 단위"
+      },
+      {
+        "name": "section_change",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단면의 형태 및 크기에 변화가 발생합니까?",
+        "source": "PDF 141쪽 1. 적용범위 하단 설명"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p197-t0",
+        "role": "구조물별 적용면적 기준",
+        "source": "PDF 141쪽 1. 적용범위 표",
+        "values": {
+          "셋팅층": {
+            "적용면적(㎡)": "알루미늄폼이 설치되는 최저층"
+          },
+          "마감층": {
+            "적용면적(㎡)": "알루미늄폼이 해체되는 최상층"
+          },
+          "일반층": {
+            "적용면적(㎡)": "전체층수-2개층(셋팅층, 마감층)"
+          }
+        },
+        "cite": {
+          "table_id": "p197-t0"
+        }
+      },
+      {
+        "id": "p197-t1",
+        "role": "층별 설치 및 해체 일당 작업조 및 시공량",
+        "source": "PDF 141쪽 2. 설치 및 해체 표",
+        "unit": "인/일, ㎡/일",
+        "values": {
+          "셋팅층": {
+            "형틀목공": "4",
+            "보통인부": "1",
+            "시공량(㎡)": "30"
+          },
+          "마감층": {
+            "형틀목공": "4",
+            "보통인부": "1",
+            "시공량(㎡)": "40"
+          },
+          "일반층": {
+            "형틀목공": "4",
+            "보통인부": "1",
+            "시공량(㎡)": "70"
+          }
+        },
+        "cite": {
+          "table_id": "p197-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "입력받은 layer_type에 따라 p197-t1에서 일당 시공량과 직종별 인원(형틀목공 4인, 보통인부 1인)을 확인한다.",
+        "작업일수 = area ÷ 일당 시공량으로 계산한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 141쪽 2. 설치 및 해체 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "단면의 형태 및 크기에 변화가 발생하는 경우",
+        "blocked_if": {
+          "input": "section_change",
+          "op": "==",
+          "value": true
+        },
+        "reason": "단면 변화 발생 시 현장 여건에 따라 '셋팅층 및 마감층의 설치 및 해체'를 조정하여 별도 계상해야 함",
+        "source": "PDF 141쪽 1. 적용범위 하단",
+        "cite": {
+          "chunk_id": "p197-x4",
+          "quote": "본 품은 단면에 변화가 없는 기준이며, 단면의 형태 및 크기에 변화가 발생되는 경우 현장 여건에\n설명 | 따라 ‘셋팅층 및 마감층의 설치 및 해체’를 조정하여 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "동바리 설치 및 해체",
+        "source": "PDF 141쪽 1. 적용범위",
+        "cite": {
+          "chunk_id": "p197-x0",
+          "quote": "동바리 설치 및 해체는 별도 계상한다."
+        }
+      },
+      {
+        "item": "재료 및 기계경비",
+        "source": "PDF 141쪽 1. 적용범위",
+        "cite": {
+          "chunk_id": "p197-x0",
+          "quote": "재료 및 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "일당 작업조와 시공량이 층별로 제시되어 있으나, 표 구조가 직종과 시공량이 혼합된 형태여서 현재의 adjusted_daily_crew 파라미터(row_input, column_input)로 자동 매핑하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p197-t0",
+      "row": "셋팅층",
+      "column": "적용면적(㎡)",
+      "value": "알루미늄폼이 설치되는 최저층"
+    },
+    {
+      "table_id": "p197-t1",
+      "row": "셋팅층",
+      "column": "시공량(㎡)",
+      "value": "30"
+    },
+    {
+      "chunk_id": "p197-x4",
+      "quote": "본 품은 단면에 변화가 없는 기준이며, 단면의 형태 및 크기에 변화가 발생되는 경우 현장 여건에\n설명 | 따라 ‘셋팅층 및 마감층의 설치 및 해체’를 조정하여 별도 계상한다."
+    },
+    {
+      "chunk_id": "p197-x0",
+      "quote": "동바리 설치 및 해체는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p197-x0",
+      "quote": "재료 및 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "p197-t1 표의 구조가 직종과 시공량이 혼합되어 있어, adjusted_daily_crew 모델의 파라미터로 정확히 매핑하기 위해 표를 재구성하는 것이 허용되는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "알루미늄폼 마감층의 일당 시공량은 얼마인가요?",
+    "단면 크기에 변화가 있는 층의 알루미늄폼 설치 품은 어떻게 계산하나요?",
+    "알루미늄폼 설치 시 동바리 설치 품도 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:36:31.296390+00:00",
+    "input_tokens": 24423,
+    "output_tokens": 4943,
+    "source_pages": [
+      197,
+      198
+    ],
+    "prompt_sha256": "d31458a44e4cfa74fe5f6ff00c0967b5eebf179ff8ca15218d8f279c0dd4fb01",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

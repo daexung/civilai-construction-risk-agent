@@ -1,0 +1,285 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-4-12/CCTV조사",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-4-12",
+    "title": "CCTV조사('12, '18, '21, '22년 보완)",
+    "work": "CCTV조사 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      908
+    ],
+    "inputs": [
+      {
+        "name": "pipe_type",
+        "type": "enum",
+        "allowed_values": [
+          "시공량(m) 신설관",
+          "시공량(m) 기존관"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조사 대상 관로는 신설관입니까, 기존관입니까?",
+        "source": "2-4-12 표 시공량 구분",
+        "synonyms": {
+          "시공량(m) 신설관": [
+            "신설관"
+          ],
+          "시공량(m) 기존관": [
+            "기존관"
+          ]
+        }
+      },
+      {
+        "name": "length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "CCTV 조사 길이는 몇 m입니까?",
+        "source": "2-4-12 표 시공량 단위"
+      },
+      {
+        "name": "pipe_diameter",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "mm",
+        "required": true,
+        "ask": "하수관거의 관경은 몇 mm입니까?",
+        "source": "[주] ①"
+      },
+      {
+        "name": "delay_factor",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "관로 내외부 지장물(맨홀뚜껑 차폐, 관로내 지장물 등)로 인해 CCTV 촬영이 지연됩니까?",
+        "source": "[주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p964-t1",
+        "role": "CCTV조사 작업조 인원 및 장비 대수, 일일시공량",
+        "source": "2-4-12 CCTV조사 표",
+        "values": {
+          "특별인부": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(m) 신설관": "520",
+            "시공량(m) 기존관": "320"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(m) 신설관": "520",
+            "시공량(m) 기존관": "320"
+          },
+          "자주식촬영장치": {
+            "규격": "CCTV",
+            "단위": "대",
+            "수량": "1"
+          },
+          "적재차": {
+            "규격": "9인승 승합차",
+            "단위": "대",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p964-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p964-t1",
+          "row": "특별인부",
+          "column_input": "pipe_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p964-t1",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "자주식촬영장치",
+            "table": "p964-t1",
+            "unit": "대·일",
+            "column": "수량"
+          },
+          {
+            "name": "적재차",
+            "table": "p964-t1",
+            "unit": "대·일",
+            "column": "수량"
+          }
+        ],
+        "quantity_input": "length"
+      },
+      "steps": [
+        "p964-t1에서 관로 종류(신설관/기존관)에 따른 기준 일일시공량을 찾는다.",
+        "작업일수 = length ÷ 일일시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p964-t1의 수량으로 구한다.",
+        "장비 대·일 = 작업일수 × p964-t1의 수량으로 구한다."
+      ],
+      "source": "2-4-12 CCTV조사 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "관경이 1,000mm 이상인 경우",
+        "blocked_if": {
+          "input": "pipe_diameter",
+          "op": ">=",
+          "value": 1000
+        },
+        "reason": "본 품은 1,000㎜미만의 하수관거 CCTV 조사 기준이므로 1,000mm 이상은 적용 불가",
+        "source": "[주] ①",
+        "cite": {
+          "chunk_id": "p964-x14",
+          "quote": "① 본 품은 1,000㎜미만의 하수관거 CCTV 조사 기준이다."
+        }
+      },
+      {
+        "condition": "지장물로 인해 촬영이 지연되는 경우",
+        "blocked_if": {
+          "input": "delay_factor",
+          "op": "==",
+          "value": true
+        },
+        "reason": "시공량을 감하여 적용할 수 있다고 명시되어 있으나, 구체적인 감산 비율이 없어 자동 계산 불가",
+        "source": "[주] ③",
+        "cite": {
+          "chunk_id": "p964-x14",
+          "quote": "③ 관로 내외부 지장물(맨홀뚜껑 차폐, 관로내 지장물 등)로 인해 CCTV 촬영이 지연되는 경우 시공량을\n설명 | 감하여 적용할 수 있다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "조사 보고서 작성(내업) 등의 기술인력",
+        "source": "[주] ④",
+        "cite": {
+          "chunk_id": "p964-x14",
+          "quote": "④ 본 품은 현장에서 CCTV를 활용한 조사 데이터 수집만을 포함하며, 조사 보고서 작성(내업) 등의\n설명 | 기술인력은 제외되어 있다."
+        }
+      },
+      {
+        "item": "CCTV외 별도의 기구",
+        "source": "[주] ⑤",
+        "cite": {
+          "chunk_id": "p964-x14",
+          "quote": "⑤ CCTV외 별도의 기구가 필요한 경우 별도 계상한다."
+        }
+      },
+      {
+        "item": "장비(자주식 촬영장치, 적재차)의 기계경비",
+        "source": "[주] ⑥",
+        "cite": {
+          "chunk_id": "p964-x14",
+          "quote": "⑥ 장비(자주식 촬영장치, 적재차)의 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일일시공량과 작업조 인원/장비가 표로 주어져 있어 작업일수를 구한 뒤 곱하는 전형적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p964-t1",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p964-t1",
+      "row": "특별인부",
+      "column": "시공량(m) 신설관",
+      "value": "520"
+    },
+    {
+      "table_id": "p964-t1",
+      "row": "특별인부",
+      "column": "시공량(m) 기존관",
+      "value": "320"
+    },
+    {
+      "table_id": "p964-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p964-t1",
+      "row": "자주식촬영장치",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p964-t1",
+      "row": "적재차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p964-x14",
+      "quote": "① 본 품은 1,000㎜미만의 하수관거 CCTV 조사 기준이다."
+    },
+    {
+      "chunk_id": "p964-x14",
+      "quote": "③ 관로 내외부 지장물(맨홀뚜껑 차폐, 관로내 지장물 등)로 인해 CCTV 촬영이 지연되는 경우 시공량을\n설명 | 감하여 적용할 수 있다."
+    },
+    {
+      "chunk_id": "p964-x14",
+      "quote": "④ 본 품은 현장에서 CCTV를 활용한 조사 데이터 수집만을 포함하며, 조사 보고서 작성(내업) 등의\n설명 | 기술인력은 제외되어 있다."
+    },
+    {
+      "chunk_id": "p964-x14",
+      "quote": "⑤ CCTV외 별도의 기구가 필요한 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p964-x14",
+      "quote": "⑥ 장비(자주식 촬영장치, 적재차)의 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 '특별인부 보통인부'가 한 행으로 합쳐져 있어, 이를 '특별인부'와 '보통인부'로 분리하여 표 데이터를 구성했습니다. 원문과 파싱 결과의 불일치로 인한 잠재적 문제가 있을 수 있습니다."
+  ],
+  "questions": [
+    "신설관 300m를 CCTV로 조사할 때 필요한 인력과 장비는 어떻게 되나요?",
+    "관로 내 지장물 때문에 촬영이 지연되었는데, 시공량을 얼마나 감산해야 하나요?",
+    "관경이 1,200mm인 하수관거를 조사할 때도 이 품셈을 적용할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:25.570400+00:00",
+    "input_tokens": 23571,
+    "output_tokens": 5822,
+    "source_pages": [
+      964,
+      965
+    ],
+    "prompt_sha256": "0dbd85bfae4c671ac9504d541051b2e919aae7b5e7c01da25929721140360193",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

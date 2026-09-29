@@ -1,0 +1,208 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-11-1/건축물보양",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-11-1",
+    "title": "건축물보양",
+    "work": "보양재 설치 및 철거",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      61
+    ],
+    "inputs": [
+      {
+        "name": "protection_type",
+        "type": "enum",
+        "allowed_values": [
+          "부직포 깔기",
+          "보양지 붙이기",
+          "목재 붙이기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 종류의 보양 작업을 수행합니까?",
+        "source": "PDF 61쪽 2-11-1 표 헤더",
+        "synonyms": {
+          "부직포 깔기": [
+            "부직포깔기"
+          ],
+          "보양지 붙이기": [
+            "보양지붙이기"
+          ],
+          "목재 붙이기": [
+            "목재붙이기"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "보양면적은 몇 ㎡입니까?",
+        "source": "PDF 61쪽 2-11-1 표 단위 (보양면적 ㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p117-t0",
+        "role": "보양 종류별 단위당 노무량",
+        "source": "PDF 61쪽 2-11-1 첫 번째 표",
+        "unit": "인/㎡",
+        "values": {
+          "건축목공": {
+            "목재 붙이기": "0.03"
+          },
+          "보통인부": {
+            "부직포 깔기": "0.003",
+            "보양지 붙이기": "0.01"
+          }
+        },
+        "cite": {
+          "table_id": "p117-t0"
+        }
+      },
+      {
+        "id": "p117-t1",
+        "role": "보양 종류별 단위당 재료량",
+        "source": "PDF 61쪽 2-11-1 두 번째 표",
+        "unit": "㎡, kg, ㎥",
+        "values": {
+          "부직포": {
+            "부직포깔기": "1.10"
+          },
+          "하드롱지": {
+            "보양지붙이기": "1.20"
+          },
+          "풀": {
+            "보양지붙이기": "0.06"
+          },
+          "목재": {
+            "목재붙이기": "0.007"
+          },
+          "못": {
+            "목재붙이기": "0.02"
+          }
+        },
+        "cite": {
+          "table_id": "p117-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p117-t0",
+          "row_input": "고정 행이름",
+          "column_input": "protection_type",
+          "trades": [
+            "건축목공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p117-t0에서 protection_type에 해당하는 직종별 단위당 노무량을 찾는다.",
+        "p117-t1에서 protection_type에 해당하는 단위당 재료량을 찾는다.",
+        "area(보양면적)를 곱하여 총 노무량과 총 재료량을 구한다."
+      ],
+      "source": "PDF 61쪽 2-11-1 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 노무량과 재료량이 표에 직접 제시되어 있어 물량을 곱하는 방식으로 계산 가능합니다.",
+  "citations": [
+    {
+      "table_id": "p117-t0",
+      "row": "건축목공",
+      "column": "목재 붙이기",
+      "value": "0.03"
+    },
+    {
+      "table_id": "p117-t0",
+      "row": "보통인부",
+      "column": "부직포 깔기",
+      "value": "0.003"
+    },
+    {
+      "table_id": "p117-t0",
+      "row": "보통인부",
+      "column": "보양지 붙이기",
+      "value": "0.01"
+    },
+    {
+      "table_id": "p117-t1",
+      "row": "부직포",
+      "column": "부직포깔기",
+      "value": "1.10"
+    },
+    {
+      "table_id": "p117-t1",
+      "row": "하드롱지",
+      "column": "보양지붙이기",
+      "value": "1.20"
+    },
+    {
+      "table_id": "p117-t1",
+      "row": "풀",
+      "column": "보양지붙이기",
+      "value": "0.06"
+    },
+    {
+      "table_id": "p117-t1",
+      "row": "목재",
+      "column": "목재붙이기",
+      "value": "0.007"
+    },
+    {
+      "table_id": "p117-t1",
+      "row": "못",
+      "column": "목재붙이기",
+      "value": "0.02"
+    },
+    {
+      "chunk_id": "p117-x6",
+      "quote": "본 품은 시공부위의 파손 및 오염을 방지하기 위하여 보양재를 설치 및 철거하는 기준이다."
+    },
+    {
+      "chunk_id": "p117-x6",
+      "quote": "보양재는 신품을 기준하며, 재료의 손율은 100%를 적용한다."
+    }
+  ],
+  "open_questions": [
+    "보양지 붙이기 작업 시 천막지, 골판지 등을 사용할 경우 재료량 산출 기준이 명확하지 않음 (하드롱지 기준만 제시됨)."
+  ],
+  "questions": [
+    "부직포 깔기 100㎡ 작업 시 보통인부 품은 얼마인가요?",
+    "보양지 붙이기 작업에 천막지를 사용할 경우 재료량은 어떻게 계산하나요?",
+    "보양면적은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:32.760306+00:00",
+    "input_tokens": 11742,
+    "output_tokens": 1904,
+    "source_pages": [
+      117,
+      118
+    ],
+    "prompt_sha256": "fcdb692dad9c914d1be76bec8009de2592b7d43887f55f02e65ce54790e23add",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

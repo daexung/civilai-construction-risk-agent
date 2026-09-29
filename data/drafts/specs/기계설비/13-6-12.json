@@ -1,0 +1,154 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-12/Roller_Gate_Guide_Metal_설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-12",
+    "title": "Roller Gate Guide Metal 설치",
+    "work": "공정별 설치품 및 소모자재",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      871,
+      872,
+      873
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "설치 물량은 몇 ton입니까?",
+        "source": "PDF 871쪽 1. 공정별 설치품 기준 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p871-t2",
+        "role": "공정별 설치품 (1)",
+        "source": "PDF 871쪽 1. 공정별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "기술지도 박스해체 검측 수정및교정": {
+            "기계기사": "5.33",
+            "목공": "0.34",
+            "특별인부": "0.17",
+            "플랜트기계설치공": "0.34"
+          }
+        },
+        "cite": {
+          "table_id": "p871-t2"
+        }
+      },
+      {
+        "id": "p872-t0",
+        "role": "공정별 설치품 (2)",
+        "source": "PDF 872쪽 1. 공정별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "설 치 준 비 Chipping 가설장비설치 앵커바정리작업 조립 센터링 거푸집하부용 앵커설치 검사기록 도장준비도장 뒷정리 전기설비,설치유지비 철거": {
+            "석공": "1.15",
+            "특별인부": "4.25",
+            "플랜트기계설치공": "0.34",
+            "플랜트배관공": "0.19",
+            "산소절단공": "0.22",
+            "플랜트용접공": "4.9",
+            "특수비계공": "0.22",
+            "측량사": "0.29",
+            "측량조수": "0.29",
+            "도장공": "0.067",
+            "플랜트전공": "4.25"
+          }
+        },
+        "cite": {
+          "table_id": "p872-t0"
+        }
+      },
+      {
+        "id": "p873-t0",
+        "role": "소모자재",
+        "source": "PDF 873쪽 2. 소모자재",
+        "unit": "병, ㎏, ℓ / ton",
+        "values": {
+          "절단및수정 전기용접 도장": {
+            "산소": "0.69병",
+            "아세틸렌": "0.2병",
+            "용접봉": "31.05㎏",
+            "Tar Epoxy": "0.536ℓ"
+          }
+        },
+        "cite": {
+          "table_id": "p873-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱된 표의 행 이름이 여러 공정으로 병합되어 있고, 동일 직종이 여러 번 중복 등장하여 기계적인 합산이 불가능합니다.",
+        "원문 표를 참조하여 각 공정별 직종 수량을 직접 합산한 후 물량(ton)을 곱하여 산출해야 합니다."
+      ],
+      "source": "PDF 871~873쪽",
+      "rounding": "단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "제공된 파싱 결과에서 공정별 행 이름이 하나로 뭉쳐져 있고, 동일 직종이 여러 번 중복 등장하여 기계적인 표 룩업 및 합산이 불가능합니다.",
+  "citations": [
+    {
+      "table_id": "p871-t2",
+      "row": "기술지도 박스해체 검측 수정및교정",
+      "column": "기계기사",
+      "value": "5.33"
+    },
+    {
+      "table_id": "p872-t0",
+      "row": "설 치 준 비 Chipping 가설장비설치 앵커바정리작업 조립 센터링 거푸집하부용 앵커설치 검사기록 도장준비도장 뒷정리 전기설비,설치유지비 철거",
+      "column": "석공",
+      "value": "1.15"
+    },
+    {
+      "table_id": "p873-t0",
+      "row": "절단및수정 전기용접 도장",
+      "column": "산소",
+      "value": "0.69병"
+    },
+    {
+      "chunk_id": "p873-x6",
+      "quote": "산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 공정별 행 이름이 하나로 뭉쳐져 있고 직종이 중복되어, 각 공정별 정확한 품을 기계적으로 분리해낼 수 없습니다. JSON 객체 특성상 중복 키는 마지막 값으로 덮어씌워지므로 데이터 유실이 발생합니다."
+  ],
+  "questions": [
+    "Roller Gate Guide Metal 설치 시 ton당 기계기사 품은 얼마인가요?",
+    "소모자재 중 산소의 규격 기준은 무엇인가요?",
+    "각 세부 공정별(예: 박스해체, 검측 등) 품을 따로 산정해야 할 경우 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:13.300658+00:00",
+    "input_tokens": 15940,
+    "output_tokens": 1700,
+    "source_pages": [
+      871,
+      872,
+      873,
+      874
+    ],
+    "prompt_sha256": "e00687810458894cc1579d5ab6be02a8bd27c07fa46a30fb243e492dc0e31d08",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

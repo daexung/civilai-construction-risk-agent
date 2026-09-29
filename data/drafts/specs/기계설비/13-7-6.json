@@ -1,0 +1,187 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-7-6/주선기본체및부속기기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-7-6",
+    "title": "주선기 본체 및 부속기기 설치",
+    "work": "주선기 본체 및 부속기기 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      826
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "설치할 주선기 본체 및 부속기기의 중량은 몇 ton입니까?",
+        "source": "PDF 826쪽 13-7-6 표 단위 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p882-t0",
+        "role": "주선기 본체 및 부속기기 설치 단위당 품",
+        "source": "PDF 826쪽 13-7-6 표",
+        "unit": "인/ton",
+        "values": {
+          "기계산업기사": {
+            "수량": "0.55"
+          },
+          "플랜트기계설치공": {
+            "수량": "4.11"
+          },
+          "플랜트제관공": {
+            "수량": "0.29"
+          },
+          "플랜트용접공": {
+            "수량": "1.14"
+          },
+          "철골공": {
+            "수량": "1.40"
+          },
+          "비계공": {
+            "수량": "1.74"
+          },
+          "특별인부": {
+            "수량": "2.48"
+          },
+          "계": {
+            "수량": "11.71"
+          }
+        },
+        "cite": {
+          "table_id": "p882-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p882-t0",
+          "column_input": "수량",
+          "trades": [
+            "기계산업기사",
+            "플랜트기계설치공",
+            "플랜트제관공",
+            "플랜트용접공",
+            "철골공",
+            "비계공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 826쪽 13-7-6 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기기본체 및 부속기기에 붙은 곳까지의 설치 배관 공사",
+        "source": "PDF 826쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p882-x9",
+          "quote": "본 품에는 기기본체 및 부속기기에 붙은 곳까지의 설치 배관 공사는 제외되어 있다."
+        }
+      },
+      {
+        "item": "소운반 및 도장품",
+        "source": "PDF 826쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p882-x9",
+          "quote": "본 품에는 소운반 및 도장품이 제외되어 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 인원이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p882-t0",
+      "row": "기계산업기사",
+      "column": "수량",
+      "value": "0.55"
+    },
+    {
+      "table_id": "p882-t0",
+      "row": "플랜트기계설치공",
+      "column": "수량",
+      "value": "4.11"
+    },
+    {
+      "table_id": "p882-t0",
+      "row": "플랜트제관공",
+      "column": "수량",
+      "value": "0.29"
+    },
+    {
+      "table_id": "p882-t0",
+      "row": "플랜트용접공",
+      "column": "수량",
+      "value": "1.14"
+    },
+    {
+      "table_id": "p882-t0",
+      "row": "철골공",
+      "column": "수량",
+      "value": "1.40"
+    },
+    {
+      "table_id": "p882-t0",
+      "row": "비계공",
+      "column": "수량",
+      "value": "1.74"
+    },
+    {
+      "table_id": "p882-t0",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "2.48"
+    },
+    {
+      "chunk_id": "p882-x9",
+      "quote": "본 품에는 기기본체 및 부속기기에 붙은 곳까지의 설치 배관 공사는 제외되어 있다."
+    },
+    {
+      "chunk_id": "p882-x9",
+      "quote": "본 품에는 소운반 및 도장품이 제외되어 있다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "주선기 본체 설치 시 물량 단위는 무엇인가요?",
+    "기기본체에 붙은 곳까지의 배관 공사는 어떻게 산정하나요?",
+    "설치할 주선기의 총 중량(ton)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:35:58.402677+00:00",
+    "input_tokens": 11702,
+    "output_tokens": 1690,
+    "source_pages": [
+      882,
+      883
+    ],
+    "prompt_sha256": "072d3a32cbc295306db32ef980b0b8c1ae960cc7008e7e2dfe9f90d2e1440a31",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

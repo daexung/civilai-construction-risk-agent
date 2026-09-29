@@ -1,0 +1,185 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-4-3/도배교체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-4-3",
+    "title": "도배 교체('22년 신설)",
+    "work": "도배 교체 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      919
+    ],
+    "inputs": [
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "벽",
+          "천장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도배 교체 부위는 벽과 천장 중 어디입니까?",
+        "source": "PDF 919쪽 3-4-3 표 시공량 구분",
+        "synonyms": {
+          "벽": [
+            "벽면"
+          ],
+          "천장": [
+            "천정"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "도배 교체 면적은 몇 ㎡입니까?",
+        "source": "PDF 919쪽 3-4-3 표 시공량 단위"
+      },
+      {
+        "name": "has_obstacles",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용중인 세대로 가구 등의 지장물이 있습니까?",
+        "source": "PDF 919쪽 3-4-3 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p975-t2",
+        "role": "도배 교체 일당 시공량 및 인원",
+        "source": "PDF 919쪽 3-4-3 표",
+        "unit": "인, ㎡/일",
+        "values": {
+          "내장공": {
+            "인원": "2",
+            "벽": "46",
+            "천장": "35"
+          }
+        },
+        "cite": {
+          "table_id": "p975-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p975-t2",
+          "row": "내장공",
+          "column_input": "surface_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p975-t2",
+          "column": "인원",
+          "trades": [
+            "내장공"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p975-t2에서 부위(벽/천장)별 기준시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "내장공 인·일 = 작업일수 × 내장공 인원(2인)으로 구한다."
+      ],
+      "source": "PDF 919쪽 3-4-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "has_obstacles == true",
+        "blocked_if": {
+          "input": "has_obstacles",
+          "op": "==",
+          "value": true
+        },
+        "reason": "사용중인 세대로 가구 등의 지장물이 있는 경우 시공량의 15%를 감산해야 하나, 현재 daily_crew 모델에 계수표 없이 직접 수식으로 시공량을 감산하는 기능이 없어 자동 계산 보류",
+        "source": "PDF 919쪽 3-4-3 표 비고",
+        "cite": {
+          "table_id": "p975-t2"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "가구 등 지장물의 운반",
+        "source": "PDF 919쪽 3-4-3 [주] ③",
+        "cite": {
+          "chunk_id": "p975-x16",
+          "quote": "③ 가구 등 지장물의 운반은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(내장공 2인)와 일일 시공량(벽 46, 천장 35)이 명시되어 있으므로 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p975-t2",
+      "row": "내장공",
+      "column": "수량 2",
+      "value": "2"
+    },
+    {
+      "table_id": "p975-t2",
+      "row": "내장공",
+      "column": "시공량(㎡) 벽 46",
+      "value": "46"
+    },
+    {
+      "table_id": "p975-t2",
+      "row": "내장공",
+      "column": "시공량(㎡) 천장 35",
+      "value": "35"
+    },
+    {
+      "table_id": "p975-t2",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 사용중인 세대로 가구 등의 지장물이 있는 경우 시공량의 15%를 감한다."
+    },
+    {
+      "chunk_id": "p975-x16",
+      "quote": "③ 가구 등 지장물의 운반은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비고란의 '시공량의 15%를 감한다'는 조건을 daily_crew 모델에서 별도의 계수표 없이 직접 수식으로 적용할 수 있는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "벽면 도배 교체 물량이 100㎡일 때 내장공 품은 얼마인가요?",
+    "사용중인 세대라서 가구가 있는데 품 할증은 어떻게 계산하나요?",
+    "도배지 해체 작업도 이 품에 포함되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:27.156079+00:00",
+    "input_tokens": 11518,
+    "output_tokens": 1726,
+    "source_pages": [
+      975,
+      976
+    ],
+    "prompt_sha256": "25f7aa4c0b62fa0348fecc05c4b2a1baffe4588678c514789c9a53645aad94f6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

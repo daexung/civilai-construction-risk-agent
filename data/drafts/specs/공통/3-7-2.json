@@ -1,0 +1,281 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-7-2/지압판블록설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-7-2",
+    "title": "지압판블록 설치('20년 신설, '25년 보완)",
+    "work": "지압판블록 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      79
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "지압판블록 설치 물량은 몇 개소입니까?",
+        "source": "PDF 79쪽 3-7-2 표 시공량(개소)"
+      },
+      {
+        "name": "block_weight",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "프리캐스트 콘크리트 블록의 무게는 몇 ton입니까?",
+        "source": "PDF 79쪽 [주] ①"
+      },
+      {
+        "name": "slope_ratio",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "무차원",
+        "required": true,
+        "ask": "비탈경사는 1:x 에서 x값이 얼마입니까? (예: 1:1.5인 경우 1.5 입력)",
+        "source": "PDF 79쪽 [주] ②"
+      },
+      {
+        "name": "vertical_height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "수직고는 몇 m입니까?",
+        "source": "PDF 79쪽 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p135-t0",
+        "role": "지압판블록 설치 일당 작업조 및 시공량",
+        "source": "PDF 79쪽 3-7-2 표",
+        "unit": "인/작업조; 대/작업조; 개소/일",
+        "values": {
+          "중급기술자": {
+            "수량": "1"
+          },
+          "보링공": {
+            "수량": "1"
+          },
+          "특별인부": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "2"
+          },
+          "크레인": {
+            "수량": "1"
+          },
+          "고소작업차": {
+            "수량": "1"
+          },
+          "강연선인장기": {
+            "수량": "1"
+          },
+          "시공량": {
+            "시공량(개소)": "11"
+          }
+        },
+        "cite": {
+          "table_id": "p135-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p135-t0",
+          "row": "시공량",
+          "column": "시공량(개소)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p135-t0",
+          "column": "수량",
+          "trades": [
+            "중급기술자",
+            "보링공",
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "중급기술자": "1022",
+            "보링공": "1035",
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "크레인",
+          "table": "p135-t0",
+          "unit": "대·일",
+          "machine_code_input": "crane_type",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p135-t0에서 고정된 일당 시공량(11개소)을 가져온다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량으로 구한다.",
+        "장비 대·일 = 작업일수 × 표의 장비 수량으로 구한다."
+      ],
+      "source": "PDF 79쪽 3-7-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "블록 무게가 2ton을 초과하는 경우",
+        "blocked_if": {
+          "input": "block_weight",
+          "op": ">",
+          "value": 2
+        },
+        "reason": "본 품은 2ton 이하 프리캐스트 콘크리트 블록 설치 기준임",
+        "source": "PDF 79쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p135-x8",
+          "quote": "본 품은 비탈면에 앵커를 사용한 프리캐스트 콘크리트 블록(2ton이하) 설치 기준이다."
+        }
+      },
+      {
+        "condition": "비탈경사가 1:1.5보다 가파른 경우 (수평거리 비율 < 1.5)",
+        "blocked_if": {
+          "input": "slope_ratio",
+          "op": "<",
+          "value": 1.5
+        },
+        "reason": "본 품은 비탈경사 1:1.5 이하 기준임",
+        "source": "PDF 79쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p135-x8",
+          "quote": "본 품은 비탈경사 1:1.5이하, 수직고 30m까지 기준이다."
+        }
+      },
+      {
+        "condition": "수직고가 30m를 초과하는 경우",
+        "blocked_if": {
+          "input": "vertical_height",
+          "op": ">",
+          "value": 30
+        },
+        "reason": "본 품은 수직고 30m까지 기준임",
+        "source": "PDF 79쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p135-x8",
+          "quote": "본 품은 비탈경사 1:1.5이하, 수직고 30m까지 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.06",
+        "cite": {
+          "chunk_id": "p135-x8",
+          "quote": "공구손료 및 경장비(절단기, 발전기 등)의 기계경비는 인력품의 6%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량(11개소)과 그에 따른 작업조 인원 및 장비 대수가 표로 명확히 주어져 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p135-t0",
+      "row": "중급기술자",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p135-t0",
+      "row": "보링공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p135-t0",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p135-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p135-t0",
+      "row": "크레인",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p135-t0",
+      "row": "고소작업차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p135-t0",
+      "row": "강연선인장기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p135-t0",
+      "row": "시공량",
+      "column": "시공량(개소)",
+      "value": "11"
+    },
+    {
+      "chunk_id": "p135-x8",
+      "quote": "본 품은 비탈면에 앵커를 사용한 프리캐스트 콘크리트 블록(2ton이하) 설치 기준이다."
+    },
+    {
+      "chunk_id": "p135-x8",
+      "quote": "본 품은 비탈경사 1:1.5이하, 수직고 30m까지 기준이다."
+    },
+    {
+      "chunk_id": "p135-x8",
+      "quote": "공구손료 및 경장비(절단기, 발전기 등)의 기계경비는 인력품의 6%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비탈경사 '1:1.5 이하'의 정확한 의미가 수평거리 비율이 1.5 이상(더 완만함)을 뜻하는지 확인이 필요하여 blocked 조건 판정 시 주의가 필요합니다.",
+    "일당 작업조에 여러 장비(크레인, 고소작업차, 강연선인장기)가 투입되나, 현재 quantity_model 명세 형식이 단일 장비 객체만 허용하여 초안에는 크레인만 기재하였습니다. 다중 장비 지원을 위한 모델 확장이 필요합니다.",
+    "adjusted_daily_crew 모델에서 base_output이 입력 변수 없이 고정된 행/열을 참조할 때 row_input 대신 row를 직접 지정하는 방식이 허용되는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "지압판블록 50개소를 설치할 때 필요한 인력과 장비 대수는 어떻게 되나요?",
+    "비탈경사가 1:1.2로 가파른 현장인데 이 품셈을 그대로 적용할 수 있나요?",
+    "설치하려는 프리캐스트 콘크리트 블록의 무게가 2.5ton인 경우 어떻게 계산해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:22.920117+00:00",
+    "input_tokens": 11703,
+    "output_tokens": 2921,
+    "source_pages": [
+      135,
+      136
+    ],
+    "prompt_sha256": "c2c484f1089ade5f67cbc3eff22043b6cf14b0613c9f1fe51649bc973c40a602",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

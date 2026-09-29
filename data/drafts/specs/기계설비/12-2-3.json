@@ -1,0 +1,173 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/12-2-3/도압배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "12-2-3",
+    "title": "도압배관",
+    "work": "도압배관 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "item_name",
+        "type": "enum",
+        "allowed_values": [
+          "유량(액면)계 배관",
+          "압력계배관",
+          "Valve 조립",
+          "DRAIN POT",
+          "SEAL POT",
+          "CONDENSER POT",
+          "3-WAY VALVE",
+          "STEAM TRAP"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 도압배관의 명칭은 무엇입니까?",
+        "source": "PDF 1쪽 12-2-3 도압배관 표 명칭"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m 또는 개",
+        "required": true,
+        "ask": "설치 물량은 얼마입니까?",
+        "source": "PDF 1쪽 12-2-3 도압배관 표 단위"
+      },
+      {
+        "name": "pipe_material",
+        "type": "enum",
+        "allowed_values": [
+          "일반",
+          "SCH 80",
+          "SUS27"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배관의 재질은 무엇입니까? (일반 / SCH 80 / SUS27)",
+        "source": "PDF 1쪽 12-2-3 도압배관 표 비고"
+      },
+      {
+        "name": "loop_test",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Loop 시험(LEAK TEST 포함)을 수행합니까?",
+        "source": "PDF 1쪽 12-2-3 도압배관 표 하단 비고"
+      },
+      {
+        "name": "fire_prohibited_zone",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "화기사용 금지구역에서 작업합니까?",
+        "source": "PDF 1쪽 12-2-3 도압배관 표 하단 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p776-t1",
+        "role": "도압배관 설치 품 (파싱 오류로 행 병합됨)",
+        "source": "PDF 1쪽 12-2-3 도압배관 표",
+        "values": {
+          "유량(액면)계 배관 압력계배관 Valve조립 DRAINPOT SEALPOT CONDENSER POT 3-WAYVALVE STEAMTRAP": {
+            "규격 SGP STPG 38": "계장공 0.1, 배관공 0.1, 보통인부 0.2",
+            "규격 (SCH40)1/2B": "계장공 0.1, 배관공 0.1, 보통인부 0.2",
+            "규격 SGP STPG38": "계장공 0.1, 배관공 0.1, 보통인부 0.2",
+            "규격 SCH40)1/2B": "계장공 0.1, 배관공 0.1, 보통인부 0.2",
+            "규격 용접": "계장공 0.1, 배관공 0.1, 보통인부 0.2",
+            "규격 1/2B": "계장공 0.1, 배관공 0.1, 보통인부 0.2",
+            "규격 〃": "계장공 0.1, 배관공 0.1, 보통인부 0.2"
+          },
+          "비고": {
+            "- Loop 시험(LEAK TEST 포함)은 20%를 가산한다. - 화기사용 금지구역은 본 품의 1.5배를 가산한다.": ""
+          }
+        },
+        "cite": {
+          "table_id": "p776-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "표에서 명칭에 따른 계장공, 배관공, 보통인부 품을 찾는다.",
+        "배관 재질이 SCH 80이면 10%, SUS27이면 30%를 가산한다.",
+        "Loop 시험(LEAK TEST 포함) 시 20%를 가산한다.",
+        "화기사용 금지구역 시 1.5배(50% 가산)를 적용한다.",
+        "물량을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 1쪽 12-2-3 도압배관 표 및 비고",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표의 행과 값이 원문과 다르게 병합되어 있어 자동 계산을 위한 표 구조를 만들 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p776-t1",
+      "row": "유량(액면)계 배관 압력계배관 Valve조립 DRAINPOT SEALPOT CONDENSER POT 3-WAYVALVE STEAMTRAP",
+      "column": "규격 SGP STPG 38",
+      "value": "계장공 0.1, 배관공 0.1, 보통인부 0.2"
+    },
+    {
+      "table_id": "p776-t1",
+      "row": "비고",
+      "column": "- Loop 시험(LEAK TEST 포함)은 20%를 가산한다. - 화기사용 금지구역은 본 품의 1.5배를 가산한다.",
+      "value": ""
+    },
+    {
+      "chunk_id": "p776-x10",
+      "quote": "본 품에는 관의 절단, 나사내기, 체결, 용접, 구부림 등의 품이 포함되어 있다."
+    },
+    {
+      "chunk_id": "p776-x10",
+      "quote": "Union, Elbow, Tee 부속품 취부품이 포함되어 있다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표의 행과 값이 원문과 다르게 병합되어 있어 정확한 단위당 품을 추출할 수 없습니다.",
+    "Loop 시험 할증(20%)과 화기사용 금지구역 할증(1.5배)이 동시에 적용될 때, 합산인지 곱산인지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "화기사용 금지구역에서 작업할 때 할증은 어떻게 되나요?",
+    "Loop 시험과 화기사용 금지구역 할증이 중복될 때 곱연산인가요, 합연산인가요?",
+    "배관 재질이 SCH 80이나 SUS27인지 확인이 필요합니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:36.905812+00:00",
+    "input_tokens": 12030,
+    "output_tokens": 1969,
+    "source_pages": [
+      776,
+      777
+    ],
+    "prompt_sha256": "c0d6615235f1762cf7e25d1e064bab86ff3833a6586ebf472d7af15ed925eaea",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "value '계장공 0.1, 배관공 0.1, 보통인부 0.2'이 p776-t1 조각 텍스트에 없음"
+    ]
+  }
+}

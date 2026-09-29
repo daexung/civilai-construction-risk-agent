@@ -1,0 +1,182 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/11-3-2/밸브설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "11-3-2",
+    "title": "밸브 설치('15년 보완)",
+    "work": "밸브 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      716
+    ],
+    "inputs": [
+      {
+        "name": "valve_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø15∼25",
+          "32∼50",
+          "65",
+          "80",
+          "100",
+          "125",
+          "ø150",
+          "200",
+          "250",
+          "300",
+          "350",
+          "400"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "설치할 밸브의 구경은 얼마입니까?",
+        "source": "p772-t0"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 밸브의 수량은 몇 개입니까?",
+        "source": "p772-t0 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p772-t0",
+        "role": "구경별 밸브 설치 인력품",
+        "source": "PDF 716쪽 11-3-2 표",
+        "unit": "인/개",
+        "values": {
+          "ø15∼25": {
+            "배관공": "0.197",
+            "보통인부": "0.064"
+          },
+          "32∼50": {
+            "배관공": "0.308",
+            "보통인부": "0.100"
+          },
+          "65": {
+            "배관공": "0.375",
+            "보통인부": "0.121"
+          },
+          "80": {
+            "배관공": "0.442",
+            "보통인부": "0.143"
+          },
+          "100": {
+            "배관공": "0.531",
+            "보통인부": "0.172"
+          },
+          "125": {
+            "배관공": "0.642",
+            "보통인부": "0.208"
+          },
+          "ø150": {
+            "배관공": "0.754",
+            "보통인부": "0.244"
+          },
+          "200": {
+            "배관공": "0.976",
+            "보통인부": "0.316"
+          },
+          "250": {
+            "배관공": "1.199",
+            "보통인부": "0.389"
+          },
+          "300": {
+            "배관공": "1.422",
+            "보통인부": "0.461"
+          },
+          "350": {
+            "배관공": "1.645",
+            "보통인부": "0.533"
+          },
+          "400": {
+            "배관공": "1.868",
+            "보통인부": "0.605"
+          }
+        },
+        "cite": {
+          "table_id": "p772-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p772-t0",
+          "row_input": "valve_size",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p772-t0에서 구경별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 716쪽 11-3-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p772-x10",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개)당 배관공, 보통인부의 품이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p772-t0",
+      "row": "ø15∼25",
+      "column": "배관공",
+      "value": "0.197"
+    },
+    {
+      "chunk_id": "p772-x10",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "설치할 밸브의 구경은 얼마입니까?",
+    "밸브 구경이 400mm를 초과하는 경우 어떻게 적용해야 합니까?",
+    "설치할 밸브의 수량은 몇 개입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:31:45.445288+00:00",
+    "input_tokens": 11775,
+    "output_tokens": 1652,
+    "source_pages": [
+      772,
+      773
+    ],
+    "prompt_sha256": "501abf7abc40059b0866396c0b8a24c964b33f8af2df8a4e6b0ec74e96f1a383",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

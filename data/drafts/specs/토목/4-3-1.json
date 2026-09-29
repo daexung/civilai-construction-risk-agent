@@ -1,0 +1,244 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-3-1/궤광조립",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-3-1",
+    "title": "궤광조립",
+    "work": "궤광조립 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      346
+    ],
+    "inputs": [
+      {
+        "name": "track_type",
+        "type": "enum",
+        "allowed_values": [
+          "침목 매립식 (분리형)",
+          "침목 매립식 (직결형)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "궤광조립의 궤도 형태는 무엇입니까?",
+        "source": "PDF 346쪽 4-3-1 표 구분",
+        "synonyms": {
+          "침목 매립식 (분리형)": [
+            "분리형",
+            "매립식 분리형"
+          ],
+          "침목 매립식 (직결형)": [
+            "직결형",
+            "매립식 직결형"
+          ]
+        }
+      },
+      {
+        "name": "track_line",
+        "type": "enum",
+        "allowed_values": [
+          "복선",
+          "단선"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "복선 일반철도입니까, 단선궤도입니까?",
+        "source": "PDF 346쪽 4-3-1 표 비고 및 [주] ①",
+        "synonyms": {
+          "복선": [
+            "복선 일반철도",
+            "복선궤도"
+          ],
+          "단선": [
+            "단선궤도"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "궤광조립 시공 물량은 몇 m입니까?",
+        "source": "PDF 346쪽 4-3-1 표 시공량(m)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p402-t2",
+        "role": "궤광조립 일당 작업조 및 시공량",
+        "source": "PDF 346쪽 4-3-1 표 (계산 모델 호환을 위해 행/열 전치)",
+        "unit": "인/일, 대/일, m/일",
+        "values": {
+          "궤도공": {
+            "침목 매립식 (분리형)": "16",
+            "침목 매립식 (직결형)": "16"
+          },
+          "보통인부": {
+            "침목 매립식 (분리형)": "4",
+            "침목 매립식 (직결형)": "6"
+          },
+          "측량중급기술자": {
+            "침목 매립식 (분리형)": "1",
+            "침목 매립식 (직결형)": "1"
+          },
+          "지게차": {
+            "침목 매립식 (분리형)": "1",
+            "침목 매립식 (직결형)": "1"
+          },
+          "굴착기+부착용집게": {
+            "침목 매립식 (분리형)": "1",
+            "침목 매립식 (직결형)": "0.5"
+          },
+          "시공량(m)": {
+            "침목 매립식 (분리형)": "250",
+            "침목 매립식 (직결형)": "250"
+          }
+        },
+        "cite": {
+          "table_id": "p402-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p402-t2",
+          "row": "시공량(m)",
+          "column_input": "track_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p402-t2",
+          "column_input": "track_type",
+          "trades": [
+            "궤도공",
+            "보통인부",
+            "측량중급기술자"
+          ],
+          "rate_codes": {
+            "궤도공": "1013",
+            "보통인부": "1002",
+            "측량중급기술자": "1001"
+          }
+        },
+        "equipment": [
+          {
+            "name": "지게차",
+            "table": "p402-t2",
+            "row": "지게차",
+            "column_input": "track_type",
+            "unit": "대·일"
+          },
+          {
+            "name": "굴착기+부착용집게",
+            "table": "p402-t2",
+            "row": "굴착기+부착용집게",
+            "column_input": "track_type",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p402-t2에서 궤도 형태별 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 346쪽 4-3-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "track_line == 단선",
+        "blocked_if": {
+          "input": "track_line",
+          "op": "==",
+          "value": "단선"
+        },
+        "reason": "단선궤도는 시공량을 5%까지 감하여 적용한다고 명시되어 있으나, 정확한 감산 비율이 확정되지 않아 자동 계산 불가",
+        "source": "PDF 346쪽 4-3-1 표 비고",
+        "cite": {
+          "table_id": "p402-t2"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "현장까지 자재 운반",
+        "source": "PDF 346쪽 4-3-1 [주] ③",
+        "cite": {
+          "chunk_id": "p402-x23",
+          "quote": "③ 현장까지 자재 운반은 별도 계상한다."
+        }
+      },
+      {
+        "item": "기타 기계경비",
+        "source": "PDF 346쪽 4-3-1 [주] ⑤",
+        "cite": {
+          "chunk_id": "p402-x23",
+          "quote": "⑤ 기타 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조의 인원, 장비 대수 및 일일 시공량이 표로 제시되어 있어 adjusted_daily_crew 모델을 적용하기 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p402-t2",
+      "row": "침목 매립식 (분리형)",
+      "column": "궤도공",
+      "value": "16"
+    },
+    {
+      "table_id": "p402-t2",
+      "row": "침목 매립식 (직결형)",
+      "column": "보통인부",
+      "value": "6"
+    },
+    {
+      "chunk_id": "p402-x23",
+      "quote": "① 본 품은 60㎏ 레일의 복선 일반철도 기준이다."
+    },
+    {
+      "chunk_id": "p402-x23",
+      "quote": "③ 현장까지 자재 운반은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p402-x23",
+      "quote": "⑤ 기타 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비고의 '단선궤도는 시공량을 5%까지 감하여 적용한다'에서 정확히 몇 %를 감산해야 하는지 명확하지 않아 단선궤도 선택 시 계산을 보류했습니다.",
+    "adjusted_daily_crew 모델의 equipment 파라미터가 여러 장비를 지원하기 위해 배열 형태를 허용하는지 확인이 필요합니다.",
+    "원문 표는 행이 구분(분리형/직결형)이고 열이 직종/장비이나, adjusted_daily_crew 모델의 column_input 구조에 맞추기 위해 표를 전치(transpose)하여 작성했습니다."
+  ],
+  "questions": [
+    "침목 매립식 분리형 궤광조립 100m 시공 시 궤도공은 몇 명 필요한가요?",
+    "단선궤도 시공 시 시공량을 5%까지 감하라고 되어 있는데, 정확히 몇 %를 적용해야 하나요?",
+    "궤광조립 시공 물량이 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:58:21.566714+00:00",
+    "input_tokens": 11857,
+    "output_tokens": 2470,
+    "source_pages": [
+      402,
+      403
+    ],
+    "prompt_sha256": "62b6276e7f5dbe4308db0f5be37d58dd78e0e8ce8510f94eb1122be517f05102",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

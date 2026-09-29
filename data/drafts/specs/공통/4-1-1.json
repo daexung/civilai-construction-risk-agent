@@ -1,0 +1,183 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/4-1-1/잔디붙임",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "4-1-1",
+    "title": "잔디붙임",
+    "work": "잔디붙임 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      91
+    ],
+    "inputs": [
+      {
+        "name": "planting_type",
+        "type": "enum",
+        "allowed_values": [
+          "줄떼",
+          "평떼"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "잔디붙임 방식은 줄떼와 평떼 중 무엇입니까?",
+        "source": "PDF 91쪽 4-1-1 표 시공량 구분",
+        "synonyms": {
+          "줄떼": [
+            "줄떼붙임"
+          ],
+          "평떼": [
+            "평떼붙임"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "잔디붙임 시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 91쪽 4-1-1 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p147-t0",
+        "role": "작업조 인원 및 시공 방식별 일일시공량",
+        "source": "PDF 91쪽 4-1-1 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "조경공": {
+            "수량": "1"
+          },
+          "보통인부": {
+            "수량": "4"
+          },
+          "시공량(㎡)": {
+            "줄떼": "170",
+            "평떼": "150"
+          }
+        },
+        "cite": {
+          "table_id": "p147-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p147-t0",
+          "row": "시공량(㎡)",
+          "column_input": "planting_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p147-t0",
+          "column": "수량",
+          "trades": [
+            "조경공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "조경공": "1025",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p147-t0에서 시공 방식(줄떼/평떼)에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = area ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p147-t0의 직종별 수량으로 구한다."
+      ],
+      "source": "PDF 91쪽 4-1-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "유지관리 비용",
+        "source": "PDF 91쪽 [주] ④",
+        "cite": {
+          "section_no": "4-1-1",
+          "marker": "④"
+        }
+      },
+      {
+        "item": "살수차 등 기계경비",
+        "source": "PDF 91쪽 [주] ⑤",
+        "cite": {
+          "section_no": "4-1-1",
+          "marker": "⑤"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "작업조 인원이 고정되어 있고, 시공 방식(줄떼/평떼)에 따른 일일 시공량이 표로 제시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p147-t0",
+      "row": "조경공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p147-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "4"
+    },
+    {
+      "table_id": "p147-t0",
+      "row": "시공량(㎡)",
+      "column": "줄떼",
+      "value": "170"
+    },
+    {
+      "table_id": "p147-t0",
+      "row": "시공량(㎡)",
+      "column": "평떼",
+      "value": "150"
+    },
+    {
+      "chunk_id": "p147-x2",
+      "quote": "본 품은 재배잔디를 붙이는 기준이다."
+    },
+    {
+      "chunk_id": "p147-x2",
+      "quote": "유지관리는 ‘[유지관리부문] 1-2 조경공사’에 따라"
+    },
+    {
+      "chunk_id": "p147-x2",
+      "quote": "물주기를 위해 살수차 등의 장비가 필요한 경우 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "잔디붙임 시공 면적이 500㎡이고 평떼로 시공할 때 품은 어떻게 되나요?",
+    "살수차를 사용해서 물주기를 할 경우 기계경비는 어떻게 산정하나요?",
+    "잔디 종류(재배잔디 외)에 따른 품 할증이 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:42.918830+00:00",
+    "input_tokens": 11610,
+    "output_tokens": 1628,
+    "source_pages": [
+      147,
+      148
+    ],
+    "prompt_sha256": "9381d9f51fe6f9f92493f834cf79a11e54822877949062846bbf0e5216784d00",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

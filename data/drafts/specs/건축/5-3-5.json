@@ -1,0 +1,284 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-3-5/걸레받이설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-3-5",
+    "title": "걸레받이 설치('16, '24년 보완)",
+    "work": "걸레받이 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      597
+    ],
+    "inputs": [
+      {
+        "name": "material",
+        "type": "enum",
+        "allowed_values": [
+          "석재류",
+          "합성수지류",
+          "중밀도섬유판"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 걸레받이의 재료는 무엇입니까?",
+        "source": "PDF 597쪽 5-3-5 표 구분"
+      },
+      {
+        "name": "length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "걸레받이 설치 길이는 몇 m입니까?",
+        "source": "PDF 597쪽 5-3-5 표 시공량 단위"
+      },
+      {
+        "name": "height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "mm",
+        "required": true,
+        "ask": "걸레받이의 높이는 몇 mm입니까? (본 품은 75~120mm 기준입니다)",
+        "source": "PDF 597쪽 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p653-t0",
+        "role": "석재류 걸레받이 설치 일당 품 및 시공량",
+        "source": "PDF 597쪽 5-3-5 첫 번째 표",
+        "values": {
+          "석재류": {
+            "석공": "3",
+            "보통인부": "1",
+            "시공량(m)": "25"
+          }
+        },
+        "cite": {
+          "table_id": "p653-t0"
+        }
+      },
+      {
+        "id": "p653-t1",
+        "role": "합성수지류 및 중밀도섬유판 걸레받이 설치 일당 품 및 시공량",
+        "source": "PDF 597쪽 5-3-5 두 번째 표",
+        "values": {
+          "합성수지류": {
+            "내장공": "2",
+            "보통인부": "1",
+            "시공량(m)": "200"
+          },
+          "중밀도섬유판": {
+            "내장공": "2",
+            "보통인부": "1",
+            "시공량(m)": "165"
+          }
+        },
+        "cite": {
+          "table_id": "p653-t1"
+        }
+      },
+      {
+        "id": "p653-t2",
+        "role": "재료량 참고",
+        "source": "PDF 597쪽 5-3-5 세 번째 표",
+        "values": {
+          "테라조": {
+            "석재류": "1.0",
+            "합성수지류": "-",
+            "중밀도섬유판": "-"
+          },
+          "합성수지": {
+            "석재류": "-",
+            "합성수지류": "1.04",
+            "중밀도섬유판": "-"
+          },
+          "중밀도섬유판": {
+            "석재류": "-",
+            "합성수지류": "-",
+            "중밀도섬유판": "1.04"
+          },
+          "접착제": {
+            "석재류": "-",
+            "합성수지류": "0.022 ∼ 0.035",
+            "중밀도섬유판": "0.022 ∼ 0.035"
+          },
+          "모르타르": {
+            "석재류": "별도계상",
+            "합성수지류": "-",
+            "중밀도섬유판": "-"
+          }
+        },
+        "cite": {
+          "table_id": "p653-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "입력된 재료(material)에 따라 p653-t0 또는 p653-t1 표를 선택한다.",
+        "선택한 표에서 해당 재료의 시공량(m)과 직종별 투입 인원을 확인한다.",
+        "작업일수 = length ÷ 시공량(m)을 계산한다.",
+        "직종별 인·일 = 작업일수 × 직종별 투입 인원으로 산출한다."
+      ],
+      "source": "PDF 597쪽 5-3-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "걸레받이 높이가 75mm 미만인 경우",
+        "blocked_if": {
+          "input": "height",
+          "op": "<",
+          "value": 75
+        },
+        "reason": "본 품은 걸레받이 높이 75~120mm 설치 기준이므로, 범위를 벗어나면 별도 산정 필요",
+        "source": "PDF 597쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p653-x8",
+          "quote": "① 본 품은 걸레받이(높이 75∼120㎜) 설치 기준이다."
+        }
+      },
+      {
+        "condition": "걸레받이 높이가 120mm 초과인 경우",
+        "blocked_if": {
+          "input": "height",
+          "op": ">",
+          "value": 120
+        },
+        "reason": "본 품은 걸레받이 높이 75~120mm 설치 기준이므로, 범위를 벗어나면 별도 산정 필요",
+        "source": "PDF 597쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p653-x8",
+          "quote": "① 본 품은 걸레받이(높이 75∼120㎜) 설치 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "재료량 (테라조, 합성수지, 중밀도섬유판, 접착제, 모르타르)",
+        "source": "PDF 597쪽 [주] ④ 및 재료량 참고 표",
+        "cite": [
+          {
+            "chunk_id": "p653-x8",
+            "quote": "④ 재료량은 다음을 참고한다."
+          },
+          {
+            "table_id": "p653-t2"
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p653-x8",
+          "quote": "③ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "재료 종류(석재류 vs 합성수지류/중밀도섬유판)에 따라 투입 직종과 시공량이 두 개의 표(p653-t0, p653-t1)로 분리되어 있어, 단일 표를 참조하는 현재의 adjusted_daily_crew 모델로는 자동 계산을 명세하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p653-t0",
+      "row": "석재류",
+      "column": "석공",
+      "value": "3"
+    },
+    {
+      "table_id": "p653-t0",
+      "row": "석재류",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p653-t0",
+      "row": "석재류",
+      "column": "시공량(m)",
+      "value": "25"
+    },
+    {
+      "table_id": "p653-t1",
+      "row": "합성수지류",
+      "column": "내장공",
+      "value": "2"
+    },
+    {
+      "table_id": "p653-t1",
+      "row": "합성수지류",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p653-t1",
+      "row": "합성수지류",
+      "column": "시공량(m)",
+      "value": "200"
+    },
+    {
+      "table_id": "p653-t1",
+      "row": "중밀도섬유판",
+      "column": "내장공",
+      "value": "2"
+    },
+    {
+      "table_id": "p653-t1",
+      "row": "중밀도섬유판",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p653-t1",
+      "row": "중밀도섬유판",
+      "column": "시공량(m)",
+      "value": "165"
+    },
+    {
+      "chunk_id": "p653-x8",
+      "quote": "① 본 품은 걸레받이(높이 75∼120㎜) 설치 기준이다."
+    },
+    {
+      "chunk_id": "p653-x8",
+      "quote": "③ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p653-x8",
+      "quote": "④ 재료량은 다음을 참고한다."
+    }
+  ],
+  "open_questions": [
+    "재료량 표(p653-t2)의 접착제 수량이 '0.022 ~ 0.035'로 범위로 주어져 있어, 정확한 물량 산출을 위해서는 어떤 값을 적용할지 기준이 필요함."
+  ],
+  "questions": [
+    "합성수지류 걸레받이 100m를 설치할 때 필요한 내장공과 보통인부의 인·일은 어떻게 되나요?",
+    "걸레받이 높이가 150mm인 경우 이 품셈을 그대로 적용할 수 있나요?",
+    "걸레받이 설치 시 접착제와 모르타르 재료량은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:02:51.583757+00:00",
+    "input_tokens": 12021,
+    "output_tokens": 2928,
+    "source_pages": [
+      653,
+      654
+    ],
+    "prompt_sha256": "13dab3e0edb8fa78696ca04a4642074b2bb81403566473bfcbf1f6b2707c7579",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

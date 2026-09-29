@@ -1,0 +1,133 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-3-5/일반발파",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-3-5",
+    "title": "암발파(일반발파 TYPE-Ⅴ)",
+    "work": "기본 발파 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      71,
+      72
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "암발파 물량은 몇 ㎥입니까?",
+        "source": "71쪽 3-3-5 표 단위 (㎥당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p127-t3",
+        "role": "일반발파 TYPE-Ⅴ 단위당 품",
+        "source": "71쪽 3-3-5 표",
+        "unit": "인/㎥, hr/㎥",
+        "values": {
+          "화약취급공": {
+            "수량": "0.004"
+          },
+          "보통인부": {
+            "수량": "0.006"
+          },
+          "유압식크롤러드릴": {
+            "수량": "0.014"
+          },
+          "굴착기": {
+            "수량": "0.008"
+          }
+        },
+        "cite": {
+          "table_id": "p127-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p127-t3",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "화약취급공",
+            "보통인부",
+            "유압식크롤러드릴",
+            "굴착기"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p127-t3에서 직종 및 장비별 단위당 품을 확인한다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "71쪽 3-3-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎥)당 직종별 인원과 장비 시간이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p127-t3",
+      "row": "화약취급공",
+      "column": "수량",
+      "value": "0.004"
+    },
+    {
+      "table_id": "p127-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.006"
+    },
+    {
+      "table_id": "p127-t3",
+      "row": "유압식크롤러드릴",
+      "column": "수량",
+      "value": "0.014"
+    },
+    {
+      "table_id": "p127-t3",
+      "row": "굴착기",
+      "column": "수량",
+      "value": "0.008"
+    }
+  ],
+  "open_questions": [
+    "원문 72페이지의 [주] 사항(발파보호공 인원/장비 가산, 비전기식뇌관 별도 계상, 집토/상차/운반 별도 계상, 잡재료비 및 소모자재 요율 등)에 해당하는 텍스트 조각이 파싱 결과에 없어 명세 규칙에 반영하지 못했습니다."
+  ],
+  "questions": [
+    "일반발파 TYPE-Ⅴ의 1㎥당 화약취급공 품은 얼마인가요?",
+    "발파보호공을 설치할 때 추가되는 품은 어떻게 계산하나요?",
+    "발파 물량을 입력하지 않으면 총 품을 계산할 수 없나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:16:02.088966+00:00",
+    "input_tokens": 11422,
+    "output_tokens": 1209,
+    "source_pages": [
+      127,
+      128
+    ],
+    "prompt_sha256": "aa036d058a26ddf77a6b03a3ad6cc1f7a572c58f833451c540b55868e2f0e235",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

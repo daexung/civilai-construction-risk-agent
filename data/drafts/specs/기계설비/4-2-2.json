@@ -1,0 +1,162 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/4-2-2/벽걸이배기팬설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "4-2-2",
+    "title": "벽걸이 배기팬 설치",
+    "work": "기본 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      673
+    ],
+    "inputs": [
+      {
+        "name": "fan_size",
+        "type": "enum",
+        "allowed_values": [
+          "200㎜",
+          "300㎜",
+          "400㎜",
+          "600㎜"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "배기팬의 크기는 얼마입니까? (200㎜ / 300㎜ / 400㎜ / 600㎜)",
+        "source": "4-2-2 표"
+      },
+      {
+        "name": "quantity",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 배기팬의 수량은 몇 개입니까?",
+        "source": "4-2-2 표 단위 (개당)"
+      },
+      {
+        "name": "formwork_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "형틀 설치가 필요합니까?",
+        "source": "4-2-2 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p729-t0",
+        "role": "배기팬 크기별 기계설비공 품",
+        "source": "4-2-2 표",
+        "unit": "인/개",
+        "values": {
+          "기계설비공": {
+            "200㎜": "0.30",
+            "300㎜": "0.40",
+            "400㎜": "0.50",
+            "600㎜": "0.80"
+          }
+        },
+        "cite": {
+          "table_id": "p729-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p729-t0",
+          "row_input": "기계설비공",
+          "column_input": "fan_size",
+          "trades": [
+            "기계설비공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "4-2-2 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "형틀 설치",
+        "source": "4-2-2 [주] ②",
+        "cite": {
+          "chunk_id": "p729-x4",
+          "quote": "형틀 설치가 필요한 경우에는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당)당 품(인)이 표에 직접 명시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p729-t0",
+      "row": "기계설비공",
+      "column": "200㎜",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p729-t0",
+      "row": "기계설비공",
+      "column": "300㎜",
+      "value": "0.40"
+    },
+    {
+      "table_id": "p729-t0",
+      "row": "기계설비공",
+      "column": "400㎜",
+      "value": "0.50"
+    },
+    {
+      "table_id": "p729-t0",
+      "row": "기계설비공",
+      "column": "600㎜",
+      "value": "0.80"
+    },
+    {
+      "chunk_id": "p729-x4",
+      "quote": "형틀 설치가 필요한 경우에는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표에 명시되지 않은 크기(예: 500㎜)에 대한 보간/보외 적용 여부가 명시되어 있지 않음."
+  ],
+  "questions": [
+    "배기팬 크기가 300㎜일 때 기계설비공 품은 얼마인가요?",
+    "배기팬 크기가 500㎜인 경우 어떻게 적용하나요?",
+    "형틀 설치가 필요한 경우 품셈에 포함되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:30:37.048475+00:00",
+    "input_tokens": 11493,
+    "output_tokens": 1407,
+    "source_pages": [
+      729,
+      730
+    ],
+    "prompt_sha256": "7f5e723b271dae04c38ce19456442aa5b47c619a17e547c55445395011ccf82b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

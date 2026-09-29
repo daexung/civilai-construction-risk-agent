@@ -1,0 +1,128 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-15/작업능력",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-15",
+    "title": "법면다짐기",
+    "work": "작업능력",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      194
+    ],
+    "inputs": [
+      {
+        "name": "equipment_type",
+        "type": "enum",
+        "allowed_values": [
+          "유압식진동콤팩터",
+          "법면다짐판"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용할 장비는 유압식진동콤팩터와 법면다짐판 중 무엇입니까?",
+        "source": "PDF 194쪽 2. 작업능력 표",
+        "synonyms": {
+          "유압식진동콤팩터": [
+            "유압식 진동 콤팩터",
+            "진동콤팩터"
+          ],
+          "법면다짐판": [
+            "법면 다짐판",
+            "다짐판"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p250-t0",
+        "role": "장비별 작업능력",
+        "source": "PDF 194쪽 2. 작업능력 표",
+        "unit": "㎡/h",
+        "values": {
+          "유압식진동콤팩터": {
+            "다짐력": "6∼9톤",
+            "플레이트규격(㎝)": "76×84",
+            "작업량(㎡/h)": "77.7",
+            "비고": "최대건조밀도 90%이상 기준"
+          },
+          "법면다짐판": {
+            "다짐력": "-",
+            "플레이트규격(㎝)": "80×80",
+            "작업량(㎡/h)": "22.7",
+            "비고": "-"
+          }
+        },
+        "cite": {
+          "table_id": "p250-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 장비 구분에 따라 p250-t0 표에서 시간당 작업량(㎡/h)을 찾는다."
+      ],
+      "source": "PDF 194쪽 2. 작업능력 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "법면 다짐판 손료",
+        "source": "PDF 194쪽 2. 작업능력 [주] ②",
+        "cite": {
+          "chunk_id": "p250-x4",
+          "quote": "② 법면 다짐판 사용시는 다짐판 손료는 계상하지 아니한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "이 절은 장비 종류에 따른 시간당 작업량(Q)을 표에서 제시할 뿐, 인·일이나 단위당 품을 직접 계산하는 수식이 없으므로 표에서 값을 찾는 역할만 수행합니다.",
+  "citations": [
+    {
+      "table_id": "p250-t0",
+      "row": "유압식진동콤팩터",
+      "column": "작업량(㎡/h)",
+      "value": "77.7"
+    },
+    {
+      "table_id": "p250-t0",
+      "row": "법면다짐판",
+      "column": "작업량(㎡/h)",
+      "value": "22.7"
+    },
+    {
+      "chunk_id": "p250-x4",
+      "quote": "② 법면 다짐판 사용시는 다짐판 손료는 계상하지 아니한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "법면다짐판의 시간당 작업량은 얼마인가요?",
+    "법면 다짐판 사용 시 다짐판 손료는 어떻게 처리하나요?",
+    "작업할 면적이 1000㎡일 때 유압식 진동콤팩터의 총 작업 시간은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:24:01.627362+00:00",
+    "input_tokens": 11617,
+    "output_tokens": 1170,
+    "source_pages": [
+      250,
+      251
+    ],
+    "prompt_sha256": "8bfef510f2e9b43ae9b1092361d59b2411a63b94d3995f0fbdff7c79850d1638",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

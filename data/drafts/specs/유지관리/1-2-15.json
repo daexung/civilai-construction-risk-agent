@@ -1,0 +1,147 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/1-2-15/잔디시비",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "1-2-15",
+    "title": "잔디시비('22년 보완)",
+    "work": "잔디시비 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      865
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "잔디시비 시공 물량은 몇 ㎡입니까?",
+        "source": "PDF 865쪽 1-2-15 표 시공량(㎡)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p921-t1",
+        "role": "잔디시비 일당 작업조 및 시공량",
+        "source": "PDF 865쪽 1-2-15 표",
+        "unit": "인, 대, ㎡",
+        "values": {
+          "조경공": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎡)": "22,500"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(㎡)": "22,500"
+          },
+          "트럭": {
+            "규격": "2.5ton",
+            "단위": "대",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p921-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "표 p921-t1에서 일당 작업조 인원(조경공 2인, 보통인부 1인)과 장비(트럭 2.5ton 1대), 기준 시공량(22,500㎡)을 확인한다.",
+        "물량 ÷ 22,500㎡로 기본 작업일수를 구한다.",
+        "현장조건 및 살포조건을 고려하여 기본 품(인·일, 대·일)에 -20% ~ +20% 범위 내의 증감률을 사용자가 직접 판단하여 적용한다."
+      ],
+      "source": "PDF 865쪽 1-2-15 표 및 [주] ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "화학비료 살포량이 300~700kg/10,000㎡ 범위를 벗어나는 경우",
+        "reason": "본 품은 화학비료 살포가 300~700kg/10,000㎡인 경우를 기준으로 하므로, 이 범위를 벗어날 경우 별도 산정 기준이 필요함",
+        "source": "PDF 865쪽 1-2-15 [주] ①",
+        "cite": {
+          "section_no": "1-2-15",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비료량",
+        "source": "PDF 865쪽 1-2-15 [주] ③",
+        "cite": {
+          "section_no": "1-2-15",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "현장 및 살포 조건에 따라 품을 20% 범위 내에서 임의로 증감하도록 되어 있어 기계적인 일괄 계산이 어렵고, 파싱된 표의 직종 행 이름이 병합되어 있어 자동 매핑이 불가능합니다.",
+  "citations": [
+    {
+      "table_id": "p921-t1",
+      "row": "조경공 보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p921-t1",
+      "row": "조경공 보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p921-t1",
+      "row": "트럭",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p921-x9",
+      "quote": "본 품은 화학비료의 살포가 300∼700㎏/10,000㎡인 경우 기준이다."
+    },
+    {
+      "chunk_id": "p921-x9",
+      "quote": "현장조건, 살포조건에 따라 살포량이 다를 때는 본 품의 20% 범위 내에서 증감한다."
+    },
+    {
+      "chunk_id": "p921-x9",
+      "quote": "비료량은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 '조경공'과 '보통인부' 행이 '조경공 보통인부'로 병합되어 출력되어 정확한 행 매핑이 어렵습니다. 명세 초안의 tables.values에는 원문을 참고하여 분리 기재했습니다.",
+    "[주] ②의 '본 품의 20% 범위 내에서 증감한다'는 조건은 현장조건에 따른 정성적 판단이 필요하여 기계적인 자동 계산식으로 구현하기 모호합니다."
+  ],
+  "questions": [
+    "잔디시비 시공 물량이 10,000㎡일 때 기본 투입 인력은 어떻게 되나요?",
+    "현장 조건이 열악하여 살포량이 많아질 경우 품 할증은 어떻게 적용하나요?",
+    "살포할 비료의 재료비는 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:33:38.334802+00:00",
+    "input_tokens": 11540,
+    "output_tokens": 1626,
+    "source_pages": [
+      921,
+      922
+    ],
+    "prompt_sha256": "3f8db80553eb0053ef1e19eb4c9bf130c1d6ea780325ae6698e56c83b6a986d4",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

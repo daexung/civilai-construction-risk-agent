@@ -1,0 +1,186 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-3-3/데크플레이트설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-3-3",
+    "title": "데크플레이트 설치",
+    "work": "데크플레이트 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      575
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "데크플레이트 설치 물량은 몇 ㎡입니까?",
+        "source": "표 p631-t3 단위 (㎡당)"
+      },
+      {
+        "name": "floor",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "층",
+        "required": true,
+        "ask": "설치하는 층수는 몇 층입니까?",
+        "source": "표 p631-t3 비고 (높이별 인력품 할증)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p631-t3",
+        "role": "데크플레이트 설치 단위당 품",
+        "source": "1-3-3 데크플레이트 설치 표",
+        "unit": "인/㎡",
+        "values": {
+          "철골공": {
+            "수량": "0.03"
+          },
+          "용접공": {
+            "수량": "0.01"
+          },
+          "특별인부": {
+            "수량": "0.01"
+          }
+        },
+        "cite": {
+          "table_id": "p631-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p631-t3",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "철골공",
+            "용접공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "floor": ">=11"
+            },
+            "change": "11층에서 15층까지는 4%, 16층 이상은 매 5개층 증가마다 1%씩 추가 가산",
+            "source": "표 p631-t3 비고"
+          }
+        ]
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "층수에 따른 인력품 할증을 적용한다."
+      ],
+      "source": "1-3-3 데크플레이트 설치 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "소모재료",
+        "source": "1-3-3 [주] ③",
+        "cite": {
+          "chunk_id": "p631-x17",
+          "quote": "③ 소모재료는 설계에 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "사용재료의 양중 기계경비",
+        "source": "1-3-3 [주] ⑤",
+        "cite": {
+          "chunk_id": "p631-x17",
+          "quote": "⑤ 사용재료의 양중은 현장여건에 따라 양중기계를 선정할 수 있으며 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "chunk_id": "p631-x17",
+          "quote": "④ 공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 5%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인력품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p631-t3",
+      "row": "철골공",
+      "column": "수량",
+      "value": "0.03"
+    },
+    {
+      "table_id": "p631-t3",
+      "row": "용접공",
+      "column": "수량",
+      "value": "0.01"
+    },
+    {
+      "table_id": "p631-t3",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.01"
+    },
+    {
+      "table_id": "p631-t3",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 본 품은 10층까지 적용하며, 높이별 인력품의 할증은 11층에서 15층까지는 4%, 16층 이상은 매 5개층 증가마다 1%씩 추가 가산한다."
+    },
+    {
+      "chunk_id": "p631-x17",
+      "quote": "③ 소모재료는 설계에 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p631-x17",
+      "quote": "④ 공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 5%로 계상한다."
+    },
+    {
+      "chunk_id": "p631-x17",
+      "quote": "⑤ 사용재료의 양중은 현장여건에 따라 양중기계를 선정할 수 있으며 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "16층 이상 매 5개층 증가마다 1%씩 추가 가산하는 방식이 정확히 어떤 구간(예: 16~20층 5%, 21~25층 6% 등)을 의미하는지 기계적 수식화가 필요합니다."
+  ],
+  "questions": [
+    "데크플레이트 설치 물량이 100㎡일 때 철골공 품은 얼마인가요?",
+    "18층에 데크플레이트를 설치할 때 인력품 할증률은 몇 %가 적용되나요?",
+    "데크플레이트 설치 시 공구손료는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:48:00.406373+00:00",
+    "input_tokens": 11670,
+    "output_tokens": 1842,
+    "source_pages": [
+      631,
+      632
+    ],
+    "prompt_sha256": "b380e581dff15361fa7bfedfecb3fd31d8eb3a48c347bf5b91b9b5c49d4ea032",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

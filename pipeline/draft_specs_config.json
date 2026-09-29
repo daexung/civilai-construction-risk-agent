@@ -1,7 +1,7 @@
 {
   "model": "gemini-3.1-pro-preview",
-  "input_usd_per_million": null,
-  "output_usd_per_million": null,
-  "max_output_tokens": 8192,
+  "input_usd_per_million": 4.0,
+  "output_usd_per_million": 18.0,
+  "max_output_tokens": 32768,
   "note": "input_usd_per_million/output_usd_per_million은 검토자가 실제 단가로 채운다. 비어 있으면 draft_specs.py가 실행을 거부한다."
 }

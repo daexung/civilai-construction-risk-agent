@@ -1,0 +1,182 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/2-2-2/흡입구설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "2-2-2",
+    "title": "흡입구 설치",
+    "work": "흡입구 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      662
+    ],
+    "inputs": [
+      {
+        "name": "item_type",
+        "type": "enum",
+        "allowed_values": [
+          "그릴(도어그릴)",
+          "점검구",
+          "후드"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 흡입구의 구분은 무엇입니까?",
+        "source": "p718-t1"
+      },
+      {
+        "name": "spec",
+        "type": "enum",
+        "allowed_values": [
+          "규격 흡입구 | 규격 1m미만",
+          "규격 장변길이 | 규격 1m이상",
+          "규격 300㎜×300㎜ 이하",
+          "규격 일반 | 규격 투영면적 ㎡당",
+          "규격 2중 | 규격 ″ ㎡당",
+          "규격 그리스필터 | 규격 ″ ㎡당",
+          "규격 2중 그리스필터 | 규격 ″ ㎡당"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 흡입구의 규격은 무엇입니까?",
+        "source": "p718-t1"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개 또는 ㎡",
+        "required": true,
+        "ask": "설치 물량은 얼마입니까? (후드의 경우 투영면적 ㎡, 그 외는 개수)",
+        "source": "p718-t1"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p718-t1",
+        "role": "흡입구 설치 덕트공 품",
+        "source": "2-2-2 흡입구 설치 표",
+        "unit": "인",
+        "values": {
+          "그릴(도어그릴)": {
+            "규격 흡입구 | 규격 1m미만": "0.525",
+            "규격 장변길이 | 규격 1m이상": "0.840"
+          },
+          "점검구": {
+            "규격 300㎜×300㎜ 이하": "0.355"
+          },
+          "후드": {
+            "규격 일반 | 규격 투영면적 ㎡당": "0.800",
+            "규격 2중 | 규격 ″ ㎡당": "0.960",
+            "규격 그리스필터 | 규격 ″ ㎡당": "0.860",
+            "규격 2중 그리스필터 | 규격 ″ ㎡당": "1.000"
+          }
+        },
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p718-t1",
+          "row_input": "item_type",
+          "column_input": "spec",
+          "trades": [
+            "덕트공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p718-t1에서 구분과 규격에 따른 덕트공 단위당 품을 찾는다.",
+        "물량을 곱하여 총 품을 구한다."
+      ],
+      "source": "2-2-2 흡입구 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품(덕트공 인)이 표에 직접 제시되어 있으며, 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p718-t1",
+      "row": "그릴(도어그릴)",
+      "column": "규격 흡입구 | 규격 1m미만",
+      "value": "0.525"
+    },
+    {
+      "table_id": "p718-t1",
+      "row": "그릴(도어그릴)",
+      "column": "규격 장변길이 | 규격 1m이상",
+      "value": "0.840"
+    },
+    {
+      "table_id": "p718-t1",
+      "row": "점검구",
+      "column": "규격 300㎜×300㎜ 이하",
+      "value": "0.355"
+    },
+    {
+      "table_id": "p718-t1",
+      "row": "후드",
+      "column": "규격 일반 | 규격 투영면적 ㎡당",
+      "value": "0.800"
+    },
+    {
+      "table_id": "p718-t1",
+      "row": "후드",
+      "column": "규격 2중 | 규격 ″ ㎡당",
+      "value": "0.960"
+    },
+    {
+      "table_id": "p718-t1",
+      "row": "후드",
+      "column": "규격 그리스필터 | 규격 ″ ㎡당",
+      "value": "0.860"
+    },
+    {
+      "table_id": "p718-t1",
+      "row": "후드",
+      "column": "규격 2중 그리스필터 | 규격 ″ ㎡당",
+      "value": "1.000"
+    },
+    {
+      "chunk_id": "p718-x16",
+      "quote": "[주] 본 품은 덕트 타공, 기기의 설치 및 고정 작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "표의 우측 상단 기준은 '(개당)'으로 되어 있으나, 후드의 규격에는 '투영면적 ㎡당'으로 명시되어 있어 후드의 물량 단위가 개수인지 면적인지 원문 상 충돌이 발생할 여지가 있습니다."
+  ],
+  "questions": [
+    "그릴(도어그릴)의 흡입구 규격이 1m 미만일 때 덕트공 품은 얼마인가요?",
+    "후드의 경우 물량을 개수로 입력해야 하나요, 아니면 투영면적(㎡)으로 입력해야 하나요?",
+    "점검구의 크기가 300㎜×300㎜를 초과하는 경우 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:38:03.109620+00:00",
+    "input_tokens": 11619,
+    "output_tokens": 1878,
+    "source_pages": [
+      718,
+      719
+    ],
+    "prompt_sha256": "60eb32d6ff47835bbf237cd21e7a3b1608eda1a3744d6b7315063e8915f2d9b2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

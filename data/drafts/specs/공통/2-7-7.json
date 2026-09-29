@@ -1,0 +1,200 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-7-7/경사형가설계단설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-7-7",
+    "title": "경사형 가설 계단 설치 및 해체",
+    "work": "경사형 가설 계단 설치 및 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      49,
+      50
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "가설 계단의 면적(디딤판의 면적, 계단참 포함)은 몇 ㎡입니까?",
+        "source": "p105-t3 단위 (㎡당) 및 p106-x0 [주] ②"
+      },
+      {
+        "name": "height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "가설 계단의 높이는 몇 m입니까?",
+        "source": "p106-x0 [주] ①"
+      },
+      {
+        "name": "width",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "가설 계단의 폭은 몇 m입니까?",
+        "source": "p106-x0 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p105-t3",
+        "role": "경사형 가설 계단 설치 및 해체 직종별 수량",
+        "source": "2-7-7 경사형 가설 계단 설치 및 해체 표",
+        "unit": "인/㎡",
+        "values": {
+          "비계공": {
+            "수량": "0.27"
+          },
+          "보통인부": {
+            "수량": "0.09"
+          }
+        },
+        "cite": {
+          "table_id": "p105-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p105-t3",
+          "column_input": "수량",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p105-t3에서 직종별 단위당 품(수량)을 가져온다.",
+        "입력된 면적(area)을 곱하여 총 품을 구한다."
+      ],
+      "source": "p105-t3 및 p106-x0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "높이가 6m를 초과하는 경우",
+        "blocked_if": {
+          "input": "height",
+          "op": ">",
+          "value": 6
+        },
+        "reason": "본 품은 높이 6m 이하 기준이며, 초과 시 적용할 기준이 명시되어 있지 않음",
+        "source": "p106-x0 [주] ①",
+        "cite": {
+          "chunk_id": "p106-x0",
+          "quote": "높이 6m이하에서"
+        }
+      },
+      {
+        "condition": "폭이 0.9m를 초과하는 경우",
+        "blocked_if": {
+          "input": "width",
+          "op": ">",
+          "value": 0.9
+        },
+        "reason": "본 품은 가설계단 폭 0.9m 이하 기준이며, 초과 시 적용할 기준이 명시되어 있지 않음",
+        "source": "p106-x0 [주] ②",
+        "cite": {
+          "chunk_id": "p106-x0",
+          "quote": "가설계단 폭은 0.9m이하"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "방호시설",
+        "source": "p106-x0 [주] ④",
+        "cite": {
+          "chunk_id": "p106-x0",
+          "quote": "방호시설은 별도 계상한다"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p106-x0",
+          "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 직종별 투입 인원이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p105-t3",
+      "row": "비계공",
+      "column": "수량",
+      "value": "0.27"
+    },
+    {
+      "table_id": "p105-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.09"
+    },
+    {
+      "chunk_id": "p106-x0",
+      "quote": "높이 6m이하에서"
+    },
+    {
+      "chunk_id": "p106-x0",
+      "quote": "가설계단 폭은 0.9m이하"
+    },
+    {
+      "chunk_id": "p106-x0",
+      "quote": "면적은 디딤판의 면적(계단참 포함)을 기준"
+    },
+    {
+      "chunk_id": "p106-x0",
+      "quote": "방호시설은 별도 계상한다"
+    },
+    {
+      "chunk_id": "p106-x0",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다"
+    }
+  ],
+  "open_questions": [
+    "높이가 6m를 초과하거나 폭이 0.9m를 초과하는 경우 할증을 적용해야 하는지, 아니면 다른 품셈을 적용해야 하는지 원문에 명시되어 있지 않아 계산을 보류했습니다."
+  ],
+  "questions": [
+    "가설 계단의 면적은 어떻게 산정하나요?",
+    "높이가 6m를 초과하는 가설 계단은 어떻게 품을 산정해야 하나요?",
+    "방호시설 설치 비용도 이 품에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:36.547472+00:00",
+    "input_tokens": 12131,
+    "output_tokens": 1931,
+    "source_pages": [
+      105,
+      106,
+      107
+    ],
+    "prompt_sha256": "7ed86d33f4e6da8472e8dfb7cb33e69833db1151182bba649f17be356a0244b7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

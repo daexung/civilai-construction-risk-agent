@@ -1,0 +1,251 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/6-1-1/유량계(직독식)설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "6-1-1",
+    "title": "유량계(직독식) 설치",
+    "work": "유량계 및 보호통 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      735
+    ],
+    "inputs": [
+      {
+        "name": "meter_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø13~15",
+          "20~32",
+          "40~50",
+          "65~80",
+          "100~125",
+          "150~200",
+          "250~300"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "유량계 규격은 얼마입니까?",
+        "source": "6-1-1 표 규격(mm)"
+      },
+      {
+        "name": "install_item",
+        "type": "enum",
+        "allowed_values": [
+          "보호통",
+          "유량계"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치 항목은 무엇입니까? (보호통 / 유량계)",
+        "source": "6-1-1 표 열 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치 수량은 몇 개입니까?",
+        "source": "6-1-1 표 단위 (개당)"
+      },
+      {
+        "name": "is_irregular_condition",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "건축물내의 유량계 설치위치･형태가 개소별로 상이하거나 연속작업이 불가능한 경우입니까?",
+        "source": "6-1-1 표 비고"
+      },
+      {
+        "name": "is_parallel_install",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "동일장소에서 수도미터, 온수미터를 병행 설치합니까?",
+        "source": "6-1-1 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p735-t0",
+        "role": "규격별 보호통 및 유량계 설치 품",
+        "source": "6-1-1 유량계(직독식) 설치 표",
+        "unit": "인/개",
+        "values": {
+          "ø13~15": {
+            "보호통 배관공(인)": "0.148",
+            "보호통 보통인부(인)": "0.148",
+            "유량계 배관공(인)": "0.094",
+            "유량계 보통인부(인)": "0.094"
+          },
+          "20~32": {
+            "보호통 배관공(인)": "0.188",
+            "보호통 보통인부(인)": "0.188",
+            "유량계 배관공(인)": "0.113",
+            "유량계 보통인부(인)": "0.113"
+          },
+          "40~50": {
+            "보호통 배관공(인)": "0.253",
+            "보호통 보통인부(인)": "0.253",
+            "유량계 배관공(인)": "0.143",
+            "유량계 보통인부(인)": "0.143"
+          },
+          "65~80": {
+            "유량계 배관공(인)": "0.446",
+            "유량계 보통인부(인)": "0.446"
+          },
+          "100~125": {
+            "유량계 배관공(인)": "0.533",
+            "유량계 보통인부(인)": "0.533"
+          },
+          "150~200": {
+            "유량계 배관공(인)": "0.686",
+            "유량계 보통인부(인)": "0.686"
+          },
+          "250~300": {
+            "유량계 배관공(인)": "0.838",
+            "유량계 보통인부(인)": "0.838"
+          }
+        },
+        "cite": {
+          "table_id": "p735-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p735-t0",
+          "row_input": "meter_size",
+          "column_input": "install_item",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_irregular_condition": true
+            },
+            "change": "본 품의 20%를 가산한다.",
+            "source": "6-1-1 표 비고",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "비고"
+            }
+          },
+          {
+            "when": {
+              "is_parallel_install": true
+            },
+            "change": "단독 설치품에 30%를 가산한다.",
+            "source": "6-1-1 표 비고",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "비고"
+            }
+          }
+        ]
+      },
+      "steps": [
+        "p735-t0에서 규격과 설치 항목에 해당하는 배관공, 보통인부의 단위당 품을 찾는다.",
+        "물량을 곱해 총 품을 구한다.",
+        "조건에 따라 비고의 할증(20%, 30%)을 적용한다."
+      ],
+      "source": "6-1-1 유량계(직독식) 설치",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [
+      {
+        "condition": "보호통 설치 시 규격이 65~80 이상인 경우",
+        "reason": "표에 65~80 이상 규격의 보호통 설치 품이 없음",
+        "source": "6-1-1 표",
+        "cite": {
+          "table_id": "p735-t0"
+        }
+      },
+      {
+        "condition": "비고의 두 가지 가산 조건(is_irregular_condition, is_parallel_install)이 모두 참인 경우",
+        "reason": "20% 가산과 30% 가산이 중복될 때 합산(50%)인지 곱연산인지 원문에 명시되지 않음",
+        "source": "6-1-1 표 비고",
+        "cite": {
+          "table_id": "p735-t0",
+          "row": "비고"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p735-x9",
+          "quote": "공구손료 및 경장비의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 제시되어 있고, 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p735-t0",
+      "row": "ø13~15",
+      "column": "보호통 배관공(인)",
+      "value": "0.148"
+    },
+    {
+      "table_id": "p735-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 건축물내의 유량계 설치위치･형태가 개소별로 상이하거나 연속작업이 불가능한 경우는 본 품의 20%를 가산한다. - 동일장소에서 수도미터, 온수미터를 병행 설치 시에는 단독 설치품에 30%를 가산한다."
+    },
+    {
+      "chunk_id": "p735-x9",
+      "quote": "공구손료 및 경장비의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비고의 20% 가산 조건과 30% 가산 조건이 동시에 발생할 경우, 할증률을 합산(50%)해야 하는지 곱연산해야 하는지 명확하지 않습니다.",
+    "보호통 설치 시 65~80 이상 규격에 대한 품이 표에 없는데, 이 경우 어떻게 처리해야 하는지 명확하지 않습니다."
+  ],
+  "questions": [
+    "유량계 규격이 40~50mm이고 유량계만 5개 설치할 때 배관공 품은 얼마인가요?",
+    "동일장소에서 수도미터와 온수미터를 병행 설치하면서, 설치위치가 상이하여 연속작업이 불가능한 경우 할증은 어떻게 적용되나요?",
+    "유량계 설치 시 밸브나 스트레이너 설치 품도 이 기준에 포함되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:40:36.452846+00:00",
+    "input_tokens": 11959,
+    "output_tokens": 2652,
+    "source_pages": [
+      735,
+      736
+    ],
+    "prompt_sha256": "09950772b2bcf6cafb6b4505654764527b2a8361c433760b437d25acbcbd4e03",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

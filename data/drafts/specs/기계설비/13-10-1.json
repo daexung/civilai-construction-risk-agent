@@ -1,0 +1,379 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-10-1/OPEN_BELT_CONVEYOR_설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-10-1",
+    "title": "OPEN BELT CONVEYOR 설치('92년 보완)",
+    "work": "OPEN BELT CONVEYOR 설치 및 Belt Endless 작업",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      901,
+      902
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "전체 설치",
+          "Belt Endless 작업만"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "수행할 작업은 전체 설치입니까, 아니면 Belt Endless 작업만입니까?",
+        "source": "PDF 901쪽 본문 및 [주] ⑬"
+      },
+      {
+        "name": "belt_width",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "Inch",
+        "required": true,
+        "ask": "Belt 폭은 몇 Inch입니까? (전체 설치 시)",
+        "source": "PDF 901쪽 산출식"
+      },
+      {
+        "name": "conveyor_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "M",
+        "required": true,
+        "ask": "Belt conveyor 길이는 몇 M입니까? (전체 설치 시)",
+        "source": "PDF 901쪽 산출식 및 [주] ⑪, ⑫"
+      },
+      {
+        "name": "is_portable",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Portable Belt conveyor 설치입니까?",
+        "source": "PDF 901쪽 [주] ⑩"
+      },
+      {
+        "name": "endless_material",
+        "type": "enum",
+        "allowed_values": [
+          "일반내열재",
+          "Steel재"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Belt Endless 작업의 재질은 무엇입니까? (Belt Endless 작업만 수행 시)",
+        "source": "PDF 901쪽 [주] ⑬ ㉮, ㉯"
+      },
+      {
+        "name": "endless_width",
+        "type": "enum",
+        "allowed_values": [
+          "18\" 이하",
+          "26\"",
+          "36\"",
+          "36\" 이하",
+          "48\"",
+          "56\"",
+          "70\"",
+          "72\""
+        ],
+        "unit": "Inch",
+        "required": true,
+        "ask": "Belt Endless 작업 시 Belt 폭은 표의 어느 규격에 해당합니까?",
+        "source": "PDF 901쪽 p901-t1, PDF 902쪽 p902-t0"
+      },
+      {
+        "name": "endless_count",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "개소",
+        "required": true,
+        "ask": "Belt Endless 작업은 몇 개소입니까?",
+        "source": "PDF 901쪽 p901-t1 단위 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p901-t0",
+        "role": "공종별 품 배분표",
+        "source": "PDF 901쪽 [주] ②",
+        "unit": "%",
+        "values": {
+          "비율(%)": {
+            "플랜트기계설치공": "37.5",
+            "비계공": "12.5",
+            "철골공": "12.5",
+            "용접공": "12.5",
+            "특별인부": "25",
+            "계": "100"
+          }
+        },
+        "cite": {
+          "table_id": "p901-t0"
+        }
+      },
+      {
+        "id": "p901-t1",
+        "role": "일반내열재 Belt Endless 작업 품",
+        "source": "PDF 901쪽 [주] ⑬ ㉮ 일반내열재",
+        "unit": "인/개소",
+        "values": {
+          "18\" 이하": {
+            "Belt Conveyor 설치공": "3.78",
+            "기계 설비공": "1.51",
+            "비계공": "3.02",
+            "특별인부": "0.75",
+            "저압케이블 전공": "0.75",
+            "계": "9.81"
+          },
+          "26\"": {
+            "Belt Conveyor 설치공": "4.27",
+            "기계 설비공": "1.70",
+            "비계공": "3.41",
+            "특별인부": "0.85",
+            "저압케이블 전공": "0.85",
+            "계": "11.08"
+          },
+          "36\"": {
+            "Belt Conveyor 설치공": "4.43",
+            "기계 설비공": "1.77",
+            "비계공": "3.55",
+            "특별인부": "0.88",
+            "저압케이블 전공": "0.88",
+            "계": "11.51"
+          },
+          "48\"": {
+            "Belt Conveyor 설치공": "4.59",
+            "기계 설비공": "1.83",
+            "비계공": "3.67",
+            "특별인부": "0.91",
+            "저압케이블 전공": "0.91",
+            "계": "11.91"
+          },
+          "56\"": {
+            "Belt Conveyor 설치공": "5.07",
+            "기계 설비공": "2.03",
+            "비계공": "4.06",
+            "특별인부": "1.01",
+            "저압케이블 전공": "1.01",
+            "계": "13.18"
+          },
+          "70\"": {
+            "Belt Conveyor 설치공": "5.64",
+            "기계 설비공": "2.25",
+            "비계공": "4.51",
+            "특별인부": "1.12",
+            "저압케이블 전공": "1.12",
+            "계": "14.64"
+          },
+          "72\"": {
+            "Belt Conveyor 설치공": "6.68",
+            "기계 설비공": "2.67",
+            "비계공": "5.34",
+            "특별인부": "1.33",
+            "저압케이블 전공": "1.33",
+            "계": "17.35"
+          }
+        },
+        "cite": {
+          "table_id": "p901-t1"
+        }
+      },
+      {
+        "id": "p902-t0",
+        "role": "Steel재 Belt Endless 작업 품",
+        "source": "PDF 902쪽 [주] ⑬ ㉯ Steel재",
+        "unit": "인/개소",
+        "values": {
+          "36\" 이하": {
+            "Belt Conveyor 설치공": "8.85",
+            "기계 설비공": "2.21",
+            "비계공": "4.42",
+            "특별인부": "2.21",
+            "저압케이블 전공": "1.10",
+            "계": "18.79"
+          },
+          "48\"": {
+            "Belt Conveyor 설치공": "9.12",
+            "기계 설비공": "2.28",
+            "비계공": "4.56",
+            "특별인부": "2.28",
+            "저압케이블 전공": "1.14",
+            "계": "19.38"
+          },
+          "56\"": {
+            "Belt Conveyor 설치공": "10.25",
+            "기계 설비공": "2.56",
+            "비계공": "5.12",
+            "특별인부": "2.56",
+            "저압케이블 전공": "1.28",
+            "계": "21.77"
+          },
+          "70\"": {
+            "Belt Conveyor 설치공": "12.02",
+            "기계 설비공": "3.00",
+            "비계공": "6.01",
+            "특별인부": "3.00",
+            "저압케이블 전공": "1.50",
+            "계": "25.53"
+          },
+          "72\"": {
+            "Belt Conveyor 설치공": "14.17",
+            "기계 설비공": "3.55",
+            "비계공": "7.08",
+            "특별인부": "3.54",
+            "저압케이블 전공": "1.77",
+            "계": "30.11"
+          }
+        },
+        "cite": {
+          "table_id": "p902-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "작업 종류가 '전체 설치'인 경우, 길이에 따른 산출식을 적용하여 총 품(인)을 구한다.",
+        "길이가 5M 미만인 경우 5M로 계산한다.",
+        "총 품(인)을 공종별 품 배분표(p901-t0)의 비율에 따라 직종별로 배분한다.",
+        "Portable Belt conveyor인 경우 산출된 품의 50%를 적용한다.",
+        "작업 종류가 'Belt Endless 작업만'인 경우, 재질과 폭에 따라 p901-t1 또는 p902-t0에서 개소당 품을 찾아 작업 개소를 곱한다."
+      ],
+      "source": "PDF 901쪽 산출식 및 [주] ②, ⑩, ⑪, ⑬",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "Support Structure 등의 설치품",
+        "reason": "별도 계상",
+        "source": "PDF 901쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p901-x5",
+          "quote": "Support Structure 등의 설치품은 별도 계상한다."
+        }
+      },
+      {
+        "condition": "Belt cover의 제작 및 설치",
+        "reason": "별도 계상",
+        "source": "PDF 901쪽 [주] ⑦",
+        "cite": {
+          "chunk_id": "p901-x5",
+          "quote": "Belt cover의 제작 및 설치 경우는 별도 계상한다."
+        }
+      },
+      {
+        "condition": "Motor, 구동장치, Tension장치, 평량기, Chute, Skirt, Liner, 진동장치 등의 설치품",
+        "reason": "별도 계상",
+        "source": "PDF 901쪽 [주] ⑧",
+        "cite": {
+          "chunk_id": "p901-x5",
+          "quote": "Motor, 구동장치, Tension장치(Weight 제외), 평량기, Chute, Skirt, Liner, 진동장치 등의 설치품은 별도 계상한다."
+        }
+      },
+      {
+        "condition": "Plummer block, Coupling, Pulley를 현장에서 조립할 경우",
+        "reason": "별도 계상",
+        "source": "PDF 901쪽 [주] ⑨",
+        "cite": {
+          "chunk_id": "p901-x5",
+          "quote": "Plu㎜er block, Coupling, Pulley를 현장에서 조립할 경우 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "산출식을 통한 총 품 계산 후 비율 배분 방식과, 특정 조건(Belt Endless 작업만)일 때 표를 참조하는 방식이 혼재되어 있어 현재의 표준 계산 모델로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "chunk_id": "p901-x0",
+      "quote": "Belt폭과 길이에 따른 Belt Conveyor 설치품은 아래의 산출식에 의한다."
+    },
+    {
+      "chunk_id": "p901-x0",
+      "quote": "1. Belt conveyor 길이 300M까지 - 품(인)={0.6+(Belt폭-12\")×0.025}×길이(M)+10.5"
+    },
+    {
+      "chunk_id": "p901-x0",
+      "quote": "2. Belt conveyor 길이 300M 초과 600M까지 - 품(인)={0.4+(Belt폭-12\")×0.025}×길이(M)+70.5"
+    },
+    {
+      "chunk_id": "p901-x0",
+      "quote": "3. Belt conveyor 길이 600M 초과 - 품(인)={0.3+(Belt폭-12\")×0.025}×길이(M)+130.5"
+    },
+    {
+      "chunk_id": "p901-x0",
+      "quote": "② 공종별 품 배분표"
+    },
+    {
+      "table_id": "p901-t0",
+      "row": "비율(%)",
+      "column": "플랜트기계설치공",
+      "value": "37.5"
+    },
+    {
+      "chunk_id": "p901-x5",
+      "quote": "⑩ Portable Belt conveyor의 설치 경우는 본 품의 50%까지 적용한다."
+    },
+    {
+      "chunk_id": "p901-x5",
+      "quote": "⑪ 5M 미만은 5M의 품을 적용한다."
+    },
+    {
+      "chunk_id": "p901-x5",
+      "quote": "⑬ Belt Endless 작업만이 필요한 경우에는 다음 품을 적용한다."
+    },
+    {
+      "chunk_id": "p901-x5",
+      "quote": "㉮ 일반내열재"
+    },
+    {
+      "table_id": "p901-t1",
+      "row": "18\" 이하",
+      "column": "Belt\nConveyor\n설치공",
+      "value": "3.78"
+    },
+    {
+      "chunk_id": "p902-x0",
+      "quote": "㉯ Steel재"
+    },
+    {
+      "table_id": "p902-t0",
+      "row": "36\" 이하",
+      "column": "Belt\nConveyor\n설치공",
+      "value": "8.85"
+    }
+  ],
+  "open_questions": [
+    "산출식으로 계산된 총 품(인)을 비율로 배분할 때, 소수점 처리는 어떻게 해야 하는지 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "Belt conveyor 길이가 200M이고 폭이 36 Inch일 때 전체 설치 품은 어떻게 계산하나요?",
+    "Belt Endless 작업만 수행할 때, 일반내열재 26 Inch 규격 2개소의 품은 어떻게 되나요?",
+    "Portable Belt conveyor를 설치할 경우 품 산출 시 어떤 비율을 적용해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:43:48.954886+00:00",
+    "input_tokens": 27251,
+    "output_tokens": 8261,
+    "source_pages": [
+      901,
+      902,
+      903
+    ],
+    "prompt_sha256": "22899072be194bf35dd4229386cc66bc8e522fd88688f79d65760b25a629ba94",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

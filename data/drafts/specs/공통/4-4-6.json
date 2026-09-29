@@ -1,0 +1,170 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/4-4-6/인공식재지배수판설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "4-4-6",
+    "title": "인공식재지 배수판 설치(‘26년 신설)",
+    "work": "배수판 절단 및 설치, 뒷정리",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      98
+    ],
+    "inputs": [
+      {
+        "name": "panel_size",
+        "type": "enum",
+        "allowed_values": [
+          "0.5㎡ 이하",
+          "0.5㎡ 초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치하는 조경용 배수판의 규격은 어떻게 됩니까?",
+        "source": "4-4-6 [주] ①"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "인공식재지 배수판 설치 물량은 몇 ㎡입니까?",
+        "source": "4-4-6 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p154-t2",
+        "role": "인공식재지 배수판 설치 일당 작업조 및 시공량",
+        "source": "4-4-6 표",
+        "unit": "인/일, ㎡/일",
+        "values": {
+          "조경공": {
+            "수량": "2",
+            "시공량(㎡)": "210"
+          },
+          "보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "210"
+          }
+        },
+        "cite": {
+          "table_id": "p154-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p154-t2",
+          "row": "조경공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p154-t2",
+          "column": "수량",
+          "trades": [
+            "조경공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p154-t2에서 일일 시공량(210㎡)을 가져온다.",
+        "작업일수 = volume ÷ 일일 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p154-t2의 직종별 수량으로 구한다."
+      ],
+      "source": "4-4-6 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "배수판 규격이 0.5㎡ 초과",
+        "blocked_if": {
+          "input": "panel_size",
+          "op": "==",
+          "value": "0.5㎡ 초과"
+        },
+        "reason": "본 품은 규격 0.5㎡ 이하인 경우에만 적용함",
+        "source": "4-4-6 [주] ①",
+        "cite": {
+          "chunk_id": "p154-x13",
+          "quote": "조경용 배수판(규격 0.5㎡이하)을 설치하는 경우에 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "방근층 및 여과층",
+        "source": "4-4-6 [주] ③",
+        "cite": {
+          "chunk_id": "p154-x13",
+          "quote": "방근층 및 여과층은 필요시 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조의 인원과 일일 시공량이 표에 제시되어 있어, 물량을 일일 시공량으로 나누어 작업일수를 구하는 방식이 적합함.",
+  "citations": [
+    {
+      "table_id": "p154-t2",
+      "row": "조경공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p154-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p154-t2",
+      "row": "조경공",
+      "column": "시공량(㎡)",
+      "value": "210"
+    },
+    {
+      "chunk_id": "p154-x13",
+      "quote": "본 품은 옥상 등 콘크리트 상부에 인공식재지 조성을 위한 조경용 배수판(규격 0.5㎡이하)을 설치하는 경우에 적용한다."
+    },
+    {
+      "chunk_id": "p154-x13",
+      "quote": "방근층 및 여과층은 필요시 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 표 텍스트(p154-t2)에서 행 이름이 '조경공 보통인부'로 병합되어 나타나, 원문 이미지를 참고하여 '조경공'과 '보통인부' 행으로 분리하여 tables를 구성함."
+  ],
+  "questions": [
+    "배수판 설치 물량은 몇 ㎡입니까?",
+    "배수판 규격이 0.5㎡를 초과하는 경우 품을 어떻게 산정해야 합니까?",
+    "방근층 및 여과층 설치 물량은 어디에 입력합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:49.600749+00:00",
+    "input_tokens": 11543,
+    "output_tokens": 1634,
+    "source_pages": [
+      154,
+      155
+    ],
+    "prompt_sha256": "6bf6a1493afe4f7940ccd02b045fd900eab70ee3553bbb7045a28944dd1ae179",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p154-x13 조각 텍스트에 없음"
+    ]
+  }
+}

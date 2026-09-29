@@ -1,0 +1,278 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-3-8/갱폼설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-3-8",
+    "title": "갱폼 설치 및 해체",
+    "work": "갱폼 조립 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      141,
+      142
+    ],
+    "inputs": [
+      {
+        "name": "layer_type",
+        "type": "enum",
+        "allowed_values": [
+          "셋팅층",
+          "마감층",
+          "일반층"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업하는 층은 어디입니까?",
+        "source": "p198-t1 및 p198-x13"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공면적은 몇 ㎡입니까?",
+        "source": "p198-t1 시공량(㎡)"
+      },
+      {
+        "name": "section_change",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단면의 형태 및 크기에 변화가 발생합니까?",
+        "source": "p198-x0"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p198-t1",
+        "role": "갱폼 설치 및 해체 일당 작업조 및 시공량",
+        "source": "2. 설치 및 해체",
+        "unit": "인/일, 대/일, ㎡/일",
+        "values": {
+          "형틀목공": {
+            "셋팅층": "5",
+            "마감층": "5",
+            "일반층": "5"
+          },
+          "보통인부": {
+            "셋팅층": "1",
+            "마감층": "1",
+            "일반층": "1"
+          },
+          "크레인": {
+            "셋팅층": "1"
+          },
+          "시공량(㎡)": {
+            "셋팅층": "40",
+            "마감층": "50",
+            "일반층": "90"
+          }
+        },
+        "cite": {
+          "table_id": "p198-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p198-t1",
+          "row": "시공량(㎡)",
+          "column_input": "layer_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p198-t1",
+          "column_input": "layer_type",
+          "trades": [
+            "형틀목공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "형틀목공": "1007",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p198-t1에서 층별 시공량을 고른다.",
+        "작업일수 = area ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "p198-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "단면의 형태 및 크기에 변화가 발생되는 경우",
+        "blocked_if": {
+          "input": "section_change",
+          "op": "==",
+          "value": true
+        },
+        "reason": "현장 여건에 따라 ‘셋팅층 및 마감층의 설치 및 해체’을 조정하여 별도 계상해야 함",
+        "source": "p198-x0",
+        "cite": {
+          "chunk_id": "p198-x0",
+          "quote": "- 본 품은 단면에 변화가 없는 기준이며, 단면의 형태 및 크기에 변화가 발생되는 경우 현장 여건에\n설명 | 따라 ‘셋팅층 및 마감층의 설치 및 해체’을 조정하여 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "양중에 소요되는 장비(크레인 등)의 기계경비",
+        "source": "p197-x16",
+        "cite": {
+          "chunk_id": "p197-x16",
+          "quote": "- 양중에 소요되는 장비(크레인 등)의 기계경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "재료 및 손료",
+        "source": "p197-x16",
+        "cite": {
+          "chunk_id": "p197-x16",
+          "quote": "- 재료 및 손료는 별도 계상한다."
+        }
+      },
+      {
+        "item": "갱폼용 핸드레일 및 작업발판의 재료 및 품",
+        "source": "p197-x16",
+        "cite": {
+          "chunk_id": "p197-x16",
+          "quote": "- 갱폼용 핸드레일 및 작업발판의 재료 및 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p197-x16",
+          "quote": "- 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조의 인원과 일일 시공량이 표로 주어져 있어, 물량을 시공량으로 나누어 작업일수를 구하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p198-t1",
+      "row": "셋팅층",
+      "column": "형틀목공",
+      "value": "5"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "셋팅층",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "셋팅층",
+      "column": "크레인",
+      "value": "1"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "셋팅층",
+      "column": "시공량(㎡)",
+      "value": "40"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "마감층",
+      "column": "형틀목공",
+      "value": "5"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "마감층",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "마감층",
+      "column": "시공량(㎡)",
+      "value": "50"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "일반층",
+      "column": "형틀목공",
+      "value": "5"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "일반층",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p198-t1",
+      "row": "일반층",
+      "column": "시공량(㎡)",
+      "value": "90"
+    },
+    {
+      "chunk_id": "p198-x0",
+      "quote": "- 본 품은 단면에 변화가 없는 기준이며, 단면의 형태 및 크기에 변화가 발생되는 경우 현장 여건에\n설명 | 따라 ‘셋팅층 및 마감층의 설치 및 해체’을 조정하여 별도 계상한다."
+    },
+    {
+      "chunk_id": "p197-x16",
+      "quote": "- 양중에 소요되는 장비(크레인 등)의 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p197-x16",
+      "quote": "- 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p197-x16",
+      "quote": "- 재료 및 손료는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p197-x16",
+      "quote": "- 갱폼용 핸드레일 및 작업발판의 재료 및 품은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "크레인 대수가 표에 명시되어 있으나 기계경비는 별도 계상이라고 되어 있어, 크레인 대·일을 산출 결과에 포함해야 하는지 여부"
+  ],
+  "questions": [
+    "갱폼 설치 시 셋팅층의 시공량은 얼마인가요?",
+    "단면 크기가 변하는 층의 갱폼 해체는 어떻게 계산하나요?",
+    "갱폼용 핸드레일 재료비는 어디에 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:36:08.400109+00:00",
+    "input_tokens": 25479,
+    "output_tokens": 5486,
+    "source_pages": [
+      197,
+      198,
+      199
+    ],
+    "prompt_sha256": "47f3a9bdd9ef2f33758f75e3456ba57ed051f7163cebf8df364cc644254f3355",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

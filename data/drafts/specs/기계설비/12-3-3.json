@@ -1,0 +1,136 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/12-3-3/콘솔설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "12-3-3",
+    "title": "콘솔(Console) 설치",
+    "work": "콘솔 조립·설치 및 시험·조정 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      722
+    ],
+    "inputs": [
+      {
+        "name": "process",
+        "type": "enum",
+        "allowed_values": [
+          "조립 및 설치",
+          "시험 및 조정"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 공정입니까? (조립 및 설치 / 시험 및 조정)",
+        "source": "PDF 722쪽 12-3-3 표의 공정"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치 또는 시험·조정할 콘솔은 몇 대입니까?",
+        "source": "PDF 722쪽 12-3-3 표의 단위 (인/대)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p778-t3",
+        "role": "콘솔 설치 공정별 단위당 품",
+        "source": "PDF 722쪽 12-3-3 표",
+        "unit": "인/대",
+        "values": {
+          "조립 및 설치": {
+            "기사": "-",
+            "계장공": "6.8"
+          },
+          "시험 및 조정": {
+            "기사": "1.9",
+            "계장공": "-"
+          }
+        },
+        "cite": {
+          "table_id": "p778-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p778-t3",
+          "row_input": "process",
+          "trades": [
+            "기사",
+            "계장공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p778-t3 표에서 공정(process)에 해당하는 기사, 계장공의 단위당 품을 찾는다.",
+        "찾은 단위당 품에 물량(quantity)을 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "PDF 722쪽 12-3-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대)당 직종별 투입 인원이 표에 직접 명시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p778-t3",
+      "row": "조립 및 설치",
+      "column": "계장공",
+      "value": "6.8"
+    },
+    {
+      "table_id": "p778-t3",
+      "row": "시험 및 조정",
+      "column": "기사",
+      "value": "1.9"
+    },
+    {
+      "chunk_id": "p778-x9",
+      "quote": "본 품은 Desk를 현장에서 조립･설치하고 P.C, Keyboard, Monitor, Printer를 설치하는 것으로 소운반이\n설명 | 포함되어 있다."
+    },
+    {
+      "chunk_id": "p778-x9",
+      "quote": "본 품은 P.C를 Hard Formatting하고 운영체계를 Hard에 Setup한다."
+    }
+  ],
+  "open_questions": [
+    "제공된 파싱 결과(p778-t3)에는 '조립 및 설치' 행과 '계장공' 열의 데이터가 누락되어 있어, 원문 PDF 이미지를 기준으로 표 데이터를 복원하여 작성했습니다. 파싱 결과의 텍스트와 원문 표의 내용 차이가 큽니다."
+  ],
+  "questions": [
+    "콘솔 조립 및 설치 시 계장공의 단위당 품은 얼마인가요?",
+    "P.C 하드 포맷 및 운영체제 셋업 작업만 단독으로 수행할 경우에도 이 품을 적용할 수 있나요?",
+    "작업할 콘솔의 대수는 몇 대인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:04.264815+00:00",
+    "input_tokens": 11484,
+    "output_tokens": 1271,
+    "source_pages": [
+      778,
+      779
+    ],
+    "prompt_sha256": "d20508b1cefd6e0af65076575dff91b06045800ca7d10e2cf447e79f0bdb1e2a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '조립 및 설치'이 p778-t3 조각 텍스트에 없음",
+      "row '시험 및 조정'이 p778-t3 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,358 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/5-2-1/매트부설",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "5-2-1",
+    "title": "매트부설",
+    "work": "매트부설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      109,
+      110
+    ],
+    "inputs": [
+      {
+        "name": "condition",
+        "type": "enum",
+        "allowed_values": [
+          "육상",
+          "수중"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "육상 부설입니까, 수중 부설입니까?",
+        "source": "PDF 109쪽 5-2-1 표의 행 구분"
+      },
+      {
+        "name": "site_type",
+        "type": "enum",
+        "allowed_values": [
+          "사면",
+          "연약지반(도로/철도)",
+          "연약지반(매립지)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 위치는 사면, 연약지반(도로/철도), 연약지반(매립지) 중 어디입니까?",
+        "source": "PDF 109쪽 5-2-1 표의 열 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "매트부설 물량은 몇 ㎡입니까?",
+        "source": "PDF 109쪽 5-2-1 표의 시공량 단위"
+      },
+      {
+        "name": "depth_over_10m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "수중 부설인 경우, 수심이 10m를 초과합니까? (육상인 경우 '아니오' 선택)",
+        "source": "PDF 109쪽 [주] ⑤"
+      },
+      {
+        "name": "special_equipment",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질 특성으로 인해 시공장비 개선(철판, 연결로프 등) 또는 특수장비를 활용한 시공이 필요합니까?",
+        "source": "PDF 109쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p165-t2",
+        "role": "작업조 인원/장비 및 기준 일일시공량",
+        "source": "PDF 109쪽 5-2-1 표",
+        "unit": "인/작업조; 대/작업조; ㎡/일",
+        "values": {
+          "특별인부": {
+            "육상": "3",
+            "수중": "2"
+          },
+          "보통인부": {
+            "육상": "1",
+            "수중": "1"
+          },
+          "잠수조": {
+            "육상": "0",
+            "수중": "1"
+          },
+          "굴착기": {
+            "육상": "1",
+            "수중": "0"
+          },
+          "사면": {
+            "육상": "4800",
+            "수중": "1150"
+          },
+          "연약지반(도로/철도)": {
+            "육상": "3600",
+            "수중": "700"
+          },
+          "연약지반(매립지)": {
+            "육상": "3200"
+          }
+        },
+        "cite": {
+          "table_id": "p165-t2"
+        }
+      },
+      {
+        "id": "p166-t0",
+        "role": "매트고정 재료량 (참고자료)",
+        "source": "PDF 110쪽 [참고자료] 표",
+        "unit": "100㎡당",
+        "values": {
+          "육상부설": {
+            "매트(㎡)": "110",
+            "P.P로프(9㎜)(m)": "98",
+            "모래주머니(개)": "64",
+            "철근(19㎜)(m)": "19"
+          },
+          "수중부설": {
+            "매트(㎡)": "115",
+            "P.P로프(9㎜)(m)": "53",
+            "모래주머니(개)": "38",
+            "철근(19㎜)(m)": "11"
+          }
+        },
+        "cite": {
+          "table_id": "p166-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p165-t2",
+          "row_input": "site_type",
+          "column_input": "condition"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p165-t2",
+          "column_input": "condition",
+          "trades": [
+            "특별인부",
+            "보통인부",
+            "잠수조"
+          ]
+        },
+        "equipment": {
+          "name": "굴착기",
+          "table": "p165-t2",
+          "unit": "대·일"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p165-t2에서 육상/수중 및 시공 위치에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 109쪽 5-2-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "수심이 10m를 초과하는 수중 부설",
+        "blocked_if": {
+          "input": "depth_over_10m",
+          "op": "==",
+          "value": true
+        },
+        "reason": "수심이 10m 이상일 경우 현장조건에 따라 조정 적용해야 하므로 자동 계산 보류",
+        "source": "PDF 109쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p165-x15",
+          "quote": "⑤ 수중부설의 수심은 10m 이하를 기준한 것이며, 수심이 10m 이상일 경우 현장조건에 따라 조정 적용한다."
+        }
+      },
+      {
+        "condition": "특수장비 활용 시공",
+        "blocked_if": {
+          "input": "special_equipment",
+          "op": "==",
+          "value": true
+        },
+        "reason": "토질 특성으로 인해 시공장비 개선 또는 특수장비를 활용한 시공이 필요한 경우 별도 계상",
+        "source": "PDF 109쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p165-x15",
+          "quote": "④ 항만 매립지 등에서 토질 특성으로 인해 시공장비 개선(철판, 연결로프 등 사용) 또는 특수장비를\n활용한 시공이 필요한 별도 계상한다."
+        }
+      },
+      {
+        "condition": "수중 연약지반(매립지) 시공",
+        "reason": "수중 연약지반(매립지)의 시공량이 표에 명시되어 있지 않음",
+        "source": "PDF 109쪽 5-2-1 표",
+        "cite": {
+          "table_id": "p165-t2"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "수중매트 부설에 따른 선박 등 기계경비",
+        "source": "PDF 109쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p165-x15",
+          "quote": "③ 수중매트 부설에 따른 선박 등 기계경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "매트고정 재료량",
+        "source": "PDF 110쪽 [참고자료]",
+        "cite": {
+          "chunk_id": "p166-x0",
+          "quote": "- 매트고정이 필요한 경우 재료량은 다음을 참고한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(봉합기) 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.04",
+        "cite": {
+          "chunk_id": "p165-x15",
+          "quote": "⑦ 공구손료 및 경장비(봉합기)의 기계경비는 인력품의 4%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "직종별 인원과 장비 대수가 고정된 작업조에 대해 조건별 일일시공량이 제시되어 있으므로 일당 작업조형으로 계산합니다.",
+  "citations": [
+    {
+      "table_id": "p165-t2",
+      "row": "육상",
+      "column": "시공량(㎡) 사면",
+      "value": "4,800"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "육상",
+      "column": "시공량(㎡) 연약지반\n(도로/철도)",
+      "value": "3,600"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "육상",
+      "column": "시공량(㎡) 연약지반\n(매립지)",
+      "value": "3,200"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "수중",
+      "column": "시공량(㎡) 사면",
+      "value": "1,150"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "수중",
+      "column": "시공량(㎡) 연약지반\n(도로/철도)",
+      "value": "700"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "육상",
+      "column": "특별인부",
+      "value": "3"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "수중",
+      "column": "특별인부",
+      "value": "2"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "육상",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "수중",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "육상",
+      "column": "굴착기",
+      "value": "1"
+    },
+    {
+      "table_id": "p165-t2",
+      "row": "수중",
+      "column": "잠수조",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p165-x15",
+      "quote": "⑦ 공구손료 및 경장비(봉합기)의 기계경비는 인력품의 4%로 계상한다."
+    },
+    {
+      "chunk_id": "p165-x15",
+      "quote": "⑤ 수중부설의 수심은 10m 이하를 기준한 것이며, 수심이 10m 이상일 경우 현장조건에 따라 조정 적용한다."
+    },
+    {
+      "chunk_id": "p165-x15",
+      "quote": "④ 항만 매립지 등에서 토질 특성으로 인해 시공장비 개선(철판, 연결로프 등 사용) 또는 특수장비를\n활용한 시공이 필요한 별도 계상한다."
+    },
+    {
+      "chunk_id": "p165-x15",
+      "quote": "③ 수중매트 부설에 따른 선박 등 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p166-x0",
+      "quote": "- 매트고정이 필요한 경우 재료량은 다음을 참고한다."
+    }
+  ],
+  "open_questions": [
+    "수중 연약지반(매립지)의 시공량이 표에 명시되어 있지 않아 계산을 보류했습니다."
+  ],
+  "questions": [
+    "육상 사면에 매트를 부설할 때 일일 시공량은 얼마인가요?",
+    "수중 매트 부설 시 수심이 12m인 경우 어떻게 계산하나요?",
+    "매트고정에 필요한 재료량도 같이 계산되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:23:21.229715+00:00",
+    "input_tokens": 12927,
+    "output_tokens": 3607,
+    "source_pages": [
+      165,
+      166,
+      167
+    ],
+    "prompt_sha256": "27f936e6e9b78dbba8b69e4324de8970c8e1431c71097074c2018c11635387b0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p165-x15 조각 텍스트에 없음"
+    ]
+  }
+}

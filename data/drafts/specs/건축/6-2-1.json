@@ -1,0 +1,176 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-2-1/도막바름",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-2-1",
+    "title": "도막바름('23년 보완)",
+    "work": "도막바름 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      604,
+      660
+    ],
+    "inputs": [
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "바닥",
+          "수직부"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도막방수를 시공하는 부위는 바닥입니까, 수직부입니까?",
+        "source": "p660-t1 표의 열 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "도막 1층(회) 바름을 기준으로 한 총 시공 면적은 몇 ㎡입니까?",
+        "source": "p660-t1 표의 단위(㎡당) 및 주석 ①의 1층(회) 기준"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p660-t1",
+        "role": "부위별 도막바름 단위당 품",
+        "source": "6-2-1 도막바름 표",
+        "unit": "인/㎡",
+        "values": {
+          "방수공": {
+            "바닥": "0.015",
+            "수직부": "0.020"
+          },
+          "보통인부": {
+            "바닥": "0.009",
+            "수직부": "0.012"
+          }
+        },
+        "cite": {
+          "table_id": "p660-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p660-t1",
+          "column_input": "surface_type",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p660-t1 표에서 시공 부위(바닥/수직부)에 해당하는 방수공과 보통인부의 단위당 품을 찾는다.",
+        "찾은 단위당 품에 1층(회) 기준 시공 면적(quantity)을 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "6-2-1 도막바름 표 및 주석 ①",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "방수재료(우레탄 고무계 등), 방수테이프, 실란트 등 재료비",
+        "source": "주석 ①, ②",
+        "cite": [
+          {
+            "chunk_id": "p660-x6",
+            "quote": "본 품은 우레탄 고무계, 아크릴 고무계, 고무아스팔트계 등 도막 1층(회)을 형성하는 작업을 기준한"
+          },
+          {
+            "chunk_id": "p660-x6",
+            "quote": "본 품은 치켜올림 부위, 드레인 주위 등에 방수테이프 및 실란트 덧바름 작업을 포함한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p660-x6",
+          "quote": "공구손료는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인·일이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p660-t1",
+      "row": "방수공",
+      "column": "바닥",
+      "value": "0.015"
+    },
+    {
+      "table_id": "p660-t1",
+      "row": "방수공",
+      "column": "수직부",
+      "value": "0.020"
+    },
+    {
+      "table_id": "p660-t1",
+      "row": "보통인부",
+      "column": "바닥",
+      "value": "0.009"
+    },
+    {
+      "table_id": "p660-t1",
+      "row": "보통인부",
+      "column": "수직부",
+      "value": "0.012"
+    },
+    {
+      "chunk_id": "p660-x6",
+      "quote": "본 품은 우레탄 고무계, 아크릴 고무계, 고무아스팔트계 등 도막 1층(회)을 형성하는 작업을 기준한"
+    },
+    {
+      "chunk_id": "p660-x6",
+      "quote": "본 품은 치켜올림 부위, 드레인 주위 등에 방수테이프 및 실란트 덧바름 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p660-x6",
+      "quote": "공구손료는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "도막 층수가 2층 이상일 때 단순히 1층 기준 품을 배수(x2, x3)로 적용하는 것이 맞는지 명시되어 있지 않아, 물량 입력 시 1층(회) 바름 기준 면적으로 입력하도록 유도함."
+  ],
+  "questions": [
+    "바닥과 수직부 중 어디에 도막방수를 시공하나요?",
+    "도막을 2회 바를 경우, 면적을 2배로 계산해서 입력하면 되나요?",
+    "도막방수 시공 면적은 몇 ㎡인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:03:17.326538+00:00",
+    "input_tokens": 11528,
+    "output_tokens": 1761,
+    "source_pages": [
+      660,
+      661
+    ],
+    "prompt_sha256": "82d28d01e29774e58642001e880750e27f5b302dc8f56d85e186b2b783901c23",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

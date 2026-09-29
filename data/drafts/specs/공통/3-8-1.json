@@ -1,0 +1,184 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-8-1/패널설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-8-1",
+    "title": "패널 설치('20년 보완)",
+    "work": "패널 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      82,
+      83
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "패널 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 82쪽 p138-t2 기준 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p138-t2",
+        "role": "패널 설치 단위당 품",
+        "source": "PDF 82쪽 3-8-1 패널 설치 표",
+        "unit": "㎡당",
+        "values": {
+          "특별인부": {
+            "단위": "인",
+            "수량": "0.10"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "0.06"
+          },
+          "철근공": {
+            "단위": "인",
+            "수량": "0.03"
+          },
+          "형틀목공": {
+            "단위": "인",
+            "수량": "0.04"
+          },
+          "크레인": {
+            "규격": "10ton",
+            "단위": "hr",
+            "수량": "0.20"
+          }
+        },
+        "cite": {
+          "table_id": "p138-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p138-t2",
+          "row_input": "고정 행이름 없음",
+          "column_input": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부",
+            "철근공",
+            "형틀목공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p138-t2에서 단위당 품을 확인한다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 82쪽 p138-t2",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "터파기 및 기초콘크리트 타설",
+        "source": "PDF 83쪽 [주] ③",
+        "cite": {
+          "section_no": "3-8-1",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "트럭",
+        "source": "PDF 83쪽 [주] ④",
+        "cite": {
+          "section_no": "3-8-1",
+          "marker": "④"
+        }
+      },
+      {
+        "item": "재료량(패널, 보강재, 빗장고리, 수평채움재, 수직채움재, 앵커철근)",
+        "source": "PDF 83쪽 [주] ⑤",
+        "cite": {
+          "section_no": "3-8-1",
+          "marker": "⑤"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 인력 및 장비 품이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p138-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.10"
+    },
+    {
+      "table_id": "p138-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.06"
+    },
+    {
+      "table_id": "p138-t2",
+      "row": "철근공",
+      "column": "수량",
+      "value": "0.03"
+    },
+    {
+      "table_id": "p138-t2",
+      "row": "형틀목공",
+      "column": "수량",
+      "value": "0.04"
+    },
+    {
+      "table_id": "p138-t2",
+      "row": "크레인",
+      "column": "수량",
+      "value": "0.20"
+    },
+    {
+      "chunk_id": "p139-x0",
+      "quote": "③ 터파기 및 기초콘크리트 타설은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p139-x0",
+      "quote": "④ 트럭이 필요한 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p139-x0",
+      "quote": "⑤ 재료량(패널, 보강재, 빗장고리, 수평채움재, 수직채움재, 앵커철근)은 설계 수량에 따른다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "패널 설치 시 터파기 작업도 이 품셈에 포함되나요?",
+    "트럭이 필요한 경우 어떻게 계상해야 하나요?",
+    "설치할 패널의 총 면적(㎡)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:18.441873+00:00",
+    "input_tokens": 12225,
+    "output_tokens": 1580,
+    "source_pages": [
+      138,
+      139,
+      140
+    ],
+    "prompt_sha256": "ce143bac9bf62e0a73cf9a0a7abbc625d9bd6b5175d3e7776d3f896aca9257c5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

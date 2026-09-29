@@ -1,0 +1,154 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-5-3/철재수평규준틀설치및철거",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-5-3",
+    "title": "철재 수평규준틀 설치 및 철거",
+    "work": "철재 수평규준틀 설치 및 철거 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      44
+    ],
+    "inputs": [
+      {
+        "name": "height",
+        "type": "enum",
+        "allowed_values": [
+          "5m이하",
+          "10m이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "규준틀 높이는 얼마입니까? (5m이하 / 10m이하)",
+        "source": "PDF 44쪽 2-5-3 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치 및 철거할 수평규준틀의 개소 수는 얼마입니까?",
+        "source": "PDF 44쪽 2-5-3 표 단위 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p100-t2",
+        "role": "규준틀 높이별 단위당 품",
+        "source": "PDF 44쪽 2-5-3 표",
+        "unit": "인/개소",
+        "values": {
+          "건축목공": {
+            "5m이하": "0.14",
+            "10m이하": "0.17"
+          },
+          "보통인부": {
+            "5m이하": "0.12",
+            "10m이하": "0.14"
+          }
+        },
+        "cite": {
+          "table_id": "p100-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p100-t2",
+          "column_input": "height",
+          "trades": [
+            "건축목공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p100-t2에서 규준틀 높이에 따른 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 44쪽 2-5-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "철재 수평규준틀 제작 품",
+        "source": "PDF 44쪽 2-5-3 [주] ①",
+        "cite": {
+          "chunk_id": "p100-x9",
+          "quote": "본 품은 제작된 수평규준틀을 설치 및 철거하는 기준이다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당) 품이 표에 직접 명시되어 있으므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p100-t2",
+      "row": "건축목공",
+      "column": "5m이하",
+      "value": "0.14"
+    },
+    {
+      "table_id": "p100-t2",
+      "row": "건축목공",
+      "column": "10m이하",
+      "value": "0.17"
+    },
+    {
+      "table_id": "p100-t2",
+      "row": "보통인부",
+      "column": "5m이하",
+      "value": "0.12"
+    },
+    {
+      "table_id": "p100-t2",
+      "row": "보통인부",
+      "column": "10m이하",
+      "value": "0.14"
+    },
+    {
+      "chunk_id": "p100-x9",
+      "quote": "본 품은 제작된 수평규준틀을 설치 및 철거하는 기준이다."
+    },
+    {
+      "chunk_id": "p100-x9",
+      "quote": "수평규준틀의 조립, 설치 및 철거작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "제작된 수평규준틀을 설치하는 기준이므로, 철재 수평규준틀의 제작 품은 별도로 계상해야 하는지 명확하지 않음."
+  ],
+  "questions": [
+    "철재 수평규준틀 높이가 5m 이하일 때 건축목공 품은 얼마인가요?",
+    "철재 수평규준틀 제작 품은 이 단가에 포함되어 있나요?",
+    "설치할 규준틀의 개소 수는 몇 개소인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:08.142553+00:00",
+    "input_tokens": 11519,
+    "output_tokens": 1435,
+    "source_pages": [
+      100,
+      101
+    ],
+    "prompt_sha256": "1c6769ed746fa778c833ed617e04870362d93ebce6af803b959844a10585918e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/2-1-5/인방보설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "2-1-5",
+    "title": "인방보 설치",
+    "work": "인방보 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      581
+    ],
+    "inputs": [
+      {
+        "name": "material_type",
+        "type": "enum",
+        "allowed_values": [
+          "벽돌",
+          "치장벽돌",
+          "블록",
+          "ALC블록"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 재료의 인방보를 설치합니까?",
+        "decision_table": "p637-t3",
+        "source": "PDF 581쪽 p637-t2 및 p637-t3"
+      },
+      {
+        "name": "length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "인방보 설치 길이는 몇 m입니까?",
+        "source": "PDF 581쪽 p637-t2 기준 단위 (m당)"
+      },
+      {
+        "name": "cast_in_place",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "인방보를 현장타설 콘크리트로 설치합니까?",
+        "source": "PDF 581쪽 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p637-t2",
+        "role": "유형별 인방보 설치 품",
+        "source": "PDF 581쪽 2-1-5 인방보 설치 표",
+        "unit": "인/m",
+        "values": {
+          "조적공": {
+            "벽돌": "0.06",
+            "치장벽돌": "0.08",
+            "블록": "0.08",
+            "ALC블록": "0.06"
+          }
+        },
+        "cite": {
+          "table_id": "p637-t2"
+        }
+      },
+      {
+        "id": "p637-t3",
+        "role": "유형별 작업범위",
+        "source": "PDF 581쪽 [주] ② 각 유형별 작업범위 표",
+        "values": {
+          "벽돌": {
+            "작업범위": "- 인방보(기성콘크리트보) 설치, 철근 및 블록메시 보강, 동바리 설치․해체 작업을 포함한다."
+          },
+          "치장벽돌": {
+            "작업범위": "- 정착철물(앵커철물, L형강앵글 등) 설치, 인방보(치장벽돌) 설치 작업을 포함한다."
+          },
+          "블록": {
+            "작업범위": "- 인방보(U형블록) 설치, 철근 보강, 사춤, 동바리 및 가틀 설치․해체 작업을 포함한다."
+          },
+          "ALC블록": {
+            "작업범위": "- 인방보(ALC인방보) 설치, 철근 보강, 동바리 설치․해체 작업을 포함한다."
+          }
+        },
+        "cite": {
+          "table_id": "p637-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p637-t2",
+          "row_input": "조적공",
+          "column_input": "material_type",
+          "trades": [
+            "조적공"
+          ]
+        },
+        "quantity_input": "length",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p637-t2에서 재료 유형별 조적공 단위당 품을 고른다.",
+        "설치 길이(m)를 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 581쪽 p637-t2",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [
+      {
+        "condition": "현장타설 콘크리트로 설치하는 경우",
+        "blocked_if": {
+          "input": "cast_in_place",
+          "op": "==",
+          "value": true
+        },
+        "reason": "현장타설 콘크리트로 설치하는 경우 별도 계상함",
+        "source": "PDF 581쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p637-x16"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "인방보, 철근, 동바리 등 재료비 및 기계경비",
+        "source": "PDF 581쪽 [주] ② 작업범위에 포함된 자재 및 장비",
+        "cite": {
+          "table_id": "p637-t3"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m당) 품이 표에 직접 주어져 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p637-t2",
+      "row": "조적공",
+      "column": "수량 벽돌",
+      "value": "0.06"
+    },
+    {
+      "table_id": "p637-t2",
+      "row": "조적공",
+      "column": "수량 치장벽돌",
+      "value": "0.08"
+    },
+    {
+      "table_id": "p637-t2",
+      "row": "조적공",
+      "column": "수량 블록",
+      "value": "0.08"
+    },
+    {
+      "table_id": "p637-t2",
+      "row": "조적공",
+      "column": "수량 ALC블록",
+      "value": "0.06"
+    },
+    {
+      "table_id": "p637-t3",
+      "row": "벽돌",
+      "column": "작업범위",
+      "value": "- 인방보(기성콘크리트보) 설치, 철근 및 블록메시 보강, 동바리 설치․해체 작업을 포함한다."
+    },
+    {
+      "table_id": "p637-t3",
+      "row": "치장벽돌",
+      "column": "작업범위",
+      "value": "- 정착철물(앵커철물, L형강앵글 등) 설치, 인방보(치장벽돌) 설치 작업을 포함한다."
+    },
+    {
+      "table_id": "p637-t3",
+      "row": "블록",
+      "column": "작업범위",
+      "value": "- 인방보(U형블록) 설치, 철근 보강, 사춤, 동바리 및 가틀 설치․해체 작업을 포함한다."
+    },
+    {
+      "table_id": "p637-t3",
+      "row": "ALC블록",
+      "column": "작업범위",
+      "value": "- 인방보(ALC인방보) 설치, 철근 보강, 동바리 설치․해체 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p637-x10",
+      "quote": "본 품은 개구부 상부에 인방보를 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p637-x16",
+      "quote": "인방보를 현장타설 콘크리트로 설치하는 경우 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "인방보 설치 길이는 몇 m입니까?",
+    "인방보를 현장타설 콘크리트로 설치합니까?",
+    "인방보 설치에 사용되는 재료(벽돌, 치장벽돌 등)의 규격에 따른 품 할증이 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:57:21.516342+00:00",
+    "input_tokens": 11756,
+    "output_tokens": 2206,
+    "source_pages": [
+      637,
+      638
+    ],
+    "prompt_sha256": "9461e41f9e0a761e0180860c31c3ea98066ed9c678ee00b83ac6716033afec9f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

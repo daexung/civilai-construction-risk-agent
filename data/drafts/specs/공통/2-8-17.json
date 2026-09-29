@@ -1,0 +1,128 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-8-17/강재거푸집_작업용_난간_설치_및_해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-8-17",
+    "title": "강재거푸집 작업용 난간 설치 및 해체('22년 신설)",
+    "work": "난간 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      56
+    ],
+    "inputs": [
+      {
+        "name": "length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "설치 및 해체할 난간의 길이는 몇 m입니까?",
+        "source": "PDF 56쪽 2-8-17 표 기준 (10m당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p112-t0",
+        "role": "강재거푸집 작업용 난간 설치 및 해체 단위당 품",
+        "source": "PDF 56쪽 2-8-17 표",
+        "unit": "인/10m",
+        "values": {
+          "비계공": {
+            "수량": "0.82"
+          }
+        },
+        "cite": {
+          "table_id": "p112-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p112-t0",
+          "row_input": "비계공",
+          "column_input": "수량",
+          "trades": [
+            "비계공"
+          ]
+        },
+        "quantity_input": "length",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p112-t0에서 비계공의 단위당 품을 찾는다.",
+        "입력된 물량(length)을 10으로 나눈 후 단위당 품을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 56쪽 2-8-17 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "발끝막이판 및 보호망의 설치 및 해체",
+        "source": "PDF 56쪽 2-8-17 [주] ④",
+        "cite": {
+          "section_no": "2-8-17",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(전동드릴 등) 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "section_no": "2-8-17",
+          "marker": "⑤"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "10m당 비계공의 품이 표에 직접 제시되어 있어 물량에 비례하여 계산하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p112-t0",
+      "row": "비계공",
+      "column": "수량",
+      "value": "0.82"
+    },
+    {
+      "chunk_id": "p112-x2",
+      "quote": "발끝막이판 및 보호망의 설치 및 해체는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p112-x2",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "강재거푸집 난간 설치 길이가 50m일 때 비계공 품은 얼마인가요?",
+    "발끝막이판 설치 품도 이 기준에 포함되나요?",
+    "난간 단수가 3단일 경우 품을 어떻게 할증하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:14:13.844596+00:00",
+    "input_tokens": 11562,
+    "output_tokens": 1186,
+    "source_pages": [
+      112,
+      113
+    ],
+    "prompt_sha256": "11aa8b940e186fe7eb1a52853126d25ee77ec5f87c2259fe2a8990cde4738f81",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-1-3/방수층보호재붙임",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-1-3",
+    "title": "방수층보호재 붙임",
+    "work": "방수층보호재 붙임 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      603
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "PE필름 바닥",
+          "PE필름 수직부",
+          "발포 PE시트 바닥",
+          "발포 PE시트 수직부"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "보호재 종류와 시공 부위는 무엇입니까?",
+        "source": "PDF 603쪽 6-1-3 표의 구분",
+        "synonyms": {
+          "PE필름 바닥": [
+            "PE필름 바닥면"
+          ],
+          "PE필름 수직부": [
+            "PE필름 벽면"
+          ],
+          "발포 PE시트 바닥": [
+            "발포PE시트 바닥",
+            "발포시트 바닥"
+          ],
+          "발포 PE시트 수직부": [
+            "발포PE시트 수직부",
+            "발포시트 수직부"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 물량은 몇 ㎡입니까?",
+        "source": "PDF 603쪽 6-1-3 표 단위 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p659-t3",
+        "role": "방수층보호재 붙임 단위당 품",
+        "source": "PDF 603쪽 6-1-3 방수층보호재 붙임 표",
+        "unit": "인/㎡",
+        "values": {
+          "방수공": {
+            "PE필름 바닥": "0.011",
+            "PE필름 수직부": "0.013",
+            "발포 PE시트 바닥": "0.012",
+            "발포 PE시트 수직부": "0.016"
+          },
+          "보통인부": {
+            "PE필름 바닥": "0.003",
+            "PE필름 수직부": "0.004",
+            "발포 PE시트 바닥": "0.004",
+            "발포 PE시트 수직부": "0.005"
+          }
+        },
+        "cite": {
+          "table_id": "p659-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p659-t3",
+          "column_input": "work_type",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p659-t3 표에서 보호재 종류 및 부위에 따른 직종별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 603쪽 6-1-3 방수층보호재 붙임 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인·일 품이 표에 직접 제시되어 있으므로 per_unit 분류를 선택함.",
+  "citations": [
+    {
+      "table_id": "p659-t3",
+      "row": "방수공",
+      "column": "PE필름 바닥",
+      "value": "0.011"
+    },
+    {
+      "table_id": "p659-t3",
+      "row": "방수공",
+      "column": "PE필름 수직부",
+      "value": "0.013"
+    },
+    {
+      "table_id": "p659-t3",
+      "row": "방수공",
+      "column": "발포 PE시트 바닥",
+      "value": "0.012"
+    },
+    {
+      "table_id": "p659-t3",
+      "row": "방수공",
+      "column": "발포 PE시트 수직부",
+      "value": "0.016"
+    },
+    {
+      "table_id": "p659-t3",
+      "row": "보통인부",
+      "column": "PE필름 바닥",
+      "value": "0.003"
+    },
+    {
+      "table_id": "p659-t3",
+      "row": "보통인부",
+      "column": "PE필름 수직부",
+      "value": "0.004"
+    },
+    {
+      "table_id": "p659-t3",
+      "row": "보통인부",
+      "column": "발포 PE시트 바닥",
+      "value": "0.004"
+    },
+    {
+      "table_id": "p659-t3",
+      "row": "보통인부",
+      "column": "발포 PE시트 수직부",
+      "value": "0.005"
+    },
+    {
+      "chunk_id": "p659-x16",
+      "quote": "[주] 본 품은 방수층 보호재(PE필름, 발포 PE시트) 붙임을 기준한 것이다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "PE필름을 바닥에 100㎡ 시공할 때 필요한 품은 어떻게 되나요?",
+    "표에 명시되지 않은 다른 재질의 방수층 보호재를 사용할 경우 품을 어떻게 적용해야 하나요?",
+    "수직부 시공 물량만 알려주면 되나요? (보호재 종류 누락)"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:02:57.799137+00:00",
+    "input_tokens": 11533,
+    "output_tokens": 1736,
+    "source_pages": [
+      659,
+      660
+    ],
+    "prompt_sha256": "86dd22d265150ea1283a5623f0b9de403e92b6228e51c390947e074167cd1f63",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

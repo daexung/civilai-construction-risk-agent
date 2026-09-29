@@ -1,0 +1,246 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-4-3/철골내화피복뿜칠",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-4-3",
+    "title": "철골 내화 피복뿜칠",
+    "work": "철골 내화 피복뿜칠 기본 품량 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      576,
+      577
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 576쪽 1-4-3 표 단위 (㎜/100㎡당)"
+      },
+      {
+        "name": "thickness",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎜",
+        "required": true,
+        "ask": "피복 두께는 몇 ㎜입니까?",
+        "source": "PDF 576쪽 1-4-3 표 단위 (㎜/100㎡당)"
+      },
+      {
+        "name": "is_vermiculite_wet",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "내화 피복 질석계 자재를 습식으로 시공합니까?",
+        "source": "PDF 576쪽 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p632-t2",
+        "role": "철골 내화 피복뿜칠 기본 품량",
+        "source": "PDF 576쪽 1-4-3 표",
+        "unit": "인, hr",
+        "values": {
+          "도장공": {
+            "수량": "0.062"
+          },
+          "특별인부": {
+            "수량": "0.056"
+          },
+          "보통인부": {
+            "수량": "0.062"
+          },
+          "그라우팅믹서": {
+            "수량": "0.180"
+          },
+          "그라우팅펌프": {
+            "수량": "0.180"
+          }
+        },
+        "cite": {
+          "table_id": "p632-t2"
+        }
+      },
+      {
+        "id": "p633-t0",
+        "role": "철골 내화 피복뿜칠 재료량",
+        "source": "PDF 577쪽 1-4-3 재료량 표",
+        "unit": "㎏",
+        "values": {
+          "질석": {
+            "수량": "38.8"
+          }
+        },
+        "cite": {
+          "table_id": "p633-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p632-t2",
+          "row_input": null,
+          "column_input": "수량",
+          "trades": [
+            "도장공",
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area, thickness",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p632-t2에서 직종 및 장비별 단위당 품을 고른다.",
+        "p633-t0에서 질석의 단위당 재료량을 고른다.",
+        "환산 물량 = (area ÷ 100) × thickness 로 계산한다.",
+        "단위당 품 및 재료량에 환산 물량을 곱해 총 투입량을 구한다."
+      ],
+      "source": "PDF 576쪽 1-4-3 표 및 PDF 577쪽 재료량 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "질석계 자재 습식 시공이 아닌 경우",
+        "blocked_if": {
+          "input": "is_vermiculite_wet",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 내화 피복 질석계 자재를 습식으로 시공하는 기준이므로, 다른 자재나 건식 시공일 경우 적용 불가",
+        "source": "PDF 576쪽 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p632-x20",
+            "quote": "본 품은 내화 피복 질석계 자재를 습식으로 시공하는 기준이다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "철골 바탕면 처리, 청소 및 검사",
+        "source": "PDF 576쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p632-x20",
+          "quote": "철골 바탕면 처리, 청소 및 검사는 별도 계상한다."
+        }
+      },
+      {
+        "item": "소모재료 및 장비의 설치, 해체, 이동",
+        "source": "PDF 576쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p632-x20",
+          "quote": "소모재료 및 장비의 설치, 해체, 이동에 소요되는 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "chunk_id": "p633-x0",
+          "quote": "공구손료 및 경장비(분사기 등)의 기계경비는 인력품의 5%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎜/100㎡당)에 따른 인력 및 장비, 재료의 품이 표에 직접 제시되어 있어 물량을 곱하여 계산하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p632-t2",
+      "row": "도장공",
+      "column": "수량",
+      "value": "0.062"
+    },
+    {
+      "table_id": "p632-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.056"
+    },
+    {
+      "table_id": "p632-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.062"
+    },
+    {
+      "table_id": "p632-t2",
+      "row": "그라우팅믹서",
+      "column": "수량",
+      "value": "0.180"
+    },
+    {
+      "table_id": "p632-t2",
+      "row": "그라우팅펌프",
+      "column": "수량",
+      "value": "0.180"
+    },
+    {
+      "table_id": "p633-t0",
+      "row": "질석",
+      "column": "수량",
+      "value": "38.8"
+    },
+    {
+      "chunk_id": "p632-x20",
+      "quote": "본 품은 내화 피복 질석계 자재를 습식으로 시공하는 기준이다."
+    },
+    {
+      "chunk_id": "p632-x20",
+      "quote": "철골 바탕면 처리, 청소 및 검사는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p632-x20",
+      "quote": "소모재료 및 장비의 설치, 해체, 이동에 소요되는 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p633-x0",
+      "quote": "공구손료 및 경장비(분사기 등)의 기계경비는 인력품의 5%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표의 단위가 (㎜/100㎡당)으로 되어 있어, 물량 계산 시 '(면적/100) * 두께'로 산정하도록 모델링하였으나, 실무적으로 이 환산 방식이 정확히 맞는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "철골 내화 피복뿜칠을 시공할 면적(㎡)과 피복 두께(㎜)는 각각 얼마입니까?",
+    "질석계 자재가 아닌 다른 종류의 자재를 사용하거나 건식으로 시공할 경우, 이 품셈을 어떻게 조정하여 적용해야 하나요?",
+    "철골 바탕면 처리나 청소 작업에 소요되는 품은 어느 기준을 참고하여 별도로 계상해야 합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:48:32.670644+00:00",
+    "input_tokens": 12355,
+    "output_tokens": 2468,
+    "source_pages": [
+      632,
+      633,
+      634
+    ],
+    "prompt_sha256": "a693c555803f7941a22d7a095856ce026ac3119845226abf3fe3e287808d967c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

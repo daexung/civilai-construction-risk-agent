@@ -1,0 +1,193 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-7-6/PC거더설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-7-6",
+    "title": "PC거더 설치",
+    "work": "PC거더 설치 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      157
+    ],
+    "inputs": [
+      {
+        "name": "unit_weight",
+        "type": "enum",
+        "allowed_values": [
+          "2ton미만",
+          "5ton미만",
+          "10ton미만",
+          "20ton미만",
+          "30ton미만"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "PC거더의 단위중량은 얼마입니까?",
+        "source": "PDF 157쪽 6-7-6 표 단위중량"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "PC거더 설치 물량은 몇 개소입니까?",
+        "source": "PDF 157쪽 6-7-6 표 시공량 단위"
+      },
+      {
+        "name": "height_over_30m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공높이가 30m를 초과합니까?",
+        "source": "PDF 157쪽 6-7-6 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p213-t2",
+        "role": "PC거더 설치 일당 작업조 및 시공량",
+        "source": "PDF 157쪽 6-7-6 표",
+        "unit": "인/작업조; 대/작업조; 개소/일",
+        "values": {
+          "시공량": {
+            "2ton미만": "21",
+            "5ton미만": "19",
+            "10ton미만": "17",
+            "20ton미만": "15",
+            "30ton미만": "12"
+          },
+          "형틀목공": {
+            "2ton미만": "3",
+            "5ton미만": "3",
+            "10ton미만": "3",
+            "20ton미만": "3",
+            "30ton미만": "3"
+          },
+          "특별인부": {
+            "2ton미만": "1",
+            "5ton미만": "1",
+            "10ton미만": "1",
+            "20ton미만": "1",
+            "30ton미만": "1"
+          },
+          "보통인부": {
+            "2ton미만": "2",
+            "5ton미만": "2",
+            "10ton미만": "2",
+            "20ton미만": "2",
+            "30ton미만": "2"
+          },
+          "크레인": {
+            "2ton미만": "1",
+            "5ton미만": "1",
+            "10ton미만": "1",
+            "20ton미만": "1",
+            "30ton미만": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p213-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p213-t2",
+          "row": "시공량",
+          "column_input": "unit_weight"
+        },
+        "crew": {
+          "table": "p213-t2",
+          "column_input": "unit_weight",
+          "trades": [
+            "형틀목공",
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "equipment": {
+          "name": "크레인",
+          "table": "p213-t2",
+          "unit": "대·일",
+          "column_input": "unit_weight"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p213-t2에서 단위중량별 기준 시공량과 작업조 인원, 장비 대수를 찾는다.",
+        "작업일수 = quantity ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 인원, 장비 대·일 = 작업일수 × 대수로 구한다."
+      ],
+      "source": "PDF 157쪽 6-7-6 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "시공높이 30m 초과",
+        "blocked_if": {
+          "input": "height_over_30m",
+          "op": "==",
+          "value": true
+        },
+        "reason": "시공높이 30m 초과 시 시공량의 10%를 감산해야 하나, 현재 계산 모델(adjusted_daily_crew)에서 조건부 시공량 감산 계수 적용을 직접 지원하지 않아 자동 계산을 보류함.",
+        "source": "PDF 157쪽 6-7-6 비고",
+        "cite": {
+          "table_id": "p213-t2",
+          "row": "비고",
+          "column": "비고"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 직종별 인원과 장비 대수로 구성된 작업조가 주어지고, 단위중량별로 일일 시공량이 제시되어 있어 이를 바탕으로 작업일수를 산출하는 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p213-t2",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 시공높이 30m를 초과하는 경우 시공량의 10%를 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p213-x28",
+      "quote": "② 본 품은 PC부재 인양설치, 다웰바 고정, 서포트 설치 및 해체, 우레탄폼 충전 및 실링 작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "크레인의 규격에 대한 구체적인 언급이 없어 어떤 장비 단가를 적용해야 할지 명확하지 않습니다.",
+    "6-7-4, 6-7-5와 달리 6-7-6에는 공구손료 및 경장비 기계경비(인력품의 17%)에 대한 [주]가 누락되어 있는데, 의도된 것인지 확인이 필요합니다."
+  ],
+  "questions": [
+    "단위중량이 10ton 미만인 PC거더를 30개소 설치할 때 필요한 인력과 장비는 어떻게 되나요?",
+    "시공높이가 35m인 현장인데, 시공량 10% 감산은 어떻게 적용해서 계산해야 하나요?",
+    "크레인 장비 단가는 어떤 규격을 기준으로 산정해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:43:06.838830+00:00",
+    "input_tokens": 11692,
+    "output_tokens": 1978,
+    "source_pages": [
+      213,
+      214
+    ],
+    "prompt_sha256": "37437f70f640bbcb170f0af30a78c6b057ce9168050b8ff8839075b9db192113",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

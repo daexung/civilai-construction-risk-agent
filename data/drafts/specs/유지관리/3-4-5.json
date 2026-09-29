@@ -1,0 +1,193 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-4-5/타일교체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-4-5",
+    "title": "3-4-5 타일 교체('22년 신설)",
+    "work": "타일 교체 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      920
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "타일 교체 물량은 몇 ㎡입니까?",
+        "source": "PDF 920쪽 3-4-5 표 시공량 단위(㎡)"
+      },
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "떠붙이기(벽)",
+          "압착붙이기(바닥)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 방법은 떠붙이기(벽)와 압착붙이기(바닥) 중 무엇입니까?",
+        "source": "PDF 920쪽 3-4-5 표 시공량 구분",
+        "synonyms": {
+          "떠붙이기(벽)": [
+            "떠붙이기",
+            "벽",
+            "벽 타일"
+          ],
+          "압착붙이기(바닥)": [
+            "압착붙이기",
+            "바닥",
+            "바닥 타일"
+          ]
+        }
+      },
+      {
+        "name": "occupied",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용중인 세대로 가구 등의 지장물이 있습니까?",
+        "source": "PDF 920쪽 3-4-5 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p976-t1",
+        "role": "타일 교체 작업조 인원 및 시공량",
+        "source": "PDF 920쪽 3-4-5 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "타일공": {
+            "인원": "2"
+          },
+          "시공량": {
+            "떠붙이기(벽)": "7",
+            "압착붙이기(바닥)": "8"
+          }
+        },
+        "cite": {
+          "table_id": "p976-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p976-t1",
+          "row": "시공량",
+          "column_input": "method"
+        },
+        "crew": {
+          "table": "p976-t1",
+          "column": "인원",
+          "trades": [
+            "타일공"
+          ],
+          "rate_codes": {
+            "타일공": "1014"
+          }
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p976-t1에서 시공방법에 따른 기준 시공량을 고른다.",
+        "occupied가 true인 경우, 기준 시공량에 0.85(15% 감산)를 곱하여 일당시공량을 구한다. false인 경우 기준 시공량이 일당시공량이 된다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "타일공 인·일 = 작업일수 × p976-t1의 타일공 인원(2인)으로 구한다."
+      ],
+      "source": "PDF 920쪽 3-4-5 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "방수 작업",
+        "source": "PDF 920쪽 3-4-5 [주] ③",
+        "cite": {
+          "section_no": "3-4-5",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "가구 등 지장물의 운반",
+        "source": "PDF 920쪽 3-4-5 [주] ④",
+        "cite": {
+          "section_no": "3-4-5",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(타일공 2인)와 기준 일일시공량(7㎡ 또는 8㎡)이 명시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p976-t1",
+      "row": "시공량",
+      "column": "떠붙이기(벽)",
+      "value": "7"
+    },
+    {
+      "table_id": "p976-t1",
+      "row": "시공량",
+      "column": "압착붙이기(바닥)",
+      "value": "8"
+    },
+    {
+      "table_id": "p976-t1",
+      "row": "타일공",
+      "column": "인원",
+      "value": "2"
+    },
+    {
+      "chunk_id": "p976-x7",
+      "quote": "사용중인 세대로 가구 등의 지장물이 있는 경우 시공량의 15%를 감한다."
+    },
+    {
+      "chunk_id": "p976-x7",
+      "quote": "방수 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p976-x7",
+      "quote": "가구 등 지장물의 운반은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비고의 '시공량의 15%를 감한다'는 조건은 표 형태의 계수가 아니어서 adjusted_daily_crew의 coefficients 파라미터로 직접 매핑하기 어렵습니다. 현재는 steps에 문장으로 반영했습니다."
+  ],
+  "questions": [
+    "타일 교체 시 방수 작업도 이 품셈에 포함되나요?",
+    "사용중인 세대에서 가구 지장물이 일부 방에만 있는 경우, 전체 물량에 대해 15% 감산을 적용해야 하나요, 아니면 해당 방의 물량에만 적용해야 하나요?",
+    "타일 교체 물량(㎡)과 시공 방법(떠붙이기/압착붙이기)을 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:38:28.902084+00:00",
+    "input_tokens": 11531,
+    "output_tokens": 1824,
+    "source_pages": [
+      976,
+      977
+    ],
+    "prompt_sha256": "517de9ace0c0daf97de21da3753d8b14dbe35852aedd86815885e0916b8df63a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "column '압착붙이기(바닥)'이 p976-t1 조각 텍스트에 없음",
+      "row '타일공'이 p976-t1 조각 텍스트에 없음"
+    ]
+  }
+}

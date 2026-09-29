@@ -1,0 +1,215 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-22/교통안전표지판교체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-22",
+    "title": "교통 안전표지판 교체('20년 보완)",
+    "work": "교통안전표지(단주식) 교체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      887
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "교체할 교통 안전표지판은 몇 개소입니까?",
+        "source": "PDF 887쪽 2-1-22 표의 시공량(개소) 기준"
+      },
+      {
+        "name": "is_standard_type_and_spec",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "교체하는 표지판이 단주식이며, 지주 규격(±60.5∼76.3×3.2×3,000∼3,600㎜) 및 표지판 규격(삼각형 900×900㎜ 또는 원형 ø600㎜)에 부합합니까?",
+        "source": "PDF 887쪽 [주] ①, ②, ⑤"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p943-t2",
+        "role": "작업조 인원 및 장비 대수, 일일 시공량",
+        "source": "PDF 887쪽 2-1-22 표",
+        "unit": "인/작업조; 대/작업조; 개소/일",
+        "values": {
+          "특별인부": {
+            "수량": "1"
+          },
+          "보통인부": {
+            "수량": "1",
+            "시공량(개소)": "6"
+          },
+          "트럭": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p943-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p943-t2",
+          "row": "보통인부",
+          "column": "시공량(개소)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p943-t2",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "트럭",
+          "table": "p943-t2",
+          "unit": "대·일",
+          "column": "수량"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p943-t2에서 기준 시공량(6개소)을 확인한다.",
+        "작업일수 = quantity ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 수량, 트럭 대·일 = 작업일수 × 트럭 수량으로 구한다."
+      ],
+      "source": "PDF 887쪽 2-1-22 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "단주식이 아니거나 규격이 다른 경우",
+        "blocked_if": {
+          "input": "is_standard_type_and_spec",
+          "op": "==",
+          "value": false
+        },
+        "reason": "별도 계상",
+        "source": "PDF 887쪽 [주] ①, ⑤",
+        "cite": [
+          {
+            "chunk_id": "p943-x16",
+            "quote": "① 본 품은 교통안전표지(단주식) 교체 기준이다."
+          },
+          {
+            "chunk_id": "p943-x16",
+            "quote": "⑤ 상기 품과 다른 형식 및 규격으로 표지를 교체할 경우 별도 계상할 수 있다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기초제작 및 폐자재 운반",
+        "source": "PDF 887쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p943-x16",
+          "quote": "④ 기초제작 및 폐자재 운반은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p943-x16",
+          "quote": "⑥ 공구손료 및 경장비(드릴, 발전기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(특별인부, 보통인부, 트럭)와 일일 시공량(6개소)이 주어져 있어, 물량을 시공량으로 나누어 작업일수를 구한 뒤 인·일을 산출하는 전형적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p943-t2",
+      "row": "보통인부",
+      "column": "시공량(개소)",
+      "value": "6"
+    },
+    {
+      "table_id": "p943-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p943-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p943-t2",
+      "row": "트럭",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p943-x16",
+      "quote": "① 본 품은 교통안전표지(단주식) 교체 기준이다."
+    },
+    {
+      "chunk_id": "p943-x16",
+      "quote": "② 교통안전표지 지주의 규격은 ±60.5∼76.3×3.2×3,000∼3,600㎜이며, 안전표지판의 규격은\n설명 | 반사장치부 900×900㎜(삼각형), ø600㎜(원형) 기준이다."
+    },
+    {
+      "chunk_id": "p943-x16",
+      "quote": "④ 기초제작 및 폐자재 운반은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p943-x16",
+      "quote": "⑤ 상기 품과 다른 형식 및 규격으로 표지를 교체할 경우 별도 계상할 수 있다."
+    },
+    {
+      "chunk_id": "p943-x16",
+      "quote": "⑥ 공구손료 및 경장비(드릴, 발전기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "adjusted_daily_crew 모델에서 base_output과 crew의 파라미터로 row_input, column_input 대신 고정된 row, column을 사용하는 것이 스펙상 허용되는지 확인이 필요합니다. (입력에 따라 변하지 않는 단일 시공량 표의 경우)"
+  ],
+  "questions": [
+    "교통안전표지판 20개소를 교체하려고 합니다. 품이 어떻게 되나요?",
+    "단주식이 아닌 복주식 표지판 교체도 이 품을 적용할 수 있나요?",
+    "기존 표지판 철거 후 폐자재 운반 비용은 어떻게 처리하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:49:49.687465+00:00",
+    "input_tokens": 11642,
+    "output_tokens": 2278,
+    "source_pages": [
+      943,
+      944
+    ],
+    "prompt_sha256": "65bc5d6bfa75e80f3276f40820496024a469bd3e097b79899dab2a7d8dbcd740",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

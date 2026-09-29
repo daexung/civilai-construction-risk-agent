@@ -1,0 +1,218 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-2-7/침목교환(기계)",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-2-7",
+    "title": "침목교환(기계)('12, '19년 보완)",
+    "work": "침목교환(기계) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      897
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "목침목 →PCT",
+          "PCT → PCT",
+          "교량침목교환"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "침목교환 구분은 무엇입니까? (목침목 →PCT / PCT → PCT / 교량침목교환)",
+        "source": "PDF 897쪽 2-2-7 표 구분",
+        "synonyms": {
+          "목침목 →PCT": [
+            "목침목에서 PCT",
+            "목침목->PCT"
+          ],
+          "PCT → PCT": [
+            "PCT에서 PCT",
+            "PCT->PCT"
+          ]
+        }
+      },
+      {
+        "name": "block_time",
+        "type": "enum",
+        "allowed_values": [
+          "3시간 차단",
+          "4시간 차단"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 차단 시간은 얼마입니까? (3시간 차단 / 4시간 차단)",
+        "source": "PDF 897쪽 2-2-7 표 수량 열",
+        "synonyms": {
+          "3시간 차단": [
+            "3시간"
+          ],
+          "4시간 차단": [
+            "4시간"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "교환할 침목의 수량은 몇 개입니까?",
+        "source": "PDF 897쪽 2-2-7 표 단위 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p953-t0",
+        "role": "침목교환(기계) 단위당 품",
+        "source": "PDF 897쪽 2-2-7 표",
+        "unit": "인/개, hr/개",
+        "values": {
+          "목침목 →PCT": {
+            "궤도공_3시간 차단": "0.090",
+            "궤도공_4시간 차단": "0.079",
+            "보통인부_3시간 차단": "0.020",
+            "보통인부_4시간 차단": "0.018",
+            "굴착기+ 부착용집게_3시간 차단": "0.065",
+            "굴착기+ 부착용집게_4시간 차단": "0.053"
+          },
+          "PCT → PCT": {
+            "궤도공_3시간 차단": "0.110",
+            "궤도공_4시간 차단": "0.097",
+            "보통인부_3시간 차단": "0.025",
+            "보통인부_4시간 차단": "0.022",
+            "굴착기+ 부착용집게_3시간 차단": "0.105",
+            "굴착기+ 부착용집게_4시간 차단": "0.086"
+          },
+          "교량침목교환": {
+            "궤도공_3시간 차단": "0.271",
+            "궤도공_4시간 차단": "0.240",
+            "보통인부_3시간 차단": "0.061",
+            "보통인부_4시간 차단": "0.054",
+            "굴착기+ 부착용집게_3시간 차단": "0.214",
+            "굴착기+ 부착용집게_4시간 차단": "0.175"
+          }
+        },
+        "cite": {
+          "table_id": "p953-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p953-t0",
+          "row_input": "work_type",
+          "column_input": "block_time",
+          "trades": [
+            "궤도공",
+            "보통인부",
+            "굴착기+ 부착용집게"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p953-t0에서 work_type(구분)에 해당하는 행을 찾는다.",
+        "선택된 행에서 block_time(차단시간)과 직종/장비가 결합된 열(예: '궤도공_3시간 차단')의 단위당 품을 고른다.",
+        "물량(quantity)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 897쪽 2-2-7 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "교량침목고정장치 설치 또는 해체 품",
+        "source": "PDF 897쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p953-x10",
+          "quote": "교량침목고정장치 설치 또는 해체 품은 별도 계상한다."
+        }
+      },
+      {
+        "item": "침목의 상차 및 하화, 운반, 도상임시철거 및 복구, 자갈다지기 및 정리",
+        "source": "PDF 897쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p953-x10",
+          "quote": "침목의 상차 및 하화, 운반, 도상임시철거 및 복구, 자갈다지기 및 정리는 별도 계상한다."
+        }
+      },
+      {
+        "item": "야간작업 할증, 열차 운행에 따른 지장, 대피 할증 (추가 계상 불가)",
+        "source": "PDF 897쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p953-x10",
+          "quote": "야간작업 할증, 열차 운행에 따른 지장, 대피 할증을 추가 계상하지 않는다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit을 선택함.",
+  "citations": [
+    {
+      "table_id": "p953-t0",
+      "row": "목침목 →PCT",
+      "column": "수량 3시간 차단",
+      "value": "0.090"
+    },
+    {
+      "table_id": "p953-t0",
+      "row": "PCT → PCT",
+      "column": "수량 4시간 차단",
+      "value": "0.086"
+    },
+    {
+      "table_id": "p953-t0",
+      "row": "교량침목교환",
+      "column": "수량 3시간 차단",
+      "value": "0.271"
+    },
+    {
+      "chunk_id": "p953-x10",
+      "quote": "교량침목고정장치 설치 또는 해체 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p953-x10",
+      "quote": "침목의 상차 및 하화, 운반, 도상임시철거 및 복구, 자갈다지기 및 정리는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p953-x10",
+      "quote": "야간작업 할증, 열차 운행에 따른 지장, 대피 할증을 추가 계상하지 않는다."
+    }
+  ],
+  "open_questions": [
+    "투입장비는 작업여건에 따라 장비조합을 변경하여 적용할 수 있다(주 6)고 되어 있으나, 구체적인 변경 기준이나 대체 장비 규격이 명시되지 않아 기본 장비(굴착기+부착용집게 0.2㎥)로만 산정함."
+  ],
+  "questions": [
+    "침목 100개를 3시간 차단하여 목침목에서 PCT로 교환할 때 궤도공 품은 얼마인가요?",
+    "교량침목교환 시 교량침목고정장치 해체 작업도 이 품에 포함되나요?",
+    "작업 차단 시간이 3시간인지 4시간인지 입력하지 않았습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:35:52.986183+00:00",
+    "input_tokens": 11988,
+    "output_tokens": 2417,
+    "source_pages": [
+      953,
+      954
+    ],
+    "prompt_sha256": "9034d80d2ef2e682fdc3e6b2f99dac7cc763aef12f43794a11b4a11e2000f57f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

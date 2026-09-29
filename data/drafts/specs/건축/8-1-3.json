@@ -1,0 +1,191 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/8-1-3/와이어메시바닥깔기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "8-1-3",
+    "title": "와이어메시 바닥깔기",
+    "work": "와이어메시 바닥깔기 품 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      617
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "와이어메시 바닥깔기 물량은 몇 ㎡입니까?",
+        "source": "PDF 617쪽 8-1-3 단위당 품 표 및 재료량 표"
+      },
+      {
+        "name": "wire_mesh_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "와이어메시 자재는 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "관급/사급 구분과 처리 방식은 실무 확인 전",
+        "synonyms": {
+          "관급": [
+            "관급자재",
+            "지급자재",
+            "발주처 지급"
+          ],
+          "사급": [
+            "사급자재",
+            "시공사 구매",
+            "자체 구매"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p673-t2",
+        "role": "단위당 품",
+        "source": "PDF 617쪽 8-1-3 첫 번째 표",
+        "unit": "인/㎡",
+        "values": {
+          "특별인부": {
+            "수량": "0.006"
+          }
+        },
+        "cite": {
+          "table_id": "p673-t2"
+        }
+      },
+      {
+        "id": "p673-t3",
+        "role": "단위당 재료량",
+        "source": "PDF 617쪽 8-1-3 두 번째 표",
+        "unit": "매/㎡, %",
+        "values": {
+          "와이어메시": {
+            "수량": "0.36"
+          },
+          "잡재료및소모재료 (결속선등)": {
+            "수량": "3"
+          }
+        },
+        "cite": {
+          "table_id": "p673-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p673-t2",
+          "row_input": "특별인부",
+          "column_input": "수량",
+          "trades": [
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p673-t2에서 단위당 품(특별인부)을 확인한다.",
+        "물량을 곱해 총 노무 품을 구한다.",
+        "p673-t3에서 단위당 재료량(와이어메시)을 확인하고 물량을 곱해 총 재료량을 구한다."
+      ],
+      "source": "PDF 617쪽 8-1-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "잡재료 및 소모재료 (결속선 등)",
+        "source": "PDF 617쪽 8-1-3 재료량 표",
+        "cite": {
+          "table_id": "p673-t3"
+        }
+      }
+    ],
+    "supply_rules": [
+      {
+        "item": "와이어메시",
+        "input": "wire_mesh_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "미산정",
+            "reason": "자재 단가 미입력"
+          }
+        },
+        "source": "일반적인 자재 공급 구분",
+        "cite": []
+      }
+    ],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 특별인부 품과 재료량이 표에 직접 제시되어 있어 물량을 곱하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p673-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.006"
+    },
+    {
+      "table_id": "p673-t3",
+      "row": "와이어메시",
+      "column": "수량",
+      "value": "0.36"
+    },
+    {
+      "table_id": "p673-t3",
+      "row": "잡재료및소모재료 (결속선등)",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "chunk_id": "p673-x10",
+      "quote": "① 본 품은 와이어메시(크기 1,800×1,800㎜)의 바닥 설치 기준이다."
+    },
+    {
+      "chunk_id": "p673-x14",
+      "quote": "※ 위 재료량은 할증이 포함되어 있다."
+    }
+  ],
+  "open_questions": [
+    "잡재료 및 소모재료는 '주재료비의 3%'로 명시되어 있으나, 현재 명세 형식의 cost_rules는 'labor_subtotal' 기준만 지원하므로 자동 계산에 포함하지 못하고 not_calculated로 처리했습니다. 주재료비 기준 경비/재료비 산출 지원이 필요합니다.",
+    "와이어메시 규격이 1,800×1,800㎜가 아닌 경우 품이나 재료량의 조정 기준이 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "와이어메시 바닥깔기 100㎡ 시공 시 특별인부 품은 얼마인가요?",
+    "와이어메시 규격이 1,800×1,800㎜가 아닌 다른 규격일 경우 품을 어떻게 조정해야 하나요?",
+    "와이어메시 자재는 관급인가요, 사급인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:05:52.953944+00:00",
+    "input_tokens": 11673,
+    "output_tokens": 1838,
+    "source_pages": [
+      673,
+      674
+    ],
+    "prompt_sha256": "f4c379eeb0712cd9cc5c08d3c77f3a447881176b1c963a84da8cde44074daf41",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,340 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/1-3-3/그루브조인트식접합및배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "1-3-3",
+    "title": "그루브조인트식 접합 및 배관('25년 신설)",
+    "work": "배관 및 접합 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      708
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "25",
+          "32",
+          "40",
+          "50",
+          "65",
+          "80",
+          "90",
+          "100",
+          "125",
+          "150",
+          "200",
+          "250",
+          "300"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "관규격은 몇 ㎜입니까?",
+        "source": "PDF 708쪽 p708-t0 표의 관규격(㎜)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "시공 물량은 몇 m입니까?",
+        "source": "PDF 708쪽 p708-t0 표의 시공량(m) 기준"
+      },
+      {
+        "name": "location",
+        "type": "enum",
+        "allowed_values": [
+          "일반",
+          "화장실배관",
+          "기계실배관",
+          "옥외배관(암거내)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공위치는 어디입니까? (일반 / 화장실배관 / 기계실배관 / 옥외배관(암거내))",
+        "source": "PDF 708쪽 p708-t1 표 및 비고란 시공위치 요율"
+      },
+      {
+        "name": "use_scissor_lift",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "자체 추진 고소작업대(시저형)를 사용하여 시공합니까?",
+        "source": "PDF 708쪽 비고란 및 [주] ⑥"
+      },
+      {
+        "name": "use_concrete_insert",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장여건에 따라 콘크리트용 인서트를 사용합니까?",
+        "source": "PDF 708쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p708-t0",
+        "role": "관규격별 작업조 인원 및 기준 시공량",
+        "source": "PDF 708쪽 1-3-3 표",
+        "unit": "인/작업조; m/일",
+        "values": {
+          "배관공": {
+            "25": "3",
+            "32": "3",
+            "40": "3",
+            "50": "3",
+            "65": "3",
+            "80": "3",
+            "90": "3",
+            "100": "3",
+            "125": "3",
+            "150": "3",
+            "200": "4",
+            "250": "4",
+            "300": "4"
+          },
+          "보통인부": {
+            "25": "1",
+            "32": "1",
+            "40": "1",
+            "50": "1",
+            "65": "1",
+            "80": "1",
+            "90": "1",
+            "100": "1",
+            "125": "1",
+            "150": "1",
+            "200": "1",
+            "250": "1",
+            "300": "1"
+          },
+          "시공량": {
+            "25": "57",
+            "32": "45",
+            "40": "40",
+            "50": "30",
+            "65": "26",
+            "80": "20",
+            "90": "18",
+            "100": "15",
+            "125": "12",
+            "150": "10",
+            "200": "9",
+            "250": "7",
+            "300": "6"
+          },
+          "고소작업대계수": {
+            "true": "1.26",
+            "false": "1.0"
+          }
+        },
+        "cite": {
+          "table_id": "p708-t0"
+        }
+      },
+      {
+        "id": "p708-t1",
+        "role": "시공위치별 시공량 요율 계수",
+        "source": "PDF 708쪽 비고란 시공위치 요율 표",
+        "unit": "무차원",
+        "values": {
+          "요율계수": {
+            "일반": "1.0",
+            "화장실배관": "0.83",
+            "기계실배관": "0.77",
+            "옥외배관(암거내)": "1.11"
+          }
+        },
+        "cite": {
+          "table_id": "p708-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p708-t0",
+          "row": "시공량",
+          "column_input": "pipe_size"
+        },
+        "coefficients": [
+          {
+            "table": "p708-t1",
+            "row": "요율계수",
+            "input": "location"
+          },
+          {
+            "table": "p708-t0",
+            "row": "고소작업대계수",
+            "input": "use_scissor_lift"
+          }
+        ],
+        "crew": {
+          "table": "p708-t0",
+          "column_input": "pipe_size",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p708-t0에서 관규격별 기준 시공량을 찾는다.",
+        "시공위치에 따른 요율계수(p708-t1)와 고소작업대 사용에 따른 할증계수(p708-t0)를 곱해 일당시공량을 구한다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "p708-t0에서 관규격별 작업조 인원을 찾는다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 708쪽 1-3-3 표 및 비고란",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "콘크리트용 인서트 사용",
+        "blocked_if": {
+          "input": "use_concrete_insert",
+          "op": "==",
+          "value": true
+        },
+        "reason": "콘크리트용 인서트를 사용할 경우 '[건축부문] 8-1-4 인서트(Insert) 설치'를 따라야 하므로 본 명세의 계산 범위를 벗어남",
+        "source": "PDF 708쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p708-x16",
+          "quote": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+        }
+      },
+      {
+        "condition": "고소작업대 사용 시 기계경비율 변경",
+        "blocked_if": {
+          "input": "use_scissor_lift",
+          "op": "==",
+          "value": true
+        },
+        "reason": "고소작업대 시공 시 기계경비가 2%에서 10%로 변경되나, 현재 cost_rules 스펙상 조건부 경비율 적용이 지원되지 않아 정확한 경비 산출이 불가함",
+        "source": "PDF 708쪽 [주] ⑥",
+        "cite": {
+          "chunk_id": "p708-x16",
+          "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 본 품의 2%로 계상하고, 고소작업대(시저형)시공의 경우 10%로 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "밸브류 설치품",
+        "source": "PDF 708쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p708-x16",
+          "quote": "밸브류 설치품은 ‘[기계설비부문] 5-1-1 일반밸브 및 콕류 설치’를 적용하고"
+        }
+      },
+      {
+        "item": "단열 지지대 및 관 지지대 설치",
+        "source": "PDF 708쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p708-x16",
+          "quote": "단열 지지대 및 관 지지대 설치 시에는 별도 계상한다."
+        }
+      },
+      {
+        "item": "고소작업대 이동을 위한 크레인, 지게차 등 비용",
+        "source": "PDF 708쪽 [주] ⑦",
+        "cite": {
+          "chunk_id": "p708-x16",
+          "quote": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p708-x16",
+          "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 본 품의 2%로 계상하고"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "관규격별로 일당 시공량과 작업조 인원(배관공, 보통인부)이 표로 주어지는 전형적인 일당 작업조형 품셈입니다.",
+  "citations": [
+    {
+      "table_id": "p708-t0",
+      "row": "배관공 보통인부",
+      "column": "관규격(㎜)",
+      "value": "25"
+    },
+    {
+      "table_id": "p708-t0",
+      "row": "배관공 보통인부",
+      "column": "시공량(m)",
+      "value": "57"
+    },
+    {
+      "table_id": "p708-t1",
+      "row": "요율",
+      "column": "화장실배관",
+      "value": "- 17%"
+    },
+    {
+      "chunk_id": "p708-x16",
+      "quote": "자체 추진 고소작업대(시저형)시공의 경우 시공량의 26%를 가산한다."
+    },
+    {
+      "chunk_id": "p708-x16",
+      "quote": "본 품은 배관용 스테인리스 강관의 옥내일반배관 기준이다."
+    },
+    {
+      "chunk_id": "p708-x16",
+      "quote": "인서트(거푸집용), 지지철물설치, 절단, 그루브 홈가공, 배관 및 그루브 접합, 배관시험을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "시공위치에 따른 요율(-17%, -23%, +11%)을 시공량에 곱하는 계수(0.83, 0.77, 1.11)로 변환하여 적용했습니다. 원문 그대로의 퍼센트 연산이 필요한지 확인이 필요합니다.",
+    "고소작업대 사용 시 기계경비율이 2%에서 10%로 변경되는데, 현재 cost_rules 스펙에 조건부(when) 적용 기능이 없어 blocked 처리했습니다. 추후 스펙 확장이 필요합니다."
+  ],
+  "questions": [
+    "관규격 50mm 배관 100m 시공 시 배관공은 몇 인·일이 필요한가요?",
+    "기계실 배관이면서 고소작업대를 사용하는 경우 시공량 할증은 어떻게 중복 적용되나요?",
+    "시공 위치가 화장실인지 기계실인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:25:51.171039+00:00",
+    "input_tokens": 12373,
+    "output_tokens": 3616,
+    "source_pages": [
+      708,
+      709
+    ],
+    "prompt_sha256": "b1e56e4e18f8da58d1f1ed76c97765467724e43aa55f70b6ebabdd1fa8bf5f6a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p708-x16 조각 텍스트에 없음"
+    ]
+  }
+}

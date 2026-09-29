@@ -1,0 +1,538 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-3-1/pipe보온",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-3-1",
+    "title": "pipe보온('04년 보완)",
+    "work": "pipe 보온 및 Lagging 작업",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      757,
+      758,
+      759,
+      760,
+      761,
+      762
+    ],
+    "inputs": [
+      {
+        "name": "insulation_thickness",
+        "type": "enum",
+        "allowed_values": [
+          "30mm이하",
+          "31~40mm",
+          "41~60mm",
+          "61~75mm",
+          "76~90mm",
+          "91mm이상"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "보온두께는 얼마입니까?",
+        "source": "각 두께별 표 제목 및 [주] ⑨"
+      },
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "50이하",
+          "65",
+          "80",
+          "90",
+          "100",
+          "125",
+          "150",
+          "200",
+          "250",
+          "300",
+          "350",
+          "400",
+          "450",
+          "500",
+          "600",
+          "650",
+          "750"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "파이프 구경(Pipe Size)은 얼마입니까?",
+        "source": "표의 Pipe Size 열"
+      },
+      {
+        "name": "target_type",
+        "type": "enum",
+        "allowed_values": [
+          "관",
+          "Fitting",
+          "Hanger",
+          "Valve및Flange"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "보온 대상은 무엇입니까?",
+        "source": "표의 열 제목"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m 또는 개",
+        "required": true,
+        "ask": "작업 물량은 얼마입니까? (관은 m, 나머지는 개)",
+        "source": "표의 단위 (m당, 개당)"
+      },
+      {
+        "name": "lagging_material",
+        "type": "enum",
+        "allowed_values": [
+          "Prefabricated Sheet",
+          "원자재",
+          "해당없음"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Lagging 재료는 무엇입니까? (원자재: 컬러강판, 아연도강판 등)",
+        "source": "표 하단 비고"
+      },
+      {
+        "name": "overlap_count",
+        "type": "nonnegative_integer",
+        "allowed_values": "1 이상의 정수",
+        "unit": "회",
+        "required": true,
+        "ask": "겹쳐 보온하는 횟수는 몇 회입니까?",
+        "source": "[주] ④ 및 표 하단 비고"
+      },
+      {
+        "name": "temperature_type",
+        "type": "enum",
+        "allowed_values": [
+          "Hot",
+          "Cold"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "보온 온도 타입은 무엇입니까?",
+        "source": "[주] ⑦"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p813-t0",
+        "role": "보온두께 30mm이하 품",
+        "source": "PDF 757쪽 1. 보온두께 30mm이하",
+        "values": {
+          "φ 50이하": {
+            "관(m당) 보온공": "0.039",
+            "관(m당) 특별인부": "0.057",
+            "Fitting(개당) 보온공": "0.032",
+            "Fitting(개당) 특별인부": "0.034",
+            "Hanger(개당) 보온공": "0.009",
+            "Hanger(개당) 특별인부": "0.009",
+            "Valve및Flange(개당) 보온공": "0.160",
+            "Valve및Flange(개당) 특별인부": "0.160",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "2.240",
+            "직관의물량 Lagging Sheet(㎡)": "0.358",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "65": {
+            "관(m당) 보온공": "0.048",
+            "관(m당) 특별인부": "0.072",
+            "Fitting(개당) 보온공": "0.043",
+            "Fitting(개당) 특별인부": "0.047",
+            "Hanger(개당) 보온공": "0.012",
+            "Hanger(개당) 특별인부": "0.012",
+            "Valve및Flange(개당) 보온공": "0.170",
+            "Valve및Flange(개당) 특별인부": "0.170",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "3.420",
+            "직관의물량 Lagging Sheet(㎡)": "0.446",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "80": {
+            "관(m당) 보온공": "0.052",
+            "관(m당) 특별인부": "0.078",
+            "Fitting(개당) 보온공": "0.056",
+            "Fitting(개당) 특별인부": "0.061",
+            "Hanger(개당) 보온공": "0.015",
+            "Hanger(개당) 특별인부": "0.015",
+            "Valve및Flange(개당) 보온공": "0.190",
+            "Valve및Flange(개당) 특별인부": "0.190",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "3.740",
+            "직관의물량 Lagging Sheet(㎡)": "0.488",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "90": {
+            "관(m당) 보온공": "0.054",
+            "관(m당) 특별인부": "0.080",
+            "Fitting(개당) 보온공": "0.066",
+            "Fitting(개당) 특별인부": "0.072",
+            "Hanger(개당) 보온공": "0.015",
+            "Hanger(개당) 특별인부": "0.015",
+            "Valve및Flange(개당) 보온공": "0.200",
+            "Valve및Flange(개당) 특별인부": "0.200",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "4.050",
+            "직관의물량 Lagging Sheet(㎡)": "0.525",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "100": {
+            "관(m당) 보온공": "0.063",
+            "관(m당) 특별인부": "0.093",
+            "Fitting(개당) 보온공": "0.088",
+            "Fitting(개당) 특별인부": "0.096",
+            "Hanger(개당) 보온공": "0.015",
+            "Hanger(개당) 특별인부": "0.015",
+            "Valve및Flange(개당) 보온공": "0.225",
+            "Valve및Flange(개당) 특별인부": "0.225",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "4.360",
+            "직관의물량 Lagging Sheet(㎡)": "0.567",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "125": {
+            "관(m당) 보온공": "0.070",
+            "관(m당) 특별인부": "0.104",
+            "Fitting(개당) 보온공": "0.126",
+            "Fitting(개당) 특별인부": "0.136",
+            "Hanger(개당) 보온공": "0.018",
+            "Hanger(개당) 특별인부": "0.018",
+            "Valve및Flange(개당) 보온공": "0.245",
+            "Valve및Flange(개당) 특별인부": "0.245",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "5.000",
+            "직관의물량 Lagging Sheet(㎡)": "0.648",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "150": {
+            "관(m당) 보온공": "0.074",
+            "관(m당) 특별인부": "0.112",
+            "Fitting(개당) 보온공": "0.161",
+            "Fitting(개당) 특별인부": "0.174",
+            "Hanger(개당) 보온공": "0.018",
+            "Hanger(개당) 특별인부": "0.018",
+            "Valve및Flange(개당) 보온공": "0.245",
+            "Valve및Flange(개당) 특별인부": "0.245",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "5.640",
+            "직관의물량 Lagging Sheet(㎡)": "0.729",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "200": {
+            "관(m당) 보온공": "0.091",
+            "관(m당) 특별인부": "0.136",
+            "Fitting(개당) 보온공": "0.255",
+            "Fitting(개당) 특별인부": "0.285",
+            "Hanger(개당) 보온공": "0.021",
+            "Hanger(개당) 특별인부": "0.021",
+            "Valve및Flange(개당) 보온공": "0.275",
+            "Valve및Flange(개당) 특별인부": "0.275",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "6.950",
+            "직관의물량 Lagging Sheet(㎡)": "0.894",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "250": {
+            "관(m당) 보온공": "0.108",
+            "관(m당) 특별인부": "0.161",
+            "Fitting(개당) 보온공": "0.382",
+            "Fitting(개당) 특별인부": "0.413",
+            "Hanger(개당) 보온공": "0.027",
+            "Hanger(개당) 특별인부": "0.027",
+            "Valve및Flange(개당) 보온공": "0.290",
+            "Valve및Flange(개당) 특별인부": "0.290",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "8.210",
+            "직관의물량 Lagging Sheet(㎡)": "1.053",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "300": {
+            "관(m당) 보온공": "0.125",
+            "관(m당) 특별인부": "0.186",
+            "Fitting(개당) 보온공": "0.530",
+            "Fitting(개당) 특별인부": "0.575",
+            "Hanger(개당) 보온공": "0.030",
+            "Hanger(개당) 특별인부": "0.030",
+            "Valve및Flange(개당) 보온공": "0.340",
+            "Valve및Flange(개당) 특별인부": "0.340",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "9.500",
+            "직관의물량 Lagging Sheet(㎡)": "1.215",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "350": {
+            "관(m당) 보온공": "0.141",
+            "관(m당) 특별인부": "0.212",
+            "Fitting(개당) 보온공": "0.700",
+            "Fitting(개당) 특별인부": "0.760",
+            "Hanger(개당) 보온공": "0.033",
+            "Hanger(개당) 특별인부": "0.033",
+            "Valve및Flange(개당) 보온공": "0.405",
+            "Valve및Flange(개당) 특별인부": "0.405",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "10.480",
+            "직관의물량 Lagging Sheet(㎡)": "1.335",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "400": {
+            "관(m당) 보온공": "0.156",
+            "관(m당) 특별인부": "0.233",
+            "Fitting(개당) 보온공": "0.882",
+            "Fitting(개당) 특별인부": "0.958",
+            "Hanger(개당) 보온공": "0.036",
+            "Hanger(개당) 특별인부": "0.036",
+            "Valve및Flange(개당) 보온공": "0.450",
+            "Valve및Flange(개당) 특별인부": "0.450",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "11.710",
+            "직관의물량 Lagging Sheet(㎡)": "1.525",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "450": {
+            "관(m당) 보온공": "0.173",
+            "관(m당) 특별인부": "0.258",
+            "Fitting(개당) 보온공": "1.095",
+            "Fitting(개당) 특별인부": "1.185",
+            "Hanger(개당) 보온공": "0.039",
+            "Hanger(개당) 특별인부": "0.039",
+            "Valve및Flange(개당) 보온공": "0.510",
+            "Valve및Flange(개당) 특별인부": "0.510",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "13.000",
+            "직관의물량 Lagging Sheet(㎡)": "1.655",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "500": {
+            "관(m당) 보온공": "0.189",
+            "관(m당) 특별인부": "0.284",
+            "Fitting(개당) 보온공": "1.345",
+            "Fitting(개당) 특별인부": "1.455",
+            "Hanger(개당) 보온공": "0.045",
+            "Hanger(개당) 특별인부": "0.045",
+            "Valve및Flange(개당) 보온공": "0.565",
+            "Valve및Flange(개당) 특별인부": "0.565",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "14.290",
+            "직관의물량 Lagging Sheet(㎡)": "1.816",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "600": {
+            "관(m당) 보온공": "0.223",
+            "관(m당) 특별인부": "0.332",
+            "Fitting(개당) 보온공": "1.900",
+            "Fitting(개당) 특별인부": "2.060",
+            "Hanger(개당) 보온공": "0.051",
+            "Hanger(개당) 특별인부": "0.051",
+            "Valve및Flange(개당) 보온공": "0.635",
+            "Valve및Flange(개당) 특별인부": "0.635",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "16.900",
+            "직관의물량 Lagging Sheet(㎡)": "2.143",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "650": {
+            "관(m당) 보온공": "0.236",
+            "관(m당) 특별인부": "0.356",
+            "Fitting(개당) 보온공": "2.075",
+            "Fitting(개당) 특별인부": "2.265",
+            "Hanger(개당) 보온공": "0.056",
+            "Hanger(개당) 특별인부": "0.056",
+            "Valve및Flange(개당) 보온공": "0.650",
+            "Valve및Flange(개당) 특별인부": "0.650",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "18.100",
+            "직관의물량 Lagging Sheet(㎡)": "2.301",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "750": {
+            "관(m당) 보온공": "0.271",
+            "관(m당) 특별인부": "0.450",
+            "Fitting(개당) 보온공": "2.305",
+            "Fitting(개당) 특별인부": "2.495",
+            "Hanger(개당) 보온공": "0.061",
+            "Hanger(개당) 특별인부": "0.061",
+            "Valve및Flange(개당) 보온공": "0.770",
+            "Valve및Flange(개당) 특별인부": "0.770",
+            "직관의물량 성형물(m)": "1",
+            "직관의물량 철선(m)": "20.670",
+            "직관의물량 Lagging Sheet(㎡)": "2.624",
+            "직관의물량 Sheet Metal Screw(개)": "10"
+          },
+          "비고": {
+            "비고": "- Prefabricated Sheet로 Lagging할 때는 본 품에 50%를 가산한다. 2매이상 겹쳐 보온하는 경우에는 전체 두께를 1회 보온하는 품에 50%를 가산한다. - 컬러강판, 아연도강판, 스테인리스 강판, 알루미늄판 등 원자재 (Rawmaterial)로 시공할 때는 본 품에 100%를 가산한다. 2매이상 겹쳐 보온하는 경우에는 전체 두께를 1회 보온하는 품의 100%를 가산한다."
+          }
+        },
+        "cite": {
+          "table_id": "p813-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p813-t0",
+          "row_input": "pipe_size",
+          "column_input": "target_type",
+          "trades": [
+            "보온공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "lagging_material": "Prefabricated Sheet"
+            },
+            "rate": "0.5",
+            "applies_to": [
+              "보온공",
+              "특별인부"
+            ],
+            "source": "표 하단 비고"
+          },
+          {
+            "when": {
+              "lagging_material": "원자재"
+            },
+            "rate": "1.0",
+            "applies_to": [
+              "보온공",
+              "특별인부"
+            ],
+            "source": "표 하단 비고"
+          }
+        ],
+        "note_adjustments": []
+      },
+      "steps": [
+        "보온두께에 맞는 표를 선택한다.",
+        "파이프 구경과 보온 대상에 해당하는 보온공, 특별인부 품을 찾는다.",
+        "물량을 곱하여 기본 품을 계산한다.",
+        "Lagging 재료에 따른 할증을 적용한다."
+      ],
+      "source": "13-3-1 각 표 및 비고",
+      "rounding": "단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "보온두께가 91mm 이상인 경우",
+        "blocked_if": {
+          "input": "insulation_thickness",
+          "op": "==",
+          "value": "91mm이상"
+        },
+        "reason": "91mm 이상 보온은 공식에 의하여 품을 별도 산출해야 함",
+        "source": "[주] ⑨",
+        "cite": [
+          {
+            "chunk_id": "p818-x0",
+            "quote": "두께 91㎜이상 보온은 본 품에 비례하여 적의 적용하되, 관(m당)의 보온공과 특별인부 품은 다음 공식에 의하여 품을 산출 적용한다."
+          }
+        ]
+      },
+      {
+        "condition": "Cold 보온시공인 경우",
+        "blocked_if": {
+          "input": "temperature_type",
+          "op": "==",
+          "value": "Cold"
+        },
+        "reason": "Cold 보온시공은 Hot 보온품에 '적량' 할증 가산한다고 되어 있어 구체적인 수치가 없음",
+        "source": "[주] ⑦",
+        "cite": [
+          {
+            "chunk_id": "p818-x0",
+            "quote": "Cold 보온시공은 Hot 보온품에 적량 할증 가산할 수 있다."
+          }
+        ]
+      },
+      {
+        "condition": "2매 이상 겹쳐 보온하는 경우",
+        "blocked_if": {
+          "input": "overlap_count",
+          "op": ">=",
+          "value": 2
+        },
+        "reason": "각각의 품을 합산하는 방식과 비고란의 전체 두께 1회 보온 품에 대한 가산 방식이 복합적으로 적용되어 자동 계산이 모호함",
+        "source": "[주] ④ 및 표 하단 비고",
+        "cite": [
+          {
+            "chunk_id": "p818-x0",
+            "quote": "2매이상 겹쳐 보온하는 경우는 각각의 품을 합산한다."
+          },
+          {
+            "table_id": "p813-t0",
+            "row": "비고",
+            "column": "비고",
+            "value": "- Prefabricated Sheet로 Lagging할 때는 본 품에 50%를 가산한다. 2매이상 겹쳐 보온하는 경우에는 전체 두께를 1회 보온하는 품에 50%를 가산한다. - 컬러강판, 아연도강판, 스테인리스 강판, 알루미늄판 등 원자재 (Rawmaterial)로 시공할 때는 본 품에 100%를 가산한다. 2매이상 겹쳐 보온하는 경우에는 전체 두께를 1회 보온하는 품의 100%를 가산한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당(m당, 개당) 보온공 및 특별인부의 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합하다.",
+  "citations": [
+    {
+      "table_id": "p813-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- Prefabricated Sheet로 Lagging할 때는 본 품에 50%를 가산한다. 2매이상 겹쳐 보온하는 경우에는 전체 두께를 1회 보온하는 품에 50%를 가산한다. - 컬러강판, 아연도강판, 스테인리스 강판, 알루미늄판 등 원자재 (Rawmaterial)로 시공할 때는 본 품에 100%를 가산한다. 2매이상 겹쳐 보온하는 경우에는 전체 두께를 1회 보온하는 품의 100%를 가산한다."
+    },
+    {
+      "chunk_id": "p818-x0",
+      "quote": "두께 91㎜이상 보온은 본 품에 비례하여 적의 적용하되, 관(m당)의 보온공과 특별인부 품은 다음 공식에 의하여 품을 산출 적용한다."
+    },
+    {
+      "chunk_id": "p818-x0",
+      "quote": "Cold 보온시공은 Hot 보온품에 적량 할증 가산할 수 있다."
+    },
+    {
+      "chunk_id": "p818-x0",
+      "quote": "2매이상 겹쳐 보온하는 경우는 각각의 품을 합산한다."
+    }
+  ],
+  "open_questions": [
+    "Cold 보온시공 시 '적량 할증 가산'의 구체적인 비율은 얼마인가?",
+    "2매 이상 겹쳐 보온할 때, [주] ④의 '각각의 품을 합산한다'와 비고란의 '전체 두께를 1회 보온하는 품에 50%(또는 100%)를 가산한다'는 어떻게 동시 적용되는가? (Lagging 품에만 적용되는 것인지, 보온공 전체 품에 적용되는 것인지 명확하지 않음)",
+    "91mm 이상 보온 시 공식에 대입할 파이프 외경(d0)과 파이프보온 외경(d1)은 사용자가 직접 입력해야 하는가?"
+  ],
+  "questions": [
+    "파이프 구경 100mm, 보온두께 40mm인 관을 10m 보온할 때 보온공 품은 얼마인가요?",
+    "Prefabricated Sheet로 Lagging 시공을 하고 2매 겹쳐 보온할 때 할증은 어떻게 계산하나요?",
+    "보온두께가 100mm인 경우 품은 어떻게 산출하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:33:50.709783+00:00",
+    "input_tokens": 34146,
+    "output_tokens": 7411,
+    "source_pages": [
+      813,
+      814,
+      815,
+      816,
+      817,
+      818,
+      819,
+      820
+    ],
+    "prompt_sha256": "0f9666a802a73d0ae0441b37e48a1dbe9744c5369580b6387b3ddbd30a3e9279",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p818-x0 조각 텍스트에 없음"
+    ]
+  }
+}

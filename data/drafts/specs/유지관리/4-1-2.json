@@ -1,0 +1,200 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/4-1-2/각형덕트해체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "4-1-2",
+    "title": "각형덕트 해체",
+    "work": "각형덕트 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      921
+    ],
+    "inputs": [
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "0.5",
+          "0.6",
+          "0.8",
+          "1.0",
+          "1.2",
+          "1.6"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "각형덕트의 호칭두께는 몇 mm입니까?",
+        "source": "PDF 921쪽 p977-t1 표의 호칭두께(mm) 열"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "각형덕트 해체 물량은 몇 ㎡입니까?",
+        "source": "PDF 921쪽 4-1-2 제목 아래 (㎡당)"
+      },
+      {
+        "name": "reuse",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해체한 각형덕트를 재사용합니까?",
+        "source": "PDF 921쪽 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p977-t1",
+        "role": "호칭두께별 각형덕트 해체 단위당 품",
+        "source": "PDF 921쪽 4-1-2 표",
+        "unit": "인/㎡",
+        "values": {
+          "덕트공": {
+            "0.5": "0.064",
+            "0.6": "0.060",
+            "0.8": "0.063",
+            "1.0": "0.077",
+            "1.2": "0.089",
+            "1.6": "0.111"
+          },
+          "보통인부": {
+            "0.5": "0.043",
+            "0.6": "0.040",
+            "0.8": "0.042",
+            "1.0": "0.051",
+            "1.2": "0.059",
+            "1.6": "0.074"
+          }
+        },
+        "cite": {
+          "table_id": "p977-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p977-t1",
+          "row_input": null,
+          "column_input": "thickness",
+          "trades": [
+            "덕트공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p977-t1 표에서 호칭두께에 해당하는 덕트공과 보통인부의 단위당 품을 찾는다.",
+        "단위당 품에 해체 면적(area)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 921쪽 4-1-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "해체한 각형덕트를 재사용하는 경우",
+        "blocked_if": {
+          "input": "reuse",
+          "op": "==",
+          "value": true
+        },
+        "reason": "본 품은 재사용하지 아니하는 때의 절단하여 해체하는 기준이므로, 재사용 시에는 적용할 수 없음",
+        "source": "PDF 921쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p977-x23",
+          "quote": "① 본 품은 각형덕트(아연도금강판, 스테인리스)를 재사용하지 아니하는 때의 절단하여 해체하는 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비산방지, 보호 및 안전시설 등의 설치비",
+        "source": "PDF 921쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p977-x23",
+          "quote": "③ 비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "폐기물 처리비용",
+        "source": "PDF 921쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p977-x23",
+          "quote": "④ 폐기물 처리비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p977-x23",
+          "quote": "⑤ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 직종별 인원이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p977-t1"
+    },
+    {
+      "chunk_id": "p977-x23",
+      "quote": "① 본 품은 각형덕트(아연도금강판, 스테인리스)를 재사용하지 아니하는 때의 절단하여 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p977-x23",
+      "quote": "③ 비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p977-x23",
+      "quote": "④ 폐기물 처리비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p977-x23",
+      "quote": "⑤ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 표(p977-t1)의 값에 '호칭두께(mm)'라는 텍스트가 잘못 포함되어 있어, 명세 작성 시 숫자만 추출하여 표를 구성했습니다. 원문 표의 열 이름과 값을 정확히 매핑하기 위해 파싱 결과의 정제가 필요할 수 있습니다."
+  ],
+  "questions": [
+    "호칭두께 0.8mm인 각형덕트를 해체할 때 단위당 품은 어떻게 되나요?",
+    "해체한 덕트를 다른 현장에서 재사용하려고 하는데 이 품셈을 적용해도 되나요?",
+    "해체할 각형덕트의 총 면적(㎡)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:39.060488+00:00",
+    "input_tokens": 11771,
+    "output_tokens": 2030,
+    "source_pages": [
+      977,
+      978
+    ],
+    "prompt_sha256": "dc45211445555f73112896a1451dd4ef4d197a6d2ab4b25b8dfcd12cd59e60c8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

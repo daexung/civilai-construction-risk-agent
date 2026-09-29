@@ -1,0 +1,165 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-3-1/케이슨진수",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-3-1",
+    "title": "케이슨 진수",
+    "work": "케이슨 진수 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      392
+    ],
+    "inputs": [
+      {
+        "name": "weight_band",
+        "type": "enum",
+        "allowed_values": [
+          "500t미만",
+          "500∼1,000t",
+          "1,000∼2,000t",
+          "2,000∼3,000t"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "케이슨의 중량은 어느 범위에 해당합니까?",
+        "source": "7-3-1 케이슨 진수 표의 구분",
+        "synonyms": {
+          "500t미만": [
+            "500톤 미만"
+          ],
+          "500∼1,000t": [
+            "500~1000t",
+            "500~1000톤"
+          ],
+          "1,000∼2,000t": [
+            "1000~2000t",
+            "1000~2000톤"
+          ],
+          "2,000∼3,000t": [
+            "2000~3000t",
+            "2000~3000톤"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "진수할 케이슨의 개수는 몇 개입니까?",
+        "source": "7-3-1 케이슨 진수 표 기준 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p448-t0",
+        "role": "케이슨 진수 단위당 품",
+        "source": "7-3-1 케이슨 진수 표",
+        "unit": "인/개",
+        "values": {
+          "비계공": {
+            "500t미만": "1∼2",
+            "500∼1,000t": "2∼3",
+            "1,000∼2,000t": "3∼4",
+            "2,000∼3,000t": "4∼6"
+          },
+          "보통인부": {
+            "500t미만": "2∼3",
+            "500∼1,000t": "2∼4",
+            "1,000∼2,000t": "4∼5",
+            "2,000∼3,000t": "5∼7"
+          }
+        },
+        "cite": {
+          "table_id": "p448-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p448-t0",
+          "column_input": "weight_band",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p448-t0에서 케이슨 중량에 따른 단위당 품을 고른다.",
+        "물량(개수)을 곱해 총 품을 구한다."
+      ],
+      "source": "7-3-1 케이슨 진수 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "선박 및 부장장비의 손료 및 운전경비",
+        "source": "7-3-1 [주] ②",
+        "cite": {
+          "chunk_id": "p448-x3",
+          "quote": "선박 및 부장장비의 손료 및 운전경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p448-t0",
+      "row": "비계공",
+      "column": "500t미만",
+      "value": "1∼2"
+    },
+    {
+      "table_id": "p448-t0",
+      "row": "보통인부",
+      "column": "500t미만",
+      "value": "2∼3"
+    },
+    {
+      "chunk_id": "p448-x3",
+      "quote": "본 품은 기 제작된 케이슨을 해상크레인에 의해 권양 및 진수하는 품이다."
+    },
+    {
+      "chunk_id": "p448-x3",
+      "quote": "선박 및 부장장비의 손료 및 운전경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표의 인력 품이 '1~2'와 같이 범위로 제시되어 있어, 자동 계산 시 단일 값(최소, 최대, 평균 등)을 어떻게 결정할지 명확하지 않습니다."
+  ],
+  "questions": [
+    "케이슨 중량이 800t일 때 진수 품은 어떻게 되나요?",
+    "품이 1~2인으로 되어 있는데, 정확히 몇 인을 적용해야 하나요?",
+    "진수할 케이슨의 개수는 몇 개입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:02:22.227413+00:00",
+    "input_tokens": 11565,
+    "output_tokens": 1609,
+    "source_pages": [
+      448,
+      449
+    ],
+    "prompt_sha256": "a999765eddcce804a7d54abe083393f586a5ded411a2437b57ae49c3bd19ec46",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

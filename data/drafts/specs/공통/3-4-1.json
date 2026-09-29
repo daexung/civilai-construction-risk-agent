@@ -1,0 +1,186 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-4-1/흙쌓기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-4-1",
+    "title": "흙쌓기",
+    "work": "흙쌓기(다짐, 비다짐) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      74,
+      75
+    ],
+    "inputs": [
+      {
+        "name": "compaction_type",
+        "type": "enum",
+        "allowed_values": [
+          "다짐(두께 30cm)",
+          "다짐(두께 20cm)",
+          "비다짐"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "흙쌓기 작업 종류는 무엇입니까? (다짐(두께 30cm) / 다짐(두께 20cm) / 비다짐)",
+        "source": "PDF 74쪽 가. 흙쌓기(다짐) 및 75쪽 나. 흙쌓기(비다짐)",
+        "decision_table": "p130-t1"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "흙쌓기 물량은 몇 ㎥입니까? (다짐상태의 토량 기준)",
+        "source": "PDF 74쪽 4. 체적환산계수를 기 반영한 것으로 다짐상태의 토량에 적용한다."
+      }
+    ],
+    "tables": [
+      {
+        "id": "p130-t1",
+        "role": "다짐도에 따른 두께 규격",
+        "source": "PDF 74쪽 3. 규격 구분",
+        "values": {
+          "다짐도(%)": {
+            "두께 30cm": "90%이상",
+            "두께 20cm": "95%이상"
+          }
+        },
+        "cite": {
+          "table_id": "p130-t1"
+        }
+      },
+      {
+        "id": "p130-t2",
+        "role": "가. 흙쌓기(다짐) 일당 시공량 및 작업조",
+        "source": "PDF 74쪽 가. 흙쌓기(다짐) 표",
+        "unit": "인, 대, ㎥",
+        "values": {
+          "특별인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(㎥) 두께 30cm": "1,150",
+            "시공량(㎥) 두께 20cm": "770"
+          },
+          "모터그레이더(일반용)": {
+            "규격": "3.6m",
+            "단위": "대",
+            "수량": "1"
+          },
+          "진동롤러(자주식)": {
+            "규격": "10.0ton",
+            "단위": "대",
+            "수량": "1"
+          },
+          "굴착기": {
+            "규격": "0.6㎥",
+            "단위": "대",
+            "수량": "1"
+          },
+          "물탱크(살수차)": {
+            "규격": "16,000ℓ",
+            "단위": "대",
+            "수량": "0.5"
+          }
+        },
+        "cite": {
+          "table_id": "p130-t2"
+        }
+      },
+      {
+        "id": "p131-t0",
+        "role": "나. 흙쌓기(비다짐) 일당 시공량 및 작업조",
+        "source": "PDF 75쪽 나. 흙쌓기(비다짐) 표",
+        "unit": "대, ㎥",
+        "values": {
+          "불도저": {
+            "규격": "32ton",
+            "단위": "대",
+            "수량": "1",
+            "시공량(㎥)": "1,300"
+          }
+        },
+        "cite": {
+          "table_id": "p131-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "다짐 여부와 두께에 따라 적용할 표(p130-t2 또는 p131-t0)를 선택한다.",
+        "선택한 표에서 일일시공량을 찾는다.",
+        "작업일수 = 물량 ÷ 일일시공량으로 구한다.",
+        "직종별 인·일 및 장비 대·일 = 작업일수 × 표의 수량으로 구한다."
+      ],
+      "source": "PDF 74쪽 가. 흙쌓기(다짐) 및 75쪽 나. 흙쌓기(비다짐)",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "다짐과 비다짐의 작업조 및 시공량 표가 분리되어 있어, 현재의 adjusted_daily_crew 단일 모델로 분기 처리가 불가능합니다.",
+  "citations": [
+    {
+      "table_id": "p130-t1",
+      "row": "다짐도(%)",
+      "column": "두께 30cm",
+      "value": "90%이상"
+    },
+    {
+      "table_id": "p130-t2",
+      "row": "특별인부",
+      "column": "시공량(㎥) 두께 30cm",
+      "value": "1,150"
+    },
+    {
+      "table_id": "p131-t0",
+      "row": "불도저",
+      "column": "시공량(㎥)",
+      "value": "1,300"
+    },
+    {
+      "chunk_id": "p130-x16",
+      "quote": "가. 흙쌓기(다짐)"
+    },
+    {
+      "chunk_id": "p131-x0",
+      "quote": "나. 흙쌓기(비다짐)"
+    },
+    {
+      "chunk_id": "p131-x2",
+      "quote": "비다짐은 토공장비에 의한 정지작업을 기준한다."
+    }
+  ],
+  "open_questions": [
+    "다짐과 비다짐의 작업조 및 시공량 표가 분리되어 있어, 현재의 adjusted_daily_crew 단일 모델로 분기 처리가 불가능하여 not_calculable로 지정함."
+  ],
+  "questions": [
+    "다짐도 95% 이상일 때 흙쌓기 다짐 두께 기준은 어떻게 되나요?",
+    "비다짐 흙쌓기 시 체적환산계수는 어떻게 적용해야 하나요?",
+    "흙쌓기 물량이 몇 ㎥인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:16:08.715924+00:00",
+    "input_tokens": 12711,
+    "output_tokens": 1900,
+    "source_pages": [
+      130,
+      131,
+      132
+    ],
+    "prompt_sha256": "cdaa3723b74ee0ba56347c7ba1c14c06a1db7ce47fa7c85e105e6f2b762d524c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,318 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-29/펌프식준설선",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-29",
+    "title": "펌프식 준설선",
+    "work": "펌프식 준설선의 1시간당 준설능력 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      218,
+      219,
+      220,
+      221,
+      222,
+      223
+    ],
+    "inputs": [
+      {
+        "name": "soil_type",
+        "type": "enum",
+        "allowed_values": [
+          "점성토",
+          "사질토"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질 분류는 무엇입니까?",
+        "source": "PDF 219~220쪽 2. 전동환산(q 표)"
+      },
+      {
+        "name": "n_value",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": null,
+        "required": true,
+        "ask": "기준 N값은 얼마입니까?",
+        "source": "PDF 219~220쪽 2. 전동환산(q 표)"
+      },
+      {
+        "name": "distance",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "m",
+        "required": true,
+        "ask": "배송거리는 몇 m입니까?",
+        "source": "PDF 219~220쪽 2. 전동환산(q 표)"
+      },
+      {
+        "name": "thickness_condition",
+        "type": "enum",
+        "allowed_values": [
+          "적당",
+          "약간 얇다",
+          "얇다"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "흙의 두께 조건은 무엇입니까?",
+        "decision_table": "p278-t3",
+        "source": "PDF 222쪽 4. 작업효율 가. 흙의 두께에 따른 효율"
+      },
+      {
+        "name": "plane_condition",
+        "type": "enum",
+        "allowed_values": [
+          "적당",
+          "약간 산재한다",
+          "산재한다"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "평면형상 조건은 무엇입니까?",
+        "decision_table": "p279-t1",
+        "source": "PDF 223쪽 4. 작업효율 나. 평면형상에 따른 효율"
+      },
+      {
+        "name": "section_condition",
+        "type": "enum",
+        "allowed_values": [
+          "적당",
+          "약간 변화한다",
+          "변화한다"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단면형상 조건은 무엇입니까?",
+        "decision_table": "p279-t3",
+        "source": "PDF 223쪽 4. 작업효율 다. 단면형상에 따른 효율"
+      },
+      {
+        "name": "sea_condition",
+        "type": "enum",
+        "allowed_values": [
+          "보통",
+          "약간 나쁘다",
+          "나쁘다"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해상조건은 무엇입니까?",
+        "decision_table": "p279-t5",
+        "source": "PDF 223쪽 4. 작업효율 라. 해상조건에 따른 효율"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p278-t2",
+        "role": "흙의 두께에 따른 효율(E1)",
+        "source": "PDF 222쪽 가. 흙의 두께에 따른 효율(E1)",
+        "unit": "무차원",
+        "values": {
+          "E1": {
+            "적당": "1.00",
+            "약간 얇다": "0.85",
+            "얇다": "0.75"
+          }
+        },
+        "cite": {
+          "table_id": "p278-t2"
+        }
+      },
+      {
+        "id": "p278-t3",
+        "role": "흙의 두께 해설",
+        "source": "PDF 222쪽 흙의 두께 해설",
+        "values": {
+          "적당": {
+            "적용 사항": "- 준설구간의 흙두께 또는 계획수심이 커터나이프의 길이보다 깊은 경우"
+          },
+          "약간 얇다": {
+            "적용 사항": "- 준설구간의 흙두께 또는 계획수심이 커터나이프의 길이보다 50% 이상인 경우"
+          },
+          "얇다": {
+            "적용 사항": "- 준설구간의 흙두께 또는 계획수심이 커터나이프의 길이보다 50% 미만인 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p278-t3"
+        }
+      },
+      {
+        "id": "p279-t0",
+        "role": "평면형상에 따른 효율(E2)",
+        "source": "PDF 223쪽 나. 평면형상에 따른 효율(E2)",
+        "unit": "무차원",
+        "values": {
+          "E2": {
+            "적당": "1.10",
+            "약간 산재한다": "1.00"
+          }
+        },
+        "cite": {
+          "table_id": "p279-t0"
+        }
+      },
+      {
+        "id": "p279-t1",
+        "role": "평면형상 해설",
+        "source": "PDF 223쪽 평면형상 해설",
+        "values": {
+          "적당": {
+            "적용 사항": "- 평면형상이 거의 직사각형이며, 적당한 준설폭과 연장을 가지는 경우"
+          },
+          "약간 산재한다": {
+            "적용 사항": "- “적당”과 “산재한다” 중 어디에도 해당되지 않는 경우"
+          },
+          "산재한다": {
+            "적용 사항": "- 협각이 많거나, 준설개소가 산재해 있는 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p279-t1"
+        }
+      },
+      {
+        "id": "p279-t2",
+        "role": "단면형상에 따른 효율(E3)",
+        "source": "PDF 223쪽 다. 단면형상에 따른 효율(E3)",
+        "unit": "무차원",
+        "values": {
+          "E3": {
+            "적당": "1.10",
+            "약간 변화한다": "1.00"
+          }
+        },
+        "cite": {
+          "table_id": "p279-t2"
+        }
+      },
+      {
+        "id": "p279-t3",
+        "role": "단면형상 해설",
+        "source": "PDF 223쪽 단면형상 해설",
+        "values": {
+          "적당": {
+            "적용 사항": "- 단면형상이 평탄한 지반인 경우"
+          },
+          "약간 변화한다": {
+            "적용 사항": "- “적당”과 “변화한다” 중 어디에도 해당되지 않는 경우"
+          },
+          "변화한다": {
+            "적용 사항": "- 단면형상의 변화가 큰 지반인 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p279-t3"
+        }
+      },
+      {
+        "id": "p279-t4",
+        "role": "해상조건에 따른 효율(E4)",
+        "source": "PDF 223쪽 라. 해상조건에 따른 효율(E4)",
+        "unit": "무차원",
+        "values": {
+          "E4": {
+            "보통": "1.10",
+            "약간 나쁘다": "1.00",
+            "나쁘다": "0.90"
+          }
+        },
+        "cite": {
+          "table_id": "p279-t4"
+        }
+      },
+      {
+        "id": "p279-t5",
+        "role": "해상조건 해설",
+        "source": "PDF 223쪽 해상조건 해설",
+        "values": {
+          "보통": {
+            "적용 사항": "- 자연지형 또는 방파제 등으로 파랑 또는 너울의 영향을 받지 않는 공사로, 조류, 조위차가 크지 않은 경우"
+          },
+          "약간 나쁘다": {
+            "적용 사항": "- “보통”과 “나쁘다” 중 어디에도 해당되지 않는 경우"
+          },
+          "나쁘다": {
+            "적용 사항": "- 자연지형 또는 방파제 등에 의한 차단효과를 기대할 수 없고, 파랑 또는 너울의 영향을 받는 공사로, 조류, 조위차가 큰 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p279-t5"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "토질, N값, 배송거리에 따라 전동환산(q) 표에서 1시간당 준설량(q)을 구한다.",
+        "배송거리가 짧은 경우 단거리 능력 산정식으로 q를 보정한다.",
+        "흙의 두께, 평면형상, 단면형상, 해상조건에 따른 효율(E1~E4)을 곱하여 작업효율(E)을 구한다.",
+        "공식 Q = (q * bo * E) / 746 을 이용하여 1시간당 준설능력(Q)을 산출한다."
+      ],
+      "source": "PDF 218쪽 1. 작업능력",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 장비(펌프식 준설선)의 시간당 작업능력(Q)을 산출하는 공식을 다루며, 인·일이나 단위당 품을 직접 계산하는 표준 작업조 모델에 맞지 않아 자동 계산 명세로 작성하기 어렵습니다.",
+  "citations": [
+    {
+      "chunk_id": "p274-x18",
+      "quote": "Q =   q⋅bo⋅E"
+    },
+    {
+      "chunk_id": "p278-x20",
+      "quote": "E = E1× E2× E3× E4"
+    },
+    {
+      "table_id": "p278-t2",
+      "row": "E 1",
+      "column": "적당",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p279-t4",
+      "row": "E 4",
+      "column": "보통",
+      "value": "1.10"
+    }
+  ],
+  "open_questions": [
+    "전동환산(q) 표가 매우 방대하고 파편화되어 있어, 이를 자동화된 룩업 테이블로 완벽히 구성하기 어렵습니다.",
+    "단거리 능력 산정 시 '적용 최단거리의 환산능력'을 구하는 과정이 사용자 입력만으로 자동화하기에 모호한 부분이 있습니다."
+  ],
+  "questions": [
+    "펌프식 준설선의 작업효율(E)은 어떻게 계산하나요?",
+    "배송거리가 전동환산표의 기준보다 짧은 경우 준설능력은 어떻게 보정하나요?",
+    "준설선의 공칭주기 출력을 전동환산 출력(bo)으로 변환하려면 어떤 계수를 적용해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:06.950027+00:00",
+    "input_tokens": 21803,
+    "output_tokens": 3208,
+    "source_pages": [
+      274,
+      275,
+      276,
+      277,
+      278,
+      279,
+      280
+    ],
+    "prompt_sha256": "de009d0019fa081a416f9a98e25c1934b7ea9a74729bb44d8cfe38cd5d6b3bf9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

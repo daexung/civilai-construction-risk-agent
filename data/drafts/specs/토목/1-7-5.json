@@ -1,0 +1,219 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-7-5/탄성포장재포설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-7-5",
+    "title": "탄성포장재 포설('21년 신설)",
+    "work": "탄성포장재 포설 및 다짐",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      320
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "탄성포장재 포설 물량은 몇 ㎡입니까?",
+        "source": "p376-t0 시공량(㎡) 기준"
+      },
+      {
+        "name": "thickness",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "cm",
+        "required": true,
+        "ask": "포장두께는 몇 cm입니까? (7.5cm 이하 기준)",
+        "source": "p376-x4 [주] ①"
+      },
+      {
+        "name": "pattern_type",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "표층을 다양한 무늬로 포설합니까?",
+        "source": "p376-x4 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p376-t0",
+        "role": "탄성포장재 포설 일당 작업조 인원 및 장비 대수, 시공량",
+        "source": "PDF 320쪽 1-7-5 표",
+        "unit": "인/작업조; 대/작업조; ㎡/일",
+        "values": {
+          "특별인부": {
+            "단위": "인",
+            "수량": "5",
+            "시공량(㎡)": "120"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "3"
+          },
+          "믹서": {
+            "규격": "0.2㎥",
+            "단위": "대",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p376-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p376-t0",
+          "row": "특별인부",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p376-t0",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "믹서",
+          "table": "p376-t0",
+          "unit": "대·일",
+          "operator_rate_code": null
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p376-t0에서 기준 일일시공량(120㎡)을 확인한다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 믹서 대·일 = 작업일수 × 1로 구한다."
+      ],
+      "source": "PDF 320쪽 1-7-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "포장두께가 7.5cm를 초과하는 경우",
+        "blocked_if": {
+          "input": "thickness",
+          "op": ">",
+          "value": 7.5
+        },
+        "reason": "본 품은 포장두께 7.5cm 이하를 기준으로 하므로 초과 시 적용 불가",
+        "source": "p376-x4 [주] ①",
+        "cite": {
+          "chunk_id": "p376-x4",
+          "quote": "탄성포장재(포장두께 7.5cm이하)를 포설 및 다짐하는 기준이다."
+        }
+      },
+      {
+        "condition": "표층을 다양한 무늬로 포설하는 경우",
+        "blocked_if": {
+          "input": "pattern_type",
+          "op": "==",
+          "value": true
+        },
+        "reason": "다양한 무늬로 포설하는 경우 별도 계상하도록 명시됨",
+        "source": "p376-x4 [주] ③",
+        "cite": {
+          "chunk_id": "p376-x4",
+          "quote": "표층을 다양한 무늬로 포설하는 경우 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p376-x4",
+          "quote": "공구손료 및 경장비(발전기, 다짐롤러 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량(120㎡)과 그에 따른 작업조 인원 및 장비 대수가 표로 제시되어 있어 물량 기반의 작업일수 계산이 가능합니다.",
+  "citations": [
+    {
+      "table_id": "p376-t0",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "5"
+    },
+    {
+      "table_id": "p376-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p376-t0",
+      "row": "믹서",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p376-t0",
+      "row": "특별인부",
+      "column": "시공량(㎡)",
+      "value": "120"
+    },
+    {
+      "chunk_id": "p376-x4",
+      "quote": "탄성포장재(포장두께 7.5cm이하)를 포설 및 다짐하는 기준이다."
+    },
+    {
+      "chunk_id": "p376-x4",
+      "quote": "표층을 다양한 무늬로 포설하는 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p376-x4",
+      "quote": "공구손료 및 경장비(발전기, 다짐롤러 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "믹서(0.2㎥)의 정확한 장비 단가 코드를 특정하기 위한 추가 정보가 원문에 없습니다."
+  ],
+  "questions": [
+    "탄성포장재 500㎡를 포설할 때 필요한 특별인부와 보통인부의 품은 얼마인가요?",
+    "포장두께가 10cm인 경우 이 품셈을 적용할 수 있나요?",
+    "표층에 무늬를 넣는 작업은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:55:05.093301+00:00",
+    "input_tokens": 11581,
+    "output_tokens": 2133,
+    "source_pages": [
+      376,
+      377
+    ],
+    "prompt_sha256": "490d3788adad39766b9903d36d0fab28c4e77fd4992cf456cb3cd3db8c886166",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

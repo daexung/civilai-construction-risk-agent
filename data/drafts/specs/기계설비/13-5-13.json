@@ -1,0 +1,282 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-5-13/Boiler_Feed_Pump_설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-5-13",
+    "title": "Boiler Feed Pump 설치",
+    "work": "Boiler Feed Pump 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      786,
+      787
+    ],
+    "inputs": [
+      {
+        "name": "pump_type",
+        "type": "enum",
+        "allowed_values": [
+          "Tubine driven type",
+          "Motor driven type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "펌프의 구동 방식은 무엇입니까?",
+        "source": "PDF 786~787쪽 1. Tubine driven type, 2. Motor driven type"
+      },
+      {
+        "name": "capacity",
+        "type": "enum",
+        "allowed_values": [
+          "300이하",
+          "400",
+          "500",
+          "600",
+          "700"
+        ],
+        "unit": "ton/hr",
+        "required": true,
+        "ask": "펌프의 용량(ton/hr)은 얼마입니까?",
+        "source": "PDF 786쪽 p842-t1"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 펌프의 수량은 몇 대입니까?",
+        "source": "PDF 786쪽 p842-t1 기준 (대당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p842-t1",
+        "role": "Tubine driven type 용량별 직종별 인원",
+        "source": "PDF 786쪽 1. Tubine driven type 표",
+        "unit": "인/대",
+        "values": {
+          "목공": {
+            "300이하": "1.9",
+            "400": "2.2",
+            "500": "2.5",
+            "600": "2.8",
+            "700": "3.1"
+          },
+          "플랜트기계설치공": {
+            "300이하": "62.8",
+            "400": "71.4",
+            "500": "81.6",
+            "600": "91.5",
+            "700": "98.6"
+          },
+          "비계공": {
+            "300이하": "23.2",
+            "400": "26.4",
+            "500": "30.4",
+            "600": "34.4",
+            "700": "37.3"
+          },
+          "건설기계운전( 조/ 대)": {
+            "300이하": "13.2",
+            "400": "14.7",
+            "500": "16.4",
+            "600": "18.0",
+            "700": "19.2"
+          },
+          "특별인부": {
+            "300이하": "67.5",
+            "400": "77.6",
+            "500": "89.4",
+            "600": "101.1",
+            "700": "109.2"
+          },
+          "계": {
+            "300이하": "168.6",
+            "400": "192.3",
+            "500": "220.3",
+            "600": "247.8",
+            "700": "267.4"
+          }
+        },
+        "cite": {
+          "table_id": "p842-t1"
+        }
+      },
+      {
+        "id": "p843-t0",
+        "role": "Motor driven type 용량별 직종별 인원 (파싱 오류로 데이터 불완전)",
+        "source": "PDF 787쪽 2. Motor driven type 표",
+        "unit": "인/대",
+        "values": {},
+        "cite": {
+          "table_id": "p843-t0"
+        }
+      },
+      {
+        "id": "p843-t1",
+        "role": "사용장비 (파싱 오류로 데이터 불완전)",
+        "source": "PDF 787쪽 [참고] 사용장비 표",
+        "unit": "대",
+        "values": {},
+        "cite": {
+          "table_id": "p843-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p842-t1",
+          "row_input": "고정 행이름",
+          "column_input": "capacity",
+          "trades": [
+            "목공",
+            "플랜트기계설치공",
+            "비계공",
+            "건설기계운전( 조/ 대)",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "pump_type이 Tubine driven type인 경우 p842-t1에서 용량별 단위당 품을 찾는다.",
+        "물량(quantity)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 786쪽 p842-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "pump_type == Motor driven type",
+        "blocked_if": {
+          "input": "pump_type",
+          "op": "==",
+          "value": "Motor driven type"
+        },
+        "reason": "Motor driven type 표(p843-t0)의 파싱 결과에서 열 이름과 일부 데이터가 누락되어 자동 계산이 불가능합니다.",
+        "source": "PDF 787쪽 2. Motor driven type 표",
+        "cite": {
+          "table_id": "p843-t0"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "부대기기(Oil tank, Oil Pump, Oil cooler 등) 및 부대배관공사",
+        "source": "PDF 787쪽 1. Tubine driven type [주] ⑦",
+        "cite": {
+          "chunk_id": "p843-x0",
+          "quote": "⑦ 본 품에는 Oil tank, Oil Pump, Oil cooler 등의 부대기기와 부대배관공사가 제외되어 있다."
+        }
+      },
+      {
+        "item": "부대배관 작업",
+        "source": "PDF 787쪽 2. Motor driven type [주] ⑧",
+        "cite": {
+          "chunk_id": "p843-x8",
+          "quote": "⑧ 본 품에는 부대배관 작업이 제외되어 있다."
+        }
+      },
+      {
+        "item": "전기배선, 계장공사",
+        "source": "PDF 787쪽 2. Motor driven type [주] ⑨",
+        "cite": {
+          "chunk_id": "p843-x8",
+          "quote": "⑨ 본 품에는 전기배선, 계장공사가 제외되어 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대당) 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다. 단, Motor driven type 표는 파싱 오류로 계산이 보류됩니다.",
+  "citations": [
+    {
+      "table_id": "p842-t1",
+      "row": "목공",
+      "column": "300이하",
+      "value": "1.9"
+    },
+    {
+      "table_id": "p842-t1",
+      "row": "플랜트기계설치공",
+      "column": "300이하",
+      "value": "62.8"
+    },
+    {
+      "table_id": "p842-t1",
+      "row": "비계공",
+      "column": "300이하",
+      "value": "23.2"
+    },
+    {
+      "table_id": "p842-t1",
+      "row": "건설기계운전( 조/ 대)",
+      "column": "300이하",
+      "value": "13.2"
+    },
+    {
+      "table_id": "p842-t1",
+      "row": "특별인부",
+      "column": "300이하",
+      "value": "67.5"
+    },
+    {
+      "table_id": "p842-t1",
+      "row": "계",
+      "column": "300이하",
+      "value": "168.6"
+    },
+    {
+      "table_id": "p843-t0"
+    },
+    {
+      "table_id": "p843-t1"
+    },
+    {
+      "chunk_id": "p843-x0",
+      "quote": "⑦ 본 품에는 Oil tank, Oil Pump, Oil cooler 등의 부대기기와 부대배관공사가 제외되어 있다."
+    },
+    {
+      "chunk_id": "p843-x8",
+      "quote": "⑧ 본 품에는 부대배관 작업이 제외되어 있다."
+    },
+    {
+      "chunk_id": "p843-x8",
+      "quote": "⑨ 본 품에는 전기배선, 계장공사가 제외되어 있다."
+    }
+  ],
+  "open_questions": [
+    "Motor driven type 표(p843-t0)의 파싱 결과에서 열 이름(300이하, 400, 500, 600, 700)과 700 열의 데이터가 누락되었고, 행 이름이 '용량(ton/hr) 직종' 등으로 중복되어 정상적인 표 구성이 불가능합니다.",
+    "사용장비 표(p843-t1)의 파싱 결과가 여러 장비를 하나의 문자열로 묶어버려 개별 장비 수량 파악이 어렵습니다."
+  ],
+  "questions": [
+    "보일러 급수 펌프의 구동 방식(Turbine / Motor)과 용량은 어떻게 됩니까?",
+    "Motor driven type의 경우 증속기 설치가 포함되는데, 현장에서 별도의 추가 작업이 발생합니까?",
+    "설치할 펌프의 총 대수는 몇 대입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:28:24.624522+00:00",
+    "input_tokens": 13006,
+    "output_tokens": 2899,
+    "source_pages": [
+      842,
+      843,
+      844
+    ],
+    "prompt_sha256": "2db0cfaed2fdaab0ce316318167dc9e203c33e167906b95ccff10f65250c9ce7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

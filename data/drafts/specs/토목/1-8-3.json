@@ -1,0 +1,173 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-8-3/도로반사경설치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-8-3",
+    "title": "도로반사경 설치",
+    "work": "도로반사경 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      321
+    ],
+    "inputs": [
+      {
+        "name": "mirror_type",
+        "type": "enum",
+        "allowed_values": [
+          "1면",
+          "2면"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 도로반사경은 1면입니까, 2면입니까?",
+        "source": "PDF 321쪽 1-8-3 표 시공량(본) 구분",
+        "synonyms": {
+          "1면": [
+            "단면",
+            "일면"
+          ],
+          "2면": [
+            "양면",
+            "이면"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "본",
+        "required": true,
+        "ask": "설치할 도로반사경의 수량은 몇 본입니까?",
+        "source": "PDF 321쪽 1-8-3 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p377-t2",
+        "role": "작업조 인원 및 일일 시공량",
+        "source": "PDF 321쪽 1-8-3 표",
+        "unit": "인/일, 본/일",
+        "values": {
+          "특별인부": {
+            "수량": "1"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "시공량(본)": {
+            "1면": "4",
+            "2면": "3"
+          }
+        },
+        "cite": {
+          "table_id": "p377-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p377-t2",
+          "row": "시공량(본)",
+          "column_input": "mirror_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p377-t2",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p377-t2에서 반사경 면수(1면/2면)에 따른 일일 시공량을 찾는다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량(특별인부 1, 보통인부 1)으로 구한다."
+      ],
+      "source": "PDF 321쪽 1-8-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p377-x9",
+          "quote": "공구손료 및 경장비(전동드릴, 발전기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 표에 주어져 있어, 전체 물량을 일일 시공량으로 나누어 작업일수를 구하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p377-t2",
+      "row": "시공량(본)",
+      "column": "1면",
+      "value": "4"
+    },
+    {
+      "table_id": "p377-t2",
+      "row": "시공량(본)",
+      "column": "2면",
+      "value": "3"
+    },
+    {
+      "table_id": "p377-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p377-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p377-x9",
+      "quote": "공구손료 및 경장비(전동드릴, 발전기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "도로반사경 및 지주의 자재비는 별도 계상인지 명시되지 않음"
+  ],
+  "questions": [
+    "도로반사경 1면짜리 10본을 설치할 때 품은 어떻게 되나요?",
+    "공구손료 3%는 특별인부와 보통인부 노무비 합계에 곱하나요?",
+    "도로반사경 자재비는 어떻게 처리하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:56:16.126733+00:00",
+    "input_tokens": 11547,
+    "output_tokens": 1560,
+    "source_pages": [
+      377,
+      378
+    ],
+    "prompt_sha256": "295ecb1f35e8911ef4647decd031e24115e2cb36b040dc75d3a8378d8ecf4af8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/10-9-1/완강기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "10-9-1",
+    "title": "완강기 설치",
+    "work": "완강기 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      712
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 완강기의 수량은 몇 개입니까?",
+        "source": "p768-t1 기준 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p768-t1",
+        "role": "완강기 설치 품 (파싱 누락으로 값 없음)",
+        "source": "10-9-1 완강기 설치",
+        "unit": "개당",
+        "values": {},
+        "cite": {
+          "table_id": "p768-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과에 기계설비공, 보통인부의 품 수치가 누락되어 계산식을 구성할 수 없습니다."
+      ],
+      "source": "10-9-1 완강기 설치",
+      "rounding": "단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에 표의 핵심 수치(기계설비공, 보통인부의 인·일)가 누락되어 있어 자동 계산 명세를 작성할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p768-t1"
+    },
+    {
+      "chunk_id": "p768-x6",
+      "quote": "① 본 품은 피난용 완강기를 설치하는 품이다."
+    },
+    {
+      "chunk_id": "p768-x6",
+      "quote": "② 본 품에는 소운반, 완강기 지지대, 보호함, 안전표시 설치를 포함한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p768-t1)에 기계설비공, 보통인부의 수량(0.094, 0.046)이 누락되어 있어 명세에 포함하지 못했습니다. 파싱 개선이 필요합니다."
+  ],
+  "questions": [
+    "완강기 설치 시 소운반이나 지지대 설치 품은 별도로 계산해야 하나요?",
+    "완강기 지지대 외에 추가적인 보강 철물이 필요한 경우 품을 어떻게 적용하나요?",
+    "설치할 완강기의 개수는 몇 개인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:40:43.785410+00:00",
+    "input_tokens": 23096,
+    "output_tokens": 1857,
+    "source_pages": [
+      768,
+      769
+    ],
+    "prompt_sha256": "8ee727d921889e97d8605ad4d948ab32e605eda670a8c505f89c5082ae992640",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

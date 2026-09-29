@@ -1,0 +1,165 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-5-3/사진기준점측량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-5-3",
+    "title": "사진 기준점 측량('21, '26년 보완)",
+    "work": "사진 기준점 측량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      473
+    ],
+    "inputs": [
+      {
+        "name": "models",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "모델",
+        "required": true,
+        "ask": "대상지역을 포괄하는 모델수는 몇 모델입니까? (표준모델 산정 시: 촬영코스연장(㎞) / 촬영기선장(㎞) × 1.1)",
+        "source": "PDF 473쪽 [주] ②, ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p529-t0",
+        "role": "작업구분별 인원",
+        "source": "PDF 473쪽 9-5-3 표",
+        "unit": "인",
+        "values": {
+          "계": {
+            "특급기술자": "2",
+            "고급기술자": "13",
+            "중급기술자": "10"
+          }
+        },
+        "cite": {
+          "table_id": "p529-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p529-t0",
+          "row_input": "계",
+          "trades": [
+            "특급기술자",
+            "고급기술자",
+            "중급기술자"
+          ]
+        },
+        "quantity_input": "models",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "입력된 모델수를 50으로 나누어 작업 단위를 산출 (본 품은 연속된 항공사진 50모델을 1작업 단위로 함)",
+            "source": "PDF 473쪽 [주] ③"
+          }
+        ]
+      },
+      "steps": [
+        "입력된 모델수를 50으로 나누어 작업 단위(수량)를 산출한다.",
+        "p529-t0 표의 '계' 행에서 직종별 인원을 찾는다.",
+        "작업 단위에 직종별 인원을 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "PDF 473쪽 9-5-3 표 및 [주] ③",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기계 경비, 데이터 처리를 위한 프로그램 및 재료비",
+        "source": "PDF 473쪽 [주] ④",
+        "cite": {
+          "section_no": "9-5-3",
+          "marker": "④"
+        }
+      },
+      {
+        "item": "지상기준점 및 검측점에 대한 지상측량 또는 대공표지 설치 비용",
+        "source": "PDF 473쪽 [주] ⑤",
+        "cite": {
+          "section_no": "9-5-3",
+          "marker": "⑤"
+        }
+      },
+      {
+        "item": "성과심사에 소요되는 비용",
+        "source": "PDF 473쪽 [주] ⑥",
+        "cite": {
+          "section_no": "9-5-3",
+          "marker": "⑥"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "50모델을 1작업 단위로 하여 직종별 투입 인원이 표에 고정값으로 제시되어 있으므로 단위당 품 계산 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p529-t0",
+      "row": "계",
+      "column": "특급기술자",
+      "value": "2"
+    },
+    {
+      "table_id": "p529-t0",
+      "row": "계",
+      "column": "고급기술자",
+      "value": "13"
+    },
+    {
+      "table_id": "p529-t0",
+      "row": "계",
+      "column": "중급기술자",
+      "value": "10"
+    },
+    {
+      "chunk_id": "p529-x4",
+      "quote": "본 품은 연속된 항공사진 50모델을 1작업 단위로 한 것이다."
+    },
+    {
+      "chunk_id": "p529-x4",
+      "quote": "기계 경비, 데이터 처리를 위한 프로그램 및 재료비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p529-x4",
+      "quote": "지상기준점 및 검측점에 대하여 지상측량 또는 대공표지 설치를 할 때는 별도 계상할 수 있다."
+    },
+    {
+      "chunk_id": "p529-x4",
+      "quote": "본 품에서 성과심사에 소요되는 비용은 국토교통부장관이 고시한 측량성과 심사수탁기관의 심사업무\n설명 | 및 지정절차 등에 관한 규정에 따라 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표 데이터(p529-t0)의 형태가 원문과 크게 달라, '계' 행의 값을 수동으로 매핑했습니다. 파싱 개선이 필요할 수 있습니다."
+  ],
+  "questions": [
+    "항공사진 100모델을 측량할 때 특급기술자는 몇 인·일이 필요한가요?",
+    "촬영코스연장이 10km이고 촬영기선장이 2km일 때 투입되는 총 인원은 어떻게 되나요?",
+    "기계 경비나 재료비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:18:58.386183+00:00",
+    "input_tokens": 11804,
+    "output_tokens": 1647,
+    "source_pages": [
+      529,
+      530
+    ],
+    "prompt_sha256": "5f2f892bace56da1dbfc33cb2201be5b0e5c76950080a64be81d629bcaf3f42f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

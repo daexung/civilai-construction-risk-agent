@@ -1,0 +1,86 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-6-2/줄눈절단",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-6-2",
+    "title": "줄눈 절단('18년 신설)",
+    "work": "줄눈 절단 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      609
+    ],
+    "inputs": [],
+    "tables": [
+      {
+        "id": "p665-t0",
+        "role": "줄눈 절단 단위당 품 (파싱 누락)",
+        "source": "6-6-2 줄눈 절단 표",
+        "values": {},
+        "cite": {
+          "table_id": "p665-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱된 표 데이터에 직종 및 수량 정보가 누락되어 계산식을 구성할 수 없습니다."
+      ],
+      "source": "p665-t0",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p665-x3",
+          "quote": "③ 공구손료 및 경장비(청소기 등) 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표 데이터(p665-t0)에 직종(방수공, 보통인부, 커터) 및 수량 정보가 완전히 누락되어 있어 단위당 품 계산을 수행할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p665-t0"
+    },
+    {
+      "chunk_id": "p665-x3",
+      "quote": "③ 공구손료 및 경장비(청소기 등) 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p665-t0)에 원문 표의 행(방수공, 보통인부, 커터)과 수량(0.005, 0.001, 0.017)이 누락되어 있어 계산식을 구성할 수 없습니다."
+  ],
+  "questions": [
+    "줄눈 절단 물량은 몇 m입니까?",
+    "옥상 보호콘크리트 외의 절단에도 이 품을 적용할 수 있습니까?",
+    "커터 장비의 규격이 320~400mm가 아닌 경우 어떻게 적용합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:04:38.593835+00:00",
+    "input_tokens": 23114,
+    "output_tokens": 1970,
+    "source_pages": [
+      665,
+      666
+    ],
+    "prompt_sha256": "2f14ffcbe71c5e09f530debfff6d262d96ad89a24d33891c1d229e1b81d23330",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

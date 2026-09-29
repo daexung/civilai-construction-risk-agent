@@ -1,0 +1,285 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-1-5/에폭시콘크리트접착제바르기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-1-5",
+    "title": "에폭시(Epoxy) 콘크리트 접착제 바르기",
+    "work": "에폭시 콘크리트 접착제 바르기 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      132
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "에폭시 콘크리트 접착제 바르기 면적은 몇 ㎡입니까?",
+        "source": "PDF 132쪽 6-1-5 표 기준 (㎡당)"
+      },
+      {
+        "name": "type",
+        "type": "enum",
+        "allowed_values": [
+          "신구-콘크리트 접착제바르기",
+          "콘크리트 및 고무 기타 접착제바르기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "접착제 바르기 구분은 무엇입니까?",
+        "source": "PDF 132쪽 6-1-5 표 구분"
+      },
+      {
+        "name": "ceiling_applied",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "상부 슬래브 등 천장 시공입니까?",
+        "source": "PDF 132쪽 6-1-5 표 비고"
+      },
+      {
+        "name": "scaffold_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계를 사용합니까?",
+        "source": "PDF 132쪽 6-1-5 [주] ②"
+      },
+      {
+        "name": "floor_level",
+        "type": "enum",
+        "allowed_values": [
+          "지하층 및 1∼3층",
+          "4∼6층",
+          "7∼9층",
+          "10∼12층",
+          "13∼15층",
+          "16∼18층",
+          "19층 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공하는 층수는 어디에 해당합니까? (층의 구분을 할 수 없을 때에는 층고를 3.6m로 기준하여 환산 적용)",
+        "source": "PDF 132쪽 6-1-5 [주] ② 표 및 ※"
+      },
+      {
+        "name": "floor_level_19_plus",
+        "type": "nonnegative_integer",
+        "allowed_values": "19 이상의 정수",
+        "unit": "층",
+        "required": true,
+        "ask": "19층 이상인 경우 정확한 층수는 몇 층입니까?",
+        "source": "PDF 132쪽 6-1-5 [주] ② 19층 이상은 매 3층 증가마다 4%씩 가산"
+      },
+      {
+        "name": "thickness_adjusted",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장조건에 따라 부득이 바름두께가 커집니까?",
+        "source": "PDF 132쪽 6-1-5 [주] ④"
+      },
+      {
+        "name": "thickness",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "mm",
+        "required": true,
+        "ask": "바름두께는 몇 mm입니까? (산식 적용 시 단위 확인 필요)",
+        "source": "PDF 132쪽 6-1-5 [주] ④ 산식"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p188-t0",
+        "role": "에폭시 콘크리트 접착제 바르기 단위당 품",
+        "source": "PDF 132쪽 6-1-5 표",
+        "unit": "㎡당",
+        "values": {
+          "신구-콘크리트 접착제바르기": {
+            "Epoxy신구-콘크리트접착제": "1.2",
+            "시너": "0.2",
+            "도장공": "0.12"
+          },
+          "콘크리트 및 고무 기타 접착제바르기": {
+            "Epoxy-콘크리트고무접착제": "1.2",
+            "시너": "0.2",
+            "도장공": "0.12"
+          }
+        },
+        "cite": {
+          "table_id": "p188-t0"
+        }
+      },
+      {
+        "id": "p188-t1",
+        "role": "비계사용시 높이에 따른 할증률",
+        "source": "PDF 132쪽 6-1-5 [주] ② 표",
+        "values": {
+          "할증률": {
+            "지하층 및 1∼3층": "0",
+            "4∼6층": "5%",
+            "7∼9층": "8%",
+            "10∼12층": "12%",
+            "13∼15층": "16%",
+            "16∼18층": "20%"
+          }
+        },
+        "cite": {
+          "table_id": "p188-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p188-t0",
+          "row_input": "type",
+          "trades": [
+            "도장공"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [
+          {
+            "when": {
+              "ceiling_applied": true
+            },
+            "rate": "0.2",
+            "applies_to": [
+              "도장공"
+            ],
+            "source": "비고 - 상부 슬래브 등 천장 시공은 본 품을 20% 가산한다."
+          },
+          {
+            "when": {
+              "scaffold_used": true
+            },
+            "rate": "p188-t1 참조 및 19층 이상 계산",
+            "applies_to": [
+              "도장공"
+            ],
+            "source": "[주] ② 비계사용시 높이에 따라 다음 할증률에 의한 품을 가산"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "thickness_adjusted": true
+            },
+            "change": "소요량 = 1.0m×1.0×두께×비중(1.2)",
+            "source": "[주] ④ 현장조건에 따라 부득이 바름두께가 커질 때는 다음 산식을 적용한다."
+          }
+        ]
+      },
+      "steps": [
+        "p188-t0에서 접착제 종류별 단위당 품을 고른다.",
+        "물량(area)을 곱해 총 품을 구한다.",
+        "천장 시공, 비계 사용 시 높이 할증, 바름두께 증가에 따른 소요량 산식을 적용한다."
+      ],
+      "source": "PDF 132쪽 6-1-5",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p188-x10",
+          "quote": "③ 공구손료는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당(㎡당) 재료량과 노무품이 표에 직접 제시되어 있으며, 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p188-t0",
+      "row": "신구-콘크리트 접착제바르기",
+      "column": "도장공",
+      "value": "0.12인"
+    },
+    {
+      "table_id": "p188-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 상부 슬래브 등 천장 시공은 본 품을 20% 가산한다."
+    },
+    {
+      "chunk_id": "p188-x6",
+      "quote": "② 비계사용시 높이에 따라 다음 할증률에 의한 품을 가산할 수 있으며 19층 이상은 매 3층 증가마다"
+    },
+    {
+      "chunk_id": "p188-x6",
+      "quote": "4%씩 가산한다."
+    },
+    {
+      "table_id": "p188-t1",
+      "row": "16∼18층",
+      "column": "16∼18층",
+      "value": "20%"
+    },
+    {
+      "chunk_id": "p188-x10",
+      "quote": "③ 공구손료는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p188-x10",
+      "quote": "④ 현장조건에 따라 부득이 바름두께가 커질 때는 다음 산식을 적용한다."
+    },
+    {
+      "chunk_id": "p188-x10",
+      "quote": "소요량 = 1.0m×1.0×두께×비중(1.2)"
+    }
+  ],
+  "open_questions": [
+    "비고의 '본 품을 20% 가산한다'가 재료량과 노무품 모두에 적용되는지, 노무품에만 적용되는지 명확하지 않음.",
+    "[주] ②의 '품을 가산할 수 있으며'가 노무품에만 적용되는지 명확하지 않음.",
+    "[주] ④의 산식 '소요량 = 1.0m×1.0×두께×비중(1.2)'에서 두께의 단위가 m인지 mm인지 명시되지 않음. (비중 1.2를 곱해 kg/㎡ 단위의 소요량을 구하는 것으로 보아 두께 단위는 mm일 가능성이 높으나 확인 필요)",
+    "19층 이상 매 3층 증가마다 4%씩 가산하는 규칙의 정확한 수식(예: 19~21층 24%, 22~24층 28% 등) 적용 방식."
+  ],
+  "questions": [
+    "에폭시 콘크리트 접착제 바르기 물량과 접착제 종류는 무엇입니까?",
+    "상부 슬래브 등 천장 시공에 해당합니까?",
+    "비계를 사용하며, 시공하는 층수는 몇 층입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:30:42.148982+00:00",
+    "input_tokens": 12048,
+    "output_tokens": 3011,
+    "source_pages": [
+      188,
+      189
+    ],
+    "prompt_sha256": "613f2a5d961dae8fd23c13bc3ddb3028fffe570a9cf7e6c6940a302a6a5db1cc",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

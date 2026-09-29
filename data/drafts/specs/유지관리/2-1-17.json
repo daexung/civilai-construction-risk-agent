@@ -1,0 +1,241 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-17/슬러리실",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-17",
+    "title": "슬러리실",
+    "work": "슬러리실 포설",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      885
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "슬러리실 시공 물량은 몇 ㎡입니까?",
+        "source": "2-1-17 슬러리실 표 시공량 단위"
+      },
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "6㎜",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "포설두께는 6㎜입니까?",
+        "source": "[주] ② 본 품은 포설두께 6㎜를 기준으로 한다."
+      }
+    ],
+    "tables": [
+      {
+        "id": "p941-t1",
+        "role": "슬러리실 일당 작업조 및 시공량",
+        "source": "2-1-17 슬러리실 표",
+        "unit": "인/일, 대/일, ㎡/일",
+        "values": {
+          "포장공": {
+            "배치인원 (인)": "2"
+          },
+          "보통인부": {
+            "배치인원 (인)": "2"
+          },
+          "슬러리실기계": {
+            "사용기계 (1대)": "1"
+          },
+          "굴착기": {
+            "사용기계 (1대)": "1"
+          },
+          "시공량": {
+            "시공량 (㎡)": "5000"
+          }
+        },
+        "cite": {
+          "table_id": "p941-t1"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {},
+        "when_text": "항상 적용",
+        "change": {
+          "보통인부": "+8"
+        },
+        "source": "[주] ⑥ 공종의 특성상 교통통제 및 안전처리(보통인부) 8명을 적용한다.",
+        "cite": {
+          "chunk_id": "p941-x10",
+          "quote": "⑥ 공종의 특성상 교통통제 및 안전처리(보통인부) 8명을 적용한다."
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p941-t1",
+          "row": "시공량",
+          "column": "시공량 (㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p941-t1",
+          "column": "배치인원 (인)",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ]
+        },
+        "equipments": [
+          {
+            "name": "슬러리실기계",
+            "table": "p941-t1",
+            "column": "사용기계 (1대)"
+          },
+          {
+            "name": "굴착기",
+            "table": "p941-t1",
+            "column": "사용기계 (1대)"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p941-t1에서 기준 일일시공량(5,000㎡)을 가져온다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "p941-t1의 작업조 인원에 [주] ⑥의 교통통제 및 안전처리 인원(보통인부 8명)을 더한다.",
+        "직종별 인·일 = 작업일수 × 조정된 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "2-1-17 슬러리실 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "thickness != 6㎜",
+        "blocked_if": {
+          "input": "thickness",
+          "op": "!=",
+          "value": "6㎜"
+        },
+        "reason": "포설두께 6㎜ 기준이며, 다른 두께에 대한 품 보정 기준이 명시되어 있지 않음",
+        "source": "[주] ②",
+        "cite": {
+          "chunk_id": "p941-x10",
+          "quote": "② 본 품은 포설두께 6㎜를 기준으로 한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "표면처리기계 경비",
+        "source": "[주] ③",
+        "cite": {
+          "chunk_id": "p941-x10",
+          "quote": "③ 표면처리기계 경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "택코트 처리 및 골재의 채집 운반적재",
+        "source": "[주] ④",
+        "cite": {
+          "chunk_id": "p941-x10",
+          "quote": "④ 택코트 처리 및 골재의 채집 운반적재는 현장여건에 따라 별도 계상할 수 있다."
+        }
+      },
+      {
+        "item": "재료량",
+        "source": "[주] ⑤",
+        "cite": {
+          "chunk_id": "p941-x10",
+          "quote": "⑤ 본 공종에서 사용되는 재료량은 배합설계에 따른다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량과 작업조 인원, 장비가 명시되어 있어 물량을 일당 시공량으로 나누어 작업일수를 구하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p941-t1",
+      "row": "포장공",
+      "column": "2",
+      "value": "2"
+    },
+    {
+      "table_id": "p941-t1",
+      "row": "보통인부",
+      "column": "2",
+      "value": "2"
+    },
+    {
+      "table_id": "p941-t1",
+      "row": "슬러리실기계",
+      "column": "1",
+      "value": "1"
+    },
+    {
+      "table_id": "p941-t1",
+      "row": "굴착기",
+      "column": "1",
+      "value": "1"
+    },
+    {
+      "table_id": "p941-t1",
+      "row": "시공량",
+      "column": "5,000",
+      "value": "5,000"
+    },
+    {
+      "chunk_id": "p941-x10",
+      "quote": "② 본 품은 포설두께 6㎜를 기준으로 한다."
+    },
+    {
+      "chunk_id": "p941-x10",
+      "quote": "③ 표면처리기계 경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p941-x10",
+      "quote": "④ 택코트 처리 및 골재의 채집 운반적재는 현장여건에 따라 별도 계상할 수 있다."
+    },
+    {
+      "chunk_id": "p941-x10",
+      "quote": "⑤ 본 공종에서 사용되는 재료량은 배합설계에 따른다."
+    },
+    {
+      "chunk_id": "p941-x10",
+      "quote": "⑥ 공종의 특성상 교통통제 및 안전처리(보통인부) 8명을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "포설두께가 6㎜가 아닐 경우의 품 보정 방식이 명시되어 있지 않음."
+  ],
+  "questions": [
+    "슬러리실 10,000㎡ 시공 시 필요한 포장공과 보통인부 인원은 몇 명인가요?",
+    "포설두께가 8㎜인 경우 품을 어떻게 할증해야 하나요?",
+    "시공 물량을 입력하지 않았습니다. 몇 ㎡ 시공하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:49:00.641574+00:00",
+    "input_tokens": 11608,
+    "output_tokens": 2320,
+    "source_pages": [
+      941,
+      942
+    ],
+    "prompt_sha256": "152429a4226f1a9a62a8431fc16f7ddc26e99929b7c5a93a8fb02f9964b1e07b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

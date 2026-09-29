@@ -1,0 +1,123 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-1-4/준설선_취업시간_및_운전시간",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-1-4",
+    "title": "준설선 취업시간 및 운전시간",
+    "work": "준설선 취업시간 및 운전시간 기준",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      389
+    ],
+    "inputs": [
+      {
+        "name": "dredger_type",
+        "type": "enum",
+        "allowed_values": [
+          "펌프준설선",
+          "그래브준설선",
+          "양묘선",
+          "토운선",
+          "예선"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "준설선의 종류는 무엇입니까?",
+        "source": "PDF 389쪽 p445-t0"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p445-t0",
+        "role": "준설선 취업시간 및 운전시간",
+        "source": "PDF 389쪽 7-1-4 표",
+        "unit": null,
+        "values": {
+          "펌프준설선": {
+            "취업시간": "24hr",
+            "운전시간": "15hr"
+          },
+          "그래브준설선": {
+            "취업시간": "12hr",
+            "운전시간": "10hr"
+          },
+          "양묘선": {
+            "취업시간": "모선과 동일",
+            "운전시간": "실운전시간"
+          },
+          "토운선": {
+            "취업시간": "〃",
+            "운전시간": "-"
+          },
+          "예선": {
+            "취업시간": "〃",
+            "운전시간": "실운전시간"
+          }
+        },
+        "cite": {
+          "table_id": "p445-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 준설선 종류에 따라 p445-t0 표에서 취업시간과 운전시간을 찾는다."
+      ],
+      "source": "PDF 389쪽 p445-t0",
+      "rounding": ""
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "준설선 종류에 따른 취업시간과 운전시간을 표에서 찾아 보여주기만 하면 되므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p445-t0",
+      "row": "펌프준설선",
+      "column": "취업시간",
+      "value": "24hr"
+    },
+    {
+      "table_id": "p445-t0",
+      "row": "그래브준설선",
+      "column": "운전시간",
+      "value": "10hr"
+    },
+    {
+      "chunk_id": "p445-x0",
+      "quote": "준설선의 취업시간과 운전시간은 다음 표를 기준으로 한다."
+    }
+  ],
+  "open_questions": [
+    "토운선의 운전시간이 표에 '-'로 되어 있는데, 이는 운전시간을 별도로 산정하지 않는다는 의미인지 명확한 확인이 필요함.",
+    "양묘선, 토운선, 예선의 취업시간이 '모선과 동일' 또는 '〃'로 되어 있는데, 모선의 취업시간을 어떻게 입력받거나 참조할지 결정이 필요함."
+  ],
+  "questions": [
+    "펌프준설선의 취업시간과 운전시간은 각각 몇 시간인가요?",
+    "양묘선의 취업시간 '모선과 동일'은 구체적으로 어떻게 적용하나요?",
+    "토운선의 운전시간이 표에 없는데 어떻게 계산해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:02:11.562500+00:00",
+    "input_tokens": 23035,
+    "output_tokens": 2269,
+    "source_pages": [
+      445,
+      446
+    ],
+    "prompt_sha256": "32debe70d7d747b95d8921f5ee626f8e48bf1303636828154d12746ab2d1739d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

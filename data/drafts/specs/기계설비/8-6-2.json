@@ -1,0 +1,167 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/8-6-2/건타입오일버너설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "8-6-2",
+    "title": "건타입 오일버너",
+    "work": "건타입 오일버너 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      700
+    ],
+    "inputs": [
+      {
+        "name": "burner_spec",
+        "type": "enum",
+        "allowed_values": [
+          "건타입 오일버너 0.75㎾",
+          "1.5",
+          "(전자동방식) 2.2",
+          "3.7"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "건타입 오일버너의 규격은 무엇입니까?",
+        "source": "PDF 700쪽 8-6-2 건타입 오일버너 표",
+        "synonyms": {
+          "건타입 오일버너 0.75㎾": [
+            "0.75kW",
+            "0.75"
+          ],
+          "1.5": [
+            "1.5kW"
+          ],
+          "(전자동방식) 2.2": [
+            "2.2kW",
+            "전자동 2.2"
+          ],
+          "3.7": [
+            "3.7kW"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 건타입 오일버너의 수량은 몇 대입니까?",
+        "source": "PDF 700쪽 8-6-2 건타입 오일버너 표 단위 (대당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p756-t1",
+        "role": "건타입 오일버너 규격별 인력 품",
+        "source": "PDF 700쪽 8-6-2 건타입 오일버너 표",
+        "unit": "인/대",
+        "values": {
+          "건타입 오일버너 0.75㎾": {
+            "보일러공": "4.2",
+            "특별인부": "2.0"
+          },
+          "1.5": {
+            "보일러공": "4.6",
+            "특별인부": "2.2"
+          },
+          "(전자동방식) 2.2": {
+            "보일러공": "5.0",
+            "특별인부": "2.5"
+          },
+          "3.7": {
+            "보일러공": "6.0",
+            "특별인부": "3.0"
+          }
+        },
+        "cite": {
+          "table_id": "p756-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p756-t1",
+          "row_input": "burner_spec",
+          "trades": [
+            "보일러공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 700쪽 8-6-2 건타입 오일버너 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대당) 인력이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p756-t1",
+      "row": "건타입 오일버너 0.75㎾",
+      "column": "보일러공",
+      "value": "4.2"
+    },
+    {
+      "table_id": "p756-t1",
+      "row": "1.5",
+      "column": "특별인부",
+      "value": "2.2"
+    },
+    {
+      "table_id": "p756-t1",
+      "row": "(전자동방식) 2.2",
+      "column": "보일러공",
+      "value": "5.0"
+    },
+    {
+      "table_id": "p756-t1",
+      "row": "3.7",
+      "column": "특별인부",
+      "value": "3.0"
+    },
+    {
+      "chunk_id": "p756-x12",
+      "quote": "[주] 조립, 설치, 수압시험 및 시운전 등을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "표에 1.5, 3.7 규격은 방식(수동/반자동/전자동)이 명시되어 있지 않은데, 모든 방식에 공통으로 적용되는지 명확하지 않음."
+  ],
+  "questions": [
+    "건타입 오일버너의 규격은 무엇입니까?",
+    "전자동방식이 아닌 2.2kW 규격의 경우 어떤 품을 적용해야 합니까?",
+    "설치할 오일버너의 수량은 몇 대입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:44:58.145723+00:00",
+    "input_tokens": 11521,
+    "output_tokens": 1548,
+    "source_pages": [
+      756,
+      757
+    ],
+    "prompt_sha256": "58b6ab27874bb45468967a33673afdd8313fde61b1f69a0541b53a5736e7eaca",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/1-2-7/운반",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "1-2-7",
+    "title": "운반('08, '10, '16, '22, '23년 보완)",
+    "work": "운반 기준 및 공식",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      15,
+      16,
+      17,
+      18
+    ],
+    "inputs": [],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "이 절은 소운반 거리 기준, 인력운반 기본공식, 지게운반, 벽돌운반, 기계설비 인력운반 공식, 화물자동차 적재량 등 운반과 관련된 다양한 기준과 공식, 룩업 테이블이 혼재되어 있습니다.",
+        "단일 계산 모델로 정의하기 어려우며, 각 하위 항목(예: 벽돌운반, 화물자동차 적재량 등)별로 별도의 명세 분리가 필요할 수 있습니다."
+      ],
+      "source": "1-2-7 절 전체",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "인력운반 기본공식",
+        "source": "PDF 15쪽 2. 인력운반 기본공식",
+        "cite": {
+          "chunk_id": "p71-x5",
+          "quote": "2. 인력운반 기본공식"
+        }
+      },
+      {
+        "item": "지게운반",
+        "source": "PDF 15쪽 3. 지게운반",
+        "cite": {
+          "table_id": "p71-t0"
+        }
+      },
+      {
+        "item": "벽돌운반",
+        "source": "PDF 16쪽 4. 벽돌운반",
+        "cite": {
+          "table_id": "p72-t0"
+        }
+      },
+      {
+        "item": "인력운반(기계설비)",
+        "source": "PDF 16쪽 5. 인력운반(기계설비)",
+        "cite": {
+          "chunk_id": "p72-x5",
+          "quote": "5. 인력운반(기계설비)"
+        }
+      },
+      {
+        "item": "화물자동차의 적재량",
+        "source": "PDF 16~18쪽 7. 화물자동차의 적재량",
+        "cite": {
+          "chunk_id": "p72-x15",
+          "quote": "7. 화물자동차의 적재량"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 단일 작업에 대한 품셈이 아니라, 인력운반 공식, 지게운반, 벽돌운반, 화물자동차 적재량 등 여러 운반 관련 기준과 공식이 혼재되어 있어 하나의 계산 모델로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "chunk_id": "p71-x5",
+      "quote": "2. 인력운반 기본공식"
+    },
+    {
+      "table_id": "p71-t0"
+    },
+    {
+      "table_id": "p72-t0"
+    },
+    {
+      "chunk_id": "p72-x5",
+      "quote": "5. 인력운반(기계설비)"
+    },
+    {
+      "chunk_id": "p72-x15",
+      "quote": "7. 화물자동차의 적재량"
+    }
+  ],
+  "open_questions": [
+    "이 절을 여러 개의 하위 작업(예: 1-2-7-2 인력운반, 1-2-7-4 벽돌운반 등)으로 분리하여 각각 명세를 작성해야 하는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "벽돌 1,000매를 3층으로 인력 운반할 때 보통인부 품은 얼마인가요?",
+    "인력운반 기본공식에서 평균왕복속도(V)는 어떻게 산정하나요?",
+    "화물자동차 적재량 표에 없는 자재의 적재량은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:07.023139+00:00",
+    "input_tokens": 40899,
+    "output_tokens": 4488,
+    "source_pages": [
+      71,
+      72,
+      73,
+      74,
+      75
+    ],
+    "prompt_sha256": "c345f826d77f63c7f14b8a22ae115ecbaf732e031145ecacc1d7908ea5ad81f8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

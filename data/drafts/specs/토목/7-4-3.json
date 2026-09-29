@@ -1,0 +1,284 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-4-3/배송관진수",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-4-3",
+    "title": "배송관 진수",
+    "work": "배송관 진수 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      394,
+      395
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "200",
+          "250",
+          "300",
+          "350",
+          "400",
+          "510",
+          "560",
+          "610",
+          "630",
+          "660",
+          "685",
+          "710",
+          "760",
+          "840",
+          "860"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "배송관 관경은 몇 ㎜입니까?",
+        "source": "PDF 394쪽 p450-t2, 395쪽 p451-t0"
+      },
+      {
+        "name": "pipe_type",
+        "type": "enum",
+        "allowed_values": [
+          "해상관",
+          "침설관"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "진수하는 배송관은 해상관입니까, 침설관입니까? (1set의 구성 기준이 다릅니다)",
+        "source": "PDF 395쪽 [주] ②, ③"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "set",
+        "required": true,
+        "ask": "진수할 배송관 물량은 몇 set입니까?",
+        "source": "PDF 394쪽 p450-t2 기준 (set당)"
+      },
+      {
+        "name": "crane_type_change",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장조건상 트럭탑재형 크레인의 적용이 어려워 동일한 규격(톤)의 크레인(무한궤도, 타이어)을 적용합니까?",
+        "source": "PDF 395쪽 [주] ⑤"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p450-t2",
+        "role": "배송관 관경 200~610㎜ 단위당 품",
+        "source": "PDF 394쪽 7-4-3 배송관 진수 표",
+        "unit": "인/set, hr/set",
+        "values": {
+          "200": {
+            "보통인부\n(인)": "0.02",
+            "크레인\n(hr)": "0.06"
+          },
+          "250": {
+            "보통인부\n(인)": "0.02",
+            "크레인\n(hr)": "0.07"
+          },
+          "300": {
+            "보통인부\n(인)": "0.02",
+            "크레인\n(hr)": "0.08"
+          },
+          "350": {
+            "보통인부\n(인)": "0.02",
+            "크레인\n(hr)": "0.09"
+          },
+          "400": {
+            "보통인부\n(인)": "0.03",
+            "크레인\n(hr)": "0.10"
+          },
+          "510": {
+            "보통인부\n(인)": "0.03",
+            "크레인\n(hr)": "0.13"
+          },
+          "560": {
+            "보통인부\n(인)": "0.04",
+            "크레인\n(hr)": "0.16"
+          },
+          "610": {
+            "보통인부\n(인)": "0.04",
+            "크레인\n(hr)": "0.18"
+          }
+        },
+        "cite": {
+          "table_id": "p450-t2"
+        }
+      },
+      {
+        "id": "p451-t0",
+        "role": "배송관 관경 630~860㎜ 단위당 품",
+        "source": "PDF 395쪽 7-4-3 배송관 진수 표 (이어서)",
+        "unit": "인/set, hr/set",
+        "values": {
+          "630": {
+            "보통인부\n(인)": "0.05",
+            "크레인\n(hr)": "0.18"
+          },
+          "660": {
+            "보통인부\n(인)": "0.05",
+            "크레인\n(hr)": "0.20"
+          },
+          "685": {
+            "보통인부\n(인)": "0.05",
+            "크레인\n(hr)": "0.20"
+          },
+          "710": {
+            "보통인부\n(인)": "0.05",
+            "크레인\n(hr)": "0.21"
+          },
+          "760": {
+            "보통인부\n(인)": "0.05",
+            "크레인\n(hr)": "0.21"
+          },
+          "840": {
+            "보통인부\n(인)": "0.06",
+            "크레인\n(hr)": "0.25"
+          },
+          "860": {
+            "보통인부\n(인)": "0.07",
+            "크레인\n(hr)": "0.27"
+          }
+        },
+        "cite": {
+          "table_id": "p451-t0"
+        }
+      },
+      {
+        "id": "p451-t1",
+        "role": "크레인 규격 기준",
+        "source": "PDF 395쪽 [주] ④ 표",
+        "unit": null,
+        "values": {
+          "200∼710 까지": {
+            "장비규격": "10톤급 트럭탑재형 크레인"
+          },
+          "760 이상": {
+            "장비규격": "15톤급 트럭탑재형 크레인"
+          }
+        },
+        "cite": {
+          "table_id": "p451-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p450-t2",
+          "row_input": "pipe_diameter",
+          "column_input": null,
+          "trades": [
+            "보통인부\n(인)",
+            "크레인\n(hr)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "crane_type_change": true
+            },
+            "change": "동일한 규격(톤)의 크레인(무한궤도, 타이어)을 적용",
+            "source": "PDF 395쪽 [주] ⑤"
+          }
+        ]
+      },
+      "steps": [
+        "배송관 관경(pipe_diameter)에 따라 p450-t2(200~610㎜) 또는 p451-t0(630~860㎜)에서 보통인부와 크레인의 단위당 품을 찾는다.",
+        "물량(quantity)을 곱하여 총 품을 구한다.",
+        "크레인 규격은 p451-t1에 따라 관경 200~710㎜는 10톤급, 760㎜ 이상은 15톤급 트럭탑재형 크레인을 적용한다.",
+        "crane_type_change가 true인 경우, 동일한 규격(톤)의 크레인(무한궤도, 타이어)으로 장비를 변경 적용한다."
+      ],
+      "source": "PDF 394~395쪽 7-4-3 배송관 진수",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "배송관 예인 및 침설작업",
+        "source": "PDF 395쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p451-x7",
+          "quote": "배송관 예인 및 침설작업은 포함하지 않는다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(set)당 보통인부와 크레인의 품이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p450-t2",
+      "row": "200",
+      "column": "보통인부\n(인)",
+      "value": "0.02"
+    },
+    {
+      "table_id": "p451-t0",
+      "row": "630",
+      "column": "크레인\n(hr)",
+      "value": "0.18"
+    },
+    {
+      "table_id": "p451-t1",
+      "row": "200∼710 까지",
+      "column": "장비규격",
+      "value": "10톤급 트럭탑재형 크레인"
+    },
+    {
+      "chunk_id": "p451-x7",
+      "quote": "해상관은 “배송관 1본+고무슬리브 1본+배송관 띄우개 1본”을 1set로 한다."
+    },
+    {
+      "chunk_id": "p451-x7",
+      "quote": "침설관은 “배송관 2본 + 고무슬리브 1본”을 1set로 한다."
+    },
+    {
+      "chunk_id": "p451-x11",
+      "quote": "현장조건상 본 품의 장비를 적용하기 어려운 경우, 동일한 규격(톤)의 크레인(무한궤도, 타이어)을 적용할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "p450-t2와 p451-t0는 사실상 하나의 표가 나뉜 것인데, per_unit 모델의 unit_rate_table 파라미터에서 두 표를 동시에 참조하는 방법이 명확하지 않아 steps에 설명으로 남겼습니다."
+  ],
+  "questions": [
+    "배송관 관경이 400mm일 때 1set당 보통인부 품은 얼마인가요?",
+    "현장 여건상 트럭탑재형 크레인을 쓸 수 없는데 다른 크레인으로 변경 가능한가요?",
+    "진수할 배송관이 해상관인지 침설관인지에 따라 1set의 기준이 어떻게 다른가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:08.233364+00:00",
+    "input_tokens": 13719,
+    "output_tokens": 3039,
+    "source_pages": [
+      450,
+      451,
+      452
+    ],
+    "prompt_sha256": "46bef9532f5e6dec2ecd374241074dbc1267add216f6b653ac94f7d36daf7160",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p451-x11 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-9-2/보차도및도로경계블록설치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-9-2",
+    "title": "보차도 및 도로경계블록 설치",
+    "work": "보차도 및 도로경계블록 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      329
+    ],
+    "inputs": [
+      {
+        "name": "block_type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건에 따른 적용기준(A-Type, B-Type)은 무엇입니까? 장비이동 및 적재 공간 여건을 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p385-t1",
+        "source": "PDF 329쪽 p385-t0 구분 및 p385-t1 적용기준",
+        "synonyms": {
+          "A-Type": [
+            "A타입",
+            "A형"
+          ],
+          "B-Type": [
+            "B타입",
+            "B형"
+          ]
+        }
+      },
+      {
+        "name": "block_size",
+        "type": "enum",
+        "allowed_values": [
+          "300미만",
+          "350미만",
+          "400미만",
+          "500미만",
+          "500이상"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "경계블록의 규격(아래폭+높이)은 얼마입니까?",
+        "source": "PDF 329쪽 p385-t0 규격(아래폭+높이㎜)"
+      },
+      {
+        "name": "alignment",
+        "type": "enum",
+        "allowed_values": [
+          "직선구간",
+          "곡선구간"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치 구간의 선형은 직선구간입니까, 곡선구간입니까?",
+        "source": "PDF 329쪽 p385-t0 시공량(m) 직선구간/곡선구간"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "설치할 경계블록의 총 물량은 몇 m입니까?",
+        "source": "PDF 329쪽 1-9-2 보차도 및 도로경계블록 설치 시공량 단위(m)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p385-t0",
+        "role": "작업조 인원 및 규격·선형별 일일시공량",
+        "source": "PDF 329쪽 1-9-2 보차도 및 도로경계블록 설치 표",
+        "unit": "인/작업조, 대/작업조, m/일",
+        "values": {
+          "특별인부": {
+            "A-Type": "3",
+            "B-Type": "2"
+          },
+          "보통인부": {
+            "A-Type": "1",
+            "B-Type": "1"
+          },
+          "굴착기(0.4㎥)": {
+            "A-Type": "1"
+          },
+          "굴착기(0.2㎥)": {
+            "B-Type": "1"
+          },
+          "300미만": {
+            "A-Type_직선구간": "170",
+            "A-Type_곡선구간": "150",
+            "B-Type_직선구간": "115",
+            "B-Type_곡선구간": "110"
+          },
+          "350미만": {
+            "A-Type_직선구간": "145",
+            "A-Type_곡선구간": "125",
+            "B-Type_직선구간": "100",
+            "B-Type_곡선구간": "85"
+          },
+          "400미만": {
+            "A-Type_직선구간": "130",
+            "A-Type_곡선구간": "110",
+            "B-Type_직선구간": "90",
+            "B-Type_곡선구간": "75"
+          },
+          "500미만": {
+            "A-Type_직선구간": "90",
+            "A-Type_곡선구간": "80",
+            "B-Type_직선구간": "65",
+            "B-Type_곡선구간": "60"
+          },
+          "500이상": {
+            "A-Type_직선구간": "60",
+            "A-Type_곡선구간": "50",
+            "B-Type_직선구간": "40",
+            "B-Type_곡선구간": "35"
+          }
+        },
+        "cite": {
+          "table_id": "p385-t0"
+        }
+      },
+      {
+        "id": "p385-t1",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 329쪽 1-9-2 [주] ④ 현장 여건별 적용기준 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+          },
+          "B-Type": {
+            "적용기준": "- 차도인접, 주택가 보도 등 장비이동 및 적재 공간이 협소한 구간"
+          }
+        },
+        "cite": {
+          "table_id": "p385-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "입력된 block_type(A-Type/B-Type)에 따라 작업조 인원(특별인부, 보통인부)과 굴착기 대수를 p385-t0에서 확인한다.",
+        "입력된 block_type, block_size, alignment에 해당하는 일일시공량을 p385-t0에서 찾는다.",
+        "작업일수 = quantity ÷ 일일시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 작업조 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 329쪽 p385-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기초 콘크리트, 거푸집, 터파기 및 되메우기, 잔토처리",
+        "source": "PDF 329쪽 1-9-2 [주] ③",
+        "cite": {
+          "chunk_id": "p385-x15",
+          "quote": "③ 기초 콘크리트, 거푸집, 터파기 및 되메우기, 잔토처리는 현장 여건에 따라 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(절단기 등) 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p385-x19",
+          "quote": "⑥ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "작업조(A/B-Type)와 시공량(규격, 선형)이 하나의 표에 혼합된 다차원 구조로, 현재의 adjusted_daily_crew 파라미터(단일 행/열 매핑)로는 자동 계산을 완벽히 표현하기 어려워 not_calculable로 분류했습니다.",
+  "citations": [
+    {
+      "table_id": "p385-t0",
+      "row": "A-Type",
+      "column": "특별인부",
+      "value": "3"
+    },
+    {
+      "table_id": "p385-t0",
+      "row": "300미만",
+      "column": "직선구간",
+      "value": "170"
+    },
+    {
+      "table_id": "p385-t1",
+      "row": "A-Type",
+      "column": "적용기준",
+      "value": "- 공원, 단지･택지조성공사의 보도 등 장비이동 및 적재가 용이한 구간"
+    },
+    {
+      "chunk_id": "p385-x15",
+      "quote": "③ 기초 콘크리트, 거푸집, 터파기 및 되메우기, 잔토처리는 현장 여건에 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p385-x19",
+      "quote": "⑥ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트(p385-t0)에는 '보통인부' 행이 누락되어 있으나, 원문 이미지에는 존재하여 명세의 tables에는 원문 이미지를 기준으로 보통인부를 포함시켰습니다.",
+    "표 구조가 작업조(A/B-Type)와 시공량(규격, 선형)이 혼합된 다차원 형태여서, 2D JSON 구조로 완벽히 표현하기 위해 열 이름에 'A-Type_직선구간'과 같이 조합된 이름을 사용했습니다. 이로 인해 adjusted_daily_crew 모델로 자동 계산하기 어려워 not_calculable로 분류했습니다."
+  ],
+  "questions": [
+    "보차도 경계블록 설치 시 A-Type과 B-Type은 어떤 기준으로 선택하나요?",
+    "현장 여건에 따라 굴착기 규격을 0.4㎥에서 0.6㎥로 변경할 경우 품셈 적용은 어떻게 달라지나요?",
+    "설치할 경계블록의 총 길이는 몇 m인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:49.515547+00:00",
+    "input_tokens": 12454,
+    "output_tokens": 2806,
+    "source_pages": [
+      385,
+      386
+    ],
+    "prompt_sha256": "4595aa9bd20cab54555343ee68263af985082aff49a87608d7f20d4c9d082d5d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

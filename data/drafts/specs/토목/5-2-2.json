@@ -1,0 +1,164 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/5-2-2/제품표면처리",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "5-2-2",
+    "title": "제품 표면처리",
+    "work": "제품 표면처리 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      359
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "제품 표면처리 면적은 몇 ㎡입니까?",
+        "source": "표 p415-t0 단위 (㎡당)"
+      },
+      {
+        "name": "is_box_inner",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "BOX 형상의 내면에 대한 표면처리입니까?",
+        "source": "표 p415-t0 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p415-t0",
+        "role": "제품 표면처리 기준 (㎡당)",
+        "source": "PDF 359쪽 5-2-2 제품 표면처리 표",
+        "unit": "인/㎡, ㎏/㎡",
+        "values": {
+          "도장공": {
+            "단위": "인",
+            "수량": "0.031"
+          },
+          "철편(Grit)": {
+            "단위": "㎏",
+            "수량": "0.245"
+          },
+          "비고": {
+            "비고": "- 제품 표면처리의 경우, BOX 형상의 내면에 대해서는 인력품을 60% 할증한다."
+          }
+        },
+        "cite": {
+          "table_id": "p415-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p415-t0",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "도장공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_box_inner": true
+            },
+            "change": "인력품을 60% 할증한다.",
+            "source": "표 p415-t0 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p415-t0에서 단위당 도장공 품과 철편 수량을 확인한다.",
+        "BOX 형상 내면인 경우 도장공 품에 60%를 할증한다.",
+        "물량을 곱해 총 품과 재료량을 구한다."
+      ],
+      "source": "PDF 359쪽 5-2-2 제품 표면처리 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "공장경비",
+        "source": "PDF 359쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p415-x4",
+          "quote": "본 품의 인력품에는 공장경비가 포함되어 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 도장공 인력과 철편 재료량이 표에 직접 명시되어 있으므로 per_unit 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p415-t0",
+      "row": "도장공",
+      "column": "수량",
+      "value": "0.031"
+    },
+    {
+      "table_id": "p415-t0",
+      "row": "철편(Grit)",
+      "column": "수량",
+      "value": "0.245"
+    },
+    {
+      "table_id": "p415-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 제품 표면처리의 경우, BOX 형상의 내면에 대해서는 인력품을 60% 할증한다."
+    },
+    {
+      "chunk_id": "p415-x4",
+      "quote": "본 품은 강교도장을 위하여 공장에서 행하는 표면처리를 기준한 것으로"
+    },
+    {
+      "chunk_id": "p415-x4",
+      "quote": "본 품의 인력품에는 공장경비가 포함되어 있다."
+    },
+    {
+      "chunk_id": "p415-x4",
+      "quote": "재료의 수량은 할증량이 포함된 것이다."
+    }
+  ],
+  "open_questions": [
+    "원문에서 '재료의 수량은 할증량이 포함된 것이다'라고 명시되어 있으나, 구체적인 할증률은 언급되지 않아 별도의 재료 할증은 적용하지 않았습니다."
+  ],
+  "questions": [
+    "제품 표면처리 면적은 몇 ㎡입니까?",
+    "BOX 형상의 내면을 표면처리합니까?",
+    "현장 표면처리의 경우 이 품셈을 적용할 수 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:42:55.468704+00:00",
+    "input_tokens": 11587,
+    "output_tokens": 1505,
+    "source_pages": [
+      415,
+      416
+    ],
+    "prompt_sha256": "b5f6f9af6ba0dbf34d91eb015dd22b1c5dce5ca54c087c8506bcea837f060a36",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

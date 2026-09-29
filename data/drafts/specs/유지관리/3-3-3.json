@@ -1,0 +1,178 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-3-3/재도장시바탕처리_목재면",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-3-3",
+    "title": "재도장 시 바탕처리(목재면)('21년 신설)",
+    "work": "바탕처리",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      918
+    ],
+    "inputs": [
+      {
+        "name": "surface_condition",
+        "type": "enum",
+        "allowed_values": [
+          "A급",
+          "B급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "대상면의 상태는 A급과 B급 중 어느 것입니까? 상태를 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p974-t4",
+        "source": "PDF 918쪽 p974-t4 및 [주] ③"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "바탕처리할 면적은 몇 ㎡입니까?",
+        "source": "PDF 918쪽 p974-t3 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p974-t3",
+        "role": "작업조 인원 및 일일시공량",
+        "source": "PDF 918쪽 3-3-3 표 (일당)",
+        "unit": "인/일, ㎡/일",
+        "values": {
+          "도장공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "시공량": {
+            "A급": "110",
+            "B급": "270"
+          }
+        },
+        "cite": {
+          "table_id": "p974-t3"
+        }
+      },
+      {
+        "id": "p974-t4",
+        "role": "대상면 상태 적용기준",
+        "source": "PDF 918쪽 3-3-3 적용기준 표",
+        "values": {
+          "A급": {
+            "적용기준": "- 재래도장의 탈락 및 목재의 손상이 심하여 갈라진틈, 구멍 땜 등을 충진하고, 평탄하게 연마해야하는 정도"
+          },
+          "B급": {
+            "적용기준": "- 재래도장의 탈락 및 목재의 손상이 거의 없으며, 부착물 제거, 부분적으로 퍼티 및 연마를 요하는 정도"
+          }
+        },
+        "cite": {
+          "table_id": "p974-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p974-t3",
+          "row": "시공량",
+          "column_input": "surface_condition"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p974-t3",
+          "column": "수량",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "도장공": "1061",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p974-t3에서 대상면 상태(A급/B급)에 따른 기준시공량을 고른다.",
+        "작업일수 = area ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 918쪽 p974-t3",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 잡재료비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p974-x24",
+          "quote": "공구손료 및 잡재료비(연마지 등)는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일시공량이 표로 명확히 주어져 있어, 물량을 시공량으로 나누어 작업일수를 구하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p974-t3",
+      "row": "시공량(㎡) A급",
+      "column": "110",
+      "value": "110"
+    },
+    {
+      "table_id": "p974-t3",
+      "row": "시공량(㎡) B급",
+      "column": "270",
+      "value": "270"
+    },
+    {
+      "table_id": "p974-t3",
+      "row": "도장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p974-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p974-x24",
+      "quote": "공구손료 및 잡재료비(연마지 등)는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "목재면 재도장 바탕처리 시 A급과 B급의 차이는 무엇인가요?",
+    "공구손료와 잡재료비는 어떻게 계산하나요?",
+    "바탕처리할 면적을 입력하지 않으면 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:22.509287+00:00",
+    "input_tokens": 11801,
+    "output_tokens": 1688,
+    "source_pages": [
+      974,
+      975
+    ],
+    "prompt_sha256": "d08edc0ea9c0836357311ff5c6148fff605605c0b34646acf8faeb0c83799fd1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

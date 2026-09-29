@@ -1,0 +1,348 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-3-6/대규모발파",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-3-6",
+    "title": "암발파(대규모발파 TYPE-Ⅵ)",
+    "work": "대규모발파 TYPE-Ⅵ 기본 품량 및 부대작업(발파보호공, 기계소할)",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      71,
+      72,
+      73
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "발파 물량은 몇 ㎥입니까?",
+        "source": "PDF 71쪽 3-3-6 표 기준 단위"
+      },
+      {
+        "name": "protection_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "발파석의 비산방지를 위한 발파보호공이 필요합니까?",
+        "source": "PDF 72쪽 [주] ⑥"
+      },
+      {
+        "name": "protection_count",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "회",
+        "required": true,
+        "ask": "발파보호공 작업 횟수는 몇 회입니까?",
+        "source": "PDF 72쪽 발파보호공 표 기준 단위(회당)"
+      },
+      {
+        "name": "reuse_volume",
+        "type": "positive_rational",
+        "allowed_values": "0 이상의 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "발파암 유용량은 몇 ㎥입니까? (없으면 0)",
+        "source": "PDF 73쪽 [주] ⑩"
+      },
+      {
+        "name": "breaking_size",
+        "type": "enum",
+        "allowed_values": [
+          "30㎝ 미만",
+          "30㎝ 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기계소할 작업능력 기준은 무엇입니까?",
+        "source": "PDF 73쪽 기계소할 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p127-t4",
+        "role": "대규모발파 TYPE-Ⅵ 기본 품",
+        "source": "PDF 71쪽 3-3-6 표",
+        "unit": "인/㎥, hr/㎥",
+        "values": {
+          "화약취급공": {
+            "단위": "인",
+            "수량": "0.002"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "0.003"
+          },
+          "유압식크롤러드릴": {
+            "규격": "110㎾",
+            "단위": "hr",
+            "수량": "0.012"
+          },
+          "굴착기": {
+            "규격": "1.0㎥",
+            "단위": "hr",
+            "수량": "0.004"
+          }
+        },
+        "cite": {
+          "table_id": "p127-t4"
+        }
+      },
+      {
+        "id": "p128-t0",
+        "role": "발파보호공 품",
+        "source": "PDF 72쪽 발파보호공 표",
+        "unit": "인/회, hr/회",
+        "values": {
+          "보통인부 굴착기": {
+            "규격": "1.0㎥",
+            "단위": "hr",
+            "수량": "1.000"
+          }
+        },
+        "cite": {
+          "table_id": "p128-t0"
+        }
+      },
+      {
+        "id": "p128-t1",
+        "role": "소모자재 요율",
+        "source": "PDF 72쪽 소모자재 요율 표",
+        "unit": "%",
+        "values": {
+          "요율": {
+            "유압식 크롤러드릴": "24%",
+            "굴착기+대형브레이커": "5%"
+          }
+        },
+        "cite": {
+          "table_id": "p128-t1"
+        }
+      },
+      {
+        "id": "p129-t0",
+        "role": "기계소할 품",
+        "source": "PDF 73쪽 기계소할 표",
+        "unit": "㎥/hr",
+        "values": {
+          "굴착기+대형브레이커": {
+            "규격": "0.6∼0.8㎥",
+            "작업능력(㎥/hr) 30㎝ 미만": "9",
+            "작업능력(㎥/hr) 30㎝ 이상": "11"
+          }
+        },
+        "cite": {
+          "table_id": "p129-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p127-t4",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "화약취급공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p127-t4에서 단위당 품을 가져온다.",
+        "물량을 곱해 총 품을 구한다.",
+        "발파보호공이 필요한 경우 p128-t0의 품에 횟수를 곱해 더한다.",
+        "발파암 유용시 유용량의 15%에 대해 p129-t0의 기계소할 품을 적용한다."
+      ],
+      "source": "PDF 71~73쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "발파암 집토, 상차, 반출 및 운반",
+        "source": "PDF 72쪽 [주] ④",
+        "cite": {
+          "table_id": "p128-t0"
+        }
+      },
+      {
+        "item": "비전기식뇌관 사용시",
+        "source": "PDF 72쪽 [주] ⑤",
+        "cite": {
+          "table_id": "p128-t0"
+        }
+      },
+      {
+        "item": "보호매트 재료비",
+        "source": "PDF 72쪽 [주] ⑥ 뒤 ※",
+        "cite": {
+          "table_id": "p128-t0"
+        }
+      },
+      {
+        "item": "폭약, 뇌관 재료비 및 잡재료비(재료비의 5%)",
+        "source": "PDF 72쪽 [주] ⑦",
+        "cite": {
+          "table_id": "p128-t0"
+        }
+      },
+      {
+        "item": "소모자재 비용 (기계경비의 24%)",
+        "source": "PDF 72쪽 [주] ⑨",
+        "cite": {
+          "table_id": "p128-t1"
+        }
+      },
+      {
+        "item": "면고르기품",
+        "source": "PDF 73쪽 [주] ⑪",
+        "cite": {
+          "table_id": "p129-t0"
+        }
+      },
+      {
+        "item": "다공질암 적용시",
+        "source": "PDF 73쪽 [주] ⑫",
+        "cite": {
+          "table_id": "p129-t0"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎥)당 직종별 인원과 장비 시간이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p127-t4",
+      "row": "화약취급공",
+      "column": "수량",
+      "value": "0.002"
+    },
+    {
+      "table_id": "p127-t4",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.003"
+    },
+    {
+      "table_id": "p127-t4",
+      "row": "유압식크롤러드릴",
+      "column": "수량",
+      "value": "0.012"
+    },
+    {
+      "table_id": "p127-t4",
+      "row": "굴착기",
+      "column": "수량",
+      "value": "0.004"
+    },
+    {
+      "chunk_id": "p128-x0",
+      "quote": "④ 발파암 집토(필요시), 상차, 반출 및 운반은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p128-x0",
+      "quote": "⑤ 뇌관은 M.S전기뇌관을 기준한 것으로 현장여건상 비전기식뇌관을 사용할 경우에는 별도로 계상한다."
+    },
+    {
+      "chunk_id": "p128-x0",
+      "quote": "⑥ 발파석의 비산방지를 위한 발파보호공이 필요한 경우에는 다음에 따라 계상한다."
+    },
+    {
+      "table_id": "p128-t0",
+      "row": "보통인부 굴착기",
+      "column": "수량",
+      "value": "0.125"
+    },
+    {
+      "table_id": "p128-t0",
+      "row": "보통인부 굴착기",
+      "column": "수량",
+      "value": "1.000"
+    },
+    {
+      "chunk_id": "p128-x7",
+      "quote": "※ 보호매트의 재료비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p128-x7",
+      "quote": "⑦ 발파작업에 사용되는 재료(폭약, 뇌관)는 “도로공사노천발파설계･시공지침”에 따라 계상하고, 발파선,\n설명 | 전색재료 등의 잡재료는 재료비의 5%로 계상한다."
+    },
+    {
+      "chunk_id": "p128-x7",
+      "quote": "⑨ 유압식 크롤러드릴 및 대형브레이커의 소모자재(비트, 로드, 생크로드, 슬리브, 치즐) 비용은 기계경비에\n설명 | 다음 요율을 적용한다."
+    },
+    {
+      "table_id": "p128-t1",
+      "row": "요율",
+      "column": "유압식 크롤러드릴",
+      "value": "24%"
+    },
+    {
+      "chunk_id": "p129-x0",
+      "quote": "⑩ 발파암 유용(미진동굴착공법, 정밀진동제어발파공법 제외)시 기계소할 품은 다음과 같으며, 이때\n설명 | 소할물량은 유용량의 15%로 적용한다."
+    },
+    {
+      "table_id": "p129-t0",
+      "row": "굴착기+대형브레이커",
+      "column": "작업능력(㎥/hr) 30㎝ 미만",
+      "value": "9"
+    },
+    {
+      "table_id": "p129-t0",
+      "row": "굴착기+대형브레이커",
+      "column": "작업능력(㎥/hr) 30㎝ 이상",
+      "value": "11"
+    },
+    {
+      "chunk_id": "p129-x3",
+      "quote": "⑪ 시공면의 면 고르기가 필요한 경우에는 면고르기품을 별도로 계상한다."
+    },
+    {
+      "chunk_id": "p129-x3",
+      "quote": "⑫ 다공질암을 적용하는 경우에는 별도로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "p128-t0 파싱 결과에서 '보통인부'와 '굴착기'가 '보통인부 굴착기'라는 하나의 행으로 합쳐져 있어, 인부와 장비의 수량을 정확히 분리하여 참조하기 어렵습니다.",
+    "잡재료비(재료비의 5%)와 소모자재 비용(기계경비의 24%)은 현재 cost_rules가 labor_subtotal 기준만 지원하여 자동 계산식에 포함하지 못하고 not_calculated로 처리했습니다."
+  ],
+  "questions": [
+    "대규모발파 TYPE-Ⅵ의 발파 물량이 1000㎥일 때 필요한 화약취급공과 보통인부의 인·일은 얼마인가요?",
+    "발파석 비산방지를 위해 발파보호공을 5회 실시할 경우 추가되는 보통인부와 굴착기 품은 어떻게 계산하나요?",
+    "발파암 500㎥를 유용하기 위해 기계소할(30㎝ 미만)을 진행할 때, 소할물량 산정과 굴착기+대형브레이커의 작업 시간은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:59.408985+00:00",
+    "input_tokens": 27633,
+    "output_tokens": 7223,
+    "source_pages": [
+      127,
+      128,
+      129,
+      130
+    ],
+    "prompt_sha256": "4788735ae9b02d404ede1aa44a482fa603e88a646b9504cf2e957def1b97ad8d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

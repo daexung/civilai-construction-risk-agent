@@ -1,0 +1,310 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-2-13/도상갱환",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-2-13",
+    "title": "도상갱환",
+    "work": "가받침 설치, 판넬설치, 타설 후 정리작업",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      899,
+      900
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "가받침 설치",
+          "판넬설치",
+          "타설 후 정리작업"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까?",
+        "source": "PDF 899~900쪽 2-2-13 도상갱환 1~3항"
+      },
+      {
+        "name": "panel_type",
+        "type": "enum",
+        "allowed_values": [
+          "B2S A형",
+          "B2S B형",
+          "C형"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "판넬의 종류는 무엇입니까?",
+        "source": "PDF 900쪽 2. 판넬설치 [주] ④, ⑤"
+      },
+      {
+        "name": "is_curve_under_950",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "곡선구간(R=950미만)입니까?",
+        "source": "PDF 899쪽 1. 가받침 설치 [주] ③ 등"
+      },
+      {
+        "name": "quantity_m",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "가받침 설치, 가받침 해체 및 설치, 또는 타설 후 정리작업의 물량은 몇 m입니까?",
+        "source": "각 표의 단위 (m당)"
+      },
+      {
+        "name": "quantity_ea",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "판넬설치 물량은 몇 개입니까?",
+        "source": "p956-t0 판넬설치(개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p955-t2",
+        "role": "가받침 설치 단위당 품",
+        "source": "PDF 899쪽 1. 가받침 설치",
+        "unit": "인/m",
+        "values": {
+          "궤도공": {
+            "수량": "0.09"
+          },
+          "특별인부": {
+            "수량": "0.05"
+          },
+          "보통인부": {
+            "수량": "0.20"
+          }
+        },
+        "cite": {
+          "table_id": "p955-t2"
+        }
+      },
+      {
+        "id": "p956-t0",
+        "role": "판넬설치 단위당 품",
+        "source": "PDF 900쪽 2. 판넬설치",
+        "unit": "인/개, 인/m",
+        "values": {
+          "궤도공": {
+            "수량 판넬설치(개당)": "0.05",
+            "수량 가받침 해체 및 설치(m당)": "0.09"
+          },
+          "특별인부": {
+            "수량 판넬설치(개당)": "0.09",
+            "수량 가받침 해체 및 설치(m당)": "0.18"
+          },
+          "보통인부": {
+            "수량 판넬설치(개당)": "0.05",
+            "수량 가받침 해체 및 설치(m당)": "0.09"
+          }
+        },
+        "cite": {
+          "table_id": "p956-t0"
+        }
+      },
+      {
+        "id": "p956-t1",
+        "role": "타설 후 정리작업 단위당 품",
+        "source": "PDF 900쪽 3. 타설 후 정리작업",
+        "unit": "인/m",
+        "values": {
+          "궤도공": {
+            "수량": "0.11"
+          },
+          "보통인부": {
+            "수량": "0.25"
+          }
+        },
+        "cite": {
+          "table_id": "p956-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "작업 종류(가받침 설치, 판넬설치, 타설 후 정리작업)에 따라 해당하는 표(p955-t2, p956-t0, p956-t1)에서 단위당 품을 찾는다.",
+        "판넬설치의 경우, 판넬설치(개당) 품과 가받침 해체 및 설치(m당) 품을 각각 물량에 곱하여 합산한다.",
+        "C형 판넬인 경우 판넬설치 품의 50%를 적용한다.",
+        "곡선구간(R=950미만)인 경우 투입품을 5% 이내에서 할증한다."
+      ],
+      "source": "PDF 899~900쪽 2-2-13 도상갱환",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "곡선구간(R=950미만)인 경우",
+        "blocked_if": {
+          "input": "is_curve_under_950",
+          "op": "==",
+          "value": true
+        },
+        "reason": "할증률이 '5% 범위 내에서 가산' 또는 '5%까지 증하여 적용'으로 명시되어 있어 정확한 비율을 자동 계산할 수 없음",
+        "source": "PDF 899쪽 1. 가받침 설치 [주] ③, 900쪽 2. 판넬설치 비고, 3. 타설 후 정리작업 비고",
+        "cite": [
+          {
+            "chunk_id": "p955-x18",
+            "quote": "③ 곡선구간(R=950미만)에서는 가받침 설치품을 5% 범위 내에서 가산하여 적용한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "잡재료비 및 기구손료 (가받침 설치)",
+        "source": "PDF 899쪽 1. 가받침 설치 [주] ④",
+        "cite": {
+          "chunk_id": "p955-x18",
+          "quote": "④ 잡재료비 및 기구손료는 별도 계상한다."
+        }
+      },
+      {
+        "item": "잡재료비 및 기계경비 (판넬설치)",
+        "source": "PDF 900쪽 2. 판넬설치 [주] ⑧",
+        "cite": {
+          "chunk_id": "p956-x5",
+          "quote": "⑧ 잡재료비 및 기계경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "잡재료비 및 기계경비 (타설 후 정리작업)",
+        "source": "PDF 900쪽 3. 타설 후 정리작업 [주] ③",
+        "cite": {
+          "chunk_id": "p956-x13",
+          "quote": "③ 잡재료비 및 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "세 가지 세부 작업(가받침 설치, 판넬설치, 타설 후 정리작업)이 각각 다른 표와 단위를 가지고 있어 단일 per_unit 모델로 통합 계산하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p955-t2",
+      "row": "궤도공",
+      "column": "수량",
+      "value": "0.09"
+    },
+    {
+      "table_id": "p955-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.05"
+    },
+    {
+      "table_id": "p955-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.20"
+    },
+    {
+      "table_id": "p956-t0",
+      "row": "궤도공",
+      "column": "수량 판넬설치(개당)",
+      "value": "0.05"
+    },
+    {
+      "table_id": "p956-t0",
+      "row": "궤도공",
+      "column": "수량 가받침 해체 및 설치(m당)",
+      "value": "0.09"
+    },
+    {
+      "table_id": "p956-t0",
+      "row": "특별인부",
+      "column": "수량 판넬설치(개당)",
+      "value": "0.09"
+    },
+    {
+      "table_id": "p956-t0",
+      "row": "특별인부",
+      "column": "수량 가받침 해체 및 설치(m당)",
+      "value": "0.18"
+    },
+    {
+      "table_id": "p956-t0",
+      "row": "보통인부",
+      "column": "수량 판넬설치(개당)",
+      "value": "0.05"
+    },
+    {
+      "table_id": "p956-t0",
+      "row": "보통인부",
+      "column": "수량 가받침 해체 및 설치(m당)",
+      "value": "0.09"
+    },
+    {
+      "table_id": "p956-t1",
+      "row": "궤도공",
+      "column": "수량",
+      "value": "0.11"
+    },
+    {
+      "table_id": "p956-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.25"
+    },
+    {
+      "chunk_id": "p955-x18",
+      "quote": "③ 곡선구간(R=950미만)에서는 가받침 설치품을 5% 범위 내에서 가산하여 적용한다."
+    },
+    {
+      "chunk_id": "p955-x18",
+      "quote": "④ 잡재료비 및 기구손료는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p956-x5",
+      "quote": "⑤ B2S B형 판넬(1,125×2,550㎜)은 동일하게 적용하며, C형 판넬(350×2,550㎜)은 판넬설치 품의\n설명 | 50%를 적용한다."
+    },
+    {
+      "chunk_id": "p956-x5",
+      "quote": "⑧ 잡재료비 및 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p956-x13",
+      "quote": "③ 잡재료비 및 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "곡선구간(R=950미만)의 할증이 '5% 범위 내에서 가산' 또는 '5%까지 증하여 적용'으로 명시되어 있어, 정확히 몇 %를 적용해야 할지 확정할 수 없습니다.",
+    "판넬설치 작업 시 판넬설치(개당)와 가받침 해체 및 설치(m당)가 동시에 발생하는데, 두 물량을 각각 입력받아 합산하는 방식이 맞는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "도상갱환 작업 중 판넬설치 시 C형 판넬을 사용하면 품이 어떻게 조정되나요?",
+    "곡선반경이 800m인 구간에서 가받침 설치 작업을 할 때 할증률은 정확히 몇 %를 적용해야 하나요?",
+    "판넬설치 작업 시 판넬 개수 외에 가받침 해체 및 설치 구간의 길이(m)도 입력해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:55:35.977951+00:00",
+    "input_tokens": 38864,
+    "output_tokens": 9507,
+    "source_pages": [
+      955,
+      956,
+      957
+    ],
+    "prompt_sha256": "352be5a2eab3c1fce15d77f9c9c31d02f2a3e34055398904647785e4ad13ce4b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

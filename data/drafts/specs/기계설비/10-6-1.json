@@ -1,0 +1,119 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/10-6-1/유량측정장치설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "10-6-1",
+    "title": "유량측정장치설치",
+    "work": "유량측정장치 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      710
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "조",
+        "required": true,
+        "ask": "유량측정장치 설치 수량은 몇 조입니까?",
+        "source": "10-6-1 유량측정장치설치 표 단위 (조당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p766-t1",
+        "role": "유량측정장치설치 단위당 품",
+        "source": "10-6-1 유량측정장치설치 표",
+        "unit": "인/조",
+        "values": {
+          "유량측정장치": {
+            "배 관 공(인)": "1.030"
+          }
+        },
+        "cite": {
+          "table_id": "p766-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p766-t1",
+          "row_input": "유량측정장치",
+          "column_input": "배 관 공(인)",
+          "trades": [
+            "배관공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "10-6-1 유량측정장치설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "소운반, 설비별 설치품 외의 추가 작업",
+        "source": "10-6-1 [주] ②",
+        "cite": {
+          "chunk_id": "p766-x6",
+          "quote": "본 품에는 소운반, 설비별 설치품을 포함한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(조당)당 배관공의 품이 표에 직접 명시되어 있으므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p766-t1",
+      "row": "유량측정장치",
+      "column": "배 관 공(인)",
+      "value": "1.030"
+    },
+    {
+      "chunk_id": "p766-x6",
+      "quote": "본 품은 스프링클러 시스템의 설비별 설치 품 기준이다."
+    },
+    {
+      "chunk_id": "p766-x6",
+      "quote": "본 품에는 소운반, 설비별 설치품을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "원문 이미지에는 '보통인부(인)' 열이 존재하고 값이 '-'로 되어 있으나, 파싱 결과에는 해당 열이 누락되어 있어 파싱 결과에 맞춰 배관공만 반영함."
+  ],
+  "questions": [
+    "유량측정장치 설치 수량은 몇 조입니까?",
+    "소운반 외에 추가적인 운반이 필요한 현장 조건입니까?",
+    "유량측정장치의 규격에 따라 품이 달라지지는 않습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:39:58.121140+00:00",
+    "input_tokens": 11443,
+    "output_tokens": 1102,
+    "source_pages": [
+      766,
+      767
+    ],
+    "prompt_sha256": "ad59aad4f601befd0255f9e42c8c1f9c49de642780ff090e5c2761266a9868fc",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

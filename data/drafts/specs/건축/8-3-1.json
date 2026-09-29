@@ -1,0 +1,338 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/8-3-1/잡철물제작및설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "8-3-1",
+    "title": "잡철물 제작 및 설치",
+    "work": "잡철물 제작 및 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      621,
+      622
+    ],
+    "inputs": [
+      {
+        "name": "work_and_material",
+        "type": "enum",
+        "allowed_values": [
+          "제품 설치 일반철재",
+          "제품 설치 경량철재",
+          "규격철물 설치 일반철재",
+          "규격철물 설치 경량철재",
+          "현장제작 설치 일반철재",
+          "현장제작 설치 경량철재"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류와 철재 종류는 무엇입니까?",
+        "source": "파싱 결과 p677-t2 표의 열 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "잡철물 제작 및 설치 물량은 몇 ton입니까?",
+        "source": "파싱 결과 p677-t2 표의 기준 단위 (ton당)"
+      },
+      {
+        "name": "simple_installation",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "관로뚜껑, Sole Plate 등 용접, 부속자재 연결 작업 없이 기성제품을 단순 설치만 합니까? (제품 설치에만 해당)",
+        "source": "파싱 결과 p677-t2 비고"
+      },
+      {
+        "name": "complex_structure",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "트러스, 원형, 곡선 등의 부재와 같이 구조나 형태가 복잡하거나, 절단, 절곡, 용접 개소가 과다하게 발생합니까?",
+        "source": "파싱 결과 p677-t2 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p677-t2",
+        "role": "잡철물 제작 및 설치 품 (ton당)",
+        "source": "파싱 결과 p677-t2",
+        "unit": "인/ton",
+        "values": {
+          "철공": {
+            "제품 설치 일반철재": "2.85",
+            "제품 설치 경량철재": "3.71",
+            "규격철물 설치 일반철재": "7.05",
+            "규격철물 설치 경량철재": "9.17",
+            "현장제작 설치 일반철재": "12.38",
+            "현장제작 설치 경량철재": "16.09"
+          },
+          "용접공": {
+            "제품 설치 일반철재": "1.04",
+            "제품 설치 경량철재": "1.35",
+            "규격철물 설치 일반철재": "2.57",
+            "규격철물 설치 경량철재": "3.34",
+            "현장제작 설치 일반철재": "3.38",
+            "현장제작 설치 경량철재": "4.39"
+          },
+          "특별인부": {
+            "제품 설치 일반철재": "0.78",
+            "제품 설치 경량철재": "1.01",
+            "규격철물 설치 일반철재": "1.92",
+            "규격철물 설치 경량철재": "2.50",
+            "현장제작 설치 일반철재": "4.50",
+            "현장제작 설치 경량철재": "5.85"
+          },
+          "보통인부": {
+            "제품 설치 일반철재": "0.52",
+            "제품 설치 경량철재": "0.68",
+            "규격철물 설치 일반철재": "1.28",
+            "규격철물 설치 경량철재": "1.66",
+            "현장제작 설치 일반철재": "2.25",
+            "현장제작 설치 경량철재": "2.93"
+          }
+        },
+        "cite": {
+          "table_id": "p677-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p677-t2",
+          "column_input": "work_and_material",
+          "trades": [
+            "철공",
+            "용접공",
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "simple_installation": true,
+              "work_and_material": "제품 설치 일반철재"
+            },
+            "change": "제품설치 품의 10% 감산",
+            "source": "파싱 결과 p677-t2 비고"
+          },
+          {
+            "when": {
+              "simple_installation": true,
+              "work_and_material": "제품 설치 경량철재"
+            },
+            "change": "제품설치 품의 10% 감산",
+            "source": "파싱 결과 p677-t2 비고"
+          },
+          {
+            "when": {
+              "complex_structure": true
+            },
+            "change": "본 품의 30% 가산",
+            "source": "파싱 결과 p677-t2 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p677-t2 표에서 작업 종류 및 철재 종류에 해당하는 단위당 품을 고른다.",
+        "물량(quantity)을 곱해 총 품을 구한다.",
+        "단순 설치 여부 및 복잡한 구조 여부에 따라 note_adjustments의 할증/감산을 적용한다."
+      ],
+      "source": "파싱 결과 p677-t2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 인·일 품이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p677-t2",
+      "row": "철공",
+      "column": "제품 설치 일반철재",
+      "value": "2.85"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "철공",
+      "column": "제품 설치 경량철재",
+      "value": "3.71"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "철공",
+      "column": "규격철물 설치 일반철재",
+      "value": "7.05"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "철공",
+      "column": "규격철물 설치 경량철재",
+      "value": "9.17"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "철공",
+      "column": "현장제작 설치 일반철재",
+      "value": "12.38"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "철공",
+      "column": "현장제작 설치 경량철재",
+      "value": "16.09"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "용접공",
+      "column": "제품 설치 일반철재",
+      "value": "1.04"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "용접공",
+      "column": "제품 설치 경량철재",
+      "value": "1.35"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "용접공",
+      "column": "규격철물 설치 일반철재",
+      "value": "2.57"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "용접공",
+      "column": "규격철물 설치 경량철재",
+      "value": "3.34"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "용접공",
+      "column": "현장제작 설치 일반철재",
+      "value": "3.38"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "용접공",
+      "column": "현장제작 설치 경량철재",
+      "value": "4.39"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "특별인부",
+      "column": "제품 설치 일반철재",
+      "value": "0.78"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "특별인부",
+      "column": "제품 설치 경량철재",
+      "value": "1.01"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "특별인부",
+      "column": "규격철물 설치 일반철재",
+      "value": "1.92"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "특별인부",
+      "column": "규격철물 설치 경량철재",
+      "value": "2.50"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "특별인부",
+      "column": "현장제작 설치 일반철재",
+      "value": "4.50"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "특별인부",
+      "column": "현장제작 설치 경량철재",
+      "value": "5.85"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "보통인부",
+      "column": "제품 설치 일반철재",
+      "value": "0.52"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "보통인부",
+      "column": "제품 설치 경량철재",
+      "value": "0.68"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "보통인부",
+      "column": "규격철물 설치 일반철재",
+      "value": "1.28"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "보통인부",
+      "column": "규격철물 설치 경량철재",
+      "value": "1.66"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "보통인부",
+      "column": "현장제작 설치 일반철재",
+      "value": "2.25"
+    },
+    {
+      "table_id": "p677-t2",
+      "row": "보통인부",
+      "column": "현장제작 설치 경량철재",
+      "value": "2.93"
+    }
+  ],
+  "open_questions": [
+    "OCR 원문에는 [주] ①~⑦ 항목이 존재하여 공구손료, 잡재료비 요율 및 별도 계상 항목(주문제작 대형부재, 장비 및 비계매기)에 대한 정보가 있으나, 제공된 '우리 파싱 결과'에는 해당 내용이 누락되어 있어 명세에 포함하지 못했습니다.",
+    "비고의 '제품설치 품의 10%를 감한다' 조건과 '본 품의 30%를 가산한다' 조건이 동시에 만족될 경우, 할증/감산의 누적 적용 방식(합산인지 곱연산인지)이 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "현장제작 설치 일반철재 1톤당 철공 품은 얼마인가요?",
+    "기성제품을 단순 설치하면서 동시에 구조가 복잡한 경우, 10% 감산과 30% 가산을 어떻게 중복 적용해야 하나요?",
+    "잡철물 설치 물량이 몇 톤인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:08:14.954099+00:00",
+    "input_tokens": 11775,
+    "output_tokens": 3446,
+    "source_pages": [
+      677,
+      678
+    ],
+    "prompt_sha256": "bdd202446d9d2a186139a9cf6ef2488082db4c2f11d47d834e6734397a4abbfd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

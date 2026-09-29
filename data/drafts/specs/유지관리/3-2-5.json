@@ -1,0 +1,149 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-2-5/경량벽체철골틀해체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-2-5",
+    "title": "경량벽체철골틀 해체('22년 신설)",
+    "work": "경량벽체철골틀 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      915
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "경량벽체철골틀 해체 면적은 몇 ㎡입니까?",
+        "source": "3-2-5 표 단위 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p971-t0",
+        "role": "경량벽체철골틀 해체 단위당 품",
+        "source": "3-2-5 표",
+        "unit": "인/㎡",
+        "values": {
+          "내장공": {
+            "수량": "0.016"
+          },
+          "보통인부": {
+            "수량": "0.011"
+          }
+        },
+        "cite": {
+          "table_id": "p971-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p971-t0",
+          "column_input": "수량",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p971-t0에서 직종별 단위당 품을 가져온다.",
+        "물량(volume)을 곱해 총 품을 구한다."
+      ],
+      "source": "3-2-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "비산방지, 보호 및 안전시설 등의 설치비",
+        "source": "3-2-5 [주] ③",
+        "cite": {
+          "chunk_id": "p971-x4",
+          "quote": "③ 비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "폐기물 처리비용",
+        "source": "3-2-5 [주] ④",
+        "cite": {
+          "chunk_id": "p971-x4",
+          "quote": "④ 폐기물 처리비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(절단기 등)의 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p971-x4",
+          "quote": "⑤ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 ㎡당 내장공과 보통인부의 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p971-t0",
+      "row": "내장공",
+      "column": "수량",
+      "value": "0.016"
+    },
+    {
+      "table_id": "p971-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.011"
+    },
+    {
+      "chunk_id": "p971-x4",
+      "quote": "③ 비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p971-x4",
+      "quote": "④ 폐기물 처리비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p971-x4",
+      "quote": "⑤ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "경량벽체철골틀 해체 물량은 어떻게 입력하나요?",
+    "러너 및 스터드 해체 작업도 이 품에 포함되나요?",
+    "폐기물 처리비용은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:00.374201+00:00",
+    "input_tokens": 11538,
+    "output_tokens": 1372,
+    "source_pages": [
+      971,
+      972
+    ],
+    "prompt_sha256": "65da2ee3fa49ea02a1543c1eba2b4e7b1ecb17a6ab6df724e209838d6b4be406",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

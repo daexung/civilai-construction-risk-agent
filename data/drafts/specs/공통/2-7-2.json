@@ -1,0 +1,240 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-7-2/시스템비계설치및해체_인력",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-7-2",
+    "title": "시스템비계 설치 및 해체(인력)('16년 신설, '26년 보완)",
+    "work": "시스템비계 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      47,
+      48
+    ],
+    "inputs": [
+      {
+        "name": "operation",
+        "type": "enum",
+        "allowed_values": [
+          "설치",
+          "해체"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치 작업입니까, 해체 작업입니까?",
+        "source": "PDF 47쪽 2-7-2 표의 작업 구분"
+      },
+      {
+        "name": "height",
+        "type": "enum",
+        "allowed_values": [
+          "10m이하",
+          "10m초과∼20m이하",
+          "20m초과∼30m이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계의 규격(높이)은 어느 구간에 해당합니까?",
+        "source": "PDF 47쪽 2-7-2 표의 수량(㎡) 구간 및 [주] ②",
+        "excluded": {
+          "30m초과": "높이 30m 초과 시 비계설치, 해체 및 비계안전 보강재 설치 품은 별도 계상 ([주] ④)"
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시스템비계 설치 또는 해체 물량은 몇 ㎡입니까?",
+        "source": "PDF 47쪽 2-7-2 표의 수량 단위"
+      },
+      {
+        "name": "safety_net_installed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계주위 보호망을 시공합니까? (시공하지 않는 경우 시공량이 8% 증가합니다)",
+        "source": "PDF 47쪽 2-7-2 표 비고 및 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p103-t2",
+        "role": "시스템비계 설치 및 해체(인력) 일당 작업조 및 시공량",
+        "source": "PDF 47쪽 2-7-2 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "비계공": {
+            "설치": "4",
+            "해체": "2"
+          },
+          "보통인부": {
+            "설치": "1",
+            "해체": "2"
+          },
+          "10m이하": {
+            "설치": "150",
+            "해체": "150"
+          },
+          "10m초과∼20m이하": {
+            "설치": "130",
+            "해체": "130"
+          },
+          "20m초과∼30m이하": {
+            "설치": "110",
+            "해체": "110"
+          }
+        },
+        "cite": {
+          "table_id": "p103-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p103-t2",
+          "row_input": "height",
+          "column_input": "operation"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p103-t2",
+          "column_input": "operation",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "비계공": "1013",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p103-t2에서 작업(설치/해체)과 높이에 따른 기준 일일시공량을 고른다.",
+        "safety_net_installed가 false인 경우, 기준 일일시공량에 1.08을 곱하여 일당시공량을 구한다. (true인 경우 1.0 곱함)",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "p103-t2에서 작업(설치/해체)에 따른 직종별 인원을 고른다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 47쪽 2-7-2 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "높이 30m 초과 시 비계설치, 해체 및 비계안전 보강재 설치",
+        "source": "PDF 48쪽 [주] ④",
+        "cite": {
+          "section_no": "2-7-2",
+          "marker": "④"
+        }
+      },
+      {
+        "item": "가설 계단 및 방호시설",
+        "source": "PDF 48쪽 [주] ⑤",
+        "cite": {
+          "section_no": "2-7-2",
+          "marker": "⑤"
+        }
+      },
+      {
+        "item": "벽 연결재 추가 설치 및 해체",
+        "source": "PDF 48쪽 [주] ⑥",
+        "cite": {
+          "section_no": "2-7-2",
+          "marker": "⑥"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "section_no": "2-7-2",
+          "marker": "⑦"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 기준 일일시공량이 표로 제시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구하고 인원을 곱하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p103-t2",
+      "row": "설치",
+      "column": "비계공",
+      "value": "4"
+    },
+    {
+      "table_id": "p103-t2",
+      "row": "해체",
+      "column": "보통인부",
+      "value": "2"
+    },
+    {
+      "table_id": "p103-t2",
+      "row": "설치",
+      "column": "10m이하",
+      "value": "150"
+    },
+    {
+      "chunk_id": "p103-t2",
+      "quote": "- 비계주위 보호망을 시공하지 않는 경우 본 시공량의 8%를 증하여 적용한다."
+    },
+    {
+      "chunk_id": "p104-x0",
+      "quote": "④ 높이 30m 초과 시 비계설치, 해체 및 비계안전 보강재 설치 품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p104-x0",
+      "quote": "⑤ 가설 계단 및 방호시설은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p104-x0",
+      "quote": "⑥ 비계에서 작업을 위해 벽 연결재를 추가적으로 설치 및 해체하는 경우는 ‘2-7-9 비계용 브라켓 설치\n설명 | 및 해체’를 적용한다."
+    },
+    {
+      "chunk_id": "p104-x0",
+      "quote": "⑦ 공구손료 및 경장비(드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비계주위 보호망을 시공하지 않는 경우 시공량의 8%를 증하여 적용하는 조건은 현재 adjusted_daily_crew 모델의 coefficients 파라미터로 표현하기 어려워 steps에만 명시하였습니다."
+  ],
+  "questions": [
+    "시스템비계 설치 물량이 500㎡이고 높이가 15m일 때 품은 어떻게 되나요?",
+    "비계주위 보호망을 설치하지 않는데, 시공량 할증은 어떻게 계산되나요?",
+    "시스템비계 해체 작업입니다. 품을 계산해주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:14:45.034927+00:00",
+    "input_tokens": 12566,
+    "output_tokens": 2412,
+    "source_pages": [
+      103,
+      104,
+      105
+    ],
+    "prompt_sha256": "678a035eb7db4ac142e7309eb1514f7878c0fa4b25f267e1a011efc58f14d32a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

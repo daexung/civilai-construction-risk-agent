@@ -1,0 +1,148 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-8-15/엘리베이터_추락방호망_설치_및_해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-8-15",
+    "title": "엘리베이터 추락방호망 설치 및 해체('20년 신설)",
+    "work": "엘리베이터 추락방호망 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      55
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치 및 해체할 엘리베이터 추락방호망의 물량은 몇 개소입니까?",
+        "source": "PDF 55쪽 2-8-15 표 (10개소당)"
+      },
+      {
+        "name": "is_standard_size",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "추락방호망 규격이 5~9㎡이하입니까?",
+        "source": "PDF 55쪽 2-8-15 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p111-t3",
+        "role": "엘리베이터 추락방호망 설치 및 해체 품",
+        "source": "PDF 55쪽 2-8-15 표",
+        "unit": "인/10개소",
+        "values": {
+          "비계공": {
+            "수량": "1.50"
+          }
+        },
+        "cite": {
+          "table_id": "p111-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p111-t3",
+          "row_input": "비계공",
+          "column_input": "수량",
+          "trades": [
+            "비계공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p111-t3 표에서 비계공의 단위당 품을 찾는다.",
+        "물량(quantity)을 곱하고 10으로 나누어 총 품을 구한다 (표가 10개소당 기준이므로)."
+      ],
+      "source": "PDF 55쪽 2-8-15 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "추락방호망 규격이 5~9㎡이하가 아님",
+        "blocked_if": {
+          "input": "is_standard_size",
+          "op": "==",
+          "value": false
+        },
+        "reason": "원문은 5~9㎡이하를 기준한다고 명시하고 있으며, 그 외 규격에 대한 보정 기준이 없음",
+        "source": "PDF 55쪽 2-8-15 [주] ②",
+        "cite": {
+          "chunk_id": "p111-x13",
+          "quote": "추락방호망 규격은 5~9㎡이하를 기준한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p111-x13",
+          "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 10개소당 비계공의 품이 직접 명시되어 있어 단위당 품 계산 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p111-t3",
+      "row": "비계공",
+      "column": "수량",
+      "value": "1.50"
+    },
+    {
+      "chunk_id": "p111-x13",
+      "quote": "추락방호망 규격은 5~9㎡이하를 기준한다."
+    },
+    {
+      "chunk_id": "p111-x13",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "추락방호망 규격이 5㎡ 미만이거나 9㎡ 초과인 경우 품을 어떻게 조정해야 하는지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "공구손료 및 경장비는 어떻게 계산하나요?",
+    "추락방호망 규격이 4㎡인 경우에는 이 품셈을 적용할 수 없나요?",
+    "설치할 추락방호망의 총 개소 수는 몇 개입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:14:07.656645+00:00",
+    "input_tokens": 11529,
+    "output_tokens": 1473,
+    "source_pages": [
+      111,
+      112
+    ],
+    "prompt_sha256": "6af320a1eee5b2e89a1fb7d1b6a1bda52e6e0527396a37fa0bb693f6441c42c3",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

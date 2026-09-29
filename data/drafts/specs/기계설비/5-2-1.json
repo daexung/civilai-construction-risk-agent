@@ -1,0 +1,172 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/5-2-1/스팀트랩장치설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "5-2-1",
+    "title": "스팀트랩 장치 설치",
+    "work": "스팀트랩 장치 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      675,
+      676
+    ],
+    "inputs": [
+      {
+        "name": "trap_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø15mm",
+          "ø20mm",
+          "ø25mm",
+          "ø32mm",
+          "ø40mm",
+          "ø50mm"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "스팀트랩의 규격은 무엇입니까?",
+        "source": "5-2-1 스팀트랩 장치 설치 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "조",
+        "required": true,
+        "ask": "설치할 스팀트랩 장치의 수량은 몇 조입니까?",
+        "source": "5-2-1 스팀트랩 장치 설치 표 단위 (조당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p731-t2",
+        "role": "스팀트랩 장치 설치 규격별 인력 품",
+        "source": "5-2-1 스팀트랩 장치 설치 표",
+        "unit": "인/조",
+        "values": {
+          "배관공": {
+            "ø15mm": "0.632",
+            "ø20mm": "0.856",
+            "ø25mm": "1.081",
+            "ø32mm": "1.396",
+            "ø40mm": "1.756",
+            "ø50mm": "2.206"
+          },
+          "보통인부": {
+            "ø15mm": "0.235",
+            "ø20mm": "0.319",
+            "ø25mm": "0.402",
+            "ø32mm": "0.519",
+            "ø40mm": "0.653",
+            "ø50mm": "0.820"
+          }
+        },
+        "cite": {
+          "table_id": "p731-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p731-t2",
+          "row_input": "trades",
+          "column_input": "trap_size",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "5-2-1 스팀트랩 장치 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "바이패스 구간 기타 부속품 추가",
+        "source": "5-2-1 [주] ③",
+        "cite": {
+          "section_no": "5-2-1",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "스팀트랩 장치 설치를 위한 지지대 및 가대설치",
+        "source": "5-2-1 [주] ④",
+        "cite": {
+          "section_no": "5-2-1",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "section_no": "5-2-1",
+          "marker": "⑤"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(조)당 직종별 인원이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p731-t2",
+      "row": "배관공",
+      "column": "ø15mm",
+      "value": "0.632"
+    },
+    {
+      "chunk_id": "p732-x0",
+      "quote": "바이패스 구간에 기타 부속품이 추가되는 경우에는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p732-x0",
+      "quote": "스팀트랩 장치 설치를 위한 지지대 및 가대설치는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p732-x0",
+      "quote": "공구손료 및 경장비(전기드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "스팀트랩의 규격(ø15mm ~ ø50mm)은 무엇입니까?",
+    "바이패스 구간에 기타 부속품이 추가되거나 지지대/가대 설치가 필요합니까? (필요시 별도 계상)",
+    "설치할 스팀트랩 장치의 총 수량(조)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:27.222956+00:00",
+    "input_tokens": 12295,
+    "output_tokens": 1593,
+    "source_pages": [
+      731,
+      732,
+      733
+    ],
+    "prompt_sha256": "4e2bc8e0efe4cafecb3e4e1e597493b3953620d175d3cc9c97884f76d55e4ece",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

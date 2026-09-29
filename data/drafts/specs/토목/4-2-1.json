@@ -1,0 +1,193 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-2-1/궤광조립",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-2-1",
+    "title": "궤광조립('11년 신설, '19, '26년 보완)",
+    "work": "궤광조립 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      345
+    ],
+    "inputs": [
+      {
+        "name": "track_type",
+        "type": "enum",
+        "allowed_values": [
+          "단선",
+          "복선"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단선과 복선 중 어느 궤도입니까?",
+        "source": "PDF 345쪽 4-2-1 표 시공량 구분"
+      },
+      {
+        "name": "rail_weight",
+        "type": "enum",
+        "allowed_values": [
+          "60kg",
+          "50kg"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "레일 규격은 60kg과 50kg 중 무엇입니까?",
+        "source": "PDF 345쪽 4-2-1 표 비고 및 [주] ①"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "궤광조립 시공 물량은 몇 m입니까?",
+        "source": "PDF 345쪽 4-2-1 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p401-t0",
+        "role": "궤광조립 일당 작업조 및 시공량",
+        "source": "PDF 345쪽 4-2-1 표",
+        "values": {
+          "시공량(m)": {
+            "단선": "250",
+            "복선": "270"
+          },
+          "궤도공": {
+            "단선": "16",
+            "복선": "16"
+          },
+          "보통인부": {
+            "단선": "4",
+            "복선": "4"
+          },
+          "측량중급기술자": {
+            "단선": "1",
+            "복선": "1"
+          },
+          "지게차": {
+            "단선": "1",
+            "복선": "1"
+          },
+          "굴착기+부착용집게": {
+            "단선": "1",
+            "복선": "1"
+          },
+          "레일할증계수": {
+            "60kg": "1.0",
+            "50kg": "1.05"
+          }
+        },
+        "cite": {
+          "table_id": "p401-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p401-t0",
+          "row": "시공량(m)",
+          "column_input": "track_type"
+        },
+        "coefficients": [
+          {
+            "table": "p401-t0",
+            "row": "레일할증계수",
+            "input": "rail_weight"
+          }
+        ],
+        "crew": {
+          "table": "p401-t0",
+          "column_input": "track_type",
+          "trades": [
+            "궤도공",
+            "보통인부",
+            "측량중급기술자",
+            "지게차",
+            "굴착기+부착용집게"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p401-t0에서 단선/복선에 따른 기준 일일시공량을 찾는다.",
+        "레일 규격에 따른 할증계수(60kg: 1.0, 50kg: 1.05)를 곱해 최종 일당시공량을 구한다.",
+        "작업일수 = 물량 ÷ 일당시공량으로 구한다.",
+        "직종 및 장비별 투입량 = 작업일수 × 표의 수량으로 구한다."
+      ],
+      "source": "PDF 345쪽 4-2-1 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "작업위치까지 자재 운반",
+        "source": "PDF 345쪽 4-2-1 [주] ③",
+        "cite": {
+          "chunk_id": "p401-x8",
+          "quote": "③ 작업위치까지 자재 운반은 별도 계상한다."
+        }
+      },
+      {
+        "item": "작업여건에 따른 장비조합 변경",
+        "source": "PDF 345쪽 4-2-1 [주] ④",
+        "cite": {
+          "chunk_id": "p401-x8",
+          "quote": "④ 투입장비는 작업여건에 따라 장비조합을 변경하여 적용할 수 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 기준 일일시공량이 표로 제시되어 있으며, 물량을 시공량으로 나누어 작업일수를 구하는 방식이 적합함.",
+  "citations": [
+    {
+      "table_id": "p401-t0",
+      "row": "시공량(m) 단선",
+      "column": "시공량(m) 단선",
+      "value": "250"
+    },
+    {
+      "table_id": "p401-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 50㎏ 레일은 시공량의 5%를 증하여 적용한다."
+    },
+    {
+      "chunk_id": "p401-x8",
+      "quote": "① 본 품은 PCT 구간 60kg레일의 일반철도 기준이다."
+    }
+  ],
+  "open_questions": [
+    "50kg 레일 시공량 5% 증가는 기준 시공량에 1.05를 곱하는 것으로 해석하여 계수표를 임의 구성함.",
+    "장비(지게차, 굴착기) 산출을 위해 crew 목록에 장비 이름을 포함시킴. 별도의 equipment 필드 배열 지원 여부 확인 필요."
+  ],
+  "questions": [
+    "단선 60kg 레일 1000m 궤광조립 시 필요한 궤도공 인원은?",
+    "50kg 레일 적용 시 시공량 5% 증가는 인원 산출에 어떻게 반영되나요?",
+    "작업위치까지 자재 운반비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:55.217518+00:00",
+    "input_tokens": 11713,
+    "output_tokens": 1895,
+    "source_pages": [
+      401,
+      402
+    ],
+    "prompt_sha256": "10bfa03215e7ba6bc112a5945bee88e0aba116a7d83fe4cf08794fa320c0f76b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

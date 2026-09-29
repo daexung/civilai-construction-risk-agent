@@ -1,0 +1,117 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-11-4/입주청소",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-11-4",
+    "title": "입주청소('23년 신설)",
+    "work": "입주청소 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      62
+    ],
+    "inputs": [
+      {
+        "name": "floor_area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "청소할 바닥면적은 몇 ㎡입니까?",
+        "source": "PDF 62쪽 2-11-4 (바닥면적 ㎡)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p118-t0",
+        "role": "입주청소 단위당 품",
+        "source": "PDF 62쪽 2-11-4 입주청소 표",
+        "unit": "인/㎡",
+        "values": {
+          "보통인부": {
+            "수량": "0.03"
+          }
+        },
+        "cite": {
+          "table_id": "p118-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p118-t0",
+          "row_input": "보통인부",
+          "column_input": "수량",
+          "trades": [
+            "보통인부"
+          ]
+        },
+        "quantity_input": "floor_area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p118-t0에서 보통인부의 단위당 품을 가져온다.",
+        "바닥면적을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 62쪽 2-11-4 입주청소 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료량(청소용 소모품 등)",
+        "source": "PDF 62쪽 2-11-4 [주] ③",
+        "cite": {
+          "chunk_id": "p118-x4",
+          "quote": "③ 재료량(청소용 소모품 등)은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 보통인부의 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p118-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.03"
+    },
+    {
+      "chunk_id": "p118-x2",
+      "quote": "(바닥면적 ㎡)"
+    },
+    {
+      "chunk_id": "p118-x4",
+      "quote": "③ 재료량(청소용 소모품 등)은 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "입주청소 시 바닥면적은 어떻게 산정하나요?",
+    "청소용 소모품 비용은 어떻게 별도로 계상해야 하나요?",
+    "바닥면적 입력란이 어디 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:24.102330+00:00",
+    "input_tokens": 11520,
+    "output_tokens": 1036,
+    "source_pages": [
+      118,
+      119
+    ],
+    "prompt_sha256": "181b17072bbabae946c8fe0b62502ee5bb9be90ed87c686717c02c0167d199ea",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

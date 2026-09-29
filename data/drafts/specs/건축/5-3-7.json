@@ -1,0 +1,246 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-3-7/도배바름",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-3-7",
+    "title": "도배바름",
+    "work": "도배바름 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      597,
+      598
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "도배 면적은 몇 ㎡입니까?",
+        "source": "PDF 597쪽 5-3-7 표 시공량 단위"
+      },
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "합판･석고보드면",
+          "콘크리트･모르타르면"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "바탕면의 종류는 무엇입니까?",
+        "source": "PDF 597쪽 5-3-7 표 시공량 구분",
+        "synonyms": {
+          "합판･석고보드면": [
+            "합판면",
+            "석고보드면",
+            "합판",
+            "석고보드"
+          ],
+          "콘크리트･모르타르면": [
+            "콘크리트면",
+            "모르타르면",
+            "콘크리트",
+            "모르타르"
+          ]
+        }
+      },
+      {
+        "name": "is_ceiling",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "천장 도배입니까?",
+        "source": "PDF 597쪽 5-3-7 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p653-t4",
+        "role": "바탕면별 기준 일일시공량 및 작업조 인원",
+        "source": "PDF 597쪽 5-3-7 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "도배공": {
+            "수량": "2",
+            "합판･석고보드면": "85",
+            "콘크리트･모르타르면": "95"
+          },
+          "보통인부": {
+            "수량": "1",
+            "합판･석고보드면": "85",
+            "콘크리트･모르타르면": "95"
+          }
+        },
+        "cite": {
+          "table_id": "p653-t4"
+        }
+      },
+      {
+        "id": "p654-t1",
+        "role": "도배 재료량",
+        "source": "PDF 598쪽 ④ 재료량 표",
+        "unit": "㎡, ㎏",
+        "values": {
+          "초배지": {
+            "합판･석고보드면": "0.8",
+            "콘크리트･모르타르면": "1.2"
+          },
+          "정배지": {
+            "합판･석고보드면": "1.2",
+            "콘크리트･모르타르면": "1.2"
+          },
+          "풀": {
+            "합판･석고보드면": "0.3",
+            "콘크리트･모르타르면": "0.3"
+          }
+        },
+        "cite": {
+          "table_id": "p654-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p653-t4",
+          "row_input": "도배공",
+          "column_input": "surface_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p653-t4",
+          "column_input": "수량",
+          "trades": [
+            "도배공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p653-t4에서 바탕면 종류(surface_type)에 따른 기준 일일시공량을 찾는다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p653-t4의 직종별 수량으로 구한다."
+      ],
+      "source": "PDF 597쪽 5-3-7 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "천장 도배인 경우",
+        "blocked_if": {
+          "input": "is_ceiling",
+          "op": "==",
+          "value": true
+        },
+        "reason": "천장은 본 시공량의 23%를 감산해야 하나, 현재 계산 모델에서 동적 계수 적용을 지원하지 않아 보류함.",
+        "source": "PDF 597쪽 5-3-7 비고",
+        "cite": {
+          "table_id": "p653-t4"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "초배지, 정배지, 풀 재료량",
+        "source": "PDF 598쪽 ④ 재료량 표",
+        "cite": {
+          "table_id": "p654-t1"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "기준 일일시공량과 작업조 인원이 명시된 일당 작업조형 품셈이므로 daily_crew로 분류함.",
+  "citations": [
+    {
+      "table_id": "p653-t4",
+      "row": "도배공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p653-t4",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p653-t4",
+      "row": "도배공",
+      "column": "합판･석고보드면",
+      "value": "85"
+    },
+    {
+      "table_id": "p653-t4",
+      "row": "도배공",
+      "column": "콘크리트･모르타르면",
+      "value": "95"
+    },
+    {
+      "table_id": "p653-t4",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 천장은 본 시공량의 23%를 감한다."
+    },
+    {
+      "chunk_id": "p653-x24",
+      "quote": "본 품은 바탕 벽면에 초배지와 정배지를 바르는 기준이다."
+    },
+    {
+      "table_id": "p654-t1",
+      "row": "초배지",
+      "column": "합판･석고보드면",
+      "value": "0.8"
+    },
+    {
+      "table_id": "p654-t1",
+      "row": "정배지",
+      "column": "합판･석고보드면",
+      "value": "1.2"
+    },
+    {
+      "table_id": "p654-t1",
+      "row": "풀",
+      "column": "합판･석고보드면",
+      "value": "0.3"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p653-t4에서 '도배공'과 '보통인부'가 한 행의 텍스트로 묶여 있어, JSON tables 구성 시 임의로 분리하여 작성했습니다.",
+    "천장 시공 시 23% 감산 규칙을 adjusted_daily_crew 모델의 coefficients로 자동화할 수 없어 blocked 처리했습니다."
+  ],
+  "questions": [
+    "합판면에 100㎡ 도배를 할 때 필요한 도배공과 보통인부 품은 얼마인가요?",
+    "천장에 도배를 할 경우 시공량 감산은 어떻게 계산하나요?",
+    "도배에 필요한 초배지와 풀의 양은 어떻게 산출하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:02:56.967270+00:00",
+    "input_tokens": 12562,
+    "output_tokens": 2298,
+    "source_pages": [
+      653,
+      654,
+      655
+    ],
+    "prompt_sha256": "d3b186e698c63e6fb9020390e4a8115c42ff5256bf47b28f78e024f12858832d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/7-1-7/후레싱설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "7-1-7",
+    "title": "후레싱 설치('16년 신설)",
+    "work": "후레싱 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      613
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "후레싱 설치 물량은 몇 m입니까?",
+        "source": "PDF 613쪽 7-1-7 표 (m당)"
+      },
+      {
+        "name": "steep_slope",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지붕이 급경사(3/4이상, 35°이상)입니까?",
+        "source": "PDF 613쪽 7-1-7 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p669-t2",
+        "role": "후레싱 설치 품",
+        "source": "PDF 613쪽 7-1-7 표",
+        "unit": "인/m",
+        "values": {
+          "지붕잇기공": {
+            "수량": "0.02"
+          },
+          "비고": {
+            "비고": "- 급경사(3/4이상, 35°이상)일 경우 본 품의 20%를 가산한다."
+          }
+        },
+        "cite": {
+          "table_id": "p669-t2"
+        }
+      },
+      {
+        "id": "p669-t3",
+        "role": "후레싱 설치 재료량",
+        "source": "PDF 613쪽 7-1-7 참고자료 표",
+        "unit": "m/m, %",
+        "values": {
+          "후레싱 잡재료및소모재료 (못,실리콘등)": {
+            "수량": "1.1"
+          },
+          "후레싱 잡재료및소모재료 (못,실리콘등) 주재료비의": {
+            "수량": "3"
+          }
+        },
+        "cite": {
+          "table_id": "p669-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p669-t2",
+          "row_input": "지붕잇기공",
+          "column_input": "수량",
+          "trades": [
+            "지붕잇기공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "steep_slope": true
+            },
+            "rate": "0.2",
+            "applies_to": [
+              "지붕잇기공"
+            ],
+            "source": "PDF 613쪽 7-1-7 표 비고"
+          }
+        ],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "surcharges/note_adjustments를 원문 순서대로 적용한다."
+      ],
+      "source": "PDF 613쪽 7-1-7 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "가시설물(비계, 안전발판 등)",
+        "source": "PDF 613쪽 7-1-7 [주] ③",
+        "cite": {
+          "chunk_id": "p669-x12",
+          "quote": "③ 가시설물(비계, 안전발판 등)이 필요한 경우 작업여건(경사도 등) 및「지붕공사 안전보건작업 기술지침」을"
+        }
+      },
+      {
+        "item": "잡재료 및 소모재료 (주재료비의 3%)",
+        "source": "PDF 613쪽 7-1-7 참고자료 표; 현재 cost_rules는 labor_subtotal 기준만 지원하므로 미산정",
+        "cite": {
+          "table_id": "p669-t3"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "chunk_id": "p669-x12",
+          "quote": "④ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 5%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m)당 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p669-t2",
+      "row": "지붕잇기공",
+      "column": "수량",
+      "value": "0.02"
+    },
+    {
+      "table_id": "p669-t2",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 급경사(3/4이상, 35°이상)일 경우 본 품의 20%를 가산한다."
+    },
+    {
+      "table_id": "p669-t3",
+      "row": "후레싱 잡재료및소모재료 (못,실리콘등)",
+      "column": "수량",
+      "value": "1.1"
+    },
+    {
+      "table_id": "p669-t3",
+      "row": "후레싱 잡재료및소모재료 (못,실리콘등) 주재료비의",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "chunk_id": "p669-x12",
+      "quote": "③ 가시설물(비계, 안전발판 등)이 필요한 경우 작업여건(경사도 등) 및「지붕공사 안전보건작업 기술지침」을"
+    },
+    {
+      "chunk_id": "p669-x12",
+      "quote": "④ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 5%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "후레싱 설치 물량은 몇 m입니까?",
+    "지붕의 경사가 급경사(3/4이상, 35°이상)에 해당합니까?",
+    "가시설물(비계, 안전발판 등) 설치가 필요한 작업 여건입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:07:13.063708+00:00",
+    "input_tokens": 23668,
+    "output_tokens": 4017,
+    "source_pages": [
+      669,
+      670
+    ],
+    "prompt_sha256": "3c15c04a4141e4007bbae328a90abe4200b244033fc6dbb4ce7e6ae2b7baedb5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '후레싱 잡재료및소모재료 (못,실리콘등) 주재료비의'이 p669-t3 조각 텍스트에 없음"
+    ]
+  }
+}

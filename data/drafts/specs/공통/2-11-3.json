@@ -1,0 +1,119 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-11-3/준공청소",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-11-3",
+    "title": "준공청소",
+    "work": "준공청소 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      117,
+      118
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "건축물의 연면적은 몇 ㎡입니까?",
+        "source": "p117-x17 (연면적 ㎡)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p117-t3",
+        "role": "준공청소 단위당 품",
+        "source": "2-11-3 준공청소 표",
+        "unit": "인/㎡",
+        "values": {
+          "보통인부": {
+            "수량": "0.02"
+          }
+        },
+        "cite": {
+          "table_id": "p117-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p117-t3",
+          "row_input": "보통인부",
+          "column_input": "수량",
+          "trades": [
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "2-11-3 준공청소 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료량(청소용 소모품 등)",
+        "source": "2-11-3 [주] ③",
+        "cite": {
+          "chunk_id": "p118-x0",
+          "quote": "③ 재료량(청소용 소모품 등)은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 보통인부의 품이 표에 직접 명시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p117-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.02"
+    },
+    {
+      "chunk_id": "p117-x17",
+      "quote": "(연면적 ㎡)"
+    },
+    {
+      "chunk_id": "p118-x0",
+      "quote": "③ 재료량(청소용 소모품 등)은 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "건축물의 연면적은 몇 ㎡입니까?",
+    "청소용 소모품 등 재료량은 어떻게 별도로 계상해야 합니까?",
+    "보양지 제거 및 옥내외 청소 외에 추가적인 특수 청소가 필요한 경우 품이 달라집니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:27.625113+00:00",
+    "input_tokens": 12072,
+    "output_tokens": 995,
+    "source_pages": [
+      117,
+      118,
+      119
+    ],
+    "prompt_sha256": "00241f9014519da6c4effdf81fa3d295f9e61ddc888471d50618845de9d68c95",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

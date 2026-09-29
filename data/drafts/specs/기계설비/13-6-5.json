@@ -1,0 +1,197 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-5/Stop-Log제작",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-5",
+    "title": "Stop-Log 제작",
+    "work": "Stop-Log 제작품 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      803,
+      804,
+      805
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Stop-Log 제작 물량은 몇 ton입니까?",
+        "source": "PDF 803쪽 1. 직종별 제작품 표 단위 (ton 당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p859-t2",
+        "role": "직종별 제작품",
+        "source": "PDF 803쪽 1. 직종별 제작품",
+        "unit": "인/ton",
+        "values": {
+          "기계산업기사": {
+            "수량": "0.50"
+          },
+          "플랜트제관공": {
+            "수량": "3.564"
+          },
+          "플랜트용접공": {
+            "수량": "2.968"
+          },
+          "비계공": {
+            "수량": "2.295"
+          },
+          "플랜트기계설치공": {
+            "수량": "1.325"
+          },
+          "도장공": {
+            "수량": "1.639"
+          },
+          "시험및조정": {
+            "수량": "1.015"
+          },
+          "계": {
+            "수량": "13.306"
+          }
+        },
+        "cite": {
+          "table_id": "p859-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p859-t2",
+          "row_input": "고정 행이름 없음",
+          "column_input": "수량",
+          "trades": [
+            "기계산업기사",
+            "플랜트제관공",
+            "플랜트용접공",
+            "비계공",
+            "플랜트기계설치공",
+            "도장공",
+            "시험및조정"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "1. 직종별 제작품 표(p859-t2)에서 각 직종별 단위(ton)당 품을 확인한다.",
+        "물량(ton)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 803쪽 1. 직종별 제작품",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "2. 공정별 제작품",
+        "source": "PDF 804쪽 2. 공정별 제작품",
+        "cite": {
+          "table_id": "p860-t0"
+        }
+      },
+      {
+        "item": "[참고] 장비사용시간",
+        "source": "PDF 804쪽 [참고] 장비사용시간",
+        "cite": {
+          "table_id": "p860-t1"
+        }
+      },
+      {
+        "item": "[참고] 소모자재",
+        "source": "PDF 805쪽 [참고] 소모자재",
+        "cite": {
+          "table_id": "p861-t0"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 품이 표에 직접 제시되어 있어 물량을 곱하여 계산하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p859-t2",
+      "row": "기계산업기사",
+      "column": "수량",
+      "value": "0.50"
+    },
+    {
+      "table_id": "p859-t2",
+      "row": "플랜트제관공",
+      "column": "수량",
+      "value": "3.564"
+    },
+    {
+      "table_id": "p859-t2",
+      "row": "플랜트용접공",
+      "column": "수량",
+      "value": "2.968"
+    },
+    {
+      "table_id": "p859-t2",
+      "row": "비계공",
+      "column": "수량",
+      "value": "2.295"
+    },
+    {
+      "table_id": "p859-t2",
+      "row": "플랜트기계설치공",
+      "column": "수량",
+      "value": "1.325"
+    },
+    {
+      "table_id": "p859-t2",
+      "row": "도장공",
+      "column": "수량",
+      "value": "1.639"
+    },
+    {
+      "table_id": "p859-t2",
+      "row": "시험및조정",
+      "column": "수량",
+      "value": "1.015"
+    },
+    {
+      "table_id": "p859-t2",
+      "row": "계",
+      "column": "수량",
+      "value": "13.306"
+    }
+  ],
+  "open_questions": [
+    "공정별 제작품 표 하단의 '(기술관리, 도장을 제외한 전 품의 10%)'가 정확히 어떤 항목(소운반조작, 검사및교정 등)의 산출 근거인지 명확하지 않아 직종별 제작품 표를 기준으로 명세를 작성했습니다."
+  ],
+  "questions": [
+    "Stop-Log 제작 물량은 몇 ton입니까?",
+    "공정별 제작품 표 하단의 '(기술관리, 도장을 제외한 전 품의 10%)'는 구체적으로 어떤 항목에 적용되는 것입니까?",
+    "장비사용시간과 소모자재는 참고용으로 제시되어 있는데, 실제 내역 반영 시 이 기준을 그대로 적용합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:43:43.084306+00:00",
+    "input_tokens": 15324,
+    "output_tokens": 1788,
+    "source_pages": [
+      859,
+      860,
+      861,
+      862
+    ],
+    "prompt_sha256": "3e9adacc17cd5f5524512a8baf2760f4fa948f2559fd18a702be4307b7c3e3b1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

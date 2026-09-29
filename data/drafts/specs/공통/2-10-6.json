@@ -1,0 +1,132 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-10-6/비탈면보양",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-10-6",
+    "title": "비탈면 보양('23년 신설)",
+    "work": "비탈면 보양재 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      60
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "비탈면 보양 면적은 몇 ㎡입니까?",
+        "source": "PDF 60쪽 2-10-6 표 단위 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p116-t2",
+        "role": "비탈면 보양 단위당 품",
+        "source": "PDF 60쪽 2-10-6 표",
+        "unit": "인/㎡",
+        "values": {
+          "특별인부": {
+            "수량": "0.02"
+          },
+          "보통인부": {
+            "수량": "0.01"
+          }
+        },
+        "cite": {
+          "table_id": "p116-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p116-t2",
+          "column_input": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p116-t2에서 직종별 단위당 품을 가져온다.",
+        "보양 면적(area)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 60쪽 2-10-6 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "보양재(천막 등) 및 P.P마대 재료비",
+        "source": "PDF 60쪽 2-10-6 [주] ①, ②",
+        "cite": [
+          {
+            "section_no": "2-10-6",
+            "marker": "①"
+          },
+          {
+            "section_no": "2-10-6",
+            "marker": "②"
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 직종별 투입 인원이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p116-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.02"
+    },
+    {
+      "table_id": "p116-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.01"
+    },
+    {
+      "chunk_id": "p116-x15",
+      "quote": "본 품은 비탈면의 토사유출 등 방지하기 위해 보양재(천막 등)를 설치 및 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p116-x15",
+      "quote": "본 품은 보양재 설치, P.P마대 만들기 및 설치 작업을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "비탈면 보양 면적은 어떻게 되나요?",
+    "보양재(천막 등)나 P.P마대 재료비는 별도로 계상해야 하나요?",
+    "보양재의 종류에 따라 품이 달라지나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:35.871638+00:00",
+    "input_tokens": 11476,
+    "output_tokens": 1159,
+    "source_pages": [
+      116,
+      117
+    ],
+    "prompt_sha256": "7110b7771916e3d4f349ca500abe1f6026f529eb4823e08c4d595156ced9f7c0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-4-4/단열재핀사용붙이기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-4-4",
+    "title": "단열재 핀사용 붙이기('22, '24년 보완)",
+    "work": "단열재 핀사용 붙이기 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      600
+    ],
+    "inputs": [
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "50이하",
+          "100이하",
+          "200이하",
+          "300이하"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "단열두께는 얼마입니까?",
+        "source": "PDF 600쪽 p656-t0 단열두께(mm)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 600쪽 p656-t0 시공량 단위"
+      },
+      {
+        "name": "material_type",
+        "type": "enum",
+        "allowed_values": [
+          "인조광물섬유판(글라스울)",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단열재 종류는 무엇입니까?",
+        "source": "PDF 600쪽 [주] ②",
+        "synonyms": {
+          "인조광물섬유판(글라스울)": [
+            "글라스울",
+            "인조광물섬유판",
+            "유리섬유"
+          ]
+        }
+      },
+      {
+        "name": "layer_count",
+        "type": "enum",
+        "allowed_values": [
+          "1겹",
+          "2겹 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단열재는 몇 겹으로 붙입니까?",
+        "source": "PDF 600쪽 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p656-t0",
+        "role": "단열두께별 시공량 및 작업조 인원",
+        "source": "PDF 600쪽 5-4-4 첫 번째 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "내장공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "50이하": {
+            "시공량(㎡)": "45"
+          },
+          "100이하": {
+            "시공량(㎡)": "42"
+          },
+          "200이하": {
+            "시공량(㎡)": "40"
+          },
+          "300이하": {
+            "시공량(㎡)": "38"
+          }
+        },
+        "cite": {
+          "table_id": "p656-t0"
+        }
+      },
+      {
+        "id": "p656-t1",
+        "role": "단위 면적(㎡)당 재료량",
+        "source": "PDF 600쪽 5-4-4 두 번째 표",
+        "unit": "㎡, 개, kg / ㎡",
+        "values": {
+          "단열재": {
+            "수량": "1.1"
+          },
+          "알루미늄핀": {
+            "수량": "6.3"
+          },
+          "접착제": {
+            "수량": "0.03"
+          }
+        },
+        "cite": {
+          "table_id": "p656-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p656-t0",
+          "row_input": "thickness",
+          "column_input": "시공량(㎡)"
+        },
+        "crew": {
+          "table": "p656-t0",
+          "column_input": "수량",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "내장공": "1024",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p656-t0에서 단열두께별 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p656-t0의 직종별 인원(수량)으로 구한다.",
+        "p656-t1의 재료량에 quantity를 곱하여 총 재료량을 구한다 (할증 포함)."
+      ],
+      "source": "PDF 600쪽 5-4-4 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "단열재 종류가 인조광물섬유판(글라스울)이 아님",
+        "blocked_if": {
+          "input": "material_type",
+          "op": "!=",
+          "value": "인조광물섬유판(글라스울)"
+        },
+        "reason": "본 품은 인조광물섬유판(글라스울) 단열재 기준이므로 다른 재질은 별도 산정 필요",
+        "source": "PDF 600쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p656-x5",
+          "quote": "② 본 품은 인조광물섬유판(글라스울) 단열재의 1겹 붙임 기준이다."
+        }
+      },
+      {
+        "condition": "단열재를 2겹 이상 붙임",
+        "blocked_if": {
+          "input": "layer_count",
+          "op": "!=",
+          "value": "1겹"
+        },
+        "reason": "본 품은 1겹 붙임 기준이므로 2겹 이상은 별도 산정 필요",
+        "source": "PDF 600쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p656-x5",
+          "quote": "② 본 품은 인조광물섬유판(글라스울) 단열재의 1겹 붙임 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량과 고정된 작업조 인원이 표로 제시되어 있어, 기준 일일시공량을 바탕으로 작업일수와 투입 인원을 계산하는 daily_crew 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p656-t0",
+      "row": "50이하",
+      "column": "시공량(㎡)",
+      "value": "45"
+    },
+    {
+      "table_id": "p656-t0",
+      "row": "100이하",
+      "column": "시공량(㎡)",
+      "value": "42"
+    },
+    {
+      "table_id": "p656-t0",
+      "row": "200이하",
+      "column": "시공량(㎡)",
+      "value": "40"
+    },
+    {
+      "table_id": "p656-t0",
+      "row": "300이하",
+      "column": "시공량(㎡)",
+      "value": "38"
+    },
+    {
+      "table_id": "p656-t0",
+      "row": "내장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p656-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p656-t1",
+      "row": "단열재",
+      "column": "수량",
+      "value": "1.1"
+    },
+    {
+      "table_id": "p656-t1",
+      "row": "알루미늄핀",
+      "column": "수량",
+      "value": "6.3"
+    },
+    {
+      "table_id": "p656-t1",
+      "row": "접착제",
+      "column": "수량",
+      "value": "0.03"
+    },
+    {
+      "chunk_id": "p656-x5",
+      "quote": "② 본 품은 인조광물섬유판(글라스울) 단열재의 1겹 붙임 기준이다."
+    },
+    {
+      "chunk_id": "p656-x5",
+      "quote": "③ 본 품은 접착제 바름, 쐐기 부착, 단열재 절단 및 설치, 이음부 마감(우레탄폼 충전 등) 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p656-x10",
+      "quote": "※ 위 재료량은 할증이 포함된 것이다."
+    }
+  ],
+  "open_questions": [
+    "adjusted_daily_crew 모델에서 base_output과 crew의 column_input에 입력 변수 이름 대신 고정 문자열('시공량(㎡)', '수량')을 사용하여 고정 열을 참조하도록 작성했습니다. 이 방식이 스키마에서 허용되는지 확인이 필요합니다.",
+    "재료량(p656-t1) 계산이 adjusted_daily_crew 파라미터 구조에 명시적으로 포함되지 않아 steps에만 서술했습니다. 재료비 산출을 위한 별도 모델 확장이 필요할 수 있습니다."
+  ],
+  "questions": [
+    "단열두께가 150mm인 경우 시공량은 100이하와 200이하 중 어느 것을 적용하나요?",
+    "인조광물섬유판 외에 압출법 보온판을 핀으로 부착할 때도 이 품을 준용할 수 있나요?",
+    "단열재를 2겹으로 시공할 경우 품을 어떻게 할증해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:04:23.114826+00:00",
+    "input_tokens": 11843,
+    "output_tokens": 2819,
+    "source_pages": [
+      656,
+      657
+    ],
+    "prompt_sha256": "619006cc2a57e44df322c1f3a530df39011f4f5b0962234cdc3ba888f57d8f04",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-5-3/덕트제작",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-5-3",
+    "title": "덕트제작(Air, Gas)",
+    "work": "덕트제작 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      774
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "덕트 제작 물량은 몇 ton입니까?",
+        "source": "PDF 774쪽 13-5-3 표 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p830-t2",
+        "role": "덕트제작 직종별 수량",
+        "source": "PDF 774쪽 13-5-3 표",
+        "unit": "인/ton",
+        "values": {
+          "본뜨기 금긋기 절단 구멍뚫기 용접 교정 도장 운반조작": {
+            "수량 0.523": "0.523",
+            "수량 1.390": "1.390",
+            "수량 0.380": "0.380",
+            "수량 0.475": "0.475",
+            "수량 2.550": "2.550",
+            "수량 1.660": "1.660",
+            "수량 1.895": "1.895",
+            "수량 0.073": "0.073",
+            "수량 0.037": "0.037"
+          },
+          "계": {
+            "수량 9.056": "9.056"
+          }
+        },
+        "cite": {
+          "table_id": "p830-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱된 표의 직종 구분이 누락되어 직종별 품을 정확히 계산할 수 없습니다."
+      ],
+      "source": "PDF 774쪽 13-5-3 표",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "조립 및 설치 품",
+        "source": "PDF 774쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p830-x27",
+          "quote": "④ 본 품에는 조립 및 설치 품은 제외되었다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표(p830-t2)의 직종 및 작업구분이 모두 병합되어 원문의 세부 직종별 수량을 구분할 수 없으므로 자동 계산이 불가능합니다.",
+  "citations": [
+    {
+      "table_id": "p830-t2",
+      "row": "본뜨기 금긋기 절단 구멍뚫기 용접 교정 도장 운반조작",
+      "column": "수량 0.523",
+      "value": "0.523"
+    },
+    {
+      "chunk_id": "p830-x27",
+      "quote": "④ 본 품에는 조립 및 설치 품은 제외되었다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표(p830-t2)에서 직종(플랜트용접공, 도장공, 비계공 등)이 모두 '플랜트제관공'으로 병합되어 있어 정확한 직종별 품을 산출할 수 없습니다. 파싱 결과 수정이 필요합니다."
+  ],
+  "questions": [
+    "덕트 제작 시 소운반 비용이 별도로 계산되나요?",
+    "Sand Blasting 및 Painting 공량이 포함되어 있다고 하는데, 별도의 도장 작업이 필요한 경우 어떻게 적용하나요?",
+    "덕트 제작 물량(ton)은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:28.811655+00:00",
+    "input_tokens": 11848,
+    "output_tokens": 1174,
+    "source_pages": [
+      830,
+      831
+    ],
+    "prompt_sha256": "37e6401d6e33efed8521f83b2c9dbb2cf2627a1bafa83ca6c5a62fae17b81a8f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

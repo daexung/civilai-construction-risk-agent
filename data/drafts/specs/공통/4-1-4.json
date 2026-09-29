@@ -1,0 +1,234 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/4-1-4/초화류식재",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "4-1-4",
+    "title": "초화류 식재",
+    "work": "초화류 식재 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      92
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "주",
+        "required": true,
+        "ask": "초화류 식재 물량은 몇 주입니까?",
+        "source": "PDF 92쪽 4-1-4 표 시공량(주)"
+      },
+      {
+        "name": "condition",
+        "type": "enum",
+        "allowed_values": [
+          "양호",
+          "보통",
+          "불량"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업장소 조건은 양호, 보통, 불량 중 무엇입니까?",
+        "source": "PDF 92쪽 4-1-4 표 및 [주] ⑤",
+        "synonyms": {
+          "양호": [
+            "양호한 조건"
+          ],
+          "보통": [
+            "보통 조건"
+          ],
+          "불량": [
+            "불량한 조건"
+          ]
+        }
+      },
+      {
+        "name": "special_bed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "특수화단(화문화단, 리본화단, 포석화단)입니까?",
+        "source": "PDF 92쪽 4-1-4 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p148-t1",
+        "role": "초화류 식재 일당 작업조 및 시공량",
+        "source": "PDF 92쪽 4-1-4 표",
+        "unit": "인/작업조; 주/일",
+        "values": {
+          "조경공": {
+            "수량": "3",
+            "양호": "2,700",
+            "보통": "1,800",
+            "불량": "1,100"
+          },
+          "보통인부": {
+            "수량": "1",
+            "양호": "2,700",
+            "보통": "1,800",
+            "불량": "1,100"
+          }
+        },
+        "cite": {
+          "table_id": "p148-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p148-t1",
+          "row": "조경공",
+          "column_input": "condition"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p148-t1",
+          "column": "수량",
+          "trades": [
+            "조경공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "조경공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p148-t1에서 작업 조건에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 92쪽 4-1-4 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "특수화단(화문화단, 리본화단, 포석화단)인 경우",
+        "blocked_if": {
+          "input": "special_bed",
+          "op": "==",
+          "value": true
+        },
+        "reason": "시공량을 17% 범위 내에서 감하여 적용하므로, 정확한 감산 비율을 기계적으로 특정할 수 없어 계산을 보류함",
+        "source": "PDF 92쪽 4-1-4 [주] ②",
+        "cite": {
+          "section_no": "4-1-4",
+          "marker": "②"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "유지관리 비용",
+        "source": "PDF 92쪽 4-1-4 [주] ③",
+        "cite": {
+          "section_no": "4-1-4",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "물주기를 위한 살수차 등 기계경비",
+        "source": "PDF 92쪽 4-1-4 [주] ④",
+        "cite": {
+          "section_no": "4-1-4",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(조경공 3인, 보통인부 1인)의 기준 일일시공량이 조건(양호/보통/불량)에 따라 제시되어 있으므로 일당 작업조형으로 계산합니다.",
+  "citations": [
+    {
+      "table_id": "p148-t1",
+      "row": "조경공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p148-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p148-t1",
+      "row": "조경공",
+      "column": "양호",
+      "value": "2,700"
+    },
+    {
+      "table_id": "p148-t1",
+      "row": "조경공",
+      "column": "보통",
+      "value": "1,800"
+    },
+    {
+      "table_id": "p148-t1",
+      "row": "조경공",
+      "column": "불량",
+      "value": "1,100"
+    },
+    {
+      "chunk_id": "p148-x10",
+      "quote": "① 본 품은 본 품은 초화류 식재, 물주기 및 마무리를 포함한다."
+    },
+    {
+      "chunk_id": "p148-x10",
+      "quote": "② 특수화단(화문화단, 리본화단, 포석화단)은 시공량을 17% 범위 내에서 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p148-x10",
+      "quote": "③ 식재 시 1회 기준의 물주기는 포함되어 있으며, 유지관리는 ‘[유지관리부문] 1-2 조경공사’에 따라\n별도 계상한다."
+    },
+    {
+      "chunk_id": "p148-x10",
+      "quote": "④ 물주기를 위해 살수차 등의 장비가 필요한 경우 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p148-x10",
+      "quote": "⑤ 초화류 식재품의 적용은 아래의 조건을 감안하여 적용한다."
+    }
+  ],
+  "open_questions": [
+    "특수화단(화문화단, 리본화단, 포석화단)의 경우 시공량을 '17% 범위 내에서' 감한다고 되어 있어, 정확한 감산 비율을 특정할 수 없어 계산을 보류(blocked) 처리했습니다."
+  ],
+  "questions": [
+    "초화류 식재 시 작업장소 조건(양호/보통/불량)은 어떻게 구분하나요?",
+    "특수화단(화문화단, 리본화단, 포석화단) 식재 시 시공량 감산 비율은 어떻게 결정하나요?",
+    "초화류 식재 후 유지관리 비용은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:21:16.598531+00:00",
+    "input_tokens": 11791,
+    "output_tokens": 2240,
+    "source_pages": [
+      148,
+      149
+    ],
+    "prompt_sha256": "dbf1df5b96291f5bd84abd4a2f5bfea1ca2a4e142d98cc78e34f59067f1fe96b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p148-x10 조각 텍스트에 없음"
+    ]
+  }
+}

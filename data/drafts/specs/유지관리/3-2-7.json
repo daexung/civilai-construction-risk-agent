@@ -1,0 +1,204 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-2-7/도배해체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-2-7",
+    "title": "도배 해체",
+    "work": "도배 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      915
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "해체할 도배 면적은 몇 ㎡입니까?",
+        "source": "PDF 915쪽 3-2-7 표 단위(㎡당)"
+      },
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "벽",
+          "천장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해체 부위는 벽과 천장 중 어디입니까?",
+        "source": "PDF 915쪽 3-2-7 표 열 구분",
+        "synonyms": {
+          "벽": [
+            "벽면"
+          ],
+          "천장": [
+            "천정"
+          ]
+        }
+      },
+      {
+        "name": "reuse_status",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도배지를 재사용합니까?",
+        "source": "PDF 915쪽 3-2-7 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p971-t2",
+        "role": "도배 해체 단위당 품",
+        "source": "PDF 915쪽 3-2-7 표",
+        "unit": "인",
+        "values": {
+          "도배공": {
+            "벽": "0.008",
+            "천장": "0.010"
+          },
+          "보통인부": {
+            "벽": "0.005",
+            "천장": "0.007"
+          }
+        },
+        "cite": {
+          "table_id": "p971-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p971-t2",
+          "column_input": "surface_type",
+          "trades": [
+            "도배공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p971-t2에서 해체 부위(벽, 천장)에 따른 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "정배지 및 초배지 해체 작업이 포함되어 있으므로 별도 할증은 없다."
+      ],
+      "source": "PDF 915쪽 3-2-7 표 및 [주] ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "도배지를 재사용하는 경우",
+        "blocked_if": {
+          "input": "reuse_status",
+          "op": "==",
+          "value": true
+        },
+        "reason": "본 품은 도배지를 재사용하지 아니하는 때의 해체하는 기준이므로, 재사용 시 별도 산정 필요",
+        "source": "PDF 915쪽 3-2-7 [주] ①",
+        "cite": {
+          "section_no": "3-2-7",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비산방지, 보호 및 안전시설 등의 설치비",
+        "source": "PDF 915쪽 3-2-7 [주] ③",
+        "cite": {
+          "section_no": "3-2-7",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "폐기물 처리비용",
+        "source": "PDF 915쪽 3-2-7 [주] ④",
+        "cite": {
+          "section_no": "3-2-7",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인·일이 표에 직접 명시되어 있으므로 per_unit 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p971-t2",
+      "row": "도배공",
+      "column": "벽",
+      "value": "0.008"
+    },
+    {
+      "table_id": "p971-t2",
+      "row": "도배공",
+      "column": "천장",
+      "value": "0.010"
+    },
+    {
+      "table_id": "p971-t2",
+      "row": "보통인부",
+      "column": "벽",
+      "value": "0.005"
+    },
+    {
+      "table_id": "p971-t2",
+      "row": "보통인부",
+      "column": "천장",
+      "value": "0.007"
+    },
+    {
+      "chunk_id": "p971-x14",
+      "quote": "본 품은 도배지를 재사용하지 아니하는 때의 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p971-x14",
+      "quote": "본 품은 정배지 및 초배지 해체 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p971-x14",
+      "quote": "비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p971-x14",
+      "quote": "폐기물 처리비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 table_id와 chunk_id가 p971로 시작하지만, 제공된 이미지의 페이지 번호는 915입니다. 파싱 결과를 우선하여 id를 유지했습니다."
+  ],
+  "questions": [
+    "벽면 50㎡의 도배지를 해체할 때 필요한 도배공과 보통인부의 품은 얼마인가요?",
+    "도배지를 뜯어내어 다른 곳에 재사용하려고 하는데, 이 품셈을 그대로 적용해도 되나요?",
+    "도배 해체 후 발생한 폐기물 처리 비용은 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:12.778272+00:00",
+    "input_tokens": 11504,
+    "output_tokens": 1851,
+    "source_pages": [
+      971,
+      972
+    ],
+    "prompt_sha256": "c2ce0705567268d2d89a042cb7363f8225eec441f43ff174e5d667251d9f74d6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

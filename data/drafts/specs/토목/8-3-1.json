@@ -1,0 +1,212 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/8-3-1/굴절법탄성파탐사",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "8-3-1",
+    "title": "굴절법 탄성파 탐사",
+    "work": "기본 탐사 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      401
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "km",
+        "required": true,
+        "ask": "탐사 측선 길이는 몇 km입니까?",
+        "source": "PDF 401쪽 8-3-1 표 단위 (측선 1km당)"
+      },
+      {
+        "name": "receiver_interval",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "수진점 간격은 몇 m입니까?",
+        "source": "PDF 401쪽 8-3-1 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p457-t0",
+        "role": "직종별 단위당 품",
+        "source": "PDF 401쪽 8-3-1 표",
+        "unit": "인",
+        "values": {
+          "기 술 사": {
+            "수 량": "3.8"
+          },
+          "특 급 기 술 자": {
+            "수 량": "5.1"
+          },
+          "고 급 기 술 자": {
+            "수 량": "10.8"
+          },
+          "중 급 기 술 자": {
+            "수 량": "14.6"
+          },
+          "특 별 인 부": {
+            "수 량": "3.8"
+          },
+          "보 통 인 부": {
+            "수 량": "13.3"
+          }
+        },
+        "cite": {
+          "table_id": "p457-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p457-t0",
+          "column_input": "수 량",
+          "trades": [
+            "기 술 사",
+            "특 급 기 술 자",
+            "고 급 기 술 자",
+            "중 급 기 술 자",
+            "특 별 인 부",
+            "보 통 인 부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 401쪽 8-3-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "수진점 간격이 5m가 아닌 경우",
+        "blocked_if": {
+          "input": "receiver_interval",
+          "op": "!=",
+          "value": 5
+        },
+        "reason": "수진점 간격 5m 기준이며, 조사규모, 목적, 방법, 현장조건에 따라 가감할 수 있다고 명시되어 있으나 구체적인 가감 기준이 없음",
+        "source": "PDF 401쪽 8-3-1 [주] ①",
+        "cite": {
+          "chunk_id": "p457-x2"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기계 기구 손료",
+        "source": "PDF 401쪽 8-3-1 [주] ③",
+        "cite": {
+          "chunk_id": "p457-x2"
+        }
+      },
+      {
+        "item": "재료비",
+        "source": "PDF 401쪽 8-3-1 [주] ④",
+        "cite": {
+          "chunk_id": "p457-x2"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "측선 1km당 직종별 인원이 표에 직접 제시되어 있어 단위당 품 계산 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p457-t0",
+      "row": "기 술 사",
+      "column": "수 량",
+      "value": "3.8"
+    },
+    {
+      "table_id": "p457-t0",
+      "row": "특 급 기 술 자",
+      "column": "수 량",
+      "value": "5.1"
+    },
+    {
+      "table_id": "p457-t0",
+      "row": "고 급 기 술 자",
+      "column": "수 량",
+      "value": "10.8"
+    },
+    {
+      "table_id": "p457-t0",
+      "row": "중 급 기 술 자",
+      "column": "수 량",
+      "value": "14.6"
+    },
+    {
+      "table_id": "p457-t0",
+      "row": "특 별 인 부",
+      "column": "수 량",
+      "value": "3.8"
+    },
+    {
+      "table_id": "p457-t0",
+      "row": "보 통 인 부",
+      "column": "수 량",
+      "value": "13.3"
+    },
+    {
+      "chunk_id": "p457-x2",
+      "quote": "① 본 품은 수진점 간격 5m를 기준으로 한 것으로 조사규모, 목적, 방법, 현장조건에 따라 가감할 수 있다."
+    },
+    {
+      "chunk_id": "p457-x2",
+      "quote": "② 본 품은 측량비 및 성과 분석비를 포함한 것이다"
+    },
+    {
+      "chunk_id": "p457-x2",
+      "quote": "③ 기계 기구 손료는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p457-x2",
+      "quote": "④ 재료비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "수진점 간격이 5m가 아닐 때, 조사규모, 목적, 방법, 현장조건에 따른 구체적인 가감 기준이 원문에 없습니다."
+  ],
+  "questions": [
+    "탐사 측선 길이는 몇 km입니까?",
+    "수진점 간격이 5m가 아닌 경우 품을 어떻게 조정해야 합니까?",
+    "기계 기구 손료와 재료비는 어떻게 산정합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:32.111118+00:00",
+    "input_tokens": 11475,
+    "output_tokens": 1868,
+    "source_pages": [
+      457,
+      458
+    ],
+    "prompt_sha256": "14c5f486dc135b141f2dfbe54dba50fffbfef6dd8d54d24c16971759e6fc5307",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '기 술 사'이 p457-t0 조각 텍스트에 없음",
+      "row '특 급 기 술 자'이 p457-t0 조각 텍스트에 없음",
+      "row '고 급 기 술 자'이 p457-t0 조각 텍스트에 없음",
+      "row '중 급 기 술 자'이 p457-t0 조각 텍스트에 없음",
+      "row '특 별 인 부'이 p457-t0 조각 텍스트에 없음",
+      "row '보 통 인 부'이 p457-t0 조각 텍스트에 없음"
+    ]
+  }
+}

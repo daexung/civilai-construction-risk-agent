@@ -1,0 +1,224 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-1-31/보도용블록소규모보수",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-1-31",
+    "title": "보도용 블록 소규모보수('21년 신설, '24년 보완)",
+    "work": "보도용 블록 소규모보수",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      891
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "보수할 블록의 면적은 몇 ㎡입니까?",
+        "source": "PDF 891쪽 2-1-31 표 시공량 단위"
+      },
+      {
+        "name": "avg_area",
+        "type": "enum",
+        "allowed_values": [
+          "10㎡이하",
+          "30㎡이하",
+          "60㎡이하",
+          "110㎡이하",
+          "110㎡초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "구간별 평균 시공면적은 어디에 해당합니까?",
+        "decision_table": "p947-t2",
+        "source": "PDF 891쪽 2-1-31 [주] ⑤ 표"
+      },
+      {
+        "name": "block_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반 블록",
+          "유도·점자블록"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치하는 블록이 일반 블록입니까, 유도·점자블록입니까?",
+        "source": "PDF 891쪽 2-1-31 표 비고"
+      },
+      {
+        "name": "block_spec_ok",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "블록의 규격이 0.1㎡ 이하이고 두께가 8cm 이하입니까?",
+        "source": "PDF 891쪽 2-1-31 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p947-t1",
+        "role": "작업조 인원 및 장비 대수, 기준 시공량",
+        "source": "PDF 891쪽 2-1-31 표",
+        "values": {
+          "포장공 특별인부 보통인부": {
+            "수량 2": "2",
+            "수량 1": "1",
+            "시공량(㎡)": "110"
+          },
+          "굴착기": {
+            "수량": "1"
+          },
+          "플레이트콤팩터": {
+            "수량": "1"
+          },
+          "트럭": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p947-t1"
+        }
+      },
+      {
+        "id": "p947-t2",
+        "role": "시공량 할증계수",
+        "source": "PDF 891쪽 2-1-31 [주] ⑤ 표",
+        "values": {
+          "시공량 할증계수": {
+            "10㎡이하": "0.65",
+            "30㎡이하": "0.85",
+            "60㎡이하": "0.95",
+            "110㎡이하": "1.00",
+            "110㎡초과": "1.05"
+          }
+        },
+        "cite": {
+          "table_id": "p947-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p947-t1에서 기준 시공량(110㎡)과 작업조 인원, 장비 대수를 확인한다.",
+        "p947-t2에서 구간별 평균 시공면적에 따른 할증계수를 확인하여 시공량에 곱한다.",
+        "유도·점자블록인 경우 시공량의 10%를 감산한다.",
+        "물량을 조정된 시공량으로 나누어 작업일수를 구하고, 인원 및 장비 대수를 곱해 총 투입량을 산출한다."
+      ],
+      "source": "PDF 891쪽 2-1-31 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "블록 규격 초과",
+        "blocked_if": {
+          "input": "block_spec_ok",
+          "op": "==",
+          "value": false
+        },
+        "reason": "블록의 규격은 0.1㎡이하, 두께 8cm이하 기준이므로 초과 시 본 품 적용 불가",
+        "source": "PDF 891쪽 2-1-31 [주] ②",
+        "cite": {
+          "chunk_id": "p947-x13",
+          "quote": "블록의 규격은 0.1㎡이하, 두께 8cm이하 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p947-x13",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과(p947-t1)에서 직종별 행(포장공, 특별인부, 보통인부)이 하나의 문자열로 병합되어 있어 기계적인 인원 추출이 불가능하며, 비고란의 10% 감산 조건을 처리할 수식 구조가 현재 모델에 없습니다.",
+  "citations": [
+    {
+      "table_id": "p947-t1",
+      "row": "포장공 특별인부 보통인부",
+      "column": "시공량(㎡)",
+      "value": "110"
+    },
+    {
+      "table_id": "p947-t2",
+      "row": "시공량 할증계수",
+      "column": "10㎡이하",
+      "value": "0.65"
+    },
+    {
+      "table_id": "p947-t2",
+      "row": "시공량 할증계수",
+      "column": "30㎡이하",
+      "value": "0.85"
+    },
+    {
+      "table_id": "p947-t2",
+      "row": "시공량 할증계수",
+      "column": "60㎡이하",
+      "value": "0.95"
+    },
+    {
+      "table_id": "p947-t2",
+      "row": "시공량 할증계수",
+      "column": "110㎡이하",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p947-t2",
+      "row": "시공량 할증계수",
+      "column": "110㎡초과",
+      "value": "1.05"
+    },
+    {
+      "chunk_id": "p947-x13",
+      "quote": "블록의 규격은 0.1㎡이하, 두께 8cm이하 기준이다."
+    },
+    {
+      "chunk_id": "p947-x13",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p947-t1)에서 직종별 행이 병합되어 있어 정확한 인원 매핑이 어렵습니다.",
+    "비고란의 '유도·점자블록 설치 시 시공량 10% 감산'을 처리할 수식 구조가 현재 모델에 없어 자동 계산이 제한됩니다."
+  ],
+  "questions": [
+    "보수 면적이 20㎡일 때 할증계수는 얼마인가요?",
+    "유도·점자블록을 설치할 때 시공량 감산은 어떻게 적용하나요?",
+    "블록의 규격(면적과 두께)은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:05.969803+00:00",
+    "input_tokens": 11894,
+    "output_tokens": 2372,
+    "source_pages": [
+      947,
+      948
+    ],
+    "prompt_sha256": "a6f52ab69c1f461d30f1d7559d4d24e7a00cfd96400e5fc4c07a9effb6b2a6d2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

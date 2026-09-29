@@ -1,0 +1,177 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/1-3-9/교량신축이음교체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "1-3-9",
+    "title": "교량신축이음 교체",
+    "work": "교량신축이음 교체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      871,
+      872
+    ],
+    "inputs": [
+      {
+        "name": "cut_width",
+        "type": "enum",
+        "allowed_values": [
+          "900㎜ 이하",
+          "1,200㎜ 이하",
+          "1,500㎜ 이하",
+          "1,800㎜ 이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "절단폭은 얼마입니까?",
+        "source": "PDF 871쪽 1-3-9 표의 구분(절단폭)"
+      },
+      {
+        "name": "blocked_lanes",
+        "type": "enum",
+        "allowed_values": [
+          "1차로 차단",
+          "2차로 차단",
+          "3차로 차단"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "차단되는 차로 수는 몇 차로입니까?",
+        "source": "PDF 871쪽 1-3-9 표의 차단 차로 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "교체할 교량신축이음의 길이는 몇 m입니까?",
+        "source": "PDF 871쪽 1-3-9 표의 시공량 단위(m)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p927-t1",
+        "role": "교량신축이음 교체 인력 및 장비 품",
+        "source": "PDF 871쪽 1-3-9 표",
+        "unit": "인/일, 대/일, m/일",
+        "values": {
+          "용접공": {
+            "1차로 차단 수량": "2",
+            "2차로 차단 수량": "2",
+            "3차로 차단 수량": "2"
+          },
+          "콘크리트공": {
+            "1차로 차단 수량": "2",
+            "2차로 차단 수량": "2",
+            "3차로 차단 수량": "2"
+          },
+          "특별인부": {
+            "1차로 차단 수량": "3",
+            "2차로 차단 수량": "3",
+            "3차로 차단 수량": "3"
+          },
+          "보통인부": {
+            "1차로 차단 수량": "1",
+            "2차로 차단 수량": "2",
+            "3차로 차단 수량": "2"
+          },
+          "굴착기+브레이커": {
+            "1차로 차단 수량": "1",
+            "2차로 차단 수량": "1",
+            "3차로 차단 수량": "1"
+          },
+          "트럭탑재형크레인": {
+            "1차로 차단 수량": "1",
+            "2차로 차단 수량": "1",
+            "3차로 차단 수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p927-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "표에서 절단폭과 차단 차로 수에 따른 수량(인원, 장비 대수)과 시공량(m)을 확인한다.",
+        "시공량이 단일 값이 아닌 범위(예: 3.0~4.0m)로 제시되어 있어, 현장 여건에 맞는 일일 시공량을 별도로 결정해야 한다.",
+        "결정된 일일 시공량을 바탕으로 작업일수를 산정하고, 총 투입 인력 및 장비를 계산한다."
+      ],
+      "source": "PDF 871쪽 1-3-9 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료량",
+        "source": "PDF 872쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p928-x0",
+          "quote": "⑤ 재료량은 설계수량을 적용한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.06",
+        "cite": {
+          "chunk_id": "p928-x0",
+          "quote": "④ 공구손료 및 경장비(소형브레이커, 용접기, 절단기, 공기압축기, 발전기, 믹서 등)의 기계경비는 인력품의 6%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "일일 시공량이 단일 값이 아닌 범위(예: 3.0~4.0m)로 제시되어 있어 자동 계산을 위한 정확한 일일 시공량 확정이 불가능합니다.",
+  "citations": [
+    {
+      "table_id": "p927-t1",
+      "row": "용접공",
+      "column": "1차로 차단 수량",
+      "value": "2"
+    },
+    {
+      "chunk_id": "p928-x0",
+      "quote": "④ 공구손료 및 경장비(소형브레이커, 용접기, 절단기, 공기압축기, 발전기, 믹서 등)의 기계경비는 인력품의 6%로 계상한다."
+    },
+    {
+      "chunk_id": "p928-x0",
+      "quote": "⑤ 재료량은 설계수량을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "일일 시공량이 범위(예: 3.0~4.0m)로 주어졌을 때, 자동 계산을 위해 어떤 값을 기준(최소, 최대, 평균 등)으로 삼아야 할지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "절단폭 900mm 이하이고 2차로를 차단할 때 투입되는 특별인부 수는 몇 명인가요?",
+    "시공량이 3.0~4.0m로 범위로 되어 있는데, 내역서 작성 시 어떤 값을 적용해야 하나요?",
+    "공구손료 및 경장비 비용은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:45.761259+00:00",
+    "input_tokens": 13952,
+    "output_tokens": 1858,
+    "source_pages": [
+      927,
+      928,
+      929
+    ],
+    "prompt_sha256": "effbd687cc5d34e7d84258afdd8242e84d1805879cc6cb37ecfe942c78c6dfdd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p928-x0 조각 텍스트에 없음"
+    ]
+  }
+}

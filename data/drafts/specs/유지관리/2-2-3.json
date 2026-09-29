@@ -1,0 +1,294 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-2-3/분기기철거",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-2-3",
+    "title": "분기기 철거('12, '19, '23년 보완)",
+    "work": "분기기 철거 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      894
+    ],
+    "inputs": [
+      {
+        "name": "turnout_type",
+        "type": "enum",
+        "allowed_values": [
+          "#8번 분기기",
+          "#10번 분기기",
+          "#12번 분기기",
+          "#15번 분기기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철거할 분기기의 종류는 무엇입니까?",
+        "source": "2-2-3 표",
+        "synonyms": {
+          "#8번 분기기": [
+            "8번",
+            "8번 분기기",
+            "#8"
+          ],
+          "#10번 분기기": [
+            "10번",
+            "10번 분기기",
+            "#10"
+          ],
+          "#12번 분기기": [
+            "12번",
+            "12번 분기기",
+            "#12"
+          ],
+          "#15번 분기기": [
+            "15번",
+            "15번 분기기",
+            "#15"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "틀",
+        "required": true,
+        "ask": "철거할 분기기의 수량은 몇 틀입니까?",
+        "source": "2-2-3 표 단위 (틀당)"
+      },
+      {
+        "name": "track_bed_type",
+        "type": "enum",
+        "allowed_values": [
+          "자갈도상",
+          "콘크리트도상",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도상의 종류는 무엇입니까?",
+        "source": "2-2-3 [주] ①",
+        "synonyms": {
+          "자갈도상": [
+            "자갈",
+            "자갈궤도"
+          ],
+          "콘크리트도상": [
+            "콘크리트",
+            "콘크리트궤도",
+            "무도상"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p950-t1",
+        "role": "분기기 철거 품 (틀당)",
+        "source": "2-2-3 표",
+        "unit": "인/틀; hr/틀",
+        "values": {
+          "궤도공": {
+            "#8번 분기기": "8",
+            "#10번 분기기": "9",
+            "#12번 분기기": "11",
+            "#15번 분기기": "13"
+          },
+          "보통인부": {
+            "#8번 분기기": "2",
+            "#10번 분기기": "2",
+            "#12번 분기기": "3",
+            "#15번 분기기": "3"
+          },
+          "굴착기+부착용집게": {
+            "#8번 분기기": "6",
+            "#10번 분기기": "8",
+            "#12번 분기기": "8",
+            "#15번 분기기": "11"
+          }
+        },
+        "cite": {
+          "table_id": "p950-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p950-t1",
+          "column_input": "turnout_type",
+          "trades": [
+            "궤도공",
+            "보통인부",
+            "굴착기+부착용집게"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p950-t1에서 분기기 종류별 단위당 품을 고른다.",
+        "물량(틀)을 곱해 총 품을 구한다."
+      ],
+      "source": "2-2-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "track_bed_type != 자갈도상",
+        "blocked_if": {
+          "input": "track_bed_type",
+          "op": "!=",
+          "value": "자갈도상"
+        },
+        "reason": "본 품은 자갈도상 구간의 분기기를 해체, 철거하는 기준이므로 다른 도상에는 적용할 수 없습니다.",
+        "source": "2-2-3 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p950-x17",
+            "quote": "본 품은 자갈도상 구간의 분기기를 해체, 철거하는 기준이다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "운반",
+        "source": "2-2-3 [주] ③",
+        "cite": [
+          {
+            "chunk_id": "p950-x17",
+            "quote": "운반은 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "레일 절단에 소요되는 품",
+        "source": "2-2-3 [주] ④",
+        "cite": [
+          {
+            "chunk_id": "p950-x17",
+            "quote": "레일 절단에 소요되는 품은 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(틀당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이 적합함",
+  "citations": [
+    {
+      "table_id": "p950-t1",
+      "row": "궤도공",
+      "column": "#8번 분기기",
+      "value": "8"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "궤도공",
+      "column": "#10번 분기기",
+      "value": "9"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "궤도공",
+      "column": "#12번 분기기",
+      "value": "11"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "궤도공",
+      "column": "#15번 분기기",
+      "value": "13"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "보통인부",
+      "column": "#8번 분기기",
+      "value": "2"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "보통인부",
+      "column": "#10번 분기기",
+      "value": "2"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "보통인부",
+      "column": "#12번 분기기",
+      "value": "3"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "보통인부",
+      "column": "#15번 분기기",
+      "value": "3"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "굴착기+부착용집게",
+      "column": "#8번 분기기",
+      "value": "6"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "굴착기+부착용집게",
+      "column": "#10번 분기기",
+      "value": "8"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "굴착기+부착용집게",
+      "column": "#12번 분기기",
+      "value": "8"
+    },
+    {
+      "table_id": "p950-t1",
+      "row": "굴착기+부착용집게",
+      "column": "#15번 분기기",
+      "value": "11"
+    },
+    {
+      "chunk_id": "p950-x17",
+      "quote": "본 품은 자갈도상 구간의 분기기를 해체, 철거하는 기준이다."
+    },
+    {
+      "chunk_id": "p950-x17",
+      "quote": "운반은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p950-x17",
+      "quote": "레일 절단에 소요되는 품은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "투입장비는 작업여건에 따라 장비조합을 변경하여 적용할 수 있다고 되어 있으나, 구체적으로 어떤 조건에서 어떻게 변경하는지에 대한 기준이 명시되어 있지 않음."
+  ],
+  "questions": [
+    "10번 분기기 2틀을 철거할 때 품은 어떻게 되나요?",
+    "콘크리트도상 구간의 분기기를 철거할 때도 이 품을 적용할 수 있나요?",
+    "분기기 철거 품을 계산해주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:35:49.894036+00:00",
+    "input_tokens": 11799,
+    "output_tokens": 2622,
+    "source_pages": [
+      950,
+      951
+    ],
+    "prompt_sha256": "f758d84bb6b4b9ebea5b55390e985332a15a34d97409aff1b5e25cca09a3a0a6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

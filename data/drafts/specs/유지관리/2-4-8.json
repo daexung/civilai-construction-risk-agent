@@ -1,0 +1,263 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-4-8/하수도 수로암거 준설(흡입식)",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-4-8",
+    "title": "하수도 수로암거 준설(흡입식)('21년 신설)",
+    "work": "기본 준설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      906,
+      907
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "수로암거 내부의 준설토 물량은 몇 ㎥입니까?",
+        "source": "PDF 906쪽 2-4-8 표 및 [주] ②"
+      },
+      {
+        "name": "site_condition",
+        "type": "enum",
+        "allowed_values": [
+          "해당 없음",
+          "하수도 내부의 준설토가 굳어져 있거나, 준설토 외에 폐기물 등이 존재하는 경우",
+          "맨홀간의 거리가 가까워(20m 미만) 장비의 이동이 빈번하게 발생되는 경우",
+          "둘 다 해당"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장별 시공여건에 따른 할증 조건이 있습니까? (해당 없음 / 준설토 굳음 등 / 맨홀간 거리 20m 미만 / 둘 다 해당)",
+        "decision_table": "p963-t1",
+        "source": "PDF 907쪽 ⑥ 현장별 시공여건에 대한 시공량의 할증 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p962-t3",
+        "role": "일당 작업조 인원, 장비 및 시공량",
+        "source": "PDF 906쪽 2-4-8 표",
+        "unit": "인/작업조; 대/작업조; ㎥/일",
+        "values": {
+          "배관공(수도)": {
+            "수량": "3",
+            "시공량(㎥)": "9.8"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "진공흡입준설차": {
+            "수량": "1"
+          },
+          "물탱크(살수차)": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p962-t3"
+        }
+      },
+      {
+        "id": "p963-t0",
+        "role": "현장 여건 적용기준",
+        "source": "PDF 907쪽 ④ 현장 여건 적용기준 표",
+        "values": {
+          "하수도 수로암거": {
+            "적용기준": "작업대상이 규격 800mm 이상의 수로암거 등으로 작업인력이 준설위치를 이동하면서 흡입 호스로 직접 준설이 가능한 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p963-t0"
+        }
+      },
+      {
+        "id": "p963-t1",
+        "role": "시공량 할증계수",
+        "source": "PDF 907쪽 ⑥ 현장별 시공여건에 대한 시공량의 할증 표",
+        "values": {
+          "시공량 할증계수": {
+            "하수도 내부의 준설토가 굳어져 있거나, 준설토 외에 폐기물 등이 존재하는 경우": "- 15%",
+            "맨홀간의 거리가 가까워(20m 미만) 장비의 이동이 빈번하게 발생되는 경우": "- 15%"
+          }
+        },
+        "cite": {
+          "table_id": "p963-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p962-t3",
+          "row": "배관공(수도)",
+          "column": "시공량(㎥)"
+        },
+        "coefficients": [
+          {
+            "table": "p963-t1",
+            "row": "시공량 할증계수",
+            "input": "site_condition"
+          }
+        ],
+        "crew": {
+          "table": "p962-t3",
+          "column": "수량",
+          "trades": [
+            "배관공(수도)",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공(수도)": "1013",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": [
+          {
+            "name": "진공흡입준설차",
+            "table": "p962-t3",
+            "unit": "대·일",
+            "column": "수량",
+            "operator_rate_code": "1048"
+          },
+          {
+            "name": "물탱크(살수차)",
+            "table": "p962-t3",
+            "unit": "대·일",
+            "column": "수량",
+            "operator_rate_code": "1048"
+          }
+        ],
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p962-t3에서 기준 일일시공량(9.8㎥)을 가져온다.",
+        "site_condition에 따라 p963-t1의 시공량 할증계수(-15%)를 적용하여 일당시공량을 조정한다.",
+        "작업일수 = volume ÷ 조정된 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p962-t3의 직종별 인원, 장비 대·일 = 작업일수 × p962-t3의 장비 대수로 구한다."
+      ],
+      "source": "PDF 906쪽 2-4-8 표 및 PDF 907쪽 ⑥",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "site_condition이 '둘 다 해당'인 경우",
+        "blocked_if": {
+          "input": "site_condition",
+          "op": "==",
+          "value": "둘 다 해당"
+        },
+        "reason": "두 가지 할증 조건이 동시에 발생할 경우, -15% 감산을 합산(-30%)할지 곱연산할지 원문에 명시되어 있지 않아 계산을 보류합니다.",
+        "source": "PDF 907쪽 ⑥",
+        "cite": {
+          "table_id": "p963-t1"
+        }
+      },
+      {
+        "condition": "장비의 규격을 변경하여 적용해야 하는 경우",
+        "reason": "작업여건을 고려하여 적합한 규격을 선정하여 계상하도록 되어 있으나, 본 명세는 25톤 진공흡입준설차와 5,500ℓ 물탱크를 기준으로 작성되었습니다.",
+        "source": "PDF 907쪽 ⑤",
+        "cite": {
+          "chunk_id": "p963-x2"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "세정수(물)의 양",
+        "source": "PDF 907쪽 ⑦",
+        "cite": {
+          "chunk_id": "p963-x4"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수가 주어지고, 기준 시공량이 명시되어 있어 작업일수를 구한 뒤 인·일을 산출하는 전형적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p962-t3",
+      "row": "배관공(수도)",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p962-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p962-t3",
+      "row": "진공흡입준설차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p962-t3",
+      "row": "물탱크(살수차)",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p962-t3",
+      "row": "배관공(수도)",
+      "column": "시공량(㎥)",
+      "value": "9.8"
+    },
+    {
+      "table_id": "p963-t1",
+      "row": "시공량 할증계수",
+      "column": "하수도 내부의 준설토가 굳어져 있거나, 준설토 외에 폐기물 등이 존재하는 경우",
+      "value": "- 15%"
+    },
+    {
+      "table_id": "p963-t1",
+      "row": "시공량 할증계수",
+      "column": "맨홀간의 거리가 가까워(20m 미만) 장비의 이동이 빈번하게 발생되는 경우",
+      "value": "- 15%"
+    },
+    {
+      "chunk_id": "p963-x4",
+      "quote": "준설 작업을 위해 투입되는 세정수(물)의 양은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p963-x2",
+      "quote": "장비의 규격은 작업여건을 고려하여 적합한 규격 선정하여 계상한다."
+    }
+  ],
+  "open_questions": [
+    "시공량 할증계수 두 가지 조건(준설토 굳음 등, 맨홀간 거리 20m 미만)이 동시에 발생할 경우, -15%를 합산(-30%)할지 곱연산할지 원문에 명시되어 있지 않아 '둘 다 해당' 시 계산을 보류했습니다.",
+    "파싱 결과에서 '배관공(수도) 보통인부'가 한 행으로 묶여 나오는 문제가 있어, 원문 PDF를 기준으로 행을 분리하여 표를 구성했습니다."
+  ],
+  "questions": [
+    "하수도 수로암거 준설 물량이 100㎥일 때 기본 품은 어떻게 되나요?",
+    "준설토가 굳어있고 맨홀 간 거리가 15m로 가까운 경우 시공량 할증은 어떻게 적용하나요?",
+    "준설 작업에 사용된 세정수(물)의 양은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:55.307714+00:00",
+    "input_tokens": 12646,
+    "output_tokens": 2884,
+    "source_pages": [
+      962,
+      963,
+      964
+    ],
+    "prompt_sha256": "e34ea1dafcd9fe3d3b3f4be35184de5df3b070c6f883611ff5d6f0991e1912dd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

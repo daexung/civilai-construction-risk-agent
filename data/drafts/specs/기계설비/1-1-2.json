@@ -1,0 +1,176 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/1-1-2/용접배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "1-1-2",
+    "title": "용접배관",
+    "work": "용접배관 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      646
+    ],
+    "inputs": [
+      {
+        "name": "location",
+        "type": "enum",
+        "allowed_values": [
+          "일반",
+          "화장실배관",
+          "기계실배관",
+          "옥외배관(암거내)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공위치는 어디입니까?",
+        "source": "1-1-2 용접배관 비고 및 p702-t0"
+      },
+      {
+        "name": "use_lift",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "자체 추진 고소작업대(시저형)를 사용하여 시공합니까?",
+        "source": "1-1-2 용접배관 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p702-t0",
+        "role": "시공위치별 시공량 가감 요율",
+        "source": "1-1-2 용접배관 비고",
+        "values": {
+          "요율": {
+            "화장실배관": "- 17%",
+            "기계실배관": "- 23%",
+            "옥외배관(암거내)": "+ 11%"
+          }
+        },
+        "cite": {
+          "table_id": "p702-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "제공된 텍스트에 1-1-2 용접배관의 기본 시공량(또는 품)을 나타내는 표가 누락되어 있어 계산할 수 없다."
+      ],
+      "source": "파싱 결과 및 OCR 텍스트",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "밸브류 설치품",
+        "source": "1-1-2 용접배관 [주] ③",
+        "cite": {
+          "chunk_id": "p702-x3",
+          "quote": "밸브류 설치품은 ‘[기계설비부문] 5-1-1 일반밸브 및 콕류 설치’를 적용하고"
+        }
+      },
+      {
+        "item": "콘크리트용 인서트 설치",
+        "source": "1-1-2 용접배관 [주] ④",
+        "cite": {
+          "chunk_id": "p702-x3",
+          "quote": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+        }
+      },
+      {
+        "item": "단열 지지대 및 관 지지대 설치",
+        "source": "1-1-2 용접배관 [주] ⑤",
+        "cite": {
+          "chunk_id": "p702-x3",
+          "quote": "단열 지지대 및 관 지지대 설치 시에는 별도 계상한다."
+        }
+      },
+      {
+        "item": "고소작업대 이동을 위한 크레인, 지게차 등 비용",
+        "source": "1-1-2 용접배관 [주] ⑦",
+        "cite": {
+          "chunk_id": "p702-x3",
+          "quote": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p702-x3",
+          "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 본 품의 2%로 계상하고"
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "제공된 파싱 결과와 OCR 텍스트에 1-1-2 용접배관의 기본 시공량(또는 품)을 나타내는 표가 누락되어 있어 계산식을 구성할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p702-t0",
+      "row": "요율",
+      "column": "화장실배관",
+      "value": "- 17%"
+    },
+    {
+      "chunk_id": "p702-x0",
+      "quote": "자체 추진 고소작업대(시저형)시공의 경우 시공량의 26%를 가산한다."
+    },
+    {
+      "chunk_id": "p702-x3",
+      "quote": "밸브류 설치품은 ‘[기계설비부문] 5-1-1 일반밸브 및 콕류 설치’를 적용하고"
+    },
+    {
+      "chunk_id": "p702-x3",
+      "quote": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+    },
+    {
+      "chunk_id": "p702-x3",
+      "quote": "단열 지지대 및 관 지지대 설치 시에는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p702-x3",
+      "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 본 품의 2%로 계상하고"
+    },
+    {
+      "chunk_id": "p702-x3",
+      "quote": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "1-1-2 용접배관의 기본 시공량(또는 품)을 나타내는 표가 원문 조각에 누락되어 있어 전체 계산이 불가능함.",
+    "공구손료 및 경장비 비율이 고소작업대 사용 여부에 따라 2% 또는 10%로 달라지는데, cost_rules에 조건부(when) 적용 기능이 없어 어떻게 처리해야 할지 명확하지 않음."
+  ],
+  "questions": [
+    "용접배관 시공 시 화장실이나 기계실 등 시공 위치에 따라 품이 어떻게 달라지나요?",
+    "고소작업대를 사용하여 시공할 때 공구손료 및 경장비 비율은 어떻게 적용해야 하나요?",
+    "용접배관의 관경별 기본 시공량은 어디서 확인할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:24:27.802018+00:00",
+    "input_tokens": 11872,
+    "output_tokens": 1937,
+    "source_pages": [
+      702,
+      703
+    ],
+    "prompt_sha256": "f6739b5a4e543ee9d88f6a68966f57fcb199a23fa51a9c0c48a9d35eb4fdae70",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

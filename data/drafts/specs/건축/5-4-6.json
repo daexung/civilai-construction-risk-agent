@@ -1,0 +1,231 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-4-6/단열재콘크리트타설부착",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-4-6",
+    "title": "단열재 콘크리트타설 부착('22, '24년 보완)",
+    "work": "단열재 콘크리트타설 부착",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      600,
+      601
+    ],
+    "inputs": [
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "50이하",
+          "100이하",
+          "200이하",
+          "300이하"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "단열두께는 몇 mm입니까?",
+        "source": "p656-t3 단열두께(mm)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 면적은 몇 ㎡입니까?",
+        "source": "p656-t3 시공량(㎡)"
+      },
+      {
+        "name": "insulation_type",
+        "type": "enum",
+        "allowed_values": [
+          "발포폴리스티렌(비드법)",
+          "발포폴리스티렌(압출법)",
+          "패놀폼(PF)",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단열재 종류는 무엇입니까?",
+        "source": "p656-x23 주 ②"
+      },
+      {
+        "name": "layers",
+        "type": "nonnegative_integer",
+        "allowed_values": "1 이상의 정수",
+        "unit": "겹",
+        "required": true,
+        "ask": "단열재는 몇 겹으로 붙입니까?",
+        "source": "p656-x23 주 ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p656-t3",
+        "role": "단열두께별 일당 시공량 및 인원",
+        "source": "PDF 600쪽 5-4-6 표",
+        "unit": "인/작업조, ㎡/일",
+        "values": {
+          "50이하": {
+            "내장공 보통인부": "2",
+            "시공량(㎡)": "75"
+          },
+          "100이하": {
+            "내장공 보통인부": "2",
+            "시공량(㎡)": "70"
+          },
+          "200이하": {
+            "내장공 보통인부": "2",
+            "시공량(㎡)": "65"
+          },
+          "300이하": {
+            "내장공 보통인부": "2",
+            "시공량(㎡)": "60"
+          }
+        },
+        "cite": {
+          "table_id": "p656-t3"
+        }
+      },
+      {
+        "id": "p657-t0",
+        "role": "재료량",
+        "source": "PDF 601쪽 재료량 표",
+        "unit": "㎡",
+        "values": {
+          "단열재": {
+            "수량": "1.1"
+          }
+        },
+        "cite": {
+          "table_id": "p657-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "단열두께에 따른 일당 시공량을 p656-t3에서 확인한다.",
+        "작업일수 = 시공 면적 ÷ 일당 시공량으로 계산한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(원문 기준 내장공 2인, 보통인부 1인)으로 계산한다.",
+        "재료량은 시공 면적 × 1.1㎡(p657-t0)로 계산한다."
+      ],
+      "source": "PDF 600쪽 p656-t3, p657-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "단열재 종류가 발포폴리스티렌(비드법, 압출법) 또는 패놀폼(PF)이 아닌 경우",
+        "blocked_if": {
+          "input": "insulation_type",
+          "op": "==",
+          "value": "기타"
+        },
+        "reason": "본 품은 발포폴리스티렌(비드법, 압출법), 패놀폼(PF) 단열재 기준임",
+        "source": "p656-x23 주 ②",
+        "cite": [
+          {
+            "chunk_id": "p656-x23",
+            "quote": "② 본 품은 발포폴리스티렌(비드법, 압출법), 패놀폼(PF) 단열재의 1겹 붙임 기준이다."
+          }
+        ]
+      },
+      {
+        "condition": "단열재를 1겹 초과하여 붙이는 경우",
+        "blocked_if": {
+          "input": "layers",
+          "op": ">",
+          "value": 1
+        },
+        "reason": "본 품은 1겹 붙임 기준임",
+        "source": "p656-x23 주 ②",
+        "cite": [
+          {
+            "chunk_id": "p656-x23",
+            "quote": "1겹 붙임 기준이다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": [
+          {
+            "chunk_id": "p657-x0",
+            "quote": "④ 공구손료 및 경장비(타정기 등)의 기계경비는 인력품의 2%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과(p656-t3)에서 직종별 인원(내장공 2인, 보통인부 1인)이 '내장공 보통인부 | 수량 2'로 병합되어 보통인부 인원이 누락되었으므로 자동 계산 모델(daily_crew)을 적용할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p656-t3",
+      "row": "50이하",
+      "column": "시공량(㎡)",
+      "value": "75"
+    },
+    {
+      "table_id": "p657-t0",
+      "row": "단열재",
+      "column": "수량",
+      "value": "1.1"
+    },
+    {
+      "chunk_id": "p656-x23",
+      "quote": "① 본 품은 거푸집면(벽, 바닥)에 단열재를 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p656-x23",
+      "quote": "② 본 품은 발포폴리스티렌(비드법, 압출법), 패놀폼(PF) 단열재의 1겹 붙임 기준이다."
+    },
+    {
+      "chunk_id": "p657-x0",
+      "quote": "③ 본 품은 단열재 절단 및 설치, 이음부 마감(우레탄폼 충전 등) 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p657-x0",
+      "quote": "④ 공구손료 및 경장비(타정기 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p657-x2",
+      "quote": "※ 위 재료량은 할증이 포함된 것이다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p656-t3)에서 직종별 인원(내장공 2인, 보통인부 1인)이 '내장공 보통인부 | 수량 2'로 병합되어 보통인부 인원이 누락되었습니다. 이로 인해 자동 계산 모델(daily_crew)을 적용하지 못하고 not_calculable로 분류했습니다.",
+    "재료량 표(p657-t0)의 단열재 수량 1.1㎡를 일당 작업조 계산에 어떻게 통합할지 명세 형식이 명확하지 않아 steps에만 명시했습니다."
+  ],
+  "questions": [
+    "공구손료는 어떻게 계상하나요?",
+    "단열두께가 150mm인 경우 시공량은 어떻게 적용하나요?",
+    "단열재를 2겹으로 시공할 때 품은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:02:51.426915+00:00",
+    "input_tokens": 12465,
+    "output_tokens": 2440,
+    "source_pages": [
+      656,
+      657,
+      658
+    ],
+    "prompt_sha256": "366777d0ce8499e6931dee14fda59d0bdf961769c69c6234513f237f830785bb",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

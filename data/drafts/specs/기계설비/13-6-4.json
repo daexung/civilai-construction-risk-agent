@@ -1,0 +1,282 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-4/수문설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-4",
+    "title": "수문 설치",
+    "work": "Tainter Gate 및 Roller Gate 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      800,
+      801,
+      802,
+      803
+    ],
+    "inputs": [
+      {
+        "name": "gate_type",
+        "type": "enum",
+        "allowed_values": [
+          "Tainter Gate",
+          "Roller Gate"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 수문의 종류는 무엇입니까?",
+        "source": "PDF 800쪽 1. Tainter Gate 설치, 802쪽 2. Roller Gate",
+        "synonyms": {
+          "Tainter Gate": [
+            "텐터게이트",
+            "테인터게이트"
+          ],
+          "Roller Gate": [
+            "롤러게이트"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "수문의 총 중량은 몇 ton입니까?",
+        "source": "PDF 800쪽 가. 직종별 설치품 (ton 당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p856-t1",
+        "role": "Tainter Gate 직종별 설치품",
+        "source": "PDF 800쪽 1. Tainter Gate 설치 가. 직종별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "기계기사": {
+            "수량": "0.500"
+          },
+          "플랜트제관공": {
+            "수량": "6.169"
+          },
+          "비계공": {
+            "수량": "4.277"
+          },
+          "플랜트기계설치공": {
+            "수량": "0.910"
+          },
+          "측량사": {
+            "수량": "0.410"
+          },
+          "플랜트용접공": {
+            "수량": "0.810"
+          },
+          "도장공": {
+            "수량": "0.635"
+          },
+          "플랜트전공": {
+            "수량": "0.310"
+          },
+          "시험및조정": {
+            "수량": "1.257"
+          },
+          "계": {
+            "수량": "15.278"
+          }
+        },
+        "cite": {
+          "table_id": "p856-t1"
+        }
+      },
+      {
+        "id": "p857-t1",
+        "role": "Tainter Gate 장비사용명",
+        "source": "PDF 801쪽 [참고] 장비사용명",
+        "unit": "대/일/ton",
+        "values": {
+          "A.C Welder": {
+            "수량(대/일)": "1"
+          },
+          "D.C Welder": {
+            "수량(대/일)": "5"
+          },
+          "Gas Cutting machine": {
+            "수량(대/일)": "6"
+          },
+          "Gas welder": {
+            "수량(대/일)": "3"
+          },
+          "Portable Drill": {
+            "수량(대/일)": "2"
+          },
+          "Portable Grinder": {
+            "수량(대/일)": "6"
+          },
+          "Air Compressor": {
+            "수량(대/일)": "2"
+          },
+          "Winch": {
+            "수량(대/일)": "2"
+          },
+          "Truck Crane": {
+            "수량(대/일)": "2"
+          },
+          "Floating Crane": {
+            "수량(대/일)": "1"
+          },
+          "Derrick Crane": {
+            "수량(대/일)": "1"
+          },
+          "Cable Crane": {
+            "수량(대/일)": "1"
+          },
+          "Tow Crane": {
+            "수량(대/일)": "1"
+          },
+          "Truck": {
+            "수량(대/일)": "4"
+          },
+          "Trailer": {
+            "수량(대/일)": "1"
+          },
+          "Fork Lift": {
+            "수량(대/일)": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p857-t1"
+        }
+      },
+      {
+        "id": "p858-t0",
+        "role": "Roller Gate 직종별 설치품 (파싱 불완전)",
+        "source": "PDF 802쪽 2. Roller Gate 가. 직종별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "직종": {
+            "공량 0.50": "플랜트용접공",
+            "공량 3.038": "플랜트용접공",
+            "공량 4.568": "플랜트용접공",
+            "공량 1.318": "플랜트용접공",
+            "공량 0.812": "플랜트용접공",
+            "공량 1.447": "플랜트용접공"
+          }
+        },
+        "cite": {
+          "table_id": "p858-t0"
+        }
+      },
+      {
+        "id": "p859-t1",
+        "role": "소모자재 (파싱 불완전)",
+        "source": "PDF 803쪽 [참고] 소모자재",
+        "unit": "병, ㎏, ℓ/ton",
+        "values": {
+          "산소 아세틸렌 용접봉 코크스 광명단 페인트": {
+            "Tainter": "0.53",
+            "Roller": "0.46"
+          }
+        },
+        "cite": {
+          "table_id": "p859-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p856-t1",
+          "row_input": "직종",
+          "column_input": "수량",
+          "trades": [
+            "기계기사",
+            "플랜트제관공",
+            "비계공",
+            "플랜트기계설치공",
+            "측량사",
+            "플랜트용접공",
+            "도장공",
+            "플랜트전공",
+            "시험및조정"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "gate_type에 따라 Tainter Gate(p856-t1) 또는 Roller Gate(p858-t0) 표를 선택한다.",
+        "선택한 표에서 직종별 단위(ton)당 수량을 찾는다.",
+        "단위당 수량에 수문 중량(quantity)을 곱하여 총 투입 인·일을 산출한다.",
+        "장비(p857-t1 등) 및 소모자재(p859-t1)도 동일하게 단위당 수량에 중량을 곱하여 산출한다."
+      ],
+      "source": "PDF 800~803쪽 직종별 설치품 및 장비/소모자재 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 인력, 장비, 소모자재 수량이 표에 직접 제시되어 있어 물량을 곱하여 산출하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p856-t1",
+      "row": "기계기사",
+      "column": "수량",
+      "value": "0.500"
+    },
+    {
+      "table_id": "p857-t1",
+      "row": "A.C Welder",
+      "column": "수량(대/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p858-t0",
+      "row": "직종",
+      "column": "공량 0.50",
+      "value": "플랜트용접공"
+    },
+    {
+      "table_id": "p859-t1",
+      "row": "산소 아세틸렌 용접봉 코크스 광명단 페인트",
+      "column": "Tainter",
+      "value": "0.53"
+    },
+    {
+      "chunk_id": "p859-x13",
+      "quote": "※ 산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 공정별 설치품 표(p857-t0, p858-t1)와 Roller Gate 직종별 설치품 표(p858-t0), 소모자재 표(p859-t1)의 행/열 구조가 심각하게 병합되거나 누락되어 정확한 값 매핑이 불가능합니다.",
+    "직종별 설치품과 공정별 설치품 중 어느 것을 기준으로 산출해야 하는지 명시되어 있지 않습니다. (일반적으로 직종별을 기본으로 함)"
+  ],
+  "questions": [
+    "수문 종류가 Tainter Gate인지 Roller Gate인지 어떻게 구분하나요?",
+    "직종별 설치품과 공정별 설치품 표가 둘 다 있는데, 어떤 경우에 공정별 설치품을 적용하나요?",
+    "수문의 총 중량(ton)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:24.320468+00:00",
+    "input_tokens": 16787,
+    "output_tokens": 2732,
+    "source_pages": [
+      856,
+      857,
+      858,
+      859,
+      860
+    ],
+    "prompt_sha256": "a38025c33ad2c1cb061bc49d126e2b7aa9fc380b0e9bfcfaeb63946162d78ce5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

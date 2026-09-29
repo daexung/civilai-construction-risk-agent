@@ -1,0 +1,258 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/5-1-1/마대쌓기헐기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "5-1-1",
+    "title": "P.P마대 및 톤마대 쌓기･헐기",
+    "work": "마대 만들기, 쌓기, 헐기",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      99
+    ],
+    "inputs": [
+      {
+        "name": "material_type",
+        "type": "enum",
+        "allowed_values": [
+          "P.P마대 (0.024㎥/개)",
+          "톤마대 (0.7㎥/개)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업할 마대의 종류는 무엇입니까?",
+        "source": "PDF 99쪽 5-1-1 표의 구분",
+        "synonyms": {
+          "P.P마대 (0.024㎥/개)": [
+            "P.P마대",
+            "PP마대",
+            "피피마대"
+          ],
+          "톤마대 (0.7㎥/개)": [
+            "톤마대",
+            "톤백"
+          ]
+        }
+      },
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "만들기",
+          "쌓기",
+          "헐기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업(만들기/쌓기/헐기)을 수행합니까?",
+        "source": "PDF 99쪽 5-1-1 표의 시공량 구분",
+        "synonyms": {
+          "만들기": [
+            "제작"
+          ],
+          "쌓기": [
+            "설치"
+          ],
+          "헐기": [
+            "해체",
+            "철거"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "작업할 마대의 수량은 몇 개입니까?",
+        "source": "PDF 99쪽 5-1-1 표의 시공량 단위(개)"
+      },
+      {
+        "name": "excavator_spec",
+        "type": "enum",
+        "allowed_values": [
+          "0.2㎥",
+          "1.0㎥",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용할 굴착기의 규격은 무엇입니까? (톤마대 작업 시 필요하며, 기본 규격은 판정표를 참고하세요.)",
+        "decision_table": "p155-t1",
+        "source": "PDF 99쪽 5-1-1 [주] ②",
+        "synonyms": {
+          "0.2㎥": [
+            "0.2루베",
+            "0.2"
+          ],
+          "1.0㎥": [
+            "1.0루베",
+            "1.0",
+            "1루베"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p155-t0",
+        "role": "마대 종류별 작업조 인원 및 시공량",
+        "source": "PDF 99쪽 5-1-1 표",
+        "unit": "인/작업조; 대/작업조; 개/일",
+        "values": {
+          "보통인부": {
+            "P.P마대 (0.024㎥/개)": "2",
+            "톤마대 (0.7㎥/개)": "2"
+          },
+          "특별인부": {
+            "P.P마대 (0.024㎥/개)": "0",
+            "톤마대 (0.7㎥/개)": "1"
+          },
+          "굴착기": {
+            "P.P마대 (0.024㎥/개)": "0",
+            "톤마대 (0.7㎥/개)": "1"
+          },
+          "만들기": {
+            "P.P마대 (0.024㎥/개)": "130",
+            "톤마대 (0.7㎥/개)": "70"
+          },
+          "쌓기": {
+            "P.P마대 (0.024㎥/개)": "320",
+            "톤마대 (0.7㎥/개)": "110"
+          },
+          "헐기": {
+            "P.P마대 (0.024㎥/개)": "320",
+            "톤마대 (0.7㎥/개)": "110"
+          }
+        },
+        "cite": {
+          "table_id": "p155-t0"
+        }
+      },
+      {
+        "id": "p155-t1",
+        "role": "작업별 굴착기 기준 규격",
+        "source": "PDF 99쪽 5-1-1 [주] ② 표",
+        "unit": "㎥",
+        "values": {
+          "굴착기": {
+            "만들기": "0.2㎥",
+            "쌓기": "1.0㎥",
+            "헐기": "1.0㎥"
+          }
+        },
+        "cite": {
+          "table_id": "p155-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p155-t0",
+          "row_input": "work_type",
+          "column_input": "material_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p155-t0",
+          "column_input": "material_type",
+          "trades": [
+            "보통인부",
+            "특별인부"
+          ],
+          "rate_codes": {
+            "보통인부": "1002",
+            "특별인부": "1003"
+          }
+        },
+        "equipment": {
+          "name": "굴착기",
+          "table": "p155-t0",
+          "unit": "대·일",
+          "machine_code_input": "excavator_spec",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p155-t0에서 마대 종류와 작업 종류에 따른 기준 일일시공량을 찾는다.",
+        "p155-t0에서 마대 종류에 따른 작업조 인원 및 장비 대수를 찾는다.",
+        "작업일수 = 물량 ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 99쪽 5-1-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "토사 채움 재료비",
+        "source": "PDF 99쪽 5-1-1 [주] ①",
+        "cite": {
+          "chunk_id": "p155-x5",
+          "quote": "토사 채움을 기준한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 표에 명시되어 있어 일당 작업조형 계산이 가능합니다.",
+  "citations": [
+    {
+      "table_id": "p155-t0",
+      "row": "보통인부",
+      "column": "P.P마대 (0.024㎥/개)",
+      "value": "2"
+    },
+    {
+      "table_id": "p155-t0",
+      "row": "만들기",
+      "column": "P.P마대 (0.024㎥/개)",
+      "value": "130"
+    },
+    {
+      "table_id": "p155-t1",
+      "row": "굴착기",
+      "column": "만들기",
+      "value": "0.2㎥"
+    },
+    {
+      "chunk_id": "p155-x5",
+      "quote": "본 품은 P.P마대 및 톤마대의 만들기, 쌓기, 헐기하는 기준이며, 토사 채움을 기준한다."
+    },
+    {
+      "chunk_id": "p155-x5",
+      "quote": "장비(굴착기)의 규격은 다음을 기준하나, 작업여건을 고려하여 적합한 규격을 선정하여 계상한다."
+    }
+  ],
+  "open_questions": [
+    "굴착기 규격이 작업여건에 따라 변경 가능하다고 되어 있어, 사용자가 '기타' 규격을 선택할 경우 장비 단가 코드를 어떻게 매핑할지 확정이 필요합니다."
+  ],
+  "questions": [
+    "P.P마대 500개를 쌓으려고 합니다. 품이 얼마나 필요한가요?",
+    "톤마대 만들기 작업인데, 현장 여건상 0.2㎥ 대신 0.6㎥ 굴착기를 사용해야 합니다. 어떻게 계산하나요?",
+    "톤마대 헐기 작업입니다. (물량 누락)"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:18:59.080376+00:00",
+    "input_tokens": 11816,
+    "output_tokens": 2541,
+    "source_pages": [
+      155,
+      156
+    ],
+    "prompt_sha256": "e8940ad6d95014bab36cce50bd6e6d79f3f42c3f2573ae3d2bd18eb445b9597e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}
