@@ -178,6 +178,16 @@ def resolve_cite(key: dict) -> dict:
         return cite_table(key["table_id"], key.get("row"), key.get("column"), key.get("value"))
     if "page_source" in key:
         return cite_page(key["page_source"])
+    if "chunk_id" in key:
+        chunk = next((item for item in _chunks() if item.get("chunk_id") == key["chunk_id"]), None)
+        if chunk is None:
+            raise LookupError(f"텍스트 청크 없음: {key['chunk_id']}")
+        quote = key.get("quote")
+        citation = _base(chunk, "본문", key["chunk_id"])
+        citation["quote"] = quote
+        if quote:
+            citation["label"] += f"\n본문 “{quote}”"
+        return citation
     return cite_note(key["section_no"], key.get("subsection_no"), key["marker"])
 
 

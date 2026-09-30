@@ -219,22 +219,23 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         return {"status": "rejected", "reason": "명세 오류: 장비 대수가 음수임", "input": "spec"}
     equipment_days = _exact_text(work_days * equipment_count)
     equipment_value = equipment_count * 8 / daily_volume
-    unit_lines.append({
-        "kind": "equipment", "name": equipment["name"], "unit": f"hr/{quantity_unit}",
-        "exact": str(equipment_value), "applied": round_quantity(equipment_value, places),
-        "places": places,
-        "formula": f"{_exact_text(equipment_count)}대 × 8hr ÷ {daily_text}{quantity_unit}",
-        "rule": rule_label, "source": f"{equipment_source['table']} {equipment_source['source']}",
-        "citations": equipment_source["citations"],
-    })
+    if equipment_count:
+        unit_lines.append({
+            "kind": "equipment", "name": equipment["name"], "unit": f"hr/{quantity_unit}",
+            "exact": str(equipment_value), "applied": round_quantity(equipment_value, places),
+            "places": places,
+            "formula": f"{_exact_text(equipment_count)}대 × 8hr ÷ {daily_text}{quantity_unit}",
+            "rule": rule_label, "source": f"{equipment_source['table']} {equipment_source['source']}",
+            "citations": equipment_source["citations"],
+        })
 
     return {
         "status": "computed",
         "daily_volume_m3": _exact_text(daily_volume),
         "work_days": _exact_text(work_days),
         "person_days": person_days,
-        "equipment_days": {equipment["name"]: equipment_days},
-        "equipment_units": {equipment["name"]: equipment["unit"]},
+        "equipment_days": {equipment["name"]: equipment_days} if equipment_count else {},
+        "equipment_units": {equipment["name"]: equipment["unit"]} if equipment_count else {},
         "unit_lines": unit_lines,
         "unit_basis": {
             "per": f"1{quantity_unit}", "daily_output": daily_text, "places": places,
@@ -265,7 +266,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                     "formula": "work_days × equipment_count",
                     "citations": equipment_source["citations"],
                 }
-            },
+            } if equipment_count else {},
         },
         "not_calculated": spec["not_calculated"],
     }

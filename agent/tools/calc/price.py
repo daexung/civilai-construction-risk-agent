@@ -232,7 +232,9 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
     """applied 품량으로만 금액을 산출하며, 없는 단가/기계경비는 null로 남긴다."""
     amount_rule = _rule_citation("일위대가표의 금액란", "0.1")
     total_rule = _rule_citation("일위대가표의 계금", "1")
-    codes = spec["quantity_model"]["params"]["crew"]["rate_codes"]
+    codes = spec["quantity_model"]["params"].get("crew", {}).get("rate_codes", {})
+    names_to_codes = ({rate["name"]: code for code, rate in rate_version["rates"].items()}
+                      if rate_version else {})
     rows = []
     unpriced = []
     priced_labor = []
@@ -240,15 +242,21 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
     equipment_version = select_equipment_version(basis_date)
     labor_missing = False
     for line in unit_lines:
+        if Decimal(line["applied"]) == 0:
+            continue
+        code = codes.get(line["name"]) or names_to_codes.get(line["name"])
         row = {"kind": line["kind"], "category": "노무비" if line["kind"] == "labor" else "경비",
                "name": line["name"], "unit": line["unit"], "quantity": line["applied"],
-               "rate_code": codes.get(line["name"]) if line["kind"] == "labor" else None,
+               "rate_code": code if line["kind"] == "labor" else None,
                "unit_price": None, "amount_exact": None, "amount": None,
                "citations": list(line.get("citations", [])), "reason": None}
         if line["kind"] == "equipment":
-            equipment_lines.extend(_machine_rows(spec, line, rate_version, equipment_version, inputs or {}))
-            if not equipment_lines:
-                row["reason"] = "장비 규격 미입력으로 기계경비 미산정"
+            if line["name"] == "콘크리트펌프차":
+                equipment_lines.extend(_machine_rows(spec, line, rate_version, equipment_version, inputs or {}))
+                if not equipment_lines:
+                    row["reason"] = "장비 규격 미입력으로 기계경비 미산정"
+            else:
+                row["reason"] = f"기계경비 단가 자료 없음: {line['name']}"
         elif rate_version is None:
             row["reason"] = "적용 가능한 노임단가 없음"
             labor_missing = True
@@ -256,7 +264,8 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
             code = row["rate_code"]
             wage = rate_version["rates"].get(code) if code else None
             if not wage or wage["daily"] is None or wage["name"] != line["name"]:
-                row["reason"] = "해당 직종의 공표 노임단가 없음"
+                row["reason"] = (f"노임 직종 대응 없음: {line['name']}" if code is None
+                                 else "해당 직종의 공표 노임단가 없음")
                 labor_missing = True
             else:
                 exact = Decimal(line["applied"]) * Decimal(wage["daily"])
@@ -385,7 +394,7 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
     total_exact = sum((value for values in category_values.values() for value in values), Decimal("0"))
     partial = bool(unpriced or excluded)
     reference_amounts = _reference_amounts(unit_prices, unit_total,
-                                            (inputs or {}).get("volume"))
+                                            (inputs or {}).get(spec["quantity_model"]["params"]["quantity_input"]))
     return {"status": "PARTIAL" if partial else "OK", "partial": partial,
             "rate_version": _version_info(rate_version),
             "equipment_rate_version": _equipment_version_info(equipment_version),
