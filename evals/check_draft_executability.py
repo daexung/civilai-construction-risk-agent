@@ -73,7 +73,7 @@ def evaluate() -> dict:
                         reason = f"{type(exc).__name__}: {exc}"
                         break
         if reason:
-            failed.append({"id": spec["id"], "reason": reason[:240]})
+            failed.append({"id": spec["id"], "reason": reason})
             reasons[reason.split(":", 1)[0]] += 1
         else:
             executable.append(spec["id"])
