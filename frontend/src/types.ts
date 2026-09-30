@@ -22,7 +22,7 @@ export interface AgentQuestion {
 
 export interface WorkInfo {
   spec_id: string;
-  section_no: string;
+  section_no: string | null;
   title: string;
   confirmed: boolean;
 }
@@ -71,7 +71,7 @@ export interface Citation {
   row: string | null;
   column: string | null;
   value: string | null;
-  pdf_page: number;
+  pdf_page: number | null;
   printed_page: number | null;
   quote: string | null;
   internal_id: string;
@@ -122,7 +122,9 @@ export interface PricedLine {
   fuel_l_per_hr?: string;
   fuel_l_per_unit?: string;
   misc_pct_of_fuel?: number;
-  status?: '제외' | '미산정';
+  status?: '산정' | '제외' | '미산정';
+  spec?: string;
+  allowance?: string;
 }
 
 export interface PricedResult {

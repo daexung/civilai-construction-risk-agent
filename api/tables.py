@@ -137,7 +137,7 @@ def unit_price_rows(priced: dict | None) -> list[dict]:
                 if "/㎥" in unit:
                     unit = unit.replace("/㎥", "")
                 unit_price = line.get("unit_price")
-                spec = line.get("machine_spec") or (
+                spec = line.get("spec") or line.get("machine_spec") or (
                     f"노임 코드 {line['rate_code']}" if line.get("rate_code") else "")
                 if base and rate is not None:
                     spec = f"{base} {rate}%"
@@ -179,9 +179,16 @@ def rate_rows(priced: dict | None, statement: dict | None,
                          "source": f"{equipment_version.get('title', '')}({equipment_version.get('publisher', '')})",
                          "period": _rate_period(equipment_version, equipment=True), "note": ""})
     for line in priced.get("supply_lines", []):
-        rows.append({"kind": "자재", "name": line["name"], "spec": "",
-                     "unit": line.get("unit", ""), "price": "-", "source": "",
-                     "period": "", "note": "관급(발주처 지급)"})
+        if line.get("status") == "산정" and line.get("unit_price") is not None:
+            rows.append({"kind": "자재", "name": line["name"], "spec": line.get("spec", ""),
+                         "unit": "원/㎥", "price": _num(line["unit_price"]),
+                         "source": "사용자 입력(부가세 제외)", "period": "",
+                         "note": f"할증 {format((Decimal(str(line['allowance'])) * 100).normalize(), 'g')}%(품셈 1-3-1)"})
+        else:
+            note = "관급(발주처 지급)" if line.get("status") == "제외" else line.get("reason", "")
+            rows.append({"kind": "자재", "name": line["name"], "spec": "",
+                         "unit": line.get("unit", ""), "price": "-", "source": "",
+                         "period": "", "note": note})
     return rows
 
 
@@ -410,8 +417,10 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
         cell.alignment = Alignment(horizontal="center", vertical="center")
     material_excluded = any(row.get("kind") == "자재" and "관급" in (row.get("note") or "")
                             for row in (response.get("tables") or {}).get("rate_rows", []))
+    ready_mix = next((line for line in (response.get("priced") or {}).get("supply_lines", [])
+                      if line.get("status") == "산정" and line.get("unit_price") is not None), None)
     entries = (
-        ("재료비", "materials", "레미콘 관급 제외" if material_excluded else ""),
+        ("재료비", "materials", ""),
         ("노무비", "labor", "직접 + 간접 노무비"),
         ("경비", "expenses", "장비·보험료·기타경비 등"),
         ("일반관리비", "management", ""),
@@ -420,6 +429,14 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
         ("부가가치세", "vat", "10%"),
         ("합 계", "contract_amount", ""),
     )
+    if ready_mix:
+        price_text = f"{Decimal(str(ready_mix['unit_price'])):,.0f}"
+        entries = tuple((label, key,
+                         f"레미콘 사급(사용자 입력 {price_text}원/㎥)" if label == "재료비" else note)
+                        for label, key, note in entries)
+    elif material_excluded:
+        entries = tuple((label, key, "레미콘 관급 제외" if label == "재료비" else note)
+                        for label, key, note in entries)
     row_by_label = {}
     for offset, (label, key, note) in enumerate(entries, 1):
         row = header_row + offset
@@ -710,6 +727,8 @@ def _unit_export_rows(response: dict, unit_rows: list[dict]) -> tuple[list[list]
             note = "; ".join(part for part in (note, item["spec"]) if part)
         if "펌프차 운전원" in item.get("name", ""):
             note = "; ".join(part for part in (note, "일 283,323원 ÷ 8시간") if part)
+        if item.get("name") == "레미콘(사급)":
+            note = "; ".join(part for part in (note, "사용자 입력 단가") if part)
         spec = "" if item.get("category") == "노무비" else item.get("spec", "")
         values = [item.get("name", ""), spec, _num(item.get("quantity")),
                   item.get("unit", ""), None, amount, None, None, None, None, None, None, note]
@@ -744,6 +763,18 @@ def _basis_rows(response: dict) -> list[list]:
     for line in result.get("unit_lines", []):
         basis.append([f"{line['name']} 1㎥당 ({line['unit']})", _num(line["applied"]), line["formula"],
                       f"{line['rule']}; {_citation_source(line.get('citations')) or line.get('source', '')}"])
+    for line in priced.get("supply_lines", []):
+        if line.get("status") == "산정":
+            quantity = _num(line.get("quantity"))
+            unit_price = Decimal(str(line["unit_price"]))
+            formula = f"{unit_price:,.0f}원/㎥ × {quantity}㎥"
+            source = "; ".join(part for part in (
+                _unit_citation_source(line.get("citations")), "사용자 입력 단가") if part)
+        else:
+            quantity = None
+            formula = f"{line.get('status')} · {line.get('reason') or ''}"
+            source = _unit_citation_source(line.get("citations"))
+        basis.append([f"{line['name']} 1㎥당 (㎥)", quantity, formula, source])
     labor_total = (statement.get("totals") or {}).get("labor")
     for line in priced.get("cost_lines", []):
         if line.get("kind") != "rate_cost":

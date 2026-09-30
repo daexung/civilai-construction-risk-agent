@@ -293,6 +293,79 @@ def main() -> int:
                    ["일천삼만이천사백삼십육", "구백구십사만칠천삼십삼", "일천삼십일만구천칠백팔십구",
                     "일억", "일천오"]))
 
+    first_sagup = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
+                                                  "basis_date": "2026-10-01"}).json()
+    sagup_answers = {**PUMP_ANSWERS, "concrete_supply": "사급"}
+    sagup_question = CLIENT.post("/api/chat", json={"thread_id": first_sagup["thread_id"],
+                                                       "answers": sagup_answers}).json()
+    ready_mix_question = next((question for question in sagup_question.get("questions", [])
+                               if question["name"] == "ready_mix_price"), None)
+    sagup_result = CLIENT.post("/api/chat", json={"thread_id": first_sagup["thread_id"],
+                                                    "answers": {"ready_mix_price": "90000"}}).json()
+    sagup_line = next((line for line in sagup_result.get("priced", {}).get("supply_lines", [])
+                       if line.get("name") == "레미콘(사급)"), {})
+    checks.append(("A32 사급 단가 조건 질문과 API 계산", ready_mix_question is not None
+                   and ready_mix_question["choices"] == ["모름"]
+                   and sagup_result["status"] == "PARTIAL"
+                   and sagup_line.get("quantity") == "1.01"
+                   and sagup_line.get("unit_price") == "90000"
+                   and sagup_line.get("amount") == "90900.0"
+                   and sagup_result["priced"]["unit_prices"] == {
+                       "재료비": "91586", "노무비": "15898", "경비": "5150"}
+                   and sagup_result["priced"]["total"] == "112634"
+                   and sagup_result["statement"]["totals"]["contract_amount"] == 41684599
+                   and any(citation.get("image_url") == "/api/source/p78.png"
+                           for citation in sagup_line.get("citations", []))
+                   and CLIENT.get("/api/source/p78.png").status_code == 200))
+    sagup_export = CLIENT.get(f"/api/export/{sagup_result['thread_id']}.xlsx")
+    if sagup_export.status_code == 200:
+        (ROOT / "evals" / "results" / "sample_견적서_사급.xlsx").write_bytes(sagup_export.content)
+    sagup_book = load_workbook(BytesIO(sagup_export.content)) if sagup_export.status_code == 200 else None
+    sagup_unit = sagup_book["일위대가"] if sagup_book else None
+    ready_unit = next((row for row in sagup_unit.iter_rows(values_only=True)
+                       if row[0] == "레미콘(사급)"), None) if sagup_unit else None
+    sagup_rate = sagup_book["단가대비표"] if sagup_book else None
+    rate_values = list(sagup_rate.iter_rows(values_only=True)) if sagup_rate else []
+    ready_rate = next((row for row in rate_values if row[0] == "자재" and row[1] == "레미콘(사급)"), None)
+    estimate_sheet = sagup_book["견적서"] if sagup_book else None
+    estimate_material_note = next((estimate_sheet.cell(row, 3).value for row in
+                                    range(1, estimate_sheet.max_row + 1)
+                                    if estimate_sheet.cell(row, 1).value == "재료비"), "") if estimate_sheet else ""
+    sagup_excel_checks = {
+        "export": sagup_export.status_code == 200,
+        "unit row": ready_unit is not None,
+        "unit spec": ready_unit is not None and ready_unit[1] == "(사급)",
+        "unit quantity": ready_unit is not None and ready_unit[2] == 1.01 and ready_unit[3] == "㎥",
+        "unit price and amount": ready_unit is not None and ready_unit[8] == 90000 and ready_unit[9] == 90900,
+        "unit note": ready_unit is not None and "1-3-1 p78" in str(ready_unit[12]),
+        "rate row": ready_rate is not None,
+        "rate price": ready_rate is not None and ready_rate[2] == "(사급)"
+        and ready_rate[3] == "원/㎥" and ready_rate[4] == 90000,
+        "rate source": ready_rate is not None and ready_rate[5] == "사용자 입력(부가세 제외)",
+        "rate note": ready_rate is not None and ready_rate[7] == "할증 1%(품셈 1-3-1)",
+        "estimate note": estimate_material_note == "레미콘 사급(사용자 입력 90,000원/㎥)",
+        "sample saved": (ROOT / "evals" / "results" / "sample_견적서_사급.xlsx").is_file(),
+    }
+    checks.append(("A33 사급 엑셀 세 시트 표시와 샘플 저장", all(sagup_excel_checks.values())))
+    if not all(sagup_excel_checks.values()):
+        print("A33 상세:", [name for name, passed in sagup_excel_checks.items() if not passed])
+
+    first_unknown = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
+                                                    "basis_date": "2026-10-01"}).json()
+    unknown_question = CLIENT.post("/api/chat", json={"thread_id": first_unknown["thread_id"],
+                                                        "answers": sagup_answers}).json()
+    unknown_result = CLIENT.post("/api/chat", json={"thread_id": first_unknown["thread_id"],
+                                                      "answers": {"ready_mix_price": "모름"}}).json()
+    unknown_line = next((line for line in unknown_result.get("priced", {}).get("supply_lines", [])
+                         if "레미콘" in line.get("name", "")), {})
+    checks.append(("A34 사급 단가 모름 및 관급 미질문", unknown_result["status"] == "PARTIAL"
+                   and unknown_question.get("questions", [{}])[0].get("name") == "ready_mix_price"
+                   and unknown_line.get("status") == "미산정" and unknown_line.get("amount") is None
+                   and unknown_line.get("reason") == "사급 레미콘 단가 미입력"
+                   and unknown_result["priced"]["unit_prices"] == {
+                       "재료비": "686", "노무비": "15898", "경비": "5150"}
+                   and not any(question["name"] == "ready_mix_price" for question in missing.get("questions", []))))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

@@ -241,11 +241,15 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
                 <span className={`supply-status-badge${line.status === '제외' ? ' excluded' : ''}`}>
                   {line.status}
                 </span>
+                {line.allowance && <small>할증 {percent(line.allowance)}</small>}
               </td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td><span>— {line.reason}</span></td>
+              <td>{line.status === '산정' ? line.unit : '—'}</td>
+              <td>{line.status === '산정' ? line.quantity : '—'}</td>
+              <td>{line.unit_price ? <details className="price-detail"><summary>{won(line.unit_price)}</summary>
+                <CitationList citations={line.citations} /></details> : '—'}</td>
+              <td>{line.amount ? <details className="price-detail"><summary>{won(line.amount)}</summary>
+                <div>버림 전: {won(line.amount_exact)}</div><CitationList citations={line.citations} />
+              </details> : <span>— {line.reason}</span>}</td>
             </tr>
           ))}
           {priced?.cost_lines.map((line) => <tr key={line.name}>
