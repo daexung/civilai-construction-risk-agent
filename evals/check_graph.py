@@ -40,7 +40,7 @@ def main() -> int:
                    and not outside.get("__interrupt__")))
 
     evidence = graph.invoke(new_state("합판거푸집 설치 인건비"), config("g2"))
-    checks.append(("G2", evidence["status"] == "EVIDENCE_ONLY" and not evidence.get("__interrupt__")))
+    checks.append(("G2", evidence["status"] == "MISSING_INFO" and bool(questions(evidence))))
 
     initial = graph.invoke(new_state(QUERY), config("g3"))
     first_questions = questions(initial)
@@ -136,6 +136,27 @@ def main() -> int:
     } and unit_lines.get("콘크리트공", {}).get("exact") == "2/65"
                    and unit_lines.get("콘크리트공", {}).get("applied") == "0.0308"
                    and unit_lines.get("콘크리트펌프차", {}).get("applied") == "0.0615"))
+
+    draft_cases = [
+        ("R1", "레디믹스트 콘크리트 100㎥ 인력운반 타설 비용", "6-1-1",
+         {"placement_method": "인력운반 타설", "structure": "철근구조물", "volume": "100",
+          "scattered_small_volume": False, "concrete_supply": "관급"}, "68693", 13150196),
+        ("M1", "현장비빔타설 기계비빔 철근구조물 100㎥ 비용", "6-1-2",
+         {"mixing_type": "기계비빔타설", "structure": "수량 철근구조물", "volume": "100"},
+         "164403", 31648540),
+        ("S1", "콘크리트 표면 마무리 200㎡ 비용", "6-1-3",
+         {"area": "200"}, "948", 364982),
+    ]
+    for label, query, section, values, total, contract in draft_cases:
+        thread = f"draft-{label}"
+        start = graph.invoke(new_state(query, "2026-10-01"), config(thread))
+        answers = {**values, **({"work": section} if any(q["name"] == "work" for q in questions(start)) else {})}
+        done = graph.invoke(Command(resume=answers), config(thread))
+        checks.append((f"G14 {label} 질문·답변·가격", bool(questions(start))
+                       and not questions(done) and done.get("status") in ("OK", "PARTIAL")
+                       and done.get("review_status") == "AI 초안 · 검토 전"
+                       and done["priced"]["total"] == total
+                       and done["statement"]["totals"]["contract_amount"] == contract))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

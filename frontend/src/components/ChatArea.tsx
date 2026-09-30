@@ -95,7 +95,7 @@ function QuestionCard({
       {question.choices && (
         <div className="question-choices">
           {question.choices.map((choice) => {
-            const label = choiceLabel(choice);
+            const label = typeof choice === 'string' ? (question.labels?.[choice] ?? choiceLabel(choice)) : choiceLabel(choice);
             const value: ChoiceValue = isWork && typeof choice === 'string' ? sectionNoFromTitle(choice) : choice;
             const isDefault = isWork && question.default === value;
             const isSelected = selectedLabel === label;
@@ -183,7 +183,7 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
         <BillTable bill={tables.bill} />
       </details>
       <details className="fold">
-      <summary>일위대가표 ({result.unit_basis.per}당) {notReviewed && <span className="review-badge">검토 전 명세 · 참고용</span>}</summary>
+      <summary>일위대가표 ({result.unit_basis.per}당) {notReviewed && <span className="review-badge">{result.review_status === 'AI 초안 · 검토 전' ? result.review_status : '검토 전 명세 · 참고용'}</span>}</summary>
       <div className="unit-summary">{work?.title}{conditions && ` · ${conditions}`}</div>
       <div className="unit-note">{priced?.rate_version
         ? `노임단가: ${priced.rate_version.id.slice(0, 4)} ${priced.rate_version.id.endsWith('H2') ? '하반기' : '상반기'} (${priced.rate_version.effective_from} 적용)`
@@ -193,7 +193,7 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
         : '기준일에 적용 가능한 건설기계 경비산출표 없음'}</div>
       <div className="table-scroll"><table className="inputs-table unit-table">
         <thead>
-          <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>1㎥당 금액</th></tr>
+          <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>{result.unit_basis.per}당 금액</th></tr>
         </thead>
         <tbody>
           {result.unit_lines.map((line) => {
@@ -263,14 +263,14 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
       </table></div>
       <div className="unit-note">{result.unit_basis.adjustable_note}</div>
       {priced && <div className="table-scroll"><table className="inputs-table price-summary-table"><tbody>
-        <tr><th>1㎥당 재료비 소계</th><td>{won(priced.subtotals['재료비'])}</td></tr>
-        <tr><th>1㎥당 노무비 소계</th><td>{won(priced.subtotals['노무비'])}</td></tr>
-        <tr><th>1㎥당 경비 소계</th><td>{won(priced.subtotals['경비'])}</td></tr>
-        <tr><th>{priced.partial ? '1㎥당 부분 합계' : '1㎥당 계'}</th>
+        <tr><th>{result.unit_basis.per}당 재료비 소계</th><td>{won(priced.subtotals['재료비'])}</td></tr>
+        <tr><th>{result.unit_basis.per}당 노무비 소계</th><td>{won(priced.subtotals['노무비'])}</td></tr>
+        <tr><th>{result.unit_basis.per}당 경비 소계</th><td>{won(priced.subtotals['경비'])}</td></tr>
+        <tr><th>{priced.partial ? `${result.unit_basis.per}당 부분 합계` : `${result.unit_basis.per}당 계`}</th>
           <td>{won(priced.total)}{priced.total_exact && ` (계금 버림 전 ${won(priced.total_exact)})`}</td></tr>
       </tbody></table></div>}
       {priced?.reference_amounts?.total != null && <div className="unit-note">
-        <strong>{priced.reference_amounts.volume}㎥ 기준 참고 금액({priced.partial ? '부분' : '전체'}): {won(priced.reference_amounts.total)}</strong>
+        <strong>{priced.reference_amounts.volume}{result.unit_basis.per.slice(1)} 기준 참고 금액({priced.partial ? '부분' : '전체'}): {won(priced.reference_amounts.total)}</strong>
         {priced.partial && <div>빠진 항목: {[...(priced.unpriced ?? []), ...(priced.excluded ?? [])]
           .map((item) => item.name).filter((name, index, names) => names.indexOf(name) === index).join(', ') || '없음'}</div>}
         <div>내역서 작성 전 참고 금액이며, 제외·미산정 항목이 반영되지 않았습니다.</div>
@@ -282,23 +282,23 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
       </details>
       <details className="fold calculation-details">
         <summary>산출근거</summary>
-        <div className="formula-row"><span className="formula-label">일당시공량</span>
+        {result.daily_volume && result.work_days && <><div className="formula-row"><span className="formula-label">일당시공량</span>
           <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
           <span className="formula-text">{result.daily_volume.formula}</span></div>
         <div className="formula-row"><span className="formula-label">작업조 투입량</span>
           <strong>{result.work_days.value} 작업조·일</strong>
           <span className="formula-text">{result.work_days.formula}</span></div>
-        <p className="unit-note">작업조 투입량은 실제 공사 기간이 아닙니다.</p>
+        <p className="unit-note">작업조 투입량은 실제 공사 기간이 아닙니다.</p></>}
         <div className="table-scroll"><table className="inputs-table lines-table">
           <thead><tr><th>구분</th><th>항목</th><th>총 투입량</th><th>단위</th><th>작업조 인원</th><th>적용 규칙</th></tr></thead>
           <tbody>{result.lines.map((line) => <tr key={line.name}>
             <td>{line.kind === 'labor' ? '노무' : '장비'}</td><td>{line.name}</td><td>{line.value}</td>
-            <td>{line.unit}</td><td>{line.crew ?? '1대'}</td>
+            <td>{line.unit}</td><td>{line.crew ?? '—'}</td>
             <td>{line.rules.length > 0 ? '인원 조정 적용' : '—'}</td>
           </tr>)}</tbody>
         </table></div>
         <div className="source-list"><strong>일당시공량 출처</strong>
-          <CitationList citations={result.daily_volume.citations} />
+          {result.daily_volume && <CitationList citations={result.daily_volume.citations} />}
           {result.lines.map((line) => <div key={line.name}><strong>{line.name} 작업조·조정 근거</strong>
             <CitationList citations={line.citations} /></div>)}
         </div>

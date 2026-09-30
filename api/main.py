@@ -72,6 +72,7 @@ def _questions_out(questions: list[dict]) -> list[dict]:
             "name": question["name"],
             "ask": question["ask"],
             "choices": question.get("choices"),
+            "labels": question.get("labels"),
             "hint": question.get("hint"),
             "default": question.get("default"),
             "decision_table": question.get("decision_table"),
@@ -174,6 +175,24 @@ def _citations_out(citations: list[dict]) -> list[dict]:
 
 
 def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
+    if "daily_volume_m3" not in raw:
+        from fractions import Fraction
+        from agent.tools.calc.daily_crew import _exact_text
+
+        quantity = Fraction(raw["provenance"]["quantity"])
+        lines = [{"kind": line["kind"], "name": line["name"],
+                  "value": _exact_text(Fraction(line["exact"]) * quantity),
+                  "unit": "인·일" if line["kind"] == "labor" else "대·일",
+                  "crew": None, "rules": [], "source": line["source"],
+                  "citations": _citations_out(line["citations"])}
+                 for line in raw["unit_lines"]]
+        return {"daily_volume": None, "work_days": None, "lines": lines,
+                "unit_lines": [{**line, "citations": _citations_out(line["citations"])}
+                               for line in raw["unit_lines"]],
+                "unit_basis": raw["unit_basis"],
+                "not_calculated": [{**item, "citations": _citations_out(resolve_cites(item.get("cite")))}
+                                   for item in raw["not_calculated"]],
+                "review_status": review_status}
     tables = {table["id"]: table for table in spec["tables"]}
     base_table = spec["quantity_model"]["params"]["base_output"]["table"]
     daily_provenance = raw["provenance"]["daily_volume_m3"]
@@ -188,7 +207,6 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
     work_provenance = raw["provenance"]["work_days"]
 
     lines = []
-    equipment_name, equipment_unit = next(iter(raw["equipment_units"].items()))
     for trade, value in raw["person_days"].items():
         source = raw["provenance"]["person_days"][trade]
         lines.append({
@@ -201,17 +219,15 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
             "source": _source_label(source["crew"]),
             "citations": _citations_out(source["citations"]),
         })
-    equipment_source = raw["provenance"]["equipment_days"][equipment_name]
-    lines.append({
-        "kind": "equipment",
-        "name": equipment_name,
-        "value": raw["equipment_days"][equipment_name],
-        "unit": equipment_unit,
-        "crew": None,
-        "rules": [],
-        "source": _source_label(equipment_source["equipment"]),
-        "citations": _citations_out(equipment_source["citations"]),
-    })
+    for equipment_name, equipment_unit in raw["equipment_units"].items():
+        equipment_source = raw["provenance"]["equipment_days"][equipment_name]
+        lines.append({
+            "kind": "equipment", "name": equipment_name,
+            "value": raw["equipment_days"][equipment_name], "unit": equipment_unit,
+            "crew": None, "rules": [],
+            "source": _source_label(equipment_source["equipment"]),
+            "citations": _citations_out(equipment_source["citations"]),
+        })
 
     return {
         "daily_volume": {

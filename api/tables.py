@@ -107,9 +107,10 @@ def bill_row(response: dict) -> dict | None:
     reference = priced["reference_amounts"]
     unit_prices, amounts = priced.get("unit_prices") or {}, reference.get("subtotals") or {}
     work = response.get("work") or {}
+    unit = ((response.get("result") or {}).get("unit_basis") or {}).get("per", "1㎥")[1:]
     return {
         "name": f"{work.get('title', '')}({work.get('section_no', '')})" if work else "",
-        "spec": _spec_text(response.get("inputs", [])), "unit": "㎥", "quantity": reference.get("volume"),
+        "spec": _spec_text(response.get("inputs", [])), "unit": unit, "quantity": reference.get("volume"),
         "unit_price": {name: unit_prices.get(name) for name in ("재료비", "노무비", "경비")},
         "amount": {name: amounts.get(name) for name in ("재료비", "노무비", "경비")},
         "total": reference.get("total"), "partial": bool(priced.get("partial")),
@@ -134,8 +135,8 @@ def unit_price_rows(priced: dict | None) -> list[dict]:
                 spec = f"노무비의 {Decimal(str(rate)) * 100:g}%" if rate is not None else ""
             else:
                 unit, quantity = line.get("unit") or "", line.get("quantity")
-                if "/㎥" in unit:
-                    unit = unit.replace("/㎥", "")
+                for basis_unit in ("㎥", "㎡"):
+                    unit = unit.replace(f"/{basis_unit}", "")
                 unit_price = line.get("unit_price")
                 spec = line.get("spec") or line.get("machine_spec") or (
                     f"노임 코드 {line['rate_code']}" if line.get("rate_code") else "")
@@ -335,8 +336,10 @@ def _metadata(response: dict) -> tuple[str, str]:
         conditions.get("contractor_type", {}).get("value"), scale_text) if part)
     qty = f" {quantity}{unit}" if quantity is not None else ""
     basis_date = response.get("basis_date") or date.today().isoformat()
+    review = (response.get("result") or {}).get("review_status")
+    badge = f" | {review}" if review == "AI 초안 · 검토 전" else ""
     return (f"공사명: {_work_name(response)}{qty}",
-            f"기준일: {basis_date} | 조건 요약: {summary}")
+            f"기준일: {basis_date} | 조건 요약: {summary}{badge}")
 
 
 def won_in_korean(amount: int) -> str:
@@ -395,7 +398,9 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
     sheet["A2"] = f"공사명 : {project}"
     sheet["A3"] = f"기 준 일 : {basis_date}"
     sheet.merge_cells("A4:C4")
-    sheet["A4"] = f"조    건 : {condition_summary}"
+    review = (response.get("result") or {}).get("review_status")
+    badge = " | AI 초안 · 검토 전" if review == "AI 초안 · 검토 전" else ""
+    sheet["A4"] = f"조    건 : {condition_summary}{badge}"
 
     totals = (response.get("statement") or {}).get("totals") or {}
     contract = totals.get("contract_amount")
@@ -711,7 +716,8 @@ def _unit_export_rows(response: dict, unit_rows: list[dict]) -> tuple[list[list]
     subtotals = priced.get("subtotals") or {}
     unit_prices = priced.get("unit_prices") or {}
     work_title = _work_name(response)
-    header = [f"제 1호표 {work_title} (㎥ 당)", None, None, None,
+    basis_unit = ((response.get("result") or {}).get("unit_basis") or {}).get("per", "1㎥")[1:]
+    header = [f"제 1호표 {work_title} ({basis_unit} 당)", None, None, None,
               None, _num(priced.get("total")), None, _num(unit_prices.get("노무비")),
               None, _num(unit_prices.get("재료비")), None, _num(unit_prices.get("경비")), None]
     rows = [header]
@@ -744,6 +750,7 @@ def _basis_rows(response: dict) -> list[list]:
     result = response.get("result") or {}
     statement = response.get("statement") or {}
     priced = response.get("priced") or {}
+    basis_unit = ((result.get("unit_basis") or {}).get("per") or "1㎥")[1:]
     basis = []
     daily = result.get("daily_volume")
     if daily:
@@ -761,7 +768,7 @@ def _basis_rows(response: dict) -> list[list]:
                       f"작업조 {line['crew']}" if line.get("crew") else "",
                       _citation_source(line.get("citations")) or line.get("source", "")])
     for line in result.get("unit_lines", []):
-        basis.append([f"{line['name']} 1㎥당 ({line['unit']})", _num(line["applied"]), line["formula"],
+        basis.append([f"{line['name']} 1{basis_unit}당 ({line['unit']})", _num(line["applied"]), line["formula"],
                       f"{line['rule']}; {_citation_source(line.get('citations')) or line.get('source', '')}"])
     for line in priced.get("supply_lines", []):
         if line.get("status") == "산정":

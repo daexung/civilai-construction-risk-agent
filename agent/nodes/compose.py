@@ -109,11 +109,11 @@ def _inputs_facts(state: AgentState, spec: dict | None) -> list[dict]:
     return out
 
 
-def _line_fact(line: dict) -> dict:
+def _line_fact(line: dict, unit: str = "㎥") -> dict:
     fact = {"category": line.get("category"), "name": line.get("name"), "unit": line.get("unit"),
             "quantity": line.get("quantity"),
             "unit_price": f"단가 {_won(line['unit_price'])}" if line.get("unit_price") is not None else None,
-            "amount": f"1㎥당 {_won(line['amount'])}" if line.get("amount") is not None else None,
+            "amount": f"1{unit}당 {_won(line['amount'])}" if line.get("amount") is not None else None,
             "reason": line.get("reason")}
     rate = line.get("rate")
     if rate is not None:
@@ -138,27 +138,27 @@ def _priced_citations(priced: dict) -> list[dict]:
     return collected
 
 
-def _priced_facts(priced: dict | None) -> dict | None:
+def _priced_facts(priced: dict | None, unit: str = "㎥") -> dict | None:
     if not priced:
         return None
-    lines = [_line_fact(line) for line in priced.get("lines", []) if line.get("kind") != "equipment"]
-    lines += [_line_fact(line) for line in priced.get("equipment_lines", [])]
-    lines += [_line_fact(line) for line in priced.get("cost_lines", [])]
+    lines = [_line_fact(line, unit) for line in priced.get("lines", []) if line.get("kind") != "equipment"]
+    lines += [_line_fact(line, unit) for line in priced.get("equipment_lines", [])]
+    lines += [_line_fact(line, unit) for line in priced.get("cost_lines", [])]
     excluded = [{"name": item["name"], "reason": item["reason"]} for item in priced.get("excluded", [])]
     unpriced = [{"name": item["name"], "reason": item["reason"]} for item in priced.get("unpriced", [])]
     rate_version = priced.get("rate_version")
     equipment_rate_version = priced.get("equipment_rate_version")
     reference = priced.get("reference_amounts") or {}
     volume = reference.get("volume")
-    reference_label = f"{volume}㎥ 기준 참고 금액(부분)" if priced.get("partial") else f"{volume}㎥ 기준 참고 금액"
+    reference_label = f"{volume}{unit} 기준 참고 금액(부분)" if priced.get("partial") else f"{volume}{unit} 기준 참고 금액"
     return {
         "lines": lines,
-        "1㎥당 소계": {f"1㎥당 {name} 소계": _won(value)
+        f"1{unit}당 소계": {f"1{unit}당 {name} 소계": _won(value)
                        for name, value in (priced.get("unit_prices") or priced.get("subtotals") or {}).items()},
-        "1㎥당 합계(부분)" if priced.get("partial") else "1㎥당 합계": _won(priced.get("total")),
+        f"1{unit}당 합계(부분)" if priced.get("partial") else f"1{unit}당 합계": _won(priced.get("total")),
         reference_label: _won(reference.get("total")),
-        "물량 기준 참고 소계": {f"{volume}㎥ 기준 {name} 소계(부분)" if priced.get("partial")
-                              else f"{volume}㎥ 기준 {name} 소계": _won(value)
+        "물량 기준 참고 소계": {f"{volume}{unit} 기준 {name} 소계(부분)" if priced.get("partial")
+                              else f"{volume}{unit} 기준 {name} 소계": _won(value)
                               for name, value in reference.get("subtotals", {}).items()},
         "partial": priced.get("partial"),
         "excluded": excluded, "excluded_count": len(excluded),
@@ -223,7 +223,12 @@ def build_facts(state: AgentState) -> dict:
         facts["condition_summary"] = condition_summary(inputs)
         facts["condition_default"] = all(sources.get(field["name"]) == "기본값" for field in _common_fields())
         facts["input_count"] = len(facts["inputs"])
-        facts["priced"] = _priced_facts(priced)
+        unit = next((field["unit"] for field in spec["inputs"]
+                     if field["name"] == spec["quantity_model"]["params"]["quantity_input"]), "㎥") if spec else "㎥"
+        facts["unit"] = unit
+        if spec and spec.get("origin") == "draft":
+            facts["draft_review"] = "AI가 품셈 원문으로 만든 계산 초안(검토 전)"
+        facts["priced"] = _priced_facts(priced, unit)
         facts["statement"] = _statement_facts(state.get("statement"))
         facts["citation_labels"] = _citation_labels(_priced_citations(priced))
     elif status == "BLOCKED":
@@ -242,10 +247,11 @@ def _template_priced(facts: dict) -> str:
     priced = facts.get("priced") or {}
     statement = facts.get("statement") or {}
     partial = priced.get("partial")
-    total_key = "1㎥당 합계(부분)" if partial else "1㎥당 합계"
+    unit = facts.get("unit", "㎥")
+    total_key = f"1{unit}당 합계(부분)" if partial else f"1{unit}당 합계"
     total = priced.get(total_key)
-    subtotals = priced.get("1㎥당 소계") or {}
-    sentences = []
+    subtotals = priced.get(f"1{unit}당 소계") or {}
+    sentences = [facts["draft_review"] + "입니다."] if facts.get("draft_review") else []
     statement_totals = statement.get("totals") or {}
     contract_amount = statement_totals.get("전체 물량 기준 도급액(부가세 포함)")
     if contract_amount is not None:
@@ -276,14 +282,14 @@ def _template_priced(facts: dict) -> str:
     elif statement.get("status") == "UNCALCULATED":
         sentences.append("해당 기준일의 제비율이 없어 원가계산서 금액은 미산정입니다.")
     if total is not None:
-        reference_key = next((key for key in priced if "㎥ 기준 참고 금액" in key), None)
+        reference_key = next((key for key in priced if f"{unit} 기준 참고 금액" in key), None)
         reference_amount = priced.get(reference_key) if reference_key else None
         amount_label = "미산정 항목을 제외한 부분 합계" if partial else "합계"
         unit_sentence = (
-            f"{label}{_josa(label, '은/는')} 1㎥당 재료비 {subtotals.get('1㎥당 재료비 소계') or '0원'}, "
-            f"노무비 {subtotals.get('1㎥당 노무비 소계') or '0원'}, "
-            f"경비 {subtotals.get('1㎥당 경비 소계') or '0원'}이며, "
-            f"1㎥당 {amount_label}{_josa(amount_label, '은/는')} {total}입니다."
+            f"{label}{_josa(label, '은/는')} 1{unit}당 재료비 {subtotals.get(f'1{unit}당 재료비 소계') or '0원'}, "
+            f"노무비 {subtotals.get(f'1{unit}당 노무비 소계') or '0원'}, "
+            f"경비 {subtotals.get(f'1{unit}당 경비 소계') or '0원'}이며, "
+            f"1{unit}당 {amount_label}{_josa(amount_label, '은/는')} {total}입니다."
         )
         if reference_amount is not None:
             unit_sentence += (f" {reference_key}{_josa(reference_key, '은/는')} "
@@ -365,7 +371,7 @@ def validate_amount_basis(text: str) -> bool:
     """Require each currency amount to carry an adjacent quantity basis."""
     for match in re.finditer(r"\d[\d,]*(?:\.\d+)?\s*원", text):
         context = text[max(0, match.start() - 24):match.start()]
-        if not re.search(r"(?:1\s*㎥\s*당|㎥\s*기준|전체\s*물량\s*기준)", context):
+        if not re.search(r"(?:1\s*[㎥㎡]\s*당|[㎥㎡]\s*기준|전체\s*물량\s*기준)", context):
             return False
     return True
 
@@ -423,6 +429,8 @@ def compose(state: AgentState, generate_fn=None) -> dict:
             else f"{type(exc).__name__}: {str(exc)[:200]}"
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
     llm_info["elapsed_ms"] = round((time.monotonic() - start) * 1000)
+    if facts.get("draft_review") and facts["draft_review"] not in text:
+        text = f"{facts['draft_review']}입니다. {text}"
     ok, bad = validate_numbers(text, facts)
     if not ok:
         llm_info["error"] = "숫자 불일치"

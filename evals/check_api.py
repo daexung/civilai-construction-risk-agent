@@ -29,7 +29,7 @@ def main() -> int:
     checks.append(("A1", outside["status"] == "OUT_OF_SCOPE" and not outside["questions"]))
 
     evidence = CLIENT.post("/api/chat", json={"message": "합판거푸집 설치 인건비"}).json()
-    checks.append(("A2", evidence["status"] == "EVIDENCE_ONLY" and len(evidence["evidence"]) == 3))
+    checks.append(("A2", evidence["status"] == "MISSING_INFO" and bool(evidence["questions"])))
 
     missing = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
                                               "basis_date": "2026-10-01"}).json()
@@ -365,6 +365,54 @@ def main() -> int:
                    and unknown_result["priced"]["unit_prices"] == {
                        "재료비": "686", "노무비": "15898", "경비": "5150"}
                    and not any(question["name"] == "ready_mix_price" for question in missing.get("questions", []))))
+
+    draft_cases = [
+        ("R1", "레디믹스트 콘크리트 100㎥ 인력운반 타설 비용", "6-1-1",
+         {"placement_method": "인력운반 타설", "structure": "철근구조물", "volume": "100",
+          "scattered_small_volume": False, "concrete_supply": "관급"}, "68693", "6869300", 13150196),
+        ("M1", "현장비빔타설 기계비빔 철근구조물 100㎥ 비용", "6-1-2",
+         {"mixing_type": "기계비빔타설", "structure": "수량 철근구조물", "volume": "100"},
+         "164403", "16440300", 31648540),
+        ("S1", "콘크리트 표면 마무리 200㎡ 비용", "6-1-3",
+         {"area": "200"}, "948", "189600", 364982),
+    ]
+    for label, query, section, values, unit_total, direct_total, contract in draft_cases:
+        first = CLIENT.post("/api/chat", json={"message": query, "basis_date": "2026-10-01"}).json()
+        answers = {**values, **({"work": section} if any(q["name"] == "work" for q in first["questions"]) else {})}
+        result = CLIENT.post("/api/chat", json={"thread_id": first["thread_id"],
+                                                  "answers": answers}).json()
+        priced = result.get("priced") or {}
+        statement = result.get("statement") or {}
+        ok = (first["status"] == "MISSING_INFO" and result.get("work", {}).get("section_no") == section
+              and result.get("status") in ("OK", "PARTIAL")
+              and result.get("result", {}).get("review_status") == "AI 초안 · 검토 전"
+              and "AI가 품셈 원문으로 만든 계산 초안(검토 전)" in result.get("answer", "")
+              and priced.get("total") == unit_total
+              and (priced.get("reference_amounts") or {}).get("total") == direct_total
+              and (statement.get("totals") or {}).get("contract_amount") == contract)
+        if section == "6-1-2":
+            structure_question = next((q for q in first.get("questions", [])
+                                       if q["name"] == "structure"), {})
+            citation_urls = [citation.get("image_url") for line in result.get("result", {}).get("unit_lines", [])
+                             for citation in line.get("citations", [])]
+            ok = ok and structure_question.get("labels", {}).get("수량 철근구조물") == "철근구조물" \
+                and "/api/source/p185-t1.png" in citation_urls \
+                and CLIENT.get("/api/source/p185-t1.png").status_code == 200
+        checks.append((f"A35 {label} 초안 전체 흐름과 손계산", ok))
+        if not ok:
+            print("A35 상세:", label, first.get("status"), first.get("work"),
+                  [q["name"] for q in first.get("questions", [])], result.get("status"),
+                  result.get("work"), [q["name"] for q in result.get("questions", [])],
+                  priced.get("total"), priced.get("reference_amounts"), statement.get("totals"),
+                  result.get("message"))
+        if label == "S1" and result.get("status") in ("OK", "PARTIAL"):
+            export = CLIENT.get(f"/api/export/{result['thread_id']}.xlsx")
+            book = load_workbook(BytesIO(export.content)) if export.status_code == 200 else None
+            checks.append(("A36 초안 엑셀 모든 시트 표시", book is not None
+                           and all("AI 초안 · 검토 전" in str(sheet["A3"].value) for sheet in
+                                   list(book.worksheets)[1:])
+                           and "AI 초안 · 검토 전" in str(book["견적서"]["A4"].value)
+                           and (result.get("tables") or {}).get("bill", {}).get("unit") == "㎡"))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

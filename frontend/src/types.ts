@@ -14,6 +14,7 @@ export interface AgentQuestion {
   name: string;
   ask: string;
   choices?: ChoiceValue[] | null;
+  labels?: Record<string, string> | null;
   hint?: QuestionHint | null;
   default?: string | null;
   decision_table?: Record<string, DecisionRow> | null;
@@ -94,8 +95,8 @@ export interface UnitLine {
 }
 
 export interface ComputedResult {
-  daily_volume: { value: string; unit: string; formula: string; sources: string[]; citations: Citation[] };
-  work_days: { value: string; formula: string };
+  daily_volume: { value: string; unit: string; formula: string; sources: string[]; citations: Citation[] } | null;
+  work_days: { value: string; formula: string } | null;
   lines: ResultLine[];
   unit_lines: UnitLine[];
   unit_basis: { per: string; daily_output: string; places: number; adjustable_note: string };
