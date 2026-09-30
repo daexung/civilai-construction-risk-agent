@@ -7,7 +7,9 @@ import unicodedata
 from fractions import Fraction
 
 from agent.tools.calc.daily_crew import _exact_text, _validate, check_blocked
+from agent.tools.calc.adjustments import apply_adjustments
 from agent.tools.calc.numbers import parse_fraction
+from agent.tools.calc.price import select_rate_version
 from agent.tools.source.citation import _chunks, cite_table
 
 
@@ -177,13 +179,22 @@ def per_unit(spec: dict, inputs: dict) -> dict:
             if material_value < 0:
                 return _unresolvable(table_id, row, name, "음수 재료량")
             material_unit = _material_unit(table_id, row, name)
+            version = select_rate_version("2026-10-01")
+            labor_names = {entry["name"] for entry in version["rates"].values()} if version else set()
+            kind = ("labor" if name in labor_names else "equipment" if material_unit in ("hr", "대")
+                    else "material")
+            numerator_unit = "인" if kind == "labor" else material_unit
             material_citation = cite_table(table_id, row, name, material_raw)
-            lines.append({"kind": "material", "name": name, "unit": f"{material_unit}/{input_unit}",
+            lines.append({"kind": kind, "name": name, "unit": f"{numerator_unit}/{input_unit}",
                           "exact": str(material_value), "applied": _exact_text(material_value), "places": 0,
                           "formula": f"{material_raw}{material_unit} × {factor} ÷ {base}{quantity_unit}",
-                          "rule": "재료 단가 자료 없음(사용자 입력 기능 예정)",
+                          "rule": ("재료 단가 자료 없음(사용자 입력 기능 예정)" if kind == "material"
+                                   else "표 단위당 품 그대로 적용(반올림 없음)"),
                           "source": f"{table_id} {table['source']}", "citations": [material_citation]})
-    return {"status": "computed", "unit_lines": lines,
+    adjusted = apply_adjustments(spec, validated, lines)
+    if adjusted["status"] != "computed":
+        return adjusted
+    return {"status": "computed", "unit_lines": lines, "adjustment_memos": adjusted["memos"],
             "unit_basis": {"per": f"1{quantity_unit}", "daily_output": "",
                            "places": 0, "adjustable_note": "표 단위당 품을 정확히 적용"},
             "provenance": {"unit_rates": sources, "quantity_input": quantity_name,

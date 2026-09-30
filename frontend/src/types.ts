@@ -92,6 +92,7 @@ export interface UnitLine {
   rule: string;
   source: string;
   citations: Citation[];
+  adjustments?: { 종류: string; 값: string; '원문 인용': string; citations: Citation[] }[];
 }
 
 export interface ComputedResult {
@@ -102,6 +103,7 @@ export interface ComputedResult {
   unit_basis: { per: string; daily_output: string; places: number; adjustable_note: string };
   not_calculated: { item: string; source: string; citations: Citation[] }[];
   review_status: string;
+  adjustment_memos?: string[];
 }
 
 export interface PricedLine {

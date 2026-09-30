@@ -776,6 +776,11 @@ def _basis_rows(response: dict) -> list[list]:
     for line in result.get("unit_lines", []):
         basis.append([f"{line['name']} 1{basis_unit}당 ({line['unit']})", _num(line["applied"]), line["formula"],
                       f"{line['rule']}; {_citation_source(line.get('citations')) or line.get('source', '')}"])
+        for adjustment in line.get("adjustments", []):
+            basis.append([f"{line['name']} {adjustment['종류']}", adjustment["값"],
+                          adjustment["원문 인용"], _citation_source(adjustment.get("citations"))])
+    for memo in result.get("adjustment_memos", []):
+        basis.append(["할증 참고", "", memo, "자동 계산 없음"])
     for line in priced.get("supply_lines", []):
         if line.get("status") == "산정":
             quantity = _num(line.get("quantity"))

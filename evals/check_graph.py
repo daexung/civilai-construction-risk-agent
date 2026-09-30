@@ -158,6 +158,28 @@ def main() -> int:
                        and done["priced"]["total"] == total
                        and done["statement"]["totals"]["contract_amount"] == contract))
 
+    epoxy_inputs = {"area": "100", "type": "신구-콘크리트 접착제바르기",
+                    "ceiling_applied": False, "scaffold_used": False,
+                    "floor_level": "지하층 및 1∼3층", "floor_level_19_plus": 19,
+                    "thickness_adjusted": False, "thickness": "1"}
+    for label, ceiling, scaffold, total, contract in (
+            ("E0", False, False, "32830", 6284801),
+            ("E1", True, False, "39396", 7541741),
+            ("E2", True, True, None, None)):
+        thread = f"draft-{label}"
+        start = graph.invoke(new_state("에폭시 콘크리트 접착제 바르기 100㎡ 비용", "2026-10-01"), config(thread))
+        answers = {**epoxy_inputs, "ceiling_applied": ceiling, "scaffold_used": scaffold}
+        if any(q["name"] == "work" for q in questions(start)):
+            answers["work"] = "6-1-5"
+        done = graph.invoke(Command(resume=answers), config(thread))
+        if label == "E2":
+            ok = (done.get("status") == "BLOCKED"
+                  and done.get("result", {}).get("citations", [{}])[0].get("internal_id") == "p188-x6")
+        else:
+            ok = (done.get("status") == "PARTIAL" and done["priced"]["total"] == total
+                  and done["statement"]["totals"]["contract_amount"] == contract)
+        checks.append((f"G15 {label} 에폭시", ok))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

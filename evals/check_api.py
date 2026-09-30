@@ -414,6 +414,35 @@ def main() -> int:
                            and "AI 초안 · 검토 전" in str(book["견적서"]["A4"].value)
                            and (result.get("tables") or {}).get("bill", {}).get("unit") == "㎡"))
 
+    epoxy_query = "에폭시 콘크리트 접착제 바르기 100㎡ 비용"
+    epoxy_inputs = {"area": "100", "type": "신구-콘크리트 접착제바르기",
+                    "ceiling_applied": False, "scaffold_used": False,
+                    "floor_level": "지하층 및 1∼3층", "floor_level_19_plus": 19,
+                    "thickness_adjusted": False, "thickness": "1"}
+    for label, ceiling, scaffold, expected_unit, expected_contract in (
+            ("E0", False, False, "32830", 6284801),
+            ("E1", True, False, "39396", 7541741),
+            ("E2", True, True, None, None)):
+        first = CLIENT.post("/api/chat", json={"message": epoxy_query,
+                                                "basis_date": "2026-10-01"}).json()
+        result = CLIENT.post("/api/chat", json={"thread_id": first["thread_id"],
+                                                  "answers": {**epoxy_inputs,
+                                                              "ceiling_applied": ceiling,
+                                                              "scaffold_used": scaffold}}).json()
+        if label == "E2":
+            ok = (result["status"] == "BLOCKED"
+                  and "할증 규칙" in result.get("result", {}).get("reason", "")
+                  and result.get("result", {}).get("citations", [{}])[0].get("internal_id") == "p188-x6")
+        else:
+            priced = result.get("priced") or {}
+            statement = result.get("statement") or {}
+            lines = {line["name"]: line for line in result.get("result", {}).get("unit_lines", [])}
+            ok = (result["status"] == "PARTIAL" and priced.get("total") == expected_unit
+                  and (statement.get("totals") or {}).get("contract_amount") == expected_contract
+                  and lines.get("Epoxy신구-콘크리트접착제", {}).get("applied") == "1.2"
+                  and lines.get("시너", {}).get("applied") == "0.2")
+        checks.append((f"A37 {label} 에폭시", ok))
+
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

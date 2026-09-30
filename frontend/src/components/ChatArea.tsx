@@ -225,6 +225,7 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
                 <div>산식: {line.formula}</div>
                 <div>정확한 값: {line.exact}</div>
                 <div>자릿수: {line.rule}</div>
+                {line.adjustments?.map((item, index) => <div key={index}>{item.종류} {item.값}: {item['원문 인용']}</div>)}
                 <CitationList citations={line.citations} />
               </details></td>
               <td>{price?.unit_price ? <details className="price-detail"><summary>{won(price.unit_price)}</summary>

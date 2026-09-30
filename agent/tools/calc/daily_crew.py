@@ -187,10 +187,10 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
     params = spec["quantity_model"]["params"]
     base = params["base_output"]
     base_table = tables[base["table"]]["values"]
-    base_row, error = _axis_key(base_table, base.get("row_input"), validated, "행", base["table"])
+    base_row, error = _axis_key(base_table, base.get("row_input", base.get("row")), validated, "행", base["table"])
     if error:
         return {"status": "unresolvable", "reason": error}
-    base_column, error = _axis_key(base_table[base_row], base.get("column_input"),
+    base_column, error = _axis_key(base_table[base_row], base.get("column_input", base.get("column")),
                                    validated, "열", base["table"])
     if error:
         return {"status": "unresolvable", "reason": error}
@@ -220,7 +220,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
     for trade in crew["trades"]:
         if trade not in crew_table:
             return {"status": "unresolvable", "reason": f"{crew['table']}: 행 '{trade}' 없음"}
-        column, error = _axis_key(crew_table[trade], crew.get("column_input"),
+        column, error = _axis_key(crew_table[trade], crew.get("column_input", crew.get("column")),
                                   validated, "열", crew["table"])
         if error:
             return {"status": "unresolvable", "reason": error}
@@ -255,29 +255,42 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                                                    for citation in rule["citations"]],
         }
 
-    equipment = params["equipment"]
-    equipment_table = tables[equipment["table"]]["values"]
-    if equipment["name"] not in equipment_table:
-        return {"status": "unresolvable", "reason": f"{equipment['table']}: 행 '{equipment['name']}' 없음"}
-    equipment_column, error = _axis_key(equipment_table[equipment["name"]],
-                                        equipment.get("column_input", crew.get("column_input")),
-                                        validated, "열", equipment["table"])
-    if error:
-        return {"status": "unresolvable", "reason": error}
-    equipment_count, equipment_source = _cell(tables, equipment["table"], equipment["name"], equipment_column)
-    if equipment_count < 0:
-        return {"status": "rejected", "reason": "명세 오류: 장비 대수가 음수임", "input": "spec"}
-    equipment_days = _exact_text(work_days * equipment_count)
-    equipment_value = equipment_count * 8 / daily_volume
-    if equipment_count:
-        unit_lines.append({
-            "kind": "equipment", "name": equipment["name"], "unit": f"hr/{quantity_unit}",
-            "exact": str(equipment_value), "applied": round_quantity(equipment_value, places),
-            "places": places,
-            "formula": f"{_exact_text(equipment_count)}대 × 8hr ÷ {daily_text}{quantity_unit}",
-            "rule": rule_label, "source": f"{equipment_source['table']} {equipment_source['source']}",
-            "citations": equipment_source["citations"],
-        })
+    equipment = params.get("equipment") or {}
+    equipment_count = Fraction(0)
+    equipment_source = None
+    equipment_days = "0"
+    if equipment.get("table"):
+        equipment_table = tables[equipment["table"]]["values"]
+        if equipment["name"] not in equipment_table:
+            return {"status": "unresolvable", "reason": f"{equipment['table']}: 행 '{equipment['name']}' 없음"}
+        equipment_column, error = _axis_key(equipment_table[equipment["name"]],
+                                            equipment.get("column_input", equipment.get("column",
+                                                          crew.get("column_input", crew.get("column")))),
+                                            validated, "열", equipment["table"])
+        if error:
+            return {"status": "unresolvable", "reason": error}
+        equipment_count, equipment_source = _cell(tables, equipment["table"], equipment["name"], equipment_column)
+        if equipment_count < 0:
+            return {"status": "rejected", "reason": "명세 오류: 장비 대수가 음수임", "input": "spec"}
+        equipment_days = _exact_text(work_days * equipment_count)
+        equipment_value = equipment_count * 8 / daily_volume
+        if equipment_count:
+            unit_lines.append({
+                "kind": "equipment", "name": equipment["name"], "unit": f"hr/{quantity_unit}",
+                "exact": str(equipment_value), "applied": round_quantity(equipment_value, places),
+                "places": places,
+                "formula": f"{_exact_text(equipment_count)}대 × 8hr ÷ {daily_text}{quantity_unit}",
+                "rule": rule_label, "source": f"{equipment_source['table']} {equipment_source['source']}",
+                "citations": equipment_source["citations"],
+            })
+
+    from agent.tools.calc.adjustments import apply_adjustments
+    adjusted = apply_adjustments(spec, validated, unit_lines)
+    if adjusted["status"] != "computed":
+        return adjusted
+    for line in unit_lines:
+        if line.get("adjustments") and line["kind"] == "labor":
+            person_days[line["name"]] = _exact_text(Fraction(line["exact"]) * quantity)
 
     return {
         "status": "computed",
@@ -287,6 +300,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         "equipment_days": {equipment["name"]: equipment_days} if equipment_count else {},
         "equipment_units": {equipment["name"]: equipment["unit"]} if equipment_count else {},
         "unit_lines": unit_lines,
+        "adjustment_memos": adjusted["memos"],
         "unit_basis": {
             "per": f"1{quantity_unit}", "daily_output": daily_text, "places": places,
             "adjustable_note": "1-2-8은 조정 가능 조항. 기본 자릿수 적용",

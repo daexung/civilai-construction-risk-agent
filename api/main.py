@@ -195,7 +195,7 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
                 "unit_basis": raw["unit_basis"],
                 "not_calculated": [{**item, "citations": _citations_out(resolve_cites(item.get("cite")))}
                                    for item in raw["not_calculated"]],
-                "review_status": review_status}
+                "review_status": review_status, "adjustment_memos": raw.get("adjustment_memos", [])}
     tables = {table["id"]: table for table in spec["tables"]}
     base_table = spec["quantity_model"]["params"]["base_output"]["table"]
     daily_provenance = raw["provenance"]["daily_volume_m3"]
@@ -251,6 +251,7 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
         "not_calculated": [{**item, "citations": _citations_out(resolve_cites(item.get("cite")))}
                            for item in raw["not_calculated"]],
         "review_status": review_status,
+        "adjustment_memos": raw.get("adjustment_memos", []),
     }
 
 
