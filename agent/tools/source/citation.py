@@ -84,6 +84,25 @@ def cite_table(table_id: str, row: str | None = None, column: str | None = None,
     return citation
 
 
+def cite_page(source: dict) -> dict:
+    """표 경계가 불확실한 규칙은 원문 PDF 페이지 전체를 출처 이미지로 연결한다."""
+    pdf_page = int(source["pdf_page"])
+    page_info = _pages()[str(pdf_page)]
+    chunk = {"source": {"page": pdf_page},
+             "section": f"{source['section_no']} {source.get('section_title', '재료의 할증')}",
+             "section_no": source["section_no"],
+             "subsection": {"no": "8", "title": source["item"]}}
+    citation = _base(chunk, "표", f"p{pdf_page}")
+    citation.update(row=source.get("row"), value=source.get("value"))
+    citation["printed_page"] = source.get("printed_page", page_info["printed_page"])
+    row, value = source.get("row"), source.get("value")
+    if row or value:
+        detail = " · ".join(str(part) for part in (row, value) if part)
+        citation["label"] += f"\n표: {detail}"
+    citation["label"] += " (쪽 전체 이미지)"
+    return citation
+
+
 def _section_chunk(section_no: str, subsection_no: str | None, marker: str) -> dict | None:
     candidates = [entry for entry in _chunks() if entry["kind"] == "text"
                   and entry["section_no"] == section_no
@@ -157,6 +176,8 @@ def cite_note(section_no: str, subsection_no: str | None, marker: str) -> dict:
 def resolve_cite(key: dict) -> dict:
     if "table_id" in key:
         return cite_table(key["table_id"], key.get("row"), key.get("column"), key.get("value"))
+    if "page_source" in key:
+        return cite_page(key["page_source"])
     return cite_note(key["section_no"], key.get("subsection_no"), key["marker"])
 
 

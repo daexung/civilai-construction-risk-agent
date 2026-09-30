@@ -310,7 +310,7 @@ def health() -> dict:
 
 @app.get("/api/source/{table_id}.png")
 def source_image(table_id: str) -> FileResponse:
-    if not re.fullmatch(r"p\d+-t\d+", table_id):
+    if not re.fullmatch(r"p\d+(?:-t\d+)?", table_id):
         raise HTTPException(status_code=404, detail="표 이미지를 찾을 수 없습니다")
     path = SOURCES / f"{table_id}.png"
     if not path.is_file():

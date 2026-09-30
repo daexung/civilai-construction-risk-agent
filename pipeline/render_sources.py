@@ -14,6 +14,7 @@ SPECS = ROOT / "agent/rules/specs"
 CHUNKS = ROOT / "data/processed/chunks.jsonl"
 PDF = ROOT / "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
 OUTPUT = ROOT / "data/processed/sources"
+MATERIAL_ALLOWANCES = ROOT / "data/rates/material_allowance.json"
 MARGIN = 12
 SCALE = 3
 
@@ -26,8 +27,16 @@ def referenced_tables() -> set[str]:
     return ids
 
 
+def referenced_pages() -> set[int]:
+    if not MATERIAL_ALLOWANCES.is_file():
+        return set()
+    rules = json.loads(MATERIAL_ALLOWANCES.read_text(encoding="utf-8"))
+    return {int(rule["source"]["pdf_page"]) for rule in rules.get("rules", [])}
+
+
 def render() -> list[Path]:
     tables = referenced_tables()
+    pages = referenced_pages()
     chunks = {}
     for line in CHUNKS.read_text(encoding="utf-8").splitlines():
         chunk = json.loads(line)
@@ -54,6 +63,12 @@ def render() -> list[Path]:
                 raise ValueError(f"표 bbox 범위 오류: {table_id}")
             output = OUTPUT / f"{table_id}.png"
             page.get_pixmap(matrix=pymupdf.Matrix(SCALE, SCALE), clip=rect, alpha=False).save(output)
+            outputs.append(output)
+        for pdf_page in sorted(pages):
+            if pdf_page < 1 or pdf_page > len(document):
+                raise ValueError(f"PDF 쪽 범위 오류: {pdf_page}")
+            output = OUTPUT / f"p{pdf_page}.png"
+            document[pdf_page - 1].get_pixmap(matrix=pymupdf.Matrix(SCALE, SCALE), alpha=False).save(output)
             outputs.append(output)
     return outputs
 
