@@ -17,6 +17,7 @@ from run_quick import QUICK_CHECKS, run_checks  # noqa: E402
 
 HEAVY_CHECKS = [
     "check_parse", "check_quantity", "check_rag", "check_estimate", "check_table_coverage",
+    "check_draft_executability",
 ]
 
 
