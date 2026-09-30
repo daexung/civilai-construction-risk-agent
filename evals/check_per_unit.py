@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import json
 import sys
 from pathlib import Path
 
@@ -11,7 +12,7 @@ sys.path.insert(0, str(ROOT))
 
 from agent.rules.specs import load_specs  # noqa: E402
 from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
-from agent.tools.calc.per_unit import clean_label, per_unit  # noqa: E402
+from agent.tools.calc.per_unit import clean_label, conversion, parse_basis, per_unit  # noqa: E402
 
 
 def main() -> int:
@@ -52,7 +53,26 @@ def main() -> int:
     ambiguous["quantity_model"]["params"]["unit_rate_table"].pop("row_input")
     bad = per_unit(ambiguous, mixed_inputs)
     checks.append(("행 둘 이상이면 지정 없음", bad["status"] == "unresolvable"
-                   and "행 지정 없음" in bad["reason"]))
+                   and "행 후보 2개" in bad["reason"]))
+    checks.append(("행 미지정 직종으로 유일한 행", per_unit(sole, {"area": "200"})["status"] == "computed"))
+    epoxy = json.loads((ROOT / "data/drafts/specs/공통/6-1-5.json").read_text(encoding="utf-8"))["draft"]
+    epoxy_inputs = {"area": "100", "type": "신구-콘크리트 접착제바르기",
+                    "ceiling_applied": False, "scaffold_used": False,
+                    "floor_level": "지하층 및 1∼3층", "floor_level_19_plus": 19,
+                    "thickness_adjusted": False, "thickness": "1"}
+    epoxy_result = per_unit(epoxy, epoxy_inputs)
+    checks.append(("전치 표 6-1-5 직종 열", epoxy_result["status"] == "computed"
+                   and epoxy_result["unit_lines"][0]["applied"] == "0.12"))
+    for unit, expected in (("인/100㎡", (100, "㎡")), ("100㎡당", (100, "㎡")),
+                           ("㎡당", (1, "㎡")), ("인/개소", (1, "개소")),
+                           ("인/ton", (1, "ton")), ("인/t", (1, "t")),
+                           ("인/1,000개", (1000, "개")), ("인/10m", (10, "m")),
+                           ("인, hr / 1,000㎡", (1000, "㎡"))):
+        checks.append((f"단위 해석 {unit}", parse_basis(unit) == expected))
+    checks.append(("길이 환산", conversion("km", "m") == 1000))
+    checks.append(("질량 환산", conversion("t", "kg") == 1000))
+    checks.append(("개수 환산", conversion("1000개", "개") == 1000))
+    checks.append(("다른 차원 거부", conversion("㎡", "m") is None))
     comma = copy.deepcopy(finish)
     comma["tables"][0]["values"]["미장공"]["수량"] = "２，７００"
     checks.append(("전각·쉼표 숫자", per_unit(comma, {"area": "200"})["unit_lines"][0]["applied"] == "27"))

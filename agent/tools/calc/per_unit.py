@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import re
+import unicodedata
 from fractions import Fraction
 
 from agent.tools.calc.daily_crew import _exact_text, _validate, check_blocked
 from agent.tools.calc.numbers import parse_fraction
-from agent.tools.source.citation import cite_table
+from agent.tools.source.citation import _chunks, cite_table
 
 
 def clean_label(value: str) -> str:
@@ -28,6 +29,47 @@ def _key(value: str) -> str:
 
 def _unresolvable(table: str, row: str, column: str, reason: str) -> dict:
     return {"status": "unresolvable", "reason": f"{table}: 행 '{row}', 열 '{column}' — {reason}"}
+
+
+def parse_basis(unit: str) -> tuple[int, str] | None:
+    """품의 분모만 읽는다. 분자의 인/시간 표기는 표의 직종 열에서 결정한다."""
+    compact = unicodedata.normalize("NFKC", unit).replace(" ", "").replace(",", "")
+    compact = compact.strip("()")
+    compact = re.sub(r"^(?:인(?:,?hr)?|hr|대)/", "", compact)
+    compact = compact.removesuffix("당")
+    match = re.fullmatch(r"(\d+)?(㎡|m2|㎥|m3|m|km|kg|t|ton|개|개소)", compact, re.I)
+    if not match:
+        return None
+    name = match.group(2).lower().replace("m2", "㎡").replace("m3", "㎥")
+    return int(match.group(1) or 1), name
+
+
+def conversion(input_unit: str, table_unit: str) -> Fraction | None:
+    """입력 물량 하나가 표 기준 물량 몇 개인지 나타내는 정확한 비율."""
+    units = {"m": ("length", 1), "km": ("length", 1000),
+             "㎡": ("area", 1), "㎥": ("volume", 1),
+             "kg": ("mass", 1), "t": ("mass", 1000), "ton": ("mass", 1000),
+             "개": ("piece", 1), "개소": ("place", 1)}
+    parsed = parse_basis(input_unit)
+    if parsed is None:
+        return None
+    count, name = parsed
+    if name not in units or table_unit not in units:
+        return None
+    family, scale = units[name]
+    target_family, target_scale = units[table_unit]
+    return Fraction(count * scale, target_scale) if family == target_family else None
+
+
+def _material_unit(table_id: str, row: str, name: str) -> str:
+    chunk = next((item for item in _chunks() if item.get("chunk_id") == table_id), None)
+    if chunk:
+        for text in chunk["text"].splitlines():
+            if _key(row) in _key(text) and _key(name) in _key(text):
+                match = re.search(r"단위\s*([㎏kgℓL㎡㎥m³t개]+)", text)
+                if match:
+                    return match.group(1).replace("㎏", "kg")
+    return "단위 미확인"
 
 
 def per_unit(spec: dict, inputs: dict) -> dict:
@@ -52,45 +94,56 @@ def per_unit(spec: dict, inputs: dict) -> dict:
     params = spec["quantity_model"]["params"]
     rate = params["unit_rate_table"]
     table_id = rate["table"]
-    if params.get("surcharges") or params.get("note_adjustments"):
-        return _unresolvable(table_id, str(rate.get("row_input", "")),
-                             str(rate.get("column_input", "")), "할증·보정 규칙 미지원")
     tables = {table["id"]: table for table in spec["tables"]}
     table = tables.get(table_id)
     if table is None:
         return _unresolvable(table_id, str(rate.get("row_input", "")),
                              str(rate.get("column_input", "")), "표 없음")
-    unit_match = re.fullmatch(r"인/(\d+)?(.+)", re.sub(r"\s+", "", table.get("unit", "")))
-    if unit_match is None:
+    basis = parse_basis(table.get("unit", ""))
+    if basis is None:
         return _unresolvable(table_id, str(rate.get("row_input", "")),
                              str(rate.get("column_input", "")), "기준 단위 파싱 실패")
-    base = int(unit_match.group(1) or "1")
-    quantity_unit = unit_match.group(2)
+    base, quantity_unit = basis
     quantity_name = params["quantity_input"]
-    if fields[quantity_name]["unit"] != quantity_unit:
+    input_unit = fields[quantity_name]["unit"]
+    factor = conversion(input_unit, quantity_unit)
+    if factor is None:
         return _unresolvable(table_id, str(rate.get("row_input", "")),
-                             str(rate.get("column_input", "")), "물량 단위 불일치")
+                             str(rate.get("column_input", "")),
+                             f"물량 단위 불일치: 입력 {input_unit}, 표 {table.get('unit', '')}")
     row_ref = rate.get("row_input")
     col_ref = rate.get("column_input")
-    if row_ref is None and len(table["values"]) != 1:
-        return _unresolvable(table_id, "", "", "행 지정 없음")
     row_word = str(validated.get(row_ref, row_ref)) if row_ref is not None else ""
     col_word = str(validated.get(col_ref, col_ref)) if col_ref is not None else ""
     lines = []
     sources = {}
+    material_columns = []
     for trade in rate["trades"]:
-        rows = ([next(iter(table["values"]))] if row_ref is None else
-                [name for name in table["values"]
-                 if _key(trade) in _key(name) and _key(row_word) in _key(name)])
+        if row_ref is None:
+            rows = [name for name in table["values"] if _key(trade) in _key(name)]
+            if not rows and len(table["values"]) == 1:
+                rows = list(table["values"])
+        else:
+            rows = [name for name in table["values"]
+                    if _key(trade) in _key(name) and _key(row_word) in _key(name)]
+            if not rows:
+                rows = [name for name in table["values"] if _key(row_word) == _key(name)]
         if len(rows) != 1:
             return _unresolvable(table_id, f"{row_word} + {trade}", col_word,
                                  f"행 후보 {len(rows)}개")
         row = rows[0]
         columns = list(table["values"][row])
         if col_ref is None:
-            if len(columns) != 1:
+            trade_columns = [name for name in columns if _key(trade) == _key(name)]
+            if not trade_columns:
+                trade_columns = [name for name in columns if _key(trade) in _key(name)]
+            if trade_columns:
+                matches = trade_columns
+                material_columns = [name for name in columns if name not in trade_columns]
+            elif len(columns) != 1:
                 return _unresolvable(table_id, row_word, col_word, "열 지정 없음")
-            matches = columns
+            else:
+                matches = columns
         else:
             exact_columns = [name for name in columns if _key(name) == _key(col_word)]
             matches = exact_columns or [name for name in columns if _key(col_word) in _key(name)]
@@ -99,20 +152,37 @@ def per_unit(spec: dict, inputs: dict) -> dict:
         column = matches[0]
         raw = table["values"][row][column]
         try:
-            value = parse_fraction(raw) / base
+            value = parse_fraction(raw) * factor / base
         except (ValueError, ZeroDivisionError):
             return _unresolvable(table_id, row_word, col_word, "셀 값 파싱 실패")
         if value < 0:
             return _unresolvable(table_id, row_word, col_word, "음수 품")
         citation = cite_table(table_id, row, column, raw)
-        line = {"kind": "labor", "name": trade, "unit": f"인/{quantity_unit}",
+        line = {"kind": "labor", "name": trade, "unit": f"인/{input_unit}",
                 "exact": str(value), "applied": _exact_text(value), "places": 0,
-                "formula": f"{raw}인 ÷ {base}{quantity_unit}",
+                "formula": f"{raw}인 × {factor} ÷ {base}{quantity_unit}",
                 "rule": "표 단위당 품 그대로 적용(반올림 없음)",
                 "source": f"{table_id} {table['source']}", "citations": [citation]}
         lines.append(line)
         sources[trade] = {"table": table_id, "row": row, "column": column,
                           "value": raw, "citations": [citation]}
+        for name in material_columns:
+            if name in rate["trades"] or any(line["name"] == name for line in lines):
+                continue
+            material_raw = table["values"][row][name]
+            try:
+                material_value = parse_fraction(material_raw) * factor / base
+            except (ValueError, ZeroDivisionError):
+                continue
+            if material_value < 0:
+                return _unresolvable(table_id, row, name, "음수 재료량")
+            material_unit = _material_unit(table_id, row, name)
+            material_citation = cite_table(table_id, row, name, material_raw)
+            lines.append({"kind": "material", "name": name, "unit": f"{material_unit}/{input_unit}",
+                          "exact": str(material_value), "applied": _exact_text(material_value), "places": 0,
+                          "formula": f"{material_raw}{material_unit} × {factor} ÷ {base}{quantity_unit}",
+                          "rule": "재료 단가 자료 없음(사용자 입력 기능 예정)",
+                          "source": f"{table_id} {table['source']}", "citations": [material_citation]})
     return {"status": "computed", "unit_lines": lines,
             "unit_basis": {"per": f"1{quantity_unit}", "daily_output": "",
                            "places": 0, "adjustable_note": "표 단위당 품을 정확히 적용"},
