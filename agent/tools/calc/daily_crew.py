@@ -8,6 +8,7 @@ from fractions import Fraction
 from typing import Any
 
 from agent.tools.calc.unit_rounding import round_quantity, unit_places
+from agent.tools.calc.numbers import parse_fraction
 from agent.tools.source.citation import cite_table, resolve_cites
 
 
@@ -68,7 +69,7 @@ def _validate(field: dict, value: Any) -> tuple[Any, str | None]:
         if type(value) not in (str, int, Fraction):
             return None, f"{name}는 정확한 양수여야 함"
         try:
-            number = Fraction(value)
+            number = parse_fraction(value)
         except (ValueError, ZeroDivisionError):
             return None, f"{name}는 정확한 양수여야 함"
         if number <= 0:
@@ -80,7 +81,7 @@ def _validate(field: dict, value: Any) -> tuple[Any, str | None]:
         if type(value) not in (str, int, Fraction):
             return None, f"{name}는 정확한 양수여야 함"
         try:
-            number = Fraction(str(value).replace(",", ""))
+            number = parse_fraction(value)
         except (ValueError, ZeroDivisionError):
             return None, f"{name}는 정확한 양수여야 함"
         if number <= 0:
@@ -92,9 +93,22 @@ def _validate(field: dict, value: Any) -> tuple[Any, str | None]:
 def _cell(tables: dict, table_id: str, row: str, column: str) -> tuple[Fraction, dict]:
     table = tables[table_id]
     raw = table["values"][row][column]
-    value = Fraction(raw)
+    value = parse_fraction(raw)
     return value, {"table": table_id, "row": row, "column": column, "value": raw,
                    "source": table["source"], "citations": [cite_table(table_id, row, column, raw)]}
+
+
+def _axis_key(values: dict, reference: str | None, inputs: dict,
+              axis: str, table_id: str) -> tuple[str | None, str | None]:
+    """축 지정이 없을 때는 유일한 키만 채택한다. 복수 후보를 임의로 고르지 않는다."""
+    if reference is None:
+        if len(values) == 1:
+            return next(iter(values)), None
+        return None, f"{table_id}: {axis} 지정 없음 (후보 {len(values)}개)"
+    key = inputs.get(reference, reference)
+    if key not in values:
+        return None, f"{table_id}: {axis} '{key}' 없음"
+    return key, None
 
 
 def check_blocked(spec: dict, inputs: dict) -> dict | None:
@@ -110,8 +124,24 @@ def check_blocked(spec: dict, inputs: dict) -> dict | None:
             validated[name] = checked
     for item in spec["blocked"]:
         condition = item.get("blocked_if")
-        if (condition and condition["input"] in validated
-                and _COMPARISONS[condition["op"]](validated[condition["input"]], condition["value"])):
+        if not condition or condition["input"] not in validated:
+            continue
+        field = by_name[condition["input"]]
+        expected = condition["value"]
+        if field["type"] in ("positive_rational", "positive_currency", "nonnegative_integer"):
+            try:
+                expected = parse_fraction(expected)
+            except ValueError:
+                return {"status": "unresolvable", "reason":
+                        f"숫자 보류 조건 해석 불가: {condition['input']} {condition['op']} {condition['value']}",
+                        "input": condition["input"]}
+        try:
+            matches = _COMPARISONS[condition["op"]](validated[condition["input"]], expected)
+        except (TypeError, KeyError):
+            return {"status": "unresolvable", "reason":
+                    f"보류 조건 비교 불가: {condition['input']} {condition['op']} {condition['value']}",
+                    "input": condition["input"]}
+        if matches:
             return {"reason": item["reason"], "source": item["source"], "input": condition["input"],
                     "citations": resolve_cites(item.get("cite"))}
     return None
@@ -156,9 +186,15 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
 
     params = spec["quantity_model"]["params"]
     base = params["base_output"]
-    base_value, base_source = _cell(
-        tables, base["table"], validated[base["row_input"]], validated[base["column_input"]]
-    )
+    base_table = tables[base["table"]]["values"]
+    base_row, error = _axis_key(base_table, base.get("row_input"), validated, "행", base["table"])
+    if error:
+        return {"status": "unresolvable", "reason": error}
+    base_column, error = _axis_key(base_table[base_row], base.get("column_input"),
+                                   validated, "열", base["table"])
+    if error:
+        return {"status": "unresolvable", "reason": error}
+    base_value, base_source = _cell(tables, base["table"], base_row, base_column)
     daily_volume = base_value
     coefficient_sources = []
     for coefficient in params["coefficients"]:
@@ -178,17 +214,23 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
     quantity = validated[quantity_name]
     work_days = quantity / daily_volume
     crew = params["crew"]
-    column = validated[crew["column_input"]]
+    crew_table = tables[crew["table"]]["values"]
     person_days = {}
     person_sources = {}
     for trade in crew["trades"]:
+        if trade not in crew_table:
+            return {"status": "unresolvable", "reason": f"{crew['table']}: 행 '{trade}' 없음"}
+        column, error = _axis_key(crew_table[trade], crew.get("column_input"),
+                                  validated, "열", crew["table"])
+        if error:
+            return {"status": "unresolvable", "reason": error}
         count, crew_source = _cell(tables, crew["table"], trade, column)
         applied_rules = []
         for rule in spec["crew_rules"]:
             if all(validated.get(name) == expected for name, expected in rule["when"].items()):
                 if trade in rule["change"]:
                     change = rule["change"][trade]
-                    count += Fraction(change)
+                    count += parse_fraction(change)
                     applied_rules.append({"when": rule["when"], "change": change, "source": rule["source"],
                                           "citations": resolve_cites(rule.get("cite"))})
         if count < 0:
@@ -214,7 +256,15 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         }
 
     equipment = params["equipment"]
-    equipment_count, equipment_source = _cell(tables, equipment["table"], equipment["name"], column)
+    equipment_table = tables[equipment["table"]]["values"]
+    if equipment["name"] not in equipment_table:
+        return {"status": "unresolvable", "reason": f"{equipment['table']}: 행 '{equipment['name']}' 없음"}
+    equipment_column, error = _axis_key(equipment_table[equipment["name"]],
+                                        equipment.get("column_input", crew.get("column_input")),
+                                        validated, "열", equipment["table"])
+    if error:
+        return {"status": "unresolvable", "reason": error}
+    equipment_count, equipment_source = _cell(tables, equipment["table"], equipment["name"], equipment_column)
     if equipment_count < 0:
         return {"status": "rejected", "reason": "명세 오류: 장비 대수가 음수임", "input": "spec"}
     equipment_days = _exact_text(work_days * equipment_count)

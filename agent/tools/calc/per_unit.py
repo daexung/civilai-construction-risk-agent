@@ -6,6 +6,7 @@ import re
 from fractions import Fraction
 
 from agent.tools.calc.daily_crew import _exact_text, _validate, check_blocked
+from agent.tools.calc.numbers import parse_fraction
 from agent.tools.source.citation import cite_table
 
 
@@ -69,26 +70,36 @@ def per_unit(spec: dict, inputs: dict) -> dict:
     if fields[quantity_name]["unit"] != quantity_unit:
         return _unresolvable(table_id, str(rate.get("row_input", "")),
                              str(rate.get("column_input", "")), "물량 단위 불일치")
-    row_word = str(validated.get(rate.get("row_input"), rate.get("row_input", "")))
-    col_word = str(validated.get(rate.get("column_input"), rate.get("column_input", "")))
+    row_ref = rate.get("row_input")
+    col_ref = rate.get("column_input")
+    if row_ref is None and len(table["values"]) != 1:
+        return _unresolvable(table_id, "", "", "행 지정 없음")
+    row_word = str(validated.get(row_ref, row_ref)) if row_ref is not None else ""
+    col_word = str(validated.get(col_ref, col_ref)) if col_ref is not None else ""
     lines = []
     sources = {}
     for trade in rate["trades"]:
-        rows = [name for name in table["values"]
-                if _key(trade) in _key(name) and _key(row_word) in _key(name)]
+        rows = ([next(iter(table["values"]))] if row_ref is None else
+                [name for name in table["values"]
+                 if _key(trade) in _key(name) and _key(row_word) in _key(name)])
         if len(rows) != 1:
             return _unresolvable(table_id, f"{row_word} + {trade}", col_word,
                                  f"행 후보 {len(rows)}개")
         row = rows[0]
         columns = list(table["values"][row])
-        exact_columns = [name for name in columns if _key(name) == _key(col_word)]
-        matches = exact_columns or [name for name in columns if _key(col_word) in _key(name)]
+        if col_ref is None:
+            if len(columns) != 1:
+                return _unresolvable(table_id, row_word, col_word, "열 지정 없음")
+            matches = columns
+        else:
+            exact_columns = [name for name in columns if _key(name) == _key(col_word)]
+            matches = exact_columns or [name for name in columns if _key(col_word) in _key(name)]
         if len(matches) != 1:
             return _unresolvable(table_id, row_word, col_word, f"열 후보 {len(matches)}개")
         column = matches[0]
         raw = table["values"][row][column]
         try:
-            value = Fraction(raw) / base
+            value = parse_fraction(raw) / base
         except (ValueError, ZeroDivisionError):
             return _unresolvable(table_id, row_word, col_word, "셀 값 파싱 실패")
         if value < 0:

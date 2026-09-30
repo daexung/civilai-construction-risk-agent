@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from agent.rules.specs import load_specs  # noqa: E402
+from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 from agent.tools.calc.per_unit import clean_label, per_unit  # noqa: E402
 
 
@@ -42,6 +43,38 @@ def main() -> int:
     bad_unit = copy.deepcopy(finish)
     bad_unit["tables"][0]["unit"] = "품"
     checks.append(("단위 해석 실패", per_unit(bad_unit, {"area": "200"})["status"] == "unresolvable"))
+    sole = copy.deepcopy(finish)
+    sole["quantity_model"]["params"]["unit_rate_table"].pop("row_input")
+    sole["quantity_model"]["params"]["unit_rate_table"].pop("column_input")
+    checks.append(("행·열 하나면 지정 없이 계산", per_unit(sole, {"area": "200"})["unit_lines"][0]["applied"]
+                   == "0.0034"))
+    ambiguous = copy.deepcopy(mixed)
+    ambiguous["quantity_model"]["params"]["unit_rate_table"].pop("row_input")
+    bad = per_unit(ambiguous, mixed_inputs)
+    checks.append(("행 둘 이상이면 지정 없음", bad["status"] == "unresolvable"
+                   and "행 지정 없음" in bad["reason"]))
+    comma = copy.deepcopy(finish)
+    comma["tables"][0]["values"]["미장공"]["수량"] = "２，７００"
+    checks.append(("전각·쉼표 숫자", per_unit(comma, {"area": "200"})["unit_lines"][0]["applied"] == "27"))
+    threshold = copy.deepcopy(finish)
+    threshold["blocked"] = [{"blocked_if": {"input": "area", "op": ">", "value": "100"},
+                             "reason": "시험 보류", "source": "시험"}]
+    checks.append(("문자열 숫자 보류 비교", per_unit(threshold, {"area": "200"})["status"] == "blocked"))
+    threshold["blocked"][0]["blocked_if"]["value"] = "숫자 아님"
+    checks.append(("숫자 아닌 보류 값은 미해결", per_unit(threshold, {"area": "200"})["status"]
+                   == "unresolvable"))
+    crew_spec = copy.deepcopy(specs[("공통", "6-1-1")])
+    crew_spec["quantity_model"]["params"]["base_output"].pop("row_input")
+    checks.append(("일당 작업조 기준 행 복수 거부", adjusted_daily_crew(crew_spec, {
+        "placement_method": "인력운반 타설", "structure": "철근구조물", "volume": "100",
+        "scattered_small_volume": False, "concrete_supply": "관급"})["status"] == "unresolvable"))
+    crew_spec = copy.deepcopy(specs[("공통", "6-1-1")])
+    for row in crew_spec["tables"][0]["values"].values():
+        row.pop("장비사용 타설")
+    crew_spec["quantity_model"]["params"]["crew"].pop("column_input")
+    checks.append(("일당 작업조 직종 열 하나 선택", adjusted_daily_crew(crew_spec, {
+        "placement_method": "인력운반 타설", "structure": "철근구조물", "volume": "100",
+        "scattered_small_volume": False, "concrete_supply": "관급"})["status"] == "computed"))
     for name, ok in checks:
         print(f"{'PASS' if ok else 'FAIL'} {name}")
     print(f"통과 {sum(ok for _, ok in checks)} / 전체 {len(checks)}")
