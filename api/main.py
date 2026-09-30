@@ -80,6 +80,7 @@ def _questions_out(questions: list[dict]) -> list[dict]:
             "reason": question.get("reason"),
             "optional": question.get("optional", False),
             "free_input": question.get("free_input", False),
+            "citations": _citations_out(question.get("citations", [])),
         }
         for question in questions
     ]

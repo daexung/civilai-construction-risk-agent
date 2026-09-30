@@ -19,6 +19,7 @@ export interface AgentQuestion {
   default?: string | null;
   decision_table?: Record<string, DecisionRow> | null;
   reason?: string | null;
+  citations?: Citation[];
 }
 
 export interface WorkInfo {

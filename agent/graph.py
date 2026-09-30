@@ -42,6 +42,8 @@ def _after_gate(state: AgentState) -> str:
 
 
 def _after_compute(state: AgentState) -> str:
+    if state.get("status") == "MISSING_INFO":
+        return "ask"
     return "compose" if state.get("status") != "COMPUTED" else "price"
 
 
@@ -64,7 +66,7 @@ def build_graph(checkpointer=None):
     graph.add_conditional_edges("fill", _after_fill, {"ask": "ask", "compose": "compose", "gate": "gate"})
     graph.add_edge("ask", "fill")
     graph.add_conditional_edges("gate", _after_gate, {"compose": "compose", "compute": "compute"})
-    graph.add_conditional_edges("compute", _after_compute, {"compose": "compose", "price": "price"})
+    graph.add_conditional_edges("compute", _after_compute, {"compose": "compose", "price": "price", "ask": "ask"})
     graph.add_edge("price", "statement")
     graph.add_edge("statement", "compose")
     graph.add_edge("compose", END)

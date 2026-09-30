@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT))
 
 from agent.tools.calc import adjustments  # noqa: E402
 from agent.tools.calc.per_unit import per_unit  # noqa: E402
+from agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
 
 
 def main() -> int:
@@ -27,9 +28,9 @@ def main() -> int:
                    and result["unit_lines"][0]["adjustments"][0]["citations"][0]["internal_id"] == "p188-t0"))
     inputs["scaffold_used"] = True
     blocked = per_unit(spec, inputs)
-    checks.append(("비계 선택 적용 보류", blocked["status"] == "blocked"
-                   and any(citation["internal_id"] == "p188-x6"
-                           for citation in blocked["citations"])))
+    checks.append(("비계 선택 적용 질문", blocked["status"] == "ask"
+                   and blocked["questions"][0]["name"] == "apply_adj_2"
+                   and blocked["questions"][0].get("default") is None))
     mechanical = json.loads((ROOT / "data/drafts/specs/공통/6-2-5.json").read_text(encoding="utf-8"))["draft"]
     source = adjustments._evidence(mechanical, mechanical["quantity_model"]["params"]["surcharges"][0])
     checks.append(("6-2-5 요율 표와 적용 문장", source is not None
@@ -45,6 +46,29 @@ def main() -> int:
                    and g1_lines["연마공"]["applied"] == "0.165"
                    and g1_lines["조력공"]["applied"] == "0.121"
                    and g1_lines["절단공"]["applied"] == "0.099"))
+    g1_price = price_unit(mechanical, g1["unit_lines"], select_rate_version("2026-10-01"),
+                          {"quantity": "1"}, "2026-10-01")
+    g1_rows = {line["name"]: line for line in g1_price["lines"]}
+    checks.append(("G1 노임·재료 미산정", [g1_rows[name]["amount"] for name in
+                   ("용접공", "연마공", "조력공")] == ["18897.7", "34354.1", "21961.0"]
+                   and g1_rows["절단공"]["amount"] is None
+                   and g1_rows["아세틸렌"]["amount"] is None
+                   and g1_rows["산소"]["amount"] is None))
+    mast = json.loads((ROOT / "data/drafts/specs/공통/2-12-2.json").read_text(encoding="utf-8"))["draft"]
+    mast_inputs = {"floor_count": "1", "floor_level": "7∼9층", "floor_distinguishable": True}
+    mast_missing = per_unit(mast, mast_inputs)
+    mast_yes = per_unit(mast, {**mast_inputs, "apply_adj_2": "예"})
+    mast_no = per_unit(mast, {**mast_inputs, "apply_adj_2": "아니오"})
+    yes_prices = price_unit(mast, mast_yes["unit_lines"], select_rate_version("2026-10-01"),
+                            mast_inputs, "2026-10-01")
+    no_prices = price_unit(mast, mast_no["unit_lines"], select_rate_version("2026-10-01"),
+                           mast_inputs, "2026-10-01")
+    checks.append(("G2 재량 질문·예·아니오", mast_missing["status"] == "ask"
+                   and [line["applied"] for line in mast_yes["unit_lines"]] == ["0.864", "0.2916"]
+                   and [line["applied"] for line in mast_no["unit_lines"]] == ["0.8", "0.27"]
+                   and [line["amount"] for line in yes_prices["lines"]] == ["245756.1", "50358.7"]
+                   and [line["amount"] for line in no_prices["lines"]] == ["227552.0", "46628.4"]
+                   and any("사용자 선택: 미적용" in memo for memo in mast_no["adjustment_memos"])))
 
     base = copy.deepcopy(spec)
     base["quantity_model"]["params"]["surcharges"] = []
@@ -57,7 +81,8 @@ def main() -> int:
         adjustments._evidence = lambda _spec, item, _inputs=None: {
             "chunk": chunk, "quote": item["source"],
             "rate": (adjustments._number(item["source"]) or ("", 0))[1],
-            "citations": adjustments.resolve_cites({"chunk_id": "p188-t0", "quote": item["source"]})}
+            "citations": adjustments.resolve_cites({"chunk_id": "p188-t0", "quote": item["source"]}),
+            "source_kind": "sentence"}
         def run(*items):
             candidate = copy.deepcopy(base)
             candidate["quantity_model"]["params"]["surcharges"] = list(items)
@@ -70,9 +95,11 @@ def main() -> int:
         a, sample = run({"source": "10% 감하여", "rate": "0.1"},
                         {"source": "×0.8", "rate": "0.8"})
         checks.append(("감·승수 기본품 선적용", a["status"] == "computed" and sample["applied"] == "0.72"))
-        for phrase in ("까지", "할 수 있으며", "이내", "범위", "내외"):
+        for phrase in ("까지", "이내", "범위", "내외"):
             a, _ = run({"source": f"20% 가산 {phrase}", "rate": "0.2"})
             checks.append((f"선택 문구 {phrase} 보류", a["status"] == "blocked"))
+        a, _ = run({"source": "20% 가산할 수 있으며", "rate": "0.2"})
+        checks.append(("재량 문구 질문", a["status"] == "ask" and a["questions"][0]["choices"] == ["예", "아니오"]))
         a, _ = run({"source": "품을 가산한다", "rate": "0.2"})
         checks.append(("원문 수치 없음 보류", a["status"] == "blocked"))
         a, _ = run({"source": "표 참조 20% 가산", "rate": "0.2"})

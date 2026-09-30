@@ -10,6 +10,7 @@ from pathlib import Path
 
 from agent.rules.specs import load_specs
 from agent.state import AgentState
+from agent.tools.calc.adjustments import adjustment_questions
 
 _COMMON_INPUTS = Path(__file__).resolve().parents[1] / "rules/cost_statement_inputs.json"
 
@@ -365,6 +366,13 @@ def fill(state: AgentState) -> dict:
     sources.update({name: origin for name in common_values})
     dict_errors = {}
     if spec:
+        for name, value in field_answers.items():
+            if re.fullmatch(r"apply_adj_\d+", name):
+                if value in ("예", "아니오"):
+                    inputs[name] = value
+                    sources[name] = "선택"
+                else:
+                    dict_errors[name] = "예 또는 아니오를 선택해 주세요"
         for field in spec["inputs"]:
             name = field["name"]
             if name not in field_answers:
@@ -431,6 +439,10 @@ def fill(state: AgentState) -> dict:
                     question["hint"] = hint
             if name in ambiguities:
                 question["reason"] = ambiguities[name]
+            questions.append(question)
+        for question in adjustment_questions(spec, inputs):
+            if question["name"] in dict_errors:
+                question["reason"] = dict_errors[question["name"]]
             questions.append(question)
     for field in common_fields:
         name = field["name"]

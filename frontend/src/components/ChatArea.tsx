@@ -115,6 +115,7 @@ function QuestionCard({
         </div>
       )}
       {question.decision_table && <DecisionTable table={question.decision_table} />}
+      {question.citations && question.citations.length > 0 && <CitationList citations={question.citations} />}
     </div>
   );
 }
@@ -191,6 +192,7 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
       <div className="unit-note">{priced?.equipment_rate_version
         ? `건설기계 경비: ${priced.equipment_rate_version.version}년도 (${priced.equipment_rate_version.published} 공표, ${priced.equipment_rate_version.effective_from}~${priced.equipment_rate_version.effective_to} 적용)`
         : '기준일에 적용 가능한 건설기계 경비산출표 없음'}</div>
+      {result.adjustment_memos?.map((memo, index) => <div className="unit-note" key={index}>{memo}</div>)}
       <div className="table-scroll"><table className="inputs-table unit-table">
         <thead>
           <tr><th>구분</th><th>명칭</th><th>단위</th><th>수량</th><th>단가</th><th>{result.unit_basis.per}당 금액</th></tr>

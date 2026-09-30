@@ -430,9 +430,15 @@ def main() -> int:
                                                               "ceiling_applied": ceiling,
                                                               "scaffold_used": scaffold}}).json()
         if label == "E2":
-            ok = (result["status"] == "BLOCKED"
-                  and "할증 규칙" in result.get("result", {}).get("reason", "")
-                  and result.get("result", {}).get("citations", [{}])[0].get("internal_id") == "p188-x6")
+            question = next((item for item in result.get("questions", [])
+                             if item["name"] == "apply_adj_2"), {})
+            ok = (result["status"] == "MISSING_INFO" and question.get("choices") == ["예", "아니오"]
+                  and not question.get("default")
+                  and any(citation["internal_id"] == "p188-x6"
+                          for citation in question.get("citations", [])))
+            answered = CLIENT.post("/api/chat", json={"thread_id": first["thread_id"],
+                                                      "answers": {"apply_adj_2": "예"}}).json()
+            ok = ok and answered["status"] == "PARTIAL" and answered["priced"]["total"] == "39396"
         else:
             priced = result.get("priced") or {}
             statement = result.get("statement") or {}

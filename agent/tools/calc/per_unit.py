@@ -41,7 +41,7 @@ def parse_basis(unit: str | None) -> tuple[int, str] | None:
     compact = compact.strip("()")
     compact = re.sub(r"^(?:인(?:,?hr)?|hr|대)/", "", compact)
     compact = compact.removesuffix("당")
-    match = re.fullmatch(r"(\d+)?(㎡|m2|㎥|m3|m|km|kg|t|ton|개|개소)", compact, re.I)
+    match = re.fullmatch(r"(\d+)?(㎡|m2|㎥|m3|m|km|kg|t|ton|개|개소|층)", compact, re.I)
     if not match:
         return None
     name = match.group(2).lower().replace("m2", "㎡").replace("m3", "㎥")
@@ -53,7 +53,7 @@ def conversion(input_unit: str, table_unit: str) -> Fraction | None:
     units = {"m": ("length", 1), "km": ("length", 1000),
              "㎡": ("area", 1), "㎥": ("volume", 1),
              "kg": ("mass", 1), "t": ("mass", 1000), "ton": ("mass", 1000),
-             "개": ("piece", 1), "개소": ("place", 1)}
+             "개": ("piece", 1), "개소": ("place", 1), "층": ("floor", 1)}
     parsed = parse_basis(input_unit)
     if parsed is None:
         return None
@@ -80,6 +80,11 @@ def per_unit(spec: dict, inputs: dict) -> dict:
     fields = {field["name"]: field for field in spec["inputs"]}
     validated = {}
     for name, value in inputs.items():
+        if re.fullmatch(r"apply_adj_\d+", name):
+            if value not in ("예", "아니오"):
+                return {"status": "rejected", "reason": f"{name}는 예 또는 아니오여야 함"}
+            validated[name] = value
+            continue
         if name not in fields:
             return {"status": "rejected", "reason": f"알 수 없는 입력: {name}"}
         if value is None:
@@ -137,6 +142,8 @@ def per_unit(spec: dict, inputs: dict) -> dict:
                     if _key(trade) in _key(name) and _key(row_word) in _key(name)]
             if not rows:
                 rows = [name for name in table["values"] if _key(row_word) == _key(name)]
+            if not rows and row_ref not in validated:
+                rows = [name for name in table["values"] if _key(trade) == _key(name)]
         if len(rows) != 1:
             return _unresolvable(table_id, f"{row_word} + {trade}", col_word,
                                  f"행 후보 {len(rows)}개")

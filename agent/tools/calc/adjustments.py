@@ -159,13 +159,32 @@ def classify_adjustment(spec: dict, item: dict) -> str:
     return "automatic"
 
 
+def adjustment_questions(spec: dict, inputs: dict) -> list[dict]:
+    items = spec["quantity_model"]["params"].get("surcharges", []) + spec["quantity_model"]["params"].get("note_adjustments", [])
+    questions = []
+    for number, item in enumerate(items, 1):
+        if not matches(item, inputs):
+            continue
+        evidence = _evidence(spec, item, inputs)
+        if not evidence or "할 수 있" not in evidence["quote"]:
+            continue
+        name = f"apply_adj_{number}"
+        if name in inputs:
+            continue
+        excerpt = evidence["quote"][:40]
+        questions.append({"name": name,
+                          "ask": f"품셈에 '{excerpt}' — 가산할 수 있다고 되어 있습니다. 적용할까요?",
+                          "choices": ["예", "아니오"], "citations": evidence["citations"]})
+    return questions
+
+
 def apply_adjustments(spec: dict, inputs: dict, lines: list[dict]) -> dict:
     params = spec["quantity_model"]["params"]
-    selected = [item for item in params.get("surcharges", []) + params.get("note_adjustments", [])
-                if matches(item, inputs)]
+    items = params.get("surcharges", []) + params.get("note_adjustments", [])
+    selected = [(number, item) for number, item in enumerate(items, 1) if matches(item, inputs)]
     applicable = []
     memos = []
-    for item in selected:
+    for number, item in selected:
         evidence = _evidence(spec, item, inputs)
         text = " ".join(str(item.get(key, "")) for key in ("rate", "change", "source"))
         if not re.search(r"\d|%|×|[xX*]", text):
@@ -175,10 +194,19 @@ def apply_adjustments(spec: dict, inputs: dict, lines: list[dict]) -> dict:
             return _blocked(item, evidence)
         quote = evidence["quote"]
         # 선택 적용 문구는 초안에서 삭제되었더라도 원문 기준으로 판정한다.
-        if any(word in quote or word in text for word in RANGE_WORDS) or "할 수 있" in quote:
+        if any(word in quote or word in text for word in RANGE_WORDS):
+            return _blocked(item, evidence, "할증률이 범위로 정해져 있어 적용 비율을 정해야 함")
+        if any(word in text for word in ("산식", "누적", "복리")) or (evidence["source_kind"] != "table" and
+                 re.search(r"(?:매\s*\d+|증가시마다)", quote)):
             return _blocked(item, evidence)
-        if any(word in text for word in ("산식", "누적", "복리")) or re.search(r"(?:매\s*\d+|증가시마다)", quote):
-            return _blocked(item, evidence)
+        if "할 수 있" in quote:
+            answer = inputs.get(f"apply_adj_{number}")
+            if answer not in ("예", "아니오"):
+                return {"status": "ask", "missing": [f"apply_adj_{number}"],
+                        "questions": adjustment_questions(spec, inputs)}
+            if answer == "아니오":
+                memos.append(f"사용자 선택: 미적용 — {quote}")
+                continue
         parsed = _number(quote)
         if evidence.get("source_kind") != "table" and (parsed is None or parsed[1] != evidence["rate"]):
             return _blocked(item, evidence)

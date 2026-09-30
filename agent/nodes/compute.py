@@ -16,7 +16,10 @@ def compute(state: AgentState) -> dict:
         return {"status": "ERROR", "reason": f"등록되지 않은 계산 방식입니다: {name}"}
     spec_inputs = {field["name"] for field in spec["inputs"]}
     result = calculate(spec, {name: value for name, value in state.get("inputs", {}).items()
-                              if name in spec_inputs})
+                              if name in spec_inputs or name.startswith("apply_adj_")})
+    if result.get("status") == "ask":
+        return {"status": "MISSING_INFO", "reason": "할증 적용 여부를 확인해 주세요",
+                "questions": result.get("questions", []), "result": result}
     if result.get("status") == "blocked":
         return {"status": "BLOCKED", "reason": result["reason"], "result": result}
     if result.get("status") != "computed":

@@ -173,8 +173,12 @@ def main() -> int:
             answers["work"] = "6-1-5"
         done = graph.invoke(Command(resume=answers), config(thread))
         if label == "E2":
-            ok = (done.get("status") == "BLOCKED"
-                  and done.get("result", {}).get("citations", [{}])[0].get("internal_id") == "p188-x6")
+            discretionary = next((item for item in questions(done) if item["name"] == "apply_adj_2"), {})
+            ok = (done.get("status") == "MISSING_INFO"
+                  and discretionary.get("choices") == ["예", "아니오"]
+                  and not discretionary.get("default"))
+            completed = graph.invoke(Command(resume={"apply_adj_2": "아니오"}), config(thread))
+            ok = ok and completed.get("status") == "PARTIAL"
         else:
             ok = (done.get("status") == "PARTIAL" and done["priced"]["total"] == total
                   and done["statement"]["totals"]["contract_amount"] == contract)

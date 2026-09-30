@@ -155,6 +155,11 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
     validated: dict[str, Any] = {}
 
     for name, value in inputs.items():
+        if re.fullmatch(r"apply_adj_\d+", name):
+            if value not in ("예", "아니오"):
+                return {"status": "rejected", "reason": f"{name}는 예 또는 아니오여야 함", "input": name}
+            validated[name] = value
+            continue
         if name not in by_name:
             return {"status": "rejected", "reason": f"알 수 없는 입력: {name}", "input": name}
         if value is None:
