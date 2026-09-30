@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
+from fractions import Fraction
 import sys
 from pathlib import Path
 
@@ -13,6 +14,8 @@ sys.path.insert(0, str(ROOT))
 from agent.rules.specs import load_specs  # noqa: E402
 from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 from agent.tools.calc.per_unit import clean_label, conversion, parse_basis, per_unit  # noqa: E402
+from agent.tools.calc.numbers import parse_table_number  # noqa: E402
+from evals.check_draft_executability import _values  # noqa: E402
 
 
 def main() -> int:
@@ -69,6 +72,26 @@ def main() -> int:
                    and materials["Epoxy신구-콘크리트접착제"]["unit"] == "kg/㎡"
                    and materials["시너"]["applied"] == "0.2"
                    and materials["시너"]["unit"] == "ℓ/㎡"))
+    mechanical = json.loads((ROOT / "data/drafts/specs/공통/6-2-5.json").read_text(encoding="utf-8"))["draft"]
+    direct = per_unit(mechanical, {"quantity": "1", "rebar_diameter": 35, "work_height": "10m 미만"})
+    direct_lines = {line["name"]: line for line in direct.get("unit_lines", [])}
+    checks.append(("6-2-5 기본품과 재료", direct["status"] == "computed"
+                   and direct_lines["용접공"]["applied"] == "0.06"
+                   and direct_lines["아세틸렌"]["applied"] == "133"
+                   and direct_lines["산소"]["applied"] == "744"))
+    checks.append(("초안 정수 하한", _values(mechanical["inputs"][1]) == ["35"]))
+    checks.append(("표 음수 퍼센트·장비 대수", parse_table_number("- 17%") == Fraction(-17, 100)
+                   and parse_table_number("-30%") == Fraction(-3, 10)
+                   and parse_table_number("1대(80㎥/hr 이상)") == 1))
+    no_unit = copy.deepcopy(finish)
+    no_unit["tables"][0]["unit"] = None
+    checks.append(("단위 없음 1단위 경고", "단위 표기 없음" in per_unit(no_unit, {"area": "200"})
+                   .get("warnings", [""])[0]))
+    with_equipment = json.loads((ROOT / "data/drafts/specs/공통/3-4-2.json").read_text(encoding="utf-8"))["draft"]
+    equipment_inputs = {field["name"]: (field["allowed_values"][0] if field["type"] == "enum" else "100")
+                        for field in with_equipment["inputs"]}
+    equipment_result = adjusted_daily_crew(with_equipment, equipment_inputs)
+    checks.append(("장비 목록 형식", equipment_result["status"] in ("computed", "blocked")))
     for unit, expected in (("인/100㎡", (100, "㎡")), ("100㎡당", (100, "㎡")),
                            ("㎡당", (1, "㎡")), ("인/개소", (1, "개소")),
                            ("인/ton", (1, "ton")), ("인/t", (1, "t")),

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import re
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -32,6 +33,9 @@ def _values(field: dict, blocked: list[dict] | None = None) -> list:
     if kind == "positive_currency":
         return ["100"]
     if kind in ("positive_rational", "nonnegative_integer"):
+        lower = re.search(r"(\d+)\s*이상의\s*정수", str(field.get("allowed_values", "")))
+        if lower:
+            return [lower.group(1)]
         exact = next((item["value"] for item in blocked if item.get("op") == "!="), None)
         if exact is not None:
             return [str(exact)]

@@ -8,7 +8,7 @@ from fractions import Fraction
 
 from agent.tools.calc.daily_crew import _exact_text, _validate, check_blocked
 from agent.tools.calc.adjustments import apply_adjustments
-from agent.tools.calc.numbers import parse_fraction
+from agent.tools.calc.numbers import parse_fraction, parse_table_number
 from agent.tools.calc.price import select_rate_version
 from agent.tools.source.citation import _chunks, cite_table
 
@@ -33,8 +33,10 @@ def _unresolvable(table: str, row: str, column: str, reason: str) -> dict:
     return {"status": "unresolvable", "reason": f"{table}: 행 '{row}', 열 '{column}' — {reason}"}
 
 
-def parse_basis(unit: str) -> tuple[int, str] | None:
+def parse_basis(unit: str | None) -> tuple[int, str] | None:
     """품의 분모만 읽는다. 분자의 인/시간 표기는 표의 직종 열에서 결정한다."""
+    if unit is None:
+        return None
     compact = unicodedata.normalize("NFKC", unit).replace(" ", "").replace(",", "")
     compact = compact.strip("()")
     compact = re.sub(r"^(?:인(?:,?hr)?|hr|대)/", "", compact)
@@ -101,14 +103,19 @@ def per_unit(spec: dict, inputs: dict) -> dict:
     if table is None:
         return _unresolvable(table_id, str(rate.get("row_input", "")),
                              str(rate.get("column_input", "")), "표 없음")
-    basis = parse_basis(table.get("unit", ""))
+    input_unit = fields[params["quantity_input"]]["unit"]
+    raw_basis = table.get("unit")
+    basis = parse_basis(raw_basis)
+    unit_warning = None
+    if basis is None and (raw_basis is None or raw_basis == "ℓ, 인"):
+        basis = (1, input_unit or "단위")
+        unit_warning = "단위 표기 없음: 표의 분모를 1단위로 적용"
     if basis is None:
         return _unresolvable(table_id, str(rate.get("row_input", "")),
                              str(rate.get("column_input", "")), "기준 단위 파싱 실패")
     base, quantity_unit = basis
     quantity_name = params["quantity_input"]
-    input_unit = fields[quantity_name]["unit"]
-    factor = conversion(input_unit, quantity_unit)
+    factor = Fraction(1) if unit_warning else conversion(input_unit, quantity_unit)
     if factor is None:
         return _unresolvable(table_id, str(rate.get("row_input", "")),
                              str(rate.get("column_input", "")),
@@ -154,7 +161,7 @@ def per_unit(spec: dict, inputs: dict) -> dict:
         column = matches[0]
         raw = table["values"][row][column]
         try:
-            value = parse_fraction(raw) * factor / base
+            value = parse_table_number(raw) * factor / base
         except (ValueError, ZeroDivisionError):
             return _unresolvable(table_id, row_word, col_word, "셀 값 파싱 실패")
         if value < 0:
@@ -173,7 +180,7 @@ def per_unit(spec: dict, inputs: dict) -> dict:
                 continue
             material_raw = table["values"][row][name]
             try:
-                material_value = parse_fraction(material_raw) * factor / base
+                material_value = parse_table_number(material_raw) * factor / base
             except (ValueError, ZeroDivisionError):
                 continue
             if material_value < 0:
@@ -191,10 +198,38 @@ def per_unit(spec: dict, inputs: dict) -> dict:
                           "rule": ("재료 단가 자료 없음(사용자 입력 기능 예정)" if kind == "material"
                                    else "표 단위당 품 그대로 적용(반올림 없음)"),
                           "source": f"{table_id} {table['source']}", "citations": [material_citation]})
+    if row_ref is None and col_ref is not None:
+        version = select_rate_version("2026-10-01")
+        labor_names = {entry["name"] for entry in version["rates"].values()} if version else set()
+        for name, columns in table["values"].items():
+            if name in rate["trades"] or any(line["name"] == name for line in lines):
+                continue
+            candidates = [column for column in columns if _key(column) == _key(col_word)]
+            if len(candidates) != 1:
+                continue
+            column = candidates[0]
+            raw = columns[column]
+            try:
+                value = parse_table_number(raw) * factor / base
+            except (ValueError, ZeroDivisionError):
+                continue
+            if value < 0:
+                return _unresolvable(table_id, name, column, "음수 품")
+            kind = "labor" if name in labor_names else "material"
+            material_unit = ("인" if kind == "labor" else "ℓ" if raw_basis == "ℓ, 인"
+                             else _material_unit(table_id, name, name))
+            citation = cite_table(table_id, name, column, raw)
+            lines.append({"kind": kind, "name": name, "unit": f"{material_unit}/{input_unit}",
+                          "exact": str(value), "applied": _exact_text(value), "places": 0,
+                          "formula": f"{raw}{material_unit} × {factor} ÷ {base}{quantity_unit}",
+                          "rule": ("재료 단가 자료 없음(사용자 입력 기능 예정)" if kind == "material"
+                                   else "표 단위당 품 그대로 적용(반올림 없음)"),
+                          "source": f"{table_id} {table['source']}", "citations": [citation]})
     adjusted = apply_adjustments(spec, validated, lines)
     if adjusted["status"] != "computed":
         return adjusted
     return {"status": "computed", "unit_lines": lines, "adjustment_memos": adjusted["memos"],
+            "warnings": [unit_warning] if unit_warning else [],
             "unit_basis": {"per": f"1{quantity_unit}", "daily_output": "",
                            "places": 0, "adjustable_note": "표 단위당 품을 정확히 적용"},
             "provenance": {"unit_rates": sources, "quantity_input": quantity_name,

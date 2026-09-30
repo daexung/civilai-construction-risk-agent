@@ -8,7 +8,7 @@ from fractions import Fraction
 from typing import Any
 
 from agent.tools.calc.unit_rounding import round_quantity, unit_places
-from agent.tools.calc.numbers import parse_fraction
+from agent.tools.calc.numbers import parse_fraction, parse_table_number
 from agent.tools.source.citation import cite_table, resolve_cites
 
 
@@ -93,7 +93,7 @@ def _validate(field: dict, value: Any) -> tuple[Any, str | None]:
 def _cell(tables: dict, table_id: str, row: str, column: str) -> tuple[Fraction, dict]:
     table = tables[table_id]
     raw = table["values"][row][column]
-    value = parse_fraction(raw)
+    value = parse_table_number(raw)
     return value, {"table": table_id, "row": row, "column": column, "value": raw,
                    "source": table["source"], "citations": [cite_table(table_id, row, column, raw)]}
 
@@ -197,7 +197,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
     base_value, base_source = _cell(tables, base["table"], base_row, base_column)
     daily_volume = base_value
     coefficient_sources = []
-    for coefficient in params["coefficients"]:
+    for coefficient in params.get("coefficients", []):
         value, source = _cell(tables, coefficient["table"], coefficient["row"], validated[coefficient["input"]])
         daily_volume *= value
         coefficient_sources.append(source)
@@ -255,11 +255,14 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                                                    for citation in rule["citations"]],
         }
 
-    equipment = params.get("equipment") or {}
-    equipment_count = Fraction(0)
-    equipment_source = None
-    equipment_days = "0"
-    if equipment.get("table"):
+    equipment_spec = params.get("equipment") or []
+    equipment_items = equipment_spec if isinstance(equipment_spec, list) else [equipment_spec]
+    equipment_days = {}
+    equipment_units = {}
+    equipment_sources = {}
+    for equipment in equipment_items:
+        if not equipment.get("table"):
+            continue
         equipment_table = tables[equipment["table"]]["values"]
         if equipment["name"] not in equipment_table:
             return {"status": "unresolvable", "reason": f"{equipment['table']}: 행 '{equipment['name']}' 없음"}
@@ -272,7 +275,11 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         equipment_count, equipment_source = _cell(tables, equipment["table"], equipment["name"], equipment_column)
         if equipment_count < 0:
             return {"status": "rejected", "reason": "명세 오류: 장비 대수가 음수임", "input": "spec"}
-        equipment_days = _exact_text(work_days * equipment_count)
+        equipment_days[equipment["name"]] = _exact_text(work_days * equipment_count)
+        equipment_units[equipment["name"]] = equipment["unit"]
+        equipment_sources[equipment["name"]] = {
+            "equipment": equipment_source, "work_days": "work_days",
+            "formula": "work_days × equipment_count", "citations": equipment_source["citations"]}
         equipment_value = equipment_count * 8 / daily_volume
         if equipment_count:
             unit_lines.append({
@@ -297,8 +304,8 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         "daily_volume_m3": _exact_text(daily_volume),
         "work_days": _exact_text(work_days),
         "person_days": person_days,
-        "equipment_days": {equipment["name"]: equipment_days} if equipment_count else {},
-        "equipment_units": {equipment["name"]: equipment["unit"]} if equipment_count else {},
+        "equipment_days": equipment_days,
+        "equipment_units": equipment_units,
         "unit_lines": unit_lines,
         "adjustment_memos": adjusted["memos"],
         "unit_basis": {
@@ -323,14 +330,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                                                         for citation in source["citations"]],
             },
             "person_days": person_sources,
-            "equipment_days": {
-                equipment["name"]: {
-                    "equipment": equipment_source,
-                    "work_days": "work_days",
-                    "formula": "work_days × equipment_count",
-                    "citations": equipment_source["citations"],
-                }
-            } if equipment_count else {},
+            "equipment_days": equipment_sources,
         },
         "not_calculated": spec["not_calculated"],
     }
