@@ -4,12 +4,16 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 import pymupdf
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from agent.rules.specs import load_specs  # noqa: E402
 SPECS = ROOT / "agent/rules/specs"
 CHUNKS = ROOT / "data/processed/chunks.jsonl"
 PDF = ROOT / "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
@@ -20,11 +24,7 @@ SCALE = 3
 
 
 def referenced_tables() -> set[str]:
-    ids = set()
-    for path in SPECS.rglob("*.json"):
-        spec = json.loads(path.read_text(encoding="utf-8"))
-        ids.update(table["id"] for table in spec.get("tables", []))
-    return ids
+    return {table["id"] for spec in load_specs().values() for table in spec.get("tables", [])}
 
 
 def referenced_pages() -> set[int]:

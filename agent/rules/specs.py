@@ -4,8 +4,11 @@ import json
 from functools import cache
 from pathlib import Path
 
+from agent.tools.calc.per_unit import clean_label
+
 
 SPECS_DIR = Path(__file__).resolve().parent / "specs"
+ROOT = Path(__file__).resolve().parents[2]
 REQUIRED = {"id", "division", "section_no", "title", "inputs", "tables", "quantity_model"}
 
 
@@ -22,6 +25,27 @@ def load_specs() -> dict[str, dict]:
         if spec["id"] in specs:
             raise ValueError(f"{path.name}: 중복 명세 id: {spec['id']}")
         specs[spec["id"]] = spec
+    config = json.loads((ROOT / "agent/rules/drafts_config.json").read_text(encoding="utf-8"))
+    executable = set(json.loads((ROOT / "data/drafts/executable.json").read_text(encoding="utf-8"))["executable"])
+    reviewed = {(spec["division"], spec["section_no"]) for spec in specs.values()}
+    for path in sorted((ROOT / "data/drafts/specs").rglob("*.json")):
+        package = json.loads(path.read_text(encoding="utf-8"))
+        if package["calc_type"] not in ("daily_crew", "per_unit"):
+            continue
+        spec = package["draft"]
+        section = (spec["division"], spec["section_no"])
+        if spec["id"] not in executable or section in reviewed:
+            continue
+        if not any(f"{section[0]}/{section[1]}".startswith(prefix)
+                   for prefix in config["enabled_prefixes"]):
+            continue
+        spec["review"] = "AI 초안 · 검토 전"
+        spec["origin"] = "draft"
+        for field in spec["inputs"]:
+            if field["type"] == "enum":
+                field["labels"] = {value: clean_label(value) for value in field["allowed_values"]}
+        specs[spec["id"]] = spec
+        reviewed.add(section)
     return specs
 
 

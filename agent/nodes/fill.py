@@ -370,6 +370,10 @@ def fill(state: AgentState) -> dict:
             if name not in field_answers:
                 continue
             value = field_answers[name]
+            if field.get("labels") and value not in field["allowed_values"]:
+                label_matches = [raw for raw, label in field["labels"].items() if label == value]
+                if len(label_matches) == 1:
+                    value = label_matches[0]
             if _valid_for_field(value, field):
                 if field["type"] in ("positive_rational", "positive_currency") and value != "모름":
                     inputs[name] = _format_rational(Fraction(str(value).replace(",", "")))
@@ -417,6 +421,8 @@ def fill(state: AgentState) -> dict:
                 continue
             question = {"name": name, "ask": field["ask"],
                         "choices": field["allowed_values"]}
+            if field.get("labels"):
+                question["labels"] = field["labels"]
             if "decision_table" in field:
                 table = tables[field["decision_table"]]
                 question["decision_table"] = table["values"]
