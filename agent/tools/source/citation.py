@@ -11,7 +11,8 @@ import pymupdf
 
 
 ROOT = Path(__file__).resolve().parents[3]
-CHUNKS = ROOT / "data/processed/chunks.jsonl"
+ALL_CHUNKS = ROOT / "data/processed/chunks.all.jsonl"
+CHUNKS = ALL_CHUNKS if ALL_CHUNKS.is_file() else ROOT / "data/processed/chunks.jsonl"
 PAGE_MAP = ROOT / "data/processed/page_map.json"
 PDF = ROOT / "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
 CODE = "2026 건설공사 표준품셈"

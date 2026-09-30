@@ -6,6 +6,7 @@ import json
 import os
 import re
 import sys
+from tempfile import TemporaryDirectory
 from pathlib import Path
 
 os.environ["AGENT_OFFLINE"] = "1"
@@ -14,7 +15,8 @@ sys.path.insert(0, str(ROOT))
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from agent.tools.source.citation import PDF, cite_note, cite_table, resolve_cites  # noqa: E402
+from agent.tools.source.citation import CHUNKS, PDF, cite_note, cite_table, resolve_cites  # noqa: E402
+import api.main as api_main  # noqa: E402
 from api.main import app  # noqa: E402
 from pipeline.page_map import KNOWN, summarize  # noqa: E402
 
@@ -100,6 +102,25 @@ def main() -> int:
     checks.append(("C11 보류 사유 원문 주석", blocked["status"] == "BLOCKED"
                    and any("회당 \n시공량의 5%" in (c["quote"] or "")
                            for c in blocked["result"].get("citations", []))))
+
+    if CHUNKS.name == "chunks.all.jsonl":
+        outside = resolve_cites({"chunk_id": "p628-x14"})[0]
+        checks.append(("C12 6장 밖 텍스트 인용", outside["internal_id"] == "p628-x14"
+                       and outside["pdf_page"] == 628 and bool(outside["section_no"])))
+        original_sources = api_main.SOURCES
+        try:
+            with TemporaryDirectory() as directory:
+                api_main.SOURCES = Path(directory)
+                table_image = client.get("/api/source/p629-t3.png")
+                text_image = client.get("/api/source/p628-x14.png")
+                checks.append(("C13 없는 PNG 즉석 생성", table_image.status_code == 200
+                               and text_image.status_code == 200
+                               and table_image.content.startswith(b"\x89PNG\r\n\x1a\n")
+                               and text_image.content.startswith(b"\x89PNG\r\n\x1a\n")
+                               and (Path(directory) / "p629-t3.png").is_file()
+                               and (Path(directory) / "p628-x14.png").is_file()))
+        finally:
+            api_main.SOURCES = original_sources
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

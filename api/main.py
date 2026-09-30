@@ -18,6 +18,7 @@ from pydantic import BaseModel
 
 from agent.graph import build_graph
 from agent.rules.specs import load_specs
+from pipeline.render_sources import render_source
 from agent.state import new_state
 from agent.nodes.fill import _common_fields, _valid_for_field
 from api.tables import add_tables, build_xlsx, estimate_filename
@@ -171,7 +172,8 @@ def _rule_label(rule: dict) -> str:
 
 def _citations_out(citations: list[dict]) -> list[dict]:
     return [{**citation, **({"image_url": f"/api/source/{citation['internal_id']}.png"}
-                           if citation["item"] == "표" else {})} for citation in citations]
+                           if re.fullmatch(r"p\d+(?:-[tx]\d+)?", citation["internal_id"]) else {})}
+            for citation in citations]
 
 
 def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
@@ -326,11 +328,14 @@ def health() -> dict:
 
 @app.get("/api/source/{table_id}.png")
 def source_image(table_id: str) -> FileResponse:
-    if not re.fullmatch(r"p\d+(?:-t\d+)?", table_id):
+    if not re.fullmatch(r"p\d+(?:-[tx]\d+)?", table_id):
         raise HTTPException(status_code=404, detail="표 이미지를 찾을 수 없습니다")
     path = SOURCES / f"{table_id}.png"
     if not path.is_file():
-        raise HTTPException(status_code=404, detail="표 이미지를 찾을 수 없습니다")
+        try:
+            path = render_source(table_id, output_dir=SOURCES)
+        except (LookupError, FileNotFoundError, ValueError):
+            raise HTTPException(status_code=404, detail="표 이미지를 찾을 수 없습니다") from None
     return FileResponse(path, media_type="image/png")
 
 
