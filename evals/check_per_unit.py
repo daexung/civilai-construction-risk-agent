@@ -63,6 +63,12 @@ def main() -> int:
     epoxy_result = per_unit(epoxy, epoxy_inputs)
     checks.append(("전치 표 6-1-5 직종 열", epoxy_result["status"] == "computed"
                    and epoxy_result["unit_lines"][0]["applied"] == "0.12"))
+    materials = {line["name"]: line for line in epoxy_result["unit_lines"]
+                 if line["kind"] == "material"}
+    checks.append(("재료량과 단가 미산정", materials["Epoxy신구-콘크리트접착제"]["applied"] == "1.2"
+                   and materials["Epoxy신구-콘크리트접착제"]["unit"] == "kg/㎡"
+                   and materials["시너"]["applied"] == "0.2"
+                   and materials["시너"]["unit"] == "ℓ/㎡"))
     for unit, expected in (("인/100㎡", (100, "㎡")), ("100㎡당", (100, "㎡")),
                            ("㎡당", (1, "㎡")), ("인/개소", (1, "개소")),
                            ("인/ton", (1, "ton")), ("인/t", (1, "t")),

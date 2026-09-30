@@ -245,12 +245,15 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
         if Decimal(line["applied"]) == 0:
             continue
         code = codes.get(line["name"]) or names_to_codes.get(line["name"])
-        row = {"kind": line["kind"], "category": "노무비" if line["kind"] == "labor" else "경비",
+        category = {"labor": "노무비", "equipment": "경비", "material": "재료비"}[line["kind"]]
+        row = {"kind": line["kind"], "category": category,
                "name": line["name"], "unit": line["unit"], "quantity": line["applied"],
                "rate_code": code if line["kind"] == "labor" else None,
                "unit_price": None, "amount_exact": None, "amount": None,
                "citations": list(line.get("citations", [])), "reason": None}
-        if line["kind"] == "equipment":
+        if line["kind"] == "material":
+            row["reason"] = "재료 단가 자료 없음(사용자 입력 기능 예정)"
+        elif line["kind"] == "equipment":
             if line["name"] == "콘크리트펌프차":
                 equipment_lines.extend(_machine_rows(spec, line, rate_version, equipment_version, inputs or {}))
                 if not equipment_lines:

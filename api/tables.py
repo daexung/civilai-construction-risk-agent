@@ -190,6 +190,12 @@ def rate_rows(priced: dict | None, statement: dict | None,
             rows.append({"kind": "자재", "name": line["name"], "spec": "",
                          "unit": line.get("unit", ""), "price": "-", "source": "",
                          "period": "", "note": note})
+    for line in priced.get("lines", []):
+        if line.get("kind") == "material":
+            rows.append({"kind": "자재", "name": line["name"], "spec": "",
+                         "unit": line.get("unit", "").split("/", 1)[0], "price": "-",
+                         "source": _citation_source(line.get("citations")), "period": "",
+                         "note": line.get("reason", "")})
     return rows
 
 

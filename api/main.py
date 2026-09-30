@@ -184,7 +184,8 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
         quantity = Fraction(raw["provenance"]["quantity"])
         lines = [{"kind": line["kind"], "name": line["name"],
                   "value": _exact_text(Fraction(line["exact"]) * quantity),
-                  "unit": "인·일" if line["kind"] == "labor" else "대·일",
+                  "unit": ("인·일" if line["kind"] == "labor" else
+                           line["unit"].split("/", 1)[0] if line["kind"] == "material" else "대·일"),
                   "crew": None, "rules": [], "source": line["source"],
                   "citations": _citations_out(line["citations"])}
                  for line in raw["unit_lines"]]

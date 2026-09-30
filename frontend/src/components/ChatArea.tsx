@@ -217,7 +217,7 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
             }
             return (
             <tr key={line.name}>
-              <td>{line.kind === 'labor' ? '노무' : '장비'}</td>
+              <td>{line.kind === 'labor' ? '노무' : line.kind === 'material' ? '재료' : '장비'}</td>
               <td>{line.name}</td>
               <td>{line.unit}</td>
               <td><details className="unit-quantity" title={`${line.formula} = ${line.exact}; ${line.rule}`}>
@@ -231,7 +231,7 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
                 <CitationList citations={price.citations} /></details> : '—'}</td>
               <td>{price?.amount ? <details className="price-detail"><summary>{won(price.amount)}</summary>
                 <div>버림 전: {won(price.amount_exact)}</div>
-                <CitationList citations={price.citations} /></details> : '—'}</td>
+                <CitationList citations={price.citations} /></details> : `— ${price?.reason ?? ''}`}</td>
             </tr>
           ); })}
           {priced?.supply_lines?.map((line) => (

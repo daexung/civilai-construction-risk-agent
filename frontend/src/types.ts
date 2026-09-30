@@ -51,7 +51,7 @@ export interface SearchInfo {
 }
 
 export interface ResultLine {
-  kind: 'labor' | 'equipment';
+  kind: 'labor' | 'equipment' | 'material';
   name: string;
   value: string;
   unit: string;
@@ -82,7 +82,7 @@ export interface Citation {
 }
 
 export interface UnitLine {
-  kind: 'labor' | 'equipment';
+  kind: 'labor' | 'equipment' | 'material';
   name: string;
   unit: string;
   exact: string;
@@ -105,7 +105,7 @@ export interface ComputedResult {
 }
 
 export interface PricedLine {
-  kind: 'labor' | 'equipment' | 'rate_cost' | 'equipment_component' | 'supply_component';
+  kind: 'labor' | 'equipment' | 'material' | 'rate_cost' | 'equipment_component' | 'supply_component';
   category: string;
   name: string;
   unit?: string;
