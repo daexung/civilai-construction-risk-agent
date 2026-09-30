@@ -149,6 +149,32 @@ def _volume(query: str) -> tuple[str | None, str | None]:
     return None, None
 
 
+def _ready_mix_price(query: str) -> tuple[str | None, str | None]:
+    if query.strip() in ("모름", "몰라요", "모르겠습니다") or re.search(
+            r"(?:레미콘(?:단가|가격)?|m3당|루베당).*모름", query):
+        return "모름", None
+    pattern = re.compile(
+        r"(?:레미콘(?:단가|가격)?(?:m3당|루베당)?|m3당|루베당)"
+        r"([\d,]+(?:\.\d+)?)(만원|원)?"
+    )
+    found = []
+    for match in pattern.finditer(query):
+        try:
+            amount = Fraction(match.group(1).replace(",", ""))
+        except (ValueError, ZeroDivisionError):
+            return None, "레미콘 단가를 해석할 수 없습니다"
+        if match.group(2) == "만원":
+            amount *= 10_000
+        if amount <= 0:
+            return None, "레미콘 단가는 0보다 커야 합니다"
+        found.append(amount)
+    if len(set(found)) > 1:
+        return None, "서로 다른 레미콘 단가가 함께 언급되었습니다"
+    if found:
+        return _format_rational(found[0]), None
+    return None, None
+
+
 def _finite_decimal(value: Fraction) -> str:
     denominator = value.denominator
     twos = fives = 0
@@ -171,7 +197,13 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
     ambiguities: dict[str, str] = {}
     for field in spec["inputs"]:
         name = field["name"]
-        if field["type"] == "positive_rational":
+        if field["type"] == "positive_currency":
+            value, reason = _ready_mix_price(normalized)
+            if value is not None:
+                values[name] = value
+            elif reason:
+                ambiguities[name] = reason
+        elif field["type"] == "positive_rational":
             value, reason = _volume(normalized)
             if value is not None:
                 values[name] = value
@@ -264,6 +296,8 @@ def _valid_for_field(value: object, field: dict) -> bool:
         return type(value) is bool
     if kind == "positive_rational":
         return _valid_positive_rational(value)
+    if kind == "positive_currency":
+        return value == "모름" or _valid_positive_rational(value)
     if kind == "nonnegative_integer":
         return type(value) is int and value >= 0
     if kind == "project_scale":
@@ -337,7 +371,10 @@ def fill(state: AgentState) -> dict:
                 continue
             value = field_answers[name]
             if _valid_for_field(value, field):
-                inputs[name] = value if field["type"] != "positive_rational" else _format_rational(Fraction(str(value)))
+                if field["type"] in ("positive_rational", "positive_currency") and value != "모름":
+                    inputs[name] = _format_rational(Fraction(str(value).replace(",", "")))
+                else:
+                    inputs[name] = value
                 sources[name] = "선택"
             else:
                 dict_errors[name] = "허용값이 아닙니다"
@@ -374,6 +411,9 @@ def fill(state: AgentState) -> dict:
         for field in spec["inputs"]:
             name = field["name"]
             if not field["required"] or (name in inputs and name not in ambiguities):
+                continue
+            condition = field.get("when")
+            if condition and inputs.get(condition["input"]) != condition["equals"]:
                 continue
             question = {"name": name, "ask": field["ask"],
                         "choices": field["allowed_values"]}

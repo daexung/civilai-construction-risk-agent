@@ -18,6 +18,7 @@ from fastapi.testclient import TestClient  # noqa: E402
 
 from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 from agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
+from agent.nodes.fill import extract_inputs  # noqa: E402
 from api.main import app  # noqa: E402
 from pipeline.labor_rates import build  # noqa: E402
 
@@ -104,6 +105,55 @@ def main() -> int:
                        "volume": "260",
                        "subtotals": {"재료비": "178360", "노무비": "4133480", "경비": "1339000"},
                        "total": "5650840"}))
+
+    allowance_data = json.loads((ROOT / "data/rates/material_allowance.json").read_text(encoding="utf-8"))
+    allowances = {(row["material"], row["structure"]): row for row in allowance_data["rules"]}
+    checks.append(("P11b 품셈 1-3-1 재료 할증률 6개와 출처",
+                   len(allowances) == 6
+                   and {key: row["allowance"] for key, row in allowances.items()} == {
+                       ("레디믹스트 콘크리트 타설(현장플랜트 포함)", "무근"): "0.02",
+                       ("레디믹스트 콘크리트 타설(현장플랜트 포함)", "철근"): "0.01",
+                       ("레디믹스트 콘크리트 타설(현장플랜트 포함)", "철골"): "0.01",
+                       ("현장 혼합 콘크리트 타설(인력 및 믹서)", "무근"): "0.03",
+                       ("현장 혼합 콘크리트 타설(인력 및 믹서)", "철근"): "0.02",
+                       ("현장 혼합 콘크리트 타설(인력 및 믹서)", "소형"): "0.05",
+                   }
+                   and all(row["source"]["section_no"] == "1-3-1"
+                           and row["source"]["pdf_page"] == 78
+                           and row["source"]["printed_page"] == 22
+                           and row["source"]["item"] == "8. 기타재료"
+                           and row["source"]["row"] and row["source"]["value"] for row in allowances.values())))
+    parsed_prices = [extract_inputs(query, spec)[0].get("ready_mix_price") for query in
+                     ("레미콘 9만원", "㎥당 90,000원", "모름")]
+    checks.append(("P11c 사급 레미콘 단가 입력 규칙", parsed_prices == ["90000", "90000", "모름"]))
+
+    sagup_inputs = {**case_input, "concrete_supply": "사급", "ready_mix_price": "90000"}
+    sagup = price_unit(spec, units, select_rate_version("2026-10-01"), sagup_inputs, "2026-10-01")
+    ready_mix = next(line for line in sagup["supply_lines"] if line["name"] == "레미콘(사급)")
+    checks.append(("P11d 사급 레미콘 입력 단가와 1% 할증",
+                   ready_mix["status"] == "산정" and ready_mix["quantity"] == "1.01"
+                   and ready_mix["unit_price"] == "90000" and ready_mix["amount_exact"] == "90900"
+                   and ready_mix["amount"] == "90900.0"
+                   and any(citation.get("internal_id") == "p78" for citation in ready_mix["citations"])
+                   and any(citation.get("item") == "사용자 입력 단가" and citation.get("quote")
+                           and "입력 시각" in citation["quote"] for citation in ready_mix["citations"])
+                   and sagup["unit_prices"] == {"재료비": "91586", "노무비": "15898", "경비": "5150"}
+                   and sagup["total"] == "112634"
+                   and sagup["reference_amounts"] == {
+                       "volume": "260",
+                       "subtotals": {"재료비": "23812360", "노무비": "4133480", "경비": "1339000"},
+                       "total": "29284840"}))
+    unknown_inputs = {**case_input, "concrete_supply": "사급", "ready_mix_price": "모름"}
+    unknown_price = price_unit(spec, units, select_rate_version("2026-10-01"),
+                               unknown_inputs, "2026-10-01")
+    unknown_mix = next(line for line in unknown_price["supply_lines"] if "레미콘" in line["name"])
+    checks.append(("P11e 사급 단가 모름은 미산정",
+                   unknown_mix["status"] == "미산정" and unknown_mix["amount"] is None
+                   and unknown_mix["reason"] == "사급 레미콘 단가 미입력"
+                   and unknown_price["unit_prices"] == {"재료비": "686", "노무비": "15898", "경비": "5150"}
+                   and unknown_price["total"] == "21734"
+                   and any("사급 레미콘 단가 미입력" == item["reason"]
+                           for item in unknown_price["unpriced"])))
 
     client = TestClient(app)
     question = "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"

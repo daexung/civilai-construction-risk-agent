@@ -74,6 +74,18 @@ def _validate(field: dict, value: Any) -> tuple[Any, str | None]:
         if number <= 0:
             return None, f"{name}은 0보다 커야 함"
         return number, None
+    if kind == "positive_currency":
+        if value == "모름":
+            return value, None
+        if type(value) not in (str, int, Fraction):
+            return None, f"{name}는 정확한 양수여야 함"
+        try:
+            number = Fraction(str(value).replace(",", ""))
+        except (ValueError, ZeroDivisionError):
+            return None, f"{name}는 정확한 양수여야 함"
+        if number <= 0:
+            return None, f"{name}은 0보다 커야 함"
+        return str(number.numerator) if number.denominator == 1 else str(number), None
     return None, f"{name}의 지원하지 않는 입력 타입: {kind}"
 
 
@@ -122,7 +134,10 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
             return {"status": "rejected", "reason": error, "input": name}
         validated[name] = checked
 
-    missing = [field["name"] for field in fields if field["required"] and field["name"] not in validated]
+    missing = [field["name"] for field in fields
+               if field["required"] and field["name"] not in validated
+               and (not field.get("when")
+                    or validated.get(field["when"]["input"]) == field["when"]["equals"])]
     if missing:
         questions = []
         for name in missing:

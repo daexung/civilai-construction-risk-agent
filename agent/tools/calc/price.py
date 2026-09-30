@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal, ROUND_DOWN
 from functools import lru_cache
 from pathlib import Path
@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[3]
 RATES = ROOT / "data/rates/labor_rates.json"
 AMOUNTS = ROOT / "agent/rules/common/1-2-2_amount_units.json"
 EQUIPMENT_RATES = ROOT / "data/rates/equipment_rates.json"
+MATERIAL_ALLOWANCES = ROOT / "data/rates/material_allowance.json"
 
 
 @lru_cache(maxsize=1)
@@ -30,6 +31,17 @@ def _amount_rules() -> dict:
 @lru_cache(maxsize=1)
 def _equipment_rates() -> dict:
     return json.loads(EQUIPMENT_RATES.read_text(encoding="utf-8"))
+
+
+@lru_cache(maxsize=1)
+def _material_allowances() -> dict:
+    return json.loads(MATERIAL_ALLOWANCES.read_text(encoding="utf-8"))
+
+
+def _ready_mix_allowance(structure: str | None) -> dict | None:
+    return next((rule for rule in _material_allowances()["rules"]
+                 if rule["material"] == "레디믹스트 콘크리트 타설(현장플랜트 포함)"
+                 and rule["structure"] == structure), None)
 
 
 def select_rate_version(basis_date: str | date | None = None) -> dict | None:
@@ -292,21 +304,75 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
 
     supply_lines = []
     excluded = []
+    unpriced_supply = []
+    inputs = inputs or {}
     for rule in spec.get("supply_rules", []):
-        value = (inputs or {}).get(rule["input"])
+        value = inputs.get(rule["input"])
         citations = resolve_cites(rule.get("cite"))
         outcome = rule["when"].get(value)
         if outcome is None:
             status, reason = "미산정", f"{rule['input']} 미입력"
         else:
             status, reason = outcome["status"], outcome["reason"]
-        supply_lines.append({"kind": "supply_component", "category": rule.get("category"),
-                             "name": rule["item"], "status": status, "unit_price": None,
-                             "amount": None, "amount_exact": None, "reason": reason,
-                             "citations": citations})
-        entry = {"name": rule["item"], "reason": reason, "category": rule.get("category"),
-                 "citations": citations}
-        (excluded if status == "제외" else unpriced).append(entry)
+        line = {"kind": "supply_component", "category": rule.get("category"),
+                "name": rule["item"], "status": status, "unit_price": None,
+                "amount": None, "amount_exact": None, "reason": reason,
+                "citations": citations}
+        if value == "사급":
+            price = inputs.get("ready_mix_price")
+            if price not in (None, "", "모름"):
+                allowance = _ready_mix_allowance(inputs.get("structure"))
+                try:
+                    unit_price = Decimal(str(price))
+                except Exception as exc:
+                    raise ValueError("ready_mix_price는 양의 숫자여야 합니다") from exc
+                if unit_price <= 0:
+                    raise ValueError("ready_mix_price는 양의 숫자여야 합니다")
+                if allowance is None:
+                    status = "미산정"
+                    reason = "구조물 종류에 맞는 레미콘 할증률 미확인"
+                    unpriced_supply.append({"name": rule["item"], "reason": reason,
+                                            "category": rule.get("category"), "citations": citations})
+                else:
+                    source = allowance["source"]
+                    allowance_citations = resolve_cites({"page_source": source})
+                    input_time = datetime.now().astimezone().isoformat(timespec="seconds")
+                    input_citation = {
+                        "code": "사용자 입력", "division": None, "section_no": None,
+                        "section_title": "거래처 견적", "section": "사용자 입력",
+                        "subsection": None, "item": "사용자 입력 단가",
+                        "row": None, "column": None,
+                        "value": f"{_money(unit_price, 0)}원/㎥ (부가세 제외)",
+                        "pdf_page": None, "printed_page": None,
+                        "quote": f"사용자 입력 단가 {price}원/㎥, 입력 시각 {input_time}",
+                        "internal_id": f"USER:ready_mix_price:{input_time}",
+                        "label": f"사용자 입력 단가 {_money(unit_price, 0)}원/㎥ (부가세 제외) · 입력 시각 {input_time}",
+                    }
+                    exact = Decimal("1") + Decimal(allowance["allowance"])
+                    quantity = exact
+                    amount_exact = unit_price * quantity
+                    amount = _truncate(amount_exact, "0.1")
+                    citations = allowance_citations + [input_citation, amount_rule]
+                    status, reason = "산정", None
+                    line.update(name="레미콘(사급)", status=status, spec="(사급)",
+                                quantity=_exact(quantity), unit="㎥", unit_price=_exact(unit_price),
+                                allowance=allowance["allowance"],
+                                amount_exact=_exact(amount_exact), amount=_money(amount, 1),
+                                reason=reason, citations=citations)
+                    category_values[rule["category"]].append(amount)
+            else:
+                status = "미산정"
+                reason = "사급 레미콘 단가 미입력"
+                line.update(status=status, reason=reason)
+                unpriced_supply.append({"name": rule["item"], "reason": reason,
+                                        "category": rule.get("category"), "citations": citations})
+        else:
+            line.update(status=status, reason=reason)
+            entry = {"name": rule["item"], "reason": reason, "category": rule.get("category"),
+                     "citations": citations}
+            (excluded if status == "제외" else unpriced_supply).append(entry)
+        supply_lines.append(line)
+    unpriced.extend(unpriced_supply)
 
     subtotals = {category: _money(sum(values, Decimal("0")) if values else None, 1)
                  for category, values in category_values.items()}

@@ -38,12 +38,12 @@ def main() -> int:
     checks.append(("S2 관급 partial은 연료 미산정 때문에 유지", priced_public["partial"]
                    and any("연료" in item["name"] for item in priced_public["unpriced"])))
 
-    private = {**base_input, "concrete_supply": "사급"}
+    private = {**base_input, "concrete_supply": "사급", "ready_mix_price": "모름"}
     units_private = adjusted_daily_crew(spec, private)["unit_lines"]
     priced_private = price_unit(spec, units_private, version, private, "2026-10-01")
     supply_private = {line["name"]: line for line in priced_private["supply_lines"]}
-    checks.append(("S3 사급 미산정", supply_private["레미콘(콘크리트) 재료비"]["status"] == "미산정"
-                   and supply_private["레미콘(콘크리트) 재료비"]["reason"] == "지역별 레미콘 단가 미입력"
+    checks.append(("S3 사급 단가 모름은 미산정", supply_private["레미콘(콘크리트) 재료비"]["status"] == "미산정"
+                   and supply_private["레미콘(콘크리트) 재료비"]["reason"] == "사급 레미콘 단가 미입력"
                    and any("레미콘" in item["name"] for item in priced_private["unpriced"])
                    and not any("레미콘" in item["name"] for item in priced_private["excluded"])))
 

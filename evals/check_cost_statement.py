@@ -142,6 +142,50 @@ def main() -> int:
     checks.append(("2025-12-31", [] if old["status"] == "UNCALCULATED" and not old["lines"] else
                    [f"2025-12-31: 기대 UNCALCULATED, 실제 {old['status']} / {old['lines']}"]))
 
+    sagup_priced = {
+        **PRICED,
+        "reference_amounts": {
+            "subtotals": {"재료비": 23812360, "노무비": 4133480, "경비": 1339000},
+            "total": 29284840,
+            "volume": 260,
+        },
+    }
+    sagup = calculate_cost_statement(sagup_priced, BASE_INPUTS, "2026-10-01")
+    sagup_lines = {line["name"]: line for line in sagup["lines"]}
+    sagup_expected = {
+        "재료비": (23812360, "산정"), "간접노무비": (789494, "산정"),
+        "노무비 계": (4922974, "산정"), "산재보험료": (175257, "산정"),
+        "고용보험료": (49722, "산정"), "건강보험료": (148598, "산정"),
+        "노인장기요양보험료": (19525, "산정"), "연금보험료": (196340, "산정"),
+        "산업안전보건관리비": (880293, "산정"), "환경보전비": (234278, "산정"),
+        "기타경비": (1580443, "산정"), "하도급대금 지급보증 수수료": (23720, "산정"),
+        "석면분담금": (295, "산정"), "임금채권부담금": (4430, "산정"),
+        "퇴직공제부금비": (0, "제외"), "경비 계": (4651901, "산정"),
+        "순공사원가": (33387235, "산정"), "일반관리비": (2670978, "산정"),
+        "이윤": (1836877, "산정"), "총원가": (37895090, "산정"),
+        "부가가치세": (3789509, "산정"), "도급액": (41684599, "산정"),
+    }
+    sagup_totals = {
+        "materials": 23812360, "labor": 4922974, "expenses": 4651901,
+        "net_cost": 33387235, "management": 2670978, "profit": 1836877,
+        "total_cost": 37895090, "vat": 3789509, "contract_amount": 41684599,
+    }
+    osafety = sagup_lines.get("산업안전보건관리비", {})
+    sagup_ok = (all((sagup_lines.get(name) or {}).get("amount") == amount
+                    and (sagup_lines.get(name) or {}).get("status") == status
+                    for name, (amount, status) in sagup_expected.items())
+                and sagup["totals"] == sagup_totals
+                and osafety.get("base_amount") == 27945840
+                and osafety.get("rate") == "3.15"
+                and osafety.get("reason") is None)
+    sagup_mismatches = {name: ((sagup_lines.get(name) or {}).get("amount"),
+                               (sagup_lines.get(name) or {}).get("status"), amount, status)
+                        for name, (amount, status) in sagup_expected.items()
+                        if (sagup_lines.get(name) or {}).get("amount") != amount
+                        or (sagup_lines.get(name) or {}).get("status") != status}
+    checks.append(("사급 레미콘 입력 단가 원가계산서 정답", [] if sagup_ok else
+                   [f"불일치 {sagup_mismatches}; 기대 {sagup_totals}, 실제 {sagup.get('totals')}; OSH {osafety}"]))
+
     for name, failures in checks:
         print(f"{'PASS' if not failures else 'FAIL'} {name}")
         for failure in failures:
