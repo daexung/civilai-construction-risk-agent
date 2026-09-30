@@ -3,8 +3,9 @@
 from agent.rules.specs import load_specs
 from agent.state import AgentState
 from agent.tools.calc.daily_crew import adjusted_daily_crew
+from agent.tools.calc.per_unit import per_unit
 
-CALCULATORS = {"adjusted_daily_crew": adjusted_daily_crew}
+CALCULATORS = {"adjusted_daily_crew": adjusted_daily_crew, "per_unit": per_unit}
 
 
 def compute(state: AgentState) -> dict:
