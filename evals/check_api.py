@@ -442,6 +442,16 @@ def main() -> int:
                   and lines.get("Epoxy신구-콘크리트접착제", {}).get("applied") == "1.2"
                   and lines.get("시너", {}).get("applied") == "0.2")
         checks.append((f"A37 {label} 에폭시", ok))
+        if label == "E1" and ok:
+            exported = CLIENT.get(f"/api/export/{result['thread_id']}.xlsx")
+            book = load_workbook(BytesIO(exported.content)) if exported.status_code == 200 else None
+            unit_names = [row[0] for row in book["일위대가"].values] if book else []
+            basis_text = [" ".join(str(cell) for cell in row if cell is not None)
+                          for row in book["산출근거"].values] if book else []
+            checks.append(("A38 E1 엑셀 재료와 할증 근거", book is not None
+                           and "Epoxy신구-콘크리트접착제" in unit_names
+                           and "시너" in unit_names
+                           and any("도장공 가산" in row and "20%" in row for row in basis_text)))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

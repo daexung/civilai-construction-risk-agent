@@ -51,6 +51,28 @@ def _blocked(item: dict, chunk: dict | None, quote: str | None) -> dict:
             "citations": citation}
 
 
+def classify_adjustment(spec: dict, item: dict) -> str:
+    """재측정 보고서에서 조건 조합과 무관하게 규칙 한 건의 처리 범위를 센다."""
+    text = " ".join(str(item.get(key, "")) for key in ("rate", "change", "source"))
+    if not re.search(r"\d|%|×|[xX*]", text):
+        return "memo"
+    chunk, quote = _source(spec, item)
+    if not chunk or not quote or any(word in quote or word in text for word in DISCRETIONARY):
+        return "blocked"
+    if any(word in text for word in ("참조", "산식", "누적", "복리")):
+        return "blocked"
+    parsed = _number(quote)
+    if parsed is None:
+        return "blocked"
+    if item.get("rate") is not None:
+        try:
+            if parse_fraction(item["rate"]) != parsed[1]:
+                return "blocked"
+        except (ValueError, ZeroDivisionError):
+            return "blocked"
+    return "automatic"
+
+
 def apply_adjustments(spec: dict, inputs: dict, lines: list[dict]) -> dict:
     params = spec["quantity_model"]["params"]
     selected = [item for item in params.get("surcharges", []) + params.get("note_adjustments", [])
