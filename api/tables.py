@@ -332,6 +332,149 @@ def _metadata(response: dict) -> tuple[str, str]:
             f"기준일: {basis_date} | 조건 요약: {summary}")
 
 
+def won_in_korean(amount: int) -> str:
+    """정수 원 금액을 견적서 관행의 한글 금액 표기로 바꾼다."""
+    number = int(amount)
+    if number < 0:
+        raise ValueError("금액은 0 이상이어야 합니다.")
+    if number == 0:
+        return "영"
+
+    digits = ("영", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구")
+    small_units = ("", "십", "백", "천")
+    large_units = ("", "만", "억", "조")
+    parts = []
+    group_index = 0
+    while number:
+        group = number % 10_000
+        if group:
+            group_text = ""
+            for position in range(3, -1, -1):
+                digit = group // (10 ** position) % 10
+                if digit:
+                    group_text += digits[digit] + small_units[position]
+            parts.append(group_text + large_units[group_index])
+        number //= 10_000
+        group_index += 1
+        if group_index >= len(large_units) and number:
+            raise ValueError("조 단위보다 큰 금액은 지원하지 않습니다.")
+    return "".join(reversed(parts))
+
+
+def _estimate_sheet(book: Workbook, response: dict) -> None:
+    """계산 결과의 최종 금액과 비목별 요약을 첫 시트에 표시한다."""
+    sheet = _new_sheet(book, "견적서", "견 적 서", ("", ""), [28, 20, 52], first=True)
+    sheet.freeze_panes = "A7"
+    sheet.page_setup.fitToHeight = 1
+    sheet.sheet_view.showGridLines = False
+
+    bill = (response.get("tables") or {}).get("bill") or {}
+    title = _work_name(response)
+    spec = bill.get("spec") or ""
+    quantity, unit = bill.get("quantity"), bill.get("unit") or "㎥"
+    project = " · ".join(part for part in (title, spec) if part)
+    if quantity is not None:
+        project = f"{project} {quantity}{unit}".strip()
+    conditions = {item["name"]: item for item in response.get("conditions", [])}
+    scale = conditions.get("project_scale", {}).get("value", "이 견적만")
+    scale_text = "단독 공사" if scale == "이 견적만" else f"전체 공사 {int(scale):,}원"
+    condition_summary = " · ".join(part for part in (
+        conditions.get("work_category", {}).get("group")
+        or conditions.get("work_category", {}).get("value"),
+        conditions.get("duration", {}).get("value"),
+        conditions.get("contractor_type", {}).get("value"), scale_text) if part)
+    basis_date = response.get("basis_date") or date.today().isoformat()
+
+    sheet["A2"] = f"공사명 : {project}"
+    sheet["A3"] = f"기 준 일 : {basis_date}"
+    sheet.merge_cells("A4:C4")
+    sheet["A4"] = f"조    건 : {condition_summary}"
+
+    totals = (response.get("statement") or {}).get("totals") or {}
+    contract = totals.get("contract_amount")
+    amount_text = ""
+    if contract is not None:
+        amount_text = f"견적금액 : 일금 {won_in_korean(contract)}원정 (₩{int(contract):,})   ※ 부가가치세 포함"
+    sheet.merge_cells("A6:C6")
+    sheet["A6"] = amount_text
+    sheet["A6"].font = Font(name=_FONT_NAME, size=13, bold=True)
+    sheet["A6"].alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    sheet["A6"].border = Border(left=_DOUBLE, right=_DOUBLE, top=_DOUBLE, bottom=_DOUBLE)
+    sheet.row_dimensions[6].height = 34
+
+    header_row = 8
+    for column, label in enumerate(("구 분", "금 액(원)", "비 고"), 1):
+        cell = sheet.cell(header_row, column, label)
+        cell.font = Font(name=_FONT_NAME, size=10, bold=True)
+        cell.fill = _HEAD
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    material_excluded = any(row.get("kind") == "자재" and "관급" in (row.get("note") or "")
+                            for row in (response.get("tables") or {}).get("rate_rows", []))
+    entries = (
+        ("재료비", "materials", "레미콘 관급 제외" if material_excluded else ""),
+        ("노무비", "labor", "직접 + 간접 노무비"),
+        ("경비", "expenses", "장비·보험료·기타경비 등"),
+        ("일반관리비", "management", ""),
+        ("이윤", "profit", ""),
+        ("공급가액", "total_cost", ""),
+        ("부가가치세", "vat", "10%"),
+        ("합 계", "contract_amount", ""),
+    )
+    row_by_label = {}
+    for offset, (label, key, note) in enumerate(entries, 1):
+        row = header_row + offset
+        row_by_label[label] = row
+        sheet.cell(row, 1, label)
+        value = totals.get(key)
+        sheet.cell(row, 2, _num(value))
+        sheet.cell(row, 3, note)
+        sheet.cell(row, 2).number_format = _MONEY
+        for column in range(1, 4):
+            sheet.cell(row, column).border = _BORDER
+            sheet.cell(row, column).alignment = Alignment(
+                horizontal="right" if column == 2 else "left", vertical="center", wrap_text=True)
+
+    for label in ("공급가액", "합 계"):
+        for column in range(1, 4):
+            sheet.cell(row_by_label[label], column).font = Font(name=_FONT_NAME, size=10, bold=True)
+    total_row = row_by_label["합 계"]
+    for column in range(1, 4):
+        sheet.cell(total_row, column).fill = _STRONG
+        sheet.cell(total_row, column).border = Border(left=_THIN, right=_THIN, top=_DOUBLE, bottom=_DOUBLE)
+
+    missing = [item for item in _missing_cost_rows(response, _cost_statement_rows(
+        (response.get("tables") or {}), response.get("statement") or {})) if item[1] == "미산정"]
+    next_row = total_row + 2
+    if missing:
+        item, _status, reason = missing[0]
+        suffix = f" 외 {len(missing) - 1}건" if len(missing) > 1 else ""
+        sheet.merge_cells(start_row=next_row, start_column=1, end_row=next_row, end_column=3)
+        sheet.cell(next_row, 1, f'빠진 항목: {item}({reason}){suffix} — 원가계산서 "빠진 항목" 참조')
+        sheet.cell(next_row, 1).alignment = Alignment(vertical="center", wrap_text=True)
+        next_row += 2
+    sheet.merge_cells(start_row=next_row, start_column=1, end_row=next_row, end_column=3)
+    sheet.cell(next_row, 1, _FOOTER)
+    sheet.cell(next_row, 1).font = Font(name=_FONT_NAME, size=9, italic=True, color="666666")
+    sheet.cell(next_row, 1).alignment = Alignment(horizontal="center", vertical="center")
+    sheet.print_area = f"A1:C{next_row}"
+    sheet.print_title_rows = "1:3"
+    for row in range(1, next_row + 1):
+        for column in range(1, 4):
+            cell = sheet.cell(row, column)
+            if cell.font.name != _FONT_NAME:
+                cell.font = Font(name=_FONT_NAME, size=10, bold=cell.font.bold,
+                                 italic=cell.font.italic, color=cell.font.color)
+    sheet["A1"].font = Font(name=_FONT_NAME, size=20, bold=True)
+    sheet["A1"].alignment = Alignment(horizontal="center", vertical="center")
+    sheet.row_dimensions[1].height = 38
+    sheet.row_dimensions[2].height = 25
+    sheet.row_dimensions[3].height = 22
+    sheet.row_dimensions[4].height = 25
+    sheet.row_dimensions[header_row].height = 24
+    for column, width in enumerate((28, 20, 52), 1):
+        sheet.column_dimensions[get_column_letter(column)].width = width
+
+
 def _new_sheet(book: Workbook, name: str, title: str, metadata: tuple[str, str], widths: list[int],
                orientation: str = "portrait", first: bool = False):
     sheet = book.active if first else book.create_sheet()
@@ -639,10 +782,11 @@ def build_xlsx(response: dict) -> bytes:
     statement = response.get("statement") or {}
     metadata = _metadata(response)
     book = Workbook()
+    _estimate_sheet(book, response)
 
     # 공사원가계산서
     widths = [16, 24, 16, 13, 56]
-    sheet = _new_sheet(book, "원가계산서", "공사원가계산서", metadata, widths, first=True)
+    sheet = _new_sheet(book, "원가계산서", "공사원가계산서", metadata, widths)
     headers = ["비목", "구분", "금액", "구성비", "비고(산출 근거)"]
     for column, value in enumerate(headers, 1):
         sheet.cell(4, column, value)

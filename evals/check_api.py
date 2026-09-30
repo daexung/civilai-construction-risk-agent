@@ -90,6 +90,8 @@ def main() -> int:
                    and bool(base["conditions"][0]["help"]["기타 토목공사"])))
 
     exported = CLIENT.get(f"/api/export/{base['thread_id']}.xlsx")  # 조건을 바꾸기 전 상태
+    if exported.status_code == 200:
+        (ROOT / "evals" / "results" / "sample_견적서.xlsx").write_bytes(exported.content)
     changed = CLIENT.post("/api/chat", json={"thread_id": base["thread_id"], "conditions": {
         "work_category": "주택 외 건축", "duration": "13~36개월", "contractor_type": "전문건설업"}}).json()
     changed_sources = {c["name"]: c["source"] for c in changed["conditions"]}
@@ -118,8 +120,8 @@ def main() -> int:
     footer_present = any(isinstance(cell.value, str) and "검토 전 참고용" in cell.value
                          for row in first.iter_rows() for cell in row) if first else False
     checks.append(("A13 엑셀 시트·열", exported.status_code == 200
-                   and len(book.sheetnames) == 5
-                   and book.sheetnames == ["원가계산서", "내역서", "일위대가", "단가대비표", "산출근거"]
+                   and len(book.sheetnames) == 6
+                   and book.sheetnames == ["견적서", "원가계산서", "내역서", "일위대가", "단가대비표", "산출근거"]
                    and cost_header is not None and footer_present
                    and CLIENT.get("/api/export/nothing.xlsx").status_code == 404))
     checks.append(("A14 원가계산서 고정 셀", contract is not None and contract[2] == 10032436
@@ -186,8 +188,9 @@ def main() -> int:
                    and f"A{contract_row}:B{contract_row}" in {str(rng) for rng in first.merged_cells.ranges}
                    and "-" in next((row[2] for row in cost_rows if row[1] == "간접재료비(-)"), None)))
 
-    metadata_ok = all(sheet["A2"].value.startswith("공사명:") and sheet["A3"].value.startswith("기준일:")
-                      for sheet in book.worksheets)
+    metadata_ok = all(isinstance(sheet["A2"].value, str) and sheet["A2"].value.startswith("공사명:")
+                      and isinstance(sheet["A3"].value, str) and sheet["A3"].value.startswith("기준일:")
+                      for sheet in book.worksheets if sheet.title != "견적서")
     checks.append(("A22 시트 공통 메타데이터", metadata_ok
                    and "금액 0.1원 미만 버림(품셈 1-2-2)" in [cell.value for row in unit_sheet.iter_rows() for cell in row]))
     labor_rows = [row for row in unit_sheet.iter_rows(min_row=6)
@@ -266,6 +269,29 @@ def main() -> int:
                               for name, reason in missing_by_name.items())
                           for keyword, token in required_reasons)
     checks.append(("A29 제외·미산정 사유", reasons_present))
+
+    estimate = book["견적서"] if "견적서" in book.sheetnames else None
+    estimate_values = {row[0]: row[1] for row in estimate.iter_rows(min_row=1, values_only=True)
+                       if row and isinstance(row[0], str)} if estimate else {}
+    estimate_items = {estimate.cell(row, 1).value: estimate.cell(row, 2).value
+                      for row in range(1, estimate.max_row + 1)} if estimate else {}
+    estimate_total = estimate_items.get("합 계")
+    estimate_components = sum(estimate_items.get(name) or 0 for name in
+                              ("재료비", "노무비", "경비", "일반관리비", "이윤", "부가가치세"))
+    estimate_amount_line = estimate["A6"].value if estimate else ""
+    checks.append(("A30 견적서 요약 시트·금액", estimate is not None
+                   and estimate_total == 10032436 and estimate_items.get("공급가액") == 9120397
+                   and estimate_total == estimate_components
+                   and "일금 일천삼만이천사백삼십육원정 (₩10,032,436)" in estimate_amount_line
+                   and estimate["A2"].value.startswith("공사명 :")
+                   and estimate["A3"].value.startswith("기 준 일 :")
+                   and estimate.page_setup.orientation == "portrait"
+                   and estimate.page_setup.fitToWidth == 1 and estimate.page_setup.fitToHeight == 1))
+    from api.tables import won_in_korean
+    checks.append(("A31 한글 금액 단위", [won_in_korean(value) for value in
+                   (10032436, 9947033, 10319789, 100000000, 1005)] ==
+                   ["일천삼만이천사백삼십육", "구백구십사만칠천삼십삼", "일천삼십일만구천칠백팔십구",
+                    "일억", "일천오"]))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
