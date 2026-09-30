@@ -28,17 +28,36 @@ def main() -> int:
     inputs["scaffold_used"] = True
     blocked = per_unit(spec, inputs)
     checks.append(("비계 선택 적용 보류", blocked["status"] == "blocked"
-                   and blocked["citations"][0]["internal_id"] == "p188-x6"))
+                   and any(citation["internal_id"] == "p188-x6"
+                           for citation in blocked["citations"])))
+    mechanical = json.loads((ROOT / "data/drafts/specs/공통/6-2-5.json").read_text(encoding="utf-8"))["draft"]
+    source = adjustments._evidence(mechanical, mechanical["quantity_model"]["params"]["surcharges"][0])
+    checks.append(("6-2-5 요율 표와 적용 문장", source is not None
+                   and source["rate"] == adjustments.parse_fraction("0.1")
+                   and [citation["internal_id"] for citation in source["citations"]]
+                   == ["p191-t1", "p191-t0"]
+                   and "높이에 따라 인력품에 다음 요율을 적용한다" in source["quote"]))
+    g1 = per_unit(mechanical, {"quantity": "1", "rebar_diameter": 35,
+                               "work_height": "10m~20m 미만"})
+    g1_lines = {line["name"]: line for line in g1.get("unit_lines", [])}
+    checks.append(("G1 6-2-5 할증 품", g1["status"] == "computed"
+                   and g1_lines["용접공"]["applied"] == "0.066"
+                   and g1_lines["연마공"]["applied"] == "0.165"
+                   and g1_lines["조력공"]["applied"] == "0.121"
+                   and g1_lines["절단공"]["applied"] == "0.099"))
 
     base = copy.deepcopy(spec)
     base["quantity_model"]["params"]["surcharges"] = []
     base["quantity_model"]["params"]["note_adjustments"] = []
     line = {"kind": "labor", "name": "도장공", "exact": "1", "applied": "1", "places": 0,
             "formula": "1", "citations": []}
-    original = adjustments._source
+    original = adjustments._evidence
     chunk = {"chunk_id": "p188-t0"}
     try:
-        adjustments._source = lambda _spec, item: (chunk, item["source"])
+        adjustments._evidence = lambda _spec, item, _inputs=None: {
+            "chunk": chunk, "quote": item["source"],
+            "rate": (adjustments._number(item["source"]) or ("", 0))[1],
+            "citations": adjustments.resolve_cites({"chunk_id": "p188-t0", "quote": item["source"]})}
         def run(*items):
             candidate = copy.deepcopy(base)
             candidate["quantity_model"]["params"]["surcharges"] = list(items)
@@ -64,7 +83,7 @@ def main() -> int:
         checks.append(("설명 메모", a["status"] == "computed" and len(a["memos"]) == 1
                        and sample["applied"] == "1"))
     finally:
-        adjustments._source = original
+        adjustments._evidence = original
     for name, ok in checks:
         print(f"{'PASS' if ok else 'FAIL'} {name}")
     print(f"통과 {sum(ok for _, ok in checks)} / 전체 {len(checks)}")
