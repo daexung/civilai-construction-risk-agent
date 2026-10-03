@@ -14,9 +14,26 @@ sys.path.insert(0, str(ROOT))
 from agent.rules.scope import enabled_divisions
 from agent.nodes.retrieve import retrieve
 from agent.nodes.answer import answer, qa_model
+from agent.nodes.qa_context import load_sections
 
 AMBIGUOUS = ['콘크리트 타설할 때 콘크리트공 품이 얼마야?', '거푸집 설치 해체 품 알려줘', '철근 가공 조립 품은 어떻게 돼?', '보도블록 깔 때 품이 어떻게 돼?', '도장 공사 품은 어떻게 잡아?']
 SEED = 191
+
+def correct_section_cited(qa, expected, *, chunks=None):
+    """원본 청크의 부문·절 또는 답변의 명시적인 부문·절 표기를 판정한다."""
+    division, section_no = expected
+    if not division or not section_no:
+        return None
+    if chunks is None:
+        chunks = {c["chunk_id"]: c for group in load_sections().values() for c in group}
+    for cite in qa.get("citations", []):
+        chunk = chunks.get(cite.get("chunk_id"), {})
+        if (chunk.get("division"), chunk.get("section_no")) == expected:
+            return True
+    text = "\n".join([qa.get("conclusion", "")] + [
+        c.get("section", "") + " " + c.get("summary", "") for c in qa.get("comparisons", [])])
+    return bool(re.search(rf"(?<![가-힣]){re.escape(division)}\s+{re.escape(section_no)}(?![\d-])", text))
+
 
 def evaluate(cases, model):
     rows = []
@@ -25,10 +42,8 @@ def evaluate(cases, model):
         state = {"query": case["question"]}
         state.update(retrieve(state))
         result = answer(state, model=model)
-        from agent.tools.source.citation import resolve_cites
-        cites = resolve_cites(result["qa"]["citations"])
         expected = (case.get("division"), case.get("section_no"))
-        correct = any((c["division"], c["section_no"]) == expected for c in cites) if expected[1] else None
+        correct = correct_section_cited(result["qa"], expected)
         rows.append({"id": case["id"], "question": case["question"], "expected": expected,
                      "correct_section_cited": correct, "latency_ms": round((time.monotonic()-start)*1000, 1),
                      "search": state["search_info"], "candidate_count": len(result["candidates"]),

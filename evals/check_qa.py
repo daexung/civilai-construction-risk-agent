@@ -13,6 +13,7 @@ from agent.nodes.answer import answer, validate
 from agent.nodes.qa_context import build_context
 from agent.graph import build_graph
 from agent.state import new_state
+from evals.eval_qa import correct_section_cited
 
 
 def main():
@@ -20,6 +21,14 @@ def main():
     def check(name, ok):
         checks.append(bool(ok))
         print(("PASS " if ok else "FAIL ") + name)
+    check("grade source chunk division instead of display label", correct_section_cited(
+        {"citations": [{"chunk_id": "p368-t0"}]}, ("토목", "1-5-4")))
+    check("grade explicit comparison or conclusion", all(correct_section_cited(value, ("토목", "1-5-4"), chunks={}) for value in (
+        {"comparisons": [{"section": "토목 1-5-4 아스팔트 기층", "summary": "기준 적용"}]},
+        {"conclusion": "토목 1-5-4 기준을 적용합니다."})))
+    check("grade rejects different division and partial section", not any(correct_section_cited(value, ("토목", "1-5-4"), chunks={}) for value in (
+        {"conclusion": "건축 1-5-4 기준"}, {"conclusion": "토목 1-5-40 기준"},
+        {"citations": [{"chunk_id": "missing"}]})))
     sections, hits = {}, []
     for i in range(1, 5):
         no = f"6-1-{i}"
