@@ -9,6 +9,11 @@ Status = Literal["RUNNING", "OUT_OF_SCOPE", "MISSING_INFO", "EVIDENCE_ONLY", "BL
 
 class AgentState(TypedDict, total=False):
     query: str  # 사용자 질문
+    route: Literal["estimate", "qa", "out_of_scope"]
+    route_confidence: float | None
+    route_reason: str
+    route_source: Literal["llm", "llm_low_confidence", "rule"]
+    previous_context: dict  # 같은 thread의 직전 route/work/result
     status: Status  # 처리 상태
     reason: str  # 상태의 이유
     answer: str  # 최종 답변

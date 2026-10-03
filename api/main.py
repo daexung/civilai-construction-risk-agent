@@ -312,6 +312,10 @@ def _build_response(thread_id: str, state: dict) -> dict:
     response = {
         "thread_id": thread_id,
         "status": status,
+        "route": state.get("route"),
+        "route_confidence": state.get("route_confidence"),
+        "route_reason": state.get("route_reason"),
+        "route_source": state.get("route_source"),
         "message": _message_out(status, state),
         "work": _work_out(state, spec),
         "questions": _questions_out(state.get("questions", [])),
@@ -396,10 +400,14 @@ def chat(payload: ChatRequest) -> dict:
     if payload.conditions is not None:
         return _change_conditions(payload)
     config = None
+    previous = None
     if payload.thread_id:
         candidate_config = {"configurable": {"thread_id": payload.thread_id}}
-        if GRAPH.get_state(candidate_config).next:
+        snapshot = GRAPH.get_state(candidate_config)
+        if snapshot.next:
             config = candidate_config
+        elif snapshot.values:
+            previous = snapshot.values
     if config is not None:
         thread_id = payload.thread_id
         resume = payload.answers if payload.answers else (payload.message or "")
@@ -407,8 +415,24 @@ def chat(payload: ChatRequest) -> dict:
                                      update={"basis_date": payload.basis_date.isoformat()}
                                      if payload.basis_date else None), config)
     else:
-        thread_id = uuid4().hex
+        thread_id = payload.thread_id if previous is not None else uuid4().hex
         config = {"configurable": {"thread_id": thread_id}}
-        state = GRAPH.invoke(new_state(payload.message or "", payload.basis_date.isoformat()
-                                       if payload.basis_date else None), config)
+        initial = new_state(payload.message or "", payload.basis_date.isoformat()
+                            if payload.basis_date else None)
+        if previous is not None:
+            spec_id = previous.get("spec_id")
+            spec = load_specs().get(spec_id) if spec_id else None
+            work = _work_out(previous, spec)
+            amount = (previous.get("statement") or {}).get("totals", {}).get("contract_amount")
+            if amount is None:
+                amount = (previous.get("statement") or {}).get("totals", {}).get("전체 물량 기준 도급액(부가세 포함)")
+            initial["previous_context"] = {
+                "previous_route": previous.get("route"),
+                "work": work["title"] if work else None,
+                "result": f"도급액 {int(amount):,}원" if isinstance(amount, (int, float)) else None,
+            }
+            initial.update(inputs={}, input_sources={}, questions=[], reply="", result={},
+                           priced=None, statement=None, answer_source="", llm_info={},
+                           route_confidence=None, route_reason="", route_source="rule")
+        state = GRAPH.invoke(initial, config)
     return _build_response(thread_id, state)
