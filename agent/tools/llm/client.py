@@ -83,10 +83,13 @@ def _transient(exc: Exception) -> bool:
         return False
     if status in (429, 503, "429", "503"):
         return True
+    if isinstance(exc, (ConnectionError, TimeoutError)):
+        return True
     message = f"{type(exc).__name__}: {exc}".upper()
     return any(token in message for token in (
         "UNAVAILABLE", "RESOURCE_EXHAUSTED", "429", "503", "TIMEOUT", "TIMED OUT",
         "CONNECTION RESET", "CONNECTION ERROR", "CONNECTION ABORTED",
+        "CONNECTIONERROR", "CONNECTERROR", "CONNECTIONRESET",
     ))
 
 

@@ -1,0 +1,46 @@
+{"id": "e01", "label": "estimate", "boundary": false, "q": "철근콘크리트 벽체 260㎥ 펌프차 타설 비용 알려줘"}
+{"id": "e02", "label": "estimate", "boundary": false, "q": "자동문 3개소 설치하면 공사비 얼마 나와?"}
+{"id": "e03", "label": "estimate", "boundary": false, "q": "수성페인트 붓칠 500㎡ 견적 좀 뽑아줘"}
+{"id": "e04", "label": "estimate", "boundary": false, "q": "합판거푸집 1,200㎡ 설치 해체 인건비 계산해줘"}
+{"id": "e05", "label": "estimate", "boundary": false, "q": "도어록 50개소 설치 노무비가 얼마야"}
+{"id": "e06", "label": "estimate", "boundary": false, "q": "데크플레이트 800㎡ 깔면 금액이 어느 정도야?"}
+{"id": "e07", "label": "estimate", "boundary": true, "note": "물량 없이 금액만 물음 → 견적(물량은 되물으면 됨)", "q": "에폭시 접착제 바르기 비용 얼마야?"}
+{"id": "e08", "label": "estimate", "boundary": true, "note": "'품'과 '금액'을 같이 물음 → 돈을 물었으니 견적", "q": "콘크리트 인력타설 100㎥ 품이랑 금액 둘 다 알려줘"}
+{"id": "e09", "label": "estimate", "boundary": true, "note": "'얼마' 없이 '견적서'만", "q": "철골 현장용접 200m 견적서 만들어줘"}
+{"id": "e10", "label": "estimate", "boundary": true, "note": "구어체·물량 단위 생략", "q": "벽 콘크리트 부을 때 인건비 대충 얼마 들어?"}
+{"id": "e11", "label": "estimate", "boundary": false, "q": "플로어힌지 20개 설치 공사비 산출해줘"}
+{"id": "e12", "label": "estimate", "boundary": true, "note": "직전 견적의 조건만 바꿔 다시 계산 → 견적", "q": "아까 거 사급 레미콘 9만원으로 다시 계산해줘", "context": {"previous_route": "estimate", "work": "공통 6-1-4 콘크리트 펌프차 타설", "result": "도급액 10,032,436원"}}
+{"id": "e16", "label": "estimate", "boundary": true, "context": null, "note": "직전 대화 없음 → 견적으로 보내고, 공종을 몰라 다음 단계에서 '어떤 공사인지' 되물음", "q": "아까 거 다시 계산해줘"}
+{"id": "e13", "label": "estimate", "boundary": false, "q": "슬립폼 공법 1,000㎡ 노무비 견적 부탁해"}
+{"id": "e14", "label": "estimate", "boundary": true, "note": "'원가계산서'라는 산출물 요청", "q": "철근 기계적 이음 30개소 원가계산서 뽑아줘"}
+{"id": "e15", "label": "estimate", "boundary": false, "q": "셔터 설치 5개소 비용 계산 부탁"}
+{"id": "q01", "label": "qa", "boundary": true, "note": "'얼마'지만 품(인원)을 물음 → 상담 (사용자 결정)", "q": "펌프차 타설할 때 콘크리트공 품이 얼마야?"}
+{"id": "q02", "label": "qa", "boundary": false, "q": "펌프차 재셋팅하면 품을 어떻게 적용해?"}
+{"id": "q03", "label": "qa", "boundary": false, "q": "거푸집 높이 할증 기준이 뭐야?"}
+{"id": "q04", "label": "qa", "boundary": true, "note": "'몇 명'은 인원 → 상담", "q": "자동문 1개소 설치하는 데 창호공 몇 명 들어가?"}
+{"id": "q05", "label": "qa", "boundary": false, "q": "진동기 안 쓰면 인원이 줄어?"}
+{"id": "q06", "label": "qa", "boundary": false, "q": "일위대가 금액 끝자리는 어떻게 버려?"}
+{"id": "q07", "label": "qa", "boundary": true, "note": "'단가'라는 말이 있지만 산정 방법을 물음 → 상담", "q": "기계경비 운전원 단가는 어떻게 산정해?"}
+{"id": "q08", "label": "qa", "boundary": false, "q": "레미콘 할증률은 몇 %야?"}
+{"id": "q09", "label": "qa", "boundary": false, "q": "천장에 에폭시 바르면 품 가산돼?"}
+{"id": "q10", "label": "qa", "boundary": true, "note": "'얼마나'는 시간 → 상담", "q": "벌목할 때 굴착기 시간은 얼마나 잡아?"}
+{"id": "q11", "label": "qa", "boundary": false, "q": "공구손료는 보통 인력품의 몇 퍼센트로 잡아?"}
+{"id": "q12", "label": "qa", "boundary": true, "note": "'공사비'라는 단어가 있지만 원가계산 규칙을 물음 → 상담", "q": "간접노무비는 공사비에서 어떤 기준으로 계산해?"}
+{"id": "q13", "label": "qa", "boundary": false, "q": "도어체크 설치 품에 브라켓 조립도 포함돼?"}
+{"id": "q14", "label": "qa", "boundary": false, "q": "슬럼프 18cm면 펌프차 일일시공량이 어떻게 돼?"}
+{"id": "q15", "label": "qa", "boundary": true, "note": "물량이 있어도 품을 물음 → 상담", "q": "합판거푸집 300㎡ 설치에 형틀목공 품은?"}
+{"id": "o01", "label": "out_of_scope", "boundary": false, "q": "오늘 서울 날씨 어때?"}
+{"id": "o02", "label": "out_of_scope", "boundary": false, "q": "파이썬으로 리스트 정렬하는 코드 짜줘"}
+{"id": "o03", "label": "out_of_scope", "boundary": false, "q": "점심 메뉴 추천해줘"}
+{"id": "o04", "label": "out_of_scope", "boundary": true, "note": "건설 관련이지만 품셈으로 답할 수 없음(평당 단가)", "q": "요즘 아파트 평당 공사비 얼마야?"}
+{"id": "o05", "label": "out_of_scope", "boundary": true, "note": "건설 관련이지만 법률 상담", "q": "하도급 대금 안 주면 어디에 신고해?"}
+{"id": "o06", "label": "out_of_scope", "boundary": true, "note": "자재 시세 — 품셈 범위 밖", "q": "이번 달 철근 시세 얼마야?"}
+{"id": "o07", "label": "out_of_scope", "boundary": false, "q": "너는 누가 만들었어?"}
+{"id": "o08", "label": "out_of_scope", "boundary": true, "note": "건설기술 일반 지식, 품셈 아님", "q": "콘크리트 양생은 왜 해야 돼?"}
+{"id": "o09", "label": "out_of_scope", "boundary": false, "q": "주식 지금 사도 될까?"}
+{"id": "o10", "label": "out_of_scope", "boundary": true, "note": "물량 산출(도면 수량 뽑기)은 서비스 범위 밖", "q": "이 도면에서 콘크리트 물량 좀 뽑아줘"}
+{"id": "o11", "label": "out_of_scope", "boundary": false, "q": "영어로 번역해줘: 안녕하세요"}
+{"id": "o12", "label": "out_of_scope", "boundary": true, "note": "건설사 정보, 품셈 아님", "q": "시공능력평가 1위 건설사가 어디야?"}
+{"id": "o13", "label": "out_of_scope", "boundary": false, "q": "ㅋㅋㅋㅋ"}
+{"id": "o14", "label": "out_of_scope", "boundary": true, "note": "안전 규정 — 품셈 아님", "q": "고소작업 안전대 착용 기준 알려줘"}
+{"id": "o15", "label": "out_of_scope", "boundary": false, "q": "비트코인 가격 알려줘"}

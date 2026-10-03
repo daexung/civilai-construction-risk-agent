@@ -52,7 +52,7 @@ def main() -> int:
                    }))
 
     reused = CLIENT.post("/api/chat", json={"thread_id": thread_id, "message": "새 질문"}).json()
-    checks.append(("A5", reused["thread_id"] != thread_id))
+    checks.append(("A5", reused["thread_id"] == thread_id and reused["route"] == "out_of_scope"))
 
     health = CLIENT.get("/api/health").json()
     checks.append(("A6", health == {"status": "ok"}))

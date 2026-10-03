@@ -50,7 +50,7 @@ def main() -> int:
     checks = []
     checks += [(f"route negative {i}", route(new_state(query))["status"] == "OUT_OF_SCOPE")
                for i, query in enumerate(NEGATIVE, 1)]
-    checks += [(f"route positive {i}", route(new_state(query)) == {})
+    checks += [(f"route positive {i}", route(new_state(query))["route"] == "estimate")
                for i, query in enumerate(POSITIVE, 1)]
     for i, (query, unit, expected) in enumerate(UNITS, 1):
         spec = {"inputs": [{"name": "quantity", "type": "positive_rational", "unit": unit}],
