@@ -104,6 +104,8 @@ def main() -> int:
                 patch.object(client, "_CLIENTS", {}), \
                 patch.object(client, "_env_value", side_effect=lambda name: key[0] if name == "GEMINI_API_KEY" else None), \
                 patch.object(client, "_create_client", side_effect=fake_factory):
+            warmed = client.warmup_client()
+            checks.append(("warmup creates without request", warmed and len(factory_calls) == 1 and not requests))
             first, second = route(state), route(state)
             checks.append(("cached client routes twice", len(factory_calls) == 1 and len(requests) == 2
                            and first["route_source"] == second["route_source"] == "llm"))
@@ -115,6 +117,26 @@ def main() -> int:
                 shared = list(pool.map(lambda _: client._get_client("vertex", "concurrent-key"), range(8)))
             checks.append(("concurrent first calls create once", len(factory_calls) == 3
                            and all(item is shared[0] for item in shared)))
+
+        with patch.dict(os.environ, {"LLM_PROVIDER": "studio"}), \
+                patch.object(client, "_CLIENTS", {}), \
+                patch.object(client, "_env_value", return_value="fake-secret"), \
+                patch.object(client, "_create_client", side_effect=RuntimeError("fake-secret failed")):
+            try:
+                client.warmup_client()
+            except client.LLMUnavailable as exc:
+                checks.append(("failed warmup is sanitized and not cached",
+                               "fake-secret" not in str(exc) and not client._CLIENTS))
+            else:
+                checks.append(("failed warmup is sanitized and not cached", False))
+
+        with patch.object(client, "provider_name", side_effect=ValueError("invalid config")):
+            try:
+                client.warmup_client()
+            except client.LLMUnavailable:
+                checks.append(("invalid warmup config becomes unavailable", True))
+            else:
+                checks.append(("invalid warmup config becomes unavailable", False))
 
         now, requests = [0.0], []
         def fake_sleep(seconds):
@@ -157,6 +179,8 @@ def main() -> int:
         with patch.object(client, "generate", side_effect=AssertionError("LLM called")):
             off = route(new_state("공사비 알려줘"))
         checks.append(("AGENT_LLM off uses rule", off["route"] == "estimate" and off["route_source"] == "rule"))
+        with patch.object(client, "_create_client", side_effect=AssertionError("client created")):
+            checks.append(("AGENT_LLM off skips warmup", client.warmup_client() is False))
 
     for name, ok in checks:
         print(f"{'PASS' if ok else 'FAIL'} {name}")

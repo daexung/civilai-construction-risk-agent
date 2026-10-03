@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 os.environ["AGENT_OFFLINE"] = "1"
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,6 +14,7 @@ sys.path.insert(0, str(ROOT))
 from fastapi.testclient import TestClient  # noqa: E402
 
 from api.main import app  # noqa: E402
+from agent.tools.llm.client import LLMUnavailable  # noqa: E402
 
 CLIENT = TestClient(app)
 
@@ -24,6 +26,20 @@ PUMP_ANSWERS = {"pump_size": "32m", "slump_band": "15㎝", "facility_type": "Typ
 
 def main() -> int:
     checks = []
+
+    with patch("api.main.VectorIndex"), patch("api.main.warmup_client") as warmup:
+        with patch.dict(os.environ, {"AGENT_LLM": "off"}):
+            with TestClient(app) as startup_client:
+                off_started = startup_client.get("/openapi.json").status_code == 200
+        checks.append(("A-start1 LLM off는 사전 생성 생략", off_started and warmup.call_count == 0))
+        with patch.dict(os.environ, {"AGENT_LLM": "on"}):
+            with TestClient(app) as startup_client:
+                on_started = startup_client.get("/openapi.json").status_code == 200
+            checks.append(("A-start2 LLM on은 시작 시 사전 생성", on_started and warmup.call_count == 1))
+            warmup.side_effect = LLMUnavailable("모의 생성 실패")
+            with TestClient(app) as startup_client:
+                failure_started = startup_client.get("/openapi.json").status_code == 200
+            checks.append(("A-start3 사전 생성 실패에도 서버 시작", failure_started and warmup.call_count == 2))
 
     outside = CLIENT.post("/api/chat", json={"message": "오늘 현장 날씨 어때?"}).json()
     checks.append(("A1", outside["status"] == "OUT_OF_SCOPE" and not outside["questions"]))

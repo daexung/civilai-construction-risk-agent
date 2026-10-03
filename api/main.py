@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+import os
 import re
 from datetime import date
 from typing import Optional
@@ -24,6 +26,7 @@ from agent.state import new_state
 from agent.nodes.fill import _common_fields, _valid_for_field
 from api.tables import add_tables, build_xlsx, estimate_filename
 from agent.tools.source.citation import resolve_cites
+from agent.tools.llm.client import LLMUnavailable, warmup_client
 
 GRAPH = build_graph()
 
@@ -41,6 +44,18 @@ app = FastAPI(title="civilai-construction-risk-agent chat api")
 def validate_service_vectors() -> None:
     """Fail startup before serving when an enabled division lacks vectors."""
     VectorIndex()
+
+
+@app.on_event("startup")
+def prepare_llm_client() -> None:
+    """Avoid client setup on the first chat; unavailable LLMs use rules."""
+    if os.environ.get("AGENT_LLM", "off") == "on":
+        try:
+            warmup_client()
+        except LLMUnavailable:
+            logging.getLogger(__name__).warning("LLM 클라이언트 사전 생성 실패: 기본 응답으로 서버를 시작합니다")
+
+
 SOURCES = Path(__file__).resolve().parents[1] / "data/processed/sources"
 app.add_middleware(
     CORSMiddleware,

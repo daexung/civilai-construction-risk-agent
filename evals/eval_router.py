@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT))
 
 from agent.nodes.route import route  # noqa: E402
 from agent.state import new_state  # noqa: E402
+from agent.tools.llm.client import LLMUnavailable, warmup_client  # noqa: E402
 
 LABELS = ("estimate", "qa", "out_of_scope")
 CRITERIA = {"overall_accuracy_min": 0.9, "boundary_accuracy_min": 0.8,
@@ -51,6 +52,7 @@ def evaluate(cases: list[dict]) -> dict:
         "confusion_matrix": matrix,
         "estimate_to_out_of_scope": matrix["estimate"]["out_of_scope"],
         "mean_latency_ms": round(sum(row["latency_ms"] for row in rows) / len(rows), 1),
+        "first_latency_ms": rows[0]["latency_ms"],
         "max_latency_ms": max(row["latency_ms"] for row in rows),
         "rule_fallback_count": sum(row["source"] == "rule" for row in rows),
         "low_confidence_count": sum(row["source"] == "llm_low_confidence" for row in rows),
@@ -72,6 +74,7 @@ def _print_summary(mode: str, summary: dict) -> None:
     print(f"estimate→out_of_scope {summary['estimate_to_out_of_scope']}건, "
           f"지연 평균 {summary['mean_latency_ms']}ms / 최대 {summary['max_latency_ms']}ms, "
           f"규칙 대체 {summary['rule_fallback_count']}건, 낮은 확신 {summary['low_confidence_count']}건")
+    print(f"첫 문항 지연 {summary['first_latency_ms']}ms (평균에 포함)")
     print("혼동표 (정답 행 / 예측 열):", " | ".join(LABELS))
     for label in LABELS:
         print(label, " | ".join(str(summary["confusion_matrix"][label][predicted]) for predicted in LABELS))
@@ -88,6 +91,11 @@ def main() -> int:
     cases = [json.loads(line) for line in TESTSET.read_text(encoding="utf-8").splitlines() if line]
     if len(cases) != 46 or len({case["id"] for case in cases}) != 46:
         raise SystemExit("라우터 시험지가 원본 46문항과 다릅니다")
+    if setting == "on":
+        try:
+            warmup_client()
+        except LLMUnavailable:
+            print("LLM 클라이언트 사전 생성 실패: 규칙 대체를 포함해 채점합니다")
     result = evaluate(cases)
     RESULTS.mkdir(parents=True, exist_ok=True)
     path = RESULTS / f"router_{date.today().isoformat()}.json"

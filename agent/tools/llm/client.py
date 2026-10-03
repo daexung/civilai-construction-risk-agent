@@ -121,6 +121,25 @@ def _get_client(provider: str, key: str):
         return _CLIENTS[cache_key]
 
 
+def warmup_client() -> bool:
+    """Create the shared client without sending a generation request."""
+    if os.environ.get("AGENT_LLM", "off") != "on":
+        return False
+    provider, key = None, None
+    try:
+        provider = provider_name()
+        key_name = "VERTEX_API_KEY" if provider == "vertex" else "GEMINI_API_KEY"
+        key = _env_value(key_name)
+        if not key:
+            raise LLMUnavailable(f"{key_name} 없음", provider=provider)
+        _get_client(provider, key)
+    except LLMUnavailable:
+        raise
+    except Exception as exc:
+        raise LLMUnavailable(_safe_error(exc, [key or ""]), provider=provider) from exc
+    return True
+
+
 def generate(
     prompt: str,
     system: str,
