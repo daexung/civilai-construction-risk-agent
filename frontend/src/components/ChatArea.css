@@ -945,3 +945,8 @@
 .fold { border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; }
 .fold > summary { cursor: pointer; font-weight: 600; font-size: 13.5px; }
 .fold[open] > summary { margin-bottom: 8px; }
+
+.qa-card { padding: 18px; border-left: 4px solid #327b73; background: #f3faf8; border-radius: 8px; }
+.qa-conclusion { display: block; font-size: 1.08rem; }
+.qa-explanation { white-space: pre-wrap; line-height: 1.65; }
+.qa-card li p { margin-top: 4px; }

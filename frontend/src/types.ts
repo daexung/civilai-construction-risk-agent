@@ -232,7 +232,7 @@ export interface StatementResult {
   basis_notes?: string[];
 }
 
-export type ChatStatus = 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR' | 'OK' | 'PARTIAL';
+export type ChatStatus = 'ANSWERED' | 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR' | 'OK' | 'PARTIAL';
 
 export interface ChatResponse {
   thread_id: string;
@@ -247,6 +247,9 @@ export interface ChatResponse {
   statement: StatementResult | null;
   conditions: ConditionField[];
   tables: ResultTables;
+  qa?: { not_found: boolean; conclusion: string; explanation: string;
+    comparisons: { section: string; summary: string }[]; citations: (Citation & { chunk_id: string })[] } | null;
+  llm_info?: { model: string; elapsed_ms: number; error: string | null } | null;
   answer: string | null;
   answer_source: 'llm' | 'template' | null;
   basis_date: string;

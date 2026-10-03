@@ -357,7 +357,16 @@ function AssistantCard({
         <span className="status-badge">{STATUS_LABEL[response.status]}</span>
         {response.work && <span className="work-badge">{response.work.title}</span>}
       </div>
-      {response.answer ? (
+      {response.status === 'ANSWERED' && response.qa ? (
+        <div className="qa-card">
+          <strong className="qa-conclusion">{response.qa.conclusion}</strong>
+          {response.qa.explanation && <p className="qa-explanation">{response.qa.explanation}</p>}
+          {response.qa.comparisons.length > 0 && <ul>{response.qa.comparisons.map((item, i) =>
+            <li key={i}><strong>{item.section}</strong><p>{item.summary}</p></li>)}</ul>}
+          {response.qa.citations.length > 0 && <div><h4>?? ??</h4>
+            <CitationList citations={response.qa.citations} /></div>}
+        </div>
+      ) : response.answer ? (
         <div className="assistant-answer">
           <span className={`answer-source-badge${response.answer_source === 'llm' ? ' llm' : ''}`}>
             {response.answer_source === 'llm' ? 'AI 설명' : '기본 설명'}
