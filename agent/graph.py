@@ -17,8 +17,15 @@ from agent.state import AgentState
 
 
 def _after_route(state: AgentState) -> str:
-    # 공사비 범위 밖의 질문은 검색하지 않는다.
-    return "compose" if state.get("status") == "OUT_OF_SCOPE" else "retrieve"
+    return "compose" if state.get("route") == "out_of_scope" else "retrieve"
+
+
+def _after_retrieve(state: AgentState) -> str:
+    return "qa_evidence" if state.get("route") == "qa" else "select"
+
+
+def _qa_evidence(_state: AgentState) -> dict:
+    return {"status": "EVIDENCE_ONLY", "reason": "품셈 질문 — 답변 기능 준비 중"}
 
 
 def _after_select(state: AgentState) -> str:
@@ -51,6 +58,7 @@ def build_graph(checkpointer=None):
     graph = StateGraph(AgentState)
     graph.add_node("route", route)
     graph.add_node("retrieve", retrieve)
+    graph.add_node("qa_evidence", _qa_evidence)
     graph.add_node("select", select)
     graph.add_node("fill", fill)
     graph.add_node("ask", ask)
@@ -61,7 +69,8 @@ def build_graph(checkpointer=None):
     graph.add_node("compose", compose)
     graph.add_edge(START, "route")
     graph.add_conditional_edges("route", _after_route, {"compose": "compose", "retrieve": "retrieve"})
-    graph.add_edge("retrieve", "select")
+    graph.add_conditional_edges("retrieve", _after_retrieve, {"qa_evidence": "qa_evidence", "select": "select"})
+    graph.add_edge("qa_evidence", "compose")
     graph.add_conditional_edges("select", _after_select, {"compose": "compose", "fill": "fill"})
     graph.add_conditional_edges("fill", _after_fill, {"ask": "ask", "compose": "compose", "gate": "gate"})
     graph.add_edge("ask", "fill")
