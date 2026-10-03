@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT))
 from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 from agent.tools.calc.per_unit import per_unit  # noqa: E402
 from agent.tools.calc.adjustments import classify_adjustment  # noqa: E402
+from agent.rules.misfiled import misfiled_ids  # noqa: E402
 
 CALCULATORS = {"daily_crew": adjusted_daily_crew, "per_unit": per_unit}
 OUTPUT = ROOT / "data/drafts/executable.json"
@@ -65,9 +66,12 @@ def evaluate() -> dict:
     failed = []
     chapter = defaultdict(lambda: Counter())
     adjustment_counts = Counter()
+    excluded = misfiled_ids()
     for path in sorted((ROOT / "data/drafts/specs").rglob("*.json")):
         package = json.loads(path.read_text(encoding="utf-8"))
         spec = package["draft"]
+        if spec["id"] in excluded:
+            continue
         kind = package["calc_type"]
         scope = "공통/6장" if spec["division"] == "공통" and spec["section_no"].startswith("6-") else "기타"
         chapter[scope]["total"] += 1

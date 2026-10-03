@@ -1730,7 +1730,7 @@
     }
   ],
   "summary": {
-    "total": 1058,
+    "total": 1056,
     "by_calc_type": {
       "daily_crew": {
         "attempted": 226,
@@ -1773,7 +1773,7 @@
     ],
     "by_scope": {
       "기타": {
-        "total": 1017,
+        "total": 1015,
         "attempted": 687,
         "executable": 359
       },

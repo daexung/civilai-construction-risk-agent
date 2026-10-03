@@ -6,6 +6,7 @@ from pathlib import Path
 
 from agent.tools.calc.per_unit import clean_label
 from agent.rules.scope import enabled_divisions
+from agent.rules.misfiled import misfiled_ids
 
 
 SPECS_DIR = Path(__file__).resolve().parent / "specs"
@@ -28,6 +29,7 @@ def load_specs() -> dict[str, dict]:
         specs[spec["id"]] = spec
     divisions = set(enabled_divisions())
     executable = set(json.loads((ROOT / "data/drafts/executable.json").read_text(encoding="utf-8"))["executable"])
+    excluded = misfiled_ids()
     reviewed = {(spec["division"], spec["section_no"]) for spec in specs.values()}
     for path in sorted((ROOT / "data/drafts/specs").rglob("*.json")):
         package = json.loads(path.read_text(encoding="utf-8"))
@@ -35,7 +37,7 @@ def load_specs() -> dict[str, dict]:
             continue
         spec = package["draft"]
         section = (spec["division"], spec["section_no"])
-        if spec["id"] not in executable or section in reviewed:
+        if spec["id"] in excluded or spec["id"] not in executable or section in reviewed:
             continue
         if section[0] not in divisions:
             continue

@@ -17,6 +17,31 @@ DIVISIONS = ("공통부문", "토목부문", "건축부문", "기계설비부문
 KNOWN = {62: 6, 185: 129, 802: 746, 876: 820, 922: 866}
 
 
+def isolated_divisions(pages: dict[str, dict]) -> list[int]:
+    """Find one-page division changes between matching neighboring pages."""
+    return [page for page in range(2, len(pages))
+            if pages[str(page - 1)]["division"]
+            and pages[str(page - 1)]["division"] == pages[str(page + 1)]["division"]
+            and pages[str(page)]["division"] not in (None, pages[str(page - 1)]["division"])]
+
+
+def correct_isolated_divisions(pages: dict[str, dict]) -> list[int]:
+    """Correct numbered content pages; an unnumbered division title page is real."""
+    corrected = []
+    for page in isolated_divisions(pages):
+        entry = pages[str(page)]
+        if entry["printed_page"] is None:
+            continue
+        division = pages[str(page - 1)]["division"]
+        previous = entry["division"]
+        entry["division"] = division
+        entry["division_reason"] = (
+            f"단일 쪽 부문 이상치 보정: PDF {page - 1}·{page + 1}쪽은 {division}, "
+            f"PDF {page}쪽 머리말은 {previous}")
+        corrected.append(page)
+    return corrected
+
+
 def build_page_map(pdf_path: Path = PDF) -> dict:
     pages: dict[str, dict] = {}
     with pymupdf.open(pdf_path) as document:
@@ -46,6 +71,8 @@ def build_page_map(pdf_path: Path = PDF) -> dict:
         if before and after and known_divisions[before] == known_divisions[after]:
             entry["division"] = known_divisions[before]
             entry["division_reason"] = f"인접 머리말 PDF {before}·{after}쪽의 같은 부문으로 보완"
+
+    correct_isolated_divisions(pages)
 
     chapter = None
     division = None

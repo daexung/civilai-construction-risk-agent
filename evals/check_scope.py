@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT))
 from agent.nodes.route import route  # noqa: E402
 from agent.nodes.select import decide  # noqa: E402
 from agent.rules.scope import enabled_divisions  # noqa: E402
+from agent.rules.misfiled import misfiled_sections  # noqa: E402
 from agent.rules.specs import specs_by_section  # noqa: E402
 from agent.state import new_state  # noqa: E402
 from agent.nodes.retrieve import make_search_index  # noqa: E402
@@ -34,9 +35,10 @@ SAMPLE_SIZE = 300
 def make_sample() -> list[dict]:
     divisions = enabled_divisions()
     grouped: dict[str, list[dict]] = {division: [] for division in divisions}
+    excluded = misfiled_sections()
     for line in SOURCE.read_text(encoding="utf-8").splitlines():
         row = json.loads(line)
-        if row.get("division") in grouped:
+        if row.get("division") in grouped and (row["division"], row["section_no"]) not in excluded:
             grouped[row["division"]].append(row)
     total = sum(map(len, grouped.values()))
     if total < SAMPLE_SIZE or any(not values for values in grouped.values()):
@@ -107,9 +109,11 @@ def evaluate(mode: str, sample: list[dict]) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mode", choices=("bm25", "hybrid"), default="bm25")
+    parser.add_argument("--refresh-sample", action="store_true",
+                        help="Refresh the committed sample after correcting source divisions")
     args = parser.parse_args()
     generated = make_sample()
-    if SAMPLE.exists():
+    if SAMPLE.exists() and not args.refresh_sample:
         sample = [json.loads(line) for line in SAMPLE.read_text(encoding="utf-8").splitlines() if line]
         if sample != generated:
             raise ValueError("고정 표본이 현재 부문 설정 또는 원본 질문과 다릅니다")

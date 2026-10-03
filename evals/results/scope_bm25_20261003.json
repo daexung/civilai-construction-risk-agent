@@ -6,30 +6,30 @@
   "method": "bm25(오프라인)",
   "summary": {
     "total": 300,
-    "route_pass": 219,
-    "top1_correct": 138,
-    "top3_correct": 169,
-    "select_correct": 44,
+    "route_pass": 222,
+    "top1_correct": 141,
+    "top3_correct": 171,
+    "select_correct": 43,
     "select_wrong": 3,
-    "select_ask": 253,
+    "select_ask": 254,
     "same_number_other_division": 2
   },
   "by_division": {
     "공통": {
-      "total": 117,
+      "total": 116,
       "route_pass": 76,
       "top1_correct": 50,
-      "top3_correct": 61,
-      "select_correct": 14,
+      "top3_correct": 59,
+      "select_correct": 13,
       "select_wrong": 1,
       "select_ask": 102,
       "same_number_other_division": 0
     },
     "토목": {
       "total": 32,
-      "route_pass": 28,
-      "top1_correct": 16,
-      "top3_correct": 20,
+      "route_pass": 30,
+      "top1_correct": 18,
+      "top3_correct": 23,
       "select_correct": 4,
       "select_wrong": 0,
       "select_ask": 28,
@@ -46,13 +46,13 @@
       "same_number_other_division": 1
     },
     "기계설비": {
-      "total": 89,
-      "route_pass": 66,
-      "top1_correct": 40,
-      "top3_correct": 49,
+      "total": 90,
+      "route_pass": 67,
+      "top1_correct": 41,
+      "top3_correct": 50,
       "select_correct": 14,
       "select_wrong": 2,
-      "select_ask": 73,
+      "select_ask": 74,
       "same_number_other_division": 0
     }
   },
@@ -116,18 +116,6 @@
         "1-3-2"
       ],
       "decision": "provisional"
-    },
-    {
-      "id": "draft-0045",
-      "division": "건축",
-      "section_no": "1-4-1",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
     },
     {
       "id": "draft-0052",
@@ -889,6 +877,18 @@
       "decision": "ask"
     },
     {
+      "id": "draft-0453",
+      "division": "건축",
+      "section_no": "9-1-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
       "id": "draft-0455",
       "division": "건축",
       "section_no": "9-1-5",
@@ -1036,6 +1036,18 @@
       "decision": "provisional"
     },
     {
+      "id": "draft-0521",
+      "division": "공통",
+      "section_no": "1-5-6",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
       "id": "draft-0523",
       "division": "공통",
       "section_no": "1-5-6",
@@ -1063,50 +1075,41 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0537",
+      "id": "draft-0543",
       "division": "공통",
-      "section_no": "2-10-1",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
+      "section_no": "2-10-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
       "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
+      "selected": [
+        "공통",
+        "2-10-3"
+      ],
+      "decision": "no_spec"
     },
     {
-      "id": "draft-0548",
+      "id": "draft-0554",
       "division": "공통",
-      "section_no": "2-10-5",
+      "section_no": "2-10-7",
       "route_pass": true,
-      "top1_correct": false,
-      "top3_correct": false,
+      "top1_correct": true,
+      "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-10-4"
+        "2-10-7"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0561",
+      "id": "draft-0567",
       "division": "공통",
-      "section_no": "2-11-2",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
-      "id": "draft-0562",
-      "division": "공통",
-      "section_no": "2-11-2",
+      "section_no": "2-11-4",
       "route_pass": true,
-      "top1_correct": true,
+      "top1_correct": false,
       "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
@@ -1117,69 +1120,9 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0574",
+      "id": "draft-0568",
       "division": "공통",
-      "section_no": "2-11-6",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "2-11-6"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-0586",
-      "division": "공통",
-      "section_no": "2-12-1",
-      "route_pass": true,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "기계설비",
-        "13-11-1"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-0588",
-      "division": "공통",
-      "section_no": "2-12-2",
-      "route_pass": true,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "wrong",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "1-3-1"
-      ],
-      "decision": "no_spec"
-    },
-    {
-      "id": "draft-0602",
-      "division": "공통",
-      "section_no": "2-2-4",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "2-2-4"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-0607",
-      "division": "공통",
-      "section_no": "2-2-5",
+      "section_no": "2-11-4",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -1189,9 +1132,39 @@
       "decision": "ask"
     },
     {
-      "id": "draft-0627",
+      "id": "draft-0580",
       "division": "공통",
-      "section_no": "2-4-3",
+      "section_no": "2-11-8",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "9-1-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0592",
+      "division": "공통",
+      "section_no": "2-12-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-9"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0594",
+      "division": "공통",
+      "section_no": "2-12-4",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1199,12 +1172,39 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-4-3"
+        "2-12-4"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0632",
+      "id": "draft-0608",
+      "division": "공통",
+      "section_no": "2-2-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-2-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0613",
+      "division": "공통",
+      "section_no": "2-2-7",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0633",
       "division": "공통",
       "section_no": "2-4-5",
       "route_pass": true,
@@ -1219,9 +1219,9 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0635",
+      "id": "draft-0638",
       "division": "공통",
-      "section_no": "2-5-1",
+      "section_no": "2-5-2",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1229,59 +1229,59 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-5-1"
+        "2-5-2"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0653",
+      "id": "draft-0641",
       "division": "공통",
-      "section_no": "2-6-3",
+      "section_no": "2-5-3",
       "route_pass": true,
-      "top1_correct": false,
+      "top1_correct": true,
       "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-6-3"
+        "2-5-3"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0660",
+      "id": "draft-0659",
       "division": "공통",
       "section_no": "2-6-5",
       "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "7-4-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0666",
+      "division": "공통",
+      "section_no": "2-7-2",
+      "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-6-5"
+        "2-7-2"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0665",
+      "id": "draft-0671",
       "division": "공통",
-      "section_no": "2-7-2",
-      "route_pass": true,
-      "top1_correct": false,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "2-7-1"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-0675",
-      "division": "공통",
-      "section_no": "2-7-6",
+      "section_no": "2-7-4",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1289,9 +1289,9 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-7-6"
+        "2-7-4"
       ],
-      "decision": "no_spec"
+      "decision": "chosen"
     },
     {
       "id": "draft-0681",
@@ -1309,37 +1309,37 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0695",
+      "id": "draft-0687",
       "division": "공통",
-      "section_no": "2-8-11",
+      "section_no": "2-8-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-8-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0701",
+      "division": "공통",
+      "section_no": "2-8-13",
       "route_pass": true,
       "top1_correct": false,
       "top3_correct": false,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
-        "기계설비",
-        "13-11-1"
+        "공통",
+        "2-8-8"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0703",
-      "division": "공통",
-      "section_no": "2-8-14",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "correct",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "2-8-14"
-      ],
-      "decision": "chosen"
-    },
-    {
-      "id": "draft-0710",
+      "id": "draft-0709",
       "division": "공통",
       "section_no": "2-8-16",
       "route_pass": true,
@@ -1369,69 +1369,54 @@
       "decision": "chosen"
     },
     {
-      "id": "draft-0720",
+      "id": "draft-0722",
       "division": "공통",
       "section_no": "2-8-3",
       "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "2-8-3"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-0731",
-      "division": "공통",
-      "section_no": "2-8-6",
-      "route_pass": true,
       "top1_correct": false,
       "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-9-2"
+        "2-8-1"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0735",
+      "id": "draft-0726",
+      "division": "공통",
+      "section_no": "2-8-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-8-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0737",
       "division": "공통",
       "section_no": "2-8-8",
       "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "2-8-8"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-0755",
-      "division": "공통",
-      "section_no": "2-9-2",
-      "route_pass": true,
       "top1_correct": false,
-      "top3_correct": true,
-      "select": "ask",
+      "top3_correct": false,
+      "select": "wrong",
       "same_number_other_division": false,
       "selected": [
-        "공통",
-        "2-12-1"
+        "기계설비",
+        "13-4-1"
       ],
-      "decision": "provisional"
+      "decision": "no_spec"
     },
     {
-      "id": "draft-0760",
+      "id": "draft-0741",
       "division": "공통",
-      "section_no": "2-9-4",
+      "section_no": "2-9-1",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1439,7 +1424,7 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-9-4"
+        "2-9-1"
       ],
       "decision": "provisional"
     },
@@ -1456,21 +1441,6 @@
       "decision": "ask"
     },
     {
-      "id": "draft-0765",
-      "division": "공통",
-      "section_no": "2-9-6",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "2-9-6"
-      ],
-      "decision": "provisional"
-    },
-    {
       "id": "draft-0766",
       "division": "공통",
       "section_no": "2-9-6",
@@ -1483,9 +1453,24 @@
       "decision": "ask"
     },
     {
-      "id": "draft-0769",
+      "id": "draft-0767",
       "division": "공통",
-      "section_no": "2-9-7",
+      "section_no": "2-9-6",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "6-7-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0771",
+      "division": "공통",
+      "section_no": "2-9-8",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1493,7 +1478,22 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "2-9-7"
+        "2-9-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0772",
+      "division": "공통",
+      "section_no": "2-9-8",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-9-8"
       ],
       "decision": "provisional"
     },
@@ -1513,19 +1513,16 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0791",
+      "id": "draft-0781",
       "division": "공통",
-      "section_no": "3-11-1",
-      "route_pass": true,
+      "section_no": "2208-5008",
+      "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
       "select": "ask",
       "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "3-11-4"
-      ],
-      "decision": "provisional"
+      "selected": null,
+      "decision": "ask"
     },
     {
       "id": "draft-0797",
@@ -1543,9 +1540,9 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0806",
+      "id": "draft-0803",
       "division": "공통",
-      "section_no": "3-2-1",
+      "section_no": "3-11-5",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -1555,9 +1552,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-0817",
+      "id": "draft-0812",
       "division": "공통",
-      "section_no": "3-3-1",
+      "section_no": "3-2-3",
       "route_pass": true,
       "top1_correct": false,
       "top3_correct": true,
@@ -1565,29 +1562,14 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "3-3-8"
+        "3-11-4"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0819",
+      "id": "draft-0823",
       "division": "공통",
-      "section_no": "3-3-2",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "3-3-2"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-0821",
-      "division": "공통",
-      "section_no": "3-3-2",
+      "section_no": "3-3-3",
       "route_pass": true,
       "top1_correct": false,
       "top3_correct": false,
@@ -1595,12 +1577,27 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "3-3-8"
+        "3-3-6"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0826",
+      "id": "draft-0825",
+      "division": "공통",
+      "section_no": "3-3-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-3-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0827",
       "division": "공통",
       "section_no": "3-3-4",
       "route_pass": true,
@@ -1615,24 +1612,24 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0842",
+      "id": "draft-0832",
       "division": "공통",
-      "section_no": "3-3-9",
+      "section_no": "3-3-6",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
-      "select": "ask",
+      "select": "correct",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "3-3-9"
+        "3-3-6"
       ],
-      "decision": "provisional"
+      "decision": "no_spec"
     },
     {
-      "id": "draft-0850",
+      "id": "draft-0848",
       "division": "공통",
-      "section_no": "3-4-3",
+      "section_no": "3-4-2",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -1642,39 +1639,27 @@
       "decision": "ask"
     },
     {
-      "id": "draft-0852",
+      "id": "draft-0856",
       "division": "공통",
-      "section_no": "3-4-4",
+      "section_no": "3-4-5",
       "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
+      "top1_correct": false,
+      "top3_correct": false,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "3-4-4"
+        "2-11-5"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0854",
+      "id": "draft-0858",
       "division": "공통",
-      "section_no": "3-4-4",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
-      "id": "draft-0865",
-      "division": "공통",
-      "section_no": "3-4-8",
+      "section_no": "3-4-6",
       "route_pass": true,
-      "top1_correct": false,
-      "top3_correct": false,
+      "top1_correct": true,
+      "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
@@ -1682,6 +1667,18 @@
         "3-4-6"
       ],
       "decision": "provisional"
+    },
+    {
+      "id": "draft-0860",
+      "division": "공통",
+      "section_no": "3-4-6",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
     },
     {
       "id": "draft-0871",
@@ -1699,9 +1696,9 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0873",
+      "id": "draft-0877",
       "division": "공통",
-      "section_no": "3-6-1",
+      "section_no": "3-6-2",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1709,26 +1706,29 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "3-6-1"
+        "3-6-2"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0878",
-      "division": "공통",
-      "section_no": "3-6-2",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
-      "id": "draft-0881",
+      "id": "draft-0879",
       "division": "공통",
       "section_no": "3-7-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-7-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0884",
+      "division": "공통",
+      "section_no": "3-7-2",
       "route_pass": true,
       "top1_correct": false,
       "top3_correct": true,
@@ -1736,14 +1736,14 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "6-3-3"
+        "6-6-7"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0893",
+      "id": "draft-0887",
       "division": "공통",
-      "section_no": "3-7-5",
+      "section_no": "3-7-3",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -1765,21 +1765,6 @@
       "decision": "ask"
     },
     {
-      "id": "draft-0904",
-      "division": "공통",
-      "section_no": "3-8-4",
-      "route_pass": true,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "3-4-6"
-      ],
-      "decision": "provisional"
-    },
-    {
       "id": "draft-0905",
       "division": "공통",
       "section_no": "3-8-4",
@@ -1795,21 +1780,24 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-0926",
+      "id": "draft-0910",
       "division": "공통",
-      "section_no": "4-1-3",
-      "route_pass": false,
+      "section_no": "3-9-2",
+      "route_pass": true,
       "top1_correct": false,
-      "top3_correct": false,
+      "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
+      "selected": [
+        "공통",
+        "1-4-1"
+      ],
+      "decision": "provisional"
     },
     {
-      "id": "draft-0939",
+      "id": "draft-0911",
       "division": "공통",
-      "section_no": "4-2-3",
+      "section_no": "3-9-2",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1817,22 +1805,37 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "4-2-3"
+        "3-9-2"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0940",
+      "id": "draft-0932",
       "division": "공통",
-      "section_no": "4-2-3",
+      "section_no": "4-1-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "4-1-5"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0945",
+      "division": "공통",
+      "section_no": "4-3-2",
       "route_pass": true,
       "top1_correct": false,
-      "top3_correct": true,
+      "top3_correct": false,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "4-2-2"
+        "4-2-1"
       ],
       "decision": "provisional"
     },
@@ -1849,24 +1852,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-0950",
+      "id": "draft-0952",
       "division": "공통",
-      "section_no": "4-3-3",
-      "route_pass": true,
-      "top1_correct": false,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "4-3-2"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-0975",
-      "division": "공통",
-      "section_no": "4108-0060",
+      "section_no": "4-3-4",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1874,14 +1862,29 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "8-4-4"
+        "4-3-4"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-0987",
+      "id": "draft-0956",
       "division": "공통",
-      "section_no": "5-1-2",
+      "section_no": "4-3-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "4-3-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0981",
+      "division": "공통",
+      "section_no": "5-1-10",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -1891,9 +1894,66 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1004",
+      "id": "draft-0993",
       "division": "공통",
-      "section_no": "5-1-8",
+      "section_no": "5-1-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1010",
+      "division": "공통",
+      "section_no": "5-2-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "5-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1037",
+      "division": "공통",
+      "section_no": "5-4-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "5-4-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1041",
+      "division": "공통",
+      "section_no": "5203-1800",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-2-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1049",
+      "division": "공통",
+      "section_no": "6-1-2",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1901,62 +1961,14 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "5-1-8"
+        "6-1-2"
       ],
-      "decision": "no_spec"
+      "decision": "chosen"
     },
     {
-      "id": "draft-1035",
-      "division": "공통",
-      "section_no": "5-3-5",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
-      "id": "draft-1043",
-      "division": "공통",
-      "section_no": "5205-0035",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
-      "id": "draft-1064",
-      "division": "공통",
-      "section_no": "6-1-7",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
-      "id": "draft-1071",
+      "id": "draft-1070",
       "division": "공통",
       "section_no": "6-2-2",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
-      "id": "draft-1073",
-      "division": "공통",
-      "section_no": "6-2-3",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -1964,12 +1976,12 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "6-2-3"
+        "6-2-2"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-1076",
+      "id": "draft-1077",
       "division": "공통",
       "section_no": "6-2-4",
       "route_pass": true,
@@ -1984,6 +1996,21 @@
       "decision": "provisional"
     },
     {
+      "id": "draft-1079",
+      "division": "공통",
+      "section_no": "6-2-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-2-5"
+      ],
+      "decision": "chosen"
+    },
+    {
       "id": "draft-1082",
       "division": "공통",
       "section_no": "6-2-6",
@@ -1996,22 +2023,22 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1094",
+      "id": "draft-1088",
       "division": "공통",
-      "section_no": "6-3-3",
+      "section_no": "6-3-10",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
-      "select": "correct",
+      "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "6-3-3"
+        "6-3-10"
       ],
-      "decision": "chosen"
+      "decision": "provisional"
     },
     {
-      "id": "draft-1101",
+      "id": "draft-1100",
       "division": "공통",
       "section_no": "6-3-5",
       "route_pass": true,
@@ -2026,24 +2053,9 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-1124",
+      "id": "draft-1107",
       "division": "공통",
-      "section_no": "6-5-2",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "correct",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "6-5-2"
-      ],
-      "decision": "chosen"
-    },
-    {
-      "id": "draft-1135",
-      "division": "공통",
-      "section_no": "6-6-3",
+      "section_no": "6-3-7",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -2051,74 +2063,59 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "6-6-3"
+        "6-3-7"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-1149",
+      "id": "draft-1130",
       "division": "공통",
-      "section_no": "6-6-8",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "6-6-8"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-1151",
-      "division": "공통",
-      "section_no": "6-7-1",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "6-7-1"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-1160",
-      "division": "공통",
-      "section_no": "6-7-4",
+      "section_no": "6-6-2",
       "route_pass": true,
       "top1_correct": false,
-      "top3_correct": false,
+      "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
-        "건축",
-        "9-2-3"
+        "공통",
+        "6-6-1"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-1176",
+      "id": "draft-1141",
       "division": "공통",
-      "section_no": "7-2-1",
+      "section_no": "6-6-6",
       "route_pass": true,
-      "top1_correct": true,
+      "top1_correct": false,
       "top3_correct": true,
-      "select": "correct",
+      "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "7-2-1"
+        "6-6-5"
       ],
-      "decision": "chosen"
+      "decision": "provisional"
     },
     {
-      "id": "draft-1183",
+      "id": "draft-1155",
       "division": "공통",
-      "section_no": "7-3-2",
+      "section_no": "6-7-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-7-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1157",
+      "division": "공통",
+      "section_no": "6-7-3",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2128,39 +2125,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1187",
+      "id": "draft-1166",
       "division": "공통",
-      "section_no": "7-4-1",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "7-4-1"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-1190",
-      "division": "공통",
-      "section_no": "7-4-2",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "7-4-2"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-1194",
-      "division": "공통",
-      "section_no": "7-4-3",
+      "section_no": "6-7-6",
       "route_pass": true,
       "top1_correct": false,
       "top3_correct": false,
@@ -2168,14 +2135,56 @@
       "same_number_other_division": false,
       "selected": [
         "건축",
-        "8-2-4"
+        "2-1-1"
       ],
       "decision": "provisional"
     },
     {
-      "id": "draft-1198",
+      "id": "draft-1182",
       "division": "공통",
-      "section_no": "8-1-1",
+      "section_no": "7-3-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1189",
+      "division": "공통",
+      "section_no": "7-4-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "7-4-2"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1193",
+      "division": "공통",
+      "section_no": "7-4-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "7-4-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1196",
+      "division": "공통",
+      "section_no": "7811-0025",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2197,9 +2206,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1220",
+      "id": "draft-1204",
       "division": "공통",
-      "section_no": "8-2-13",
+      "section_no": "8-1-3",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2209,9 +2218,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1228",
+      "id": "draft-1206",
       "division": "공통",
-      "section_no": "8-2-19",
+      "section_no": "8-1-3",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2221,9 +2230,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1229",
+      "id": "draft-1226",
       "division": "공통",
-      "section_no": "8-2-19",
+      "section_no": "8-2-18",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2233,36 +2242,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1230",
+      "id": "draft-1234",
       "division": "공통",
-      "section_no": "8-2-19",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
-      "id": "draft-1237",
-      "division": "공통",
-      "section_no": "8-2-22",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "8-2-22"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-1238",
-      "division": "공통",
-      "section_no": "8-2-22",
+      "section_no": "8-2-21",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -2270,9 +2252,45 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "8-2-22"
+        "8-2-21"
       ],
       "decision": "no_spec"
+    },
+    {
+      "id": "draft-1235",
+      "division": "공통",
+      "section_no": "8-2-21",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1236",
+      "division": "공통",
+      "section_no": "8-2-21",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1243",
+      "division": "공통",
+      "section_no": "8-2-24",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
     },
     {
       "id": "draft-1244",
@@ -2280,21 +2298,6 @@
       "section_no": "8-2-24",
       "route_pass": true,
       "top1_correct": true,
-      "top3_correct": true,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "8-2-24"
-      ],
-      "decision": "provisional"
-    },
-    {
-      "id": "draft-1249",
-      "division": "공통",
-      "section_no": "8-2-26",
-      "route_pass": true,
-      "top1_correct": false,
       "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
@@ -2317,24 +2320,24 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1268",
+      "id": "draft-1255",
       "division": "공통",
-      "section_no": "8-2-31",
+      "section_no": "8-2-28",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
-      "select": "correct",
+      "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "8-2-31"
+        "8-2-28"
       ],
-      "decision": "no_spec"
+      "decision": "provisional"
     },
     {
-      "id": "draft-1269",
+      "id": "draft-1256",
       "division": "공통",
-      "section_no": "8-2-31",
+      "section_no": "8-2-28",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2344,24 +2347,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1270",
+      "id": "draft-1274",
       "division": "공통",
-      "section_no": "8-2-32",
-      "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
-      "select": "correct",
-      "same_number_other_division": false,
-      "selected": [
-        "공통",
-        "8-2-32"
-      ],
-      "decision": "no_spec"
-    },
-    {
-      "id": "draft-1284",
-      "division": "공통",
-      "section_no": "8-2-6",
+      "section_no": "8-2-33",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2371,9 +2359,9 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1285",
+      "id": "draft-1276",
       "division": "공통",
-      "section_no": "8-2-7",
+      "section_no": "8-2-4",
       "route_pass": true,
       "top1_correct": true,
       "top3_correct": true,
@@ -2381,14 +2369,14 @@
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "8-2-7"
+        "8-2-4"
       ],
       "decision": "no_spec"
     },
     {
-      "id": "draft-1291",
+      "id": "draft-1290",
       "division": "공통",
-      "section_no": "8-2-9",
+      "section_no": "8-2-8",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2410,18 +2398,6 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1304",
-      "division": "공통",
-      "section_no": "8-3-3",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
       "id": "draft-1305",
       "division": "공통",
       "section_no": "8-3-3",
@@ -2434,17 +2410,29 @@
       "decision": "ask"
     },
     {
-      "id": "draft-1309",
+      "id": "draft-1310",
       "division": "공통",
       "section_no": "8-3-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1315",
+      "division": "공통",
+      "section_no": "8-3-7",
       "route_pass": true,
-      "top1_correct": true,
-      "top3_correct": true,
+      "top1_correct": false,
+      "top3_correct": false,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
         "공통",
-        "6-1-4"
+        "8-2-22"
       ],
       "decision": "provisional"
     },
@@ -2479,18 +2467,6 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-1334",
-      "division": "공통",
-      "section_no": "8-4-4",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
       "id": "draft-1336",
       "division": "공통",
       "section_no": "8-4-5",
@@ -2506,6 +2482,18 @@
       "id": "draft-1337",
       "division": "공통",
       "section_no": "8-4-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1340",
+      "division": "공통",
+      "section_no": "8-4-6",
       "route_pass": false,
       "top1_correct": false,
       "top3_correct": false,
@@ -2894,7 +2882,7 @@
       "same_number_other_division": false,
       "selected": [
         "기계설비",
-        "13-6-6"
+        "13-5-4"
       ],
       "decision": "provisional"
     },
@@ -3180,6 +3168,21 @@
       "selected": [
         "기계설비",
         "2-2-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1772",
+      "division": "기계설비",
+      "section_no": "13-7-21",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-7-21"
       ],
       "decision": "provisional"
     },
@@ -3877,21 +3880,6 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-2455",
-      "division": "토목",
-      "section_no": "1-4-3",
-      "route_pass": true,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": [
-        "기계설비",
-        "13-2-1"
-      ],
-      "decision": "provisional"
-    },
-    {
       "id": "draft-2460",
       "division": "토목",
       "section_no": "1-5-4",
@@ -3918,6 +3906,21 @@
       "selected": [
         "토목",
         "1-5-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2467",
+      "division": "토목",
+      "section_no": "1-5-7",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "1-5-3"
       ],
       "decision": "provisional"
     },
@@ -4066,18 +4069,6 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-2583",
-      "division": "토목",
-      "section_no": "4-6-8",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
-    },
-    {
       "id": "draft-2589",
       "division": "토목",
       "section_no": "5-1-3",
@@ -4149,6 +4140,21 @@
       "selected": [
         "기계설비",
         "13-6-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2616",
+      "division": "토목",
+      "section_no": "6-4-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "6-4-2"
       ],
       "decision": "provisional"
     },
@@ -4237,8 +4243,8 @@
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
-        "공통",
-        "2-1-31"
+        "토목",
+        "1-7-2"
       ],
       "decision": "provisional"
     },
@@ -4288,12 +4294,27 @@
       "decision": "provisional"
     },
     {
-      "id": "draft-2685",
+      "id": "draft-2679",
       "division": "토목",
-      "section_no": "9-18-3",
+      "section_no": "8-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "8-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2688",
+      "division": "토목",
+      "section_no": "9-18-4",
       "route_pass": true,
       "top1_correct": false,
-      "top3_correct": false,
+      "top3_correct": true,
       "select": "ask",
       "same_number_other_division": false,
       "selected": [
@@ -4301,18 +4322,6 @@
         "9-3-6"
       ],
       "decision": "provisional"
-    },
-    {
-      "id": "draft-2692",
-      "division": "토목",
-      "section_no": "9-18-5",
-      "route_pass": false,
-      "top1_correct": false,
-      "top3_correct": false,
-      "select": "ask",
-      "same_number_other_division": false,
-      "selected": null,
-      "decision": "ask"
     }
   ]
 }
