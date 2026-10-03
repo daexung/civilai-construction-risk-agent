@@ -1,4 +1,4 @@
-"""?? ?? ??? ??? ?? ??."""
+"""품셈 상담 구조화 답변과 원문 검증."""
 import json
 import os
 import re
@@ -16,7 +16,7 @@ SCHEMA = {"type": "object", "properties": {
     "citations": {"type": "array", "items": {"type": "object", "properties": {
         "chunk_id": {"type": "string"}, "quote": {"type": "string"}}, "required": ["chunk_id", "quote"]}}},
     "required": ["not_found", "conclusion", "explanation", "comparisons", "citations"]}
-MONEY = re.compile(r"\d[\d,]*(?:\.\d+)?\s*?|[??]|[????]\s*?|KRW|?\s*[/?]", re.I)
+MONEY = re.compile(r"\d[\d,]*(?:\.\d+)?\s*원|[₩￦]|[천만억조]\s*원|KRW|원\s*[/／]", re.I)
 
 def qa_model():
     return json.loads(client.CONFIG_PATH.read_text(encoding="utf-8")).get("qa_model", "gemini-3.5-flash-lite")
@@ -58,23 +58,23 @@ def validate(qa, contexts):
     return None
 
 def not_found(contexts):
-    return {"not_found": True, "conclusion": "???? ? ??? ?? ??? ?? ?????.",
-            "explanation": "?? ??? ?: " + contexts[0]["section"] if contexts else "",
+    return {"not_found": True, "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
+            "explanation": "가장 가까운 절: " + contexts[0]["section"] if contexts else "",
             "comparisons": [], "citations": []}
 
 def template(contexts, hits):
-    qa = {"not_found": False, "conclusion": "???? ?? ??? ?????.", "explanation": "",
+    qa = {"not_found": False, "conclusion": "품셈에서 관련 기준을 찾았습니다.", "explanation": "",
           "comparisons": [], "citations": []}
     ranks = {h["chunk_id"]: h["rank"] for h in hits}
     for ctx in contexts:
-        qa["comparisons"].append({"section": ctx["section"], "summary": "?? ??? ??? ???."})
+        qa["comparisons"].append({"section": ctx["section"], "summary": "원문 기준을 확인해 주세요."})
         for c in sorted(ctx["chunks"], key=lambda c: ranks.get(c["chunk_id"], 999))[:2]:
             lines = [line for line in c["text"].splitlines() if not MONEY.search(line)]
             quote = next((line.strip()[:350] for line in lines if line.strip()), "")
             if quote:
                 qa["citations"].append({"chunk_id": c["chunk_id"], "quote": quote})
     if any(ctx["truncated"] for ctx in contexts):
-        qa["explanation"] = "?? ?? ???? ?? ??? ???????. ??? ??? ???."
+        qa["explanation"] = "문맥 길이 제한으로 일부 원문이 생략되었습니다. 원문을 확인해 주세요."
     return qa
 
 def answer(state, *, generate_fn=None, model=None, contexts=None):
@@ -101,6 +101,6 @@ def answer(state, *, generate_fn=None, model=None, contexts=None):
         except Exception as exc:
             info.update(error=str(exc) if isinstance(exc, client.LLMUnavailable) else type(exc).__name__, attempts=getattr(exc, "attempts", info["attempts"]))
     info["elapsed_ms"] = round((time.monotonic() - started) * 1000)
-    text = "\n\n".join(t for t in [qa["conclusion"], qa["explanation"]] + [c["section"] + ": " + c["summary"] for c in qa["comparisons"]] if t)
+    text = "\n\n".join(t for t in [qa["conclusion"], qa["explanation"]] + [c["section"] + ": " + c["summary"] for c in qa["comparisons"]] + [f"[{c['chunk_id']}] {c['quote']}" for c in qa["citations"]] if t)
     return {"status": "ANSWERED", "reason": "", "qa": qa, "answer": text, "answer_source": source,
             "llm_info": info, "candidates": [{k: c[k] for k in ("division", "section_no", "section", "score", "has_spec")} for c in contexts]}

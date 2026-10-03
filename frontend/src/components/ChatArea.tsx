@@ -15,6 +15,7 @@ interface Props {
 }
 
 const STATUS_LABEL: Record<ChatResponse['status'], string> = {
+  ANSWERED: '품셈 상담',
   OUT_OF_SCOPE: '범위 밖',
   EVIDENCE_ONLY: '근거만 제공',
   MISSING_INFO: '확인이 필요합니다',
@@ -363,7 +364,7 @@ function AssistantCard({
           {response.qa.explanation && <p className="qa-explanation">{response.qa.explanation}</p>}
           {response.qa.comparisons.length > 0 && <ul>{response.qa.comparisons.map((item, i) =>
             <li key={i}><strong>{item.section}</strong><p>{item.summary}</p></li>)}</ul>}
-          {response.qa.citations.length > 0 && <div><h4>?? ??</h4>
+          {response.qa.citations.length > 0 && <div><h4>📖 근거</h4>
             <CitationList citations={response.qa.citations} /></div>}
         </div>
       ) : response.answer ? (

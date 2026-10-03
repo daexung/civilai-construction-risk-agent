@@ -172,8 +172,8 @@ def main() -> int:
                 patch.object(client, "generate", return_value=_response("qa")):
             graph = build_graph()
             graph_state = graph.invoke(new_state("품은 몇 인이야?"), {"configurable": {"thread_id": "router-qa"}})
-        checks.append(("qa evidence without select", graph_state["status"] == "EVIDENCE_ONLY"
-                       and graph_state["reason"] == "품셈 질문 — 답변 기능 준비 중"))
+        checks.append(("qa answered without select", graph_state["status"] == "ANSWERED"
+                       and graph_state["qa"]["not_found"]))
 
     with patch.dict(os.environ, {"AGENT_LLM": "off"}):
         with patch.object(client, "generate", side_effect=AssertionError("LLM called")):

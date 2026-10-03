@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 QUICK_CHECKS = [
-    "check_router", "check_compose", "check_fill", "check_graph", "check_api", "check_price",
+    "check_router", "check_qa", "check_compose", "check_fill", "check_graph", "check_api", "check_price",
     "check_equipment", "check_supply", "check_spec_cases", "check_citation", "check_overhead_rates",
     "check_cost_statement", "check_embedding_config", "check_chunk_ids",
     "check_per_unit", "check_adjustments",
