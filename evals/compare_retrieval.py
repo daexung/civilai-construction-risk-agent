@@ -47,7 +47,7 @@ def main() -> int:
     spec = json.loads(QUESTIONS.read_text(encoding="utf-8"))
     items = spec["questions"] + spec.get("evidence_checks", [])
     bm25 = Index(load(CHUNKS))
-    vec = VectorIndex()
+    vec = VectorIndex(config_path=ROOT / "evals/index_configs/6chapter_studio.json")
     if vec.stale or vec.missing:
         raise SystemExit(f"벡터가 청크와 맞지 않는다(옛 {len(vec.stale)}, 없음 {len(vec.missing)}). embed.py를 다시 실행")
 

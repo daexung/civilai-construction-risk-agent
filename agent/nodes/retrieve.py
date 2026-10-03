@@ -5,7 +5,7 @@ from functools import cache
 
 from agent.state import AgentState
 from agent.tools.search.bm25 import Index, load
-from agent.tools.search.vector import ModelMismatchError, load_index_config
+from agent.tools.search.vector import MissingVectorsError, ModelMismatchError, load_index_config
 
 
 class _Fallback:
@@ -35,7 +35,12 @@ class _Fallback:
 
 def make_search_index(offline: bool, hybrid_factory=None):
     """검색 인덱스와 초기 검색 방식·경고를 만든다."""
-    bm25 = Index(load(load_index_config()["chunks"]))
+    config = load_index_config()
+    chunks = load(config["chunks"])
+    if "divisions" in config:
+        enabled = set(config["divisions"])
+        chunks = [chunk for chunk in chunks if chunk.get("division") in enabled]
+    bm25 = Index(chunks)
     if offline:
         return bm25, "bm25(오프라인)", None
     try:
@@ -43,7 +48,7 @@ def make_search_index(offline: bool, hybrid_factory=None):
             from agent.tools.search.hybrid import HybridIndex
             hybrid_factory = HybridIndex
         return _Fallback(hybrid_factory(bm25=bm25), bm25), "hybrid", None
-    except ModelMismatchError:
+    except (ModelMismatchError, MissingVectorsError):
         raise
     except Exception as exc:  # 패키지·벡터 파일 오류
         return bm25, "bm25(대체)", f"하이브리드 검색을 준비하지 못해 BM25로 대신했습니다: {type(exc).__name__}: {str(exc)[:120]}"

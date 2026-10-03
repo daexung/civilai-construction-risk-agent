@@ -5,6 +5,7 @@ from functools import cache
 from pathlib import Path
 
 from agent.tools.calc.per_unit import clean_label
+from agent.rules.scope import enabled_divisions
 
 
 SPECS_DIR = Path(__file__).resolve().parent / "specs"
@@ -25,7 +26,7 @@ def load_specs() -> dict[str, dict]:
         if spec["id"] in specs:
             raise ValueError(f"{path.name}: 중복 명세 id: {spec['id']}")
         specs[spec["id"]] = spec
-    config = json.loads((ROOT / "agent/rules/drafts_config.json").read_text(encoding="utf-8"))
+    divisions = set(enabled_divisions())
     executable = set(json.loads((ROOT / "data/drafts/executable.json").read_text(encoding="utf-8"))["executable"])
     reviewed = {(spec["division"], spec["section_no"]) for spec in specs.values()}
     for path in sorted((ROOT / "data/drafts/specs").rglob("*.json")):
@@ -36,8 +37,7 @@ def load_specs() -> dict[str, dict]:
         section = (spec["division"], spec["section_no"])
         if spec["id"] not in executable or section in reviewed:
             continue
-        if not any(f"{section[0]}/{section[1]}".startswith(prefix)
-                   for prefix in config["enabled_prefixes"]):
+        if section[0] not in divisions:
             continue
         spec["review"] = "AI 초안 · 검토 전"
         spec["origin"] = "draft"

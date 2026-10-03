@@ -6,18 +6,24 @@ import json
 import os
 import sys
 import time
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
 
 from shared.embedding import (ROOT, client, document_fingerprint, embed_texts,
                               query_input, retryable_error, settings)
+from agent.rules.scope import enabled_divisions
 
 DEFAULT_CONFIG = Path(__file__).with_name("index_config.json")
 
 
 class ModelMismatchError(ValueError):
     """The selected index cannot be queried with the configured embedding model."""
+
+
+class MissingVectorsError(ValueError):
+    """An enabled division has chunks without current embeddings."""
 
 
 def load_index_config(path: str | Path | None = None) -> dict:
@@ -29,6 +35,8 @@ def load_index_config(path: str | Path | None = None) -> dict:
         if field not in data:
             raise ValueError(f"색인 설정 누락: {field} ({source})")
     result = dict(data)
+    if path is None and not os.environ.get("INDEX_CONFIG"):
+        result["divisions"] = enabled_divisions()
     for field in ("chunks", "vectors"):
         location = Path(data[field])
         result[field] = location if location.is_absolute() else ROOT / location
@@ -52,6 +60,9 @@ class VectorIndex:
         vectors_path = vectors_path or index_config["vectors"]
         self.chunks = [json.loads(line) for line in Path(chunks_path).read_text(encoding="utf-8").splitlines()
                        if line.strip()]
+        if "divisions" in index_config:
+            enabled = set(index_config["divisions"])
+            self.chunks = [chunk for chunk in self.chunks if chunk.get("division") in enabled]
         self.by_id = {chunk["chunk_id"]: chunk for chunk in self.chunks}
         table = pq.read_table(vectors_path).to_pylist()
         models = {row["model"] for row in table}
@@ -60,12 +71,19 @@ class VectorIndex:
                 f"색인 모델 {sorted(models)}과 질문 모델 {self.embedding.model}이 다릅니다: {vectors_path}")
         if any(row["dim"] != self.embedding.dim for row in table):
             raise ModelMismatchError(f"색인 차원과 질문 차원이 다릅니다: {vectors_path}")
+        if "divisions" in index_config:
+            table = [row for row in table if row["chunk_id"] in self.by_id]
         self.stale = [row["chunk_id"] for row in table if
                       row["chunk_id"] not in self.by_id or
                       row["text_sha256"] != document_fingerprint(self.by_id[row["chunk_id"]], self.embedding)]
-        rows = [row for row in table if row["chunk_id"] not in self.stale]
+        rows = [row for row in table if row["chunk_id"] in self.by_id and row["chunk_id"] not in self.stale]
         self.missing = [chunk["chunk_id"] for chunk in self.chunks
                         if chunk["chunk_id"] not in {row["chunk_id"] for row in rows}]
+        if self.missing and "divisions" in index_config:
+            counts = Counter(self.by_id[chunk_id]["division"] for chunk_id in self.missing)
+            detail = ", ".join(f"{division} {counts[division]}개" for division in index_config["divisions"]
+                               if counts[division])
+            raise MissingVectorsError(f"켜진 부문의 임베딩 벡터 누락: {detail}")
         self.ids = [row["chunk_id"] for row in rows]
         if not rows:
             raise ValueError(f"사용 가능한 임베딩 벡터가 없습니다: {vectors_path}")

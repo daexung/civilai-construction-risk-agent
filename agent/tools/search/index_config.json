@@ -1,1 +1,1 @@
-{"chunks": "data/processed/chunks.jsonl", "vectors": "data/processed/embeddings.parquet", "embed_provider": "studio"}
+{"chunks": "data/processed/chunks.all.jsonl", "vectors": "data/processed/embeddings.all.gemini-embedding-2.parquet", "embed_provider": "studio"}

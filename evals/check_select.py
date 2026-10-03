@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+os.environ["INDEX_CONFIG"] = str(ROOT / "evals/index_configs/6chapter_studio.json")
 
 from agent.nodes.retrieve import get_search, retrieve  # noqa: E402
 from agent.nodes.select import MARGIN, decide  # noqa: E402

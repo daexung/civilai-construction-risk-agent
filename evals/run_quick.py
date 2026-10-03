@@ -19,6 +19,7 @@ QUICK_CHECKS = [
     "check_equipment", "check_supply", "check_spec_cases", "check_citation", "check_overhead_rates",
     "check_cost_statement", "check_embedding_config", "check_chunk_ids",
     "check_per_unit", "check_adjustments",
+    "check_scope_inputs",
 ]
 
 SUMMARY_PATTERN = re.compile(r"통과 (\d+) / 전체 (\d+)")
@@ -29,6 +30,9 @@ def run_one(name: str) -> tuple[int, str, str]:
     env["AGENT_OFFLINE"] = "1"
     env["AGENT_LLM"] = "off"
     env["PYTHONIOENCODING"] = "utf-8"
+    env["INDEX_CONFIG"] = str(ROOT / "evals/index_configs/6chapter_studio.json")
+    if name in ("check_scope", "check_scope_inputs"):
+        env.pop("INDEX_CONFIG", None)
     result = subprocess.run(
         [sys.executable, str(ROOT / "evals" / f"{name}.py")],
         cwd=ROOT, env=env, capture_output=True, text=True, encoding="utf-8", errors="replace",

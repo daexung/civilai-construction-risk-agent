@@ -18,6 +18,7 @@ from pydantic import BaseModel
 
 from agent.graph import build_graph
 from agent.rules.specs import load_specs
+from agent.tools.search.vector import VectorIndex
 from pipeline.render_sources import render_source
 from agent.state import new_state
 from agent.nodes.fill import _common_fields, _valid_for_field
@@ -34,6 +35,12 @@ DEV_ORIGINS = [
 ]
 
 app = FastAPI(title="civilai-construction-risk-agent chat api")
+
+
+@app.on_event("startup")
+def validate_service_vectors() -> None:
+    """Fail startup before serving when an enabled division lacks vectors."""
+    VectorIndex()
 SOURCES = Path(__file__).resolve().parents[1] / "data/processed/sources"
 app.add_middleware(
     CORSMiddleware,
@@ -137,7 +144,7 @@ def _work_out(state: dict, spec: dict | None) -> dict | None:
     return {
         "spec_id": spec_id,
         "section_no": selection.get("section_no") or spec["section_no"],
-        "title": selection.get("section") or spec["title"],
+        "title": f"{spec['division']} {spec['section_no']} {spec['title']}",
         "confirmed": bool(selection.get("confirmed")),
     }
 
