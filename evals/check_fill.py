@@ -39,8 +39,9 @@ def main() -> int:
                                              "duration": "1~6개월", "contractor_type": "종합건설업",
                                              "project_scale": "이 견적만"}
                    and not {"work_category", "duration", "contractor_type", "project_scale"} & set(names)
+                   and first["input_sources"]["work_category"] == "기본값(부문)"
                    and all(first["input_sources"][n] == "기본값" for n in
-                           ("work_category", "duration", "contractor_type", "project_scale"))
+                           ("duration", "contractor_type", "project_scale"))
                    and pump_size["choices"] == ["32m", "36m", "41m", "43m", "47m", "52m"]
                    and facility.get("hint") == {"value": "Type-Ⅱ", "matched": "벽"}))
 

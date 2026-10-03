@@ -19,7 +19,8 @@ def decide(hits: list[dict], specs: dict[tuple[str, str], list[dict]], margin: f
         key = (division, section_no)
         group = by_section.setdefault(key, {
             "division": division, "section_no": section_no,
-            "section": f"{division} {hit['section']}" if division else hit["section"],
+            "section": (f"{division} {section_no} {specs[key][0]['title']}" if specs.get(key)
+                        else f"{division} {hit['section']}" if division else hit["section"]),
             "score": 0.0, "has_spec": bool(specs.get(key)),
         })
         group["score"] += 1 / hit["rank"]

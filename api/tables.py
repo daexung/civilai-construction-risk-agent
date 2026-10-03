@@ -318,7 +318,13 @@ _FOOTER = "표준품셈 기준 금액 · 검토 전 참고용 · 품셈AI"
 
 
 def _work_name(response: dict) -> str:
-    title = (response.get("work") or {}).get("title") or "공사비"
+    work = response.get("work") or {}
+    title = work.get("title") or "공사비"
+    if work.get("spec_id"):
+        from agent.rules.specs import load_specs
+        spec = load_specs().get(work["spec_id"])
+        if spec:
+            title = spec["title"]
     return re.sub(r"\s*\(20\d{2}(?:년)?[^)]*\)\s*$", "", title).strip()
 
 

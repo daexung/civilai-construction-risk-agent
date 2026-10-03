@@ -85,7 +85,8 @@ def main() -> int:
     condition_sources = {c["name"]: c["source"] for c in base["conditions"]}
     checks.append(("A10 기본값 도급액", base["status"] == "PARTIAL"
                    and base["statement"]["totals"]["contract_amount"] == 10032436
-                   and set(condition_sources.values()) == {"기본값"}
+                   and condition_sources["work_category"] == "기본값(부문)"
+                   and set(condition_sources.values()) == {"기본값", "기본값(부문)"}
                    and base["conditions"][0]["group"] == "토목"
                    and bool(base["conditions"][0]["help"]["기타 토목공사"])))
 
@@ -395,7 +396,9 @@ def main() -> int:
                                        if q["name"] == "structure"), {})
             citation_urls = [citation.get("image_url") for line in result.get("result", {}).get("unit_lines", [])
                              for citation in line.get("citations", [])]
-            ok = ok and structure_question.get("labels", {}).get("수량 철근구조물") == "철근구조물" \
+            ok = ok and not structure_question and any(
+                item["name"] == "structure" and item["value"] == "수량 철근구조물"
+                for item in first.get("inputs", [])) \
                 and "/api/source/p185-t1.png" in citation_urls \
                 and CLIENT.get("/api/source/p185-t1.png").status_code == 200
         checks.append((f"A35 {label} 초안 전체 흐름과 손계산", ok))

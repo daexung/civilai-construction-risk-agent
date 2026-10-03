@@ -42,9 +42,10 @@ def _type_mentions(query: str, field: dict) -> list[tuple[int, int, str]]:
 def _enum_matches(query: str, field: dict) -> set[str]:
     matches = set()
     for value in field["allowed_values"]:
-        for spelling in [value, *field.get("synonyms", {}).get(value, [])]:
+        for spelling in [value, field.get("labels", {}).get(value, ""),
+                         *field.get("synonyms", {}).get(value, [])]:
             needle = _norm(spelling)
-            if needle in query:
+            if needle and needle in query:
                 matches.add(value)
     return matches
 
@@ -150,6 +151,41 @@ def _volume(query: str) -> tuple[str | None, str | None]:
     return None, None
 
 
+_UNIT_ALIASES = {
+    "m3": ("m3", "루베", "세제곱미터"),
+    "m2": ("m2", "제곱미터"),
+    "ton": ("ton", "톤", "t"),
+    "m": ("m", "미터"),
+    "km": ("km", "킬로미터"),
+    "kg": ("kg", "킬로그램"),
+    "개소": ("개소",), "개": ("개",), "본": ("본",), "대": ("대",), "층": ("층",),
+}
+
+
+def _quantity(query: str, unit: str) -> tuple[str | None, str | None]:
+    normalized_unit = _norm(unit)
+    key = next((name for name, aliases in _UNIT_ALIASES.items()
+                if normalized_unit in aliases), None)
+    if key is None:
+        return None, None
+    aliases = sorted(_UNIT_ALIASES[key], key=len, reverse=True)
+    pattern = re.compile(r"(?<![0-9a-z.])(-?\d[\d,]*(?:\.\d+)?(?:/\d+)?)"
+                         r"(?:" + "|".join(map(re.escape, aliases)) + r")(?![a-z0-9])", re.I)
+    found = []
+    for match in pattern.finditer(query):
+        try:
+            found.append(Fraction(match.group(1).replace(",", "")))
+        except (ValueError, ZeroDivisionError):
+            return None, "물량 숫자를 해석할 수 없습니다"
+    if len(set(found)) > 1:
+        return None, "물량이 둘 이상입니다"
+    if found:
+        if found[0] <= 0:
+            return None, "물량은 0보다 커야 합니다"
+        return _format_rational(found[0]), None
+    return None, None
+
+
 def _ready_mix_price(query: str) -> tuple[str | None, str | None]:
     if query.strip() in ("모름", "몰라요", "모르겠습니다") or re.search(
             r"(?:레미콘(?:단가|가격)?|m3당|루베당).*모름", query):
@@ -196,6 +232,7 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
     normalized = _norm(query)
     values: dict = {}
     ambiguities: dict[str, str] = {}
+    quantity_name = spec["quantity_model"]["params"].get("quantity_input")
     for field in spec["inputs"]:
         name = field["name"]
         if field["type"] == "positive_currency":
@@ -205,7 +242,10 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
             elif reason:
                 ambiguities[name] = reason
         elif field["type"] == "positive_rational":
-            value, reason = _volume(normalized)
+            if name == quantity_name and _norm(field.get("unit", "")) not in ("m3", "루베", "세제곱미터"):
+                value, reason = _quantity(normalized, field.get("unit", ""))
+            else:
+                value, reason = _volume(normalized)
             if value is not None:
                 values[name] = value
             elif reason:
@@ -276,6 +316,8 @@ def _compatible_inputs(inputs: dict, sources: dict, spec: dict) -> tuple[dict, d
     for field in _common_fields():
         name = field["name"]
         if name in inputs and _valid_for_field(inputs[name], field):
+            if name == "work_category" and sources.get(name, "").startswith("기본값"):
+                continue
             retained[name] = inputs[name]
             if name in sources:
                 retained_sources[name] = sources[name]
@@ -403,8 +445,13 @@ def fill(state: AgentState) -> dict:
             dict_errors[name] = "허용값이 아닙니다"
     for field in common_fields:
         if field["name"] not in inputs:
-            inputs[field["name"]] = field["default"]
-            sources[field["name"]] = "기본값"
+            if field["name"] == "work_category" and spec:
+                inputs[field["name"]] = ("주택 외 건축" if spec["division"] in ("건축", "기계설비")
+                                          else "기타 토목공사")
+                sources[field["name"]] = "기본값(부문)"
+            else:
+                inputs[field["name"]] = field["default"]
+                sources[field["name"]] = "기본값"
     ambiguities = {**ambiguities, **dict_errors}
     questions = []
     if update.get("selection", state.get("selection", {})).get("confirmed") is False:
