@@ -143,19 +143,34 @@ def _blocked(item: dict, evidence: dict | None, reason: str = BLOCK_REASON) -> d
             "citations": citation}
 
 
+def _is_memo(item: dict) -> bool:
+    numeric = " ".join(str(item.get(key, "")) for key in ("rate", "change"))
+    return (not re.search(r"\d|%|×|[xX*]", numeric)
+            and not re.search(r"\d+\s*%", str(item.get("source", ""))))
+
+
 def classify_adjustment(spec: dict, item: dict) -> str:
     """재측정 보고서에서 조건 조합과 무관하게 규칙 한 건의 처리 범위를 센다."""
     text = " ".join(str(item.get(key, "")) for key in ("rate", "change", "source"))
-    if not re.search(r"\d|%|×|[xX*]", text):
+    if _is_memo(item):
         return "memo"
-    evidence = _evidence(spec, item)
+    example_inputs = {}
+    for field in spec.get("inputs", []):
+        if field["type"] == "enum":
+            example_inputs[field["name"]] = field["allowed_values"][0]
+    example_inputs.update({key: value for key, value in _conditions(item).items()
+                           if not (isinstance(value, str) and re.match(r"\s*[<>!=]", value))})
+    evidence = _evidence(spec, item, example_inputs)
     if not evidence:
-        return "blocked"
+        return "blocked_other"
     quote = evidence["quote"]
-    if any(word in quote or word in text for word in RANGE_WORDS) or "할 수 있" in quote:
-        return "blocked"
-    if any(word in text for word in ("산식", "누적", "복리")):
-        return "blocked"
+    if any(word in quote or word in text for word in RANGE_WORDS):
+        return "blocked_range"
+    if any(word in text for word in ("산식", "누적", "복리")) or (evidence["source_kind"] != "table" and
+            re.search(r"(?:매\s*\d+|증가시마다)", quote)):
+        return "blocked_cumulative_formula"
+    if "할 수 있" in quote:
+        return "user_confirmation"
     return "automatic"
 
 
@@ -187,7 +202,7 @@ def apply_adjustments(spec: dict, inputs: dict, lines: list[dict]) -> dict:
     for number, item in selected:
         evidence = _evidence(spec, item, inputs)
         text = " ".join(str(item.get(key, "")) for key in ("rate", "change", "source"))
-        if not re.search(r"\d|%|×|[xX*]", text):
+        if _is_memo(item):
             memos.append(item.get("source", ""))
             continue
         if evidence is None:
