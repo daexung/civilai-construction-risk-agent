@@ -91,6 +91,16 @@ def main():
     question_state = {**state, "query": "시공량 123인 기준 품 알려줘"}
     out = answer(question_state, contexts=one, generate_fn=lambda *a, **k: json.dumps(question_qa, ensure_ascii=False))
     check("question numbers allowed", out["answer_source"] == "llm")
+    fallback_context = copy.deepcopy(one)
+    fallback_context[0]["chunks"][0].update(kind="table", section="6-1-1 공종", text=
+        "6-1-1 공종\n설명 | 단위 | 수량\n보통인부 | 단위 인 | 수량 3\n콘크리트공 | 단위 인 | 수량 2\n콘크리트공 | 단위 인 | 수량 2")
+    fallback_context[0]["chunks"][1]["text"] = fallback_context[0]["chunks"][0]["text"]
+    out = answer({"query": "콘크리트공 품", "hits": hits}, contexts=fallback_context)
+    quotes = [c["quote"] for c in out["qa"]["citations"]]
+    check("fallback shows content instead of heading", quotes and all(not q.startswith("6-1-1") and q != "설명 | 단위 | 수량" for q in quotes))
+    check("fallback prioritizes overlapping table row", quotes[0] == "콘크리트공 | 단위 인 | 수량 2")
+    check("fallback deduplicates content and combined answer", len(quotes) == len(set(quotes)) and
+          all(out["answer"].count(q) == 1 for q in quotes) and out["answer"].count(fallback_context[0]["section"]) == 1)
     bad = copy.deepcopy(qa); bad["comparisons"] = [{"section": "공통 6-1-1", "summary": "999인"}]
     check("comparison numbers checked", run(bad)["llm_info"]["error"] == "numbers")
     multi = copy.deepcopy(qa); multi["comparisons"] = [{"section": c["section"], "summary": "인원 2인 적용"} for c in many]

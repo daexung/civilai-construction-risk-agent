@@ -248,7 +248,8 @@ export interface ChatResponse {
   conditions: ConditionField[];
   tables: ResultTables;
   qa?: { not_found: boolean; conclusion: string; explanation: string;
-    comparisons: { section: string; summary: string }[]; citations: (Citation & { chunk_id: string })[] } | null;
+    comparisons: { section: string; summary: string; citation_ids?: string[] }[];
+    citations: (Citation & { chunk_id: string; quote_match?: 'normalized' | 'fuzzy' })[] } | null;
   llm_info?: { model: string; elapsed_ms: number; error: string | null } | null;
   answer: string | null;
   answer_source: 'llm' | 'template' | null;

@@ -8,6 +8,7 @@ from pathlib import Path
 from agent.nodes.qa_context import build_context
 from agent.nodes.compose import validate_numbers
 from agent.tools.llm import client
+from agent.tools.search.bm25 import tokens
 
 PROMPT = Path(__file__).resolve().parents[1] / "tools/llm/prompts/qa.md"
 SCHEMA = {"type": "object", "properties": {
@@ -92,17 +93,47 @@ def not_found(contexts):
             "explanation": "가장 가까운 절: " + contexts[0]["section"] if contexts else "",
             "comparisons": [], "citations": []}
 
-def template(contexts, hits):
+def content_lines(chunk):
+    """절 표제와 빈 표 머리글을 제외하고 실제 내용 행만 남긴다."""
+    title = normalize(chunk.get("section", ""))
+    for raw in chunk["text"].splitlines():
+        line = raw.strip()
+        if not line or MONEY.search(line):
+            continue
+        if normalize(line) == title or re.match(r"^\d+-\d+-\d+(?:\s|$)", line):
+            continue
+        if re.fullmatch(r"(?:기준\s*)?\([^)]*\)", line):
+            continue
+        if not re.sub(r"설명|단위|수량|규격|구분|품명|공종|기준|[\s|]", "", line):
+            continue
+        yield line
+
+def template(contexts, hits, query=""):
     qa = {"not_found": False, "conclusion": "품셈에서 관련 기준을 찾았습니다.", "explanation": "",
           "comparisons": [], "citations": []}
     ranks = {h["chunk_id"]: h["rank"] for h in hits}
+    words = set(tokens(query))
+    seen = set()
     for ctx in contexts:
-        qa["comparisons"].append({"section": ctx["section"], "summary": "원문 기준을 확인해 주세요."})
-        for c in sorted(ctx["chunks"], key=lambda c: ranks.get(c["chunk_id"], 999))[:2]:
-            lines = [line for line in c["text"].splitlines() if not MONEY.search(line)]
-            quote = next((line.strip()[:350] for line in lines if line.strip()), "")
-            if quote:
-                qa["citations"].append({"chunk_id": c["chunk_id"], "quote": quote})
+        retrieved = [c for c in ctx["chunks"] if c["chunk_id"] in ranks]
+        rows = []
+        for c in retrieved or ctx["chunks"]:
+            for order, line in enumerate(content_lines(c)):
+                overlap = sum(len(word) for word in words & set(tokens(line)))
+                table = c.get("kind") == "table" or "|" in line
+                rows.append((-overlap, -int(table), ranks.get(c["chunk_id"], 999), order, c["chunk_id"], line))
+        selected = []
+        for *_, chunk_id, line in sorted(rows):
+            if normalize(line) in seen:
+                continue
+            seen.add(normalize(line))
+            selected.append({"chunk_id": chunk_id, "quote": line})
+            if len(selected) == 2:
+                break
+        qa["comparisons"].append({"section": ctx["section"],
+            "summary": "\n".join(c["quote"] for c in selected),
+            "citation_ids": list(dict.fromkeys(c["chunk_id"] for c in selected))})
+        qa["citations"].extend(selected)
     if any(ctx["truncated"] for ctx in contexts):
         qa["explanation"] = "문맥 길이 제한으로 일부 원문이 생략되었습니다. 원문을 확인해 주세요."
     return qa
@@ -113,7 +144,7 @@ def answer(state, *, generate_fn=None, model=None, contexts=None):
     qa, source = not_found(contexts), "template"
     started = time.monotonic()
     if contexts:
-        qa = template(contexts, state.get("hits", []))
+        qa = template(contexts, state.get("hits", []), state["query"])
         try:
             if generate_fn is None and os.environ.get("AGENT_LLM", "off") != "on":
                 raise client.LLMUnavailable("AGENT_LLM=off")
@@ -131,6 +162,15 @@ def answer(state, *, generate_fn=None, model=None, contexts=None):
         except Exception as exc:
             info.update(error=str(exc) if isinstance(exc, client.LLMUnavailable) else type(exc).__name__, attempts=getattr(exc, "attempts", info["attempts"]))
     info["elapsed_ms"] = round((time.monotonic() - started) * 1000)
-    text = "\n\n".join(t for t in [qa["conclusion"], qa["explanation"]] + [c["section"] + ": " + c["summary"] for c in qa["comparisons"]] + [f"[{c['chunk_id']}] {c['quote']}" for c in qa["citations"]] if t)
+    parts = [qa["conclusion"], qa["explanation"]]
+    if source == "template":
+        for comparison in qa["comparisons"]:
+            parts.append(comparison["section"])
+            parts.extend(f"[{c['chunk_id']}] {c['quote']}" for c in qa["citations"]
+                         if c["chunk_id"] in comparison.get("citation_ids", []))
+    else:
+        parts.extend(c["section"] + ": " + c["summary"] for c in qa["comparisons"])
+        parts.extend(f"[{c['chunk_id']}] {c['quote']}" for c in qa["citations"])
+    text = "\n\n".join(t for t in parts if t)
     return {"status": "ANSWERED", "reason": "", "qa": qa, "answer": text, "answer_source": source,
             "llm_info": info, "candidates": [{k: c[k] for k in ("division", "section_no", "section", "score", "has_spec")} for c in contexts]}
