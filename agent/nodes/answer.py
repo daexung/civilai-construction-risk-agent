@@ -3,6 +3,7 @@ import json
 import os
 import re
 import time
+from difflib import SequenceMatcher
 from pathlib import Path
 from agent.nodes.qa_context import build_context
 from agent.nodes.compose import validate_numbers
@@ -22,9 +23,32 @@ def qa_model():
     return json.loads(client.CONFIG_PATH.read_text(encoding="utf-8")).get("qa_model", "gemini-3.5-flash-lite")
 
 def normalize(text):
-    return re.sub(r"\s+", "", text)
+    return re.sub(r"\s+|\||설명|단위|수량", "", text)
 
-def validate(qa, contexts):
+def match_quote(quote, source):
+    """표의 저장용 머리글을 제외하고 비교하되 표시 문장은 원문에서 가져온다."""
+    wanted = normalize(quote)
+    if not wanted:
+        return None
+    lines = [line.strip() for line in source.splitlines() if normalize(line)]
+    joined = "".join(normalize(line) for line in lines)
+    start = joined.find(wanted)
+    if start >= 0:
+        offset, selected = 0, []
+        for line in lines:
+            end = offset + len(normalize(line))
+            if end > start and offset < start + len(wanted):
+                selected.append(line)
+            offset = end
+        return "normalized", "\n".join(selected)
+    if not lines:
+        return None
+    ranked = [(SequenceMatcher(None, wanted, normalize(line), autojunk=False).ratio(), line)
+              for line in lines]
+    score, line = max(ranked, key=lambda item: item[0])
+    return ("fuzzy", line) if score >= 0.85 else None
+
+def validate(qa, contexts, query=""):
     if not isinstance(qa, dict) or type(qa.get("not_found")) is not bool:
         return "schema"
     if not all(isinstance(qa.get(k), str) for k in ("conclusion", "explanation")) or not all(isinstance(qa.get(k), list) for k in ("comparisons", "citations")):
@@ -43,6 +67,7 @@ def validate(qa, contexts):
     if set(re.findall(r"\d+-\d+-\d+", text)) - sections:
         return "section"
     source = "\n".join(ctx["section"] + "\n" + "\n".join(c["text"] for c in ctx["chunks"]) for ctx in contexts)
+    source += "\n" + query
     # Remove whitespace only within a numeric token (e.g. spaced thousands).
     source = re.sub(r"(?<=\d)[ \t]+(?=\d)", "", source)
     checked = re.sub(r"(?<=\d)[ \t]+(?=\d)", "", text)
@@ -53,8 +78,13 @@ def validate(qa, contexts):
     for cite in qa["citations"]:
         if cite["chunk_id"] not in chunks:
             return "chunk_id"
-        if not normalize(cite["quote"]) or normalize(cite["quote"]) not in normalize(chunks[cite["chunk_id"]]):
+        match = match_quote(cite["quote"], chunks[cite["chunk_id"]])
+        if match is None:
             return "quote"
+        kind, original = match
+        if MONEY.search(original):
+            return "money"
+        cite.update(quote=original, quote_match=kind)
     return None
 
 def not_found(contexts):
@@ -92,7 +122,7 @@ def answer(state, *, generate_fn=None, model=None, contexts=None):
                 PROMPT.read_text(encoding="utf-8"), response_schema=SCHEMA, timeout_ms=15000, model=info["model"])
             info.update(provider=getattr(result, "provider", None), attempts=getattr(result, "attempts", 1))
             generated = json.loads(result.text if hasattr(result, "text") else result)
-            error = validate(generated, contexts)
+            error = validate(generated, contexts, state["query"])
             if error:
                 info["error"] = error
             else:

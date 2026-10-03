@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 os.environ["AGENT_LLM"] = "off"
 os.environ["AGENT_OFFLINE"] = "1"
-from agent.nodes.answer import answer, validate
+from agent.nodes.answer import answer, validate, match_quote
 from agent.nodes.qa_context import build_context
 from agent.graph import build_graph
 from agent.state import new_state
@@ -67,6 +67,30 @@ def main():
     check("model override and total budget", requests[0][2]["model"] == "review-model" and requests[0][2]["timeout_ms"] == 15000)
     spaced = copy.deepcopy(qa); spaced["citations"][0]["quote"] = "인원  2인\n적용"
     check("quote whitespace normalized", run(spaced)["answer_source"] == "llm")
+    table_context = copy.deepcopy(one)
+    table_context[0]["chunks"][0]["text"] = "콘크리트공 | 단위 인 | 작업조 철근콘크리트 4"
+    table_qa = copy.deepcopy(qa)
+    table_qa.update(conclusion="콘크리트공 4인", citations=[{
+        "chunk_id": "p1-x0", "quote": "콘크리트공 인 작업조 철근콘크리트 4"}])
+    out = run(table_qa, table_context)
+    check("table separators and headers normalized", out["answer_source"] == "llm" and
+          out["qa"]["citations"][0]["quote"] == table_context[0]["chunks"][0]["text"])
+    check("fuzzy 0.84 fails", match_quote("가" * 84 + "나" * 16, "가" * 100) is None)
+    check("fuzzy 0.86 passes", match_quote("가" * 86 + "나" * 14, "가" * 100) == ("fuzzy", "가" * 100))
+    fuzzy_context = copy.deepcopy(one)
+    fuzzy_context[0]["chunks"][0]["text"] = "가" * 100
+    fuzzy_qa = copy.deepcopy(qa)
+    fuzzy_qa.update(conclusion="기준을 확인했습니다.", citations=[{
+        "chunk_id": "p1-x0", "quote": "가" * 86 + "나" * 14}])
+    out = run(fuzzy_qa, fuzzy_context)
+    check("fuzzy records match and displays original", out["answer_source"] == "llm" and
+          out["qa"]["citations"][0]["quote_match"] == "fuzzy" and
+          out["qa"]["citations"][0]["quote"] == "가" * 100 and "나" not in out["answer"])
+    question_qa = copy.deepcopy(qa)
+    question_qa["conclusion"] = "시공량 123인 기준입니다."
+    question_state = {**state, "query": "시공량 123인 기준 품 알려줘"}
+    out = answer(question_state, contexts=one, generate_fn=lambda *a, **k: json.dumps(question_qa, ensure_ascii=False))
+    check("question numbers allowed", out["answer_source"] == "llm")
     bad = copy.deepcopy(qa); bad["comparisons"] = [{"section": "공통 6-1-1", "summary": "999인"}]
     check("comparison numbers checked", run(bad)["llm_info"]["error"] == "numbers")
     multi = copy.deepcopy(qa); multi["comparisons"] = [{"section": c["section"], "summary": "인원 2인 적용"} for c in many]
