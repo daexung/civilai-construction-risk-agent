@@ -79,10 +79,15 @@ def _transient(exc: Exception) -> bool:
             status = None
     response = getattr(exc, "response", None)
     status = status or getattr(response, "status_code", None)
+    if status in (400, 401, 403, "400", "401", "403"):
+        return False
     if status in (429, 503, "429", "503"):
         return True
     message = f"{type(exc).__name__}: {exc}".upper()
-    return any(token in message for token in ("UNAVAILABLE", "RESOURCE_EXHAUSTED", "429", "503"))
+    return any(token in message for token in (
+        "UNAVAILABLE", "RESOURCE_EXHAUSTED", "429", "503", "TIMEOUT", "TIMED OUT",
+        "CONNECTION RESET", "CONNECTION ERROR", "CONNECTION ABORTED",
+    ))
 
 
 def _safe_error(exc: Exception, secrets: list[str]) -> str:
@@ -101,6 +106,10 @@ def generate(
     request_fn: Callable[[str, str, str, int], str] | None = None,
     sleep_fn: Callable[[float], None] = time.sleep,
     clock_fn: Callable[[], float] = time.monotonic,
+    response_schema: dict | None = None,
+    timeout_ms: int = TIMEOUT_MS,
+    max_attempts: int = MAX_ATTEMPTS,
+    retry_delays: list[float] | tuple[float, ...] = RETRY_DELAYS,
 ) -> LLMResult:
     """Call the selected Gemini provider, retrying only transient capacity errors."""
     if os.environ.get("AGENT_LLM", "off") != "on":
@@ -125,34 +134,40 @@ def generate(
             raise LLMUnavailable(_safe_error(exc, secrets), attempts=0, provider=provider) from exc
 
         def request_fn(model_name: str, prompt_text: str, system_text: str, timeout_ms: int) -> str:
-            config = types.GenerateContentConfig(
-                system_instruction=system_text, temperature=0,
-                http_options=types.HttpOptions(timeout=timeout_ms),
-            )
+            options = {"system_instruction": system_text, "temperature": 0,
+                       "http_options": types.HttpOptions(timeout=timeout_ms)}
+            if response_schema is not None:
+                options.update(response_mime_type="application/json", response_schema=response_schema)
+            config = types.GenerateContentConfig(**options)
             response = client.models.generate_content(model=model_name, contents=prompt_text, config=config)
             return (response.text or "").strip()
 
     started = clock_fn()
     last_error: Exception | None = None
-    for attempt in range(1, MAX_ATTEMPTS + 1):
-        remaining_ms = TIMEOUT_MS - int((clock_fn() - started) * 1000)
+    if timeout_ms <= 0 or max_attempts < 1 or len(retry_delays) < max_attempts - 1:
+        raise ValueError("invalid LLM retry or timeout configuration")
+    attempt = 0
+    for attempt in range(1, max_attempts + 1):
+        remaining_ms = timeout_ms - int((clock_fn() - started) * 1000)
         if remaining_ms <= 0:
             break
         try:
             text = request_fn(model, prompt, system, remaining_ms)
         except Exception as exc:
             last_error = exc
-            if not _transient(exc) or attempt == MAX_ATTEMPTS:
+            if not _transient(exc) or attempt == max_attempts:
                 raise LLMUnavailable(_safe_error(exc, secrets), attempts=attempt, provider=provider) from exc
-            delay = RETRY_DELAYS[attempt - 1]
+            delay = retry_delays[attempt - 1]
             elapsed = clock_fn() - started
-            if elapsed + delay >= TIMEOUT_MS / 1000:
+            if elapsed + delay + 0.1 >= timeout_ms / 1000:
                 break
             sleep_fn(delay)
             continue
+        if (clock_fn() - started) * 1000 >= timeout_ms:
+            raise LLMUnavailable(f"LLM 호출 시간 상한 {timeout_ms}ms 초과", attempts=attempt, provider=provider)
         if not text:
             raise LLMUnavailable("빈 응답", attempts=attempt, provider=provider)
         return LLMResult(text=text, provider=provider, attempts=attempt)
 
-    message = _safe_error(last_error, secrets) if last_error else "LLM 호출 시간 상한 20초 초과"
-    raise LLMUnavailable(message, attempts=min(MAX_ATTEMPTS, attempt), provider=provider)
+    message = _safe_error(last_error, secrets) if last_error else f"LLM 호출 시간 상한 {timeout_ms}ms 초과"
+    raise LLMUnavailable(message, attempts=attempt, provider=provider)
