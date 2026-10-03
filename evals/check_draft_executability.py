@@ -20,8 +20,10 @@ CALCULATORS = {"daily_crew": adjusted_daily_crew, "per_unit": per_unit}
 OUTPUT = ROOT / "data/drafts/executable.json"
 
 
-def _values(field: dict, blocked: list[dict] | None = None) -> list:
+def _values(field: dict, blocked: list[dict] | None = None,
+            adjustments: list[dict] | None = None) -> list:
     blocked = blocked or []
+    adjustments = adjustments or []
     kind = field["type"]
     if kind == "enum":
         options = field["allowed_values"]
@@ -35,7 +37,14 @@ def _values(field: dict, blocked: list[dict] | None = None) -> list:
     if kind in ("positive_rational", "nonnegative_integer"):
         lower = re.search(r"(\d+)\s*이상의\s*정수", str(field.get("allowed_values", "")))
         if lower:
-            return [lower.group(1)]
+            values = [lower.group(1)]
+            for item in adjustments:
+                when = item.get("when") or {}
+                if isinstance(when, dict) and field["name"] in when:
+                    match = re.fullmatch(r">\s*(\d+)", str(when[field["name"]]))
+                    if match:
+                        values.append(str(int(match.group(1)) + 1))
+            return list(dict.fromkeys(values))
         exact = next((item["value"] for item in blocked if item.get("op") == "!="), None)
         if exact is not None:
             return [str(exact)]
@@ -79,7 +88,9 @@ def evaluate() -> dict:
                 condition = item.get("blocked_if")
                 if condition:
                     blocked_by_field[condition["input"]].append(condition)
-            choices = [_values(field, blocked_by_field[field["name"]]) for field in fields]
+            adjustments = (spec["quantity_model"]["params"].get("surcharges", [])
+                           + spec["quantity_model"]["params"].get("note_adjustments", []))
+            choices = [_values(field, blocked_by_field[field["name"]], adjustments) for field in fields]
             if any(not options for options in choices):
                 reason = "입력 타입 미지원"
             else:
@@ -90,8 +101,22 @@ def evaluate() -> dict:
                     try:
                         result = CALCULATORS[kind](spec, inputs)
                         status = result.get("status")
+                        was_ask = status == "ask"
+                        if status == "ask":
+                            questions = result.get("questions", [])
+                            if not questions or any(q.get("default") is not None for q in questions):
+                                reason = "재량 할증 질문 또는 기본값 오류"
+                                break
+                            for answer in ("예", "아니오"):
+                                answered = CALCULATORS[kind](spec, {**inputs, **{q["name"]: answer for q in questions}})
+                                if answered.get("status") not in ("computed", "blocked"):
+                                    reason = f"재량 할증 답변 {answer}: {answered.get('status')}: {answered.get('reason', '')}"
+                                    break
+                            if reason:
+                                break
+                            status = "computed"
                         if index == 0:
-                            base_computed = status == "computed"
+                            base_computed = status == "computed" and not was_ask
                             if not base_computed:
                                 reason = f"기본 조합 {status}: {result.get('reason', '')}"
                                 break

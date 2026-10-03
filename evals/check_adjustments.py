@@ -31,6 +31,9 @@ def main() -> int:
     checks.append(("비계 선택 적용 질문", blocked["status"] == "ask"
                    and blocked["questions"][0]["name"] == "apply_adj_2"
                    and blocked["questions"][0].get("default") is None))
+    inputs["floor_level"] = "19층 이상"
+    inputs["apply_adj_2"] = "예"
+    checks.append(("6-1-5 19층 누적 보류", per_unit(spec, inputs)["status"] == "blocked"))
     mechanical = json.loads((ROOT / "data/drafts/specs/공통/6-2-5.json").read_text(encoding="utf-8"))["draft"]
     source = adjustments._evidence(mechanical, mechanical["quantity_model"]["params"]["surcharges"][0])
     checks.append(("6-2-5 요율 표와 적용 문장", source is not None
@@ -46,6 +49,8 @@ def main() -> int:
                    and g1_lines["연마공"]["applied"] == "0.165"
                    and g1_lines["조력공"]["applied"] == "0.121"
                    and g1_lines["절단공"]["applied"] == "0.099"))
+    checks.append(("6-2-5 직경 증가 누적 보류", per_unit(mechanical, {
+        "quantity": "1", "rebar_diameter": 38, "work_height": "10m 미만"})["status"] == "blocked"))
     g1_price = price_unit(mechanical, g1["unit_lines"], select_rate_version("2026-10-01"),
                           {"quantity": "1"}, "2026-10-01")
     g1_rows = {line["name"]: line for line in g1_price["lines"]}
@@ -109,6 +114,9 @@ def main() -> int:
         a, sample = run({"source": "현장 여건을 검토한다"})
         checks.append(("설명 메모", a["status"] == "computed" and len(a["memos"]) == 1
                        and sample["applied"] == "1"))
+        a, sample = run({"source": "PDF 135쪽 6-2-5 비고", "change": "현장 여건 검토"})
+        checks.append(("위치 숫자는 할증 수치가 아닌 메모", a["status"] == "computed"
+                       and len(a["memos"]) == 1 and sample["applied"] == "1"))
     finally:
         adjustments._evidence = original
     for name, ok in checks:
