@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 os.environ["AGENT_LLM"] = "off"
 os.environ["AGENT_OFFLINE"] = "1"
-from agent.nodes.answer import answer, validate, match_quote
-from agent.nodes.qa_context import build_context
+from agent.nodes.answer import answer, validate, match_quote, TIMEOUT_MS
+from agent.nodes.qa_context import build_context, LIMIT
 from agent.graph import build_graph
 from agent.state import new_state
 from evals.eval_qa import correct_section_cited
@@ -64,7 +64,13 @@ def main():
         return json.dumps(qa, ensure_ascii=False)
     answer(state, contexts=many, generate_fn=fake, model="review-model")
     check("three full contexts sent to model", len(requests[0][0]["sections"]) == 3 and "[주]" in requests[0][0]["sections"][0]["text"])
-    check("model override and total budget", requests[0][2]["model"] == "review-model" and requests[0][2]["timeout_ms"] == 15000)
+    check("model override and total budget", requests[0][2]["model"] == "review-model" and requests[0][2]["timeout_ms"] == TIMEOUT_MS)
+    check("new context and timeout limits", LIMIT == 4000 and TIMEOUT_MS == 12000)
+    limited = build_context(hits[:1], sections=long_sections, specs=specs)
+    check("default context bounded and notes retained", limited[0]["truncated"] and len(limited[0]["text"]) <= 4000 and "[주]" in limited[0]["text"] and "비고" in limited[0]["text"])
+    with patch("agent.nodes.answer.time.monotonic", side_effect=[0, 0, 12.001, 12.001]):
+        timed = run(qa)
+    check("late LLM response replaced by template", timed["answer_source"] == "template" and timed["llm_info"]["error"] == "timeout")
     spaced = copy.deepcopy(qa); spaced["citations"][0]["quote"] = "인원  2인\n적용"
     check("quote whitespace normalized", run(spaced)["answer_source"] == "llm")
     table_context = copy.deepcopy(one)

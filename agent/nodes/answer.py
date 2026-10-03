@@ -19,6 +19,7 @@ SCHEMA = {"type": "object", "properties": {
         "chunk_id": {"type": "string"}, "quote": {"type": "string"}}, "required": ["chunk_id", "quote"]}}},
     "required": ["not_found", "conclusion", "explanation", "comparisons", "citations"]}
 MONEY = re.compile(r"\d[\d,]*(?:\.\d+)?\s*원|[₩￦]|[천만억조]\s*원|KRW|원\s*[/／]", re.I)
+TIMEOUT_MS = 12_000
 
 def qa_model():
     return json.loads(client.CONFIG_PATH.read_text(encoding="utf-8")).get("qa_model", "gemini-3.5-flash-lite")
@@ -148,10 +149,13 @@ def answer(state, *, generate_fn=None, model=None, contexts=None):
         try:
             if generate_fn is None and os.environ.get("AGENT_LLM", "off") != "on":
                 raise client.LLMUnavailable("AGENT_LLM=off")
+            call_started = time.monotonic()
             result = (generate_fn or client.generate)(json.dumps({"question": state["query"], "sections": [
                 {"section": c["section"], "truncated": c["truncated"], "text": c["text"]} for c in contexts]}, ensure_ascii=False),
-                PROMPT.read_text(encoding="utf-8"), response_schema=SCHEMA, timeout_ms=15000, model=info["model"])
+                PROMPT.read_text(encoding="utf-8"), response_schema=SCHEMA, timeout_ms=TIMEOUT_MS, model=info["model"])
             info.update(provider=getattr(result, "provider", None), attempts=getattr(result, "attempts", 1))
+            if (time.monotonic() - call_started) * 1000 >= TIMEOUT_MS:
+                raise client.LLMUnavailable("timeout", attempts=info["attempts"], provider=info.get("provider"))
             generated = json.loads(result.text if hasattr(result, "text") else result)
             error = validate(generated, contexts, state["query"])
             if error:

@@ -7,7 +7,7 @@ from agent.nodes.select import decide
 from agent.rules.specs import specs_by_section
 
 CHUNKS = Path(__file__).resolve().parents[2] / "data/processed/chunks.all.jsonl"
-LIMIT = 6000
+LIMIT = 4000
 
 @cache
 def load_sections():
