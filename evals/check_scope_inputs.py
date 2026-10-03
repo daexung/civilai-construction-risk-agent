@@ -87,6 +87,8 @@ def main() -> int:
     checks.append(("A1 unit prices", priced.get("total") == "483906"
                    and [lines[name]["amount"] for name in ("창호공", "기계설비공", "보통인부")]
                    == ["211264.9", "181985.2", "81168.0"]))
+    checks.append(("A1 direct and tool cost", (priced.get("reference_amounts") or {}).get("total") == "1451718"
+                   and any(line["amount"] == "9488.3" for line in priced.get("cost_lines", []))))
     checks.append(("A1 review and filename", response.get("result", {}).get("review_status") == "AI 초안 · 검토 전"
                    and estimate_filename(response) == "자동문 설치_견적서.xlsx"))
 

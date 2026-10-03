@@ -1,0 +1,4318 @@
+{
+  "mode": "bm25",
+  "date": "2026-10-03",
+  "seed": 181,
+  "sample_size": 300,
+  "method": "bm25(오프라인)",
+  "summary": {
+    "total": 300,
+    "route_pass": 219,
+    "top1_correct": 138,
+    "top3_correct": 169,
+    "select_correct": 44,
+    "select_wrong": 3,
+    "select_ask": 253,
+    "same_number_other_division": 2
+  },
+  "by_division": {
+    "공통": {
+      "total": 117,
+      "route_pass": 76,
+      "top1_correct": 50,
+      "top3_correct": 61,
+      "select_correct": 14,
+      "select_wrong": 1,
+      "select_ask": 102,
+      "same_number_other_division": 0
+    },
+    "토목": {
+      "total": 32,
+      "route_pass": 28,
+      "top1_correct": 16,
+      "top3_correct": 20,
+      "select_correct": 4,
+      "select_wrong": 0,
+      "select_ask": 28,
+      "same_number_other_division": 1
+    },
+    "건축": {
+      "total": 62,
+      "route_pass": 49,
+      "top1_correct": 32,
+      "top3_correct": 39,
+      "select_correct": 12,
+      "select_wrong": 0,
+      "select_ask": 50,
+      "same_number_other_division": 1
+    },
+    "기계설비": {
+      "total": 89,
+      "route_pass": 66,
+      "top1_correct": 40,
+      "top3_correct": 49,
+      "select_correct": 14,
+      "select_wrong": 2,
+      "select_ask": 73,
+      "same_number_other_division": 0
+    }
+  },
+  "rows": [
+    {
+      "id": "draft-0007",
+      "division": "건축",
+      "section_no": "1-1-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "1-1-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0014",
+      "division": "건축",
+      "section_no": "1-2-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": true,
+      "selected": [
+        "건축",
+        "1-2-1"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0023",
+      "division": "건축",
+      "section_no": "1-2-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "5-1-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0037",
+      "division": "건축",
+      "section_no": "1-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "1-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0045",
+      "division": "건축",
+      "section_no": "1-4-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0052",
+      "division": "건축",
+      "section_no": "1-4-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "1-4-4"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0061",
+      "division": "건축",
+      "section_no": "10-1-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "10-1-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0069",
+      "division": "건축",
+      "section_no": "10-1-5",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "10-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0071",
+      "division": "건축",
+      "section_no": "10-1-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "10-1-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0076",
+      "division": "건축",
+      "section_no": "10-1-8",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0079",
+      "division": "건축",
+      "section_no": "10-2-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "10-2-1"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0090",
+      "division": "건축",
+      "section_no": "10-3-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "10-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0098",
+      "division": "건축",
+      "section_no": "11-1-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-4-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0099",
+      "division": "건축",
+      "section_no": "11-1-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0105",
+      "division": "건축",
+      "section_no": "11-1-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "11-1-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0117",
+      "division": "건축",
+      "section_no": "11-2-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0129",
+      "division": "건축",
+      "section_no": "11-2-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "11-2-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0135",
+      "division": "건축",
+      "section_no": "11-2-8",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "11-2-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0144",
+      "division": "건축",
+      "section_no": "11-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "11-3-2"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-0146",
+      "division": "건축",
+      "section_no": "2-1-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "2-1-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0161",
+      "division": "건축",
+      "section_no": "2-2-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "2-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0165",
+      "division": "건축",
+      "section_no": "2-2-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "9-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0167",
+      "division": "건축",
+      "section_no": "2-3-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "2-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0169",
+      "division": "건축",
+      "section_no": "2-3-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "2-1-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0172",
+      "division": "건축",
+      "section_no": "2-3-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "5-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0178",
+      "division": "건축",
+      "section_no": "3-1-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "3-1-2"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0198",
+      "division": "건축",
+      "section_no": "4-1-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "4-1-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0207",
+      "division": "건축",
+      "section_no": "4-2-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0214",
+      "division": "건축",
+      "section_no": "4-2-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0221",
+      "division": "건축",
+      "section_no": "4-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "4-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0222",
+      "division": "건축",
+      "section_no": "4-3-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "4-6-9"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0229",
+      "division": "건축",
+      "section_no": "4-3-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0237",
+      "division": "건축",
+      "section_no": "5-1-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "5-1-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0246",
+      "division": "건축",
+      "section_no": "5-2-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0248",
+      "division": "건축",
+      "section_no": "5-2-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "7-4-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0250",
+      "division": "건축",
+      "section_no": "5-2-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-7-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0252",
+      "division": "건축",
+      "section_no": "5-2-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "5-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0257",
+      "division": "건축",
+      "section_no": "5-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "5-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0259",
+      "division": "건축",
+      "section_no": "5-3-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0266",
+      "division": "건축",
+      "section_no": "5-3-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "5-3-5"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-0269",
+      "division": "건축",
+      "section_no": "5-3-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "5-3-6"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0282",
+      "division": "건축",
+      "section_no": "5-4-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "5-4-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0299",
+      "division": "건축",
+      "section_no": "5-4-8",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-2-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0303",
+      "division": "건축",
+      "section_no": "5-4-9",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-11-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0319",
+      "division": "건축",
+      "section_no": "6-2-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "6-2-2"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0328",
+      "division": "건축",
+      "section_no": "6-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "6-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0332",
+      "division": "건축",
+      "section_no": "6-3-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "6-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0336",
+      "division": "건축",
+      "section_no": "6-4-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0343",
+      "division": "건축",
+      "section_no": "6-4-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "6-4-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0346",
+      "division": "건축",
+      "section_no": "6-5-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0349",
+      "division": "건축",
+      "section_no": "6-5-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "6-5-2"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-0356",
+      "division": "건축",
+      "section_no": "6-6-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0363",
+      "division": "건축",
+      "section_no": "6-6-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "3-1-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0376",
+      "division": "건축",
+      "section_no": "7-1-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "7-1-5"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0391",
+      "division": "건축",
+      "section_no": "7-2-3",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0413",
+      "division": "건축",
+      "section_no": "8-1-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "8-1-4"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0418",
+      "division": "건축",
+      "section_no": "8-1-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "8-1-6"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0424",
+      "division": "건축",
+      "section_no": "8-2-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0455",
+      "division": "건축",
+      "section_no": "9-1-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "9-1-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0462",
+      "division": "건축",
+      "section_no": "9-2-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-4-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0464",
+      "division": "건축",
+      "section_no": "9-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "9-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0468",
+      "division": "건축",
+      "section_no": "9-3-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-11-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0492",
+      "division": "공통",
+      "section_no": "1-2-7",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-2-7"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-0499",
+      "division": "공통",
+      "section_no": "1-2-9",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-2-9"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-0503",
+      "division": "공통",
+      "section_no": "1-4-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0512",
+      "division": "공통",
+      "section_no": "1-4-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-4-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0514",
+      "division": "공통",
+      "section_no": "1-4-6",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0515",
+      "division": "공통",
+      "section_no": "1-4-7",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0523",
+      "division": "공통",
+      "section_no": "1-5-6",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0526",
+      "division": "공통",
+      "section_no": "2-1-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-1-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0537",
+      "division": "공통",
+      "section_no": "2-10-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0548",
+      "division": "공통",
+      "section_no": "2-10-5",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-10-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0561",
+      "division": "공통",
+      "section_no": "2-11-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0562",
+      "division": "공통",
+      "section_no": "2-11-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-11-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0574",
+      "division": "공통",
+      "section_no": "2-11-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-11-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0586",
+      "division": "공통",
+      "section_no": "2-12-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-11-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0588",
+      "division": "공통",
+      "section_no": "2-12-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "wrong",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-3-1"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-0602",
+      "division": "공통",
+      "section_no": "2-2-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-2-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0607",
+      "division": "공통",
+      "section_no": "2-2-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0627",
+      "division": "공통",
+      "section_no": "2-4-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-4-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0632",
+      "division": "공통",
+      "section_no": "2-4-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-4-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0635",
+      "division": "공통",
+      "section_no": "2-5-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-5-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0653",
+      "division": "공통",
+      "section_no": "2-6-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-6-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0660",
+      "division": "공통",
+      "section_no": "2-6-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-6-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0665",
+      "division": "공통",
+      "section_no": "2-7-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-7-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0675",
+      "division": "공통",
+      "section_no": "2-7-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-7-6"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-0681",
+      "division": "공통",
+      "section_no": "2-7-8",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-7-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0695",
+      "division": "공통",
+      "section_no": "2-8-11",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-11-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0703",
+      "division": "공통",
+      "section_no": "2-8-14",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-8-14"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0710",
+      "division": "공통",
+      "section_no": "2-8-16",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-8-16"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0716",
+      "division": "공통",
+      "section_no": "2-8-18",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-8-18"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-0720",
+      "division": "공통",
+      "section_no": "2-8-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-8-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0731",
+      "division": "공통",
+      "section_no": "2-8-6",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-9-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0735",
+      "division": "공통",
+      "section_no": "2-8-8",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-8-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0755",
+      "division": "공통",
+      "section_no": "2-9-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-12-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0760",
+      "division": "공통",
+      "section_no": "2-9-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-9-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0761",
+      "division": "공통",
+      "section_no": "2-9-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0765",
+      "division": "공통",
+      "section_no": "2-9-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-9-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0766",
+      "division": "공통",
+      "section_no": "2-9-6",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0769",
+      "division": "공통",
+      "section_no": "2-9-7",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-9-7"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0775",
+      "division": "공통",
+      "section_no": "2-9-9",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-9-9"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0791",
+      "division": "공통",
+      "section_no": "3-11-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-11-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0797",
+      "division": "공통",
+      "section_no": "3-11-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-11-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0806",
+      "division": "공통",
+      "section_no": "3-2-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0817",
+      "division": "공통",
+      "section_no": "3-3-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-3-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0819",
+      "division": "공통",
+      "section_no": "3-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0821",
+      "division": "공통",
+      "section_no": "3-3-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-3-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0826",
+      "division": "공통",
+      "section_no": "3-3-4",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-3-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0842",
+      "division": "공통",
+      "section_no": "3-3-9",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-3-9"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0850",
+      "division": "공통",
+      "section_no": "3-4-3",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0852",
+      "division": "공통",
+      "section_no": "3-4-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-4-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0854",
+      "division": "공통",
+      "section_no": "3-4-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0865",
+      "division": "공통",
+      "section_no": "3-4-8",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-4-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0871",
+      "division": "공통",
+      "section_no": "3-5-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-11-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0873",
+      "division": "공통",
+      "section_no": "3-6-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-6-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0878",
+      "division": "공통",
+      "section_no": "3-6-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0881",
+      "division": "공통",
+      "section_no": "3-7-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-3-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0893",
+      "division": "공통",
+      "section_no": "3-7-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0899",
+      "division": "공통",
+      "section_no": "3-8-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0904",
+      "division": "공통",
+      "section_no": "3-8-4",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-4-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0905",
+      "division": "공통",
+      "section_no": "3-8-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-8-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0926",
+      "division": "공통",
+      "section_no": "4-1-3",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0939",
+      "division": "공통",
+      "section_no": "4-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "4-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0940",
+      "division": "공통",
+      "section_no": "4-2-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "4-2-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0946",
+      "division": "공통",
+      "section_no": "4-3-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-0950",
+      "division": "공통",
+      "section_no": "4-3-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "4-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0975",
+      "division": "공통",
+      "section_no": "4108-0060",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-4-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-0987",
+      "division": "공통",
+      "section_no": "5-1-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1004",
+      "division": "공통",
+      "section_no": "5-1-8",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "5-1-8"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1035",
+      "division": "공통",
+      "section_no": "5-3-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1043",
+      "division": "공통",
+      "section_no": "5205-0035",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1064",
+      "division": "공통",
+      "section_no": "6-1-7",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1071",
+      "division": "공통",
+      "section_no": "6-2-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1073",
+      "division": "공통",
+      "section_no": "6-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1076",
+      "division": "공통",
+      "section_no": "6-2-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-2-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1082",
+      "division": "공통",
+      "section_no": "6-2-6",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1094",
+      "division": "공통",
+      "section_no": "6-3-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-3-3"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-1101",
+      "division": "공통",
+      "section_no": "6-3-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-3-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1124",
+      "division": "공통",
+      "section_no": "6-5-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-5-2"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-1135",
+      "division": "공통",
+      "section_no": "6-6-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-6-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1149",
+      "division": "공통",
+      "section_no": "6-6-8",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-6-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1151",
+      "division": "공통",
+      "section_no": "6-7-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-7-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1160",
+      "division": "공통",
+      "section_no": "6-7-4",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "9-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1176",
+      "division": "공통",
+      "section_no": "7-2-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "7-2-1"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-1183",
+      "division": "공통",
+      "section_no": "7-3-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1187",
+      "division": "공통",
+      "section_no": "7-4-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "7-4-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1190",
+      "division": "공통",
+      "section_no": "7-4-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "7-4-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1194",
+      "division": "공통",
+      "section_no": "7-4-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "8-2-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1198",
+      "division": "공통",
+      "section_no": "8-1-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1200",
+      "division": "공통",
+      "section_no": "8-1-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1220",
+      "division": "공통",
+      "section_no": "8-2-13",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1228",
+      "division": "공통",
+      "section_no": "8-2-19",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1229",
+      "division": "공통",
+      "section_no": "8-2-19",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1230",
+      "division": "공통",
+      "section_no": "8-2-19",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1237",
+      "division": "공통",
+      "section_no": "8-2-22",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-22"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1238",
+      "division": "공통",
+      "section_no": "8-2-22",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-22"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1244",
+      "division": "공통",
+      "section_no": "8-2-24",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-24"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1249",
+      "division": "공통",
+      "section_no": "8-2-26",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-24"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1250",
+      "division": "공통",
+      "section_no": "8-2-26",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1268",
+      "division": "공통",
+      "section_no": "8-2-31",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-31"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1269",
+      "division": "공통",
+      "section_no": "8-2-31",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1270",
+      "division": "공통",
+      "section_no": "8-2-32",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-32"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1284",
+      "division": "공통",
+      "section_no": "8-2-6",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1285",
+      "division": "공통",
+      "section_no": "8-2-7",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-7"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1291",
+      "division": "공통",
+      "section_no": "8-2-9",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1302",
+      "division": "공통",
+      "section_no": "8-3-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1304",
+      "division": "공통",
+      "section_no": "8-3-3",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1305",
+      "division": "공통",
+      "section_no": "8-3-3",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1309",
+      "division": "공통",
+      "section_no": "8-3-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-1-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1316",
+      "division": "공통",
+      "section_no": "8-3-7",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "6-4-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1330",
+      "division": "공통",
+      "section_no": "8-4-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-4-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1334",
+      "division": "공통",
+      "section_no": "8-4-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1336",
+      "division": "공통",
+      "section_no": "8-4-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1337",
+      "division": "공통",
+      "section_no": "8-4-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1354",
+      "division": "공통",
+      "section_no": "8-5-10",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-5-10"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1367",
+      "division": "공통",
+      "section_no": "8-5-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1380",
+      "division": "공통",
+      "section_no": "8-5-9",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1383",
+      "division": "공통",
+      "section_no": "8201-0100",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1386",
+      "division": "공통",
+      "section_no": "9010-0003",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1416",
+      "division": "기계설비",
+      "section_no": "1-3-5",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "1-5-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1418",
+      "division": "기계설비",
+      "section_no": "1-4-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "1-5-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1423",
+      "division": "기계설비",
+      "section_no": "1-5-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "1-5-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1432",
+      "division": "기계설비",
+      "section_no": "1-6-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1450",
+      "division": "기계설비",
+      "section_no": "10-2-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1460",
+      "division": "기계설비",
+      "section_no": "10-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "10-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1461",
+      "division": "기계설비",
+      "section_no": "10-3-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-2-7"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1463",
+      "division": "기계설비",
+      "section_no": "10-4-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1479",
+      "division": "기계설비",
+      "section_no": "10-6-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1497",
+      "division": "기계설비",
+      "section_no": "11-1-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1508",
+      "division": "기계설비",
+      "section_no": "11-3-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1513",
+      "division": "기계설비",
+      "section_no": "11-3-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-5-9"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1521",
+      "division": "기계설비",
+      "section_no": "12-1-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "12-1-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1526",
+      "division": "기계설비",
+      "section_no": "12-2-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "12-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1537",
+      "division": "기계설비",
+      "section_no": "12-2-4",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "wrong",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-2-4"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1550",
+      "division": "기계설비",
+      "section_no": "13-1-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-1-1"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1572",
+      "division": "기계설비",
+      "section_no": "13-1-8",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1599",
+      "division": "기계설비",
+      "section_no": "13-11-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1604",
+      "division": "기계설비",
+      "section_no": "13-2-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-2-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1616",
+      "division": "기계설비",
+      "section_no": "13-2-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-2-6"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1635",
+      "division": "기계설비",
+      "section_no": "13-4-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-4-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1639",
+      "division": "기계설비",
+      "section_no": "13-4-7",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1644",
+      "division": "기계설비",
+      "section_no": "13-5-10",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-6-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1645",
+      "division": "기계설비",
+      "section_no": "13-5-10",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-5-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1653",
+      "division": "기계설비",
+      "section_no": "13-5-13",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-5-13"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1672",
+      "division": "기계설비",
+      "section_no": "13-5-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-5-6"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1673",
+      "division": "기계설비",
+      "section_no": "13-5-7",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-8-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1674",
+      "division": "기계설비",
+      "section_no": "13-5-7",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-5-7"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1676",
+      "division": "기계설비",
+      "section_no": "13-5-8",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "7-4-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1692",
+      "division": "기계설비",
+      "section_no": "13-6-12",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1693",
+      "division": "기계설비",
+      "section_no": "13-6-12",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-6-12"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1694",
+      "division": "기계설비",
+      "section_no": "13-6-13",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1704",
+      "division": "기계설비",
+      "section_no": "13-6-16",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1713",
+      "division": "기계설비",
+      "section_no": "13-6-3",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1715",
+      "division": "기계설비",
+      "section_no": "13-6-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1725",
+      "division": "기계설비",
+      "section_no": "13-6-7",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-1-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1727",
+      "division": "기계설비",
+      "section_no": "13-6-8",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-6-8"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1738",
+      "division": "기계설비",
+      "section_no": "13-7-10",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-7-10"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1741",
+      "division": "기계설비",
+      "section_no": "13-7-11",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1746",
+      "division": "기계설비",
+      "section_no": "13-7-13",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "wrong",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-3-1"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1751",
+      "division": "기계설비",
+      "section_no": "13-7-15",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-7-15"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1759",
+      "division": "기계설비",
+      "section_no": "13-7-17",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-2-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1766",
+      "division": "기계설비",
+      "section_no": "13-7-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-2-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1776",
+      "division": "기계설비",
+      "section_no": "13-7-22",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1777",
+      "division": "기계설비",
+      "section_no": "13-7-22",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1779",
+      "division": "기계설비",
+      "section_no": "13-7-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-7-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1783",
+      "division": "기계설비",
+      "section_no": "13-7-4",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1784",
+      "division": "기계설비",
+      "section_no": "13-7-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-7-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1786",
+      "division": "기계설비",
+      "section_no": "13-7-5",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "1-2-7"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1791",
+      "division": "기계설비",
+      "section_no": "13-7-7",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-7-7"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1793",
+      "division": "기계설비",
+      "section_no": "13-7-8",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-7-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1804",
+      "division": "기계설비",
+      "section_no": "13-8-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1826",
+      "division": "기계설비",
+      "section_no": "13-9-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-9-4"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1827",
+      "division": "기계설비",
+      "section_no": "13-9-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-9-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1828",
+      "division": "기계설비",
+      "section_no": "13-9-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-9-4"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1831",
+      "division": "기계설비",
+      "section_no": "2-1-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "9-5-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1838",
+      "division": "기계설비",
+      "section_no": "2-1-4",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-1-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1840",
+      "division": "기계설비",
+      "section_no": "2-1-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-1-5"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-1841",
+      "division": "기계설비",
+      "section_no": "2-1-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-1-5"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-1847",
+      "division": "기계설비",
+      "section_no": "2-2-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1850",
+      "division": "기계설비",
+      "section_no": "2-2-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1852",
+      "division": "기계설비",
+      "section_no": "2-2-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "4-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1854",
+      "division": "기계설비",
+      "section_no": "2-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1855",
+      "division": "기계설비",
+      "section_no": "2-2-4",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-2-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1858",
+      "division": "기계설비",
+      "section_no": "2-2-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "2-2-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1872",
+      "division": "기계설비",
+      "section_no": "3-2-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1873",
+      "division": "기계설비",
+      "section_no": "3-2-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "3-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1876",
+      "division": "기계설비",
+      "section_no": "3-3-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "3-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1886",
+      "division": "기계설비",
+      "section_no": "3-4-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1892",
+      "division": "기계설비",
+      "section_no": "4-1-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "2-1-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1909",
+      "division": "기계설비",
+      "section_no": "4-2-5",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "4-2-5"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-1941",
+      "division": "기계설비",
+      "section_no": "6-2-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "6-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1943",
+      "division": "기계설비",
+      "section_no": "6-2-2",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-1945",
+      "division": "기계설비",
+      "section_no": "6-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "6-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1951",
+      "division": "기계설비",
+      "section_no": "7-1-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "7-1-2"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-1954",
+      "division": "기계설비",
+      "section_no": "7-1-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "7-1-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1974",
+      "division": "기계설비",
+      "section_no": "7-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "7-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1987",
+      "division": "기계설비",
+      "section_no": "7-3-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "7-3-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-1995",
+      "division": "기계설비",
+      "section_no": "8-1-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "8-1-3"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-2006",
+      "division": "기계설비",
+      "section_no": "8-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "8-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2019",
+      "division": "기계설비",
+      "section_no": "8-3-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "8-3-3"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-2030",
+      "division": "기계설비",
+      "section_no": "8-3-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "8-3-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2032",
+      "division": "기계설비",
+      "section_no": "8-3-7",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "8-3-7"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2047",
+      "division": "기계설비",
+      "section_no": "8-6-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "8-2-8"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2056",
+      "division": "기계설비",
+      "section_no": "9-1-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "건축",
+        "8-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2059",
+      "division": "기계설비",
+      "section_no": "9-2-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-2076",
+      "division": "기계설비",
+      "section_no": "9-4-2",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "9-4-2"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-2078",
+      "division": "기계설비",
+      "section_no": "9-4-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "1-6-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2080",
+      "division": "기계설비",
+      "section_no": "9-5-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "9-5-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2446",
+      "division": "토목",
+      "section_no": "1-2-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "1-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2447",
+      "division": "토목",
+      "section_no": "1-2-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "1-2-2"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2455",
+      "division": "토목",
+      "section_no": "1-4-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-2-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2460",
+      "division": "토목",
+      "section_no": "1-5-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "1-5-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2463",
+      "division": "토목",
+      "section_no": "1-5-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "1-5-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2485",
+      "division": "토목",
+      "section_no": "1-6-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "1-6-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2487",
+      "division": "토목",
+      "section_no": "1-6-5",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "5-2-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2512",
+      "division": "토목",
+      "section_no": "1-8-6",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "1-8-6"
+      ],
+      "decision": "chosen"
+    },
+    {
+      "id": "draft-2524",
+      "division": "토목",
+      "section_no": "1-9-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "1-9-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2537",
+      "division": "토목",
+      "section_no": "2-2-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "3-2-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2540",
+      "division": "토목",
+      "section_no": "2-3-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-2559",
+      "division": "토목",
+      "section_no": "3-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "3-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2564",
+      "division": "토목",
+      "section_no": "3-2-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "3-2-4"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-2569",
+      "division": "토목",
+      "section_no": "3-4-1",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-2577",
+      "division": "토목",
+      "section_no": "4-6-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "4-6-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2583",
+      "division": "토목",
+      "section_no": "4-6-8",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    },
+    {
+      "id": "draft-2589",
+      "division": "토목",
+      "section_no": "5-1-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "5-1-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2595",
+      "division": "토목",
+      "section_no": "5-2-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": true,
+      "selected": [
+        "토목",
+        "6-7-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2600",
+      "division": "토목",
+      "section_no": "6-2-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "6-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2602",
+      "division": "토목",
+      "section_no": "6-2-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "6-2-1"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-2613",
+      "division": "토목",
+      "section_no": "6-3-4",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "기계설비",
+        "13-6-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2618",
+      "division": "토목",
+      "section_no": "6-5-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "6-5-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2620",
+      "division": "토목",
+      "section_no": "6-5-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "6-5-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2628",
+      "division": "토목",
+      "section_no": "6-8-1",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "6-8-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2631",
+      "division": "토목",
+      "section_no": "6-8-4",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "6-8-4"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2633",
+      "division": "토목",
+      "section_no": "7-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "7-2-3"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2638",
+      "division": "토목",
+      "section_no": "7-3-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "공통",
+        "2-1-31"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2660",
+      "division": "토목",
+      "section_no": "8-2-3",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "correct",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "8-2-3"
+      ],
+      "decision": "no_spec"
+    },
+    {
+      "id": "draft-2676",
+      "division": "토목",
+      "section_no": "8-3-1",
+      "route_pass": true,
+      "top1_correct": true,
+      "top3_correct": true,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "8-3-1"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2678",
+      "division": "토목",
+      "section_no": "8-3-2",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "3-2-5"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2685",
+      "division": "토목",
+      "section_no": "9-18-3",
+      "route_pass": true,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": [
+        "토목",
+        "9-3-6"
+      ],
+      "decision": "provisional"
+    },
+    {
+      "id": "draft-2692",
+      "division": "토목",
+      "section_no": "9-18-5",
+      "route_pass": false,
+      "top1_correct": false,
+      "top3_correct": false,
+      "select": "ask",
+      "same_number_other_division": false,
+      "selected": null,
+      "decision": "ask"
+    }
+  ]
+}

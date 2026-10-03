@@ -1,0 +1,300 @@
+{"id": "draft-0007", "question": "H형강부재를 사용할 때 기본용접공수는 어떻게 계산하나요?", "division": "건축", "section_no": "1-1-3"}
+{"id": "draft-0014", "question": "6층 이상 건물에서 강재사용량에 따른 보정치 a를 계산할 때 소수점 몇째 자리까지 적용해야 하나요?", "division": "건축", "section_no": "1-2-1"}
+{"id": "draft-0023", "question": "철골설계수량이 400ton이고 1ton당 볼트 본수가 60본일 때, 보정계수는 어떻게 적용하나요?", "division": "건축", "section_no": "1-2-4"}
+{"id": "draft-0037", "question": "데크플레이트 플라즈마 절단 길이가 50m일 때 철골공과 특별인부의 품은 어떻게 되나요?", "division": "건축", "section_no": "1-3-2"}
+{"id": "draft-0045", "question": "볼트조임 작업 외에 추가적인 용접 작업이 필요한 경우 별도로 계상해야 하나요?", "division": "건축", "section_no": "1-4-1"}
+{"id": "draft-0052", "question": "경량형강철골조 조립설치 물량은 몇 ton입니까?", "division": "건축", "section_no": "1-4-4"}
+{"id": "draft-0061", "question": "알루미늄창호 면적이 2.5㎡일 때 품은 어떻게 되나요?", "division": "건축", "section_no": "10-1-3"}
+{"id": "draft-0069", "question": "창호 설치 개소 수는 몇 개입니까?", "division": "건축", "section_no": "10-1-5"}
+{"id": "draft-0071", "question": "셔터 면적이 25㎡ 이상인 대형 셔터를 설치할 때는 품을 어떻게 계산해야 하나요?", "division": "건축", "section_no": "10-1-6"}
+{"id": "draft-0076", "question": "현장가공과 공장가공 중 어느 방식으로 프레임을 제작합니까?", "division": "건축", "section_no": "10-1-8"}
+{"id": "draft-0079", "question": "도어체크 50개소를 설치할 때 창호공 품은 어떻게 계산하나요?", "division": "건축", "section_no": "10-2-1"}
+{"id": "draft-0090", "question": "접합유리를 설치하는 경우 이 품셈을 적용할 수 있나요?", "division": "건축", "section_no": "10-3-1"}
+{"id": "draft-0098", "question": "천장 작업 시 품 할증은 어떻게 적용하나요?", "division": "건축", "section_no": "11-1-2"}
+{"id": "draft-0099", "question": "작업 부위가 천장인지 벽면인지 알려주세요.", "division": "건축", "section_no": "11-1-2"}
+{"id": "draft-0105", "question": "목재면 바탕만들기 100㎡를 작업하려고 합니다. 품을 계산해주세요.", "division": "건축", "section_no": "11-1-4"}
+{"id": "draft-0117", "question": "수성페인트 롤러칠 작업 시 공구손료는 어떻게 계산하나요?", "division": "건축", "section_no": "11-2-2"}
+{"id": "draft-0129", "question": "녹막이 페인트칠 100㎡ 작업 시 도장공은 몇 인이 필요한가요?", "division": "건축", "section_no": "11-2-6"}
+{"id": "draft-0135", "question": "에폭시 코팅 100㎡ 칠할 때 도장공 품은 얼마인가요?", "division": "건축", "section_no": "11-2-8"}
+{"id": "draft-0144", "question": "천장에 탄성코트를 칠할 때 품 할증은 어떻게 적용하나요?", "division": "건축", "section_no": "11-3-2"}
+{"id": "draft-0146", "question": "벽두께 1.0B, 시공높이 3m일 때 조적공과 보통인부의 일당 시공량은 얼마인가요?", "division": "건축", "section_no": "2-1-1"}
+{"id": "draft-0161", "question": "390x190x190 규격의 블록을 3.6m 이하 높이에서 양면마감으로 쌓을 때 조적공 3인과 보통인부 1인의 일일 시공량은 얼마인가요?", "division": "건축", "section_no": "2-2-1"}
+{"id": "draft-0165", "question": "비계사용 시 높이가 10m일 경우 시공량 감산은 어떻게 계산하나요?", "division": "건축", "section_no": "2-2-2"}
+{"id": "draft-0167", "question": "ALC블록 600x400x100 규격을 시공높이 3m에 쌓을 때 일당 시공량은 얼마인가요?", "division": "건축", "section_no": "2-3-1"}
+{"id": "draft-0169", "question": "지게차를 사용할 때 보통인부 인원 조정은 어떻게 되나요?", "division": "건축", "section_no": "2-3-1"}
+{"id": "draft-0172", "question": "시공 면적은 얼마인가요?", "division": "건축", "section_no": "2-3-2"}
+{"id": "draft-0178", "question": "타일줄눈 설치 물량이 100㎡일 때 줄눈 모르타르 소요량은 얼마인가요?", "division": "건축", "section_no": "3-1-2"}
+{"id": "draft-0198", "question": "마루틀 장선 위에 합판을 까는 것이 아니라 다른 바탕재를 사용할 경우에도 이 품을 적용할 수 있나요?", "division": "건축", "section_no": "4-1-3"}
+{"id": "draft-0207", "question": "틀간격이 400mm인 경우에도 이 품을 그대로 적용할 수 있나요?", "division": "건축", "section_no": "4-2-2"}
+{"id": "draft-0214", "question": "접착제 외에 수장합판 자재 물량은 어떻게 산출하나요?", "division": "건축", "section_no": "4-2-4"}
+{"id": "draft-0221", "question": "기초앵커 100개를 설치할 때 철공과 보통인부의 품은 어떻게 되나요?", "division": "건축", "section_no": "4-3-2"}
+{"id": "draft-0222", "question": "D16mm 앵커를 설치하려고 하는데 이 품셈을 적용해도 되나요?", "division": "건축", "section_no": "4-3-2"}
+{"id": "draft-0229", "question": "데크 연결용 클립 등 소모재료비 산정을 위한 주재료비 내역이 있습니까?", "division": "건축", "section_no": "4-3-4"}
+{"id": "draft-0237", "question": "합판마루, 강화마루, 온돌마루 외에 강마루 설치 시에도 이 품을 동일하게 적용할 수 있나요?", "division": "건축", "section_no": "5-1-3"}
+{"id": "draft-0246", "question": "공구손료 및 경장비는 어떻게 계상하나요?", "division": "건축", "section_no": "5-2-1"}
+{"id": "draft-0248", "question": "천장판 크기가 0.3㎡이면 시공량 기준을 어떻게 적용하나요?", "division": "건축", "section_no": "5-2-2"}
+{"id": "draft-0250", "question": "천장판의 총 시공 면적은 얼마인가요?", "division": "건축", "section_no": "5-2-2"}
+{"id": "draft-0252", "question": "치장용 석고판 설치 시 바탕용 석고판도 포함된 기준인가요?", "division": "건축", "section_no": "5-2-3"}
+{"id": "draft-0257", "question": "석고판 100㎡를 접착제로 붙일 때 필요한 내장공과 보통인부 품은 얼마인가요?", "division": "건축", "section_no": "5-3-2"}
+{"id": "draft-0259", "question": "접착제 재료량은 어떻게 산출하나요?", "division": "건축", "section_no": "5-3-2"}
+{"id": "draft-0266", "question": "합성수지류 걸레받이 100m를 설치할 때 필요한 내장공과 보통인부의 인·일은 어떻게 되나요?", "division": "건축", "section_no": "5-3-5"}
+{"id": "draft-0269", "question": "마루귀틀 50m를 설치할 때 내장공과 보통인부의 품은 각각 얼마인가요?", "division": "건축", "section_no": "5-3-6"}
+{"id": "draft-0282", "question": "접착제 수량이 0.3~0.35kg으로 되어 있는데, 내역서 작성 시 어떤 값을 적용해야 하나요?", "division": "건축", "section_no": "5-4-2"}
+{"id": "draft-0299", "question": "필름 폭이 1.2m인 자재를 사용할 경우 재료량 할증이나 품을 어떻게 조정해야 하나요?", "division": "건축", "section_no": "5-4-8"}
+{"id": "draft-0303", "question": "마감재로 스타코를 시공할 경우 이 품셈에 포함되나요?", "division": "건축", "section_no": "5-4-9"}
+{"id": "draft-0319", "question": "보강포 붙임 시공 부위가 바닥인가요, 수직부인가요?", "division": "건축", "section_no": "6-2-2"}
+{"id": "draft-0328", "question": "접착식시트를 시공할 면적은 몇 ㎡입니까?", "division": "건축", "section_no": "6-3-2"}
+{"id": "draft-0332", "question": "치켜올림 부위나 드레인 주위 작업은 별도로 품을 가산해야 하나요?", "division": "건축", "section_no": "6-3-3"}
+{"id": "draft-0336", "question": "방수 면적을 입력하지 않았습니다. 면적을 알려주세요.", "division": "건축", "section_no": "6-4-1"}
+{"id": "draft-0343", "question": "노출 공법으로 100㎡ 시공 시 방수공 품은 어떻게 되나요?", "division": "건축", "section_no": "6-4-4"}
+{"id": "draft-0346", "question": "바닥과 수직부 중 어느 부위입니까?", "division": "건축", "section_no": "6-5-1"}
+{"id": "draft-0349", "question": "액상형 흡수방지방수를 뿜칠로 2회 도포할 때 ㎡당 품은 얼마인가요?", "division": "건축", "section_no": "6-5-2"}
+{"id": "draft-0356", "question": "마스킹테이프 재료비는 별도로 산정해야 합니까?", "division": "건축", "section_no": "6-6-1"}
+{"id": "draft-0363", "question": "줄눈 설치 물량은 어떻게 입력하나요?", "division": "건축", "section_no": "6-6-3"}
+{"id": "draft-0376", "question": "아스팔트싱글 설치 물량은 몇 ㎡입니까?", "division": "건축", "section_no": "7-1-5"}
+{"id": "draft-0391", "question": "고소작업차를 사용해야 하는데 기계경비는 어떻게 산정하나요?", "division": "건축", "section_no": "7-2-3"}
+{"id": "draft-0413", "question": "인서트 설치 시 재료량(인서트 개수)은 어떻게 산출하나요?", "division": "건축", "section_no": "8-1-4"}
+{"id": "draft-0418", "question": "천장점검구 규격이 500x500인 경우 품셈 적용을 어떻게 해야 하나요?", "division": "건축", "section_no": "8-1-6"}
+{"id": "draft-0424", "question": "난간 자재(분체도장된 난간)의 재료비는 어떻게 산정하나요?", "division": "건축", "section_no": "8-2-2"}
+{"id": "draft-0455", "question": "라스 붙임 작업 시 미장공의 단위당 품은 얼마인가요?", "division": "건축", "section_no": "9-1-5"}
+{"id": "draft-0462", "question": "높이가 10m인 곳에서 비계를 사용해 작업할 때 시공량 감산은 몇 % 적용되나요?", "division": "건축", "section_no": "9-2-2"}
+{"id": "draft-0464", "question": "시공높이가 3m일 때 미장공과 보통인부의 일당 인원은 몇 명인가요?", "division": "건축", "section_no": "9-2-3"}
+{"id": "draft-0468", "question": "방수 코킹 작업도 이 품셈에 포함되나요?", "division": "건축", "section_no": "9-3-1"}
+{"id": "draft-0492", "question": "인력운반 기본공식에서 평균왕복속도(V)는 어떻게 산정하나요?", "division": "공통", "section_no": "1-2-7"}
+{"id": "draft-0499", "question": "복합 공종 시공 시에도 소규모 작업물량 제한 할증을 적용하나요?", "division": "공통", "section_no": "1-2-9"}
+{"id": "draft-0503", "question": "군 통제지역에서 작업할 때 할증률은 얼마인가요?", "division": "공통", "section_no": "1-4-3"}
+{"id": "draft-0512", "question": "작업가능시간이 3시간일 때 적용되는 할증률은 얼마인가요?", "division": "공통", "section_no": "1-4-6"}
+{"id": "draft-0514", "question": "작업준비 시간이나 대기 시간도 작업가능시간에 포함하여 계산하나요?", "division": "공통", "section_no": "1-4-6"}
+{"id": "draft-0515", "question": "야간작업 할증률은 얼마인가요?", "division": "공통", "section_no": "1-4-7"}
+{"id": "draft-0523", "question": "공사용수 산정 시 양생에 필요한 물도 따로 계산해야 하나요?", "division": "공통", "section_no": "1-5-6"}
+{"id": "draft-0526", "question": "직접노무비 총금액을 아직 정확히 모르는 상태에서는 가설물 면적을 산출할 수 없나요?", "division": "공통", "section_no": "2-1-1"}
+{"id": "draft-0537", "question": "보호막 손율 100%는 재료비 산정 시 어떻게 적용하나요?", "division": "공통", "section_no": "2-10-1"}
+{"id": "draft-0548", "question": "설치 길이는 몇 m입니까?", "division": "공통", "section_no": "2-10-5"}
+{"id": "draft-0561", "question": "복합 구조물인 경우 구조 유형을 어떻게 선택해야 하나요?", "division": "공통", "section_no": "2-11-2"}
+{"id": "draft-0562", "question": "현장정리를 할 건축물의 연면적은 얼마인가요?", "division": "공통", "section_no": "2-11-2"}
+{"id": "draft-0574", "question": "자동세륜기 설치 횟수는 몇 회인가요?", "division": "공통", "section_no": "2-11-6"}
+{"id": "draft-0586", "question": "기초콘크리트 공사 비용도 이 품셈에 포함되어 있나요?", "division": "공통", "section_no": "2-12-1"}
+{"id": "draft-0588", "question": "19층 이상일 때 할증률은 어떻게 계산하나요?", "division": "공통", "section_no": "2-12-2"}
+{"id": "draft-0602", "question": "구조물 동바리를 3개월 사용할 때 손율은 얼마인가요?", "division": "공통", "section_no": "2-2-4"}
+{"id": "draft-0607", "question": "어떤 재료의 손율을 알고 싶으신가요?", "division": "공통", "section_no": "2-2-5"}
+{"id": "draft-0627", "question": "EGI휀스에 도색을 해야 하는데 이 품셈으로 계산할 수 있나요?", "division": "공통", "section_no": "2-4-3"}
+{"id": "draft-0632", "question": "가로형 가설방음판 3m 이하 설치 시 일일시공량은 얼마인가요?", "division": "공통", "section_no": "2-4-5"}
+{"id": "draft-0635", "question": "설치 및 철거할 목재 비탈 규준틀은 총 몇 개소입니까?", "division": "공통", "section_no": "2-5-1"}
+{"id": "draft-0653", "question": "시스템 동바리 설치 10m 높이의 일당 시공량은 얼마인가요?", "division": "공통", "section_no": "2-6-3"}
+{"id": "draft-0660", "question": "지반에 잭서포트를 설치할 때 지반고르기 비용은 어떻게 계산하나요?", "division": "공통", "section_no": "2-6-5"}
+{"id": "draft-0665", "question": "비계주위 보호망을 설치하지 않는데, 시공량 할증은 어떻게 계산되나요?", "division": "공통", "section_no": "2-7-2"}
+{"id": "draft-0675", "question": "높이 2m짜리 강관 조립말비계 5대를 설치하고 해체할 때 비계공 품은 어떻게 되나요?", "division": "공통", "section_no": "2-7-6"}
+{"id": "draft-0681", "question": "타워형 가설 계단 50㎡를 설치할 때 필요한 비계공과 보통인부의 품은 얼마인가요?", "division": "공통", "section_no": "2-7-8"}
+{"id": "draft-0695", "question": "발끝막이판 설치 비용도 이 품셈에 포함되나요?", "division": "공통", "section_no": "2-8-11"}
+{"id": "draft-0703", "question": "난간틀 높이가 1.5m인 경우 이 품셈을 적용할 수 있나요?", "division": "공통", "section_no": "2-8-14"}
+{"id": "draft-0710", "question": "설치할 수평보호덮개의 총 개수는 몇 개인가요?", "division": "공통", "section_no": "2-8-16"}
+{"id": "draft-0716", "question": "설치할 수평지지로프의 총 길이는 몇 m입니까?", "division": "공통", "section_no": "2-8-18"}
+{"id": "draft-0720", "question": "시스템방호 낙하물 방지망 500㎡ 설치 시 비계공은 몇 인·일이 필요한가요?", "division": "공통", "section_no": "2-8-3"}
+{"id": "draft-0731", "question": "설치할 방호선반의 개소 수는 몇 개입니까?", "division": "공통", "section_no": "2-8-6"}
+{"id": "draft-0735", "question": "보호망 설치 면적이 500㎡일 때 비계공 품은 얼마인가요?", "division": "공통", "section_no": "2-8-8"}
+{"id": "draft-0755", "question": "건설용리프트의 규격이 싱글 1.2ton이 아닌 경우 품을 어떻게 조정해야 하나요?", "division": "공통", "section_no": "2-9-2"}
+{"id": "draft-0760", "question": "모래주머니 만들기 작업만 별도로 수행할 경우 이 품을 분할하여 적용할 수 있나요?", "division": "공통", "section_no": "2-9-4"}
+{"id": "draft-0761", "question": "PE드럼 자재비는 어떻게 계산하나요?", "division": "공통", "section_no": "2-9-4"}
+{"id": "draft-0765", "question": "PC가설방호벽 설치 및 해체 물량은 몇 개입니까?", "division": "공통", "section_no": "2-9-6"}
+{"id": "draft-0766", "question": "도색 작업이 필요한 경우 별도로 계상하셨습니까?", "division": "공통", "section_no": "2-9-6"}
+{"id": "draft-0769", "question": "가설휀스 제작 비용은 이 품셈에 포함되어 있나요?", "division": "공통", "section_no": "2-9-7"}
+{"id": "draft-0775", "question": "가림막 가설휀스의 규격이 L2.0xH1.2~1.8m 범위를 벗어나는 경우 품을 어떻게 조정해야 합니까?", "division": "공통", "section_no": "2-9-9"}
+{"id": "draft-0791", "question": "장비조립 및 해체 시 GNSS 기준국 설치 비용은 어떻게 계산하나요?", "division": "공통", "section_no": "3-11-1"}
+{"id": "draft-0797", "question": "GNSS 기준국 설치 및 해체품은 어떻게 계상해야 하나요?", "division": "공통", "section_no": "3-11-3"}
+{"id": "draft-0806", "question": "현장 내에서 소운반하여 깔고 고르는 잔토처리는 어떻게 계산하나요?", "division": "공통", "section_no": "3-2-1"}
+{"id": "draft-0817", "question": "유압식 크롤러 드릴과 굴착기+대형브레이커의 규격이 현장 장비와 다를 경우 품을 어떻게 조정하나요?", "division": "공통", "section_no": "3-3-1"}
+{"id": "draft-0819", "question": "정밀진동제어발파 100㎥ 작업 시 화약취급공 품은 얼마인가요?", "division": "공통", "section_no": "3-3-2"}
+{"id": "draft-0821", "question": "유압식 크롤러드릴의 소모자재 비용은 어떻게 계산하나요?", "division": "공통", "section_no": "3-3-2"}
+{"id": "draft-0826", "question": "비전기식뇌관을 사용할 경우 품셈 적용을 어떻게 해야 하나요?", "division": "공통", "section_no": "3-3-4"}
+{"id": "draft-0842", "question": "수심이 12m인 경우 폭약과 뇌관의 수량도 50% 할증되나요?", "division": "공통", "section_no": "3-3-9"}
+{"id": "draft-0850", "question": "다짐두께가 20cm인 경우에는 15cm와 30cm 중 어떤 기준을 적용해야 하나요?", "division": "공통", "section_no": "3-4-3"}
+{"id": "draft-0852", "question": "뒤채움 물량이 500㎥일 때 필요한 특별인부와 보통인부의 인·일은 어떻게 되나요?", "division": "공통", "section_no": "3-4-4"}
+{"id": "draft-0854", "question": "뒤채움 물량을 입력하지 않았는데 총 투입량을 계산할 수 있나요?", "division": "공통", "section_no": "3-4-4"}
+{"id": "draft-0865", "question": "현장 여건상 진동롤러 대신 다른 다짐장비를 사용하려고 하는데, 장비조합 변경 시 품셈 적용은 어떻게 해야 하나요?", "division": "공통", "section_no": "3-4-8"}
+{"id": "draft-0871", "question": "살수차 비용은 어떻게 계산해서 반영해야 하나요?", "division": "공통", "section_no": "3-5-2"}
+{"id": "draft-0873", "question": "성토면 고르기 작업 시 굴착기 1.0㎥의 일일 시공량은 얼마인가요?", "division": "공통", "section_no": "3-6-1"}
+{"id": "draft-0878", "question": "식재면 고르기 물량은 어디에 입력하나요?", "division": "공통", "section_no": "3-6-2"}
+{"id": "draft-0881", "question": "수직고가 25m인 비탈면에도 이 품셈을 적용할 수 있나요?", "division": "공통", "section_no": "3-7-1"}
+{"id": "draft-0893", "question": "천공에 필요한 비트나 물 등의 소모재료비는 어떻게 계산하나요?", "division": "공통", "section_no": "3-7-5"}
+{"id": "draft-0899", "question": "블록, 보강재, 쇄석, 유공관 등의 재료량은 설계수량에 맞게 별도로 반영하셨습니까?", "division": "공통", "section_no": "3-8-2"}
+{"id": "draft-0904", "question": "현장 여건상 진동롤러 대신 다른 다짐 장비를 사용해야 하는데, 품을 어떻게 조정해야 하나요?", "division": "공통", "section_no": "3-8-4"}
+{"id": "draft-0905", "question": "지지력 시험 비용은 이 품에 포함되어 있나요?", "division": "공통", "section_no": "3-8-4"}
+{"id": "draft-0926", "question": "종자나 비료 같은 재료량도 같이 산출되나요?", "division": "공통", "section_no": "4-1-3"}
+{"id": "draft-0939", "question": "나무높이가 0.5m이고 수관폭이 0.6m인 관목을 군식할 때 시공량 기준은 무엇인가요?", "division": "공통", "section_no": "4-2-3"}
+{"id": "draft-0940", "question": "나무높이가 1.8m인 관목을 식재할 때 시공량은 어떻게 비례하여 감산하나요?", "division": "공통", "section_no": "4-2-3"}
+{"id": "draft-0946", "question": "야생 수목 굴취 시 17% 범위 내에서 감산하라고 되어 있는데, 정확히 몇 %를 적용해야 하나요?", "division": "공통", "section_no": "4-3-2"}
+{"id": "draft-0950", "question": "분이 없는 나무를 굴취하는데 시공량 할증이 있나요?", "division": "공통", "section_no": "4-3-3"}
+{"id": "draft-0975", "question": "콘크리트믹서 0.1㎥의 주연료와 조종원 수는 어떻게 되나요?", "division": "공통", "section_no": "4108-0060"}
+{"id": "draft-0987", "question": "크레인 규격은 어떤 기준으로 선정하여 적용해야 하나요?", "division": "공통", "section_no": "5-1-2"}
+{"id": "draft-1004", "question": "복공판 설치 물량이 500㎡일 때 필요한 철골공 인원은 몇 명인가요?", "division": "공통", "section_no": "5-1-8"}
+{"id": "draft-1035", "question": "극경암 지층이 발생했을 때 천공시간 할증은 어느 정도 적용해야 하나요?", "division": "공통", "section_no": "5-3-5"}
+{"id": "draft-1043", "question": "크롤러드릴 15(120mm)의 조종원은 몇 명인가요?", "division": "공통", "section_no": "5205-0035"}
+{"id": "draft-1064", "question": "현장양생용 공시체 제작 수량은 몇 조입니까?", "division": "공통", "section_no": "6-1-7"}
+{"id": "draft-1071", "question": "철근 가공 시 사용되는 철근 절단기나 밴딩기의 기계경비는 어떻게 계산하나요?", "division": "공통", "section_no": "6-2-2"}
+{"id": "draft-1073", "question": "토목 Type-I I-1 유형의 철근 현장조립 10ton을 시공할 때 인건비는 어떻게 되나요?", "division": "공통", "section_no": "6-2-3"}
+{"id": "draft-1076", "question": "철근 공장가공 물량은 몇 ton입니까?", "division": "공통", "section_no": "6-2-4"}
+{"id": "draft-1082", "question": "GFRP 보강근 조립 시 공구손료는 어떻게 계산하나요?", "division": "공통", "section_no": "6-2-6"}
+{"id": "draft-1094", "question": "유로폼 설치 물량이 100㎡이고 복잡한 구조물일 때 형틀목공은 몇 인·일이 필요한가요?", "division": "공통", "section_no": "6-3-3"}
+{"id": "draft-1101", "question": "벽체 높이가 2.5m인 경우 벽체품 할증과 비계 별도 계상은 어떻게 적용해야 하나요?", "division": "공통", "section_no": "6-3-5"}
+{"id": "draft-1124", "question": "솔 플레이트 용접 길이가 3.2m일 때 시공량은 어떻게 되나요?", "division": "공통", "section_no": "6-5-2"}
+{"id": "draft-1135", "question": "신축이음장치 자체의 자재비나 무수축 콘크리트 재료비는 이 품셈에 포함되어 있나요?", "division": "공통", "section_no": "6-6-3"}
+{"id": "draft-1149", "question": "노출 배수관 설치 물량은 얼마인가요?", "division": "공통", "section_no": "6-6-8"}
+{"id": "draft-1151", "question": "플륨관 설치 시 터파기 비용도 이 품셈에 포함되나요?", "division": "공통", "section_no": "6-7-1"}
+{"id": "draft-1160", "question": "시공높이가 30m를 초과하는 경우 품셈 적용은 어떻게 하나요?", "division": "공통", "section_no": "6-7-4"}
+{"id": "draft-1176", "question": "메붙임 시공 면적이 어떻게 되나요?", "division": "공통", "section_no": "7-2-1"}
+{"id": "draft-1183", "question": "전석깔기 물량은 어떤 면적을 기준으로 산정하나요?", "division": "공통", "section_no": "7-3-2"}
+{"id": "draft-1187", "question": "계단부 시공 시 계단참 면적도 계단부 시공량 기준을 적용하나요?", "division": "공통", "section_no": "7-4-1"}
+{"id": "draft-1190", "question": "석재판 절단 및 설치 작업이 품에 포함되나요?", "division": "공통", "section_no": "7-4-2"}
+{"id": "draft-1194", "question": "시공할 전체 면적(㎡) 정보가 필요합니다.", "division": "공통", "section_no": "7-4-3"}
+{"id": "draft-1198", "question": "다짐 작업에 사용할 수 있는 건설기계 종류는 무엇인가요?", "division": "공통", "section_no": "8-1-1"}
+{"id": "draft-1200", "question": "현장 진입로가 좁은데 장비 선택 시 고려할 사항이 있나요?", "division": "공통", "section_no": "8-1-1"}
+{"id": "draft-1220", "question": "현장 조건이 협소하여 작업 진행에 영향을 줄 때 굴착 작업능력은 상한치, 평균치, 하한치 중 어느 것을 적용해야 하나요?", "division": "공통", "section_no": "8-2-13"}
+{"id": "draft-1228", "question": "콘크리트 믹서트럭의 시간당 운반량은 어떻게 계산하나요?", "division": "공통", "section_no": "8-2-19"}
+{"id": "draft-1229", "question": "덤프트럭 운반 시 주행시간(cm1) 계산식은 무엇인가요?", "division": "공통", "section_no": "8-2-19"}
+{"id": "draft-1230", "question": "콘크리트플랜트 싸이클시간(cmc)은 어디서 확인해야 하나요?", "division": "공통", "section_no": "8-2-19"}
+{"id": "draft-1237", "question": "강관파일 시공 시 토질이 점토와 모래가 섞여 있을 때 토질계수(α)는 어떻게 산정하나요?", "division": "공통", "section_no": "8-2-22"}
+{"id": "draft-1238", "question": "콘크리트 파일 시공 시 파일세우기 횟수(Ns)는 보통 어떻게 결정되나요?", "division": "공통", "section_no": "8-2-22"}
+{"id": "draft-1244", "question": "강널말뚝 시공 시 현장 조건이 불량하여 작업중단이 약간 있는 경우, 작업계수 F는 어떻게 산정하나요?", "division": "공통", "section_no": "8-2-24"}
+{"id": "draft-1249", "question": "파일 길이가 15m일 때 준비시간(Ts)은 어떻게 계산하나요?", "division": "공통", "section_no": "8-2-26"}
+{"id": "draft-1250", "question": "전기용접이 필요할 때 용접공은 1인을 추가해야 하나요, 2인을 추가해야 하나요?", "division": "공통", "section_no": "8-2-26"}
+{"id": "draft-1268", "question": "암반(경질)에 중추중량 20ton을 사용할 수 없는 이유는 무엇인가요?", "division": "공통", "section_no": "8-2-31"}
+{"id": "draft-1269", "question": "작업효율(E)를 계산하기 위해 8-2-30의 어떤 항목을 참조해야 하나요?", "division": "공통", "section_no": "8-2-31"}
+{"id": "draft-1270", "question": "이동식 임목파쇄기 93.25㎾의 시간당 작업량은 얼마인가요?", "division": "공통", "section_no": "8-2-32"}
+{"id": "draft-1284", "question": "적재함용적과 체적환산계수는 어디서 확인하나요?", "division": "공통", "section_no": "8-2-6"}
+{"id": "draft-1285", "question": "모터 그레이더로 흙고르기 작업을 할 때, 현장조건이 '보통'이면 작업효율(E)은 얼마를 적용해야 하나요?", "division": "공통", "section_no": "8-2-7"}
+{"id": "draft-1291", "question": "롤러의 시간당 다짐토량을 구하는 공식은 무엇인가요?", "division": "공통", "section_no": "8-2-9"}
+{"id": "draft-1302", "question": "플레이트 콤팩터의 운전경비는 어떻게 계산하나요?", "division": "공통", "section_no": "8-3-2"}
+{"id": "draft-1304", "question": "타이어 크레인의 타이어 운전경비는 어떻게 계상하나요?", "division": "공통", "section_no": "8-3-3"}
+{"id": "draft-1305", "question": "타워크레인 권상용 와이어 소모율은 어떻게 되나요?", "division": "공통", "section_no": "8-3-3"}
+{"id": "draft-1309", "question": "콘크리트 펌프차 32m의 상각비 계수는 얼마인가요?", "division": "공통", "section_no": "8-3-5"}
+{"id": "draft-1316", "question": "그라우팅 펌프의 호스파이프 비용은 어떻게 계산하나요?", "division": "공통", "section_no": "8-3-7"}
+{"id": "draft-1330", "question": "크레인(무한궤도) 50ton의 주연료 소비량은 얼마인가요?", "division": "공통", "section_no": "8-4-3"}
+{"id": "draft-1334", "question": "현장가열표층재생기(3450-0642)의 주연료 '73.7+휘발유54.5'는 어떻게 해석하여 적용해야 하나요?", "division": "공통", "section_no": "8-4-4"}
+{"id": "draft-1336", "question": "콘크리트배치플랜트 120 (160) 규격의 조종원은 몇 명인가요?", "division": "공통", "section_no": "8-4-5"}
+{"id": "draft-1337", "question": "표에 없는 규격의 콘크리트배치플랜트를 사용할 경우 조종원 수는 어떻게 산정하나요?", "division": "공통", "section_no": "8-4-5"}
+{"id": "draft-1354", "question": "분류번호 9010-0003인 펌프준설선의 가격은 얼마인가요?", "division": "공통", "section_no": "8-5-10"}
+{"id": "draft-1367", "question": "분류번호가 0150인 기계의 가격을 찾고 싶은데, 배치플랜트와 사일로 중 어느 것입니까?", "division": "공통", "section_no": "8-5-5"}
+{"id": "draft-1380", "question": "이 장비들의 임대료 산정 기준이나 추가 부대비용은 어떻게 되나요?", "division": "공통", "section_no": "8-5-9"}
+{"id": "draft-1383", "question": "지능형 다짐공 시스템의 연간표준 가동시간은 어떻게 되나요?", "division": "공통", "section_no": "8201-0100"}
+{"id": "draft-1386", "question": "선박류 기계경비 산출 시 연간 표준가동시간은 어디서 확인하나요?", "division": "공통", "section_no": "9010-0003"}
+{"id": "draft-1416", "question": "콘크리트용 인서트를 사용할 경우 품셈 적용은 어떻게 해야 하나요?", "division": "기계설비", "section_no": "1-3-5"}
+{"id": "draft-1418", "question": "자체 추진 고소작업대를 사용하여 시공할 경우 시공량과 기계경비는 어떻게 할증되나요?", "division": "기계설비", "section_no": "1-4-1"}
+{"id": "draft-1423", "question": "고소작업대를 사용하여 시공할 때 공구손료는 어떻게 계산하나요?", "division": "기계설비", "section_no": "1-5-1"}
+{"id": "draft-1432", "question": "배관 길이가 어떻게 되나요?", "division": "기계설비", "section_no": "1-6-1"}
+{"id": "draft-1450", "question": "템퍼스위치결선 작업은 어떻게 계산하나요?", "division": "기계설비", "section_no": "10-2-2"}
+{"id": "draft-1460", "question": "지상식 단구형 5조를 설치할 때 배관공 품은 얼마인가요?", "division": "기계설비", "section_no": "10-3-2"}
+{"id": "draft-1461", "question": "소운반 비용은 따로 계산해야 하나요?", "division": "기계설비", "section_no": "10-3-2"}
+{"id": "draft-1463", "question": "일반송수구의 규격(단구형, 쌍구형 등)은 무엇입니까?", "division": "기계설비", "section_no": "10-4-1"}
+{"id": "draft-1479", "question": "소운반 외에 추가적인 운반이 필요한 현장 조건입니까?", "division": "기계설비", "section_no": "10-6-1"}
+{"id": "draft-1497", "question": "용접 방법이 알곤용접입니까, 아니면 아크용접입니까?", "division": "기계설비", "section_no": "11-1-1"}
+{"id": "draft-1508", "question": "분기공의 구경은 몇 ㎜입니까?", "division": "기계설비", "section_no": "11-3-1"}
+{"id": "draft-1513", "question": "설치할 밸브의 수량은 몇 개입니까?", "division": "기계설비", "section_no": "11-3-2"}
+{"id": "draft-1521", "question": "완제품이 아니고 이면반이 있는 경우 품 할증/감액은 어떻게 계산하나요?", "division": "기계설비", "section_no": "12-1-1"}
+{"id": "draft-1526", "question": "실내온도조절기 전기전자식 10개를 설치할 때 품은 어떻게 되나요?", "division": "기계설비", "section_no": "12-2-1"}
+{"id": "draft-1537", "question": "배관지지물 설치 품은 어떻게 계산하나요?", "division": "기계설비", "section_no": "12-2-4"}
+{"id": "draft-1550", "question": "배관 규격 100mm, 옥내배관 용접식으로 10ton 설치 시 기본 품은 어떻게 되나요?", "division": "기계설비", "section_no": "13-1-1"}
+{"id": "draft-1572", "question": "타 공사와 병행작업을 할 경우 가산율은 어떻게 적용해야 하나요?", "division": "기계설비", "section_no": "13-1-8"}
+{"id": "draft-1599", "question": "배관 공사 시 산소 소모량이 '(용접식)5.0'으로 되어 있는데, 나사식 배관일 경우에는 산소 소모량을 어떻게 산정해야 하나요?", "division": "기계설비", "section_no": "13-11-5"}
+{"id": "draft-1604", "question": "철판두께 25mm 강판을 10m 절단할 때 필요한 용접공 품은 얼마인가요?", "division": "기계설비", "section_no": "13-2-2"}
+{"id": "draft-1616", "question": "탄소강 파이프 8인치, 벽 두께 1.00인치에 Ring Burner 방식으로 응력제거를 하려고 합니다. 품이 어떻게 되나요?", "division": "기계설비", "section_no": "13-2-6"}
+{"id": "draft-1635", "question": "검사 및 교정이 필요하여 10% 가산할 때, 기계산업기사 품도 가산 대상에 포함되나요?", "division": "기계설비", "section_no": "13-4-4"}
+{"id": "draft-1639", "question": "유해가스가 발생하는 환경에서 오물제거 작업을 할 때 할증률은 몇 %를 적용해야 하나요?", "division": "기계설비", "section_no": "13-4-7"}
+{"id": "draft-1644", "question": "Leak test 교정 품을 계산할 때 '기술관리 포장해체를 제외한 품의 15%'라고 되어 있는데, 정확히 어떤 작업들의 품을 합산한 후 15%를 곱해야 하나요?", "division": "기계설비", "section_no": "13-5-10"}
+{"id": "draft-1645", "question": "복수기 설치 전체 품을 계산하려면 공사기간, 포장해체 면적, 소운반 중량 등 각 세부 작업별 물량이 모두 필요한가요?", "division": "기계설비", "section_no": "13-5-10"}
+{"id": "draft-1653", "question": "Motor driven type의 경우 증속기 설치가 포함되는데, 현장에서 별도의 추가 작업이 발생합니까?", "division": "기계설비", "section_no": "13-5-13"}
+{"id": "draft-1672", "question": "Soot blower를 설치하려고 합니다. 품을 계산해주세요.", "division": "기계설비", "section_no": "13-5-6"}
+{"id": "draft-1673", "question": "용량이 550 ㎥/min인 Fan 2대를 설치할 때 필요한 플랜트기계설치공의 인·일은 얼마인가요?", "division": "기계설비", "section_no": "13-5-7"}
+{"id": "draft-1674", "question": "설치하려는 Fan이 1,200㎜Aq의 Centrifugal Fan인 경우 이 품을 적용할 수 있나요?", "division": "기계설비", "section_no": "13-5-7"}
+{"id": "draft-1676", "question": "터빈 설치 시 검사 및 교정 품은 어떻게 산정하나요?", "division": "기계설비", "section_no": "13-5-8"}
+{"id": "draft-1692", "question": "소모자재 중 산소의 규격 기준은 무엇인가요?", "division": "기계설비", "section_no": "13-6-12"}
+{"id": "draft-1693", "question": "각 세부 공정별(예: 박스해체, 검측 등) 품을 따로 산정해야 할 경우 어떻게 계산하나요?", "division": "기계설비", "section_no": "13-6-12"}
+{"id": "draft-1694", "question": "제작 물량은 몇 ton입니까?", "division": "기계설비", "section_no": "13-6-13"}
+{"id": "draft-1704", "question": "산소량 규격의 기준은 무엇입니까?", "division": "기계설비", "section_no": "13-6-16"}
+{"id": "draft-1713", "question": "장비사용시간은 현장 제작 시에도 적용되나요?", "division": "기계설비", "section_no": "13-6-3"}
+{"id": "draft-1715", "question": "수문 종류가 Tainter Gate인지 Roller Gate인지 어떻게 구분하나요?", "division": "기계설비", "section_no": "13-6-4"}
+{"id": "draft-1725", "question": "소모자재의 '기타 10%'는 어떤 금액이나 수량의 10%를 의미하나요?", "division": "기계설비", "section_no": "13-6-7"}
+{"id": "draft-1727", "question": "Spiral Casing 설치 물량은 몇 ton입니까?", "division": "기계설비", "section_no": "13-6-8"}
+{"id": "draft-1738", "question": "설치할 Mud Gun의 중량을 입력하지 않았습니다.", "division": "기계설비", "section_no": "13-7-10"}
+{"id": "draft-1741", "question": "내화물 쌓기 물량이 어떻게 되나요?", "division": "기계설비", "section_no": "13-7-11"}
+{"id": "draft-1746", "question": "비계 높이가 10m일 때 할증률은 15%인가요, 아니면 15%+5%=20%인가요?", "division": "기계설비", "section_no": "13-7-13"}
+{"id": "draft-1751", "question": "O2, N2 Spherical Gas Holder 조립설치 시 약품세척 작업이 필요한데, 이 품은 어떻게 계상하나요?", "division": "기계설비", "section_no": "13-7-15"}
+{"id": "draft-1759", "question": "설치할 기기의 총 중량(ton)은 얼마입니까?", "division": "기계설비", "section_no": "13-7-17"}
+{"id": "draft-1766", "question": "설치할 기기의 총 중량(톤)은 얼마입니까?", "division": "기계설비", "section_no": "13-7-2"}
+{"id": "draft-1776", "question": "가루비누 재료비는 어떻게 산정하나요?", "division": "기계설비", "section_no": "13-7-22"}
+{"id": "draft-1777", "question": "시험 체적(㎥)을 입력해주세요.", "division": "기계설비", "section_no": "13-7-22"}
+{"id": "draft-1779", "question": "설치 시 부속되는 계단 손잡이 설치 품도 이 기준에 포함되나요?", "division": "기계설비", "section_no": "13-7-3"}
+{"id": "draft-1783", "question": "기기에 붙은 Flange 이후의 배관공사 물량은 어떻게 처리합니까?", "division": "기계설비", "section_no": "13-7-4"}
+{"id": "draft-1784", "question": "열풍로 DECK 설치 물량은 몇 ton입니까?", "division": "기계설비", "section_no": "13-7-5"}
+{"id": "draft-1786", "question": "소운반이나 도장 작업이 필요한 경우 별도로 품을 계상해야 합니까?", "division": "기계설비", "section_no": "13-7-5"}
+{"id": "draft-1791", "question": "기기에 붙은 배관공사도 이 품셈으로 계산하나요?", "division": "기계설비", "section_no": "13-7-7"}
+{"id": "draft-1793", "question": "제진기 본체 설치 시 하부지지용 Structure Deck 조립설치도 이 품에 포함되나요?", "division": "기계설비", "section_no": "13-7-8"}
+{"id": "draft-1804", "question": "장비 사용시간은 어떻게 산정해야 하나요?", "division": "기계설비", "section_no": "13-8-2"}
+{"id": "draft-1826", "question": "오수처리시설 설치 시 위생공과 보통인부의 품은 어떻게 되나요?", "division": "기계설비", "section_no": "13-9-4"}
+{"id": "draft-1827", "question": "제어함 설치 시 계장공의 품은 얼마인가요?", "division": "기계설비", "section_no": "13-9-4"}
+{"id": "draft-1828", "question": "오수처리시설 설치 시 유입 및 배수배관 설치공사는 어떻게 처리하나요?", "division": "기계설비", "section_no": "13-9-4"}
+{"id": "draft-1831", "question": "각형덕트 설치 물량이 몇 ㎡인지 알려주세요.", "division": "기계설비", "section_no": "2-1-1"}
+{"id": "draft-1838", "question": "PVC덕트 호칭두께가 5mm인 경우 품을 어떻게 적용해야 하나요?", "division": "기계설비", "section_no": "2-1-4"}
+{"id": "draft-1840", "question": "세대내 환기덕트 설치 물량은 몇 m입니까?", "division": "기계설비", "section_no": "2-1-5"}
+{"id": "draft-1841", "question": "설치하는 환기덕트의 규격이 204x60mm 이하입니까?", "division": "기계설비", "section_no": "2-1-5"}
+{"id": "draft-1847", "question": "유니버설형 단면적이 0.07㎡인 경우 품은 어떻게 적용하나요?", "division": "기계설비", "section_no": "2-2-1"}
+{"id": "draft-1850", "question": "후드의 경우 물량을 개수로 입력해야 하나요, 아니면 투영면적(㎡)으로 입력해야 하나요?", "division": "기계설비", "section_no": "2-2-2"}
+{"id": "draft-1852", "question": "송풍기 규격 호칭 번호가 090(6)일 때 덕트공 품은 얼마인가요?", "division": "기계설비", "section_no": "2-2-3"}
+{"id": "draft-1854", "question": "설치할 플렉시블 조인트의 개소 수는 몇 개인가요?", "division": "기계설비", "section_no": "2-2-3"}
+{"id": "draft-1855", "question": "설치할 댐퍼의 종류(방화댐퍼, 풍량조절댐퍼)는 무엇입니까?", "division": "기계설비", "section_no": "2-2-4"}
+{"id": "draft-1858", "question": "방화댐퍼 200mm이하 규격을 10개 설치할 때 덕트공 품은 어떻게 되나요?", "division": "기계설비", "section_no": "2-2-5"}
+{"id": "draft-1872", "question": "보온재 종류(고무발포, 발포폴리에틸렌)를 선택하지 않았는데 어떻게 계산하나요?", "division": "기계설비", "section_no": "3-2-1"}
+{"id": "draft-1873", "question": "밸브 규격이 100mm일 때 보온공 품은 얼마인가요?", "division": "기계설비", "section_no": "3-2-2"}
+{"id": "draft-1876", "question": "각형덕트 보온 시공 면적이 100㎡이고 보온두께가 25mm 이하일 때, 고무발포보온재를 사용하면 품이 얼마나 드나요?", "division": "기계설비", "section_no": "3-3-1"}
+{"id": "draft-1886", "question": "강제전선관 배관이나 통신/전기배선 인입 작업이 포함되어 있습니까?", "division": "기계설비", "section_no": "3-4-2"}
+{"id": "draft-1892", "question": "펌프 설치 시 지게차를 사용하면 어떻게 계산하나요?", "division": "기계설비", "section_no": "4-1-2"}
+{"id": "draft-1909", "question": "레인지후드 크기가 700mm 이하인 경우 기계설비공 품은 얼마인가요?", "division": "기계설비", "section_no": "4-2-5"}
+{"id": "draft-1941", "question": "적산열량계 설치 시 공구손료는 어떻게 계산하나요?", "division": "기계설비", "section_no": "6-2-2"}
+{"id": "draft-1943", "question": "적산열량계의 규격이 150mm를 초과하는 경우에는 어떻게 산정하나요?", "division": "기계설비", "section_no": "6-2-2"}
+{"id": "draft-1945", "question": "열량지시계를 벽에 매립해서 설치하려고 하는데 품셈 적용이 가능한가요?", "division": "기계설비", "section_no": "6-2-3"}
+{"id": "draft-1951", "question": "기존 대변기 철거 품도 포함되어 있습니까?", "division": "기계설비", "section_no": "7-1-2"}
+{"id": "draft-1954", "question": "설치하는 세면기가 벽붙임 도기세면기가 맞습니까?", "division": "기계설비", "section_no": "7-1-3"}
+{"id": "draft-1974", "question": "세면기수전 설치 시 공구손료는 어떻게 계산하나요?", "division": "기계설비", "section_no": "7-2-3"}
+{"id": "draft-1987", "question": "휴지걸이 매립형을 설치할 때 슬리브BOX 매립 작업 품은 별도로 산정하나요?", "division": "기계설비", "section_no": "7-3-2"}
+{"id": "draft-1995", "question": "냉각탑 용량이 100이고 5층 건물 옥상에 1회 설치할 때 품은 어떻게 되나요?", "division": "기계설비", "section_no": "8-1-3"}
+{"id": "draft-2006", "question": "팬코일유닛 상치형과 천정형의 품이 다른데, 어떻게 구분해서 입력하나요?", "division": "기계설비", "section_no": "8-2-3"}
+{"id": "draft-2019", "question": "가스보일러 20,000 Kcal/hr 벽걸이형을 설치할 때 품은 어떻게 되나요?", "division": "기계설비", "section_no": "8-3-3"}
+{"id": "draft-2030", "question": "방열기 설치 수량은 몇 조입니까?", "division": "기계설비", "section_no": "8-3-6"}
+{"id": "draft-2032", "question": "규격이 740×440×105mm가 아닌 다른 크기의 전기콘벡터를 설치할 때도 이 품을 그대로 적용하나요?", "division": "기계설비", "section_no": "8-3-7"}
+{"id": "draft-2047", "question": "품 값이 '2.5~3.0'처럼 범위로 되어 있는데, 현장 조건에 따라 어떻게 결정하나요?", "division": "기계설비", "section_no": "8-6-1"}
+{"id": "draft-2056", "question": "관로뚜껑을 단순 설치하는데, 형태가 복잡해서 용접 개소가 많다면 품 할증과 감산을 어떻게 적용해야 하나요?", "division": "기계설비", "section_no": "9-1-2"}
+{"id": "draft-2059", "question": "작업 대상이 소형 형강(100㎜ 미만) 구조입니까?", "division": "기계설비", "section_no": "9-2-1"}
+{"id": "draft-2076", "question": "단독주택 30호의 시험점화 품은 어떻게 계산하나요?", "division": "기계설비", "section_no": "9-4-2"}
+{"id": "draft-2078", "question": "공구손료 계산 시 기준이 되는 인력품은 무엇인가요?", "division": "기계설비", "section_no": "9-4-2"}
+{"id": "draft-2080", "question": "주기계 실내기기의 온풍난방인 경우 품셈 적용은 어떻게 하나요?", "division": "기계설비", "section_no": "9-5-1"}
+{"id": "draft-2446", "question": "순수 인력 살수를 할 경우 인원 가산은 어떻게 계산하나요?", "division": "토목", "section_no": "1-2-3"}
+{"id": "draft-2447", "question": "포설할 동상방지층의 총 물량(㎥)은 얼마인가요?", "division": "토목", "section_no": "1-2-3"}
+{"id": "draft-2455", "question": "순수 인력으로 살수할 경우 품은 어떻게 가산하나요?", "division": "토목", "section_no": "1-4-3"}
+{"id": "draft-2460", "question": "시공폭이 3.5m(본선)이고 1층 포설두께가 5cm일 때, 기준 일일시공량은 얼마인가요?", "division": "토목", "section_no": "1-5-4"}
+{"id": "draft-2463", "question": "아스팔트 표층 포설 물량이 3200㎡일 때 소형장비 작업조의 작업일수는 며칠인가요?", "division": "토목", "section_no": "1-5-6"}
+{"id": "draft-2485", "question": "공항포장에서 지장물 때문에 연속 포설이 불가능할 경우 시공량은 어떻게 계산하나요?", "division": "토목", "section_no": "1-6-4"}
+{"id": "draft-2487", "question": "외부 반출/반입 조건에서 장비 조립을 1회 수행할 때 기계설비공의 품은 어떻게 되나요?", "division": "토목", "section_no": "1-6-5"}
+{"id": "draft-2512", "question": "볼라드 직경이 200mm인 경우 이 품셈을 적용할 수 있나요?", "division": "토목", "section_no": "1-8-6"}
+{"id": "draft-2524", "question": "와이어 설치 시 비계가 필요한데 품셈에 어떻게 적용하나요?", "division": "토목", "section_no": "1-9-3"}
+{"id": "draft-2537", "question": "터파기 작업에 대한 품은 어디서 확인하나요?", "division": "토목", "section_no": "2-2-3"}
+{"id": "draft-2540", "question": "종자살포나 잔디심기 등 기타 공종이 포함되어 있습니까?", "division": "토목", "section_no": "2-3-1"}
+{"id": "draft-2559", "question": "점보드릴로 굴진장 2.5m 작업 시 천공속도는 얼마인가요?", "division": "토목", "section_no": "3-2-3"}
+{"id": "draft-2564", "question": "터널 단면적이 8㎡인 경우 어떤 장비 조합을 적용해야 하나요?", "division": "토목", "section_no": "3-2-4"}
+{"id": "draft-2569", "question": "방수시트의 관급/사급 여부에 따른 재료비 처리는 어떻게 되나요?", "division": "토목", "section_no": "3-4-1"}
+{"id": "draft-2577", "question": "침목 1개소당 8개소의 구멍뚫기가 아닌 경우 품을 어떻게 조정해야 합니까?", "division": "토목", "section_no": "4-6-4"}
+{"id": "draft-2583", "question": "굴착기+부착용집게의 유류비는 어떻게 계산하나요?", "division": "토목", "section_no": "4-6-8"}
+{"id": "draft-2589", "question": "제작도(Shop drawing) 작성 비용은 어떻게 계상하나요?", "division": "토목", "section_no": "5-1-3"}
+{"id": "draft-2595", "question": "잡재료 10% 계상은 수량 기준인가요, 금액 기준인가요?", "division": "토목", "section_no": "5-2-3"}
+{"id": "draft-2600", "question": "관경 200mm 주철관을 장비로 50본 부설할 때 품이 어떻게 되나요?", "division": "토목", "section_no": "6-2-1"}
+{"id": "draft-2602", "question": "타이튼 접합 부설 품을 계산해주세요.", "division": "토목", "section_no": "6-2-1"}
+{"id": "draft-2613", "question": "금긋기 및 절단 작업만 수행할 경우 품은 어떻게 계산하나요?", "division": "토목", "section_no": "6-3-4"}
+{"id": "draft-2618", "question": "관경 40mm P.E관을 조임식으로 100개소 접합할 때 필요한 배관공(수도)와 보통인부의 품은 얼마인가요?", "division": "토목", "section_no": "6-5-1"}
+{"id": "draft-2620", "question": "접합에 사용되는 유니온이나 오링 등의 재료비는 이 품에 포함되어 있나요?", "division": "토목", "section_no": "6-5-1"}
+{"id": "draft-2628", "question": "관경 100mm 제수밸브를 인력으로 부설할 때 품은 어떻게 되나요?", "division": "토목", "section_no": "6-8-1"}
+{"id": "draft-2631", "question": "누수방지대 부설 및 접합 작업에도 이 품셈을 동일하게 적용할 수 있나요?", "division": "토목", "section_no": "6-8-4"}
+{"id": "draft-2633", "question": "육상투하 물량이 100㎥이고 0.1㎥ 이상 크레인 투하일 때 품은 어떻게 되나요?", "division": "토목", "section_no": "7-2-3"}
+{"id": "draft-2638", "question": "거치할 블록의 중량은 몇 톤인가요?", "division": "토목", "section_no": "7-3-3"}
+{"id": "draft-2660", "question": "자연시료 채취 1회당 중급기술자 품은 얼마인가요?", "division": "토목", "section_no": "8-2-3"}
+{"id": "draft-2676", "question": "수진점 간격이 5m가 아닌 경우 품을 어떻게 조정해야 합니까?", "division": "토목", "section_no": "8-3-1"}
+{"id": "draft-2678", "question": "측선 길이가 2.5km일 때 직종별 투입 인원은 어떻게 되나요?", "division": "토목", "section_no": "8-3-2"}
+{"id": "draft-2685", "question": "기계경비와 재료소모품비는 어떻게 처리해야 하나요?", "division": "토목", "section_no": "9-18-3"}
+{"id": "draft-2692", "question": "작업 물량(도곽 수)을 입력하지 않았는데 어떻게 계산하나요?", "division": "토목", "section_no": "9-18-5"}
