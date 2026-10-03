@@ -8,6 +8,7 @@ import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from threading import Lock
 from typing import Callable
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -15,6 +16,8 @@ CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 TIMEOUT_MS = 20_000
 MAX_ATTEMPTS = 3
 RETRY_DELAYS = (1, 2)
+_CLIENTS: dict[tuple[str, str], object] = {}
+_CLIENT_LOCK = Lock()
 
 
 class LLMUnavailable(Exception):
@@ -102,6 +105,22 @@ def _safe_error(exc: Exception, secrets: list[str]) -> str:
     return message[:200]
 
 
+def _create_client(provider: str, key: str):
+    from google import genai
+
+    return (genai.Client(vertexai=True, api_key=key) if provider == "vertex"
+            else genai.Client(api_key=key))
+
+
+def _get_client(provider: str, key: str):
+    """Share one client per provider/key, including concurrent first calls."""
+    with _CLIENT_LOCK:
+        cache_key = (provider, key)
+        if cache_key not in _CLIENTS:
+            _CLIENTS[cache_key] = _create_client(provider, key)
+        return _CLIENTS[cache_key]
+
+
 def generate(
     prompt: str,
     system: str,
@@ -115,6 +134,9 @@ def generate(
     retry_delays: list[float] | tuple[float, ...] = RETRY_DELAYS,
 ) -> LLMResult:
     """Call the selected Gemini provider, retrying only transient capacity errors."""
+    started = clock_fn()
+    if timeout_ms <= 0 or max_attempts < 1 or len(retry_delays) < max_attempts - 1:
+        raise ValueError("invalid LLM retry or timeout configuration")
     if os.environ.get("AGENT_LLM", "off") != "on":
         raise LLMUnavailable("AGENT_LLM=off", attempts=0)
 
@@ -128,11 +150,10 @@ def generate(
 
     if request_fn is None:
         try:
-            from google import genai
+            if (clock_fn() - started) * 1000 >= timeout_ms:
+                raise LLMUnavailable(f"LLM 호출 시간 상한 {timeout_ms}ms 초과", provider=provider)
+            client = _get_client(provider, key)
             from google.genai import types
-
-            client = (genai.Client(vertexai=True, api_key=key) if provider == "vertex"
-                      else genai.Client(api_key=key))
         except Exception as exc:
             raise LLMUnavailable(_safe_error(exc, secrets), attempts=0, provider=provider) from exc
 
@@ -145,15 +166,13 @@ def generate(
             response = client.models.generate_content(model=model_name, contents=prompt_text, config=config)
             return (response.text or "").strip()
 
-    started = clock_fn()
     last_error: Exception | None = None
-    if timeout_ms <= 0 or max_attempts < 1 or len(retry_delays) < max_attempts - 1:
-        raise ValueError("invalid LLM retry or timeout configuration")
     attempt = 0
-    for attempt in range(1, max_attempts + 1):
+    for next_attempt in range(1, max_attempts + 1):
         remaining_ms = timeout_ms - int((clock_fn() - started) * 1000)
         if remaining_ms <= 0:
             break
+        attempt = next_attempt
         try:
             text = request_fn(model, prompt, system, remaining_ms)
         except Exception as exc:

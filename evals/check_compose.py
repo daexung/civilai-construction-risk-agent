@@ -6,6 +6,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 os.environ["AGENT_OFFLINE"] = "1"
@@ -215,6 +216,47 @@ def main() -> int:
     checks.append(("C13 Vertex 키 없음은 LLMUnavailable", no_vertex_key["answer_source"] == "template"
                    and no_vertex_key["llm_info"]["provider"] == "vertex"
                    and no_vertex_key["llm_info"]["error"] == "VERTEX_API_KEY 없음"))
+
+    factory_calls, requests = [], []
+    key = ["compose-key-1"]
+    def fake_factory(provider, api_key):
+        factory_calls.append((provider, api_key))
+        def generate_content(**kwargs):
+            requests.append(kwargs)
+            return SimpleNamespace(text=good_llm("", ""))
+        return SimpleNamespace(models=SimpleNamespace(generate_content=generate_content))
+
+    with patch.dict(os.environ, {"AGENT_LLM": "on", "LLM_PROVIDER": "vertex"}), \
+            patch.object(llm_client, "_CLIENTS", {}), \
+            patch.object(llm_client, "_env_value", side_effect=lambda name: key[0] if name == "VERTEX_API_KEY" else None), \
+            patch.object(llm_client, "_create_client", side_effect=fake_factory):
+        first, second = compose(state), compose(state)
+        checks.append(("C14 compose 클라이언트 재사용", len(factory_calls) == 1 and len(requests) == 2
+                       and first["answer_source"] == second["answer_source"] == "llm"))
+        key[0] = "compose-key-2"
+        changed = compose(state)
+        checks.append(("C15 키 변경 시 새 클라이언트", len(factory_calls) == 2
+                       and factory_calls[-1] == ("vertex", key[0]) and changed["answer_source"] == "llm"))
+        with patch.dict(os.environ, {"LLM_PROVIDER": "studio"}), \
+                patch.object(llm_client, "_env_value", return_value=key[0]):
+            switched = compose(state)
+        checks.append(("C16 provider도 캐시 구분", len(factory_calls) == 3
+                       and factory_calls[-1] == ("studio", key[0]) and switched["answer_source"] == "llm"))
+
+    now, requests = [0.0], []
+    def fake_sleep(seconds):
+        now[0] += seconds
+    def slow_factory(provider, api_key):
+        fake_sleep(20.1)
+        return fake_factory(provider, api_key)
+    with patch.dict(os.environ, {"AGENT_LLM": "on", "LLM_PROVIDER": "vertex"}), \
+            patch.object(llm_client, "_CLIENTS", {}), \
+            patch.object(llm_client, "_env_value", return_value="slow-key"), \
+            patch.object(llm_client, "_create_client", side_effect=slow_factory):
+        slow = compose(state, generate_fn=lambda prompt, system: llm_client.generate(
+            prompt, system, clock_fn=lambda: now[0]))
+    checks.append(("C17 생성 시간 초과는 요청 없이 template", slow["answer_source"] == "template"
+                   and slow["llm_info"]["attempts"] == 0 and not requests))
 
     graph = build_graph()
     config = {"configurable": {"thread_id": "compose-g1"}}

@@ -5,7 +5,9 @@ from __future__ import annotations
 import json
 import os
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -88,6 +90,59 @@ def main() -> int:
             result = route(new_state("공사비 알려줘"), generate_fn=lambda prompt, system, **options: client.generate(
                 prompt, system, request_fn=twice, sleep_fn=lambda _delay: None, **options))
             checks.append(("two 503s rule", len(calls) == 2 and result["route_source"] == "rule"))
+
+        factory_calls, requests = [], []
+        key = ["router-key-1"]
+        def fake_factory(provider, api_key):
+            factory_calls.append((provider, api_key))
+            def generate_content(**kwargs):
+                requests.append(kwargs)
+                return SimpleNamespace(text=_response("qa"))
+            return SimpleNamespace(models=SimpleNamespace(generate_content=generate_content))
+
+        with patch.dict(os.environ, {"LLM_PROVIDER": "studio"}), \
+                patch.object(client, "_CLIENTS", {}), \
+                patch.object(client, "_env_value", side_effect=lambda name: key[0] if name == "GEMINI_API_KEY" else None), \
+                patch.object(client, "_create_client", side_effect=fake_factory):
+            first, second = route(state), route(state)
+            checks.append(("cached client routes twice", len(factory_calls) == 1 and len(requests) == 2
+                           and first["route_source"] == second["route_source"] == "llm"))
+            key[0] = "router-key-2"
+            changed = route(state)
+            checks.append(("changed key creates client", len(factory_calls) == 2
+                           and factory_calls[-1] == ("studio", key[0]) and changed["route_source"] == "llm"))
+            with ThreadPoolExecutor(max_workers=4) as pool:
+                shared = list(pool.map(lambda _: client._get_client("vertex", "concurrent-key"), range(8)))
+            checks.append(("concurrent first calls create once", len(factory_calls) == 3
+                           and all(item is shared[0] for item in shared)))
+
+        now, requests = [0.0], []
+        def fake_sleep(seconds):
+            now[0] += seconds
+        def slow_factory(provider, api_key):
+            fake_sleep(3.1)
+            return fake_factory(provider, api_key)
+        with patch.dict(os.environ, {"LLM_PROVIDER": "studio"}), \
+                patch.object(client, "_CLIENTS", {}), \
+                patch.object(client, "_env_value", return_value="slow-key"), \
+                patch.object(client, "_create_client", side_effect=slow_factory):
+            slow = route(state, generate_fn=lambda prompt, system, **options: client.generate(
+                prompt, system, clock_fn=lambda: now[0], **options))
+        checks.append(("client creation over budget skips request and uses rule",
+                       slow["route_source"] == "rule" and not requests))
+
+        now, requests = [0.0], []
+        def setup_factory(provider, api_key):
+            fake_sleep(1.0)
+            return fake_factory(provider, api_key)
+        with patch.dict(os.environ, {"LLM_PROVIDER": "studio"}), \
+                patch.object(client, "_CLIENTS", {}), \
+                patch.object(client, "_env_value", return_value="setup-key"), \
+                patch.object(client, "_create_client", side_effect=setup_factory):
+            remaining = route(state, generate_fn=lambda prompt, system, **options: client.generate(
+                prompt, system, clock_fn=lambda: now[0], **options))
+        checks.append(("request receives remaining total budget", remaining["route_source"] == "llm"
+                       and requests[0]["config"].http_options.timeout == 2000))
 
         with patch("agent.graph.retrieve", return_value={"hits": [], "search_info": {}}), \
                 patch("agent.graph.select", side_effect=AssertionError("select called")), \
