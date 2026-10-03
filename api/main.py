@@ -320,6 +320,14 @@ def _search_out(state: dict) -> dict:
             "raw_warnings": raw, "fallback_reason": search_info.get("fallback_reason")}
 
 
+def _qa_out(state: dict) -> dict | None:
+    qa = state.get("qa")
+    if not qa or state.get("status") != "ANSWERED":
+        return None
+    resolved = _citations_out(resolve_cites(qa["citations"]))
+    return {**qa, "citations": [{**raw, **cite} for raw, cite in zip(qa["citations"], resolved)]}
+
+
 def _build_response(thread_id: str, state: dict) -> dict:
     status = _status_out(state)
     spec_id = state.get("spec_id", "")
@@ -340,6 +348,7 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "priced": _priced_out(state.get("priced")),
         "statement": state.get("statement"),
         "answer": state.get("answer") or None,
+        "qa": _qa_out(state),
         "answer_source": state.get("answer_source") or None,
         "llm_info": state.get("llm_info") or None,
         "basis_date": state.get("basis_date") or date.today().isoformat(),

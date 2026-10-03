@@ -4,7 +4,7 @@ from typing import Literal, TypedDict
 
 
 Status = Literal["RUNNING", "OUT_OF_SCOPE", "MISSING_INFO", "EVIDENCE_ONLY", "BLOCKED", "COMPUTED",
-                 "ERROR", "OK", "PARTIAL"]
+                 "ERROR", "OK", "PARTIAL", "ANSWERED"]
 
 
 class AgentState(TypedDict, total=False):
@@ -19,6 +19,7 @@ class AgentState(TypedDict, total=False):
     answer: str  # 최종 답변
     answer_source: str  # "llm" | "template"
     llm_info: dict  # LLM 모델, 걸린 시간, 실패·거부 사유, 거부된 숫자
+    qa: dict | None  # ??? ?? ??
     hits: list[dict]  # 검색된 청크
     search_info: dict  # 검색 방식과 경고
     candidates: list[dict]  # 후보 절과 제목·점수·명세 여부
@@ -38,7 +39,7 @@ class AgentState(TypedDict, total=False):
 
 def new_state(query: str, basis_date: str | None = None) -> AgentState:
     state: AgentState = {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [],
-                         "search_info": {}, "candidates": [], "spec_id": "", "selection": {}}
+                         "qa": None, "search_info": {}, "candidates": [], "spec_id": "", "selection": {}}
     if basis_date is not None:
         state["basis_date"] = basis_date
     return state

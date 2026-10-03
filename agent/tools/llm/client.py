@@ -148,6 +148,7 @@ def generate(
     sleep_fn: Callable[[float], None] = time.sleep,
     clock_fn: Callable[[], float] = time.monotonic,
     response_schema: dict | None = None,
+    model: str | None = None,
     timeout_ms: int = TIMEOUT_MS,
     max_attempts: int = MAX_ATTEMPTS,
     retry_delays: list[float] | tuple[float, ...] = RETRY_DELAYS,
@@ -164,7 +165,7 @@ def generate(
     key = _env_value(key_name)
     if not key:
         raise LLMUnavailable(f"{key_name} 없음", attempts=0, provider=provider)
-    model = model_name()
+    model = model or model_name()
     secrets = [key, _env_value("GOOGLE_CLOUD_PROJECT") or ""]
 
     if request_fn is None:
