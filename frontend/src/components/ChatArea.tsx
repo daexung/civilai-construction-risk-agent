@@ -193,36 +193,48 @@ function MarkdownAnswer({ children }: { children: string }) {
   }}>{children}</ReactMarkdown>;
 }
 
-function AssistantActionBar({ response, elapsedMs, receivedAtMs }: {
-  response: ChatResponse; elapsedMs?: number; receivedAtMs?: number;
-}) {
+function AssistantTiming({ response, elapsedMs }: { response: ChatResponse; elapsedMs?: number }) {
   const [showTiming, setShowTiming] = useState(false);
   const timing = response.timing;
   const total = timing?.total_ms ?? 0;
   const detail = timing ? Math.max(0, total - timing.route_ms - timing.retrieve_ms - timing.compute_ms - timing.llm_ms) : 0;
-  const time = receivedAtMs ? new Date(receivedAtMs).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '';
-  const copy = () => { void navigator.clipboard?.writeText(response.answer ?? response.message); };
+  if (elapsedMs == null) return null;
   return (
-    <div className="assistant-actions-wrap">
-      <div className="action-bar">
-        <button type="button" className="action-btn" onClick={copy}>복사</button>
-        {time && <time className="msg-time">{time}</time>}
-        {elapsedMs != null && <span className="think-label">{(elapsedMs / 1000).toFixed(1)}초 동안 생각함</span>}
-        {timing && <button type="button" className="action-btn timing-toggle" onClick={() => setShowTiming((open) => !open)}>
-          {showTiming ? '간략히' : '자세히'}
-        </button>}
-        {['OK', 'PARTIAL'].includes(response.status) &&
-          <a className="action-btn export-link" href={exportUrl(response.thread_id)}>엑셀로 받기</a>}
-      </div>
-      {showTiming && timing && <div className="timing-details">
-        질문 분류 { (timing.route_ms / 1000).toFixed(1) }초 · 검색 { (timing.retrieve_ms / 1000).toFixed(1) }초 ·
-        계산 { (timing.compute_ms / 1000).toFixed(1) }초 · 답변 작성 { (timing.llm_ms / 1000).toFixed(1) }초 ·
-        기타 { (detail / 1000).toFixed(1) }초
-      </div>}
+    <div className="assistant-timing">
+      <span className="think-label">{`${(elapsedMs / 1000).toFixed(1)}\uCD08 \uB3D9\uC548 \uC0DD\uAC01\uD568`}</span>
+      {timing && <button type="button" className="timing-toggle" onClick={() => setShowTiming((open) => !open)}>
+        {showTiming ? '\uC811\uAE30' : '\uC790\uC138\uD788'}
+      </button>}
+      {showTiming && timing && <div className="timing-details">{`\uC9C8\uBB38 \uBD84\uB958 ${(timing.route_ms / 1000).toFixed(1)}\uCD08 ? \uAC80\uC0C9 ${(timing.retrieve_ms / 1000).toFixed(1)}\uCD08 ? \uACC4\uC0B0 ${(timing.compute_ms / 1000).toFixed(1)}\uCD08 ? \uB2F5\uBCC0 \uC791\uC131 ${(timing.llm_ms / 1000).toFixed(1)}\uCD08 ? \uAE30\uD0C0 ${(detail / 1000).toFixed(1)}\uCD08`}</div>}
     </div>
   );
 }
 
+function AssistantActionBar({ response, receivedAtMs }: { response: ChatResponse; receivedAtMs?: number }) {
+  const [copied, setCopied] = useState(false);
+  const time = receivedAtMs ? new Date(receivedAtMs).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '';
+  const copy = () => {
+    void navigator.clipboard?.writeText(response.answer ?? response.message);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1500);
+  };
+  return (
+    <div className="action-bar">
+      <button type="button" className="action-btn" onClick={copy} title="\uBCF5\uC0AC" aria-label="\uBCF5\uC0AC">
+        {copied
+          ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
+          : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>}
+      </button>
+      {['OK', 'PARTIAL'].includes(response.status) &&
+        <a className="action-btn export-link" href={exportUrl(response.thread_id)} title="Excel \uB2E4\uC6B4\uB85C\uB4DC">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
+          </svg><span>Excel</span>
+        </a>}
+      {time && <time className="msg-time">{time}</time>}
+    </div>
+  );
+}
 function ComputedCard({ work, inputs, result, priced, tables }: {
   work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult; priced: PricedResult | null;
   tables: ChatResponse['tables'];
@@ -418,6 +430,7 @@ function AssistantCard({
         {response.work && <span className="work-badge">{response.work.title}</span>}
         {response.status === 'ANSWERED' && response.answer_source === 'template' && <span className="review-badge">AI 초안 · 검토 전</span>}
       </div>
+      <AssistantTiming response={response} elapsedMs={elapsedMs} />
       {response.status === 'ANSWERED' && response.qa ? (
         <div className="qa-card">
           <MarkdownAnswer>{`**${response.qa.conclusion}**${response.qa.explanation ? `\n\n${response.qa.explanation}` : ''}`}</MarkdownAnswer>
@@ -482,7 +495,7 @@ function AssistantCard({
       {response.status === 'BLOCKED' && response.result && (
         <BlockedCard result={response.result as BlockedResult} />
       )}
-      <AssistantActionBar response={response} elapsedMs={elapsedMs} receivedAtMs={receivedAtMs} />
+      <AssistantActionBar response={response} receivedAtMs={receivedAtMs} />
     </div>
   );
 }
