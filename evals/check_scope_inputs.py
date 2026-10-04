@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import tempfile
+import time
 from pathlib import Path
 from unittest.mock import patch
 
@@ -112,14 +113,15 @@ def main() -> int:
             checks.append(("missing vector division count", "공통 1개" in str(exc)))
         else:
             checks.append(("missing vector division count", False))
-    try:
-        with patch("api.main.VectorIndex", side_effect=MissingVectorsError("공통 1개")):
-            with TestClient(app):
-                pass
-    except MissingVectorsError:
-        checks.append(("startup rejects missing vectors", True))
-    else:
-        checks.append(("startup rejects missing vectors", False))
+    with patch("api.main.get_search", side_effect=MissingVectorsError("공통 1개")):
+        with TestClient(app) as client:
+            health = client.get("/api/health").json()
+            deadline = time.monotonic() + 2
+            while health.get("status") == "warming" and time.monotonic() < deadline:
+                time.sleep(0.01)
+                health = client.get("/api/health").json()
+            unavailable = client.post("/api/chat", json={"message": "estimate"}).status_code
+    checks.append(("missing vectors keep service unready", health == {"status": "error"} and unavailable == 503))
     for name, ok in checks:
         print(f"{'PASS' if ok else 'FAIL'} {name}")
     print(f"통과 {sum(ok for _, ok in checks)} / 전체 {len(checks)}")

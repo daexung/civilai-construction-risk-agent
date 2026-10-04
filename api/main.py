@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
+import threading
 import re
+from contextlib import asynccontextmanager
 from datetime import date
 from time import perf_counter
 from typing import Optional
@@ -21,7 +24,7 @@ from pydantic import BaseModel
 
 from agent.graph import build_graph, capture_node_timings
 from agent.rules.specs import load_specs
-from agent.tools.search.vector import VectorIndex
+from agent.nodes.retrieve import get_search
 from pipeline.render_sources import render_source
 from agent.state import new_state
 from agent.nodes.fill import _common_fields, _valid_for_field
@@ -38,23 +41,51 @@ DEV_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 
-app = FastAPI(title="civilai-construction-risk-agent chat api")
+_READY_EVENT = threading.Event()
+_LIFESPAN_ACTIVE = False
+_READY_ERROR: Exception | None = None
 
 
-@app.on_event("startup")
-def validate_service_vectors() -> None:
-    """Fail startup before serving when an enabled division lacks vectors."""
-    VectorIndex()
+def _prepare_service() -> None:
+    global _READY_ERROR
+    started = perf_counter()
+    try:
+        get_search()
+        load_specs()
+        if os.environ.get("AGENT_LLM", "off") == "on":
+            try:
+                warmup_client()
+            except LLMUnavailable:
+                logging.getLogger(__name__).warning("LLM client warmup failed; rule fallback remains available")
+    except Exception as exc:
+        _READY_ERROR = exc
+        logging.getLogger(__name__).exception("Service preparation failed")
+    finally:
+        logging.getLogger(__name__).info("Service preparation completed in %.2f sec", perf_counter() - started)
+        _READY_EVENT.set()
 
 
-@app.on_event("startup")
-def prepare_llm_client() -> None:
-    """Avoid client setup on the first chat; unavailable LLMs use rules."""
-    if os.environ.get("AGENT_LLM", "off") == "on":
-        try:
-            warmup_client()
-        except LLMUnavailable:
-            logging.getLogger(__name__).warning("LLM 클라이언트 사전 생성 실패: 기본 응답으로 서버를 시작합니다")
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    global _LIFESPAN_ACTIVE, _READY_ERROR
+    _LIFESPAN_ACTIVE = True
+    _READY_ERROR = None
+    _READY_EVENT.clear()
+    prepare_task = asyncio.create_task(asyncio.to_thread(_prepare_service))
+    try:
+        yield
+    finally:
+        await prepare_task
+        _LIFESPAN_ACTIVE = False
+
+
+app = FastAPI(title="civilai-construction-risk-agent chat api", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=DEV_ORIGINS,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 SOURCES = Path(__file__).resolve().parents[1] / "data/processed/sources"
@@ -363,7 +394,9 @@ def _build_response(thread_id: str, state: dict) -> dict:
 
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok"}
+    if _LIFESPAN_ACTIVE and not _READY_EVENT.is_set():
+        return {"status": "warming"}
+    return {"status": "error" if _READY_ERROR else "ok"}
 
 
 @app.get("/api/source/{table_id}.png")
@@ -423,6 +456,10 @@ def export_xlsx(thread_id: str) -> Response:
 
 @app.post("/api/chat")
 def chat(payload: ChatRequest) -> dict:
+    if _LIFESPAN_ACTIVE:
+        _READY_EVENT.wait()
+        if _READY_ERROR:
+            raise HTTPException(status_code=503, detail="Service preparation failed")
     started = perf_counter()
     with capture_node_timings() as node_timings:
         response = _chat_response(payload)

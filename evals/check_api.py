@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import os
+import threading
+import time
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -14,11 +16,12 @@ sys.path.insert(0, str(ROOT))
 from fastapi.testclient import TestClient  # noqa: E402
 
 from api.main import app  # noqa: E402
+import api.main as api_main  # noqa: E402
 from agent.tools.llm.client import LLMUnavailable  # noqa: E402
 
 CLIENT = TestClient(app)
 
-PUMP_ANSWERS = {"pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
+PUMP_ANSWERS = {"work": "6-1-4", "pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
                 "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",
                 "work_category": "기타 토목공사", "duration": "1~6개월", "contractor_type": "종합건설업",
                 "project_scale": "이 견적만"}
@@ -27,19 +30,34 @@ PUMP_ANSWERS = {"pump_size": "32m", "slump_band": "15㎝", "facility_type": "Typ
 def main() -> int:
     checks = []
 
-    with patch("api.main.VectorIndex"), patch("api.main.warmup_client") as warmup:
+    started, release = threading.Event(), threading.Event()
+    def delayed_search_prep():
+        started.set()
+        release.wait(2)
+    with patch("api.main.get_search", side_effect=delayed_search_prep), \
+            patch("api.main.load_specs", return_value={}), \
+            patch("api.main.warmup_client") as warmup:
         with patch.dict(os.environ, {"AGENT_LLM": "off"}):
             with TestClient(app) as startup_client:
+                started_ok = started.wait(1)
+                warming = startup_client.get("/api/health").json()
+                release.set()
+                deadline = time.monotonic() + 2
+                ready = startup_client.get("/api/health").json()
+                while ready.get("status") == "warming" and time.monotonic() < deadline:
+                    time.sleep(0.01)
+                    ready = startup_client.get("/api/health").json()
                 off_started = startup_client.get("/openapi.json").status_code == 200
-        checks.append(("A-start1 LLM off는 사전 생성 생략", off_started and warmup.call_count == 0))
+        checks.append(("A-start1 health warming to ok", started_ok and warming == {"status": "warming"}
+                       and ready == {"status": "ok"} and off_started and warmup.call_count == 0))
         with patch.dict(os.environ, {"AGENT_LLM": "on"}):
             with TestClient(app) as startup_client:
                 on_started = startup_client.get("/openapi.json").status_code == 200
-            checks.append(("A-start2 LLM on은 시작 시 사전 생성", on_started and warmup.call_count == 1))
-            warmup.side_effect = LLMUnavailable("모의 생성 실패")
+            checks.append(("A-start2 LLM on warms at startup", on_started and warmup.call_count == 1))
+            warmup.side_effect = LLMUnavailable("simulated warmup failure")
             with TestClient(app) as startup_client:
                 failure_started = startup_client.get("/openapi.json").status_code == 200
-            checks.append(("A-start3 사전 생성 실패에도 서버 시작", failure_started and warmup.call_count == 2))
+            checks.append(("A-start3 LLM warmup failure does not block server", failure_started and warmup.call_count == 2))
 
     outside = CLIENT.post("/api/chat", json={"message": "오늘 현장 날씨 어때?"}).json()
     checks.append(("A1", outside["status"] == "OUT_OF_SCOPE" and not outside["questions"]))
@@ -52,7 +70,6 @@ def main() -> int:
 
     evidence = CLIENT.post("/api/chat", json={"message": "합판거푸집 설치 인건비"}).json()
     checks.append(("A2", evidence["status"] == "MISSING_INFO" and bool(evidence["questions"])))
-
     missing = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
                                               "basis_date": "2026-10-01"}).json()
     thread_id = missing["thread_id"]
