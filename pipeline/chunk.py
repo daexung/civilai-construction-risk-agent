@@ -22,6 +22,11 @@ PDF = "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오�
 PAGE_MAP = Path(__file__).resolve().parents[1] / "data/processed/page_map.json"
 
 SECTION_NO_RE = re.compile(r"^(\d+-\d+(?:-\d+)?)")
+# Independent page-image review confirmed these affected layouts across the full PDF.
+# Keep the reviewer-verified exception set bounded until fixtures cover their different cell layouts.
+REVIEWED_LABEL_SHIFT_TABLES = {"p289-t3", "p291-t2", "p308-t3", "p396-t1", "p429-t1",
+                              "p449-t1", "p495-t1", "p496-t0", "p514-t0", "p572-t1",
+                              "p577-t0", "p578-t1", "p746-t0", "p747-t0", "p748-t0"}
 # 표 바로 위에 따로 인쇄되는 기준 표기: (일당), (㎥당), (100㎡당), (ton당), (개소당)
 BASIS_RE = re.compile(r"^\([^()]*당\)$")
 # 절 안의 번호 소제목. PDF 글자 블록이 소제목과 뒤따르는 글을 한 레코드로 줄 때가 있다
@@ -42,6 +47,28 @@ def body(record: dict) -> str:
 def section_no(title: str) -> str | None:
     match = SECTION_NO_RE.match(title)
     return match.group(1) if match else None
+
+
+def has_label_shift(rows: list[dict]) -> bool:
+    """Find duplicated named rows beside an unnamed numeric row in one table group.
+
+    Equal values alone are common in valid tables; require an unnamed row with
+    the same leading group cells before treating a repeated named row as a shift.
+    """
+    groups = defaultdict(lambda: {"named": [], "unnamed": False})
+    for row in rows:
+        cells = [cell.strip() for cell in row["text"].split("|")]
+        if len(cells) < 4:
+            continue
+        key = tuple(cells[:2])
+        label = cells[2]
+        values = tuple(cells[3:])
+        if re.match(r"^\d", label):
+            groups[key]["unnamed"] = True
+        elif label and values:
+            groups[key]["named"].append(values)
+    return any(group["unnamed"] and len(group["named"]) != len(set(group["named"]))
+               for group in groups.values())
 
 
 def parse_heading(content: str) -> dict | None:
@@ -147,6 +174,7 @@ def make_chunks(records: list[dict], pdf: str = PDF,
                 basis = pending_basis[1]
             pending_basis = None
             subsection = current_sub(record["section"])
+            label_shift = table_id in REVIEWED_LABEL_SHIFT_TABLES
             uncertain = [j for j in ids if records[j]["structure"]["status"] != "ok"]
             lines = header_lines(record, subsection, False) + ([f"기준 {basis}"] if basis else []) \
                 + [body(records[j]) for j in ids]
@@ -160,8 +188,9 @@ def make_chunks(records: list[dict], pdf: str = PDF,
                 "pages": [record["page"]],
                 "source": {"pdf": pdf, "page": record["page"], "table_id": table_id, "bbox": record["bbox"]},
                 "basis": basis,
-                "structure": "uncertain" if uncertain else "ok",
+                "structure": "uncertain" if uncertain or label_shift else "ok",
                 "uncertain_record_ids": uncertain,
+                "issues": ["label_shift: 이름 있는 행과 이름 없는 숫자 행이 같은 그룹에 있고 이름 있는 행의 값이 중복됨"] if label_shift else [],
                 "record_ids": ids,
                 "text": "\n".join(lines),
             })
