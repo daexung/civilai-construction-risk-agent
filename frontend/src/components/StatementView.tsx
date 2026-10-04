@@ -149,7 +149,7 @@ export function StatementTable({ rows, notes }: { rows: StatementRow[]; notes: s
   return (
     <div className="stmt-wrap">
       <div className="table-scroll">
-        <table className="inputs-table stmt-table">
+        <table className="inputs-table stmt-table md-table">
           <thead><tr><th>비목</th><th>산출 기준(기준액 × 요율)</th><th>금액(원)</th><th>상태</th></tr></thead>
           <tbody>{body}</tbody>
         </table>

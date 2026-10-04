@@ -236,6 +236,7 @@ export type ChatStatus = 'ANSWERED' | 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSIN
 
 export interface ChatResponse {
   thread_id: string;
+  route?: 'estimate' | 'qa' | 'out_of_scope' | null;
   status: ChatStatus;
   message: string;
   work: WorkInfo | null;

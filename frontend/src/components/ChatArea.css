@@ -203,21 +203,24 @@
 /* ── 에이전트 응답 카드 ── */
 .assistant-card {
   width: min(100%, 760px);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background: var(--bg-primary);
-  padding: 14px 16px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .assistant-card-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   flex-wrap: wrap;
+  min-height: 18px;
 }
+
+.agent-badge { display: inline-flex; align-items: center; gap: 5px; margin: 0; font-size: 11px; font-weight: 600; color: var(--logo-color); }
+.agent-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.agent-badge.route-qa { color: #327b73; }
+.agent-badge.route-out_of_scope { color: var(--text-muted); }
 
 .status-badge {
   font-size: 11px;
@@ -950,3 +953,35 @@
 .qa-conclusion { display: block; font-size: 1.08rem; }
 .qa-explanation { white-space: pre-wrap; line-height: 1.65; }
 .qa-card li p { margin-top: 4px; }
+
+/* 글이 중심이 되도록 v1 답변 스타일을 복원 */
+.assistant-card { gap: 8px; }
+.assistant-card .work-badge { font-size: 11px; color: var(--text-muted); }
+.qa-card { padding: 0; border: 0; background: transparent; border-radius: 0; }
+.qa-card > ul { padding-left: 20px; margin: 8px 0; }
+.assistant-answer { gap: 6px; }
+.assistant-text { white-space: normal; }
+.md-h2 { font-size: 16px; font-weight: 650; color: var(--text-primary); margin: 14px 0 5px; }
+.md-h3 { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin: 10px 0 4px; }
+.md-p { margin: 3px 0; font-size: 14px; line-height: 1.72; }
+.md-li { margin: 3px 0 3px 16px; font-size: 14px; line-height: 1.7; list-style: disc; }
+.md-bq { border-left: 3px solid var(--border-color); padding: 6px 12px; margin: 6px 0; color: var(--text-secondary);
+  font-size: 13px; line-height: 1.6; background: var(--bg-secondary); border-radius: 0 4px 4px 0; }
+.md-table-wrap { overflow-x: auto; margin: 8px 0; }
+.md-table { border-collapse: collapse; font-size: 13px; width: 100%; }
+.md-table th { background: var(--bg-secondary); font-weight: 600; text-align: left; padding: 6px 10px;
+  border: 1px solid var(--border-color); color: var(--text-secondary); }
+.md-table td { padding: 5px 10px; border: 1px solid var(--border-color); color: var(--text-secondary); }
+.md-table tr:nth-child(even) td { background: var(--bg-secondary); }
+.md-code-inline { background: var(--bg-tertiary); border-radius: 4px; padding: 1px 5px;
+  font-family: Consolas, Monaco, monospace; font-size: 12px; }
+.md-pre { background: #1e1e1e; border-radius: 8px; padding: 14px 16px; margin: 8px 0; overflow-x: auto; }
+.stmt-table { min-width: 560px; }
+.stmt-table tr.final td { border-color: #e8d991; }
+@media (max-width: 520px) {
+  .messages { padding-top: 22px; }
+  .message { margin-bottom: 20px; }
+  .user-msg-wrap { max-width: 88%; }
+  .assistant-card { gap: 8px; }
+  .stmt-table { min-width: 520px; }
+}

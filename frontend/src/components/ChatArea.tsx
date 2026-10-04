@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
 import { EXAMPLE_QUESTIONS } from '../examples';
 import { BillTable, ConditionsBar, RateTable, StatementTable } from './StatementView';
@@ -167,6 +169,21 @@ function CitationList({ citations }: { citations: Citation[] }) {
       </div>}
     </div>
   );
+}
+
+function MarkdownAnswer({ children }: { children: string }) {
+  return <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+    h2: ({ children: content }) => <h2 className="md-h2">{content}</h2>,
+    h3: ({ children: content }) => <h3 className="md-h3">{content}</h3>,
+    p: ({ children: content }) => <p className="md-p">{content}</p>,
+    li: ({ children: content }) => <li className="md-li">{content}</li>,
+    blockquote: ({ children: content }) => <blockquote className="md-bq">{content}</blockquote>,
+    table: ({ children: content }) => <div className="md-table-wrap"><table className="md-table">{content}</table></div>,
+    code: ({ children: content, className }) => className
+      ? <code className={className}>{content}</code>
+      : <code className="md-code-inline">{content}</code>,
+    pre: ({ children: content }) => <pre className="md-pre">{content}</pre>,
+  }}>{children}</ReactMarkdown>;
 }
 
 function ComputedCard({ work, inputs, result, priced, tables }: {
@@ -355,31 +372,31 @@ function AssistantCard({
     <div className={`assistant-card status-${response.status.toLowerCase()}`}>
       <WarningBanner warnings={response.search.warnings} raw={response.search.raw_warnings} />
       <div className="assistant-card-header">
-        <span className="status-badge">{STATUS_LABEL[response.status]}</span>
+        <span className={`agent-badge route-${response.route ?? 'unknown'}`}><span className="agent-badge-dot" />
+          {response.route === 'estimate' ? '견적' : response.route === 'qa' ? '상담' : response.route === 'out_of_scope' ? '범위 밖' : STATUS_LABEL[response.status]}
+        </span>
         {response.work && <span className="work-badge">{response.work.title}</span>}
+        {response.status === 'ANSWERED' && response.answer_source === 'template' && <span className="review-badge">AI 초안 · 검토 전</span>}
       </div>
       {response.status === 'ANSWERED' && response.qa ? (
         <div className="qa-card">
-          <strong className="qa-conclusion">{response.qa.conclusion}</strong>
-          {response.qa.explanation && <p className="qa-explanation">{response.qa.explanation}</p>}
+          <MarkdownAnswer>{`**${response.qa.conclusion}**${response.qa.explanation ? `\n\n${response.qa.explanation}` : ''}`}</MarkdownAnswer>
           {response.qa.comparisons.length > 0 && <ul>{response.qa.comparisons.map((item, i) =>
             <li key={i}><strong>{item.section}</strong>
               {(response.answer_source === 'template' || response.qa!.not_found_kind === 'section_found_value_missing') && item.citation_ids ?
                 <CitationList citations={response.qa!.citations.filter(c => item.citation_ids!.includes(c.chunk_id))} /> :
-                <p>{item.summary}</p>}
+                <MarkdownAnswer>{item.summary}</MarkdownAnswer>}
             </li>)}</ul>}
           {response.answer_source !== 'template' && response.qa.not_found_kind !== 'section_found_value_missing' && response.qa.citations.length > 0 && <div><h4>📖 근거</h4>
             <CitationList citations={response.qa.citations} /></div>}
         </div>
       ) : response.answer ? (
         <div className="assistant-answer">
-          <span className={`answer-source-badge${response.answer_source === 'llm' ? ' llm' : ''}`}>
-            {response.answer_source === 'llm' ? 'AI 설명' : '기본 설명'}
-          </span>
-          <div className="assistant-text">{response.answer}</div>
+          {response.answer_source === 'template' && <span className="review-badge">기본 응답 · 검토 전</span>}
+          <div className="assistant-text"><MarkdownAnswer>{response.answer}</MarkdownAnswer></div>
         </div>
       ) : (
-        <div className="assistant-text">{response.message}</div>
+        <div className="assistant-text"><MarkdownAnswer>{response.message}</MarkdownAnswer></div>
       )}
 
       {response.status === 'EVIDENCE_ONLY' && <EvidenceList items={response.evidence} />}
