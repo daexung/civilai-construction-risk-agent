@@ -20,7 +20,7 @@ SCHEMA = {"type": "object", "properties": {
     "required": ["not_found", "conclusion", "explanation", "comparisons", "citations"]}
 MONEY = re.compile(r"\d[\d,]*(?:\.\d+)?\s*원|[₩￦]|[천만억조]\s*원|KRW|원\s*[/／]", re.I)
 TIMEOUT_MS = 12_000
-INSTRUCTION_LEAK = re.compile(r"금지되어|지시|규칙상|제공된\s*문맥|원문에\s*직접\s*곱셈")
+INSTRUCTION_LEAK = re.compile(r"금지되어|지시|규칙상|제공된\s*문맥|원문에\s*직접\s*곱셈|곱하거나|환산하지|주의하여|안내합니다|제시된\s*자료|주어진\s*원문")
 
 def qa_model():
     return json.loads(client.CONFIG_PATH.read_text(encoding="utf-8")).get("qa_model", "gemini-3.5-flash-lite")
