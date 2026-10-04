@@ -70,6 +70,13 @@ def main() -> int:
 
     evidence = CLIENT.post("/api/chat", json={"message": "합판거푸집 설치 인건비"}).json()
     checks.append(("A2", evidence["status"] == "MISSING_INFO" and bool(evidence["questions"])))
+    queries = evidence.get("search", {}).get("queries", [])
+    checks.append(("A2 검색에 사용한 원문 질의를 API로 공개", len(queries) == 1 and isinstance(queries[0], str)))
+    examples_source = (ROOT / "frontend" / "src" / "examples.ts").read_text(encoding="utf-8")
+    example_rows = [line for line in examples_source.splitlines() if "{ kind:" in line and "text:" in line]
+    checks.append(("예시 목록은 견적·상담 배지가 있는 네 질문", len(example_rows) == 4
+                   and sum("kind: '견적'" in line for line in example_rows) == 2
+                   and sum("kind: '상담'" in line for line in example_rows) == 2))
     missing = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
                                               "basis_date": "2026-10-01"}).json()
     thread_id = missing["thread_id"]

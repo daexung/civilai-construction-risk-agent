@@ -608,13 +608,14 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
             <div className="example-menu">
               {EXAMPLE_QUESTIONS.map((ex) => (
                 <button
-                  key={ex.label}
+                  key={ex.text}
                   type="button"
                   className="example-menu-item"
                   onClick={() => handleExampleClick(ex.text)}
                   title={ex.text}
                 >
-                  {ex.label}
+                  <span className={`example-kind ${ex.kind === '견적' ? 'estimate' : 'qa'}`}>{ex.kind}</span>
+                  <span>{ex.text}</span>
                 </button>
               ))}
             </div>
@@ -644,18 +645,20 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
       <main className="chat-area">
         <div className="centered-welcome">
           <div className="welcome-header">
-            <div className="welcome-logo">Civil<span>.AI</span></div>
+            <div className="welcome-logo">품셈AI</div>
             <h2>어떤 공사비를 계산할까요?</h2>
-            <p className="welcome-subtitle">2026 건설공사 표준품셈을 기준으로 계산에 필요한 조건을 확인해드립니다</p>
+            <p className="welcome-subtitle">표준품셈 근거로 계산하는 공사비 AI</p>
           </div>
           <div className="example-prompts">
             {EXAMPLE_QUESTIONS.map((ex) => (
-              <button key={ex.label} className="example-btn" onClick={() => onSendMessage(ex.text)} title={ex.text}>
-                {ex.label}
+              <button key={ex.text} className="example-btn" onClick={() => onSendMessage(ex.text)} title={ex.text}>
+                <span className={`example-kind ${ex.kind === '견적' ? 'estimate' : 'qa'}`}>{ex.kind}</span>
+                <span>{ex.text}</span>
               </button>
             ))}
           </div>
           <div className="centered-input-area">{renderInputBox(false)}</div>
+          <p className="disclaimer-notice">표준품셈 기준 참고 금액 · 검토 전 · 국토교통부와 무관</p>
         </div>
       </main>
     );
