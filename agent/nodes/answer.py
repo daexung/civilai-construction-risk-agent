@@ -140,7 +140,7 @@ def template(contexts, hits, query=""):
     return qa
 
 def answer(state, *, generate_fn=None, model=None, contexts=None):
-    contexts = build_context(state.get("hits", [])) if contexts is None else contexts
+    contexts = build_context(state.get("hits", []), query=state["query"]) if contexts is None else contexts
     info = {"model": model or qa_model(), "elapsed_ms": 0, "attempts": 0, "error": None}
     qa, source = not_found(contexts), "template"
     started = time.monotonic()

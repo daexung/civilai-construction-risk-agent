@@ -3,11 +3,14 @@ from functools import cache
 import json
 import re
 from pathlib import Path
-from agent.nodes.select import decide
+from agent.nodes.select import decide, MARGIN
 from agent.rules.specs import specs_by_section
+from agent.tools.search.bm25 import tokens
 
 CHUNKS = Path(__file__).resolve().parents[2] / "data/processed/chunks.all.jsonl"
 LIMIT = 4000
+TOTAL_LIMIT = 12000
+FIRST_LIMIT = 8000
 ROOT = CHUNKS.parents[2]
 
 def _position_lines(words):
@@ -61,19 +64,35 @@ def load_sections():
             sections.setdefault((chunk.get("division", "공통"), chunk.get("section_no")), []).append(chunk)
     return sections
 
-def build_context(hits, *, sections=None, specs=None, limit=LIMIT):
+def build_context(hits, *, query="", sections=None, specs=None, limit=None):
     decision = decide(hits, specs_by_section() if specs is None else specs)
     candidates = decision["candidates"][:1 if decision["decision"] == "chosen" else 3]
     sections = load_sections() if sections is None else sections
     contexts = []
-    for candidate in candidates:
+    remaining_total = TOTAL_LIMIT
+    words = set(tokens(query))
+    conditions = re.findall(r"\d+(?:\.\d+)?\s*[가-힣㎡㎥%]+", query)
+    second = decision["candidates"][1] if len(decision["candidates"]) > 1 else None
+    confident = bool(candidates) and (decision["decision"] == "chosen" or second is None or
+                                     candidates[0]["score"] >= MARGIN * second["score"])
+    for candidate_index, candidate in enumerate(candidates):
+        budget = min(FIRST_LIMIT if candidate_index == 0 else remaining_total // (len(candidates) - candidate_index), remaining_total)
+        if limit is not None:  # Explicit budgets retain the earlier bounded-context contract.
+            budget = min(budget, limit)
         key = (candidate["division"], candidate["section_no"])
         ordered = sorted([supplement_table(c) for c in sections.get(key, [])], key=lambda c: (c["source"]["page"], min(c["record_ids"]) if c.get("record_ids") else int(re.search(r"(\d+)$", c["chunk_id"]).group(1))))
         ids = [h["chunk_id"] for h in hits if (h.get("division", "공통"), h.get("section_no")) == key]
         total = sum(len(c["text"]) + len(c["chunk_id"]) + 4 for c in ordered)
-        truncated = total > limit
-        priority = sorted(ordered, key=lambda c: (0 if c["chunk_id"] in ids else 1 if any(t in c["text"] for t in ("[주]", "비고", "①", "※")) else 2, ordered.index(c))) if truncated else ordered
-        selected, remaining = {}, limit
+        truncated = total > budget
+        def relevance(c):
+            subtitle = (c.get("subsection") or {}).get("title", "")
+            compact = re.sub(r"\s+", "", subtitle + "\n" + "\n".join(c["text"].splitlines()[:3]))
+            condition_matches = sum(re.sub(r"\s+", "", term) in compact for term in conditions)
+            overlap = sum(len(word) for word in words & set(tokens(subtitle + "\n" + c["text"])))
+            note = any(t in c["text"] for t in ("[주]", "비고", "①", "※"))
+            return (-condition_matches, -overlap, -int(note), -int(c["chunk_id"] in ids), ordered.index(c))
+        priority = sorted(ordered, key=relevance) if truncated else ordered
+        selected, remaining = {}, budget
         for index, c in enumerate(priority):
             # Reserve room for retrieved chunks and notes following a long table.
             important = [n for n in priority[index + 1:] if n["chunk_id"] in ids or any(t in n["text"] for t in ("[주]", "비고", "①", "※"))]
@@ -85,6 +104,9 @@ def build_context(hits, *, sections=None, specs=None, limit=LIMIT):
             selected[c["chunk_id"]] = {**c, "text": text}
             remaining -= len(text) + len(c["chunk_id"]) + 4
         chunks = [selected[c["chunk_id"]] for c in ordered if c["chunk_id"] in selected]
+        text = "\n".join(f"[{c['chunk_id']}]\n{c['text']}" for c in chunks)
+        remaining_total -= len(text)
         contexts.append({**candidate, "chunks": chunks, "truncated": truncated,
-                         "text": "\n".join(f"[{c['chunk_id']}]\n{c['text']}" for c in chunks)})
+                         "selection_decision": decision["decision"], "section_confident": confident if candidate_index == 0 else False,
+                         "text": text})
     return contexts

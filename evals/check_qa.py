@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT))
 os.environ["AGENT_LLM"] = "off"
 os.environ["AGENT_OFFLINE"] = "1"
 from agent.nodes.answer import answer, validate, match_quote, TIMEOUT_MS
-from agent.nodes.qa_context import build_context, LIMIT, load_sections, supplement_table
+from agent.nodes.qa_context import build_context, LIMIT, TOTAL_LIMIT, FIRST_LIMIT, load_sections, supplement_table
 from agent.graph import build_graph
 from agent.state import new_state
 from evals.eval_qa import correct_section_cited
@@ -77,8 +77,19 @@ def main():
     check("three full contexts sent to model", len(requests[0][0]["sections"]) == 3 and "[주]" in requests[0][0]["sections"][0]["text"])
     check("model override and total budget", requests[0][2]["model"] == "review-model" and requests[0][2]["timeout_ms"] == TIMEOUT_MS)
     check("new context and timeout limits", LIMIT == 4000 and TIMEOUT_MS == 12000)
-    limited = build_context(hits[:1], sections=long_sections, specs=specs)
+    limited = build_context(hits[:1], sections=long_sections, specs=specs, limit=LIMIT)
     check("default context bounded and notes retained", limited[0]["truncated"] and len(limited[0]["text"]) <= 4000 and "[주]" in limited[0]["text"] and "비고" in limited[0]["text"])
+    tower = build_context([{"rank": 1, "division": "기계설비", "section_no": "8-1-3",
+        "section": "8-1-3 냉각탑 설치", "chunk_id": "p746-t0"}], specs={},
+        query="냉각탑 용량이 100이고 5층 건물 옥상에 1회 설치할 때 품은?")
+    fifth = next(c for c in tower[0]["chunks"] if c["chunk_id"] == "p747-t0")
+    check("5 floor cooling tower table retained completely", fifth["text"] == next(c["text"] for c in load_sections()[("기계설비", "8-1-3")] if c["chunk_id"] == "p747-t0") and "구분 100" in fifth["text"])
+    check("first section within 8000 characters", len(tower[0]["text"]) <= FIRST_LIMIT and FIRST_LIMIT == 8000 and tower[0]["truncated"])
+    large_sections = copy.deepcopy(sections)
+    for group in large_sections.values():
+        group[0]["text"] = "내용 2인 " * 2000
+    distributed = build_context(hits, sections=large_sections, specs=specs, query="내용 품")
+    check("three section total within 12000", len(distributed) == 3 and sum(len(c["text"]) for c in distributed) <= TOTAL_LIMIT and TOTAL_LIMIT == 12000)
     with patch("agent.nodes.answer.time.monotonic", side_effect=[0, 0, 12.001, 12.001]):
         timed = run(qa)
     check("late LLM response replaced by template", timed["answer_source"] == "template" and timed["llm_info"]["error"] == "timeout")
