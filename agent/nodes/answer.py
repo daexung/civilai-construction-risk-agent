@@ -67,8 +67,9 @@ def validate(qa, contexts, query=""):
         return "money"
     if qa["not_found"]:
         return None
-    chunks = {c["chunk_id"]: "\n".join(line for line in c["text"].splitlines()
-              if "원문텍스트 · 표 구조 불확실]" not in line) for ctx in contexts for c in ctx["chunks"]}
+    chunks = {c["chunk_id"]: (c.get("pdf_text", "") if any(str(issue).startswith("label_shift") for issue in c.get("issues", [])) else
+              "\n".join(line for line in c["text"].splitlines()
+              if "원문텍스트 · 표 구조 불확실]" not in line)) for ctx in contexts for c in ctx["chunks"]}
     sections = {ctx["section_no"] for ctx in contexts}
     if set(re.findall(r"\d+-\d+-\d+", text)) - sections:
         return "section"

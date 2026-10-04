@@ -42,9 +42,10 @@ def pdf_table_text(pdf, page, bbox, section_no):
 def supplement_table(chunk):
     if chunk.get("kind") != "table":
         return chunk
+    label_shift = any(str(issue).startswith("label_shift") for issue in chunk.get("issues", []))
     content = "\n".join(line for line in chunk["text"].splitlines()
                         if not line.startswith((chunk.get("section_no") or "\0", "기준 ")))
-    if chunk.get("structure") != "uncertain" and re.search(r"\d", content):
+    if not label_shift and chunk.get("structure") != "uncertain" and re.search(r"\d", content):
         return chunk
     source = chunk.get("source", {})
     pdf = ROOT / source.get("pdf", "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf")
@@ -52,8 +53,12 @@ def supplement_table(chunk):
         raw = pdf_table_text(str(pdf), source["page"], tuple(source["bbox"]) if source.get("bbox") else None, chunk["section_no"])
     except (OSError, KeyError, ValueError) as exc:
         return {**chunk, "supplement_error": type(exc).__name__}
-    return {**chunk, "pdf_text": raw, "text": chunk["text"] +
-            (f"\n[{chunk['chunk_id']} 원문텍스트 · 표 구조 불확실]\n{raw}" if raw else "")}
+    if label_shift:
+        # The parsed cells contain a confidently wrong label/value pairing; expose only PDF text.
+        text = f"{chunk['section']}\n[{chunk['chunk_id']} 원문텍스트 · 이름 줄 밀림]\n{raw}"
+    else:
+        text = chunk["text"] + (f"\n[{chunk['chunk_id']} 원문텍스트 · 표 구조 불확실]\n{raw}" if raw else "")
+    return {**chunk, "pdf_text": raw, "text": text}
 
 @cache
 def load_sections():
