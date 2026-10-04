@@ -247,7 +247,7 @@ export interface ChatResponse {
   statement: StatementResult | null;
   conditions: ConditionField[];
   tables: ResultTables;
-  qa?: { not_found: boolean; conclusion: string; explanation: string;
+  qa?: { not_found: boolean; not_found_kind?: 'section_not_found' | 'section_found_value_missing'; conclusion: string; explanation: string;
     comparisons: { section: string; summary: string; citation_ids?: string[] }[];
     citations: (Citation & { chunk_id: string; quote_match?: 'normalized' | 'fuzzy' })[] } | null;
   llm_info?: { model: string; elapsed_ms: number; error: string | null } | null;

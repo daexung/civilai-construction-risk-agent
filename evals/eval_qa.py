@@ -50,6 +50,10 @@ def evaluate(cases, model):
                      "comparison_filled": bool(result["qa"]["comparisons"]), **result})
     return rows
 
+def not_found_counts(rows):
+    return {kind: sum(r["qa"].get("not_found", False) and
+                     r["qa"].get("not_found_kind", "section_not_found") == kind for r in rows)
+            for kind in ("section_not_found", "section_found_value_missing")}
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default=qa_model())
@@ -68,6 +72,7 @@ def main():
                "mean_latency_ms": sum(r["latency_ms"] for r in rows)/len(rows),
                "max_latency_ms": max(r["latency_ms"] for r in rows),
                "ambiguous_comparison_pass": sum(r["candidate_count"] >= 2 and r["comparison_filled"] and r["answer_source"] == "llm" for r in ambiguous)}
+    summary["not_found_kind_counts"] = not_found_counts(rows)
     stamp = datetime.now(ZoneInfo("Asia/Seoul")).date().isoformat()
     results = ROOT / "evals/results"; results.mkdir(exist_ok=True)
     model_slug = re.sub(r"[^a-zA-Z0-9_.-]", "_", args.model)
@@ -85,7 +90,11 @@ def main():
             text += f"\n- [{c['chunk_id']}] {c['quote']}\n"
     review.write_text(old.rstrip()+"\n\n"+text, encoding="utf-8")
     print("| 지표 | 결과 |\n|---|---|")
-    for key, value in summary.items(): print(f"| {key} | {value} |")
+    for key, value in summary.items():
+        if isinstance(value, dict):
+            for kind, count in value.items(): print(f"| {key}.{kind} | {count} |")
+        else:
+            print(f"| {key} | {value} |")
     print(path); print(review)
     print("\n| 비교 질문 | 후보 | LLM 비교 |\n|---|---:|---|")
     for r in ambiguous: print(f"| {r['question']} | {r['candidate_count']} | {r['comparison_filled'] and r['answer_source'] == 'llm'} |")

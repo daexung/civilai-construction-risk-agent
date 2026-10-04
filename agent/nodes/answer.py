@@ -20,6 +20,7 @@ SCHEMA = {"type": "object", "properties": {
     "required": ["not_found", "conclusion", "explanation", "comparisons", "citations"]}
 MONEY = re.compile(r"\d[\d,]*(?:\.\d+)?\s*원|[₩￦]|[천만억조]\s*원|KRW|원\s*[/／]", re.I)
 TIMEOUT_MS = 12_000
+INSTRUCTION_LEAK = re.compile(r"금지되어|지시|규칙상|제공된\s*문맥|원문에\s*직접\s*곱셈")
 
 def qa_model():
     return json.loads(client.CONFIG_PATH.read_text(encoding="utf-8")).get("qa_model", "gemini-3.5-flash-lite")
@@ -60,15 +61,18 @@ def validate(qa, contexts, query=""):
     if any(not isinstance(c, dict) or not all(isinstance(c.get(k), str) for k in ("chunk_id", "quote")) for c in qa["citations"]):
         return "schema"
     text = "\n".join([qa["conclusion"], qa["explanation"]] + [c["section"] + " " + c["summary"] for c in qa["comparisons"]])
+    if INSTRUCTION_LEAK.search(text):
+        return "instruction_leak"
     if MONEY.search(text + "\n" + "\n".join(c["quote"] for c in qa["citations"])):
         return "money"
     if qa["not_found"]:
         return None
-    chunks = {c["chunk_id"]: c["text"] for ctx in contexts for c in ctx["chunks"]}
+    chunks = {c["chunk_id"]: "\n".join(line for line in c["text"].splitlines()
+              if "원문텍스트 · 표 구조 불확실]" not in line) for ctx in contexts for c in ctx["chunks"]}
     sections = {ctx["section_no"] for ctx in contexts}
     if set(re.findall(r"\d+-\d+-\d+", text)) - sections:
         return "section"
-    source = "\n".join(ctx["section"] + "\n" + "\n".join(c["text"] for c in ctx["chunks"]) for ctx in contexts)
+    source = "\n".join(ctx["section"] for ctx in contexts) + "\n" + "\n".join(chunks.values())
     source += "\n" + query
     # Remove whitespace only within a numeric token (e.g. spaced thousands).
     source = re.sub(r"(?<=\d)[ \t]+(?=\d)", "", source)
@@ -89,8 +93,14 @@ def validate(qa, contexts, query=""):
         cite.update(quote=original, quote_match=kind)
     return None
 
-def not_found(contexts):
-    return {"not_found": True, "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
+def not_found(contexts, *, value_missing=False, hits=None, query=""):
+    if value_missing and contexts:
+        qa = template(contexts[:1], hits or [], query)
+        qa.update(not_found=True, not_found_kind="section_found_value_missing",
+                  conclusion=f"관련 기준은 {contexts[0]['section']}입니다. 질문하신 조건의 값은 원문에서 확인하지 못했습니다.")
+        return qa
+    return {"not_found": True, "not_found_kind": "section_not_found",
+            "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
             "explanation": "가장 가까운 절: " + contexts[0]["section"] if contexts else "",
             "comparisons": [], "citations": []}
 
@@ -105,7 +115,9 @@ def content_lines(chunk):
             continue
         if re.fullmatch(r"(?:기준\s*)?\([^)]*\)", line):
             continue
-        if not re.sub(r"설명|단위|수량|규격|구분|품명|공종|기준|[\s|]", "", line):
+        compact = re.sub(r"[\s|]", "", line)
+        content = re.sub(r"설명|단위|수량|규격|구분|품명|공종|기준", "", compact)
+        if content in ("", "인", "대", "㎡", "㎥"):
             continue
         yield line
 
@@ -118,11 +130,13 @@ def template(contexts, hits, query=""):
     for ctx in contexts:
         retrieved = [c for c in ctx["chunks"] if c["chunk_id"] in ranks]
         rows = []
-        for c in retrieved or ctx["chunks"]:
+        retrieved_ids = {c["chunk_id"] for c in retrieved}
+        for c in ctx["chunks"]:
             for order, line in enumerate(content_lines(c)):
                 overlap = sum(len(word) for word in words & set(tokens(line)))
                 table = c.get("kind") == "table" or "|" in line
-                rows.append((-overlap, -int(table), ranks.get(c["chunk_id"], 999), order, c["chunk_id"], line))
+                rows.append((int(bool(retrieved_ids) and c["chunk_id"] not in retrieved_ids),
+                             -overlap, -int(table), ranks.get(c["chunk_id"], 999), order, c["chunk_id"], line))
         selected = []
         for *_, chunk_id, line in sorted(rows):
             if normalize(line) in seen:
@@ -161,13 +175,15 @@ def answer(state, *, generate_fn=None, model=None, contexts=None):
             if error:
                 info["error"] = error
             else:
-                qa = not_found(contexts) if generated["not_found"] else generated
+                qa = not_found(contexts, value_missing=contexts[0].get("section_confident", False) or
+                               contexts[0].get("selection_decision") == "chosen",
+                               hits=state.get("hits", []), query=state["query"]) if generated["not_found"] else generated
                 source = "llm"
         except Exception as exc:
             info.update(error=str(exc) if isinstance(exc, client.LLMUnavailable) else type(exc).__name__, attempts=getattr(exc, "attempts", info["attempts"]))
     info["elapsed_ms"] = round((time.monotonic() - started) * 1000)
     parts = [qa["conclusion"], qa["explanation"]]
-    if source == "template":
+    if source == "template" or qa.get("not_found_kind") == "section_found_value_missing":
         for comparison in qa["comparisons"]:
             parts.append(comparison["section"])
             parts.extend(f"[{c['chunk_id']}] {c['quote']}" for c in qa["citations"]

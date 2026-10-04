@@ -364,11 +364,11 @@ function AssistantCard({
           {response.qa.explanation && <p className="qa-explanation">{response.qa.explanation}</p>}
           {response.qa.comparisons.length > 0 && <ul>{response.qa.comparisons.map((item, i) =>
             <li key={i}><strong>{item.section}</strong>
-              {response.answer_source === 'template' && item.citation_ids ?
+              {(response.answer_source === 'template' || response.qa!.not_found_kind === 'section_found_value_missing') && item.citation_ids ?
                 <CitationList citations={response.qa!.citations.filter(c => item.citation_ids!.includes(c.chunk_id))} /> :
                 <p>{item.summary}</p>}
             </li>)}</ul>}
-          {response.answer_source !== 'template' && response.qa.citations.length > 0 && <div><h4>📖 근거</h4>
+          {response.answer_source !== 'template' && response.qa.not_found_kind !== 'section_found_value_missing' && response.qa.citations.length > 0 && <div><h4>📖 근거</h4>
             <CitationList citations={response.qa.citations} /></div>}
         </div>
       ) : response.answer ? (

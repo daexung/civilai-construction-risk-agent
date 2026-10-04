@@ -13,7 +13,7 @@ from agent.nodes.answer import answer, validate, match_quote, TIMEOUT_MS
 from agent.nodes.qa_context import build_context, LIMIT, TOTAL_LIMIT, FIRST_LIMIT, load_sections, supplement_table
 from agent.graph import build_graph
 from agent.state import new_state
-from evals.eval_qa import correct_section_cited
+from evals.eval_qa import correct_section_cited, not_found_counts
 
 
 def main():
@@ -34,6 +34,9 @@ def main():
               "comparisons": [], "citations": [{"chunk_id": "p681-t0", "quote": "미장공 인 0.14"}]}
     check("PDF supplement accepted as same chunk citation", validate(las_qa, [{
         "section": "건축 9-1-5 라스 붙임", "section_no": "9-1-5", "chunks": [supplemented]}]) is None)
+    synthetic = copy.deepcopy(las_qa); synthetic["conclusion"] = "681인입니다."
+    check("supplement marker ID is not numerical evidence", validate(synthetic, [{
+        "section": "건축 9-1-5 라스 붙임", "section_no": "9-1-5", "chunks": [supplemented]}]) == "numbers")
     check("grade explicit comparison or conclusion", all(correct_section_cited(value, ("토목", "1-5-4"), chunks={}) for value in (
         {"comparisons": [{"section": "토목 1-5-4 아스팔트 기층", "summary": "기준 적용"}]},
         {"conclusion": "토목 1-5-4 기준을 적용합니다."})))
@@ -145,8 +148,21 @@ def main():
         check(error + " citation fallback", out["answer_source"] == "template" and out["llm_info"]["error"] == error)
     bad = copy.deepcopy(qa); bad["citations"] = []
     check("requires citation", run(bad)["llm_info"]["error"] == "citations_missing")
-    bad = copy.deepcopy(qa); bad["not_found"] = True; bad["conclusion"] = "999 기준 없음"; out = run(bad)
+    bad = copy.deepcopy(qa); bad["not_found"] = True; bad["conclusion"] = "999 기준 없음"; out = run(bad, many)
     check("not found normalized without citations", out["qa"]["not_found"] and not out["qa"]["citations"] and "999" not in out["answer"])
+    check("weak candidates mean section not found", out["qa"]["not_found_kind"] == "section_not_found")
+    missing = run(bad)
+    check("chosen section value missing keeps two source lines", missing["qa"]["not_found_kind"] == "section_found_value_missing" and
+          "질문하신 조건의 값" in missing["answer"] and len(missing["qa"]["citations"]) == 2)
+    no_spec = build_context(hits[:1], sections=sections, specs={})
+    missing_no_spec = run(bad, no_spec)
+    check("dominant section without spec means value missing", missing_no_spec["qa"]["not_found_kind"] == "section_found_value_missing")
+    check("evaluation counts not found kinds", not_found_counts([out, missing, missing_no_spec]) == {
+        "section_not_found": 1, "section_found_value_missing": 2})
+    for phrase in ("금지되어", "지시", "규칙상", "제공된 문맥", "원문에 직접 곱셈"):
+        leaked = copy.deepcopy(qa); leaked["explanation"] = phrase + " 답변합니다."
+        leak_out = run(leaked)
+        check("instruction leakage rejected: " + phrase, leak_out["answer_source"] == "template" and leak_out["llm_info"]["error"] == "instruction_leak")
     check("empty candidates skip llm", answer(state, contexts=[], generate_fn=lambda *a, **k: (_ for _ in ()).throw(AssertionError()))["qa"]["not_found"])
     check("bad JSON fallback", answer(state, contexts=one, generate_fn=lambda *a, **k: "bad")["llm_info"]["error"] == "JSONDecodeError")
     check("bad schema fallback", run({})["llm_info"]["error"] == "schema")
