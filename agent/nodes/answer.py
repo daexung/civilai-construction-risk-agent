@@ -99,7 +99,7 @@ def content_lines(chunk):
     title = normalize(chunk.get("section", ""))
     for raw in chunk["text"].splitlines():
         line = raw.strip()
-        if not line or MONEY.search(line):
+        if not line or MONEY.search(line) or "원문텍스트 · 표 구조 불확실]" in line:
             continue
         if normalize(line) == title or re.match(r"^\d+-\d+-\d+(?:\s|$)", line):
             continue

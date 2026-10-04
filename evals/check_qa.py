@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT))
 os.environ["AGENT_LLM"] = "off"
 os.environ["AGENT_OFFLINE"] = "1"
 from agent.nodes.answer import answer, validate, match_quote, TIMEOUT_MS
-from agent.nodes.qa_context import build_context, LIMIT
+from agent.nodes.qa_context import build_context, LIMIT, load_sections, supplement_table
 from agent.graph import build_graph
 from agent.state import new_state
 from evals.eval_qa import correct_section_cited
@@ -23,6 +23,17 @@ def main():
         print(("PASS " if ok else "FAIL ") + name)
     check("grade source chunk division instead of display label", correct_section_cited(
         {"citations": [{"chunk_id": "p368-t0"}]}, ("토목", "1-5-4")))
+    las = next(c for c in load_sections()[("건축", "9-1-5")] if c["chunk_id"] == "p681-t0")
+    supplemented = supplement_table(las)
+    check("broken p681 table supplemented from PDF", "0.14" in supplemented["pdf_text"] and
+          "[p681-t0 원문텍스트 · 표 구조 불확실]" in supplemented["text"] and "pdf_text" not in las)
+    without_bbox = copy.deepcopy(las); without_bbox["source"]["bbox"] = None
+    section_text = supplement_table(without_bbox)["pdf_text"]
+    check("PDF without bbox scoped to section", "0.14" in section_text and "9-2-1" not in section_text)
+    las_qa = {"not_found": False, "conclusion": "미장공 0.14인입니다.", "explanation": "",
+              "comparisons": [], "citations": [{"chunk_id": "p681-t0", "quote": "미장공 인 0.14"}]}
+    check("PDF supplement accepted as same chunk citation", validate(las_qa, [{
+        "section": "건축 9-1-5 라스 붙임", "section_no": "9-1-5", "chunks": [supplemented]}]) is None)
     check("grade explicit comparison or conclusion", all(correct_section_cited(value, ("토목", "1-5-4"), chunks={}) for value in (
         {"comparisons": [{"section": "토목 1-5-4 아스팔트 기층", "summary": "기준 적용"}]},
         {"conclusion": "토목 1-5-4 기준을 적용합니다."})))

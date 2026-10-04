@@ -8,6 +8,49 @@ from agent.rules.specs import specs_by_section
 
 CHUNKS = Path(__file__).resolve().parents[2] / "data/processed/chunks.all.jsonl"
 LIMIT = 4000
+ROOT = CHUNKS.parents[2]
+
+def _position_lines(words):
+    """PDF 단어를 위에서 아래, 같은 줄에서는 왼쪽에서 오른쪽으로 모은다."""
+    rows = []
+    for word in sorted(words, key=lambda w: ((w[1] + w[3]) / 2, w[0])):
+        center = (word[1] + word[3]) / 2
+        if not rows or abs(center - rows[-1][0]) > 3:
+            rows.append((center, []))
+        rows[-1][1].append(word)
+    return "\n".join(" ".join(w[4] for w in sorted(row, key=lambda w: w[0])) for _, row in rows)
+
+@cache
+def pdf_table_text(pdf, page, bbox, section_no):
+    import pymupdf
+
+    with pymupdf.open(pdf) as document:
+        source_page = document[page - 1]
+        if bbox:
+            return _position_lines(source_page.get_text("words", clip=pymupdf.Rect(bbox)))
+        lines = _position_lines(source_page.get_text("words")).splitlines()
+        start = next((i for i, line in enumerate(lines) if re.match(rf"^{re.escape(section_no)}\s", line)), None)
+        if start is None:
+            return ""
+        end = next((i for i in range(start + 1, len(lines))
+                    if re.match(r"^\d+-\d+(?:-\d+)?\s+[^\d]", lines[i])), len(lines))
+        return "\n".join(lines[start:end])
+
+def supplement_table(chunk):
+    if chunk.get("kind") != "table":
+        return chunk
+    content = "\n".join(line for line in chunk["text"].splitlines()
+                        if not line.startswith((chunk.get("section_no") or "\0", "기준 ")))
+    if chunk.get("structure") != "uncertain" and re.search(r"\d", content):
+        return chunk
+    source = chunk.get("source", {})
+    pdf = ROOT / source.get("pdf", "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf")
+    try:
+        raw = pdf_table_text(str(pdf), source["page"], tuple(source["bbox"]) if source.get("bbox") else None, chunk["section_no"])
+    except (OSError, KeyError, ValueError) as exc:
+        return {**chunk, "supplement_error": type(exc).__name__}
+    return {**chunk, "pdf_text": raw, "text": chunk["text"] +
+            (f"\n[{chunk['chunk_id']} 원문텍스트 · 표 구조 불확실]\n{raw}" if raw else "")}
 
 @cache
 def load_sections():
@@ -25,7 +68,7 @@ def build_context(hits, *, sections=None, specs=None, limit=LIMIT):
     contexts = []
     for candidate in candidates:
         key = (candidate["division"], candidate["section_no"])
-        ordered = sorted(sections.get(key, []), key=lambda c: (c["source"]["page"], min(c["record_ids"]) if c.get("record_ids") else int(re.search(r"(\d+)$", c["chunk_id"]).group(1))))
+        ordered = sorted([supplement_table(c) for c in sections.get(key, [])], key=lambda c: (c["source"]["page"], min(c["record_ids"]) if c.get("record_ids") else int(re.search(r"(\d+)$", c["chunk_id"]).group(1))))
         ids = [h["chunk_id"] for h in hits if (h.get("division", "공통"), h.get("section_no")) == key]
         total = sum(len(c["text"]) + len(c["chunk_id"]) + 4 for c in ordered)
         truncated = total > limit
