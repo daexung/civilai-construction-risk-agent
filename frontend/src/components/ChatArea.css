@@ -978,6 +978,19 @@
 .md-pre { background: #1e1e1e; border-radius: 8px; padding: 14px 16px; margin: 8px 0; overflow-x: auto; }
 .stmt-table { min-width: 560px; }
 .stmt-table tr.final td { border-color: #e8d991; }
+.evidence-disclosure > summary, .citation-disclosure > summary, .fold > summary {
+  cursor: pointer; color: var(--text-secondary); font-size: 13px; font-weight: 600;
+  list-style: disclosure-closed; padding: 3px 0;
+}
+.evidence-disclosure[open] > summary, .citation-disclosure[open] > summary { margin-bottom: 8px; }
+.evidence-disclosure, .citation-disclosure { min-width: 0; }
+.evidence-list, .citation-list { display: flex; flex-direction: column; gap: 8px; }
+.evidence-row, .citation-item { padding: 8px 0; border: 0; border-bottom: 1px solid var(--border-light);
+  border-radius: 0; background: transparent; }
+.citation-item blockquote { border-left: 3px solid var(--border-color); padding: 5px 10px; background: var(--bg-secondary);
+  border-radius: 0 4px 4px 0; }
+.citation-internal { margin-top: 4px; }
+.citation-internal summary { cursor: pointer; color: var(--text-muted); }
 @media (max-width: 520px) {
   .messages { padding-top: 22px; }
   .message { margin-bottom: 20px; }

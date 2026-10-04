@@ -126,38 +126,44 @@ function QuestionCard({
 function EvidenceList({ items }: { items: ChatResponse['evidence'] }) {
   if (items.length === 0) return null;
   return (
-    <div className="evidence-list">
-      {items.map((item, i) => (
-        <div className="evidence-row" key={i}>
-          <div className="evidence-head">
-            <strong>{item.section}</strong>
-            <span>PDF {item.page}쪽{item.table_id ? ` · ${item.table_id}` : ''}</span>
+    <details className="evidence-disclosure">
+      <summary>📖 근거 {items.length}개</summary>
+      <div className="evidence-list">
+        {items.map((item, i) => (
+          <div className="evidence-row" key={i}>
+            <div className="evidence-head">
+              <strong>{item.section}</strong>
+              <span>PDF {item.page}쪽{item.table_id ? ` · ${item.table_id}` : ''}</span>
+            </div>
+            <p>{item.snippet}</p>
           </div>
-          <p>{item.snippet}</p>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </details>
   );
 }
 
 function CitationList({ citations }: { citations: Citation[] }) {
   const [openImage, setOpenImage] = useState<Citation | null>(null);
   return (
-    <div className="citation-list">
-      {citations.map((citation, index) => (
-        <div className="citation-item" key={`${citation.internal_id}-${index}`}>
-          <div className="citation-label">
-            {citation.quote ? citation.label.split('\n').slice(0, 2).join('\n') : citation.label}
+    <details className="citation-disclosure">
+      <summary>📖 근거 {citations.length}개</summary>
+      <div className="citation-list">
+        {citations.map((citation, index) => (
+          <div className="citation-item" key={`${citation.internal_id}-${index}`}>
+            <div className="citation-label">
+              {citation.quote ? citation.label.split('\n').slice(0, 2).join('\n') : citation.label}
+            </div>
+            {citation.quote && <blockquote className="md-bq"><strong>{citation.item}</strong> “{citation.quote}”</blockquote>}
+            {citation.reason && <div>{citation.reason}</div>}
+            {citation.image_url && <button type="button" className="source-image-button"
+              onClick={() => setOpenImage(citation)}>원문 보기</button>}
+            <details className="citation-internal"><summary>자세히</summary>
+              <small>내부 ID: {citation.internal_id} · PDF {citation.pdf_page}쪽</small>
+            </details>
           </div>
-          {citation.quote && <blockquote><strong>{citation.item}</strong> “{citation.quote}”</blockquote>}
-          {citation.reason && <div>{citation.reason}</div>}
-          {citation.image_url && <button type="button" className="source-image-button"
-            onClick={() => setOpenImage(citation)}>원문 보기</button>}
-          <details className="citation-internal"><summary>자세히</summary>
-            <small>내부 ID: {citation.internal_id} · PDF {citation.pdf_page}쪽</small>
-          </details>
-        </div>
-      ))}
+        ))}
+      </div>
       {openImage?.image_url && <div className="source-modal-backdrop" role="presentation"
         onClick={() => setOpenImage(null)}>
         <div className="source-modal" role="dialog" aria-modal="true" aria-label="표 원문"
@@ -167,7 +173,7 @@ function CitationList({ citations }: { citations: Citation[] }) {
           <img src={openImage.image_url} alt={`${openImage.section_no} ${openImage.subsection ?? ''} 표 원문`} />
         </div>
       </div>}
-    </div>
+    </details>
   );
 }
 
