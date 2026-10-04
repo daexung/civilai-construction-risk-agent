@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from agent.rules.misfiled import misfiled_ids  # noqa: E402
+from agent.rules.scope import enabled_divisions  # noqa: E402
 from agent.rules.specs import load_specs  # noqa: E402
 from agent.tools.search.vector import VectorIndex  # noqa: E402
 from pipeline.page_map import correct_isolated_divisions, isolated_divisions  # noqa: E402
@@ -48,8 +49,9 @@ def main() -> int:
                    and all(row["id"] not in excluded for row in executable["failed"])
                    and executable["summary"]["total"] == 1056))
     index = VectorIndex()
+    checks.append(("maintenance division enabled", "유지관리" in enabled_divisions()))
     checks.append(("enabled divisions have vectors", not index.missing and not index.stale
-                   and len(index.chunks) == len(index.ids) == 4390))
+                   and len(index.chunks) == len(index.ids) == 4779))
     for name, ok in checks:
         print(f"{'PASS' if ok else 'FAIL'} {name}")
     print(f"통과 {sum(ok for _, ok in checks)} / 전체 {len(checks)}")

@@ -57,7 +57,8 @@ def main() -> int:
                 "quantity_model": {"params": {"quantity_input": "quantity"}}}
         values, _ = extract_inputs(query, spec)
         checks.append((f"quantity unit {i}", values.get("quantity") == expected))
-    for division, expected in (("건축", "주택 외 건축"), ("공통", "기타 토목공사")):
+    for division, expected in (("건축", "주택 외 건축"), ("공통", "기타 토목공사"),
+                               ("유지관리", "기타 토목공사")):
         spec = _draft(division)
         state = {"query": "품셈 비용", "spec_id": spec["id"], "inputs": {}, "input_sources": {},
                  "selection": {"confirmed": True}, "reply": ""}
