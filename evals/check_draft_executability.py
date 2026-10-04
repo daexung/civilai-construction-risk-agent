@@ -19,6 +19,7 @@ from agent.rules.misfiled import misfiled_ids  # noqa: E402
 
 CALCULATORS = {"daily_crew": adjusted_daily_crew, "per_unit": per_unit}
 OUTPUT = ROOT / "data/drafts/executable.json"
+CHUNKS = ROOT / "data/processed/chunks.all.jsonl"
 
 
 def _values(field: dict, blocked: list[dict] | None = None,
@@ -67,6 +68,17 @@ def evaluate() -> dict:
     chapter = defaultdict(lambda: Counter())
     adjustment_counts = Counter()
     excluded = misfiled_ids()
+    chunks = [json.loads(line) for line in CHUNKS.read_text(encoding="utf-8").splitlines() if line.strip()]
+    label_shift_ids = {c["chunk_id"] for c in chunks if any(str(issue).startswith("label_shift") for issue in c.get("issues", []))}
+    uncertain_ids = {c["chunk_id"] for c in chunks if c.get("structure") == "uncertain" and c["chunk_id"] not in label_shift_ids}
+    def referenced_ids(value):
+        if isinstance(value, dict):
+            return set().union(*(referenced_ids(v) for v in value.values())) if value else set()
+        if isinstance(value, list):
+            return set().union(*(referenced_ids(v) for v in value)) if value else set()
+        if isinstance(value, str) and re.fullmatch(r"p\d+-t\d+", value):
+            return {value}
+        return set()
     for path in sorted((ROOT / "data/drafts/specs").rglob("*.json")):
         package = json.loads(path.read_text(encoding="utf-8"))
         spec = package["draft"]
@@ -75,6 +87,12 @@ def evaluate() -> dict:
         kind = package["calc_type"]
         scope = "공통/6장" if spec["division"] == "공통" and spec["section_no"].startswith("6-") else "기타"
         chapter[scope]["total"] += 1
+        cited = referenced_ids(spec)
+        broken = sorted(cited & label_shift_ids)
+        if broken:
+            failed.append({"id": spec["id"], "reason": "표 이름 줄 밀림 — 원문 재확인 필요", "tables": broken})
+            reasons["표 이름 줄 밀림 — 원문 재확인 필요"] += 1
+            continue
         if kind not in CALCULATORS:
             continue
         for item in (spec["quantity_model"]["params"].get("surcharges", [])
@@ -137,13 +155,23 @@ def evaluate() -> dict:
             executable.append(spec["id"])
             success[kind] += 1
             chapter[scope]["executable"] += 1
+    executable_uncertain = 0
+    for path in sorted((ROOT / "data/drafts/specs").rglob("*.json")):
+        try:
+            package = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if package["draft"]["id"] in executable and referenced_ids(package["draft"]) & uncertain_ids:
+            executable_uncertain += 1
     return {"executable": sorted(executable), "failed": failed,
             "summary": {"total": sum(value["total"] for value in chapter.values()),
                         "by_calc_type": {kind: {"attempted": attempts[kind], "executable": success[kind]}
                                          for kind in CALCULATORS},
                         "failure_reasons_top10": reasons.most_common(10),
                         "by_scope": dict(chapter),
-                        "adjustment_items": dict(adjustment_counts)}}
+                        "adjustment_items": dict(adjustment_counts),
+                        "executable_using_other_uncertain_tables": executable_uncertain,
+                        "label_shift_table_ids": sorted(label_shift_ids)}}
 
 
 def main() -> int:
