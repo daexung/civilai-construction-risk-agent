@@ -6,6 +6,7 @@ import logging
 import os
 import re
 from datetime import date
+from time import perf_counter
 from typing import Optional
 from uuid import uuid4
 from pathlib import Path
@@ -18,7 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from langgraph.types import Command
 from pydantic import BaseModel
 
-from agent.graph import build_graph
+from agent.graph import build_graph, capture_node_timings
 from agent.rules.specs import load_specs
 from agent.tools.search.vector import VectorIndex
 from pipeline.render_sources import render_source
@@ -421,6 +422,17 @@ def export_xlsx(thread_id: str) -> Response:
 
 @app.post("/api/chat")
 def chat(payload: ChatRequest) -> dict:
+    started = perf_counter()
+    with capture_node_timings() as node_timings:
+        response = _chat_response(payload)
+    response["timing"] = {
+        **{name: round(value, 1) for name, value in node_timings.items()},
+        "total_ms": round((perf_counter() - started) * 1000, 1),
+    }
+    return response
+
+
+def _chat_response(payload: ChatRequest) -> dict:
     if payload.conditions is not None:
         return _change_conditions(payload)
     config = None

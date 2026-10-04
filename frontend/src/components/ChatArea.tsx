@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
+import { exportUrl } from '../api';
 import { EXAMPLE_QUESTIONS } from '../examples';
 import { BillTable, ConditionsBar, RateTable, StatementTable } from './StatementView';
 import './ChatArea.css';
@@ -192,6 +193,36 @@ function MarkdownAnswer({ children }: { children: string }) {
   }}>{children}</ReactMarkdown>;
 }
 
+function AssistantActionBar({ response, elapsedMs, receivedAtMs }: {
+  response: ChatResponse; elapsedMs?: number; receivedAtMs?: number;
+}) {
+  const [showTiming, setShowTiming] = useState(false);
+  const timing = response.timing;
+  const total = timing?.total_ms ?? 0;
+  const detail = timing ? Math.max(0, total - timing.route_ms - timing.retrieve_ms - timing.compute_ms - timing.llm_ms) : 0;
+  const time = receivedAtMs ? new Date(receivedAtMs).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '';
+  const copy = () => { void navigator.clipboard?.writeText(response.answer ?? response.message); };
+  return (
+    <div className="assistant-actions-wrap">
+      <div className="action-bar">
+        <button type="button" className="action-btn" onClick={copy}>복사</button>
+        {time && <time className="msg-time">{time}</time>}
+        {elapsedMs != null && <span className="think-label">{(elapsedMs / 1000).toFixed(1)}초 동안 생각함</span>}
+        {timing && <button type="button" className="action-btn timing-toggle" onClick={() => setShowTiming((open) => !open)}>
+          {showTiming ? '간략히' : '자세히'}
+        </button>}
+        {['OK', 'PARTIAL'].includes(response.status) &&
+          <a className="action-btn export-link" href={exportUrl(response.thread_id)}>엑셀로 받기</a>}
+      </div>
+      {showTiming && timing && <div className="timing-details">
+        질문 분류 { (timing.route_ms / 1000).toFixed(1) }초 · 검색 { (timing.retrieve_ms / 1000).toFixed(1) }초 ·
+        계산 { (timing.compute_ms / 1000).toFixed(1) }초 · 답변 작성 { (timing.llm_ms / 1000).toFixed(1) }초 ·
+        기타 { (detail / 1000).toFixed(1) }초
+      </div>}
+    </div>
+  );
+}
+
 function ComputedCard({ work, inputs, result, priced, tables }: {
   work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult; priced: PricedResult | null;
   tables: ChatResponse['tables'];
@@ -365,6 +396,7 @@ function WarningBanner({ warnings, raw }: { warnings: string[]; raw?: string[] }
 
 function AssistantCard({
   response, interactive, draft, onSelect, onSubmit, loading, onChangeConditions,
+  elapsedMs, receivedAtMs,
 }: {
   response: ChatResponse;
   onChangeConditions: (conditions: Record<string, string>) => void;
@@ -373,6 +405,8 @@ function AssistantCard({
   onSelect: (name: string, value: ChoiceValue, label: string) => void;
   onSubmit: () => void;
   loading: boolean;
+  elapsedMs?: number;
+  receivedAtMs?: number;
 }) {
   return (
     <div className={`assistant-card status-${response.status.toLowerCase()}`}>
@@ -433,7 +467,7 @@ function AssistantCard({
 
       {['OK', 'PARTIAL'].includes(response.status) && response.tables.statement_rows.length > 0 && (
         <>
-          <ConditionsBar key={JSON.stringify(response.conditions)} threadId={response.thread_id}
+          <ConditionsBar key={JSON.stringify(response.conditions)}
             conditions={response.conditions} disabled={!interactive || loading}
             onApply={onChangeConditions} />
           <StatementTable rows={response.tables.statement_rows} notes={response.statement?.basis_notes ?? []} />
@@ -448,6 +482,7 @@ function AssistantCard({
       {response.status === 'BLOCKED' && response.result && (
         <BlockedCard result={response.result as BlockedResult} />
       )}
+      <AssistantActionBar response={response} elapsedMs={elapsedMs} receivedAtMs={receivedAtMs} />
     </div>
   );
 }
@@ -456,12 +491,23 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
   const [showExampleMenu, setShowExampleMenu] = useState(false);
+  const [thinkNow, setThinkNow] = useState(Date.now());
+  const [loadingSince, setLoadingSince] = useState<number | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const exampleMenuRef = useRef<HTMLDivElement>(null);
 
   const lastTurn = turns[turns.length - 1];
   const lastResponse = lastTurn?.role === 'assistant' ? lastTurn.response : undefined;
+  const activeUserTurn = turns[turns.length - 1]?.role === 'user' ? turns[turns.length - 1] : undefined;
+  const thinkingSeconds = Math.max(0, (thinkNow - (activeUserTurn?.sentAtMs ?? loadingSince ?? thinkNow)) / 1000);
+
+  useEffect(() => {
+    if (!loading) return;
+    setLoadingSince(Date.now());
+    const timer = window.setInterval(() => setThinkNow(Date.now()), 1000);
+    return () => { window.clearInterval(timer); setLoadingSince(null); };
+  }, [loading]);
 
   useEffect(() => {
     if (lastResponse?.status === 'MISSING_INFO') {
@@ -626,6 +672,8 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
                   {turn.response && (
                     <AssistantCard
                       response={turn.response}
+                      elapsedMs={turn.elapsedMs}
+                      receivedAtMs={turn.receivedAtMs}
                       interactive={i === turns.length - 1}
                       draft={draft}
                       onSelect={handleSelect}
@@ -649,7 +697,7 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
                   <rect className="brick b5" x="20" y="14" width="11" height="7" rx="1.5" fill="#2e6436" />
                   <rect className="brick b6" x="13" y="6" width="11" height="7" rx="1.5" fill="#14532d" />
                 </svg>
-                <span className="think-label animate">생각 중...</span>
+                <span className="think-label animate">{thinkingSeconds.toFixed(0)}초 동안 생각 중...</span>
               </div>
             </div>
           )}

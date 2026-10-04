@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BillRow, ConditionField, RateRow, StatementRow } from '../types';
-import { exportUrl } from '../api';
 
 const HEADED = ['재료비', '노무비', '경비'];
 
@@ -29,8 +28,7 @@ export function conditionSummary(conditions: ConditionField[]): string {
   return [c.work_category.group ?? c.work_category.value, c.duration.value, c.contractor_type.value, scale].join(' · ');
 }
 
-export function ConditionsBar({ threadId, conditions, disabled, onApply }: {
-  threadId: string;
+export function ConditionsBar({ conditions, disabled, onApply }: {
   conditions: ConditionField[];
   disabled: boolean;
   onApply: (conditions: Record<string, string>) => void;
@@ -63,7 +61,6 @@ export function ConditionsBar({ threadId, conditions, disabled, onApply }: {
         <button type="button" className="ghost-btn" disabled={disabled} onClick={() => setOpen((v) => !v)}>
           조건 바꾸기
         </button>
-        <a className="ghost-btn export-link" href={exportUrl(threadId)}>엑셀로 받기</a>
       </div>
       {open && (
         <div className="conditions-panel">

@@ -26,13 +26,15 @@ export default function App() {
     body: { message?: string; answers?: Record<string, ChoiceValue> },
     thread: string | null,
   ) => {
-    const userTurn: ChatTurn = { id: uuidv4(), role: 'user', text: userLabel };
+    const startedAt = performance.now();
+    const userTurn: ChatTurn = { id: uuidv4(), role: 'user', text: userLabel, sentAtMs: Date.now() };
     setTurns(prev => [...prev, userTurn]);
     setLoading(true);
     try {
       const response = await sendChat({ thread_id: thread, ...body });
       setThreadId(response.thread_id);
-      setTurns(prev => [...prev, { id: uuidv4(), role: 'assistant', response }]);
+      setTurns(prev => [...prev, { id: uuidv4(), role: 'assistant', response,
+        elapsedMs: performance.now() - startedAt, receivedAtMs: Date.now() }]);
     } catch (err) {
       handleError(err);
     } finally {
@@ -49,10 +51,12 @@ export default function App() {
   // 결과 카드의 조건만 바꿔 같은 카드를 새 계산으로 교체한다(공종 입력은 서버가 그대로 둔다).
   const handleChangeConditions = useCallback(async (turnId: string, conditions: Record<string, string>) => {
     if (!threadId) return;
+    const startedAt = performance.now();
     setLoading(true);
     try {
       const response = await sendChat({ thread_id: threadId, conditions });
-      setTurns(prev => prev.map(turn => (turn.id === turnId ? { ...turn, response } : turn)));
+      setTurns(prev => prev.map(turn => (turn.id === turnId ? { ...turn, response,
+        elapsedMs: performance.now() - startedAt, receivedAtMs: Date.now() } : turn)));
     } catch (err) {
       handleError(err);
     } finally {

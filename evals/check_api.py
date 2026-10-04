@@ -43,6 +43,12 @@ def main() -> int:
 
     outside = CLIENT.post("/api/chat", json={"message": "오늘 현장 날씨 어때?"}).json()
     checks.append(("A1", outside["status"] == "OUT_OF_SCOPE" and not outside["questions"]))
+    timing = outside.get("timing", {})
+    timing_keys = ("route_ms", "retrieve_ms", "compute_ms", "llm_ms", "total_ms")
+    checks.append(("A1 timing 단계 시간 응답", all(key in timing for key in timing_keys)
+                   and all(isinstance(timing[key], (int, float)) and not isinstance(timing[key], bool)
+                           and timing[key] >= 0 for key in timing_keys)
+                   and timing["total_ms"] > 0))
 
     evidence = CLIENT.post("/api/chat", json={"message": "합판거푸집 설치 인건비"}).json()
     checks.append(("A2", evidence["status"] == "MISSING_INFO" and bool(evidence["questions"])))

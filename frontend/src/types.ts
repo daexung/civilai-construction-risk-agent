@@ -256,6 +256,7 @@ export interface ChatResponse {
   answer_source: 'llm' | 'template' | null;
   basis_date: string;
   search: SearchInfo;
+  timing?: { route_ms: number; retrieve_ms: number; compute_ms: number; llm_ms: number; total_ms: number };
 }
 
 export interface ChatTurn {
@@ -263,4 +264,7 @@ export interface ChatTurn {
   role: 'user' | 'assistant';
   text?: string;
   response?: ChatResponse;
+  elapsedMs?: number;
+  sentAtMs?: number;
+  receivedAtMs?: number;
 }

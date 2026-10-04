@@ -984,6 +984,7 @@
 }
 .evidence-disclosure[open] > summary, .citation-disclosure[open] > summary { margin-bottom: 8px; }
 .evidence-disclosure, .citation-disclosure { min-width: 0; }
+.fold { border: 0; border-top: 1px solid var(--border-light); border-radius: 0; padding: 8px 0; }
 .evidence-list, .citation-list { display: flex; flex-direction: column; gap: 8px; }
 .evidence-row, .citation-item { padding: 8px 0; border: 0; border-bottom: 1px solid var(--border-light);
   border-radius: 0; background: transparent; }
@@ -991,6 +992,13 @@
   border-radius: 0 4px 4px 0; }
 .citation-internal { margin-top: 4px; }
 .citation-internal summary { cursor: pointer; color: var(--text-muted); }
+.action-bar { align-items: center; gap: 8px; margin-top: 4px; }
+.action-btn { min-height: 26px; font-family: inherit; font-size: 11.5px; text-decoration: none; }
+.action-bar .think-label { margin: 0; font-size: 11.5px; }
+.timing-toggle { color: var(--logo-accent); }
+.timing-details { margin-top: 4px; color: var(--text-muted); font-size: 11.5px; line-height: 1.5; }
+.assistant-actions-wrap { border-top: 1px solid var(--border-light); padding-top: 5px; }
+.loading-indicator { align-items: center; }
 @media (max-width: 520px) {
   .messages { padding-top: 22px; }
   .message { margin-bottom: 20px; }
