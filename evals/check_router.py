@@ -14,14 +14,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from agent.graph import build_graph  # noqa: E402
-from agent.nodes.route import route  # noqa: E402
+from agent.nodes.route import ROUTE_SCHEMA, route  # noqa: E402
+from agent.nodes.retrieve import retrieve  # noqa: E402
 from agent.state import new_state  # noqa: E402
 from agent.tools.llm import client  # noqa: E402
 
 
-def _response(label: str, confidence: float = 0.9) -> str:
-    return json.dumps({"route": label, "confidence": confidence, "reason": "질문의 목적에 따라 분류했습니다."})
-
+def _response(label: str, confidence: float = 0.9, search_query: str = "standard cost question") -> str:
+    return json.dumps({"route": label, "confidence": confidence,
+                       "reason": "classified by question intent", "search_query": search_query})
 
 class FakeServiceError(Exception):
     def __init__(self, code: int):
@@ -31,6 +32,35 @@ class FakeServiceError(Exception):
 
 def main() -> int:
     checks = []
+    checks.append(("router schema includes search_query", "search_query" in ROUTE_SCHEMA["properties"]))
+    class SearchStub:
+        api_calls = 0
+        fallback_reason = None
+        used = "hybrid"
+        def __init__(self): self.queries = []
+        def search(self, query, k=10):
+            self.queries.append(query)
+            chunk = {"chunk_id": query, "kind": "text", "section_no": "6-1-4", "division": "common",
+                     "section": "concrete", "source": {"page": 186, "table_id": "p186-x16"},
+                     "structure": {}, "text": query}
+            return [(1.0, chunk)]
+    original = "\uC9C4\uB3D9\uAE30 \uC548 \uC4F0\uBA74 \uC778\uC6D0\uC774 \uC904\uC5B4?"
+    expanded = "\uCF58\uD06C\uB9AC\uD2B8 \uD0C0\uC124 \uC9C4\uB3D9\uAE30 \uBBF8\uC0AC\uC6A9 \uC778\uC6D0 \uD3B8\uC131 \uAC10"
+    search_stub = SearchStub()
+    with patch("agent.nodes.retrieve.get_search", return_value=(search_stub, "hybrid", None)):
+        merged_state = new_state(original)
+        merged_state.update(route_source="llm", search_query=expanded)
+        merged = retrieve(merged_state)
+    checks.append(("LLM search_query searches both and reports them",
+                   search_stub.queries == [original, expanded]
+                   and merged["search_info"]["queries"] == search_stub.queries and len(merged["hits"]) == 2))
+    search_stub = SearchStub()
+    with patch("agent.nodes.retrieve.get_search", return_value=(search_stub, "bm25(offline)", None)):
+        fallback_state = new_state(original)
+        fallback_state.update(route_source="rule", search_query=expanded)
+        fallback = retrieve(fallback_state)
+    checks.append(("rule fallback searches original once", search_stub.queries == [original]
+                   and fallback["search_info"]["queries"] == search_stub.queries))
     state = new_state("콘크리트공 품이 얼마야?")
     with patch.dict(os.environ, {"AGENT_LLM": "on"}):
         valid = route(state, generate_fn=lambda *_args, **_kwargs: _response("qa"))

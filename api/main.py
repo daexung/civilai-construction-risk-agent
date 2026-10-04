@@ -318,7 +318,8 @@ def _search_out(state: dict) -> dict:
     # 오류 원문은 raw_warnings로만 내리고, 화면에는 쉬운 문장만 보인다.
     warnings = ["의미 검색이 잠시 안 돼 단어 검색으로 찾았습니다."] if raw else []
     return {"method": method, "api_calls": search_info.get("api_calls", 0), "warnings": warnings,
-            "raw_warnings": raw, "fallback_reason": search_info.get("fallback_reason")}
+            "raw_warnings": raw, "fallback_reason": search_info.get("fallback_reason"),
+            "queries": search_info.get("queries", [])}
 
 
 def _qa_out(state: dict) -> dict | None:

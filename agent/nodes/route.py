@@ -25,8 +25,9 @@ ROUTE_SCHEMA = {
         "route": {"type": "string", "enum": ["estimate", "qa", "out_of_scope"]},
         "confidence": {"type": "number", "minimum": 0, "maximum": 1},
         "reason": {"type": "string"},
+        "search_query": {"type": "string"},
     },
-    "required": ["route", "confidence", "reason"],
+    "required": ["route", "confidence", "reason", "search_query"],
 }
 
 
@@ -67,10 +68,15 @@ def route(state: AgentState, generate_fn=None) -> dict:
             raise ValueError("invalid reason")
     except Exception:
         return fallback
+    search_query = data.get("search_query")
+    if not isinstance(search_query, str) or len(search_query.strip().splitlines()) > 1:
+        return fallback
     chosen = data["route"] if confidence >= 0.6 else "qa"
     output = {"route": chosen, "route_confidence": float(confidence),
               "route_reason": reason.strip(),
               "route_source": "llm" if confidence >= 0.6 else "llm_low_confidence"}
+    if search_query.strip():
+        output["search_query"] = search_query.strip()
     if chosen == "out_of_scope":
         output.update(status="OUT_OF_SCOPE", reason="공사비·품셈 계산 질문이 아닙니다")
     return output

@@ -9,6 +9,7 @@ Status = Literal["RUNNING", "OUT_OF_SCOPE", "MISSING_INFO", "EVIDENCE_ONLY", "BL
 
 class AgentState(TypedDict, total=False):
     query: str  # 사용자 질문
+    search_query: str  # Expanded standard-cost search query
     route: Literal["estimate", "qa", "out_of_scope"]
     route_confidence: float | None
     route_reason: str

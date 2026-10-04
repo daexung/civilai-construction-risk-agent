@@ -33,16 +33,22 @@ class HybridIndex:
     def api_calls(self) -> int:
         return self.vector.api_calls
 
-    def search(self, query: str, k: int = 5) -> list[tuple[float, dict]]:
+    def search_many(self, queries: list[str], k: int = 5) -> list[tuple[float, dict]]:
+        unique = list(dict.fromkeys(queries))
+        vector_results = self.vector.search_many(unique, CANDIDATES)
         ranks: dict[str, dict] = {}
-        for name, hits in (("bm25", self.bm25.search(query, CANDIDATES)),
-                           ("vector", self.vector.search(query, CANDIDATES))):
-            for rank, (_, chunk) in enumerate(hits, 1):
-                ranks.setdefault(chunk["chunk_id"], {})[name] = rank
-        scored = [(sum(1 / (K + r) for r in rs.values()), cid) for cid, rs in ranks.items()]
-        scored.sort(key=lambda s: -s[0])
+        for query, vector_hits in zip(unique, vector_results):
+            for name, hits in (("bm25", self.bm25.search(query, CANDIDATES)), ("vector", vector_hits)):
+                for rank, (_, chunk) in enumerate(hits, 1):
+                    ranks.setdefault(chunk["chunk_id"], {})[(query, name)] = rank
+        scored = [(sum(1 / (K + rank) for rank in rs.values()), cid) for cid, rs in ranks.items()]
+        scored.sort(key=lambda item: -item[0])
         self.last_ranks = ranks
         return [(score, self.by_id[cid]) for score, cid in scored[:k]]
+
+    def search(self, query: str, k: int = 5) -> list[tuple[float, dict]]:
+        return self.search_many([query], k)
+
 
 
 def main() -> None:

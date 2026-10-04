@@ -127,6 +127,11 @@ def embed_texts(cli, texts: list[str], *, config: EmbeddingSettings | None = Non
             config=types.EmbedContentConfig(output_dimensionality=selected.dim))
         return _vectors(result, len(texts), selected.dim)
 
+    if task == "query":
+        result = cli.models.embed_content(model=selected.model, contents=texts,
+            config=types.EmbedContentConfig(task_type="RETRIEVAL_QUERY"))
+        return _vectors(result, len(texts), selected.dim)
+
     # A document title is request-wide in the SDK config. Send each document
     # separately so the title cannot be applied to another input. Concurrency 1 <= 5.
     vectors = []

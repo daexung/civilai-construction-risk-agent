@@ -99,32 +99,45 @@ class VectorIndex:
         self.api_calls = 0
         self.last_embed_sec = 0.0
 
-    def embed_query(self, query: str) -> np.ndarray:
+    def embed_queries(self, queries: list[str]) -> list[np.ndarray]:
         if self._client is None:
             self._client = self._client_factory()
         started = time.perf_counter()
+        inputs = [query_input(query, self.embedding) for query in queries]
         for attempt in range(3):
             try:
                 self.api_calls += 1
-                raw = self._embed_fn(self._client, [query_input(query, self.embedding)],
-                                     config=self.embedding, task="query")[0]
-                vector = np.array(raw, dtype=np.float32)
-                norm = np.linalg.norm(vector)
-                if norm == 0:
-                    raise ValueError("질문 임베딩 벡터 길이가 0입니다")
+                raw_vectors = self._embed_fn(self._client, inputs, config=self.embedding, task="query")
+                vectors = []
+                for raw in raw_vectors:
+                    vector = np.asarray(raw, dtype=np.float32)
+                    norm = np.linalg.norm(vector)
+                    if norm == 0:
+                        raise ValueError("query embedding has zero norm")
+                    vectors.append(vector / norm)
                 self.last_embed_sec = time.perf_counter() - started
-                return vector / norm
+                return vectors
             except Exception as exc:
                 if not retryable_error(exc) or attempt == 2:
                     self.last_embed_sec = time.perf_counter() - started
                     raise
                 self._sleep_fn((1, 2)[attempt])
-        raise RuntimeError("질문 임베딩 재시도 소진")
+        raise RuntimeError("query embedding retry exhausted")
+
+    def embed_query(self, query: str) -> np.ndarray:
+        return self.embed_queries([query])[0]
+
+    def search_many(self, queries: list[str], k: int = 5) -> list[list[tuple[float, dict]]]:
+        vectors = self.embed_queries(queries)
+        results = []
+        for vector in vectors:
+            scores = self.matrix @ vector
+            top = np.argsort(-scores)[:k]
+            results.append([(float(scores[index]), self.by_id[self.ids[index]]) for index in top])
+        return results
 
     def search(self, query: str, k: int = 5) -> list[tuple[float, dict]]:
-        scores = self.matrix @ self.embed_query(query)
-        top = np.argsort(-scores)[:k]
-        return [(float(scores[index]), self.by_id[self.ids[index]]) for index in top]
+        return self.search_many([query], k)[0]
 
 
 def main() -> None:
