@@ -1,0 +1,3415 @@
+{
+  "question": "철근콘크리트 벽체 260㎥ 펌프차 32m 붐타설 비용",
+  "answers": {
+    "work": "6-1-4",
+    "pump_size": "32m",
+    "slump_band": "15㎝",
+    "facility_type": "Type-Ⅱ",
+    "site_type": "Type-Ⅱ",
+    "placement": "붐",
+    "vibrator_used": true,
+    "reset_status": "없음",
+    "concrete_supply": "관급",
+    "work_category": "기타 토목공사",
+    "duration": "1~6개월",
+    "contractor_type": "종합건설업",
+    "project_scale": "이 견적만"
+  },
+  "response": {
+    "thread_id": "7ca180b9ec5d4448b61c33afdaa860ba",
+    "status": "PARTIAL",
+    "route": "estimate",
+    "route_confidence": null,
+    "route_reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+    "route_source": "rule",
+    "message": "계산에 필요한 조건을 확인해 주세요",
+    "work": {
+      "spec_id": "2026-정오표1차/공통/6-1-4/펌프차타설",
+      "section_no": "6-1-4",
+      "title": "공통 6-1-4 콘크리트 펌프차 타설",
+      "confirmed": true
+    },
+    "questions": [],
+    "inputs": [
+      {
+        "name": "pump_size",
+        "label": "pump_size",
+        "value": "32m",
+        "source": "선택"
+      },
+      {
+        "name": "volume",
+        "label": "콘크리트 타설 물량",
+        "value": "260",
+        "source": "질문"
+      },
+      {
+        "name": "structure",
+        "label": "구조물",
+        "value": "철근",
+        "source": "질문"
+      },
+      {
+        "name": "placement",
+        "label": "타설방식",
+        "value": "붐",
+        "source": "선택"
+      },
+      {
+        "name": "work_category",
+        "label": "공사 종류",
+        "value": "기타 토목공사",
+        "source": "선택"
+      },
+      {
+        "name": "duration",
+        "label": "공사 기간",
+        "value": "1~6개월",
+        "source": "선택"
+      },
+      {
+        "name": "contractor_type",
+        "label": "시공사 업종",
+        "value": "종합건설업",
+        "source": "선택"
+      },
+      {
+        "name": "project_scale",
+        "label": "전체 공사 규모",
+        "value": "이 견적만",
+        "source": "선택"
+      },
+      {
+        "name": "slump_band",
+        "label": "슬럼프",
+        "value": "15㎝",
+        "source": "선택"
+      },
+      {
+        "name": "facility_type",
+        "label": "시설유형",
+        "value": "Type-Ⅱ",
+        "source": "선택"
+      },
+      {
+        "name": "site_type",
+        "label": "현장조건",
+        "value": "Type-Ⅱ",
+        "source": "선택"
+      },
+      {
+        "name": "vibrator_used",
+        "label": "진동기 사용",
+        "value": true,
+        "source": "선택"
+      },
+      {
+        "name": "reset_status",
+        "label": "펌프차 타설범위를 넘어 이동·재셋팅",
+        "value": "없음",
+        "source": "선택"
+      },
+      {
+        "name": "concrete_supply",
+        "label": "레미콘",
+        "value": "관급",
+        "source": "선택"
+      }
+    ],
+    "evidence": [
+      {
+        "section_no": "6-1-4",
+        "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+        "page": 186,
+        "table_id": "p186-t1",
+        "snippet": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)\n2. 인력편성\n콘크리트공 | 단위 인 | 작업조 무근콘크리트 3 | 작업조 철근콘크리트 4 | 비고 타설/진동기/면정리\n특별인부 | 단위 인 | 작업조 무근콘크리트 1 | 작업조 철근콘크리트 1 | 비고 배관타설 : 1인 추가\n형틀목공 | 단위 인 | 작업조 무근콘"
+      },
+      {
+        "section_no": "6-1-4",
+        "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+        "page": 187,
+        "table_id": null,
+        "snippet": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)\n3. 일일시공량\n설명 | 나. 현장조건(f2)"
+      },
+      {
+        "section_no": "6-1-4",
+        "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+        "page": 187,
+        "table_id": "p187-t3",
+        "snippet": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)\n3. 일일시공량\nf2 | Type-Ⅰ 1.2 | Type-Ⅱ 1.0 | Type-Ⅲ 0.8"
+      }
+    ],
+    "result": {
+      "daily_volume": {
+        "value": "130",
+        "unit": "㎥/일",
+        "formula": "기준 130 × f1 1.0 × f2 1.0",
+        "sources": [
+          "p187-t0 PDF 187쪽 3. 일일시공량 표 (일당)",
+          "p187-t1 PDF 187쪽 3. 일일시공량 가. 시설유형 표",
+          "p187-t3 PDF 187쪽 3. 일일시공량 나. 현장조건 표"
+        ],
+        "citations": [
+          {
+            "code": "2026 건설공사 표준품셈",
+            "division": "공통부문",
+            "section_no": "6-1-4",
+            "section_title": "콘크리트 펌프차 타설",
+            "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+            "subsection": "3. 일일시공량",
+            "item": "표",
+            "row": "15㎝",
+            "column": "철근",
+            "value": "130",
+            "pdf_page": 187,
+            "printed_page": 131,
+            "quote": null,
+            "internal_id": "p187-t0",
+            "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 3. 일일시공량 (인쇄 131쪽)\n표: 슬럼프 15㎝ · 철근구조물 → 130㎥/일",
+            "image_url": "/api/source/p187-t0.png"
+          },
+          {
+            "code": "2026 건설공사 표준품셈",
+            "division": "공통부문",
+            "section_no": "6-1-4",
+            "section_title": "콘크리트 펌프차 타설",
+            "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+            "subsection": "3. 일일시공량",
+            "item": "표",
+            "row": "f1",
+            "column": "Type-Ⅱ",
+            "value": "1.0",
+            "pdf_page": 187,
+            "printed_page": 131,
+            "quote": null,
+            "internal_id": "p187-t1",
+            "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 3. 일일시공량 (인쇄 131쪽)\n표: f1 · Type-Ⅱ → 1.0",
+            "image_url": "/api/source/p187-t1.png"
+          },
+          {
+            "code": "2026 건설공사 표준품셈",
+            "division": "공통부문",
+            "section_no": "6-1-4",
+            "section_title": "콘크리트 펌프차 타설",
+            "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+            "subsection": "3. 일일시공량",
+            "item": "표",
+            "row": "f2",
+            "column": "Type-Ⅱ",
+            "value": "1.0",
+            "pdf_page": 187,
+            "printed_page": 131,
+            "quote": null,
+            "internal_id": "p187-t3",
+            "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 3. 일일시공량 (인쇄 131쪽)\n표: f2 · Type-Ⅱ → 1.0",
+            "image_url": "/api/source/p187-t3.png"
+          }
+        ]
+      },
+      "work_days": {
+        "value": "2",
+        "formula": "260 ÷ 130"
+      },
+      "lines": [
+        {
+          "kind": "labor",
+          "name": "콘크리트공",
+          "value": "8",
+          "unit": "인·일",
+          "crew": "4",
+          "rules": [],
+          "source": "p186-t1 콘크리트공·철근 4",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트공",
+              "column": "철근",
+              "value": "4",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트공 · 철근 → 4",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        },
+        {
+          "kind": "labor",
+          "name": "특별인부",
+          "value": "2",
+          "unit": "인·일",
+          "crew": "1",
+          "rules": [],
+          "source": "p186-t1 특별인부·철근 1",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "특별인부",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 특별인부 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        },
+        {
+          "kind": "labor",
+          "name": "형틀목공",
+          "value": "2",
+          "unit": "인·일",
+          "crew": "1",
+          "rules": [],
+          "source": "p186-t1 형틀목공·철근 1",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "형틀목공",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 형틀목공 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        },
+        {
+          "kind": "labor",
+          "name": "보통인부",
+          "value": "2",
+          "unit": "인·일",
+          "crew": "1",
+          "rules": [],
+          "source": "p186-t1 보통인부·철근 1",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "보통인부",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 보통인부 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        },
+        {
+          "kind": "equipment",
+          "name": "콘크리트펌프차",
+          "value": "2",
+          "unit": "대·일",
+          "crew": null,
+          "rules": [],
+          "source": "p186-t1 콘크리트펌프차·철근 1",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        }
+      ],
+      "unit_lines": [
+        {
+          "kind": "labor",
+          "name": "콘크리트공",
+          "unit": "인/㎥",
+          "exact": "2/65",
+          "applied": "0.0308",
+          "places": 4,
+          "formula": "4인 ÷ 130㎥",
+          "rule": "1-2-8 100단위→소수 4자리, 1-2-1 반올림",
+          "source": "p186-t1 PDF 186쪽 2. 인력편성 표",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트공",
+              "column": "철근",
+              "value": "4",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트공 · 철근 → 4",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        },
+        {
+          "kind": "labor",
+          "name": "특별인부",
+          "unit": "인/㎥",
+          "exact": "1/130",
+          "applied": "0.0077",
+          "places": 4,
+          "formula": "1인 ÷ 130㎥",
+          "rule": "1-2-8 100단위→소수 4자리, 1-2-1 반올림",
+          "source": "p186-t1 PDF 186쪽 2. 인력편성 표",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "특별인부",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 특별인부 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        },
+        {
+          "kind": "labor",
+          "name": "형틀목공",
+          "unit": "인/㎥",
+          "exact": "1/130",
+          "applied": "0.0077",
+          "places": 4,
+          "formula": "1인 ÷ 130㎥",
+          "rule": "1-2-8 100단위→소수 4자리, 1-2-1 반올림",
+          "source": "p186-t1 PDF 186쪽 2. 인력편성 표",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "형틀목공",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 형틀목공 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        },
+        {
+          "kind": "labor",
+          "name": "보통인부",
+          "unit": "인/㎥",
+          "exact": "1/130",
+          "applied": "0.0077",
+          "places": 4,
+          "formula": "1인 ÷ 130㎥",
+          "rule": "1-2-8 100단위→소수 4자리, 1-2-1 반올림",
+          "source": "p186-t1 PDF 186쪽 2. 인력편성 표",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "보통인부",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 보통인부 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        },
+        {
+          "kind": "equipment",
+          "name": "콘크리트펌프차",
+          "unit": "hr/㎥",
+          "exact": "4/65",
+          "applied": "0.0615",
+          "places": 4,
+          "formula": "1대 × 8hr ÷ 130㎥",
+          "rule": "1-2-8 100단위→소수 4자리, 1-2-1 반올림",
+          "source": "p186-t1 PDF 186쪽 2. 인력편성 표",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ]
+        }
+      ],
+      "unit_basis": {
+        "per": "1㎥",
+        "daily_output": "130",
+        "places": 4,
+        "adjustable_note": "1-2-8은 조정 가능 조항. 기본 자릿수 적용"
+      },
+      "not_calculated": [
+        {
+          "item": "공통 정책 1-2-9 소규모 적용",
+          "source": "공통부문 1-2-9; 이번 범위는 PDF 186~187쪽 6-1-4의 기본 품량",
+          "cite": {
+            "section_no": "1-2-9",
+            "marker": "본문"
+          },
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-9",
+              "section_title": "소규모(작업물량 제한)",
+              "section": "1-2-9 소규모(작업물량 제한)(‘23년 신설, ‘25년 보완)",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 75,
+              "printed_page": 19,
+              "quote": "\"시공량/일\"으로 명시된 항목 중 총 시공량이 본 품(시공량/일)의 기준 미만인 소규모 공사인 경우 ",
+              "internal_id": "PDF 75",
+              "label": "2026 건설공사 표준품셈 공통부문\n1-2-9 소규모(작업물량 제한) (인쇄 19쪽)\n본문 “\"시공량/일\"으로 명시된 항목 중 총 시공량이 본 품(시공량/일)의 기준 미만인 소규모 공사인 경우 ”"
+            }
+          ]
+        },
+        {
+          "item": "살수 양생 품량",
+          "source": "PDF 186쪽 1. 적용범위 사",
+          "cite": {
+            "section_no": "6-1-4",
+            "subsection_no": "1",
+            "marker": "사."
+          },
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "1. 적용범위",
+              "item": "사.",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "양생은 양생방법 및 시간을 고려하여 별도 계상한다.",
+              "internal_id": "p186-x6",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 1. 적용범위 (인쇄 130쪽)\n사. “양생은 양생방법 및 시간을 고려하여 별도 계상한다.”",
+              "image_url": "/api/source/p186-x6.png"
+            }
+          ]
+        }
+      ],
+      "review_status": "미완료",
+      "adjustment_memos": []
+    },
+    "priced": {
+      "status": "PARTIAL",
+      "partial": true,
+      "rate_version": {
+        "id": "2026H2",
+        "title": "2026년 하반기 적용 건설업 임금실태조사",
+        "publisher": "대한건설협회",
+        "effective_from": "2026-09-01",
+        "effective_to": null,
+        "source_file": "data/raw/labor_rates/2026H2_wage_survey.pdf",
+        "unit": "원/일(8시간)"
+      },
+      "equipment_rate_version": {
+        "version": "2026",
+        "title": "2026년도 건설기계 경비산출표",
+        "publisher": "대한건설협회",
+        "published": "2026-01-08",
+        "effective_from": "2026-01-01",
+        "effective_to": "2026-12-31",
+        "source_file": "data/raw/equipment_rates/2026_machine_cost_table.pdf",
+        "effective_period_basis": "PDF 1쪽 표제 '2026년도 건설기계 경비산출표'의 연도별 적용. 원문에 별도 적용 기간 문구 없음"
+      },
+      "lines": [
+        {
+          "kind": "labor",
+          "category": "노무비",
+          "name": "콘크리트공",
+          "unit": "인/㎥",
+          "quantity": "0.0308",
+          "rate_code": "1013",
+          "unit_price": "276285",
+          "amount_exact": "8509.578",
+          "amount": "8509.5",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트공",
+              "column": "철근",
+              "value": "4",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트공 · 철근 → 4",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1013",
+              "section_title": "콘크리트공",
+              "section": "콘크리트공",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "콘크리트공",
+              "column": "1013",
+              "value": "276285",
+              "pdf_page": 10,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1013",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1013 콘크리트공: 276,285원/일 (PDF 10쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ],
+          "reason": null
+        },
+        {
+          "kind": "labor",
+          "category": "노무비",
+          "name": "특별인부",
+          "unit": "인/㎥",
+          "quantity": "0.0077",
+          "rate_code": "1003",
+          "unit_price": "228717",
+          "amount_exact": "1761.1209",
+          "amount": "1761.1",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "특별인부",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 특별인부 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1003",
+              "section_title": "특별인부",
+              "section": "특별인부",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "특별인부",
+              "column": "1003",
+              "value": "228717",
+              "pdf_page": 10,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1003",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1003 특별인부: 228,717원/일 (PDF 10쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ],
+          "reason": null
+        },
+        {
+          "kind": "labor",
+          "category": "노무비",
+          "name": "형틀목공",
+          "unit": "인/㎥",
+          "quantity": "0.0077",
+          "rate_code": "1007",
+          "unit_price": "275379",
+          "amount_exact": "2120.4183",
+          "amount": "2120.4",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "형틀목공",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 형틀목공 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1007",
+              "section_title": "형틀목공",
+              "section": "형틀목공",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "형틀목공",
+              "column": "1007",
+              "value": "275379",
+              "pdf_page": 10,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1007",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1007 형틀목공: 275,379원/일 (PDF 10쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ],
+          "reason": null
+        },
+        {
+          "kind": "labor",
+          "category": "노무비",
+          "name": "보통인부",
+          "unit": "인/㎥",
+          "quantity": "0.0077",
+          "rate_code": "1002",
+          "unit_price": "172698",
+          "amount_exact": "1329.7746",
+          "amount": "1329.7",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "보통인부",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 보통인부 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1002",
+              "section_title": "보통인부",
+              "section": "보통인부",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "보통인부",
+              "column": "1002",
+              "value": "172698",
+              "pdf_page": 10,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1002",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1002 보통인부: 172,698원/일 (PDF 10쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ],
+          "reason": null
+        },
+        {
+          "kind": "equipment",
+          "category": "경비",
+          "name": "콘크리트펌프차",
+          "unit": "hr/㎥",
+          "quantity": "0.0615",
+          "rate_code": null,
+          "unit_price": null,
+          "amount_exact": null,
+          "amount": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            }
+          ],
+          "reason": null
+        }
+      ],
+      "equipment_lines": [
+        {
+          "kind": "equipment_component",
+          "machine_code": "4504-0032",
+          "machine_spec": "32m, 80~95㎥/hr",
+          "unit": "hr/㎥",
+          "quantity": "0.0615",
+          "rate_code": null,
+          "amount_exact": "4464.9",
+          "amount": "4464.9",
+          "reason": null,
+          "category": "경비",
+          "name": "펌프차 기계손료",
+          "unit_price": "72600",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년도 건설기계 경비산출표",
+              "division": "건설기계",
+              "section_no": "4504",
+              "section_title": "콘크리트 펌프차",
+              "section": "4504 콘크리트 펌프차",
+              "subsection": "32m, 80~95㎥/hr",
+              "item": "시간당 손료",
+              "row": "4504-0032",
+              "column": "시간당 손료",
+              "value": "72600",
+              "pdf_page": 14,
+              "printed_page": 14,
+              "quote": null,
+              "internal_id": "4504-0032",
+              "label": "대한건설협회 「2026년도 건설기계 경비산출표」 4504-0032 32m, 80~95㎥/hr (PDF 14쪽)\n시간당 손료: 72600"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "8-1-5",
+              "section_title": "기계경비 용어와 정의",
+              "section": "8-1-5 기계경비 용어와 정의",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 223,
+              "printed_page": 167,
+              "quote": "손료계수의 합계를 곱한 값을 말한다. (원미만의 값은 절사한다.)",
+              "internal_id": "PDF223-8-1-5",
+              "label": "2026 건설공사 표준품셈 공통부문 8-1-5 기계경비 용어와 정의 (인쇄 167쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "kind": "equipment_component",
+          "machine_code": "4504-0032",
+          "machine_spec": "32m, 80~95㎥/hr",
+          "unit": "hr/㎥",
+          "quantity": "0.0615",
+          "rate_code": "1048",
+          "amount_exact": "2178.0455625",
+          "amount": "2178.0",
+          "reason": null,
+          "category": "노무비",
+          "name": "펌프차 운전원",
+          "unit_price": "35415.375",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년도 건설기계 경비산출표",
+              "division": "건설기계",
+              "section_no": "4504",
+              "section_title": "콘크리트 펌프차",
+              "section": "4504 콘크리트 펌프차",
+              "subsection": "32m, 80~95㎥/hr",
+              "item": "조종원",
+              "row": "4504-0032",
+              "column": "조종원",
+              "value": "1",
+              "pdf_page": 14,
+              "printed_page": 14,
+              "quote": null,
+              "internal_id": "4504-0032",
+              "label": "대한건설협회 「2026년도 건설기계 경비산출표」 4504-0032 32m, 80~95㎥/hr (PDF 14쪽)\n조종원: 1"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "8-1-6",
+              "section_title": "기계경비 적산요령",
+              "section": "8-1-6 기계경비 적산요령",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 223,
+              "printed_page": 167,
+              "quote": "3. 운전경비 : 기계를 사용하는데 필요한 다음 각호 경비의 합계액으로 한다.",
+              "internal_id": "PDF223-8-1-6",
+              "label": "2026 건설공사 표준품셈 공통부문 8-1-6 기계경비 적산요령 (인쇄 167쪽)"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": null,
+              "section_title": "이용상의 주의사항",
+              "section": "이용상의 주의사항",
+              "subsection": "7. 이용상의 주의사항",
+              "item": "1일 8시간 기준",
+              "row": null,
+              "column": null,
+              "value": "8시간",
+              "pdf_page": 4,
+              "printed_page": 3,
+              "quote": "다. 본조사임금은1일8시간기준(단, 잠수부는6시간기준)금액임.",
+              "internal_id": "2026H2:PDF4:8시간",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」 7. 이용상의 주의사항 (PDF 4쪽)\n건설기계운전사 일당의 시간당 환산: 1일 8시간"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1048",
+              "section_title": "건설기계운전사",
+              "section": "건설기계운전사",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "건설기계운전사",
+              "column": "1048",
+              "value": "283323",
+              "pdf_page": 11,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1048",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1048 건설기계운전사: 283,323원/일 (PDF 11쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "kind": "equipment_component",
+          "machine_code": "4504-0032",
+          "machine_spec": "32m, 80~95㎥/hr",
+          "unit": "hr/㎥",
+          "quantity": "0.0615",
+          "rate_code": null,
+          "amount_exact": null,
+          "amount": null,
+          "reason": "유류 가격 미입력 — 품셈 8-1-7: 해당 지역 가격",
+          "category": "재료비",
+          "name": "펌프차 연료·잡재료비",
+          "unit_price": null,
+          "fuel_l_per_hr": "17.3",
+          "fuel_l_per_unit": "1.06395",
+          "misc_pct_of_fuel": 35,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년도 건설기계 경비산출표",
+              "division": "건설기계",
+              "section_no": "4504",
+              "section_title": "콘크리트 펌프차",
+              "section": "4504 콘크리트 펌프차",
+              "subsection": "32m, 80~95㎥/hr",
+              "item": "주연료",
+              "row": "4504-0032",
+              "column": "주연료",
+              "value": "17.3ℓ/hr",
+              "pdf_page": 14,
+              "printed_page": 14,
+              "quote": null,
+              "internal_id": "4504-0032",
+              "label": "대한건설협회 「2026년도 건설기계 경비산출표」 4504-0032 32m, 80~95㎥/hr (PDF 14쪽)\n주연료: 17.3ℓ/hr"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "8-1-7",
+              "section_title": "손료보정 등",
+              "section": "8-1-7 손료보정 등",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 224,
+              "printed_page": 168,
+              "quote": "5. 유류가격은 해당지역의 가격으로 한다.",
+              "internal_id": "PDF224-8-1-7",
+              "label": "2026 건설공사 표준품셈 공통부문 8-1-7 손료보정 등 (인쇄 168쪽)"
+            }
+          ]
+        }
+      ],
+      "cost_lines": [
+        {
+          "kind": "rate_cost",
+          "category": "경비",
+          "name": "공구손료 및 경장비",
+          "base": "labor_subtotal",
+          "rate": "0.05",
+          "amount_exact": "686.035",
+          "amount": "686.0",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "[주] ②",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "공구손료 및 경장비(콘크리트 진동기 등)의 기계경비는 편성인력 노무비의 5%를 적용한다.",
+              "internal_id": "p186-x16",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n[주] ② “공구손료 및 경장비(콘크리트 진동기 등)의 기계경비는 편성인력 노무비의 5%를 적용한다.”",
+              "image_url": "/api/source/p186-x16.png"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "kind": "rate_cost",
+          "category": "재료비",
+          "name": "잔여 콘크리트 재료비",
+          "base": "labor_subtotal",
+          "rate": "0.05",
+          "amount_exact": "686.035",
+          "amount": "686.0",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "[주] ③",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "타설 후 발생하는 잔여 콘크리트(배관 내 잔여물 등)의 재료비는 편성인력 노무비의 5%로 계상한다.",
+              "internal_id": "p186-x16",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n[주] ③ “타설 후 발생하는 잔여 콘크리트(배관 내 잔여물 등)의 재료비는 편성인력 노무비의 5%로 계상한다.”",
+              "image_url": "/api/source/p186-x16.png"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        }
+      ],
+      "supply_lines": [
+        {
+          "kind": "supply_component",
+          "category": "재료비",
+          "name": "레미콘(콘크리트) 재료비",
+          "status": "제외",
+          "unit_price": null,
+          "amount": null,
+          "amount_exact": null,
+          "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "1. 적용범위",
+              "item": "가.",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "본 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다.",
+              "internal_id": "p186-x6",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 1. 적용범위 (인쇄 130쪽)\n가. “본 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다.”",
+              "image_url": "/api/source/p186-x6.png"
+            }
+          ]
+        }
+      ],
+      "labor_subtotal": "13720.7",
+      "subtotals": {
+        "재료비": "686.0",
+        "노무비": "15898.7",
+        "경비": "5150.9"
+      },
+      "unit_prices": {
+        "재료비": "686",
+        "노무비": "15898",
+        "경비": "5150"
+      },
+      "total_exact": "21735.6",
+      "total": "21734",
+      "reference_amounts": {
+        "volume": "260",
+        "subtotals": {
+          "재료비": "178360",
+          "노무비": "4133480",
+          "경비": "1339000"
+        },
+        "total": "5650840"
+      },
+      "total_citations": [
+        {
+          "code": "2026 건설공사 표준품셈",
+          "division": "공통부문",
+          "section_no": "1-2-2",
+          "section_title": "수량의 단위표준",
+          "section": "1-2-2 수량의 단위표준",
+          "subsection": "2. 금액의 단위표준",
+          "item": "일위대가표의 계금",
+          "row": "일위대가표의 계금",
+          "column": null,
+          "value": "1",
+          "pdf_page": 62,
+          "printed_page": 6,
+          "quote": null,
+          "internal_id": "PDF62-1-2-2",
+          "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 계금: 1원 미만버림"
+        }
+      ],
+      "unpriced": [
+        {
+          "name": "펌프차 연료·잡재료비",
+          "reason": "유류 가격 미입력 — 품셈 8-1-7: 해당 지역 가격",
+          "category": "재료비",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년도 건설기계 경비산출표",
+              "division": "건설기계",
+              "section_no": "4504",
+              "section_title": "콘크리트 펌프차",
+              "section": "4504 콘크리트 펌프차",
+              "subsection": "32m, 80~95㎥/hr",
+              "item": "주연료",
+              "row": "4504-0032",
+              "column": "주연료",
+              "value": "17.3ℓ/hr",
+              "pdf_page": 14,
+              "printed_page": 14,
+              "quote": null,
+              "internal_id": "4504-0032",
+              "label": "대한건설협회 「2026년도 건설기계 경비산출표」 4504-0032 32m, 80~95㎥/hr (PDF 14쪽)\n주연료: 17.3ℓ/hr"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "8-1-7",
+              "section_title": "손료보정 등",
+              "section": "8-1-7 손료보정 등",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 224,
+              "printed_page": 168,
+              "quote": "5. 유류가격은 해당지역의 가격으로 한다.",
+              "internal_id": "PDF224-8-1-7",
+              "label": "2026 건설공사 표준품셈 공통부문 8-1-7 손료보정 등 (인쇄 168쪽)"
+            }
+          ]
+        },
+        {
+          "name": "공통 정책 1-2-9 소규모 적용",
+          "reason": "이번 계산 범위에서 미산정",
+          "category": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-9",
+              "section_title": "소규모(작업물량 제한)",
+              "section": "1-2-9 소규모(작업물량 제한)(‘23년 신설, ‘25년 보완)",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 75,
+              "printed_page": 19,
+              "quote": "\"시공량/일\"으로 명시된 항목 중 총 시공량이 본 품(시공량/일)의 기준 미만인 소규모 공사인 경우 ",
+              "internal_id": "PDF 75",
+              "label": "2026 건설공사 표준품셈 공통부문\n1-2-9 소규모(작업물량 제한) (인쇄 19쪽)\n본문 “\"시공량/일\"으로 명시된 항목 중 총 시공량이 본 품(시공량/일)의 기준 미만인 소규모 공사인 경우 ”"
+            }
+          ]
+        },
+        {
+          "name": "살수 양생 품량",
+          "reason": "이번 계산 범위에서 미산정",
+          "category": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "1. 적용범위",
+              "item": "사.",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "양생은 양생방법 및 시간을 고려하여 별도 계상한다.",
+              "internal_id": "p186-x6",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 1. 적용범위 (인쇄 130쪽)\n사. “양생은 양생방법 및 시간을 고려하여 별도 계상한다.”",
+              "image_url": "/api/source/p186-x6.png"
+            }
+          ]
+        }
+      ],
+      "excluded": [
+        {
+          "name": "레미콘(콘크리트) 재료비",
+          "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외",
+          "category": "재료비",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "1. 적용범위",
+              "item": "가.",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "본 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다.",
+              "internal_id": "p186-x6",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 1. 적용범위 (인쇄 130쪽)\n가. “본 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다.”",
+              "image_url": "/api/source/p186-x6.png"
+            }
+          ]
+        }
+      ],
+      "rounding_policy": {
+        "source": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)",
+        "line": "0.1원 미만버림",
+        "total": "1원 미만버림",
+        "small_amount_exception": {
+          "quote": "일위대가표 금액란 또는 기초계산금액에서 소액이 산출되어 공종이 없어질 우려가 있어 소수자리 1자리 \n이하의 산출이 불가피할 경우에는 소수자리의 정도를 조정 계산한다.",
+          "cite": {
+            "section_no": "1-2-2",
+            "subsection_no": "2",
+            "pdf_page": 62,
+            "marker": "[주]"
+          }
+        }
+      }
+    },
+    "statement": {
+      "status": "PARTIAL",
+      "basis_date": "2026-10-01",
+      "overhead_version": {
+        "id": "260413",
+        "effective_from": "2026-04-13",
+        "source_files": [
+          "data/raw/토목공사 간접공사비 적용기준(260413).xlsx"
+        ]
+      },
+      "conditions": {
+        "work_category": "기타 토목공사",
+        "duration": "1~6개월",
+        "contractor_type": "종합건설업",
+        "project_scale": "이 견적만"
+      },
+      "basis_notes": [
+        "전체 공사 규모: 이 견적만 기준(5,650,840원)으로 제비율 구간을 선택했습니다.",
+        "산업안전보건관리비 기초액은 전체 공사에 1회 계상 — 부분 견적에서 제외(간이)."
+      ],
+      "lines": [
+        {
+          "name": "재료비",
+          "category": "재료비",
+          "base": "일위대가표 물량 기준 참고 금액",
+          "base_amount": 178360,
+          "rate": null,
+          "amount": 178360,
+          "source": {
+            "file": "일위대가표",
+            "version": "2026H2"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "직접노무비",
+          "category": "노무비",
+          "base": "일위대가표 물량 기준 참고 금액",
+          "base_amount": 4133480,
+          "rate": null,
+          "amount": 4133480,
+          "source": {
+            "file": "일위대가표",
+            "version": "2026H2"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "직접경비",
+          "category": "경비",
+          "base": "일위대가표 물량 기준 참고 금액",
+          "base_amount": 1339000,
+          "rate": null,
+          "amount": 1339000,
+          "source": {
+            "file": "일위대가표",
+            "version": "2026H2"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "간접노무비",
+          "category": "노무비",
+          "base": "직접노무비",
+          "base_amount": 4133480,
+          "rate": "19.1",
+          "amount": 789494,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "AC15",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "노무비 계",
+          "category": "노무비",
+          "base": "직접노무비 + 간접노무비",
+          "base_amount": 4922974,
+          "rate": null,
+          "amount": 4922974,
+          "source": {
+            "file": "원가계산서 합산",
+            "version": "260413"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "산재보험료",
+          "category": "경비",
+          "base": "노무비 계",
+          "base_amount": 4922974,
+          "rate": "3.56",
+          "amount": 175257,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "BZ51",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "고용보험료",
+          "category": "경비",
+          "base": "노무비 계",
+          "base_amount": 4922974,
+          "rate": "1.01",
+          "amount": 49722,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "AH79",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "건강보험료",
+          "category": "경비",
+          "base": "직접노무비",
+          "base_amount": 4133480,
+          "rate": "3.595",
+          "amount": 148598,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "AU51",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "노인장기요양보험료",
+          "category": "경비",
+          "base": "건강보험료",
+          "base_amount": 148598,
+          "rate": "13.14",
+          "amount": 19525,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "BD51",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "연금보험료",
+          "category": "경비",
+          "base": "직접노무비",
+          "base_amount": 4133480,
+          "rate": "4.75",
+          "amount": 196340,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "BR51",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "환경보전비",
+          "category": "경비",
+          "base": "직접공사비",
+          "base_amount": 5650840,
+          "rate": "0.8",
+          "amount": 45206,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "BU86",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": "공사 종류: 기타 토목공사"
+        },
+        {
+          "name": "기타경비",
+          "category": "경비",
+          "base": "재료비 + 노무비",
+          "base_amount": 5101334,
+          "rate": "5.5",
+          "amount": 280573,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "AL15",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "하도급대금 지급보증 수수료",
+          "category": "경비",
+          "base": "직접공사비",
+          "base_amount": 5650840,
+          "rate": "0.081",
+          "amount": 4577,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "DC68",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "석면분담금",
+          "category": "경비",
+          "base": "노무비",
+          "base_amount": 4922974,
+          "rate": "0.006",
+          "amount": 295,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "BZ99",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "임금채권부담금",
+          "category": "경비",
+          "base": "노무비",
+          "base_amount": 4922974,
+          "rate": "0.09",
+          "amount": 4430,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "CS99",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "퇴직공제부금비",
+          "category": "경비",
+          "base": "직접노무비",
+          "base_amount": 4133480,
+          "rate": "2.3",
+          "amount": 0,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "AU110",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "AU113"
+          },
+          "status": "제외",
+          "reason": "추정금액 1억 미만",
+          "note": null
+        },
+        {
+          "name": "산업안전보건관리비",
+          "category": "경비",
+          "base": "재료비 + 직접노무비",
+          "base_amount": 4311840,
+          "rate": "3.15",
+          "amount": 0,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "ES21",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "DK51"
+          },
+          "status": "제외",
+          "reason": "총 공사금액 2천만원 미만",
+          "note": null
+        },
+        {
+          "name": "경비 계",
+          "category": "경비",
+          "base": "직접경비 + 간접경비",
+          "base_amount": 2263523,
+          "rate": null,
+          "amount": 2263523,
+          "source": {
+            "file": "원가계산서 합산",
+            "version": "260413"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "순공사원가",
+          "category": "합계",
+          "base": "재료비 + 노무비 계 + 경비 계",
+          "base_amount": 7364857,
+          "rate": null,
+          "amount": 7364857,
+          "source": {
+            "file": "원가계산서 합산",
+            "version": "260413"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "일반관리비",
+          "category": "일반관리비",
+          "base": "순공사원가",
+          "base_amount": 7364857,
+          "rate": "8",
+          "amount": 589188,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "BD15",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "이윤",
+          "category": "이윤",
+          "base": "노무비 + 경비 + 일반관리비",
+          "base_amount": 7775685,
+          "rate": "15",
+          "amount": 1166352,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": "BS15",
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "총원가",
+          "category": "합계",
+          "base": "순공사원가 + 일반관리비 + 이윤",
+          "base_amount": 9120397,
+          "rate": null,
+          "amount": 9120397,
+          "source": {
+            "file": "원가계산서 합산",
+            "version": "260413"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "부가가치세",
+          "category": "부가가치세",
+          "base": "총원가",
+          "base_amount": 9120397,
+          "rate": null,
+          "amount": 912039,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": null,
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "도급액",
+          "category": "합계",
+          "base": "총원가 + 부가가치세",
+          "base_amount": 10032436,
+          "rate": null,
+          "amount": 10032436,
+          "source": {
+            "file": "원가계산서 합산",
+            "version": "260413"
+          },
+          "condition_source": null,
+          "status": "산정",
+          "reason": null,
+          "note": null
+        },
+        {
+          "name": "공사이행보증",
+          "category": "경비",
+          "base": "",
+          "base_amount": 0,
+          "rate": null,
+          "amount": 0,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": null,
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "제외",
+          "reason": "지방계약법 시행령 제51조제1항 적용 의무 대상(추정가격 300억 이상 등)만 해당",
+          "note": null
+        },
+        {
+          "name": "레미콘(콘크리트) 재료비",
+          "category": "재료비",
+          "base": "",
+          "base_amount": 0,
+          "rate": null,
+          "amount": 0,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": null,
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "제외",
+          "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외",
+          "note": null
+        },
+        {
+          "name": "펌프차 연료·잡재료비",
+          "category": "재료비",
+          "base": "",
+          "base_amount": 0,
+          "rate": null,
+          "amount": null,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": null,
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "미산정",
+          "reason": "유류 가격 미입력 — 품셈 8-1-7: 해당 지역 가격",
+          "note": null
+        },
+        {
+          "name": "공통 정책 1-2-9 소규모 적용",
+          "category": null,
+          "base": "",
+          "base_amount": 0,
+          "rate": null,
+          "amount": null,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": null,
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "미산정",
+          "reason": "이번 계산 범위에서 미산정",
+          "note": null
+        },
+        {
+          "name": "살수 양생 품량",
+          "category": null,
+          "base": "",
+          "base_amount": 0,
+          "rate": null,
+          "amount": null,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": null,
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "미산정",
+          "reason": "이번 계산 범위에서 미산정",
+          "note": null
+        },
+        {
+          "name": "건설기계대여대금 지급보증 수수료",
+          "category": "경비",
+          "base": "",
+          "base_amount": 0,
+          "rate": null,
+          "amount": null,
+          "source": {
+            "file": "data/raw/토목공사 간접공사비 적용기준(260413).xlsx",
+            "cell": null,
+            "version": "260413",
+            "effective_from": "2026-04-13"
+          },
+          "condition_source": null,
+          "status": "미산정",
+          "reason": "원문 요율은 '지급보증액 발급금액' 기준이라 보증 수수료 산정 방법 확인 필요",
+          "note": null
+        }
+      ],
+      "excluded": [
+        {
+          "name": "퇴직공제부금비",
+          "reason": "추정금액 1억 미만"
+        },
+        {
+          "name": "산업안전보건관리비",
+          "reason": "총 공사금액 2천만원 미만"
+        },
+        {
+          "name": "공사이행보증",
+          "reason": "지방계약법 시행령 제51조제1항 적용 의무 대상(추정가격 300억 이상 등)만 해당"
+        },
+        {
+          "name": "레미콘(콘크리트) 재료비",
+          "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+        }
+      ],
+      "unpriced": [
+        {
+          "name": "펌프차 연료·잡재료비",
+          "reason": "유류 가격 미입력 — 품셈 8-1-7: 해당 지역 가격",
+          "category": "재료비",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1"
+            },
+            {
+              "code": "2026년도 건설기계 경비산출표",
+              "division": "건설기계",
+              "section_no": "4504",
+              "section_title": "콘크리트 펌프차",
+              "section": "4504 콘크리트 펌프차",
+              "subsection": "32m, 80~95㎥/hr",
+              "item": "주연료",
+              "row": "4504-0032",
+              "column": "주연료",
+              "value": "17.3ℓ/hr",
+              "pdf_page": 14,
+              "printed_page": 14,
+              "quote": null,
+              "internal_id": "4504-0032",
+              "label": "대한건설협회 「2026년도 건설기계 경비산출표」 4504-0032 32m, 80~95㎥/hr (PDF 14쪽)\n주연료: 17.3ℓ/hr"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "8-1-7",
+              "section_title": "손료보정 등",
+              "section": "8-1-7 손료보정 등",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 224,
+              "printed_page": 168,
+              "quote": "5. 유류가격은 해당지역의 가격으로 한다.",
+              "internal_id": "PDF224-8-1-7",
+              "label": "2026 건설공사 표준품셈 공통부문 8-1-7 손료보정 등 (인쇄 168쪽)"
+            }
+          ]
+        },
+        {
+          "name": "공통 정책 1-2-9 소규모 적용",
+          "reason": "이번 계산 범위에서 미산정",
+          "category": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-9",
+              "section_title": "소규모(작업물량 제한)",
+              "section": "1-2-9 소규모(작업물량 제한)(‘23년 신설, ‘25년 보완)",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 75,
+              "printed_page": 19,
+              "quote": "\"시공량/일\"으로 명시된 항목 중 총 시공량이 본 품(시공량/일)의 기준 미만인 소규모 공사인 경우 ",
+              "internal_id": "PDF 75",
+              "label": "2026 건설공사 표준품셈 공통부문\n1-2-9 소규모(작업물량 제한) (인쇄 19쪽)\n본문 “\"시공량/일\"으로 명시된 항목 중 총 시공량이 본 품(시공량/일)의 기준 미만인 소규모 공사인 경우 ”"
+            }
+          ]
+        },
+        {
+          "name": "살수 양생 품량",
+          "reason": "이번 계산 범위에서 미산정",
+          "category": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "1. 적용범위",
+              "item": "사.",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "양생은 양생방법 및 시간을 고려하여 별도 계상한다.",
+              "internal_id": "p186-x6",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 1. 적용범위 (인쇄 130쪽)\n사. “양생은 양생방법 및 시간을 고려하여 별도 계상한다.”"
+            }
+          ]
+        },
+        {
+          "name": "건설기계대여대금 지급보증 수수료",
+          "reason": "원문 요율은 '지급보증액 발급금액' 기준이라 보증 수수료 산정 방법 확인 필요"
+        }
+      ],
+      "totals": {
+        "materials": 178360,
+        "labor": 4922974,
+        "expenses": 2263523,
+        "net_cost": 7364857,
+        "management": 589188,
+        "profit": 1166352,
+        "total_cost": 9120397,
+        "vat": 912039,
+        "contract_amount": 10032436
+      },
+      "volume": "260"
+    },
+    "answer": "콘크리트 펌프차 타설 260㎥ 전체 물량 기준 부가세 포함 도급액은 10,032,436원입니다. 미산정 항목: 펌프차 연료·잡재료비, 공통 정책 1-2-9 소규모 적용, 살수 양생 품량, 건설기계대여대금 지급보증 수수료.",
+    "qa": null,
+    "answer_source": "template",
+    "llm_info": {
+      "provider": "vertex",
+      "model": "gemini-3.5-flash-lite",
+      "elapsed_ms": 0,
+      "attempts": 0,
+      "error": "AGENT_LLM=off",
+      "bad_numbers": []
+    },
+    "basis_date": "2026-10-01",
+    "search": {
+      "method": "bm25(오프라인)",
+      "api_calls": 0,
+      "warnings": [],
+      "raw_warnings": [],
+      "fallback_reason": null,
+      "queries": [
+        "철근콘크리트 벽체 260㎥ 펌프차 32m 붐타설 비용"
+      ]
+    },
+    "conditions": [
+      {
+        "name": "work_category",
+        "label": "공사 종류",
+        "value": "기타 토목공사",
+        "source": "선택",
+        "type": "enum",
+        "choices": [
+          "도로",
+          "플랜트",
+          "지하철",
+          "철도",
+          "상하수도",
+          "항만(오탁방지막 미설치)",
+          "항만(오탁방지막 설치)",
+          "댐",
+          "택지개발",
+          "기타 토목공사",
+          "재개발·재건축",
+          "주택 신축",
+          "주택 외 건축"
+        ],
+        "help": {
+          "도로": "도로·교량·터널 공사",
+          "플랜트": "발전소·화학설비 등 플랜트 공사",
+          "지하철": "지하철 공사",
+          "철도": "철도 공사",
+          "상하수도": "상수도·하수도 관로·시설 공사",
+          "항만(오탁방지막 미설치)": "항만·간척·준설 공사(오탁방지막 없음)",
+          "항만(오탁방지막 설치)": "항만·준설 공사 중 오탁방지막을 함께 설치하는 경우",
+          "댐": "댐 공사",
+          "택지개발": "택지·단지 조성 공사",
+          "기타 토목공사": "위에 해당하지 않는 토목(하천·옹벽·배수 등). 잘 모르겠으면 이 값",
+          "재개발·재건축": "재개발·재건축 건축 공사",
+          "주택 신축": "주택을 새로 짓는 공사",
+          "주택 외 건축": "아파트·건물·빌딩 등 주택 신축이 아닌 건축. 건축에서 잘 모르겠으면 이 값"
+        },
+        "default": "기타 토목공사",
+        "groups": {
+          "토목": [
+            "도로",
+            "플랜트",
+            "지하철",
+            "철도",
+            "상하수도",
+            "항만(오탁방지막 미설치)",
+            "항만(오탁방지막 설치)",
+            "댐",
+            "택지개발",
+            "기타 토목공사"
+          ],
+          "건축": [
+            "재개발·재건축",
+            "주택 신축",
+            "주택 외 건축"
+          ]
+        },
+        "group": "토목"
+      },
+      {
+        "name": "duration",
+        "label": "공사 기간",
+        "value": "1~6개월",
+        "source": "선택",
+        "type": "enum",
+        "choices": [
+          "1개월 미만",
+          "1~6개월",
+          "7~12개월",
+          "13~36개월",
+          "36개월 초과"
+        ],
+        "help": {
+          "1개월 미만": "30일 미만의 짧은 공사(건강보험 등 일부 비목 제외)",
+          "1~6개월": "6개월 이하. 잘 모르겠으면 이 값",
+          "7~12개월": "1년 이내",
+          "13~36개월": "1년 초과 3년 이내",
+          "36개월 초과": "3년 초과 장기 공사"
+        },
+        "default": "1~6개월"
+      },
+      {
+        "name": "contractor_type",
+        "label": "시공사 업종",
+        "value": "종합건설업",
+        "source": "선택",
+        "type": "enum",
+        "choices": [
+          "종합건설업",
+          "전문건설업"
+        ],
+        "help": {
+          "종합건설업": "원청 건설사",
+          "전문건설업": "하도급 전문업체"
+        },
+        "default": "종합건설업"
+      },
+      {
+        "name": "project_scale",
+        "label": "전체 공사 규모",
+        "value": "이 견적만",
+        "source": "선택",
+        "type": "project_scale",
+        "choices": [
+          "이 견적만"
+        ],
+        "help": {
+          "이 견적만": "이 공종만 따로 발주한다고 가정"
+        },
+        "default": "이 견적만"
+      }
+    ],
+    "tables": {
+      "statement_rows": [
+        {
+          "name": "재료비",
+          "category": "재료비",
+          "basis": "일위대가표 물량 기준 참고 금액",
+          "amount": 178360,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "레미콘(콘크리트) 재료비",
+          "category": "재료비",
+          "basis": "",
+          "amount": 0,
+          "status": "제외",
+          "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외",
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "펌프차 연료·잡재료비",
+          "category": "재료비",
+          "basis": "",
+          "amount": null,
+          "status": "미산정",
+          "reason": "유류 가격 미입력 — 품셈 8-1-7: 해당 지역 가격",
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "직접노무비",
+          "category": "노무비",
+          "basis": "일위대가표 물량 기준 참고 금액",
+          "amount": 4133480,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "간접노무비",
+          "category": "노무비",
+          "basis": "직접노무비 4,133,480원 × 19.1%",
+          "amount": 789494,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "노무비 계",
+          "category": "노무비",
+          "basis": "직접노무비 + 간접노무비",
+          "amount": 4922974,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "subtotal",
+          "final": false
+        },
+        {
+          "name": "직접경비",
+          "category": "경비",
+          "basis": "일위대가표 물량 기준 참고 금액",
+          "amount": 1339000,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "산재보험료",
+          "category": "경비",
+          "basis": "노무비 계 4,922,974원 × 3.56%",
+          "amount": 175257,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "고용보험료",
+          "category": "경비",
+          "basis": "노무비 계 4,922,974원 × 1.01%",
+          "amount": 49722,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "건강보험료",
+          "category": "경비",
+          "basis": "직접노무비 4,133,480원 × 3.595%",
+          "amount": 148598,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "노인장기요양보험료",
+          "category": "경비",
+          "basis": "건강보험료 148,598원 × 13.14%",
+          "amount": 19525,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "연금보험료",
+          "category": "경비",
+          "basis": "직접노무비 4,133,480원 × 4.75%",
+          "amount": 196340,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "환경보전비",
+          "category": "경비",
+          "basis": "직접공사비 5,650,840원 × 0.8%",
+          "amount": 45206,
+          "status": "산정",
+          "reason": null,
+          "note": "공사 종류: 기타 토목공사",
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "기타경비",
+          "category": "경비",
+          "basis": "재료비 + 노무비 5,101,334원 × 5.5%",
+          "amount": 280573,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "하도급대금 지급보증 수수료",
+          "category": "경비",
+          "basis": "직접공사비 5,650,840원 × 0.081%",
+          "amount": 4577,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "석면분담금",
+          "category": "경비",
+          "basis": "노무비 4,922,974원 × 0.006%",
+          "amount": 295,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "임금채권부담금",
+          "category": "경비",
+          "basis": "노무비 4,922,974원 × 0.09%",
+          "amount": 4430,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "퇴직공제부금비",
+          "category": "경비",
+          "basis": "직접노무비",
+          "amount": 0,
+          "status": "제외",
+          "reason": "추정금액 1억 미만",
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "산업안전보건관리비",
+          "category": "경비",
+          "basis": "재료비 + 직접노무비",
+          "amount": 0,
+          "status": "제외",
+          "reason": "총 공사금액 2천만원 미만",
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "공사이행보증",
+          "category": "경비",
+          "basis": "",
+          "amount": 0,
+          "status": "제외",
+          "reason": "지방계약법 시행령 제51조제1항 적용 의무 대상(추정가격 300억 이상 등)만 해당",
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "건설기계대여대금 지급보증 수수료",
+          "category": "경비",
+          "basis": "",
+          "amount": null,
+          "status": "미산정",
+          "reason": "원문 요율은 '지급보증액 발급금액' 기준이라 보증 수수료 산정 방법 확인 필요",
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "경비 계",
+          "category": "경비",
+          "basis": "직접경비 + 간접경비",
+          "amount": 2263523,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "subtotal",
+          "final": false
+        },
+        {
+          "name": "순공사원가",
+          "category": "합계",
+          "basis": "재료비 + 노무비 계 + 경비 계",
+          "amount": 7364857,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "total",
+          "final": false
+        },
+        {
+          "name": "일반관리비",
+          "category": "일반관리비",
+          "basis": "순공사원가 7,364,857원 × 8%",
+          "amount": 589188,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "이윤",
+          "category": "이윤",
+          "basis": "노무비 + 경비 + 일반관리비 7,775,685원 × 15%",
+          "amount": 1166352,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "총원가",
+          "category": "합계",
+          "basis": "순공사원가 + 일반관리비 + 이윤",
+          "amount": 9120397,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "total",
+          "final": false
+        },
+        {
+          "name": "부가가치세",
+          "category": "부가가치세",
+          "basis": "총원가",
+          "amount": 912039,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "도급액",
+          "category": "합계",
+          "basis": "총원가 + 부가가치세",
+          "amount": 10032436,
+          "status": "산정",
+          "reason": null,
+          "note": null,
+          "kind": "total",
+          "final": true
+        },
+        {
+          "name": "공통 정책 1-2-9 소규모 적용",
+          "category": null,
+          "basis": "",
+          "amount": null,
+          "status": "미산정",
+          "reason": "이번 계산 범위에서 미산정",
+          "note": null,
+          "kind": "item",
+          "final": false
+        },
+        {
+          "name": "살수 양생 품량",
+          "category": null,
+          "basis": "",
+          "amount": null,
+          "status": "미산정",
+          "reason": "이번 계산 범위에서 미산정",
+          "note": null,
+          "kind": "item",
+          "final": false
+        }
+      ],
+      "bill": {
+        "name": "공통 6-1-4 콘크리트 펌프차 타설(6-1-4)",
+        "spec": "철근·15㎝·Type-Ⅱ/Ⅱ·32m 붐",
+        "unit": "㎥",
+        "quantity": "260",
+        "unit_price": {
+          "재료비": "686",
+          "노무비": "15898",
+          "경비": "5150"
+        },
+        "amount": {
+          "재료비": "178360",
+          "노무비": "4133480",
+          "경비": "1339000"
+        },
+        "total": "5650840",
+        "partial": true
+      },
+      "unit_rows": [
+        {
+          "category": "노무비",
+          "name": "콘크리트공",
+          "spec": "노임 코드 1013",
+          "unit": "인",
+          "quantity": "0.0308",
+          "unit_price": "276285",
+          "amount": "8509.5",
+          "status": "산정",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트공",
+              "column": "철근",
+              "value": "4",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트공 · 철근 → 4",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1013",
+              "section_title": "콘크리트공",
+              "section": "콘크리트공",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "콘크리트공",
+              "column": "1013",
+              "value": "276285",
+              "pdf_page": 10,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1013",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1013 콘크리트공: 276,285원/일 (PDF 10쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "category": "노무비",
+          "name": "특별인부",
+          "spec": "노임 코드 1003",
+          "unit": "인",
+          "quantity": "0.0077",
+          "unit_price": "228717",
+          "amount": "1761.1",
+          "status": "산정",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "특별인부",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 특별인부 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1003",
+              "section_title": "특별인부",
+              "section": "특별인부",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "특별인부",
+              "column": "1003",
+              "value": "228717",
+              "pdf_page": 10,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1003",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1003 특별인부: 228,717원/일 (PDF 10쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "category": "노무비",
+          "name": "형틀목공",
+          "spec": "노임 코드 1007",
+          "unit": "인",
+          "quantity": "0.0077",
+          "unit_price": "275379",
+          "amount": "2120.4",
+          "status": "산정",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "형틀목공",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 형틀목공 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1007",
+              "section_title": "형틀목공",
+              "section": "형틀목공",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "형틀목공",
+              "column": "1007",
+              "value": "275379",
+              "pdf_page": 10,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1007",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1007 형틀목공: 275,379원/일 (PDF 10쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "category": "노무비",
+          "name": "보통인부",
+          "spec": "노임 코드 1002",
+          "unit": "인",
+          "quantity": "0.0077",
+          "unit_price": "172698",
+          "amount": "1329.7",
+          "status": "산정",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "보통인부",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 보통인부 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1002",
+              "section_title": "보통인부",
+              "section": "보통인부",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "보통인부",
+              "column": "1002",
+              "value": "172698",
+              "pdf_page": 10,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1002",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1002 보통인부: 172,698원/일 (PDF 10쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "category": "경비",
+          "name": "펌프차 기계손료",
+          "spec": "32m, 80~95㎥/hr",
+          "unit": "hr",
+          "quantity": "0.0615",
+          "unit_price": "72600",
+          "amount": "4464.9",
+          "status": "산정",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년도 건설기계 경비산출표",
+              "division": "건설기계",
+              "section_no": "4504",
+              "section_title": "콘크리트 펌프차",
+              "section": "4504 콘크리트 펌프차",
+              "subsection": "32m, 80~95㎥/hr",
+              "item": "시간당 손료",
+              "row": "4504-0032",
+              "column": "시간당 손료",
+              "value": "72600",
+              "pdf_page": 14,
+              "printed_page": 14,
+              "quote": null,
+              "internal_id": "4504-0032",
+              "label": "대한건설협회 「2026년도 건설기계 경비산출표」 4504-0032 32m, 80~95㎥/hr (PDF 14쪽)\n시간당 손료: 72600"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "8-1-5",
+              "section_title": "기계경비 용어와 정의",
+              "section": "8-1-5 기계경비 용어와 정의",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 223,
+              "printed_page": 167,
+              "quote": "손료계수의 합계를 곱한 값을 말한다. (원미만의 값은 절사한다.)",
+              "internal_id": "PDF223-8-1-5",
+              "label": "2026 건설공사 표준품셈 공통부문 8-1-5 기계경비 용어와 정의 (인쇄 167쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "category": "노무비",
+          "name": "펌프차 운전원",
+          "spec": "32m, 80~95㎥/hr",
+          "unit": "hr",
+          "quantity": "0.0615",
+          "unit_price": "35415.375",
+          "amount": "2178.0",
+          "status": "산정",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년도 건설기계 경비산출표",
+              "division": "건설기계",
+              "section_no": "4504",
+              "section_title": "콘크리트 펌프차",
+              "section": "4504 콘크리트 펌프차",
+              "subsection": "32m, 80~95㎥/hr",
+              "item": "조종원",
+              "row": "4504-0032",
+              "column": "조종원",
+              "value": "1",
+              "pdf_page": 14,
+              "printed_page": 14,
+              "quote": null,
+              "internal_id": "4504-0032",
+              "label": "대한건설협회 「2026년도 건설기계 경비산출표」 4504-0032 32m, 80~95㎥/hr (PDF 14쪽)\n조종원: 1"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "8-1-6",
+              "section_title": "기계경비 적산요령",
+              "section": "8-1-6 기계경비 적산요령",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 223,
+              "printed_page": 167,
+              "quote": "3. 운전경비 : 기계를 사용하는데 필요한 다음 각호 경비의 합계액으로 한다.",
+              "internal_id": "PDF223-8-1-6",
+              "label": "2026 건설공사 표준품셈 공통부문 8-1-6 기계경비 적산요령 (인쇄 167쪽)"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": null,
+              "section_title": "이용상의 주의사항",
+              "section": "이용상의 주의사항",
+              "subsection": "7. 이용상의 주의사항",
+              "item": "1일 8시간 기준",
+              "row": null,
+              "column": null,
+              "value": "8시간",
+              "pdf_page": 4,
+              "printed_page": 3,
+              "quote": "다. 본조사임금은1일8시간기준(단, 잠수부는6시간기준)금액임.",
+              "internal_id": "2026H2:PDF4:8시간",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」 7. 이용상의 주의사항 (PDF 4쪽)\n건설기계운전사 일당의 시간당 환산: 1일 8시간"
+            },
+            {
+              "code": "2026년 하반기 적용 건설업 임금실태조사",
+              "division": null,
+              "section_no": "1048",
+              "section_title": "건설기계운전사",
+              "section": "건설기계운전사",
+              "subsection": null,
+              "item": "노임단가",
+              "row": "건설기계운전사",
+              "column": "1048",
+              "value": "283323",
+              "pdf_page": 11,
+              "printed_page": null,
+              "quote": null,
+              "internal_id": "2026H2:1048",
+              "label": "대한건설협회 「2026년 하반기 적용 건설업 임금실태조사」(시중노임단가), 2026-09-01 적용\n1048 건설기계운전사: 283,323원/일 (PDF 11쪽)"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "category": "재료비",
+          "name": "펌프차 연료·잡재료비",
+          "spec": "32m, 80~95㎥/hr",
+          "unit": "hr",
+          "quantity": "0.0615",
+          "unit_price": null,
+          "amount": null,
+          "status": "미산정",
+          "reason": "유류 가격 미입력 — 품셈 8-1-7: 해당 지역 가격",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "표",
+              "row": "콘크리트펌프차",
+              "column": "철근",
+              "value": "1",
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": null,
+              "internal_id": "p186-t1",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n표: 콘크리트펌프차 · 철근 → 1",
+              "image_url": "/api/source/p186-t1.png"
+            },
+            {
+              "code": "2026년도 건설기계 경비산출표",
+              "division": "건설기계",
+              "section_no": "4504",
+              "section_title": "콘크리트 펌프차",
+              "section": "4504 콘크리트 펌프차",
+              "subsection": "32m, 80~95㎥/hr",
+              "item": "주연료",
+              "row": "4504-0032",
+              "column": "주연료",
+              "value": "17.3ℓ/hr",
+              "pdf_page": 14,
+              "printed_page": 14,
+              "quote": null,
+              "internal_id": "4504-0032",
+              "label": "대한건설협회 「2026년도 건설기계 경비산출표」 4504-0032 32m, 80~95㎥/hr (PDF 14쪽)\n주연료: 17.3ℓ/hr"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "8-1-7",
+              "section_title": "손료보정 등",
+              "section": "8-1-7 손료보정 등",
+              "subsection": null,
+              "item": "본문",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 224,
+              "printed_page": 168,
+              "quote": "5. 유류가격은 해당지역의 가격으로 한다.",
+              "internal_id": "PDF224-8-1-7",
+              "label": "2026 건설공사 표준품셈 공통부문 8-1-7 손료보정 등 (인쇄 168쪽)"
+            }
+          ]
+        },
+        {
+          "category": "경비",
+          "name": "공구손료 및 경장비",
+          "spec": "노무비의 5.00%",
+          "unit": "식",
+          "quantity": 1,
+          "unit_price": "686.0",
+          "amount": "686.0",
+          "status": "산정",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "[주] ②",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "공구손료 및 경장비(콘크리트 진동기 등)의 기계경비는 편성인력 노무비의 5%를 적용한다.",
+              "internal_id": "p186-x16",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n[주] ② “공구손료 및 경장비(콘크리트 진동기 등)의 기계경비는 편성인력 노무비의 5%를 적용한다.”",
+              "image_url": "/api/source/p186-x16.png"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "category": "재료비",
+          "name": "잔여 콘크리트 재료비",
+          "spec": "노무비의 5.00%",
+          "unit": "식",
+          "quantity": 1,
+          "unit_price": "686.0",
+          "amount": "686.0",
+          "status": "산정",
+          "reason": null,
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "2. 인력편성",
+              "item": "[주] ③",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "타설 후 발생하는 잔여 콘크리트(배관 내 잔여물 등)의 재료비는 편성인력 노무비의 5%로 계상한다.",
+              "internal_id": "p186-x16",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 2. 인력편성 (인쇄 130쪽)\n[주] ③ “타설 후 발생하는 잔여 콘크리트(배관 내 잔여물 등)의 재료비는 편성인력 노무비의 5%로 계상한다.”",
+              "image_url": "/api/source/p186-x16.png"
+            },
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "1-2-2",
+              "section_title": "수량의 단위표준",
+              "section": "1-2-2 수량의 단위표준",
+              "subsection": "2. 금액의 단위표준",
+              "item": "일위대가표의 금액란",
+              "row": "일위대가표의 금액란",
+              "column": null,
+              "value": "0.1",
+              "pdf_page": 62,
+              "printed_page": 6,
+              "quote": null,
+              "internal_id": "PDF62-1-2-2",
+              "label": "2026 건설공사 표준품셈 공통부문 1-2-2 2. 금액의 단위표준, PDF 62쪽(인쇄 6쪽)\n일위대가표의 금액란: 0.1원 미만버림"
+            }
+          ]
+        },
+        {
+          "category": "재료비",
+          "name": "레미콘(콘크리트) 재료비",
+          "spec": "",
+          "unit": "",
+          "quantity": null,
+          "unit_price": null,
+          "amount": null,
+          "status": "제외",
+          "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외",
+          "citations": [
+            {
+              "code": "2026 건설공사 표준품셈",
+              "division": "공통부문",
+              "section_no": "6-1-4",
+              "section_title": "콘크리트 펌프차 타설",
+              "section": "6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)",
+              "subsection": "1. 적용범위",
+              "item": "가.",
+              "row": null,
+              "column": null,
+              "value": null,
+              "pdf_page": 186,
+              "printed_page": 130,
+              "quote": "본 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다.",
+              "internal_id": "p186-x6",
+              "label": "2026 건설공사 표준품셈 공통부문\n6-1-4 콘크리트 펌프차 타설 › 1. 적용범위 (인쇄 130쪽)\n가. “본 품은 콘크리트펌프차(80㎥/hr 이상)를 활용한 콘크리트 타설에 적용한다.”",
+              "image_url": "/api/source/p186-x6.png"
+            }
+          ]
+        }
+      ],
+      "rate_rows": [
+        {
+          "kind": "노임",
+          "name": "콘크리트공",
+          "spec": "",
+          "unit": "원/인",
+          "price": "276285",
+          "source": "2026년 하반기 적용 건설업 임금실태조사(대한건설협회)",
+          "period": "2026 하반기",
+          "note": "일 8시간 · 노임 코드 1013"
+        },
+        {
+          "kind": "노임",
+          "name": "특별인부",
+          "spec": "",
+          "unit": "원/인",
+          "price": "228717",
+          "source": "2026년 하반기 적용 건설업 임금실태조사(대한건설협회)",
+          "period": "2026 하반기",
+          "note": "일 8시간 · 노임 코드 1003"
+        },
+        {
+          "kind": "노임",
+          "name": "형틀목공",
+          "spec": "",
+          "unit": "원/인",
+          "price": "275379",
+          "source": "2026년 하반기 적용 건설업 임금실태조사(대한건설협회)",
+          "period": "2026 하반기",
+          "note": "일 8시간 · 노임 코드 1007"
+        },
+        {
+          "kind": "노임",
+          "name": "보통인부",
+          "spec": "",
+          "unit": "원/인",
+          "price": "172698",
+          "source": "2026년 하반기 적용 건설업 임금실태조사(대한건설협회)",
+          "period": "2026 하반기",
+          "note": "일 8시간 · 노임 코드 1002"
+        },
+        {
+          "kind": "기계경비",
+          "name": "펌프차 기계손료",
+          "spec": "32m, 80~95㎥/hr",
+          "unit": "원/hr",
+          "price": "72600",
+          "source": "2026년도 건설기계 경비산출표(대한건설협회)",
+          "period": "2026",
+          "note": ""
+        },
+        {
+          "kind": "노임",
+          "name": "펌프차 운전원",
+          "spec": "",
+          "unit": "원/인",
+          "price": 283323,
+          "source": "2026년 하반기 적용 건설업 임금실태조사(대한건설협회)",
+          "period": "2026 하반기",
+          "note": "시간당 35,415.4원 환산(÷8) · 노임 코드 1048"
+        },
+        {
+          "kind": "자재",
+          "name": "레미콘(콘크리트) 재료비",
+          "spec": "",
+          "unit": "",
+          "price": "-",
+          "source": "",
+          "period": "",
+          "note": "관급(발주처 지급)"
+        }
+      ]
+    },
+    "timing": {
+      "route_ms": 0.0,
+      "retrieve_ms": 0.0,
+      "compute_ms": 412.1,
+      "llm_ms": 5.5,
+      "total_ms": 538.3
+    }
+  }
+}

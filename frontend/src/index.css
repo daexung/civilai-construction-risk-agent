@@ -1,20 +1,35 @@
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9f9f9;
-  --bg-tertiary: #eeeeee;
+  --accent: #1F5A3A;
+  --accent-tint: #EAF2EC;
+  --point: #8A5A3B;
+  --point-tint: #F4ECE4;
+  --status-warning: #9A6B12;
+  --status-warning-tint: #FBF1DC;
+  --bg-primary: #FAF8F4;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1eee8;
   --border-color: #e5e5e5;
   --border-light: #f0f0f0;
   --text-primary: #1a1a1a;
   --text-secondary: #555555;
   --text-muted: #999999;
   --modal-bg: #ffffff;
-  --send-btn-bg: #1a1a1a;
+  --surface: #ffffff;
+  --shadow-soft: 0 16px 44px rgba(48, 39, 29, 0.1);
+  --shadow-card: 0 5px 18px rgba(48, 39, 29, 0.04);
+  --send-btn-bg: var(--accent);
   --send-btn-color: #ffffff;
-  --logo-color: #14532d;
-  --logo-accent: #3a7d44;
+  --logo-color: var(--accent);
+  --logo-accent: var(--accent);
 }
 
 [data-theme="dark"] {
+  --accent: #5AAD7A;
+  --accent-tint: #233b2d;
+  --point: #C49470;
+  --point-tint: #3e3027;
+  --status-warning: #e1b45d;
+  --status-warning-tint: #40351e;
   --bg-primary: #25262a;
   --bg-secondary: #2e2f33;
   --bg-tertiary: #3a3b40;
@@ -24,10 +39,13 @@
   --text-secondary: #a0a2aa;
   --text-muted: #65666e;
   --modal-bg: #2e2f33;
-  --send-btn-bg: #3a7d44;
+  --surface: #2e2f33;
+  --shadow-soft: 0 16px 44px rgba(0, 0, 0, 0.24);
+  --shadow-card: 0 5px 18px rgba(0, 0, 0, 0.16);
+  --send-btn-bg: var(--accent);
   --send-btn-color: #ffffff;
-  --logo-color: #5aad68;
-  --logo-accent: #5aad68;
+  --logo-color: var(--accent);
+  --logo-accent: var(--accent);
 }
 
 /* ── 스크롤바 ── */
