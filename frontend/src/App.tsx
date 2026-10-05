@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ChatArea from './components/ChatArea';
+import Landing from './landing/Landing';
 import ToastContainer from './components/ToastContainer';
 import { ChatTurn, ChoiceValue } from './types';
 import { sendChat } from './api';
@@ -8,6 +9,7 @@ import { showToast } from './toast';
 import './App.css';
 
 export default function App() {
+  const [pathname, setPathname] = useState(window.location.pathname);
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [threadId, setThreadId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -74,6 +76,29 @@ export default function App() {
     setThreadId(null);
     return send(text, { message: text }, null);
   }, [send]);
+
+  const navigate = useCallback((path: string) => {
+    window.history.pushState({}, '', path);
+    setPathname(window.location.pathname);
+  }, []);
+
+  useEffect(() => {
+    const onPopState = () => setPathname(window.location.pathname);
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  useEffect(() => {
+    if (pathname !== '/chat') return;
+    const query = new URLSearchParams(window.location.search).get('q');
+    if (!query) return;
+    window.history.replaceState({}, '', '/chat');
+    handleSendExample(query);
+  }, [pathname, handleSendExample]);
+
+  if (pathname !== '/chat') {
+    return <Landing onStart={() => navigate('/chat')} onExample={(question) => navigate(`/chat?q=${encodeURIComponent(question)}`)} />;
+  }
 
   return (
     <div className="app">
