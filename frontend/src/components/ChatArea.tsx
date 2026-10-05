@@ -474,7 +474,7 @@ function AssistantCard({
           {response.route === 'estimate' ? '견적' : response.route === 'qa' ? '상담' : response.route === 'out_of_scope' ? '범위 밖' : STATUS_LABEL[response.status]}
         </span>
         {response.work && <span className="work-badge">{response.work.section_no ? `${response.work.section_no} ` : ''}{response.work.title}</span>}
-        {response.status === 'ANSWERED' && response.answer_source === 'template' && <span className="review-badge">AI 초안 · 검토 전</span>}
+        {response.answer_source === 'template' && <span className="simple-answer-badge">간단 응답</span>}
         <AssistantTiming response={response} elapsedMs={elapsedMs} />
       </div>
       {amountRow && <div className="estimate-amount-block">
@@ -495,7 +495,6 @@ function AssistantCard({
         </div>
       ) : response.answer ? (
         <div className="assistant-answer">
-          {response.answer_source === 'template' && <span className="review-badge">기본 응답 · 검토 전</span>}
           <div className="assistant-text"><MarkdownAnswer>{response.answer}</MarkdownAnswer></div>
         </div>
       ) : (

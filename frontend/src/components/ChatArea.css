@@ -1127,3 +1127,4 @@ button.source-page-badge:hover { color: var(--point); background: var(--point-ti
 .estimate-tab-row button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
 .estimate-tab-row button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 .estimate-tabs [role="tabpanel"] { min-width: 0; }
+.simple-answer-badge { font-size: 11px; color: var(--text-secondary); }
