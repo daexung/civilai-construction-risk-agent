@@ -311,8 +311,12 @@ def validate_numbers(text: str, facts: dict) -> tuple[bool, list[str]]:
     return not bad, bad
 
 
-def validate_amount_basis(text: str) -> bool:
-    """Require each currency amount to carry an adjacent quantity basis."""
+def validate_amount_basis(text: str, facts: dict | None = None) -> bool:
+    """Check the VAT-inclusive contract amount, or retain unit-basis checks for unit estimates."""
+    totals = ((facts or {}).get("statement") or {}).get("totals") or {}
+    contract_amount = totals.get("전체 물량 기준 도급액(부가세 포함)")
+    if contract_amount is not None:
+        return contract_amount in text and "부가세 포함" in text
     for match in re.finditer(r"\d[\d,]*(?:\.\d+)?\s*원", text):
         context = text[max(0, match.start() - 24):match.start()]
         if not re.search(r"(?:1\s*[㎥㎡]\s*당|[㎥㎡]\s*기준|전체\s*물량\s*기준)", context):
@@ -378,7 +382,7 @@ def compose(state: AgentState, generate_fn=None) -> dict:
         llm_info["error"] = "숫자 불일치"
         llm_info["bad_numbers"] = bad
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
-    if not validate_amount_basis(text):
+    if not validate_amount_basis(text, facts):
         llm_info["error"] = "금액 기준 누락"
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
     if validate_unpriced(text, facts):
