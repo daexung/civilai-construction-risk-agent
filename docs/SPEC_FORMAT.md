@@ -1,6 +1,6 @@
 # 계산 명세 형식
 
-`agent/rules/specs/<부문>/<절-작업>.json` 한 파일 = 한 절(부문+절 번호)의 한 작업에 대한 계산 명세. 완성 예시: `agent/rules/specs/common/6-1-4_pump.json`. 이 문서는 강한 모델이 초안을 쓸 때 지시문에 그대로 들어가므로, 여기 없는 필드는 만들지 말고 여기 있는 값만 쓴다.
+`backend/agent/rules/specs/<부문>/<절-작업>.json` 한 파일 = 한 절(부문+절 번호)의 한 작업에 대한 계산 명세. 완성 예시: `backend/agent/rules/specs/common/6-1-4_pump.json`. 이 문서는 강한 모델이 초안을 쓸 때 지시문에 그대로 들어가므로, 여기 없는 필드는 만들지 말고 여기 있는 값만 쓴다.
 
 ## 최상위 필드
 
@@ -74,7 +74,7 @@
 
 계산 방식 하나. `name`으로 어떤 계산 함수를 쓸지 고른다.
 
-### `adjusted_daily_crew` (구현됨 — `agent/tools/calc/daily_crew.py`)
+### `adjusted_daily_crew` (구현됨 — `backend/agent/tools/calc/daily_crew.py`)
 
 일당 작업조형: 기준 일일시공량에 계수를 곱해 조정 후, 물량 ÷ 일당시공량 = 작업일수를 구하고, 직종별 인원 × 작업일수로 인·일을 낸다. `p186-t1`(6-1-4)처럼 "구조물별/직종별 인원 + 장비 대수" 표와 "기준 일일시공량 × 계수" 표가 있는 절에 쓴다.
 

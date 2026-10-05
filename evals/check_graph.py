@@ -13,9 +13,9 @@ sys.path.insert(0, str(ROOT))
 
 from langgraph.types import Command  # noqa: E402
 
-import agent.nodes.compute as compute_module  # noqa: E402
-from agent.graph import build_graph  # noqa: E402
-from agent.state import new_state  # noqa: E402
+import backend.agent.nodes.compute as compute_module  # noqa: E402
+from backend.agent.graph import build_graph  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
 
 
 QUERY = "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"

@@ -1,8 +1,8 @@
 """계산 전에 명세의 보류 조건에 걸리는지만 확인한다. 계산은 하지 않는다."""
 
-from agent.rules.specs import load_specs
-from agent.state import AgentState
-from agent.tools.calc.daily_crew import check_blocked
+from backend.agent.rules.specs import load_specs
+from backend.agent.state import AgentState
+from backend.agent.tools.calc.daily_crew import check_blocked
 
 
 def gate(state: AgentState) -> dict:

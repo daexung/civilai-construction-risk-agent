@@ -321,7 +321,7 @@ def _work_name(response: dict) -> str:
     work = response.get("work") or {}
     title = work.get("title") or "공사비"
     if work.get("spec_id"):
-        from agent.rules.specs import load_specs
+        from backend.agent.rules.specs import load_specs
         spec = load_specs().get(work["spec_id"])
         if spec:
             title = spec["title"]
@@ -611,7 +611,8 @@ def _format_sheet(sheet, last_column: int, header_rows: tuple[int, ...], data_st
 
 @lru_cache(maxsize=1)
 def _overhead_rates() -> dict:
-    path = Path(__file__).resolve().parents[1] / "data" / "rates" / "overhead_rates.json"
+    from backend.paths import ROOT
+    path = ROOT / "data" / "rates" / "overhead_rates.json"
     return json.loads(path.read_text(encoding="utf-8"))
 
 

@@ -14,14 +14,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from fastapi.testclient import TestClient  # noqa: E402
-from agent.nodes.fill import extract_inputs, fill  # noqa: E402
-from agent.nodes.route import route  # noqa: E402
-from agent.nodes.retrieve import get_search  # noqa: E402
-from agent.rules.specs import load_specs  # noqa: E402
-from agent.state import new_state  # noqa: E402
-from api.main import app  # noqa: E402
-from api.tables import estimate_filename  # noqa: E402
-from agent.tools.search.vector import MissingVectorsError, VectorIndex  # noqa: E402
+from backend.agent.nodes.fill import extract_inputs, fill  # noqa: E402
+from backend.agent.nodes.route import route  # noqa: E402
+from backend.agent.nodes.retrieve import get_search  # noqa: E402
+from backend.agent.rules.specs import load_specs  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
+from backend.api.main import app  # noqa: E402
+from backend.api.tables import estimate_filename  # noqa: E402
+from backend.agent.tools.search.vector import MissingVectorsError, VectorIndex  # noqa: E402
 
 
 NEGATIVE = [
@@ -113,7 +113,7 @@ def main() -> int:
             checks.append(("missing vector division count", "공통 1개" in str(exc)))
         else:
             checks.append(("missing vector division count", False))
-    with patch("api.main.get_search", side_effect=MissingVectorsError("공통 1개")):
+    with patch("backend.api.main.get_search", side_effect=MissingVectorsError("공통 1개")):
         with TestClient(app) as client:
             health = client.get("/api/health").json()
             deadline = time.monotonic() + 2

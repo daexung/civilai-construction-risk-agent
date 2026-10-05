@@ -10,8 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
-from agent.tools.calc.unit_rounding import round_quantity, unit_places  # noqa: E402
+from backend.agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
+from backend.agent.tools.calc.unit_rounding import round_quantity, unit_places  # noqa: E402
 
 
 CALCULATORS = {"adjusted_daily_crew": adjusted_daily_crew}
@@ -19,7 +19,7 @@ CALCULATORS = {"adjusted_daily_crew": adjusted_daily_crew}
 
 def load_specs() -> dict[str, dict]:
     specs = {}
-    for path in (ROOT / "agent/rules/specs").rglob("*.json"):
+    for path in (ROOT / "backend/agent/rules/specs").rglob("*.json"):
         spec = json.loads(path.read_text(encoding="utf-8"))
         if spec["id"] in specs:
             raise ValueError(f"중복 명세 id: {spec['id']}")

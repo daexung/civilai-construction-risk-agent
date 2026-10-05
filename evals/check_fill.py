@@ -8,9 +8,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.nodes.fill import extract_inputs, fill  # noqa: E402
-from agent.rules.specs import load_specs  # noqa: E402
-from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
+from backend.agent.nodes.fill import extract_inputs, fill  # noqa: E402
+from backend.agent.rules.specs import load_specs  # noqa: E402
+from backend.agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 
 
 SPEC = next(spec for spec in load_specs().values() if spec["section_no"] == "6-1-4")

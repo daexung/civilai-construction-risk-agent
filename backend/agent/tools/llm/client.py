@@ -11,7 +11,7 @@ from pathlib import Path
 from threading import Lock
 from typing import Callable
 
-ROOT = Path(__file__).resolve().parents[3]
+from backend.paths import ROOT
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 TIMEOUT_MS = 20_000
 MAX_ATTEMPTS = 3

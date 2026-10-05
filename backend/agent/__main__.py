@@ -10,9 +10,9 @@ from uuid import uuid4
 
 from langgraph.types import Command
 
-from agent.graph import build_graph
-from agent.rules.specs import load_specs
-from agent.state import new_state
+from backend.agent.graph import build_graph
+from backend.agent.rules.specs import load_specs
+from backend.agent.state import new_state
 
 
 def _console_utf8() -> None:

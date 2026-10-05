@@ -5,10 +5,10 @@ import re
 import time
 from difflib import SequenceMatcher
 from pathlib import Path
-from agent.nodes.qa_context import build_context
-from agent.nodes.compose import validate_numbers
-from agent.tools.llm import client
-from agent.tools.search.bm25 import tokens
+from backend.agent.nodes.qa_context import build_context
+from backend.agent.nodes.compose import validate_numbers
+from backend.agent.tools.llm import client
+from backend.agent.tools.search.bm25 import tokens
 
 PROMPT = Path(__file__).resolve().parents[1] / "tools/llm/prompts/qa.md"
 SCHEMA = {"type": "object", "properties": {

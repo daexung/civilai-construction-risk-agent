@@ -1,7 +1,7 @@
 """검색 순위로 작업 절을 고른다."""
 
-from agent.rules.specs import specs_by_section
-from agent.state import AgentState
+from backend.agent.rules.specs import specs_by_section
+from backend.agent.state import AgentState
 
 
 # check_select.py 하이브리드 34문항: 4.0은 오답 0·되묻기 20, 3.0은 오답 2.

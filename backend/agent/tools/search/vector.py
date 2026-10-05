@@ -11,9 +11,9 @@ from pathlib import Path
 
 import numpy as np
 
-from shared.embedding import (ROOT, client, document_fingerprint, embed_texts,
+from backend.shared.embedding import (ROOT, client, document_fingerprint, embed_texts,
                               query_input, retryable_error, settings)
-from agent.rules.scope import enabled_divisions
+from backend.agent.rules.scope import enabled_divisions
 
 DEFAULT_CONFIG = Path(__file__).with_name("index_config.json")
 

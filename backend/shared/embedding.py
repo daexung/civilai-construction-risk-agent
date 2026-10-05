@@ -9,7 +9,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from backend.paths import ROOT
 CONFIG = Path(__file__).with_name("embedding_config.json")
 MODEL = "gemini-embedding-2"  # Existing index and saved evaluation metadata.
 DIM = 3072

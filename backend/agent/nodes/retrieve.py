@@ -3,9 +3,9 @@
 import os
 from functools import cache
 
-from agent.state import AgentState
-from agent.tools.search.bm25 import Index, load
-from agent.tools.search.vector import MissingVectorsError, ModelMismatchError, load_index_config
+from backend.agent.state import AgentState
+from backend.agent.tools.search.bm25 import Index, load
+from backend.agent.tools.search.vector import MissingVectorsError, ModelMismatchError, load_index_config
 
 
 class _Fallback:
@@ -46,7 +46,7 @@ class _Fallback:
 
 
 def _merge_query_hits(results, k: int):
-    from agent.tools.search.hybrid import K
+    from backend.agent.tools.search.hybrid import K
     chunks, scores = {}, {}
     for _query, hits in results:
         for rank, (score, chunk) in enumerate(hits, 1):
@@ -68,7 +68,7 @@ def make_search_index(offline: bool, hybrid_factory=None):
         return bm25, "bm25(오프라인)", None
     try:
         if hybrid_factory is None:
-            from agent.tools.search.hybrid import HybridIndex
+            from backend.agent.tools.search.hybrid import HybridIndex
             hybrid_factory = HybridIndex
         return _Fallback(hybrid_factory(bm25=bm25), bm25), "hybrid", None
     except (ModelMismatchError, MissingVectorsError):

@@ -10,12 +10,12 @@ from pathlib import Path
 import pymupdf
 
 
-ROOT = Path(__file__).resolve().parents[1]
+from backend.paths import ROOT
 sys.path.insert(0, str(ROOT))
 
-from agent.rules.specs import load_specs  # noqa: E402
-from agent.tools.source.citation import CHUNKS  # noqa: E402
-SPECS = ROOT / "agent/rules/specs"
+from backend.agent.rules.specs import load_specs  # noqa: E402
+from backend.agent.tools.source.citation import CHUNKS  # noqa: E402
+SPECS = ROOT / "backend/agent/rules/specs"
 PDF = ROOT / "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
 OUTPUT = ROOT / "data/processed/sources"
 MATERIAL_ALLOWANCES = ROOT / "data/rates/material_allowance.json"

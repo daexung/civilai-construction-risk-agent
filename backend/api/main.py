@@ -22,15 +22,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from langgraph.types import Command
 from pydantic import BaseModel
 
-from agent.graph import build_graph, capture_node_timings
-from agent.rules.specs import load_specs
-from agent.nodes.retrieve import get_search
-from pipeline.render_sources import render_source
-from agent.state import new_state
-from agent.nodes.fill import _common_fields, _valid_for_field
-from api.tables import add_tables, build_xlsx, estimate_filename
-from agent.tools.source.citation import resolve_cites
-from agent.tools.llm.client import LLMUnavailable, warmup_client
+from backend.agent.graph import build_graph, capture_node_timings
+from backend.agent.rules.specs import load_specs
+from backend.agent.nodes.retrieve import get_search
+from backend.render_sources import render_source
+from backend.agent.state import new_state
+from backend.agent.nodes.fill import _common_fields, _valid_for_field
+from backend.api.tables import add_tables, build_xlsx, estimate_filename
+from backend.agent.tools.source.citation import resolve_cites
+from backend.agent.tools.llm.client import LLMUnavailable, warmup_client
 
 GRAPH = build_graph()
 
@@ -88,7 +88,9 @@ app.add_middleware(
 )
 
 
-SOURCES = Path(__file__).resolve().parents[1] / "data/processed/sources"
+from backend.paths import ROOT
+
+SOURCES = ROOT / "data/processed/sources"
 app.add_middleware(
     CORSMiddleware,
     allow_origins=DEV_ORIGINS,
@@ -234,7 +236,7 @@ def _citations_out(citations: list[dict]) -> list[dict]:
 def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
     if "daily_volume_m3" not in raw:
         from fractions import Fraction
-        from agent.tools.calc.daily_crew import _exact_text
+        from backend.agent.tools.calc.daily_crew import _exact_text
 
         quantity = Fraction(raw["provenance"]["quantity"])
         lines = [{"kind": line["kind"], "name": line["name"],

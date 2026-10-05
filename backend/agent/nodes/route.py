@@ -8,8 +8,8 @@ import re
 import unicodedata
 from pathlib import Path
 
-from agent.state import AgentState
-from agent.tools.llm import client as llm_client
+from backend.agent.state import AgentState
+from backend.agent.tools.llm import client as llm_client
 
 
 COST_TERMS = (

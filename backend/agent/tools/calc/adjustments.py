@@ -5,8 +5,8 @@ from __future__ import annotations
 import re
 from fractions import Fraction
 
-from agent.tools.calc.numbers import parse_fraction
-from agent.tools.source.citation import _chunks, cite_table, resolve_cites
+from backend.agent.tools.calc.numbers import parse_fraction
+from backend.agent.tools.source.citation import _chunks, cite_table, resolve_cites
 
 BLOCK_REASON = "이 할증 규칙은 아직 자동 계산하지 않음"
 RANGE_WORDS = ("까지", "이내", "범위", "정도", "내외", "이상 적용")
@@ -267,10 +267,10 @@ def apply_adjustments(spec: dict, inputs: dict, lines: list[dict]) -> dict:
         line["exact"] = str(result)
         # 일당 작업조의 단위당 품 자릿수는 기존 계산기의 정밀도에 맞춘다.
         if line["places"]:
-            from agent.tools.calc.unit_rounding import round_quantity
+            from backend.agent.tools.calc.unit_rounding import round_quantity
             line["applied"] = round_quantity(result, line["places"])
         else:
-            from agent.tools.calc.daily_crew import _exact_text
+            from backend.agent.tools.calc.daily_crew import _exact_text
             line["applied"] = _exact_text(result)
         line["formula"] += f" × {multiplier} × (1 + {additions})" if multiplier != 1 else f" × (1 + {additions})"
         line["adjustments"] = adjustments

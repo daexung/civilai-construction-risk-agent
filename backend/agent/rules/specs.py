@@ -4,13 +4,13 @@ import json
 from functools import cache
 from pathlib import Path
 
-from agent.tools.calc.per_unit import clean_label
-from agent.rules.scope import enabled_divisions
-from agent.rules.misfiled import misfiled_ids
+from backend.agent.tools.calc.per_unit import clean_label
+from backend.agent.rules.scope import enabled_divisions
+from backend.agent.rules.misfiled import misfiled_ids
 
 
 SPECS_DIR = Path(__file__).resolve().parent / "specs"
-ROOT = Path(__file__).resolve().parents[2]
+from backend.paths import ROOT
 REQUIRED = {"id", "division", "section_no", "title", "inputs", "tables", "quantity_model"}
 
 

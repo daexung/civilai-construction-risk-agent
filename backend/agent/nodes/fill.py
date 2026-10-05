@@ -8,9 +8,9 @@ from fractions import Fraction
 import json
 from pathlib import Path
 
-from agent.rules.specs import load_specs
-from agent.state import AgentState
-from agent.tools.calc.adjustments import adjustment_questions
+from backend.agent.rules.specs import load_specs
+from backend.agent.state import AgentState
+from backend.agent.tools.calc.adjustments import adjustment_questions
 
 _COMMON_INPUTS = Path(__file__).resolve().parents[1] / "rules/cost_statement_inputs.json"
 

@@ -1,7 +1,7 @@
 """청크 검색과 근거 묶음.
 
 실행 예:
-    python -m agent.tools.search.bm25 search "레미콘 인력운반 타설 콘크리트공 인원"
+    python -m backend.agent.tools.search.bm25 search "레미콘 인력운반 타설 콘크리트공 인원"
 
 
 검색은 외부 API 없이 BM25(낱말 + 한글 두 글자 조각)로 한다. 답변 문장 생성(LLM)은 연결하지 않았다.
@@ -16,7 +16,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
+from backend.paths import ROOT
 CHUNKS = ROOT / "data/processed/chunks.jsonl"
 PARSED = ROOT / "data/processed/parsed.jsonl"
 

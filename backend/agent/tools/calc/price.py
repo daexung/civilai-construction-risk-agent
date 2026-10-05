@@ -8,12 +8,12 @@ from decimal import Decimal, ROUND_DOWN
 from functools import lru_cache
 from pathlib import Path
 
-from agent.tools.source.citation import resolve_cites
+from backend.agent.tools.source.citation import resolve_cites
 
 
-ROOT = Path(__file__).resolve().parents[3]
+from backend.paths import ROOT
 RATES = ROOT / "data/rates/labor_rates.json"
-AMOUNTS = ROOT / "agent/rules/common/1-2-2_amount_units.json"
+AMOUNTS = ROOT / "backend/agent/rules/common/1-2-2_amount_units.json"
 EQUIPMENT_RATES = ROOT / "data/rates/equipment_rates.json"
 MATERIAL_ALLOWANCES = ROOT / "data/rates/material_allowance.json"
 

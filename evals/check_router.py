@@ -13,11 +13,11 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.graph import build_graph  # noqa: E402
-from agent.nodes.route import ROUTE_SCHEMA, route  # noqa: E402
-from agent.nodes.retrieve import retrieve  # noqa: E402
-from agent.state import new_state  # noqa: E402
-from agent.tools.llm import client  # noqa: E402
+from backend.agent.graph import build_graph  # noqa: E402
+from backend.agent.nodes.route import ROUTE_SCHEMA, route  # noqa: E402
+from backend.agent.nodes.retrieve import retrieve  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
+from backend.agent.tools.llm import client  # noqa: E402
 
 
 def _response(label: str, confidence: float = 0.9, search_query: str = "standard cost question") -> str:
@@ -47,7 +47,7 @@ def main() -> int:
     original = "\uC9C4\uB3D9\uAE30 \uC548 \uC4F0\uBA74 \uC778\uC6D0\uC774 \uC904\uC5B4?"
     expanded = "\uCF58\uD06C\uB9AC\uD2B8 \uD0C0\uC124 \uC9C4\uB3D9\uAE30 \uBBF8\uC0AC\uC6A9 \uC778\uC6D0 \uD3B8\uC131 \uAC10"
     search_stub = SearchStub()
-    with patch("agent.nodes.retrieve.get_search", return_value=(search_stub, "hybrid", None)):
+    with patch("backend.agent.nodes.retrieve.get_search", return_value=(search_stub, "hybrid", None)):
         merged_state = new_state(original)
         merged_state.update(route_source="llm", search_query=expanded)
         merged = retrieve(merged_state)
@@ -55,7 +55,7 @@ def main() -> int:
                    search_stub.queries == [original, expanded]
                    and merged["search_info"]["queries"] == search_stub.queries and len(merged["hits"]) == 2))
     search_stub = SearchStub()
-    with patch("agent.nodes.retrieve.get_search", return_value=(search_stub, "bm25(offline)", None)):
+    with patch("backend.agent.nodes.retrieve.get_search", return_value=(search_stub, "bm25(offline)", None)):
         fallback_state = new_state(original)
         fallback_state.update(route_source="rule", search_query=expanded)
         fallback = retrieve(fallback_state)
@@ -196,9 +196,9 @@ def main() -> int:
         checks.append(("request receives remaining total budget", remaining["route_source"] == "llm"
                        and requests[0]["config"].http_options.timeout == 2000))
 
-        with patch("agent.graph.retrieve", return_value={"hits": [], "search_info": {}}), \
-                patch("agent.graph.select", side_effect=AssertionError("select called")), \
-                patch("agent.graph.compose", return_value={"answer": "근거 안내"}), \
+        with patch("backend.agent.graph.retrieve", return_value={"hits": [], "search_info": {}}), \
+                patch("backend.agent.graph.select", side_effect=AssertionError("select called")), \
+                patch("backend.agent.graph.compose", return_value={"answer": "근거 안내"}), \
                 patch.object(client, "generate", return_value=_response("qa")):
             graph = build_graph()
             graph_state = graph.invoke(new_state("품은 몇 인이야?"), {"configurable": {"thread_id": "router-qa"}})

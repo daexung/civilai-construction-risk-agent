@@ -10,7 +10,7 @@ from pathlib import Path
 import pymupdf
 
 
-ROOT = Path(__file__).resolve().parents[3]
+from backend.paths import ROOT
 ALL_CHUNKS = ROOT / "data/processed/chunks.all.jsonl"
 CHUNKS = ALL_CHUNKS if ALL_CHUNKS.is_file() else ROOT / "data/processed/chunks.jsonl"
 PAGE_MAP = ROOT / "data/processed/page_map.json"

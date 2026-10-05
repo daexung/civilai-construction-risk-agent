@@ -15,9 +15,9 @@ sys.path.insert(0, str(ROOT))
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from agent.tools.source.citation import CHUNKS, PDF, cite_note, cite_table, resolve_cites  # noqa: E402
-import api.main as api_main  # noqa: E402
-from api.main import app  # noqa: E402
+from backend.agent.tools.source.citation import CHUNKS, PDF, cite_note, cite_table, resolve_cites  # noqa: E402
+import backend.api.main as api_main  # noqa: E402
+from backend.api.main import app  # noqa: E402
 from pipeline.page_map import KNOWN, summarize  # noqa: E402
 
 
@@ -52,7 +52,7 @@ def main() -> int:
                            for note in (note1, note2, reset))
     checks.append(("C7 인용문 PDF 원문 그대로", exact_quotes))
 
-    spec = json.loads((ROOT / "agent/rules/specs/common/6-1-4_pump.json").read_text(encoding="utf-8"))
+    spec = json.loads((ROOT / "backend/agent/rules/specs/common/6-1-4_pump.json").read_text(encoding="utf-8"))
     unresolved = []
     for group in ("tables", "crew_rules", "blocked", "not_calculated"):
         for index, item in enumerate(spec[group]):

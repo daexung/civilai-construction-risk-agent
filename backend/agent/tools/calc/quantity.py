@@ -1,9 +1,9 @@
 """6장 품량 계량: 원문 표에서 노무 품량을 단가 없이 계산한다 (첫 구현).
 
 실행 예:
-    python -m agent.tools.calc.quantity --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=철근구조물 --quantity 100
-    python -m agent.tools.calc.quantity --section 6-1-1 --cond "공법=인력운반 타설" --cond 구조물=철근구조물 --quantity 100 --json
-    python -m agent.tools.calc.quantity --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=소형구조물 --quantity 8 \\
+    python -m backend.agent.tools.calc.quantity --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=철근구조물 --quantity 100
+    python -m backend.agent.tools.calc.quantity --section 6-1-1 --cond "공법=인력운반 타설" --cond 구조물=철근구조물 --quantity 100 --json
+    python -m backend.agent.tools.calc.quantity --section 6-1-2 --cond 유형=기계비빔타설 --cond 구조물=소형구조물 --quantity 8 \\
         --confirm small_structure_scattered=true
 
 범위
@@ -30,11 +30,11 @@ from decimal import Decimal
 from fractions import Fraction
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
-from agent.tools.search.bm25 import CHUNKS, PARSED, citation, load
-from agent.tools.calc.inputs import VolumeError, parse_volume
-from agent.tools.calc.format import safe_console
-from agent.rules.section_6 import SPECS
+from backend.paths import ROOT
+from backend.agent.tools.search.bm25 import CHUNKS, PARSED, citation, load
+from backend.agent.tools.calc.inputs import VolumeError, parse_volume
+from backend.agent.tools.calc.format import safe_console
+from backend.agent.rules.section_6 import SPECS
 
 GOLDEN = ROOT / "evals/golden_quantity.json"
 NUMBER_RE = re.compile(r"^\d+(?:\.\d+)?$")

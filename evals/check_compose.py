@@ -16,17 +16,17 @@ sys.path.insert(0, str(ROOT))
 
 from langgraph.types import Command  # noqa: E402
 
-from agent.graph import build_graph  # noqa: E402
-from agent.nodes.compose import (_josa, build_facts, build_template, compose,
+from backend.agent.graph import build_graph  # noqa: E402
+from backend.agent.nodes.compose import (_josa, build_facts, build_template, compose,
                                  unpriced_names, validate_amount_basis, validate_numbers)  # noqa: E402
-from agent.nodes.compute import compute  # noqa: E402
-from agent.nodes.gate import gate  # noqa: E402
-from agent.nodes.price import price  # noqa: E402
-from agent.nodes.statement import statement  # noqa: E402
-from agent.rules.specs import load_specs  # noqa: E402
-from agent.state import new_state  # noqa: E402
-from agent.tools.llm.client import LLMUnavailable  # noqa: E402
-from agent.tools.llm import client as llm_client  # noqa: E402
+from backend.agent.nodes.compute import compute  # noqa: E402
+from backend.agent.nodes.gate import gate  # noqa: E402
+from backend.agent.nodes.price import price  # noqa: E402
+from backend.agent.nodes.statement import statement  # noqa: E402
+from backend.agent.rules.specs import load_specs  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
+from backend.agent.tools.llm.client import LLMUnavailable  # noqa: E402
+from backend.agent.tools.llm import client as llm_client  # noqa: E402
 
 
 PUMP_SPEC = next(spec for spec in load_specs().values() if spec["section_no"] == "6-1-4")

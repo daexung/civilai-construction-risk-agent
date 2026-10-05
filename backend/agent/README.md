@@ -1,4 +1,4 @@
-# agent/
+# backend/agent/
 
 표준품셈의 6-1-1 철근구조물 인력운반 타설 노무량·노무비 질문을 처리한다. 계산은 코드가 수행하며 현재 LLM은 사용하지 않는다.
 
@@ -22,7 +22,7 @@
 
 ## 질문 하나의 처리 순서
 
-`agent/graph.py`는 `route → retrieve → select → fill ⇄ ask → gate → compute → price → statement → compose` 순으로 연결한다. `route`가 `OUT_OF_SCOPE`를 반환하면 바로 `compose`로 간다. 검색 결과는 `hits`와 `search_info`에, 후보와 선택 결과는 `candidates`, `spec_id`, `selection`에 저장된다. `select`가 계산할 명세를 고르지 못하면 `EVIDENCE_ONLY`로 설명을 만든다.
+`backend/agent/graph.py`는 `route → retrieve → select → fill ⇄ ask → gate → compute → price → statement → compose` 순으로 연결한다. `route`가 `OUT_OF_SCOPE`를 반환하면 바로 `compose`로 간다. 검색 결과는 `hits`와 `search_info`에, 후보와 선택 결과는 `candidates`, `spec_id`, `selection`에 저장된다. `select`가 계산할 명세를 고르지 못하면 `EVIDENCE_ONLY`로 설명을 만든다.
 
 `fill`은 질문과 답변에서 조건을 모아 `inputs`, `input_sources`, `questions`, `reason`을 갱신한다. 부족한 조건이 있으면 `MISSING_INFO`에서 `ask`를 거쳐 다시 `fill`로 돌아온다. 조건이 모이면 `gate`가 보류 조건을 검사하며, 차단 시 `BLOCKED`로 종료한다. 통과하면 `compute`가 정확한 계산 결과를 `result`에 저장하고 `COMPUTED`가 된다. 이어 `price`가 단가 적용 결과를 `priced`에, `statement`가 원가계산서를 `statement`에 저장하며 최종 상태를 `OK` 또는 `PARTIAL`로 정한다. `compose`는 최종 `answer`와 답변 출처·LLM 정보를 채운다. 상태와 이유는 `status`, `reason`에 유지된다.
 
@@ -59,9 +59,9 @@
 저장소 루트에서 실행한다.
 
 ```bash
-python -m agent "철근구조물 150㎥ 레미콘 인력운반 타설 노무비는?" --rates 내_노임단가.json --offline --json
-python -m agent.tools.calc.quantity --section 6-1-1 --cond "공법=인력운반 타설" --cond 구조물=철근구조물 --quantity 100 --json
-python -m agent.tools.calc.unit_price --golden --json
+python -m backend.agent "철근구조물 150㎥ 레미콘 인력운반 타설 노무비는?" --rates 내_노임단가.json --offline --json
+python -m backend.agent.tools.calc.quantity --section 6-1-1 --cond "공법=인력운반 타설" --cond 구조물=철근구조물 --quantity 100 --json
+python -m backend.agent.tools.calc.unit_price --golden --json
 python evals/check_agent.py --offline
 python evals/check_quantity.py
 python evals/check_unit_price.py
@@ -69,3 +69,9 @@ python evals/check_json_output.py
 ```
 
 단가 파일 형식은 `evals/labor_rates.template.json`을 참고한다.
+
+API 서버는 저장소 루트에서 실행한다.
+
+```bash
+uvicorn backend.api.main:app --port 8000
+```

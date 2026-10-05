@@ -13,16 +13,16 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.nodes.retrieve import _Fallback, make_search_index, retrieve  # noqa: E402
-from agent.state import new_state  # noqa: E402
-from agent.tools.search.bm25 import Index, load  # noqa: E402
-from agent.tools.search.vector import ModelMismatchError, VectorIndex  # noqa: E402
-from api.main import _search_out  # noqa: E402
+from backend.agent.nodes.retrieve import _Fallback, make_search_index, retrieve  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
+from backend.agent.tools.search.bm25 import Index, load  # noqa: E402
+from backend.agent.tools.search.vector import ModelMismatchError, VectorIndex  # noqa: E402
+from backend.api.main import _search_out  # noqa: E402
 from evals.build_draft_questions import collect as collect_draft_questions  # noqa: E402
 from evals.compare_embedding_models import QueryCache  # noqa: E402
 from pipeline.chunk import page_divisions  # noqa: E402
 from pipeline import embed as embed_pipeline  # noqa: E402
-from shared.embedding import (api_key, document_fingerprint, document_input, document_title,  # noqa: E402
+from backend.shared.embedding import (api_key, document_fingerprint, document_input, document_title,  # noqa: E402
                               embed_texts, query_input, rate_limit_error, settings)
 
 
@@ -107,7 +107,7 @@ def main() -> int:
 
     bm25 = Index(load())
     fallback = _Fallback(Primary(), bm25)
-    with patch("agent.nodes.retrieve.get_search", return_value=(fallback, "hybrid", None)):
+    with patch("backend.agent.nodes.retrieve.get_search", return_value=(fallback, "hybrid", None)):
         result = retrieve(new_state("펌프차"))
     checks.append(("질문 503 소진 시 BM25 대체", result["search_info"]["method"] == "bm25(대체)"
                    and result["search_info"]["fallback_reason"] == "FakeServiceError"

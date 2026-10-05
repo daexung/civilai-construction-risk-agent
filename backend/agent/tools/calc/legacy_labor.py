@@ -1,7 +1,7 @@
 """Legacy labor estimate, retained for regression checks only."""
 
 from decimal import Decimal, InvalidOperation
-from agent.tools.search.bm25 import citation
+from backend.agent.tools.search.bm25 import citation
 
 def one_value(parts: list[str], prefix: str) -> Decimal:
     values = [p[len(prefix):] for p in parts if p.startswith(prefix)]
@@ -70,7 +70,7 @@ def main() -> None:
     import argparse
     import json
 
-    from agent.tools.search.bm25 import CHUNKS, PARSED, load
+    from backend.agent.tools.search.bm25 import CHUNKS, PARSED, load
 
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=["estimate"])

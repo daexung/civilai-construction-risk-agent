@@ -7,9 +7,9 @@ import re
 from fractions import Fraction
 from typing import Any
 
-from agent.tools.calc.unit_rounding import round_quantity, unit_places
-from agent.tools.calc.numbers import parse_fraction, parse_table_number
-from agent.tools.source.citation import cite_table, resolve_cites
+from backend.agent.tools.calc.unit_rounding import round_quantity, unit_places
+from backend.agent.tools.calc.numbers import parse_fraction, parse_table_number
+from backend.agent.tools.source.citation import cite_table, resolve_cites
 
 
 _COMPARISONS = {
@@ -296,7 +296,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
                 "citations": equipment_source["citations"],
             })
 
-    from agent.tools.calc.adjustments import apply_adjustments
+    from backend.agent.tools.calc.adjustments import apply_adjustments
     adjusted = apply_adjustments(spec, validated, unit_lines)
     if adjusted["status"] != "computed":
         return adjusted

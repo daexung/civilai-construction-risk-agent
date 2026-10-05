@@ -14,11 +14,11 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.nodes.select import MARGIN, decide  # noqa: E402
-from agent.rules.specs import specs_by_section  # noqa: E402
-from agent.tools.search.hybrid import HybridIndex  # noqa: E402
+from backend.agent.nodes.select import MARGIN, decide  # noqa: E402
+from backend.agent.rules.specs import specs_by_section  # noqa: E402
+from backend.agent.tools.search.hybrid import HybridIndex  # noqa: E402
 from evals.check_select import classify, questions as select_questions  # noqa: E402
-from shared.embedding import query_input, rate_limit_error, sha256  # noqa: E402
+from backend.shared.embedding import query_input, rate_limit_error, sha256  # noqa: E402
 
 RAG_QUESTIONS = ROOT / "evals/rag_questions.json"
 DRAFT_QUESTIONS = ROOT / "evals/draft_questions.jsonl"

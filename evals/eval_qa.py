@@ -11,10 +11,10 @@ from zoneinfo import ZoneInfo
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from agent.rules.scope import enabled_divisions
-from agent.nodes.retrieve import retrieve
-from agent.nodes.answer import answer, qa_model
-from agent.nodes.qa_context import load_sections
+from backend.agent.rules.scope import enabled_divisions
+from backend.agent.nodes.retrieve import retrieve
+from backend.agent.nodes.answer import answer, qa_model
+from backend.agent.nodes.qa_context import load_sections
 
 AMBIGUOUS = ['콘크리트 타설할 때 콘크리트공 품이 얼마야?', '거푸집 설치 해체 품 알려줘', '철근 가공 조립 품은 어떻게 돼?', '보도블록 깔 때 품이 어떻게 돼?', '도장 공사 품은 어떻게 잡아?']
 SEED = 191

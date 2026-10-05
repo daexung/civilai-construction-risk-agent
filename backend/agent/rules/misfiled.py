@@ -3,7 +3,9 @@
 import json
 from pathlib import Path
 
-FILE = Path(__file__).resolve().parents[2] / "data/drafts/misfiled.json"
+from backend.paths import ROOT
+
+FILE = ROOT / "data/drafts/misfiled.json"
 
 
 def misfiled_ids() -> set[str]:

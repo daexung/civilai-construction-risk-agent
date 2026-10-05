@@ -1,9 +1,9 @@
 """일위대가(노무비) 계산: 6-1-1 '철근구조물 인력운반 타설' 한 사례만.
 
 실행 예:
-    python -m agent.tools.calc.unit_price --volume 150 --rates 내_노임단가.json
-    python -m agent.tools.calc.unit_price --volume 150       # 단가 파일 없이: 전 직종 미산정
-    python -m agent.tools.calc.unit_price --golden           # 회귀: 골든 사례(100㎥)와 기존 노무량 15인·일 대조
+    python -m backend.agent.tools.calc.unit_price --volume 150 --rates 내_노임단가.json
+    python -m backend.agent.tools.calc.unit_price --volume 150       # 단가 파일 없이: 전 직종 미산정
+    python -m backend.agent.tools.calc.unit_price --golden           # 회귀: 골든 사례(100㎥)와 기존 노무량 15인·일 대조
 
 흐름
   1. 지원 사례(SUPPORTED_CASE)는 절·공법·구조물이 고정이다. 물량만 사용자 입력이며 parse_volume으로 검증한다.
@@ -29,12 +29,12 @@ from decimal import Decimal, InvalidOperation, localcontext
 from fractions import Fraction
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
-from agent.tools.search.bm25 import CHUNKS, Index, citation, evidence, load
-from agent.tools.calc.inputs import VolumeError, parse_volume
-from agent.tools.calc.format import UNCALCULATED, report, safe_console, to_json
-from agent.tools.calc.quantity import compute as compute_quantity, is_terminating, quantity_record
-from agent.rules.section_6 import SUPPORTED_CASE
+from backend.paths import ROOT
+from backend.agent.tools.search.bm25 import CHUNKS, Index, citation, evidence, load
+from backend.agent.tools.calc.inputs import VolumeError, parse_volume
+from backend.agent.tools.calc.format import UNCALCULATED, report, safe_console, to_json
+from backend.agent.tools.calc.quantity import compute as compute_quantity, is_terminating, quantity_record
+from backend.agent.rules.section_6 import SUPPORTED_CASE
 
 GOLDEN = ROOT / "evals/golden_estimate.json"
 PRICE_UNIT = "원/인·일"

@@ -16,10 +16,10 @@ sys.path.insert(0, str(ROOT))
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
-from agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
-from agent.nodes.fill import extract_inputs  # noqa: E402
-from api.main import app  # noqa: E402
+from backend.agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
+from backend.agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
+from backend.agent.nodes.fill import extract_inputs  # noqa: E402
+from backend.api.main import app  # noqa: E402
 from pipeline.labor_rates import build  # noqa: E402
 
 
@@ -43,7 +43,7 @@ def main() -> int:
                    and select_rate_version("2026-10-01")["id"] == "2026H2"
                    and select_rate_version("2025-12-01") is None))
 
-    rule = json.loads((ROOT / "agent/rules/common/1-2-2_amount_units.json").read_text(encoding="utf-8"))
+    rule = json.loads((ROOT / "backend/agent/rules/common/1-2-2_amount_units.json").read_text(encoding="utf-8"))
     with pymupdf.open(ROOT / "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf") as pdf:
         source = pdf[61].get_text("text")
     amounts = {item["item"]: item["truncate_below"] for item in rule["rules"]}
@@ -52,7 +52,7 @@ def main() -> int:
         "일위대가표의 계금": "1", "일위대가표의 금액란": "0.1",
     } and rule["small_amount_exception"]["quote"] in source))
 
-    spec = json.loads((ROOT / "agent/rules/specs/common/6-1-4_pump.json").read_text(encoding="utf-8"))
+    spec = json.loads((ROOT / "backend/agent/rules/specs/common/6-1-4_pump.json").read_text(encoding="utf-8"))
     cases = json.loads((ROOT / "evals/cases/common_6-1-4_pump.json").read_text(encoding="utf-8"))
     units = adjusted_daily_crew(spec, cases["cases"][0]["input"])["unit_lines"]
     priced = price_unit(spec, units, select_rate_version("2026-06-01"))

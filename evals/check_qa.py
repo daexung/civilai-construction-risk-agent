@@ -10,10 +10,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 os.environ["AGENT_LLM"] = "off"
 os.environ["AGENT_OFFLINE"] = "1"
-from agent.nodes.answer import answer, validate, match_quote, TIMEOUT_MS
-from agent.nodes.qa_context import build_context, LIMIT, TOTAL_LIMIT, FIRST_LIMIT, load_sections, supplement_table
-from agent.graph import build_graph
-from agent.state import new_state
+from backend.agent.nodes.answer import answer, validate, match_quote, TIMEOUT_MS
+from backend.agent.nodes.qa_context import build_context, LIMIT, TOTAL_LIMIT, FIRST_LIMIT, load_sections, supplement_table
+from backend.agent.graph import build_graph
+from backend.agent.state import new_state
 from evals.eval_qa import correct_section_cited, not_found_counts
 from pipeline.chunk import has_label_shift
 
@@ -101,7 +101,7 @@ def main():
         group[0]["text"] = "내용 2인 " * 2000
     distributed = build_context(hits, sections=large_sections, specs=specs, query="내용 품")
     check("three section total within 12000", len(distributed) == 3 and sum(len(c["text"]) for c in distributed) <= TOTAL_LIMIT and TOTAL_LIMIT == 12000)
-    with patch("agent.nodes.answer.time.monotonic", side_effect=[0, 0, 12.001, 12.001]):
+    with patch("backend.agent.nodes.answer.time.monotonic", side_effect=[0, 0, 12.001, 12.001]):
         timed = run(qa)
     check("late LLM response replaced by template", timed["answer_source"] == "template" and timed["llm_info"]["error"] == "timeout")
     spaced = copy.deepcopy(qa); spaced["citations"][0]["quote"] = "인원  2인\n적용"
@@ -174,13 +174,13 @@ def main():
     check("empty candidates skip llm", answer(state, contexts=[], generate_fn=lambda *a, **k: (_ for _ in ()).throw(AssertionError()))["qa"]["not_found"])
     check("bad JSON fallback", answer(state, contexts=one, generate_fn=lambda *a, **k: "bad")["llm_info"]["error"] == "JSONDecodeError")
     check("bad schema fallback", run({})["llm_info"]["error"] == "schema")
-    with patch("agent.nodes.answer.client.generate", side_effect=AssertionError("external call")):
+    with patch("backend.agent.nodes.answer.client.generate", side_effect=AssertionError("external call")):
         check("off skips client", answer(state, contexts=one)["answer_source"] == "template")
-    with patch("agent.graph.route", return_value={"route": "qa"}), patch("agent.graph.retrieve", return_value={"hits": hits}), patch("agent.graph.select", side_effect=AssertionError("select called")), patch("agent.nodes.answer.build_context", return_value=one):
+    with patch("backend.agent.graph.route", return_value={"route": "qa"}), patch("backend.agent.graph.retrieve", return_value={"hits": hits}), patch("backend.agent.graph.select", side_effect=AssertionError("select called")), patch("backend.agent.nodes.answer.build_context", return_value=one):
         graph = build_graph()
         output = graph.invoke(new_state("품 알려줘"), {"configurable": {"thread_id": "qa-check"}})
         check("qa graph ANSWERED and no select", output["status"] == "ANSWERED" and not output.get("result"))
-    from api.main import _build_response
+    from backend.api.main import _build_response
     response = _build_response("qa", answer(state, contexts=real))
     check("API resolves label image and chunk id", bool(response["qa"]["citations"]) and all(c["label"] and c["image_url"] and c["chunk_id"] for c in response["qa"]["citations"]))
     print(f"통과 {sum(checks)} / 전체 {len(checks)}")

@@ -12,10 +12,10 @@ import re
 import time
 from decimal import Decimal
 
-from agent.nodes.fill import _common_fields
-from agent.rules.specs import load_specs
-from agent.state import AgentState
-from agent.tools.llm import client as llm_client
+from backend.agent.nodes.fill import _common_fields
+from backend.agent.rules.specs import load_specs
+from backend.agent.state import AgentState
+from backend.agent.tools.llm import client as llm_client
 
 COMPOSE_STATUSES = {"OK", "PARTIAL", "BLOCKED", "EVIDENCE_ONLY", "OUT_OF_SCOPE"}
 

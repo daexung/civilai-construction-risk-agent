@@ -3,15 +3,15 @@ from functools import cache
 import json
 import re
 from pathlib import Path
-from agent.nodes.select import decide, MARGIN
-from agent.rules.specs import specs_by_section
-from agent.tools.search.bm25 import tokens
+from backend.agent.nodes.select import decide, MARGIN
+from backend.agent.rules.specs import specs_by_section
+from backend.agent.tools.search.bm25 import tokens
+from backend.paths import ROOT
 
-CHUNKS = Path(__file__).resolve().parents[2] / "data/processed/chunks.all.jsonl"
+CHUNKS = ROOT / "data/processed/chunks.all.jsonl"
 LIMIT = 4000
 TOTAL_LIMIT = 12000
 FIRST_LIMIT = 8000
-ROOT = CHUNKS.parents[2]
 
 def _position_lines(words):
     """PDF 단어를 위에서 아래, 같은 줄에서는 왼쪽에서 오른쪽으로 모은다."""

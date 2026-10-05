@@ -11,7 +11,7 @@ import json
 import time
 from pathlib import Path
 
-from shared.embedding import (ROOT, client, document_fingerprint, document_input,
+from backend.shared.embedding import (ROOT, client, document_fingerprint, document_input,
                               document_title, embed_texts, rate_limit_error,
                               retryable_error, settings)
 

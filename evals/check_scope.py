@@ -17,13 +17,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.nodes.route import route  # noqa: E402
-from agent.nodes.select import decide  # noqa: E402
-from agent.rules.scope import enabled_divisions  # noqa: E402
-from agent.rules.misfiled import misfiled_sections  # noqa: E402
-from agent.rules.specs import specs_by_section  # noqa: E402
-from agent.state import new_state  # noqa: E402
-from agent.nodes.retrieve import make_search_index  # noqa: E402
+from backend.agent.nodes.route import route  # noqa: E402
+from backend.agent.nodes.select import decide  # noqa: E402
+from backend.agent.rules.scope import enabled_divisions  # noqa: E402
+from backend.agent.rules.misfiled import misfiled_sections  # noqa: E402
+from backend.agent.rules.specs import specs_by_section  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
+from backend.agent.nodes.retrieve import make_search_index  # noqa: E402
 
 SOURCE = ROOT / "evals/draft_questions.jsonl"
 SAMPLE = ROOT / "evals/scope_sample.jsonl"

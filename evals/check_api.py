@@ -15,9 +15,9 @@ sys.path.insert(0, str(ROOT))
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from api.main import app  # noqa: E402
-import api.main as api_main  # noqa: E402
-from agent.tools.llm.client import LLMUnavailable  # noqa: E402
+from backend.api.main import app  # noqa: E402
+import backend.api.main as api_main  # noqa: E402
+from backend.agent.tools.llm.client import LLMUnavailable  # noqa: E402
 
 CLIENT = TestClient(app)
 
@@ -34,9 +34,9 @@ def main() -> int:
     def delayed_search_prep():
         started.set()
         release.wait(2)
-    with patch("api.main.get_search", side_effect=delayed_search_prep), \
-            patch("api.main.load_specs", return_value={}), \
-            patch("api.main.warmup_client") as warmup:
+    with patch("backend.api.main.get_search", side_effect=delayed_search_prep), \
+            patch("backend.api.main.load_specs", return_value={}), \
+            patch("backend.api.main.warmup_client") as warmup:
         with patch.dict(os.environ, {"AGENT_LLM": "off"}):
             with TestClient(app) as startup_client:
                 started_ok = started.wait(1)
@@ -334,7 +334,7 @@ def main() -> int:
                    and estimate["A3"].value.startswith("기 준 일 :")
                    and estimate.page_setup.orientation == "portrait"
                    and estimate.page_setup.fitToWidth == 1 and estimate.page_setup.fitToHeight == 1))
-    from api.tables import won_in_korean
+    from backend.api.tables import won_in_korean
     checks.append(("A31 한글 금액 단위", [won_in_korean(value) for value in
                    (10032436, 9947033, 10319789, 100000000, 1005)] ==
                    ["일천삼만이천사백삼십육", "구백구십사만칠천삼십삼", "일천삼십일만구천칠백팔십구",

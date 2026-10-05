@@ -1,0 +1,7 @@
+fastapi==0.141.1
+httpx==0.28.1  # evals/check_api.py? FastAPI TestClient? ??
+langgraph==1.2.12
+langgraph-checkpoint==4.2.0
+openpyxl==3.1.5
+tzdata
+uvicorn==0.54.0

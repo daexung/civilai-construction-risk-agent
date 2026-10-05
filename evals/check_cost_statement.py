@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.tools.calc.cost_statement import calculate_cost_statement  # noqa: E402
+from backend.agent.tools.calc.cost_statement import calculate_cost_statement  # noqa: E402
 
 
 PRICED = {

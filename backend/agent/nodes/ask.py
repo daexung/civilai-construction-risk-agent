@@ -2,7 +2,7 @@
 
 from langgraph.types import interrupt
 
-from agent.state import AgentState
+from backend.agent.state import AgentState
 
 
 def ask(state: AgentState) -> dict:
