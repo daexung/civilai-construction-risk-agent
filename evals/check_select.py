@@ -11,11 +11,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 os.environ["INDEX_CONFIG"] = str(ROOT / "evals/index_configs/6chapter_studio.json")
 
-from agent.nodes.retrieve import get_search, retrieve  # noqa: E402
-from agent.nodes.select import MARGIN, decide  # noqa: E402
-from agent.rules.specs import specs_by_section  # noqa: E402
-from agent.state import new_state  # noqa: E402
-from shared.embedding import MODEL, api_key  # noqa: E402
+from backend.agent.nodes.retrieve import get_search, retrieve  # noqa: E402
+from backend.agent.nodes.select import MARGIN, decide  # noqa: E402
+from backend.agent.rules.specs import specs_by_section  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
+from backend.shared.embedding import MODEL, api_key  # noqa: E402
 
 
 QUESTIONS = Path(__file__).with_name("rag_questions.json")

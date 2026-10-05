@@ -13,11 +13,11 @@ os.environ["AGENT_OFFLINE"] = "1"
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.nodes.fill import extract_inputs, fill  # noqa: E402
-from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
-from agent.tools.calc.price import price_unit, select_equipment_version, select_rate_version  # noqa: E402
+from backend.agent.nodes.fill import extract_inputs, fill  # noqa: E402
+from backend.agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
+from backend.agent.tools.calc.price import price_unit, select_equipment_version, select_rate_version  # noqa: E402
 from pipeline.equipment_rates import build  # noqa: E402
-from api.main import app  # noqa: E402
+from backend.api.main import app  # noqa: E402
 
 
 def main() -> int:
@@ -35,7 +35,7 @@ def main() -> int:
         (Decimal(entry["price_thousand_won"]) * 1000 * Decimal(2640) / Decimal(10_000_000))
         .to_integral_value(rounding=ROUND_DOWN) == entry["hourly_depreciation"]
         for entry in machines.values())))
-    spec = json.loads((ROOT / "agent/rules/specs/common/6-1-4_pump.json").read_text(encoding="utf-8"))
+    spec = json.loads((ROOT / "backend/agent/rules/specs/common/6-1-4_pump.json").read_text(encoding="utf-8"))
     cases = json.loads((ROOT / "evals/cases/common_6-1-4_pump.json").read_text(encoding="utf-8"))["cases"]
     version = select_rate_version("2026-10-01")
     a = cases[0]["input"] | {"pump_size": "32m"}

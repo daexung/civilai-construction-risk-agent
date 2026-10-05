@@ -11,10 +11,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.rules.specs import load_specs  # noqa: E402
-from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
-from agent.tools.calc.per_unit import clean_label, conversion, parse_basis, per_unit  # noqa: E402
-from agent.tools.calc.numbers import parse_table_number  # noqa: E402
+from backend.agent.rules.specs import load_specs  # noqa: E402
+from backend.agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
+from backend.agent.tools.calc.per_unit import clean_label, conversion, parse_basis, per_unit  # noqa: E402
+from backend.agent.tools.calc.numbers import parse_table_number  # noqa: E402
 from evals.check_draft_executability import _values  # noqa: E402
 
 

@@ -17,9 +17,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from agent.tools.search.hybrid import HybridIndex  # noqa: E402
-from agent.tools.search.bm25 import CHUNKS, Index, load  # noqa: E402
-from agent.tools.search.vector import VectorIndex  # noqa: E402
+from backend.agent.tools.search.hybrid import HybridIndex  # noqa: E402
+from backend.agent.tools.search.bm25 import CHUNKS, Index, load  # noqa: E402
+from backend.agent.tools.search.vector import VectorIndex  # noqa: E402
 
 QUESTIONS = Path(__file__).with_name("rag_questions.json")
 OUT = ROOT / "data/processed/search_compare.jsonl"

@@ -15,9 +15,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.nodes.route import route  # noqa: E402
-from agent.state import new_state  # noqa: E402
-from agent.tools.llm.client import LLMUnavailable, warmup_client  # noqa: E402
+from backend.agent.nodes.route import route  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
+from backend.agent.tools.llm.client import LLMUnavailable, warmup_client  # noqa: E402
 
 LABELS = ("estimate", "qa", "out_of_scope")
 CRITERIA = {"overall_accuracy_min": 0.9, "boundary_accuracy_min": 0.8,

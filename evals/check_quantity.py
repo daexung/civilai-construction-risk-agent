@@ -15,10 +15,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from agent.tools.calc import quantity  # noqa: E402
-from agent.tools.calc.quantity import USER_INPUT, compute, decimal_text, load_golden, load_sources, table_model  # noqa: E402
-from agent.tools.calc.legacy_labor import estimate_labor  # noqa: E402
-from agent.tools.calc.format import safe_console  # noqa: E402
+from backend.agent.tools.calc import quantity  # noqa: E402
+from backend.agent.tools.calc.quantity import USER_INPUT, compute, decimal_text, load_golden, load_sources, table_model  # noqa: E402
+from backend.agent.tools.calc.legacy_labor import estimate_labor  # noqa: E402
+from backend.agent.tools.calc.format import safe_console  # noqa: E402
 
 GOLDEN_ESTIMATE = json.loads((ROOT / "evals/golden_estimate.json").read_text(encoding="utf-8"))
 SMALL = {"유형": "기계비빔타설", "구조물": "소형구조물"}
@@ -44,7 +44,7 @@ def with_case(golden, section_no, conditions):
 def run_cli(args, encoding="cp949"):
     env = {k: v for k, v in os.environ.items() if k not in ("PYTHONIOENCODING", "PYTHONUTF8")}
     env["PYTHONIOENCODING"] = encoding
-    return subprocess.run([sys.executable, "-m", "agent.tools.calc.quantity", *args], cwd=ROOT, env=env, capture_output=True)
+    return subprocess.run([sys.executable, "-m", "backend.agent.tools.calc.quantity", *args], cwd=ROOT, env=env, capture_output=True)
 
 
 def main() -> int:

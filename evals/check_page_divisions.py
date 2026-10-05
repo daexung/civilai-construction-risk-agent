@@ -9,10 +9,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.rules.misfiled import misfiled_ids  # noqa: E402
-from agent.rules.scope import enabled_divisions  # noqa: E402
-from agent.rules.specs import load_specs  # noqa: E402
-from agent.tools.search.vector import VectorIndex  # noqa: E402
+from backend.agent.rules.misfiled import misfiled_ids  # noqa: E402
+from backend.agent.rules.scope import enabled_divisions  # noqa: E402
+from backend.agent.rules.specs import load_specs  # noqa: E402
+from backend.agent.tools.search.vector import VectorIndex  # noqa: E402
 from pipeline.page_map import correct_isolated_divisions, isolated_divisions  # noqa: E402
 
 

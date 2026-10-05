@@ -11,14 +11,14 @@ os.environ["AGENT_OFFLINE"] = "1"
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.nodes.fill import extract_inputs, fill  # noqa: E402
-from agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
-from agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
+from backend.agent.nodes.fill import extract_inputs, fill  # noqa: E402
+from backend.agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
+from backend.agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
 
 
 def main() -> int:
     checks = []
-    spec = json.loads((ROOT / "agent/rules/specs/common/6-1-4_pump.json").read_text(encoding="utf-8"))
+    spec = json.loads((ROOT / "backend/agent/rules/specs/common/6-1-4_pump.json").read_text(encoding="utf-8"))
     base_input = {
         "pump_size": "32m", "volume": "260", "structure": "철근", "slump_band": "15㎝",
         "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ", "placement": "붐",

@@ -27,7 +27,7 @@ DEFAULT_CHUNKS = ROOT / "data/processed/chunks.all.jsonl"
 DEFAULT_PAGE_MAP = ROOT / "data/processed/page_map.json"
 DEFAULT_PDF = ROOT / "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
 DEFAULT_SPEC_FORMAT = ROOT / "docs/SPEC_FORMAT.md"
-DEFAULT_EXAMPLE_SPEC = ROOT / "agent/rules/specs/common/6-1-4_pump.json"
+DEFAULT_EXAMPLE_SPEC = ROOT / "backend/agent/rules/specs/common/6-1-4_pump.json"
 DEFAULT_OUT_DIR = ROOT / "data/drafts"
 DEFAULT_CONFIG = Path(__file__).with_name("draft_specs_config.json")
 

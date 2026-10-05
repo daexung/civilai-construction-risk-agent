@@ -1,4 +1,4 @@
-"""최소 에이전트(agent/flow/agent.py) 점검: 정상 사례와 누락·모호·범위 밖 입력.
+"""최소 에이전트(backend/agent/__main__.py) 점검: 정상 사례와 누락·모호·범위 밖 입력.
 
 실행: python evals/check_agent.py            # 계산 사례는 하이브리드 검색(질문마다 임베딩 1회)
       python evals/check_agent.py --offline  # 임베딩 없이 BM25만
@@ -12,9 +12,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from agent import answer  # noqa: E402
-from agent.tools.calc.unit_price import parse_rates
-from agent.tools.calc.format import safe_console  # noqa: E402
+from backend.agent import answer  # noqa: E402
+from backend.agent.tools.calc.unit_price import parse_rates
+from backend.agent.tools.calc.format import safe_console  # noqa: E402
 
 SRC = "테스트용 가상값(실제 노임단가 아님)"
 FULL = parse_rates({"rates": [
@@ -143,8 +143,8 @@ def main() -> int:
           and i["amount_exact"] is None for i in r["cost_items"]) and "[금액 표시]" not in r["final_response"], r)
 
     # ---- 품량 단계 연결: 에이전트의 노무량은 calc/quantity.py에서 온다 ----
-    from agent.nodes import quantity as quantity_node
-    from agent.tools.calc import legacy_labor as rag
+    from backend.agent.nodes import quantity as quantity_node
+    from backend.agent.tools.calc import legacy_labor as rag
 
     calls, original = [], quantity_node.compute
 

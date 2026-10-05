@@ -10,9 +10,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from agent.tools.calc import adjustments  # noqa: E402
-from agent.tools.calc.per_unit import per_unit  # noqa: E402
-from agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
+from backend.agent.tools.calc import adjustments  # noqa: E402
+from backend.agent.tools.calc.per_unit import per_unit  # noqa: E402
+from backend.agent.tools.calc.price import price_unit, select_rate_version  # noqa: E402
 
 
 def main() -> int:

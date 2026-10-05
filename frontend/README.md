@@ -1,6 +1,6 @@
 # 공사비 챗봇 화면
 
-`api/main.py`(FastAPI)가 `agent/graph.py`의 `route → retrieve → select → fill ⇄ ask → gate → compute → price → statement → compose` 흐름을 호출하고, 한 페이지 채팅 화면이 결과를 보여준다. 범위 밖이면 `OUT_OF_SCOPE`, 명세 없이 근거만 있으면 `EVIDENCE_ONLY`로 끝난다. 조건이 부족하면 `MISSING_INFO`로 질문하고 답변을 받아 `fill`로 돌아간다. 조건이 모이면 `gate`가 계산 보류 여부를 확인한 뒤 계산·단가·원가계산서를 만들고 `OK` 또는 `PARTIAL`로 답한다. 상태와 이유는 `status`, `reason`에 담기며 검색 방식은 `search_info`, 근거는 `hits`, 입력은 `inputs`, 계산 결과는 `result`, 가격 결과는 `priced`, 원가계산서는 `statement`에 저장된다. 로그인·프로젝트·대화 목록·설정 화면은 없다.
+`backend/api/main.py`(FastAPI)가 `backend/agent/graph.py`의 `route → retrieve → select → fill ⇄ ask → gate → compute → price → statement → compose` 흐름을 호출하고, 한 페이지 채팅 화면이 결과를 보여준다. 범위 밖이면 `OUT_OF_SCOPE`, 명세 없이 근거만 있으면 `EVIDENCE_ONLY`로 끝난다. 조건이 부족하면 `MISSING_INFO`로 질문하고 답변을 받아 `fill`로 돌아간다. 조건이 모이면 `gate`가 계산 보류 여부를 확인한 뒤 계산·단가·원가계산서를 만들고 `OK` 또는 `PARTIAL`로 답한다. 상태와 이유는 `status`, `reason`에 담기며 검색 방식은 `search_info`, 근거는 `hits`, 입력은 `inputs`, 계산 결과는 `result`, 가격 결과는 `priced`, 원가계산서는 `statement`에 저장된다. 로그인·프로젝트·대화 목록·설정 화면은 없다.
 
 ## 실행
 
@@ -9,7 +9,7 @@ API 서버와 화면을 각각 다른 터미널에서 띄운다.
 ```powershell
 # 1) API 서버 (저장소 루트에서)
 $env:PYTHONIOENCODING = "utf-8"
-.venv\Scripts\python.exe -m uvicorn api.main:app --reload --port 8000
+.venv\Scripts\python.exe -m uvicorn backend.api.main:app --port 8000
 # 오프라인(BM25)만 쓰려면: $env:AGENT_OFFLINE = "1"
 
 # 2) 화면 (frontend/에서, 최초 1회 npm install)
