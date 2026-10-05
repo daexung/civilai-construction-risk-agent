@@ -29,7 +29,7 @@ from backend.render_sources import render_source
 from backend.agent.state import new_state
 from backend.agent.nodes.fill import _common_fields, _valid_for_field
 from backend.api.tables import add_tables, build_xlsx, estimate_filename
-from backend.agent.tools.source.citation import resolve_cites
+from backend.agent.tools.source.citation import prepare_citations, resolve_cites
 from backend.agent.tools.llm.client import LLMUnavailable, warmup_client
 
 GRAPH = build_graph()
@@ -50,6 +50,7 @@ def _prepare_service() -> None:
     global _READY_ERROR
     started = perf_counter()
     try:
+        prepare_citations()
         get_search()
         load_specs()
         if os.environ.get("AGENT_LLM", "off") == "on":

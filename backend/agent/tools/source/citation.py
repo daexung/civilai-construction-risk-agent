@@ -30,6 +30,13 @@ def _pages() -> dict:
     return json.loads(PAGE_MAP.read_text(encoding="utf-8"))["pages"]
 
 
+def prepare_citations() -> None:
+    """계산에 필요한 쪽 대응표와 원본 PDF를 서비스 준비 단계에서 확인한다."""
+    _pages()
+    with pymupdf.open(PDF):
+        pass
+
+
 @lru_cache(maxsize=32)
 def _pdf_text(page: int) -> str:
     with pymupdf.open(PDF) as document:
