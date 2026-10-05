@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
@@ -145,7 +145,7 @@ function EvidenceList({ items }: { items: ChatResponse['evidence'] }) {
 }
 
 function CitationList({ citations }: { citations: Citation[] }) {
-  const [openImage, setOpenImage] = useState<Citation | null>(null);
+  const setOpenImage = useContext(SourcePanelContext);
   const first = citations[0];
   const citationSummary = citations.length === 1 && first
     ? `근거 · ${first.section} (p.${first.pdf_page ?? '—'})`
@@ -161,6 +161,9 @@ function CitationList({ citations }: { citations: Citation[] }) {
             </div>
             {citation.quote && <blockquote className="md-bq"><strong>{citation.item}</strong> “{citation.quote}”</blockquote>}
             {citation.reason && <div>{citation.reason}</div>}
+            {citation.pdf_page != null && (citation.image_url ?
+              <button type="button" className="source-page-badge" onClick={() => setOpenImage(citation)} aria-label={`PDF ${citation.pdf_page}쪽 원문 보기`}>p.{citation.pdf_page}</button> :
+              <span className="source-page-badge">p.{citation.pdf_page}</span>)}
             {citation.image_url && <button type="button" className="source-image-button"
               onClick={() => setOpenImage(citation)}>원문 보기</button>}
             <details className="citation-internal"><summary>자세히</summary>
@@ -169,16 +172,28 @@ function CitationList({ citations }: { citations: Citation[] }) {
           </div>
         ))}
       </div>
-      {openImage?.image_url && <div className="source-modal-backdrop" role="presentation"
-        onClick={() => setOpenImage(null)}>
-        <div className="source-modal" role="dialog" aria-modal="true" aria-label="표 원문"
-          onClick={(event) => event.stopPropagation()}>
-          <div className="source-modal-header"><strong>표 원문 · PDF {openImage.pdf_page}쪽</strong>
-            <button type="button" onClick={() => setOpenImage(null)} aria-label="닫기">닫기</button></div>
-          <img src={openImage.image_url} alt={`${openImage.section_no} ${openImage.subsection ?? ''} 표 원문`} />
-        </div>
-      </div>}
     </details>
+  );
+}
+
+const SourcePanelContext = createContext<(citation: Citation | null) => void>(() => undefined);
+
+function SourceViewer({ citation, onClose }: { citation: Citation; onClose: () => void }) {
+  const apiBase = process.env.REACT_APP_API_URL ?? '';
+  const imageUrl = citation.image_url?.startsWith('/') ? `${apiBase}${citation.image_url}` : citation.image_url;
+  return (
+    <div className="source-viewer-backdrop" role="presentation" onClick={onClose}>
+      <section className="source-viewer" role="dialog" aria-modal="true" aria-label="표 원문"
+        onClick={(event) => event.stopPropagation()}>
+        <header className="source-viewer-header">
+          <strong>표 원문 · PDF {citation.pdf_page ?? '—'}쪽</strong>
+          <button type="button" onClick={onClose} aria-label="원문 패널 닫기">×</button>
+        </header>
+        <div className="source-viewer-image">
+          <img src={imageUrl ?? ''} alt={`${citation.section_no} ${citation.subsection ?? ''} 표 원문`} />
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -511,7 +526,7 @@ function AssistantCard({
   );
 }
 
-export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers, onChangeConditions, onNewChat, onSendExample }: Props) {
+function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeConditions, onNewChat, onSendExample }: Props) {
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
   const [showExampleMenu, setShowExampleMenu] = useState(false);
@@ -733,5 +748,27 @@ export default function ChatArea({ turns, loading, onSendMessage, onSendAnswers,
       </div>
       <div className="input-area">{renderInputBox(true)}</div>
     </main>
+  );
+}
+
+export default function ChatArea(props: Props) {
+  const [openSource, setOpenSource] = useState<Citation | null>(null);
+
+  useEffect(() => {
+    if (!openSource) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenSource(null);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [openSource]);
+
+  return (
+    <SourcePanelContext.Provider value={setOpenSource}>
+      <div className={`chat-shell${openSource ? ' with-source' : ''}`}>
+        <ChatAreaView {...props} />
+        {openSource?.image_url && <SourceViewer citation={openSource} onClose={() => setOpenSource(null)} />}
+      </div>
+    </SourcePanelContext.Provider>
   );
 }

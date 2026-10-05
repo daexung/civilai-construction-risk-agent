@@ -1,5 +1,14 @@
+.chat-shell {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .chat-area {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -145,7 +154,7 @@
 }
 
 .user-bubble {
-  background-color: var(--bg-tertiary);
+  background-color: var(--accent-tint);
   border-radius: 18px 18px 4px 18px;
   padding: 10px 16px;
   font-size: 14px;
@@ -219,7 +228,7 @@
 
 .agent-badge { display: inline-flex; align-items: center; gap: 5px; margin: 0; font-size: 11px; font-weight: 600; color: var(--logo-color); }
 .agent-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.agent-badge.route-qa { color: #327b73; }
+.agent-badge.route-qa { color: var(--accent); }
 .agent-badge.route-out_of_scope { color: var(--text-muted); }
 
 .status-badge {
@@ -232,9 +241,9 @@
 }
 
 .status-out_of_scope .status-badge { color: var(--text-muted); }
-.status-evidence_only .status-badge { color: #b45309; }
-.status-missing_info .status-badge { color: #2563eb; }
-.status-computed .status-badge { color: #16a34a; }
+.status-evidence_only .status-badge { color: var(--status-warning); background: var(--status-warning-tint); }
+.status-missing_info .status-badge { color: var(--status-warning); background: var(--status-warning-tint); }
+.status-computed .status-badge { color: var(--accent); }
 .status-blocked .status-badge { color: #dc2626; }
 .status-error .status-badge { color: #dc2626; }
 
@@ -245,9 +254,9 @@
 
 /* ── 경고 띠 ── */
 .warning-banner {
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
-  color: #92400e;
+  background: var(--status-warning-tint);
+  border: 1px solid var(--status-warning);
+  color: var(--status-warning);
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 12.5px;
@@ -442,9 +451,9 @@
 .review-badge {
   font-size: 11px;
   font-weight: 600;
-  color: #b45309;
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
+  color: var(--status-warning);
+  background: var(--status-warning-tint);
+  border: 1px solid var(--status-warning);
   border-radius: 999px;
   padding: 2px 8px;
 }
@@ -580,8 +589,8 @@
 .source-image-button {
   margin-top: 6px;
   padding: 3px 7px;
-  color: var(--text-primary);
-  background: var(--bg-primary);
+  color: var(--point);
+  background: var(--point-tint);
   border: 1px solid var(--border-color);
   border-radius: 4px;
   cursor: pointer;
@@ -880,7 +889,7 @@
 }
 
 .send-btn:hover:not(:disabled) {
-  background-color: #3a7d44;
+  background-color: var(--accent);
 }
 
 .send-btn:disabled {
@@ -949,7 +958,7 @@
 .fold > summary { cursor: pointer; font-weight: 600; font-size: 13.5px; }
 .fold[open] > summary { margin-bottom: 8px; }
 
-.qa-card { padding: 18px; border-left: 4px solid #327b73; background: #f3faf8; border-radius: 8px; }
+.qa-card { padding: 18px; border-left: 4px solid var(--accent); background: var(--accent-tint); border-radius: 8px; }
 .qa-conclusion { display: block; font-size: 1.08rem; }
 .qa-explanation { white-space: pre-wrap; line-height: 1.65; }
 .qa-card li p { margin-top: 4px; }
@@ -962,7 +971,7 @@
 .qa-card > ul > .md-li { font-size: 14px; }
 .qa-card > ul > .md-li > strong { font-weight: 650; }
 .estimate-amount-block { display: flex; flex-direction: column; gap: 2px; margin: 2px 0 4px; }
-.estimate-amount-block strong { font-size: 19px; font-weight: 700; color: var(--text-primary); }
+.estimate-amount-block strong { font-size: 19px; font-weight: 700; color: var(--accent); }
 .estimate-amount-block span { font-size: 11px; color: var(--text-muted); }
 .assistant-card-header .assistant-timing { margin: 0; }
 .assistant-answer { gap: 6px; }
@@ -1028,6 +1037,70 @@
 .example-btn, .example-menu-item { display: flex; align-items: center; gap: 9px; }
 .example-kind { flex: 0 0 auto; display: inline-flex; align-items: center; border-radius: 999px; padding: 2px 7px;
   background: var(--bg-secondary); color: var(--text-muted); font-size: 10px; font-weight: 600; }
-.example-kind.estimate { color: #2563eb; background: #eff6ff; }
-.example-kind.qa { color: #327b73; background: #eef7f4; }
+.example-kind.estimate { color: var(--accent); background: var(--accent-tint); }
+.example-kind.qa { color: var(--accent); background: var(--accent-tint); }
 .disclaimer-notice { margin: 18px 0 0; color: var(--text-muted); font-size: 10.5px; }
+
+.source-page-badge {
+  display: inline-flex;
+  align-items: center;
+  margin: 5px 5px 0 0;
+  padding: 2px 7px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 10px;
+  line-height: 1.4;
+  text-decoration: none;
+}
+button.source-page-badge { cursor: pointer; }
+button.source-page-badge:hover { color: var(--point); background: var(--point-tint); }
+
+.source-viewer-backdrop { position: fixed; inset: 0; z-index: 1000; pointer-events: none; }
+.source-viewer {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  min-width: 0;
+  height: 100%;
+  border-left: 1px solid var(--border-color);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  pointer-events: auto;
+}
+.with-source .chat-area { flex: 0 0 55%; width: 55%; }
+.source-viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 58px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--point);
+}
+.source-viewer-header button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--point-tint);
+  color: var(--point);
+  font: inherit;
+  font-size: 21px;
+  cursor: pointer;
+}
+.source-viewer-image { flex: 1; overflow: auto; padding: 20px; background: var(--bg-primary); }
+.source-viewer-image img { display: block; width: 100%; height: auto; margin: 0 auto; object-fit: contain; }
+
+@media (max-width: 1023px) {
+  .source-viewer-backdrop { display: flex; align-items: center; justify-content: center; padding: 16px; background: rgb(0 0 0 / 62%); pointer-events: auto; }
+  .source-viewer { position: relative; inset: auto; width: min(100%, 980px); height: 92vh; border: 0; border-radius: 12px; overflow: hidden; }
+  .with-source .chat-area { flex: 1; width: auto; }
+}
