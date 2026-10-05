@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
+import React, { useId, createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
@@ -254,7 +254,35 @@ function AssistantActionBar({ response, receivedAtMs }: { response: ChatResponse
     </div>
   );
 }
-function ComputedCard({ work, inputs, result, priced, tables }: {
+function EstimateTabs({ tabs, resetToken }: {
+  tabs: { id: string; label: string; content: React.ReactNode }[]; resetToken: object;
+}) {
+  const prefix = useId();
+  const [selected, setSelected] = useState(tabs[0]?.id);
+  useEffect(() => { setSelected(tabs[0]?.id); }, [resetToken]); // eslint-disable-line react-hooks/exhaustive-deps
+  const active = tabs.find(tab => tab.id === selected) ?? tabs[0];
+  if (!active) return null;
+  return <div className="estimate-tabs">
+    <div className="estimate-tab-row" role="tablist" aria-label="견적 결과">
+      {tabs.map((tab, index) => <button type="button" key={tab.id}
+        id={`${prefix}-${tab.id}`} role="tab" aria-selected={active.id === tab.id}
+        aria-controls={`${prefix}-panel`} tabIndex={active.id === tab.id ? 0 : -1}
+        onClick={() => setSelected(tab.id)} onKeyDown={event => {
+          if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+          event.preventDefault();
+          const next = tabs[(index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
+          setSelected(next.id);
+          document.getElementById(`${prefix}-${next.id}`)?.focus();
+        }}>{tab.label}</button>)}
+    </div>
+    <div id={`${prefix}-panel`} role="tabpanel" aria-labelledby={`${prefix}-${active.id}`} tabIndex={0}>
+      {active.content}
+    </div>
+  </div>;
+}
+
+function ComputedCard({ work, inputs, result, priced, tables, response }: {
+  response: ChatResponse;
   work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult; priced: PricedResult | null;
   tables: ChatResponse['tables'];
 }) {
@@ -264,12 +292,11 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
     .map((item) => `${item.label} ${choiceLabel(item.value)}`).join(' · ');
   return (
     <div className="computed-card">
-      <details className="fold">
-        <summary>내역서</summary>
-        <BillTable bill={tables.bill} />
-      </details>
-      <details className="fold">
-      <summary>일위대가표 ({result.unit_basis.per}당)</summary>
+      <EstimateTabs resetToken={response} tabs={[
+        ...(tables.statement_rows.length ? [{ id: 'statement', label: '원가계산서', content:
+          <StatementTable rows={tables.statement_rows} notes={response.statement?.basis_notes ?? []} /> }] : []),
+        ...(tables.bill ? [{ id: 'bill', label: '내역서', content: <BillTable bill={tables.bill} /> }] : []),
+        ...(result.unit_lines.length ? [{ id: 'unit', label: `일위대가표 (${result.unit_basis.per}당)`, content: <div>
       <div className="unit-summary">{work?.title}{conditions && ` · ${conditions}`}</div>
       <div className="unit-note">{priced?.rate_version
         ? `노임단가: ${priced.rate_version.id.slice(0, 4)} ${priced.rate_version.id.endsWith('H2') ? '하반기' : '상반기'} (${priced.rate_version.effective_from} 적용)`
@@ -363,13 +390,9 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
           .map((item) => item.name).filter((name, index, names) => names.indexOf(name) === index).join(', ') || '없음'}</div>}
         <div>내역서 작성 전 참고 금액이며, 제외·미산정 항목이 반영되지 않았습니다.</div>
       </div>}
-      </details>
-      <details className="fold">
-        <summary>단가대비표</summary>
-        <RateTable rows={tables.rate_rows} />
-      </details>
-      <details className="fold calculation-details">
-        <summary>산출근거</summary>
+      </div> }] : []),
+        ...(tables.rate_rows.length ? [{ id: 'rates', label: '단가대비표', content: <RateTable rows={tables.rate_rows} /> }] : []),
+        ...(result.lines.length || result.daily_volume ? [{ id: 'basis', label: '산출근거', content: <div className="calculation-details">
         {result.daily_volume && result.work_days && <><div className="formula-row"><span className="formula-label">일당시공량</span>
           <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
           <span className="formula-text">{result.daily_volume.formula}</span></div>
@@ -385,12 +408,13 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
             <td>{line.rules.length > 0 ? '인원 조정 적용' : '—'}</td>
           </tr>)}</tbody>
         </table></div>
+      </div> }] : []),
+      ]} />
         <div className="source-list"><strong>일당시공량 출처</strong>
           {result.daily_volume && <CitationList citations={result.daily_volume.citations} />}
           {result.lines.map((line) => <div key={line.name}><strong>{line.name} 작업조·조정 근거</strong>
             <CitationList citations={line.citations} /></div>)}
         </div>
-      </details>
 
       <div className="not-calculated">
         <h4>미산정 항목</h4>
@@ -509,13 +533,15 @@ function AssistantCard({
           <ConditionsBar key={JSON.stringify(response.conditions)}
             conditions={response.conditions} disabled={!interactive || loading}
             onApply={onChangeConditions} />
-          <StatementTable rows={response.tables.statement_rows} notes={response.statement?.basis_notes ?? []} />
+          {!response.result && <EstimateTabs resetToken={response} tabs={[
+            { id: 'statement', label: '원가계산서', content: <StatementTable rows={response.tables.statement_rows} notes={response.statement?.basis_notes ?? []} /> },
+          ]} />}
         </>
       )}
 
       {['COMPUTED', 'OK', 'PARTIAL'].includes(response.status) && response.result && (
         <ComputedCard work={response.work} inputs={response.inputs} result={response.result as ComputedResult}
-          priced={response.priced} tables={response.tables} />
+          priced={response.priced} tables={response.tables} response={response} />
       )}
 
       {response.status === 'BLOCKED' && response.result && (
