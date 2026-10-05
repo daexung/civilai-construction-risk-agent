@@ -73,6 +73,15 @@ def main() -> int:
     state = partial_state()
     checks.append(("사전조건: 부분 계산 상태", state["status"] == "PARTIAL"))
     facts = build_facts(state)
+    with patch("backend.agent.nodes.compose._spec", return_value={
+            "origin": "draft", "section_no": "6-1-4", "title": "draft test work",
+            "inputs": [], "quantity_model": {"params": {"quantity_input": "volume"}}}):
+        draft_facts = build_facts(state)
+        captured_prompt = []
+        draft_compose = compose(state, generate_fn=lambda prompt, _system: captured_prompt.append(prompt) or build_template(draft_facts))
+    checks.append(("C0 draft-review fact omitted from compose input",
+                   "draft_review" not in draft_facts and "draft_review" not in captured_prompt[0]
+                   and draft_compose["answer_source"] == "llm"))
     priced_facts = facts["priced"]
     checks.append(("C0 facts 금액에 단위·참고 기준 표시",
                    "1㎥당 합계(부분)" in priced_facts

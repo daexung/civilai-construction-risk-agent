@@ -433,7 +433,7 @@ def main() -> int:
         ok = (first["status"] == "MISSING_INFO" and result.get("work", {}).get("section_no") == section
               and result.get("status") in ("OK", "PARTIAL")
               and result.get("result", {}).get("review_status") == "AI 초안 · 검토 전"
-              and "AI가 품셈 원문으로 만든 계산 초안(검토 전)" in result.get("answer", "")
+              and "AI가 품셈 원문으로 만든 계산 초안(검토 전)" not in result.get("answer", "")
               and priced.get("total") == unit_total
               and (priced.get("reference_amounts") or {}).get("total") == direct_total
               and (statement.get("totals") or {}).get("contract_amount") == contract)
