@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { EXAMPLE_QUESTIONS } from '../examples';
-import ChatArea from '../components/ChatArea';
-import { ChatResponse, ChatTurn } from '../types';
+import { ChatResponse, ComputedResult } from '../types';
+import { conditionSummary } from '../components/StatementView';
 import demo from './demo.json';
 import './Landing.css';
 
@@ -11,28 +11,80 @@ interface Props {
 }
 
 const demoResponse = demo.response as unknown as ChatResponse;
-const demoTurns: ChatTurn[] = [
-  { id: 'landing-demo-question', role: 'user', text: demo.question },
-  { id: 'landing-demo-answer', role: 'assistant', response: demoResponse },
-];
+const demoResult = demoResponse.result as ComputedResult;
+const demoAmount = demoResponse.tables.statement_rows.find((row) => row.name === '도급액');
+const previewRows = demoResponse.tables.statement_rows.filter((row) =>
+  ['재료비', '노무비 계', '경비 계', '일반관리비', '이윤', '부가가치세'].includes(row.name));
+const previewTabs = ['원가계산서', '일위대가', '산출근거'];
+
+function formatAmount(value: number | string | null | undefined): string {
+  return value == null ? '—' : Number(value).toLocaleString('ko-KR');
+}
 
 function LandingPreview() {
-  const previewRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      const messages = previewRef.current?.querySelector<HTMLElement>('.messages');
-      if (messages) messages.scrollTop = 0;
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
+  const [selected, setSelected] = useState(0);
+  const prefix = useId();
+  const source = demoResult.daily_volume?.citations[0];
+  const activateTab = (index: number) => {
+    setSelected(index);
+    document.getElementById(`${prefix}-tab-${index}`)?.focus();
+  };
   return (
-    <div className="landing-preview-frame" ref={previewRef} aria-label="실제 견적 답변 미리보기">
-      <div className="landing-preview-chat">
-        <ChatArea turns={demoTurns} loading={false} onSendMessage={() => undefined}
-          onSendAnswers={() => undefined} onChangeConditions={() => undefined}
-          onNewChat={() => undefined} onSendExample={() => undefined} />
+    <div className="landing-preview-frame" aria-label="실제 견적 답변 미리보기">
+      <p className="preview-question">{demo.question}</p>
+      <div className="preview-result">
+        <div className="preview-result-heading">
+          <span className="preview-kind"><span className="evidence-dot" />견적</span>
+          <span className="preview-status">{demoResponse.status === 'PARTIAL' ? '부분 금액 계산' : '금액 계산 완료'}</span>
+        </div>
+        <div className="preview-amount">
+          <span>도급액</span>
+          <strong>{formatAmount(demoAmount?.amount)}<small>원</small></strong>
+          <p>부가세 포함 · 표준품셈 기준 참고 금액</p>
+        </div>
+        <p className="preview-conditions">기준: {conditionSummary(demoResponse.conditions)}</p>
+        <div className="preview-tabs" role="tablist" aria-label="견적 결과">
+          {previewTabs.map((label, index) => <button key={label} type="button" role="tab"
+            id={`${prefix}-tab-${index}`} aria-selected={selected === index}
+            aria-controls={`${prefix}-panel`} tabIndex={selected === index ? 0 : -1}
+            onClick={() => setSelected(index)} onKeyDown={(event) => {
+              const next = event.key === 'ArrowRight' ? (index + 1) % previewTabs.length
+                : event.key === 'ArrowLeft' ? (index + previewTabs.length - 1) % previewTabs.length
+                  : event.key === 'Home' ? 0 : event.key === 'End' ? previewTabs.length - 1 : null;
+              if (next != null) { event.preventDefault(); activateTab(next); }
+            }}>{label}</button>)}
+        </div>
+        <div className="preview-tab-panel" role="tabpanel" id={`${prefix}-panel`}
+          aria-labelledby={`${prefix}-tab-${selected}`} tabIndex={0}>
+          {selected === 0 && <dl className="preview-costs">
+            {previewRows.map((row) => <div key={row.name}><dt>{row.name}</dt><dd>{formatAmount(row.amount)}원</dd></div>)}
+          </dl>}
+          {selected === 1 && <div className="preview-unit-table-wrap"><table className="preview-unit-table">
+            <caption>일위대가표 ({demoResult.unit_basis.per}당)</caption>
+            <thead><tr><th>명칭</th><th>수량</th><th>단위</th></tr></thead>
+            <tbody>{demoResult.unit_lines.map((line) => <tr key={line.name}>
+              <td>{line.name}</td><td>{line.applied}</td><td>{line.unit}</td>
+            </tr>)}</tbody>
+          </table></div>}
+          {selected === 2 && <div className="preview-basis">
+            <span className="preview-source-page">p.{source?.pdf_page} · 원문 근거</span>
+            <p>{source?.label}</p>
+            <dl className="preview-costs">
+              <div><dt>일당시공량</dt><dd>{demoResult.daily_volume?.value} {demoResult.daily_volume?.unit}</dd></div>
+              <div><dt>작업조 투입량</dt><dd>{demoResult.work_days?.value} 작업조·일</dd></div>
+            </dl>
+          </div>}
+        </div>
+        <div className="preview-unpriced">
+          <strong>미산정 항목</strong>
+          <p>{demoResponse.tables.statement_rows.filter((row) => row.status === '미산정').map((row) => row.name).join(' · ')}</p>
+        </div>
       </div>
-      <div className="landing-preview-fade" aria-hidden="true" />
+      {source && <button type="button" className="preview-source-link" onClick={() => activateTab(2)}>
+        <FlowIcon kind="source" /><span>{source.section_no} {source.section_title}</span>
+        <span className="preview-source-page">p.{source.pdf_page} · 원문 근거</span>
+        <span aria-hidden="true">↗</span>
+      </button>}
     </div>
   );
 }
@@ -72,21 +124,28 @@ export default function Landing({ onStart, onExample }: Props) {
           <button className="landing-start landing-start-small" onClick={onStart}>시작하기 <span aria-hidden="true">↗</span></button>
         </header>
 
-        <section className="landing-hero landing-reveal">
-          <p className="landing-eyebrow"><span className="evidence-dot" /> 2026 표준품셈을 근거로</p>
-          <h1>품셈 찾고 계산하던 시간을,<br /><span>질문 한 줄로.</span></h1>
-          <p className="landing-lead">2026 건설공사 표준품셈 원문을 근거로 공사비를 계산하고,<br className="desktop-break" /> 품셈 질문에 답합니다.</p>
-          <div className="landing-hero-actions">
-            <a className="landing-button landing-button-outline" href="#features">기능 보기 <span aria-hidden="true">↓</span></a>
-            <button className="landing-button landing-button-primary" onClick={onStart}>지금 시작하기 <span aria-hidden="true">→</span></button>
-          </div>
-          <p className="landing-facts">2026 표준품셈 <i /> 5개 부문 <i /> 1,058개 절 <i /> 근거 원문 첨부</p>
-        </section>
+        <div className="landing-intro">
+          <section className="landing-hero landing-reveal">
+            <p className="landing-eyebrow"><span className="evidence-dot" /> 2026 표준품셈을 근거로</p>
+            <h1>품셈 찾고 계산하던 시간을,<br /><span>질문 한 줄로.</span></h1>
+            <p className="landing-lead">2026 건설공사 표준품셈 원문을 근거로 공사비를 계산하고,<br className="desktop-break" /> 품셈 질문에 답합니다.</p>
+            <div className="landing-hero-actions">
+              <a className="landing-button landing-button-outline" href="#features">기능 보기 <span aria-hidden="true">↓</span></a>
+              <button className="landing-button landing-button-primary" onClick={onStart}>지금 시작하기 <span aria-hidden="true">→</span></button>
+            </div>
+          </section>
 
-        <section className="landing-demo landing-reveal" aria-label="견적 답변 미리보기">
-          <div className="demo-window-top"><span /><span /><span /><p>품셈AI · 견적 답변</p><b>실제 응답</b></div>
-          <LandingPreview />
-        </section>
+          <section className="landing-demo landing-reveal" aria-label="견적 답변 미리보기">
+            <div className="demo-window-top"><span /><span /><span /><p>품셈AI · 견적 답변</p><b>실제 응답</b></div>
+            <LandingPreview />
+          </section>
+        </div>
+        <div className="landing-facts" aria-label="표준품셈 자료">
+          <span><strong>2026</strong> 표준품셈</span>
+          <span><strong>5개</strong> 부문</span>
+          <span><strong>1,058개</strong> 절</span>
+          <span>근거 원문 첨부 <FlowIcon kind="source" /></span>
+        </div>
 
         <section className="landing-features landing-reveal" id="features">
           <div className="section-heading">
