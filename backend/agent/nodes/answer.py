@@ -190,7 +190,14 @@ def answer(state, *, generate_fn=None, model=None, contexts=None):
             parts.extend(f"[{c['chunk_id']}] {c['quote']}" for c in qa["citations"]
                          if c["chunk_id"] in comparison.get("citation_ids", []))
     else:
-        parts.extend(c["section"] + ": " + c["summary"] for c in qa["comparisons"])
+        comparisons = qa["comparisons"]
+        if len(comparisons) == 1 and qa["citations"]:
+            first_chunk_id = qa["citations"][0]["chunk_id"]
+            first_section = next((context["section"] for context in contexts
+                                  if any(chunk["chunk_id"] == first_chunk_id for chunk in context["chunks"])), None)
+            if first_section == comparisons[0]["section"]:
+                comparisons = []
+        parts.extend(c["section"] + ": " + c["summary"] for c in comparisons)
         parts.extend(f"[{c['chunk_id']}] {c['quote']}" for c in qa["citations"])
     text = "\n\n".join(t for t in parts if t)
     return {"status": "ANSWERED", "reason": "", "qa": qa, "answer": text, "answer_source": source,

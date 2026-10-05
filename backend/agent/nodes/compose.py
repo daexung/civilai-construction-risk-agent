@@ -20,22 +20,12 @@ from backend.agent.tools.llm import client as llm_client
 COMPOSE_STATUSES = {"OK", "PARTIAL", "BLOCKED", "EVIDENCE_ONLY", "OUT_OF_SCOPE"}
 
 SYSTEM_PROMPT = (
-    "당신은 건설 표준품셈 기반 공사비 계산 도우미의 설명 담당입니다. "
-    "아래 facts(JSON)에 있는 숫자만 사용해 한국어로 3~6문장의 설명을 쓰세요. "
-    "현장 공무 담당자에게 설명하듯 자연스러운 문장으로 쓰고, 표를 다시 나열하지 마세요. "
-    "facts는 JSON 자료 구조일 뿐이니 amount·unit_price 같은 영어 필드 이름을 문장에 그대로 "
-    "쓰지 말고 자연스러운 한국어로 바꿔 부르세요(예: 소계, 합계, 금액). "
-    "새로운 숫자·단가·금액을 추정하거나 만들어내지 마세요. 금액의 숫자 값 자체는 facts에 "
-    "있는 표기를 그대로 쓰고 임의로 반올림하거나 계산하지 마세요. "
-    "금액을 말할 때는 반드시 '1㎥당'인지 '전체 물량 기준'인지 밝히세요. "
-    "부분 금액이면 무엇이 제외되거나 미산정되어 빠졌는지도 함께 말하세요. "
-    "원가계산서 facts가 있으면 첫 문장은 반드시 공종, 물량, '전체 물량 기준 도급액(부가세 포함)', "
-    "그리고 괄호 안에 facts의 condition_summary를 그대로 넣은 '(기준: ...)'을 말하세요. "
-    "condition_default가 true이면 그 괄호에 '기본 조건'이라고도 적으세요. "
-    "unpriced 항목은 하나도 빠짐없이 이름 그대로 문장에 쓰세요. "
-    "unit_price처럼 소수점이 긴 값은 가능하면 인용하지 말고 금액·합계 위주로 설명하세요. "
-    "계산 금액이 있다면 '표준품셈 기준 금액이며 시장 가격과 다를 수 있다'는 점을 반드시 "
-    "언급하고, 제외 항목이나 미산정 항목이 있다면 그 이름과 사유를 반드시 언급하세요."
+    "당신은 건설 표준품셈 기반 공사비 계산 결과의 설명 담당입니다. "
+    "facts(JSON)에 있는 숫자만 사용해 한국어로 최대 두 문장으로 답하세요. "
+    "첫 문장에는 공종, 물량, 전체 물량 기준 부가세 포함 도급액을 말하고 조건 요약은 반복하지 마세요. "
+    "미산정 항목이 있으면 두 번째 문장에는 항목 이름만 나열하세요. "
+    "제외 항목이나 제외 사유, 시장 가격 차이는 설명하지 마세요. "
+    "새로운 숫자나 금액을 만들거나 계산하지 말고, 금액에는 물량 기준을 함께 밝혀 주세요."
 )
 
 NUMBER_PATTERN = re.compile(r"\d+(?:-\d+){2}(?!\d)|\d[\d,]*(?:\.\d+)?(?:/\d+)?")
@@ -223,11 +213,11 @@ def build_facts(state: AgentState) -> dict:
         facts["condition_summary"] = condition_summary(inputs)
         facts["condition_default"] = all(sources.get(field["name"]) == "기본값" for field in _common_fields())
         facts["input_count"] = len(facts["inputs"])
+        quantity_input = (spec or {}).get("quantity_model", {}).get("params", {}).get("quantity_input")
+        facts["quantity"] = inputs.get(quantity_input) if quantity_input else None
         unit = next((field["unit"] for field in spec["inputs"]
                      if field["name"] == spec["quantity_model"]["params"]["quantity_input"]), "㎥") if spec else "㎥"
         facts["unit"] = unit
-        if spec and spec.get("origin") == "draft":
-            facts["draft_review"] = "AI가 품셈 원문으로 만든 계산 초안(검토 전)"
         facts["priced"] = _priced_facts(priced, unit)
         facts["statement"] = _statement_facts(state.get("statement"))
         facts["citation_labels"] = _citation_labels(_priced_citations(priced))
@@ -243,70 +233,24 @@ def build_facts(state: AgentState) -> dict:
 
 def _template_priced(facts: dict) -> str:
     work = facts.get("work")
-    label = f"{work['title']}({work['section_no']})" if work else "이번 계산"
+    label = work["title"] if work else "공사"
     priced = facts.get("priced") or {}
     statement = facts.get("statement") or {}
-    partial = priced.get("partial")
-    unit = facts.get("unit", "㎥")
-    total_key = f"1{unit}당 합계(부분)" if partial else f"1{unit}당 합계"
-    total = priced.get(total_key)
-    subtotals = priced.get(f"1{unit}당 소계") or {}
-    sentences = [facts["draft_review"] + "입니다."] if facts.get("draft_review") else []
-    statement_totals = statement.get("totals") or {}
-    contract_amount = statement_totals.get("전체 물량 기준 도급액(부가세 포함)")
+    quantity = facts.get("quantity")
+    quantity_text = f"{quantity}{facts.get('unit', '㎥')} " if quantity is not None else ""
+    totals = statement.get("totals") or {}
+    contract_amount = totals.get("전체 물량 기준 도급액(부가세 포함)")
     if contract_amount is not None:
-        inputs = {item.get("name"): item.get("value") for item in facts.get("inputs", [])}
-        structure = "철근콘크리트 벽체" if inputs.get("structure") == "철근" else "콘크리트 벽체"
-        volume = inputs.get("volume")
-        placement = inputs.get("placement")
-        subject = (f"{structure} {volume}㎥ 콘크리트 펌프차 {placement}타설 공사비"
-                   if volume and placement else "원가계산서 공사비")
-        basis = f"기준: {facts['condition_summary']}" + (", 기본 조건" if facts.get("condition_default") else "")
-        sentences.append(
-            f"{subject}{_josa(subject, '은/는')} 전체 물량 기준 부가세 포함 총 "
-            f"{contract_amount}(도급액)으로 계산되었습니다({basis})."
-        )
-        sentences.append(
-            f"전체 물량 기준 재료비 {statement_totals.get('전체 물량 기준 재료비', '0원')}, "
-            f"노무비 {statement_totals.get('전체 물량 기준 노무비', '0원')}, "
-            f"경비 {statement_totals.get('전체 물량 기준 경비', '0원')}, "
-            f"순공사원가 {statement_totals.get('전체 물량 기준 순공사원가', '0원')}입니다."
-        )
-        vat = statement_totals.get("전체 물량 기준 부가가치세", "0원")
-        sentences.append(
-            f"기준일 {statement.get('basis_date')} 제비율을 적용해 일반관리비 "
-            f"{statement_totals.get('전체 물량 기준 일반관리비', '0원')}과 이윤 "
-            f"{statement_totals.get('전체 물량 기준 이윤', '0원')}, 부가가치세 "
-            f"{vat}{_josa(vat, '을/를')} 반영했습니다."
-        )
-    elif statement.get("status") == "UNCALCULATED":
-        sentences.append("해당 기준일의 제비율이 없어 원가계산서 금액은 미산정입니다.")
-    if total is not None:
-        reference_key = next((key for key in priced if f"{unit} 기준 참고 금액" in key), None)
-        reference_amount = priced.get(reference_key) if reference_key else None
-        amount_label = "미산정 항목을 제외한 부분 합계" if partial else "합계"
-        unit_sentence = (
-            f"{label}{_josa(label, '은/는')} 1{unit}당 재료비 {subtotals.get(f'1{unit}당 재료비 소계') or '0원'}, "
-            f"노무비 {subtotals.get(f'1{unit}당 노무비 소계') or '0원'}, "
-            f"경비 {subtotals.get(f'1{unit}당 경비 소계') or '0원'}이며, "
-            f"1{unit}당 {amount_label}{_josa(amount_label, '은/는')} {total}입니다."
-        )
-        if reference_amount is not None:
-            unit_sentence += (f" {reference_key}{_josa(reference_key, '은/는')} "
-                              f"{reference_amount}입니다. 내역서 작성 전 참고용입니다.")
-        sentences.append(unit_sentence)
+        sentences = [f"{label} {quantity_text}전체 물량 기준 부가세 포함 도급액은 {contract_amount}입니다."]
     else:
-        sentences.append(f"{label}은(는) 현재 적용 가능한 단가가 없어 금액을 계산하지 못했습니다.")
-    omitted_by_name = {}
-    for item in [*(priced.get("excluded") or []), *(statement.get("excluded") or [])]:
-        omitted_by_name.setdefault(item["name"], f"{item['name']} 제외({item['reason']})")
-    for item in [*(priced.get("unpriced") or []), *(statement.get("unpriced") or [])]:
-        omitted_by_name.setdefault(item["name"], f"{item['name']} 미산정({item['reason']})")
-    omitted = list(omitted_by_name.values())
-    if omitted:
-        sentences.append("빠진 항목: " + ", ".join(omitted) + ".")
-    sentences.append("표준품셈 기준 금액이며 시장 가격과 다를 수 있습니다.")
+        unit = facts.get("unit", "㎥")
+        total = priced.get(f"1{unit}당 합계(부분)") or priced.get(f"1{unit}당 합계")
+        sentences = [f"{label} {total}입니다."] if total is not None else [f"{label}은(는) 현재 적용 가능한 단가가 없어 금액을 계산하지 못했습니다."]
+    unpriced = list(dict.fromkeys(item["name"] for item in [*(priced.get("unpriced") or []), *(statement.get("unpriced") or [])]))
+    if unpriced:
+        sentences.append("미산정 항목: " + ", ".join(unpriced) + ".")
     return " ".join(sentences)
+
 
 
 def _template_blocked(facts: dict) -> str:
@@ -367,8 +311,12 @@ def validate_numbers(text: str, facts: dict) -> tuple[bool, list[str]]:
     return not bad, bad
 
 
-def validate_amount_basis(text: str) -> bool:
-    """Require each currency amount to carry an adjacent quantity basis."""
+def validate_amount_basis(text: str, facts: dict | None = None) -> bool:
+    """Check the VAT-inclusive contract amount, or retain unit-basis checks for unit estimates."""
+    totals = ((facts or {}).get("statement") or {}).get("totals") or {}
+    contract_amount = totals.get("전체 물량 기준 도급액(부가세 포함)")
+    if contract_amount is not None:
+        return contract_amount in text and "부가세 포함" in text
     for match in re.finditer(r"\d[\d,]*(?:\.\d+)?\s*원", text):
         context = text[max(0, match.start() - 24):match.start()]
         if not re.search(r"(?:1\s*[㎥㎡]\s*당|[㎥㎡]\s*기준|전체\s*물량\s*기준)", context):
@@ -429,14 +377,12 @@ def compose(state: AgentState, generate_fn=None) -> dict:
             else f"{type(exc).__name__}: {str(exc)[:200]}"
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
     llm_info["elapsed_ms"] = round((time.monotonic() - start) * 1000)
-    if facts.get("draft_review") and facts["draft_review"] not in text:
-        text = f"{facts['draft_review']}입니다. {text}"
     ok, bad = validate_numbers(text, facts)
     if not ok:
         llm_info["error"] = "숫자 불일치"
         llm_info["bad_numbers"] = bad
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
-    if not validate_amount_basis(text):
+    if not validate_amount_basis(text, facts):
         llm_info["error"] = "금액 기준 누락"
         return {"answer": template_text, "answer_source": "template", "llm_info": llm_info}
     if validate_unpriced(text, facts):

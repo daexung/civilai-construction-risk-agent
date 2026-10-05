@@ -959,6 +959,12 @@
 .assistant-card .work-badge { font-size: 11px; color: var(--text-muted); }
 .qa-card { padding: 0; border: 0; background: transparent; border-radius: 0; }
 .qa-card > ul { padding-left: 20px; margin: 8px 0; }
+.qa-card > ul > .md-li { font-size: 14px; }
+.qa-card > ul > .md-li > strong { font-weight: 650; }
+.estimate-amount-block { display: flex; flex-direction: column; gap: 2px; margin: 2px 0 4px; }
+.estimate-amount-block strong { font-size: 19px; font-weight: 700; color: var(--text-primary); }
+.estimate-amount-block span { font-size: 11px; color: var(--text-muted); }
+.assistant-card-header .assistant-timing { margin: 0; }
 .assistant-answer { gap: 6px; }
 .assistant-text { white-space: normal; }
 .md-h2 { font-size: 16px; font-weight: 650; color: var(--text-primary); margin: 14px 0 5px; }

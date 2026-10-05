@@ -10,8 +10,9 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 os.environ["AGENT_OFFLINE"] = "1"
-os.environ.setdefault("AGENT_LLM", "off")
 ROOT = Path(__file__).resolve().parents[1]
+os.environ["AGENT_LLM"] = "off"
+os.environ["INDEX_CONFIG"] = str(ROOT / "evals" / "index_configs" / "6chapter_studio.json")
 sys.path.insert(0, str(ROOT))
 
 from langgraph.types import Command  # noqa: E402
@@ -73,6 +74,15 @@ def main() -> int:
     state = partial_state()
     checks.append(("사전조건: 부분 계산 상태", state["status"] == "PARTIAL"))
     facts = build_facts(state)
+    with patch("backend.agent.nodes.compose._spec", return_value={
+            "origin": "draft", "section_no": "6-1-4", "title": "draft test work",
+            "inputs": [], "quantity_model": {"params": {"quantity_input": "volume"}}}):
+        draft_facts = build_facts(state)
+        captured_prompt = []
+        draft_compose = compose(state, generate_fn=lambda prompt, _system: captured_prompt.append(prompt) or build_template(draft_facts))
+    checks.append(("C0 draft-review fact omitted from compose input",
+                   "draft_review" not in draft_facts and "draft_review" not in captured_prompt[0]
+                   and draft_compose["answer_source"] == "llm"))
     priced_facts = facts["priced"]
     checks.append(("C0 facts 금액에 단위·참고 기준 표시",
                    "1㎥당 합계(부분)" in priced_facts
@@ -88,37 +98,49 @@ def main() -> int:
                    and facts["statement"]["totals"]["전체 물량 기준 순공사원가"] == "7,364,857원"))
 
     template = build_template(facts)
+    first_sentence = template.split("입니다.", 1)[0]
     checks.append(("C0d template 첫 문장 전체 물량 도급액",
-                   template.split(".", 1)[0].startswith("철근콘크리트 벽체 260㎥ 콘크리트 펌프차 붐타설 공사비는 전체 물량 기준 부가세 포함 총 10,032,436원(도급액)")))
+                   facts["work"]["title"] in first_sentence and "260㎥" in first_sentence
+                   and "전체 물량 기준 부가세 포함 도급액은" in first_sentence
+                   and "10,032,436원" in first_sentence))
     duplicate_facts = json.loads(json.dumps(facts, ensure_ascii=False))
     for field in ("excluded", "unpriced"):
         if duplicate_facts["priced"][field]:
             duplicate_facts["priced"][field].append(duplicate_facts["priced"][field][0])
             duplicate_facts["statement"][field].append(duplicate_facts["statement"][field][0])
     duplicate_text = build_template(duplicate_facts)
-    duplicate_names = [item["name"] for field in ("excluded", "unpriced")
-                       for item in facts["priced"][field]]
+    duplicate_names = [item["name"] for item in facts["priced"]["unpriced"]]
     checks.append(("C0e 빠진 항목 이름 중복 제거",
-                   duplicate_text.count("빠진 항목:") == 1
+                   duplicate_text.count("미산정 항목:") == 1
                    and all(duplicate_text.count(name) == 1 for name in duplicate_names)))
     checks.append(("C0f 숫자·괄호 뒤 조사 선택",
                    f"912,039원{_josa('912,039원', '을/를')}" == "912,039원을"
                    and f"(6-1-4){_josa('타설(6-1-4)', '은/는')}" == "(6-1-4)은"
                    and f"(부분){_josa('참고 금액(부분)', '은/는')}" == "(부분)은"
-                   and "912,039원을 반영했습니다." in template
-                   and "타설(6-1-4)은" in template
-                   and "참고 금액(부분)은" in template))
+                   ))
 
     def good_llm(prompt: str, system: str) -> str:
-        return (f"{facts['work']['title']} 계산 결과 1㎥당 합계(부분)는 "
-                f"{facts['priced']['1㎥당 합계(부분)']}입니다. "
-                f"260㎥ 기준 참고 금액(부분)은 {facts['priced']['260㎥ 기준 참고 금액(부분)']}입니다. "
-                f"미산정 항목은 {', '.join(unpriced_names(facts))}입니다. "
-                "표준품셈 기준 금액이며 시장 가격과 다를 수 있습니다.")
+        return (f"{facts['work']['title']} 260㎥ 전체 물량 기준 부가세 포함 도급액은 "
+                f"{facts['statement']['totals']['전체 물량 기준 도급액(부가세 포함)']}입니다. "
+                f"미산정 항목: {', '.join(unpriced_names(facts))}.")
 
     good = compose(state, generate_fn=good_llm)
     checks.append(("C1 facts 숫자만 쓰면 llm 채택", good["answer_source"] == "llm"
                    and good["answer"] == good_llm("", "")))
+
+    estimate_facts = {
+        "status": "PARTIAL", "work": {"title": "자동문 설치", "section_no": "10-1-7"},
+        "quantity": "3", "unit": "개소", "inputs": [],
+        "priced": {"unpriced": [{"name": "유리공사"}], "excluded": []},
+        "statement": {"totals": {"전체 물량 기준 도급액(부가세 포함)": "2,727,421원"},
+                      "unpriced": [{"name": "유리공사"}], "excluded": []},
+    }
+    estimate_answer = ("자동문 설치 3개소 전체 물량 기준 부가세 포함 도급액은 "
+                       "2,727,421원입니다. 유리공사는 단가가 없어 빠졌습니다.")
+    with patch("backend.agent.nodes.compose.build_facts", return_value=estimate_facts):
+        estimate_llm = compose({"status": "PARTIAL"}, generate_fn=lambda *_: estimate_answer)
+    checks.append(("C1b VAT-inclusive contract amount with unpriced item accepted",
+                   estimate_llm["answer_source"] == "llm" and estimate_llm["answer"] == estimate_answer))
 
     def bad_number_llm(prompt: str, system: str) -> str:
         return "이번 계산은 약 25,000원 정도로 예상됩니다."
@@ -271,15 +293,20 @@ def main() -> int:
                    and bool(out_of_scope.get("answer"))))
 
     default_sources = {name: "기본값" for name in ("work_category", "duration", "contractor_type", "project_scale")}
-    default_text = build_template(build_facts({**state, "input_sources": default_sources})).split(". ", 1)[0]
-    chosen_text = build_template(build_facts({**state, "input_sources": {**default_sources, "duration": "선택"}})).split(". ", 1)[0]
-    checks.append(("C-new1 첫 문장에 조건 요약, 기본값이면 기본 조건",
-                   "(기준: 토목 · 1~6개월 · 종합건설업 · 단독 공사, 기본 조건)" in default_text
-                   and "(기준: 토목 · 1~6개월 · 종합건설업 · 단독 공사)" in chosen_text))
+    default_facts = build_facts({**state, "input_sources": default_sources})
+    chosen_facts = build_facts({**state, "input_sources": {**default_sources, "duration": "선택"}})
+    default_text = build_template(default_facts)
+    chosen_text = build_template(chosen_facts)
+    checks.append(("C-new1 답변은 조건 요약 없이, facts에 기본 조건 유지",
+                   "(기준:" not in default_text and "(기준:" not in chosen_text
+                   and default_facts["condition_summary"] == "토목 · 1~6개월 · 종합건설업 · 단독 공사"
+                   and default_facts["condition_default"] is True
+                   and chosen_facts["condition_summary"] == default_facts["condition_summary"]
+                   and chosen_facts["condition_default"] is False))
 
     def omit_unpriced_llm(prompt: str, system: str) -> str:
-        return ("1㎥당 합계(부분)는 " + facts["priced"]["1㎥당 합계(부분)"] + "입니다. "
-                "표준품셈 기준 금액이며 시장 가격과 다를 수 있습니다.")
+        return ("전체 물량 기준 부가세 포함 도급액은 "
+                + facts["statement"]["totals"]["전체 물량 기준 도급액(부가세 포함)"] + "입니다.")
 
     omitted = compose(state, generate_fn=omit_unpriced_llm)
     checks.append(("C-new2 미산정 누락이면 template", omitted["answer_source"] == "template"

@@ -74,6 +74,12 @@ def main():
     def run(value, contexts=one):
         return answer(state, contexts=contexts, generate_fn=lambda *a, **k: json.dumps(value, ensure_ascii=False))
     check("valid uses llm", run(qa)["answer_source"] == "llm")
+    repeated = copy.deepcopy(qa)
+    repeated["comparisons"] = [{"section": one[0]["section"], "summary": "인원 2인 적용"}]
+    deduplicated = run(repeated)
+    check("single comparison matching first citation section is omitted from body",
+          deduplicated["answer_source"] == "llm" and
+          f"{one[0]['section']}: 인원 2인 적용" not in deduplicated["answer"])
     requests = []
     def fake(prompt, system, **options):
         requests.append((json.loads(prompt), system, options))
