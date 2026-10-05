@@ -146,9 +146,13 @@ function EvidenceList({ items }: { items: ChatResponse['evidence'] }) {
 
 function CitationList({ citations }: { citations: Citation[] }) {
   const [openImage, setOpenImage] = useState<Citation | null>(null);
+  const first = citations[0];
+  const citationSummary = citations.length === 1 && first
+    ? `근거 · ${first.section} (p.${first.pdf_page ?? '—'})`
+    : `근거 ${citations.length}개`;
   return (
     <details className="citation-disclosure">
-      <summary>📖 근거 {citations.length}개</summary>
+      <summary>{citationSummary}</summary>
       <div className="citation-list">
         {citations.map((citation, index) => (
           <div className="citation-item" key={`${citation.internal_id}-${index}`}>
@@ -239,7 +243,6 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
   work: ChatResponse['work']; inputs: ChatResponse['inputs']; result: ComputedResult; priced: PricedResult | null;
   tables: ChatResponse['tables'];
 }) {
-  const notReviewed = result.review_status !== '완료';
   const priceByName = new Map(priced?.lines.map((line) => [line.name, line]) ?? []);
   const conditionNames = ['structure', 'slump_band', 'facility_type', 'site_type', 'placement', 'vibrator_used', 'pump_size'];
   const conditions = inputs.filter((item) => conditionNames.includes(item.name))
@@ -251,7 +254,7 @@ function ComputedCard({ work, inputs, result, priced, tables }: {
         <BillTable bill={tables.bill} />
       </details>
       <details className="fold">
-      <summary>일위대가표 ({result.unit_basis.per}당) {notReviewed && <span className="review-badge">{result.review_status === 'AI 초안 · 검토 전' ? result.review_status : '검토 전 명세 · 참고용'}</span>}</summary>
+      <summary>일위대가표 ({result.unit_basis.per}당)</summary>
       <div className="unit-summary">{work?.title}{conditions && ` · ${conditions}`}</div>
       <div className="unit-note">{priced?.rate_version
         ? `노임단가: ${priced.rate_version.id.slice(0, 4)} ${priced.rate_version.id.endsWith('H2') ? '하반기' : '상반기'} (${priced.rate_version.effective_from} 적용)`
@@ -420,6 +423,10 @@ function AssistantCard({
   elapsedMs?: number;
   receivedAtMs?: number;
 }) {
+  const amountRow = response.route === 'estimate'
+    ? response.tables.statement_rows.find((row) => row.name === '도급액' && row.amount != null)
+    : undefined;
+  const bill = response.tables.bill;
   return (
     <div className={`assistant-card status-${response.status.toLowerCase()}`}>
       <WarningBanner warnings={response.search.warnings} raw={response.search.raw_warnings} />
@@ -427,20 +434,24 @@ function AssistantCard({
         <span className={`agent-badge route-${response.route ?? 'unknown'}`}><span className="agent-badge-dot" />
           {response.route === 'estimate' ? '견적' : response.route === 'qa' ? '상담' : response.route === 'out_of_scope' ? '범위 밖' : STATUS_LABEL[response.status]}
         </span>
-        {response.work && <span className="work-badge">{response.work.title}</span>}
+        {response.work && <span className="work-badge">{response.work.section_no ? `${response.work.section_no} ` : ''}{response.work.title}</span>}
         {response.status === 'ANSWERED' && response.answer_source === 'template' && <span className="review-badge">AI 초안 · 검토 전</span>}
+        <AssistantTiming response={response} elapsedMs={elapsedMs} />
       </div>
-      <AssistantTiming response={response} elapsedMs={elapsedMs} />
+      {amountRow && <div className="estimate-amount-block">
+        <strong>도급액 {won(String(amountRow.amount))} (부가세 포함{bill ? ` · ${bill.quantity}${bill.unit}` : ''})</strong>
+        <span>표준품셈 기준 참고 금액</span>
+      </div>}
       {response.status === 'ANSWERED' && response.qa ? (
         <div className="qa-card">
           <MarkdownAnswer>{`**${response.qa.conclusion}**${response.qa.explanation ? `\n\n${response.qa.explanation}` : ''}`}</MarkdownAnswer>
           {response.qa.comparisons.length > 0 && <ul>{response.qa.comparisons.map((item, i) =>
-            <li key={i}><strong>{item.section}</strong>
+            <li className="md-li" key={i}><strong>{item.section}:</strong>
               {(response.answer_source === 'template' || response.qa!.not_found_kind === 'section_found_value_missing') && item.citation_ids ?
                 <CitationList citations={response.qa!.citations.filter(c => item.citation_ids!.includes(c.chunk_id))} /> :
-                <MarkdownAnswer>{item.summary}</MarkdownAnswer>}
+                <span>{item.summary}</span>}
             </li>)}</ul>}
-          {response.answer_source !== 'template' && response.qa.not_found_kind !== 'section_found_value_missing' && response.qa.citations.length > 0 && <div><h4>📖 근거</h4>
+          {response.answer_source !== 'template' && response.qa.not_found_kind !== 'section_found_value_missing' && response.qa.citations.length > 0 && <div>
             <CitationList citations={response.qa.citations} /></div>}
         </div>
       ) : response.answer ? (
