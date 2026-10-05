@@ -59,6 +59,21 @@ def main() -> int:
                 failure_started = startup_client.get("/openapi.json").status_code == 200
             checks.append(("A-start3 LLM warmup failure does not block server", failure_started and warmup.call_count == 2))
 
+    with patch("backend.api.main.prepare_citations", side_effect=FileNotFoundError("missing page map")), \
+            patch("backend.api.main.get_search") as search_prep:
+        with TestClient(app) as failed_startup_client:
+            api_main._READY_EVENT.wait(2)
+            failed_health = failed_startup_client.get("/api/health").json()
+            failed_chat = failed_startup_client.post("/api/chat", json={"message": "공사비 계산"})
+        checks.append(("A-start4 missing citation data blocks readiness", failed_health == {"status": "error"}
+                       and failed_chat.status_code == 503 and search_prep.call_count == 0))
+    # Failed preparation must not leak into the remaining checks.
+    with TestClient(app) as recovered_startup_client:
+        recovered_ready = api_main._READY_EVENT.wait(30)
+        recovered_health = recovered_startup_client.get("/api/health").json()
+    checks.append(("A-start5 citation preparation recovers", recovered_ready
+                   and recovered_health == {"status": "ok"}))
+
     outside = CLIENT.post("/api/chat", json={"message": "오늘 현장 날씨 어때?"}).json()
     checks.append(("A1", outside["status"] == "OUT_OF_SCOPE" and not outside["questions"]))
     timing = outside.get("timing", {})
@@ -80,7 +95,10 @@ def main() -> int:
     missing = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
                                               "basis_date": "2026-10-01"}).json()
     thread_id = missing["thread_id"]
-    checks.append(("A3", missing["status"] == "MISSING_INFO" and len(missing["questions"]) == 8
+    required_pump_questions = {"work", "pump_size", "slump_band", "facility_type", "site_type",
+                               "placement", "vibrator_used", "reset_status"}
+    checks.append(("A3", missing["status"] == "MISSING_INFO"
+                   and required_pump_questions.issubset({item["name"] for item in missing["questions"]})
                    and missing["work"]["section_no"] == "6-1-4"))
 
     computed = CLIENT.post("/api/chat", json={"thread_id": thread_id, "answers": PUMP_ANSWERS}).json()

@@ -1,4 +1,6 @@
 :root {
+  --brand-primary: oklch(.537 .106 145.6);
+  --brand-strong: oklch(.393 .091 152.5);
   --accent: #1F5A3A;
   --accent-tint: #EAF2EC;
   --point: #8A5A3B;

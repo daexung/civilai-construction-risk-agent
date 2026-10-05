@@ -1,13 +1,19 @@
 import React, { useId, createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { ArrowUp, Check, Copy, Download, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
 import { exportUrl } from '../api';
 import { EXAMPLE_QUESTIONS } from '../examples';
+import { showToast } from '../toast';
 import { BillTable, ConditionsBar, RateTable, StatementTable } from './StatementView';
 import './ChatArea.css';
+import './ChatWorkspace.css';
 
 interface Props {
+  conversations?: { id: string; title: string }[];
+  activeConversationId?: string | null;
+  onSelectConversation?: (id: string) => void;
   turns: ChatTurn[];
   loading: boolean;
   onSendMessage: (text: string) => void;
@@ -239,16 +245,12 @@ function AssistantActionBar({ response, receivedAtMs }: { response: ChatResponse
   };
   return (
     <div className="action-bar">
-      <button type="button" className="action-btn" onClick={copy} title="\uBCF5\uC0AC" aria-label="\uBCF5\uC0AC">
-        {copied
-          ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
-          : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>}
+      <button type="button" className="action-btn" onClick={copy} title="복사" aria-label="복사">
+        {copied ? <Check size={16} strokeWidth={1.75} aria-hidden="true" /> : <Copy size={16} strokeWidth={1.75} aria-hidden="true" />}
       </button>
       {['OK', 'PARTIAL'].includes(response.status) &&
-        <a className="action-btn export-link" href={exportUrl(response.thread_id)} title="Excel \uB2E4\uC6B4\uB85C\uB4DC">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
-          </svg><span>Excel</span>
+        <a className="action-btn export-link" href={exportUrl(response.thread_id)} title="Excel 다운로드">
+          <Download size={16} strokeWidth={1.75} aria-hidden="true" /><span>Excel</span>
         </a>}
       {time && <time className="msg-time">{time}</time>}
     </div>
@@ -551,7 +553,7 @@ function AssistantCard({
   );
 }
 
-function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeConditions, onNewChat, onSendExample }: Props) {
+function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeConditions, onSendExample }: Props) {
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
   const [showExampleMenu, setShowExampleMenu] = useState(false);
@@ -603,8 +605,10 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
         setShowExampleMenu(false);
       }
     };
+    const handleEscape = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowExampleMenu(false); };
     document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('keydown', handleEscape);
+    return () => { document.removeEventListener('mousedown', handleOutsideClick); document.removeEventListener('keydown', handleEscape); };
   }, [showExampleMenu]);
 
   const handleExampleClick = useCallback((text: string) => {
@@ -635,7 +639,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmitMessage(); }
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); handleSubmitMessage(); }
   };
 
   const handleInput = () => {
@@ -650,10 +654,12 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
           <button
             type="button"
             className="example-menu-btn"
+            aria-label="예시 질문 보기"
+            aria-expanded={showExampleMenu}
             disabled={loading}
             onClick={() => setShowExampleMenu((prev) => !prev)}
           >
-            예시
+            <ChatIcon name="plus" />
           </button>
           {showExampleMenu && (
             <div className="example-menu">
@@ -679,14 +685,13 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         onInput={handleInput}
-        placeholder="메시지를 입력하세요 (질문이 있으면 글자로 답해도 됩니다)"
+        placeholder="무엇이든 물어보세요"
+        aria-label="질문 입력"
         rows={1}
         disabled={loading}
       />
-      <button className="send-btn" onClick={handleSubmitMessage} disabled={!input.trim() || loading}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-        </svg>
+      <button className="send-btn" aria-label="질문 보내기" onClick={handleSubmitMessage} disabled={!input.trim() || loading}>
+        <ChatIcon name="arrow" />
       </button>
     </div>
   );
@@ -696,20 +701,16 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
       <main className="chat-area">
         <div className="centered-welcome">
           <div className="welcome-header">
-            <div className="welcome-logo">품셈AI</div>
-            <h2>어떤 공사비를 계산할까요?</h2>
-            <p className="welcome-subtitle">표준품셈 근거로 계산하는 공사비 AI</p>
+            <h2>무엇을 도와드릴까요?</h2>
           </div>
+          <div className="centered-input-area">{renderInputBox(true)}</div>
           <div className="example-prompts">
-            {EXAMPLE_QUESTIONS.map((ex) => (
-              <button key={ex.text} className="example-btn" onClick={() => onSendMessage(ex.text)} title={ex.text}>
-                <span className={`example-kind ${ex.kind === '견적' ? 'estimate' : 'qa'}`}>{ex.kind}</span>
-                <span>{ex.text}</span>
+            {EXAMPLE_QUESTIONS.map((ex, index) => (
+              <button key={ex.text} className="example-btn" disabled={loading} onClick={() => onSendExample(ex.text)} title={ex.text}>
+                <span>{['자동문 설치 견적', '콘크리트 타설 견적', '진동기 적용 기준', '기초앵커 품셈 상담'][index] ?? ex.text}</span>
               </button>
             ))}
           </div>
-          <div className="centered-input-area">{renderInputBox(false)}</div>
-          <p className="disclaimer-notice">표준품셈 기준 참고 금액 · 검토 전 · 국토교통부와 무관</p>
         </div>
       </main>
     );
@@ -718,15 +719,6 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
   return (
     <main className="chat-area">
       <div className="messages-wrap">
-        <div className="chat-toolbar">
-          <button className="export-btn" onClick={onNewChat} title="새 대화">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            새 대화
-          </button>
-        </div>
         <div className="messages">
           {turns.map((turn, i) => (
             <div key={turn.id} className={`message ${turn.role}`}>
@@ -771,13 +763,37 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
           <div ref={bottomRef} />
         </div>
       </div>
-      <div className="input-area">{renderInputBox(true)}</div>
+      <div className="input-area">{renderInputBox(true)}<p className="composer-note">견적은 참고용 초안입니다. 사용 전 산출근거를 확인해 주세요.</p></div>
     </main>
   );
 }
 
+function ChatIcon({ name }: { name: 'plus' | 'panel' | 'settings' | 'feedback' | 'arrow' }) {
+  const icons = { plus: Plus, panel: PanelLeft, settings: Settings, feedback: MessageSquareText, arrow: ArrowUp };
+  const Icon = icons[name];
+  return <Icon size={name === 'panel' ? 22 : 20} strokeWidth={1.75} aria-hidden="true" />;
+}
+
 export default function ChatArea(props: Props) {
   const [openSource, setOpenSource] = useState<Citation | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 900);
+  const [conversationKey, setConversationKey] = useState(0);
+  const newChat = () => { setOpenSource(null); setConversationKey(key => key + 1); props.onNewChat(); if (window.innerWidth < 900) setSidebarOpen(false); };
+
+  useEffect(() => {
+    if (!window.matchMedia) return;
+    const desktop = window.matchMedia('(min-width: 900px)');
+    const updateLayout = (event: MediaQueryListEvent) => setSidebarOpen(event.matches);
+    desktop.addEventListener('change', updateLayout);
+    return () => desktop.removeEventListener('change', updateLayout);
+  }, []);
+
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const closeMenu = (event: KeyboardEvent) => { if (event.key === 'Escape' && window.innerWidth < 900) setSidebarOpen(false); };
+    window.addEventListener('keydown', closeMenu);
+    return () => window.removeEventListener('keydown', closeMenu);
+  }, [sidebarOpen]);
 
   useEffect(() => {
     if (!openSource) return;
@@ -791,7 +807,25 @@ export default function ChatArea(props: Props) {
   return (
     <SourcePanelContext.Provider value={setOpenSource}>
       <div className={`chat-shell${openSource ? ' with-source' : ''}`}>
-        <ChatAreaView {...props} />
+        {sidebarOpen && <>
+          <button className="chat-sidebar-backdrop" aria-label="메뉴 닫기" onClick={() => setSidebarOpen(false)} />
+          <aside id="chat-sidebar" className="chat-sidebar" aria-label="채팅 메뉴">
+            <div className="chat-sidebar-brand"><a href="/" aria-label="품셈이 홈">품셈이</a><button className="chat-icon-button" aria-label="사이드바 닫기" onClick={() => setSidebarOpen(false)}><ChatIcon name="panel" /></button></div>
+            <nav className="chat-nav">
+              <button className={!props.activeConversationId ? 'chat-nav-active' : undefined} aria-current={!props.activeConversationId ? 'page' : undefined} disabled={props.loading} onClick={newChat}><ChatIcon name="plus" />새 대화</button>
+            </nav>
+            {!!props.conversations?.length && <nav className="chat-history" aria-label="이전 대화"><h2>대화</h2>{props.conversations.map(chat => <button key={chat.id} title={chat.title} aria-current={chat.id === props.activeConversationId ? 'page' : undefined} className={chat.id === props.activeConversationId ? 'chat-history-active' : undefined} disabled={props.loading} onClick={() => { setOpenSource(null); props.onSelectConversation?.(chat.id); if (window.innerWidth < 900) setSidebarOpen(false); }}><span>{chat.title}</span></button>)}</nav>}
+            <div className="chat-sidebar-bottom">
+              <button className="chat-sidebar-action" onClick={() => showToast('설정 기능은 준비 중입니다.')}><ChatIcon name="settings" />설정</button>
+              <button className="chat-sidebar-action" onClick={() => showToast('피드백 기능은 준비 중입니다.')}><ChatIcon name="feedback" />피드백 남기기</button>
+              <div className="chat-sidebar-login"><strong>품셈이와 함께 시작하세요</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button onClick={() => showToast('로그인 기능은 준비 중입니다.')}>로그인</button></div>
+            </div>
+          </aside>
+        </>}
+        <div className="chat-workspace">
+          <header className="chat-header"><div>{!sidebarOpen && <button className="chat-icon-button" aria-label="사이드바 열기" aria-expanded={sidebarOpen} aria-controls="chat-sidebar" onClick={() => setSidebarOpen(true)}><ChatIcon name="panel" /></button>}<span>품셈이</span><span className="chat-header-caption">표준품셈 AI</span></div><button className="chat-icon-button" aria-label="새 대화 시작" title="새 대화" disabled={props.loading} onClick={newChat}><ChatIcon name="plus" /></button></header>
+          <ChatAreaView key={`${props.activeConversationId ?? 'new'}:${conversationKey}`} {...props} />
+        </div>
         {openSource?.image_url && <SourceViewer citation={openSource} onClose={() => setOpenSource(null)} />}
       </div>
     </SourcePanelContext.Provider>
