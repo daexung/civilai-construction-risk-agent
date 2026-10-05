@@ -81,8 +81,8 @@ def main() -> int:
         captured_prompt = []
         draft_compose = compose(state, generate_fn=lambda prompt, _system: captured_prompt.append(prompt) or build_template(draft_facts))
     checks.append(("C0 draft-review fact omitted from compose input",
-                   "draft_review" not in draft_facts and "draft_review" not in captured_prompt[0]
-                   and draft_compose["answer_source"] == "llm"))
+                   "draft_review" not in draft_facts and not captured_prompt
+                   and draft_compose["answer_source"] == "fixed"))
     priced_facts = facts["priced"]
     checks.append(("C0 facts 금액에 단위·참고 기준 표시",
                    "1㎥당 합계(부분)" in priced_facts
@@ -109,9 +109,9 @@ def main() -> int:
             duplicate_facts["priced"][field].append(duplicate_facts["priced"][field][0])
             duplicate_facts["statement"][field].append(duplicate_facts["statement"][field][0])
     duplicate_text = build_template(duplicate_facts)
-    duplicate_names = [item["name"] for item in facts["priced"]["unpriced"]]
+    duplicate_names = unpriced_names(facts)
     checks.append(("C0e 빠진 항목 이름 중복 제거",
-                   duplicate_text.count("미산정 항목:") == 1
+                   "미산정 항목:" not in duplicate_text and "빠졌습니다." in duplicate_text
                    and all(duplicate_text.count(name) == 1 for name in duplicate_names)))
     checks.append(("C0f 숫자·괄호 뒤 조사 선택",
                    f"912,039원{_josa('912,039원', '을/를')}" == "912,039원을"
@@ -125,8 +125,8 @@ def main() -> int:
                 f"미산정 항목: {', '.join(unpriced_names(facts))}.")
 
     good = compose(state, generate_fn=good_llm)
-    checks.append(("C1 facts 숫자만 쓰면 llm 채택", good["answer_source"] == "llm"
-                   and good["answer"] == good_llm("", "")))
+    checks.append(("C1 견적은 fixed 문장 사용", good["answer_source"] == "fixed"
+                   and good["answer"] == build_template(facts)))
 
     estimate_facts = {
         "status": "PARTIAL", "work": {"title": "자동문 설치", "section_no": "10-1-7"},
@@ -138,14 +138,19 @@ def main() -> int:
     estimate_answer = ("자동문 설치 3개소 전체 물량 기준 부가세 포함 도급액은 "
                        "2,727,421원입니다. 유리공사는 단가가 없어 빠졌습니다.")
     with patch("backend.agent.nodes.compose.build_facts", return_value=estimate_facts):
-        estimate_llm = compose({"status": "PARTIAL"}, generate_fn=lambda *_: estimate_answer)
+        estimate_llm = compose({"status": "PARTIAL", "priced": {"unpriced": []}}, generate_fn=lambda *_: estimate_answer)
     checks.append(("C1b VAT-inclusive contract amount with unpriced item accepted",
-                   estimate_llm["answer_source"] == "llm" and estimate_llm["answer"] == estimate_answer))
+                   estimate_llm["answer_source"] == "fixed" and estimate_llm["answer"] == estimate_answer))
+
+    def legacy_compose(st, generate_fn=None):
+        # No calculated tables: exercise the unchanged LLM validation/client path.
+        with patch("backend.agent.nodes.compose.build_facts", return_value=facts):
+            return compose({"status": st["status"]}, generate_fn=generate_fn)
 
     def bad_number_llm(prompt: str, system: str) -> str:
         return "이번 계산은 약 25,000원 정도로 예상됩니다."
 
-    bad = compose(state, generate_fn=bad_number_llm)
+    bad = legacy_compose(state, generate_fn=bad_number_llm)
     checks.append(("C2 facts에 없는 숫자는 거부", bad["answer_source"] == "template"
                    and "25000" in bad["llm_info"]["bad_numbers"]
                    and bad["answer"] == build_template(facts)))
@@ -153,20 +158,20 @@ def main() -> int:
     def raising_llm(prompt: str, system: str) -> str:
         raise RuntimeError("모의 LLM 실패")
 
-    failed = compose(state, generate_fn=raising_llm)
+    failed = legacy_compose(state, generate_fn=raising_llm)
     checks.append(("C3 가짜 LLM 예외는 template", failed["answer_source"] == "template"
                    and failed["answer"] == build_template(facts)))
 
     def unavailable_llm(prompt: str, system: str) -> str:
         raise LLMUnavailable("모의 실패")
 
-    unavailable = compose(state, generate_fn=unavailable_llm)
+    unavailable = legacy_compose(state, generate_fn=unavailable_llm)
     checks.append(("C3b LLMUnavailable도 template", unavailable["answer_source"] == "template"))
 
     original_env = os.environ.get("AGENT_LLM")
     os.environ["AGENT_LLM"] = "off"
     try:
-        off_result = compose(state)  # generate_fn 주입 없이 실제 client.generate 경로 — 네트워크 호출 없음
+        off_result = legacy_compose(state)  # generate_fn 주입 없이 실제 client.generate 경로 — 네트워크 호출 없음
     finally:
         if original_env is None:
             os.environ.pop("AGENT_LLM", None)
@@ -197,7 +202,7 @@ def main() -> int:
     checks.append(("C7b 금액 기준 표시 누락은 template 대체",
                    validate_numbers(basis_missing_text, facts)[0]
                    and not validate_amount_basis(basis_missing_text)
-                   and compose(state, generate_fn=lambda *_: basis_missing_text)["answer_source"] == "template"))
+                   and legacy_compose(state, generate_fn=lambda *_: basis_missing_text)["answer_source"] == "template"))
 
     class FakeServiceError(Exception):
         def __init__(self, message: str, code: int):
@@ -216,7 +221,7 @@ def main() -> int:
     retry_calls = []
     with patch.dict(os.environ, {"AGENT_LLM": "on", "LLM_PROVIDER": "vertex"}, clear=False), \
             patch.object(llm_client, "_env_value", env_for_fake):
-        retried = compose(state, generate_fn=lambda prompt, system: llm_client.generate(
+        retried = legacy_compose(state, generate_fn=lambda prompt, system: llm_client.generate(
             prompt, system, request_fn=retry_backend, sleep_fn=lambda _seconds: None))
     checks.append(("C11 503 두 번 후 성공 재시도", retried["answer_source"] == "llm"
                    and retried["llm_info"]["provider"] == "vertex"
@@ -227,14 +232,14 @@ def main() -> int:
 
     with patch.dict(os.environ, {"AGENT_LLM": "on", "LLM_PROVIDER": "vertex"}, clear=False), \
             patch.object(llm_client, "_env_value", env_for_fake):
-        rejected = compose(state, generate_fn=lambda prompt, system: llm_client.generate(
+        rejected = legacy_compose(state, generate_fn=lambda prompt, system: llm_client.generate(
             prompt, system, request_fn=bad_request, sleep_fn=lambda _seconds: None))
     checks.append(("C12 400 즉시 template", rejected["answer_source"] == "template"
                    and rejected["llm_info"]["attempts"] == 1))
 
     with patch.dict(os.environ, {"AGENT_LLM": "on", "LLM_PROVIDER": "vertex"}, clear=False), \
             patch.object(llm_client, "_env_value", lambda _name: None):
-        no_vertex_key = compose(state)
+        no_vertex_key = legacy_compose(state)
     checks.append(("C13 Vertex 키 없음은 LLMUnavailable", no_vertex_key["answer_source"] == "template"
                    and no_vertex_key["llm_info"]["provider"] == "vertex"
                    and no_vertex_key["llm_info"]["error"] == "VERTEX_API_KEY 없음"))
@@ -252,16 +257,16 @@ def main() -> int:
             patch.object(llm_client, "_CLIENTS", {}), \
             patch.object(llm_client, "_env_value", side_effect=lambda name: key[0] if name == "VERTEX_API_KEY" else None), \
             patch.object(llm_client, "_create_client", side_effect=fake_factory):
-        first, second = compose(state), compose(state)
+        first, second = legacy_compose(state), legacy_compose(state)
         checks.append(("C14 compose 클라이언트 재사용", len(factory_calls) == 1 and len(requests) == 2
                        and first["answer_source"] == second["answer_source"] == "llm"))
         key[0] = "compose-key-2"
-        changed = compose(state)
+        changed = legacy_compose(state)
         checks.append(("C15 키 변경 시 새 클라이언트", len(factory_calls) == 2
                        and factory_calls[-1] == ("vertex", key[0]) and changed["answer_source"] == "llm"))
         with patch.dict(os.environ, {"LLM_PROVIDER": "studio"}), \
                 patch.object(llm_client, "_env_value", return_value=key[0]):
-            switched = compose(state)
+            switched = legacy_compose(state)
         checks.append(("C16 provider도 캐시 구분", len(factory_calls) == 3
                        and factory_calls[-1] == ("studio", key[0]) and switched["answer_source"] == "llm"))
 
@@ -275,7 +280,7 @@ def main() -> int:
             patch.object(llm_client, "_CLIENTS", {}), \
             patch.object(llm_client, "_env_value", return_value="slow-key"), \
             patch.object(llm_client, "_create_client", side_effect=slow_factory):
-        slow = compose(state, generate_fn=lambda prompt, system: llm_client.generate(
+        slow = legacy_compose(state, generate_fn=lambda prompt, system: llm_client.generate(
             prompt, system, clock_fn=lambda: now[0]))
     checks.append(("C17 생성 시간 초과는 요청 없이 template", slow["answer_source"] == "template"
                    and slow["llm_info"]["attempts"] == 0 and not requests))
@@ -286,7 +291,7 @@ def main() -> int:
     final = graph.invoke(Command(resume="기타 토목공사 6개월 종합건설업 이 견적만 15cm 타입2 현장 2유형 붐 진동기 사용 재셋팅 없음 레미콘 관급"), config)
     checks.append(("C8 그래프 전체: PARTIAL 유지", final["status"] == "PARTIAL"))
     checks.append(("C9 그래프 전체: answer 필드 추가", bool(final.get("answer"))
-                   and final.get("answer_source") in ("llm", "template")))
+                   and final.get("answer_source") == "fixed"))
 
     out_of_scope = graph.invoke(new_state("오늘 현장 날씨 어때?"), {"configurable": {"thread_id": "compose-g2"}})
     checks.append(("C10 그래프 전체: OUT_OF_SCOPE도 answer 추가", out_of_scope["status"] == "OUT_OF_SCOPE"
@@ -308,9 +313,24 @@ def main() -> int:
         return ("전체 물량 기준 부가세 포함 도급액은 "
                 + facts["statement"]["totals"]["전체 물량 기준 도급액(부가세 포함)"] + "입니다.")
 
-    omitted = compose(state, generate_fn=omit_unpriced_llm)
+    omitted = legacy_compose(state, generate_fn=omit_unpriced_llm)
     checks.append(("C-new2 미산정 누락이면 template", omitted["answer_source"] == "template"
                    and omitted["llm_info"]["error"] == "미산정 누락"))
+
+    calls = []
+    def counted_generate(*args):
+        calls.append(args)
+        return "공사비 계산 질문으로 문의해 주세요."
+    for status in ("PARTIAL", "OK"):
+        fixed = compose({**state, "status": status}, generate_fn=counted_generate)
+        checks.append((f"C-fixed {status} LLM 호출 0회",
+                       not calls and fixed["answer_source"] == "fixed"
+                       and fixed["llm_info"] == {"skipped": "estimate_fixed_text"}
+                       and fixed["answer"] == build_template(build_facts({**state, "status": status}))))
+    scope = compose(out_of_scope_state(), generate_fn=counted_generate)
+    checks.append(("C-fixed OUT_OF_SCOPE LLM 호출 유지", len(calls) == 1 and scope["answer_source"] == "llm"))
+    checks.append(("C-fixed 미산정 사유 구분",
+                   "건설기계대여대금 지급보증 수수료는 이번 계산에서 빠졌습니다." in template))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

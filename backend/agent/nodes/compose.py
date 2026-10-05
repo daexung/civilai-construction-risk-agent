@@ -246,9 +246,17 @@ def _template_priced(facts: dict) -> str:
         unit = facts.get("unit", "㎥")
         total = priced.get(f"1{unit}당 합계(부분)") or priced.get(f"1{unit}당 합계")
         sentences = [f"{label} {total}입니다."] if total is not None else [f"{label}은(는) 현재 적용 가능한 단가가 없어 금액을 계산하지 못했습니다."]
-    unpriced = list(dict.fromkeys(item["name"] for item in [*(priced.get("unpriced") or []), *(statement.get("unpriced") or [])]))
-    if unpriced:
-        sentences.append("미산정 항목: " + ", ".join(unpriced) + ".")
+    # Reasons identify price gaps; non-price omissions must not claim a missing price.
+    omissions = {}
+    for item in [*(priced.get("unpriced") or []), *(statement.get("unpriced") or [])]:
+        omissions.setdefault(item["name"], item.get("reason") or "")
+    for price_gap in (True, False):
+        names = [name for name, reason in omissions.items()
+                 if (not reason or "단가" in reason or "가격" in reason) == price_gap]
+        if names:
+            label = ", ".join(names)
+            ending = "단가가 없어 빠졌습니다." if price_gap else "이번 계산에서 빠졌습니다."
+            sentences.append(f"{label}{_josa(label, '은/는')} {ending}")
     return " ".join(sentences)
 
 
@@ -348,6 +356,9 @@ def compose(state: AgentState, generate_fn=None) -> dict:
         return {}
     facts = build_facts(state)
     template_text = build_template(facts)
+    if status in ("OK", "PARTIAL") and (state.get("statement") or state.get("priced")):
+        return {"answer": template_text, "answer_source": "fixed",
+                "llm_info": {"skipped": "estimate_fixed_text"}}
     fn = generate_fn or llm_client.generate
     try:
         provider = llm_client.provider_name()

@@ -253,7 +253,7 @@ export interface ChatResponse {
     citations: (Citation & { chunk_id: string; quote_match?: 'normalized' | 'fuzzy' })[] } | null;
   llm_info?: { model: string; elapsed_ms: number; error: string | null } | null;
   answer: string | null;
-  answer_source: 'llm' | 'template' | null;
+  answer_source: 'llm' | 'template' | 'fixed' | null;
   basis_date: string;
   search: SearchInfo;
   timing?: { route_ms: number; retrieve_ms: number; compute_ms: number; llm_ms: number; total_ms: number };

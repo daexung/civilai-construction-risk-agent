@@ -117,9 +117,7 @@ def main() -> int:
                    and computed_lines["콘크리트공"]["value"] == "8"))
 
     checks.append(("A9 응답에 llm_info 포함",
-                   computed.get("llm_info", {}).get("provider") == "vertex"
-                   and computed["llm_info"].get("model") == "gemini-3.5-flash-lite"
-                   and computed["llm_info"].get("attempts") == 0
+                   computed.get("llm_info") == {"skipped": "estimate_fixed_text"}
                    and "VERTEX_API_KEY" not in str(computed["llm_info"])))
 
     # 조건 없이 계산: 기본값으로 바로 도급액이 나온다.
