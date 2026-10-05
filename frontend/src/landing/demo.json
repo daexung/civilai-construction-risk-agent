@@ -2194,16 +2194,11 @@
       },
       "volume": "260"
     },
-    "answer": "콘크리트 펌프차 타설 260㎥ 전체 물량 기준 부가세 포함 도급액은 10,032,436원입니다. 미산정 항목: 펌프차 연료·잡재료비, 공통 정책 1-2-9 소규모 적용, 살수 양생 품량, 건설기계대여대금 지급보증 수수료.",
+    "answer": "콘크리트 펌프차 타설 260㎥ 전체 물량 기준 부가세 포함 도급액은 10,032,436원입니다. 펌프차 연료·잡재료비는 단가가 없어 빠졌습니다. 공통 정책 1-2-9 소규모 적용, 살수 양생 품량, 건설기계대여대금 지급보증 수수료는 이번 계산에서 빠졌습니다.",
     "qa": null,
-    "answer_source": "template",
+    "answer_source": "fixed",
     "llm_info": {
-      "provider": "vertex",
-      "model": "gemini-3.5-flash-lite",
-      "elapsed_ms": 0,
-      "attempts": 0,
-      "error": "AGENT_LLM=off",
-      "bad_numbers": []
+      "skipped": "estimate_fixed_text"
     },
     "basis_date": "2026-10-01",
     "search": {
