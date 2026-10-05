@@ -11,7 +11,8 @@ from unittest.mock import patch
 
 os.environ["AGENT_OFFLINE"] = "1"
 ROOT = Path(__file__).resolve().parents[1]
-os.environ.setdefault("AGENT_LLM", "off")
+os.environ["AGENT_LLM"] = "off"
+os.environ["INDEX_CONFIG"] = str(ROOT / "evals" / "index_configs" / "6chapter_studio.json")
 sys.path.insert(0, str(ROOT))
 
 from langgraph.types import Command  # noqa: E402
