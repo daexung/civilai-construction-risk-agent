@@ -69,9 +69,10 @@ def main() -> int:
                        and failed_chat.status_code == 503 and search_prep.call_count == 0))
     # Failed preparation must not leak into the remaining checks.
     with TestClient(app) as recovered_startup_client:
-        api_main._READY_EVENT.wait(2)
+        recovered_ready = api_main._READY_EVENT.wait(30)
         recovered_health = recovered_startup_client.get("/api/health").json()
-    checks.append(("A-start5 citation preparation recovers", recovered_health == {"status": "ok"}))
+    checks.append(("A-start5 citation preparation recovers", recovered_ready
+                   and recovered_health == {"status": "ok"}))
 
     outside = CLIENT.post("/api/chat", json={"message": "오늘 현장 날씨 어때?"}).json()
     checks.append(("A1", outside["status"] == "OUT_OF_SCOPE" and not outside["questions"]))
