@@ -1,0 +1,16 @@
+.terms-main { max-width: 840px; padding-top: 64px; padding-bottom: 80px; }
+.terms-main h1 { margin-top: 12px; font-size: 40px; font-weight: 700; letter-spacing: -.025em; line-height: 1.2; }
+.terms-date { margin-top: 16px; font-size: 14px; color: var(--lp-muted); }
+.terms-summary { margin-top: 32px; padding: 24px; border: 1px solid var(--lp-border); border-left: 4px solid var(--lp-primary); border-radius: 8px; background: var(--lp-surface); }
+.terms-summary > strong { font-size: 20px; color: var(--lp-brand); }
+.terms-summary p { margin-top: 12px; font-size: 16px; line-height: 1.8; }
+.terms-content { margin-top: 48px; }
+.terms-content section + section { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--lp-border); }
+.civil-landing .terms-content h2 { font-size: 20px; line-height: 1.5; letter-spacing: -.02em; }
+.terms-content p, .terms-content ul { margin-top: 16px; font-size: 16px; line-height: 1.85; }
+.terms-content ul { padding-left: 22px; }
+.terms-content li + li { margin-top: 8px; }
+.terms-content strong { font-weight: 600; }
+.terms-home { margin-top: 48px; }
+.terms-page .lp-footer { border-top: 1px solid var(--lp-border); }
+@media (min-width: 640px) { .terms-main { padding-top: 80px; } .terms-main h1 { font-size: 48px; } }
