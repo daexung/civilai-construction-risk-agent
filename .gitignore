@@ -24,3 +24,4 @@ data/drafts/raw/
 
 # Graphify가 다시 만들 수 있는 분석 산출물
 graphify-out/
+evals/results/embedding_query_cache.jsonl
