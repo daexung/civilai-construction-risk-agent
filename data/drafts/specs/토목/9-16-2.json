@@ -1,0 +1,336 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-16-2/도시계획선명시측량_수치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-16-2",
+    "title": "도시계획선명시 측량(수치)",
+    "work": "1필지당 측량 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1,
+      2
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "1필지의 면적은 몇 ㎡입니까?",
+        "source": "PDF 2쪽 ② 면적계수"
+      },
+      {
+        "name": "region_type",
+        "type": "enum",
+        "allowed_values": [
+          "면",
+          "읍",
+          "동 시",
+          "동 구"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "행정구역은 어디에 해당합니까?",
+        "source": "PDF 2쪽 ③ 지역구분계수",
+        "synonyms": {
+          "동 시": [
+            "동(시)",
+            "시의 동",
+            "시 동"
+          ],
+          "동 구": [
+            "동(구)",
+            "구의 동",
+            "구 동"
+          ]
+        }
+      },
+      {
+        "name": "appraisal_requested",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량결과에 대한 설명을 부가한 감정도 및 감정서 발급을 요청합니까?",
+        "source": "PDF 2쪽 ⑤ 기타사항 ㉴"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p613-t1",
+        "role": "직종별 기본 품",
+        "source": "PDF 1쪽 9-16-2 표",
+        "unit": "인/필지",
+        "values": {
+          "합계": {
+            "지적기사": "0.58",
+            "지적산업기사": "0.62",
+            "지적기능사": "0.34"
+          }
+        },
+        "cite": {
+          "table_id": "p613-t1"
+        }
+      },
+      {
+        "id": "p614-t0",
+        "role": "면적계수",
+        "source": "PDF 2쪽 ② 면적계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "0회": "1.0",
+            "1회": "1.3",
+            "2회이상": "1.2+(0.10×n)"
+          }
+        },
+        "cite": {
+          "table_id": "p614-t0"
+        }
+      },
+      {
+        "id": "p614-t1",
+        "role": "지역구분계수",
+        "source": "PDF 2쪽 ③ 지역구분계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "면": "1.00",
+            "읍": "1.10",
+            "동 시": "1.30",
+            "동 구": "1.40"
+          }
+        },
+        "cite": {
+          "table_id": "p614-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p613-t1",
+          "row_input": "합계",
+          "trades": [
+            "지적기사",
+            "지적산업기사",
+            "지적기능사"
+          ]
+        },
+        "quantity_input": "1",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "appraisal_requested": true
+            },
+            "change": "추가 품 가산 적용할 수 있다 (구체적 수치 없음)",
+            "source": "PDF 2쪽 ⑤ 기타사항 ㉴"
+          }
+        ]
+      },
+      "steps": [
+        "p613-t1에서 직종별 합계 품을 가져온다.",
+        "면적(area)을 300㎡ 기준으로 나누어 가산횟수(n)를 구하고, p614-t0에 따라 면적계수를 산출한다.",
+        "region_type에 따라 p614-t1에서 지역구분계수를 찾는다.",
+        "총 계수 = 기본계수(1.00) + 등록계수(0.00) + 지역구분계수 + 면적계수",
+        "직종별 품 = 기본 품 × 총 계수"
+      ],
+      "source": "PDF 1~2쪽",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "appraisal_requested == true",
+        "blocked_if": {
+          "input": "appraisal_requested",
+          "op": "==",
+          "value": true
+        },
+        "reason": "감정도 및 감정서 발급 요청 시 추가 품을 가산할 수 있다고 되어 있으나, 구체적인 가산 품이 명시되어 있지 않음",
+        "source": "PDF 2쪽 ⑤ 기타사항 ㉴",
+        "cite": [
+          {
+            "chunk_id": "p614-x7",
+            "quote": "본 품의 측량결과에 대한 설명을 부가한 감정도 및 감정서 발급을 요청할 경우에는 추가 품을 가산 적용할 수 있다"
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 2쪽 ⑤ 기타사항 ㉰",
+        "cite": [
+          {
+            "chunk_id": "p614-x7",
+            "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "지적측량기준점 설치비",
+        "source": "PDF 2쪽 ⑤ 기타사항 ㉱",
+        "cite": [
+          {
+            "chunk_id": "p614-x7",
+            "quote": "작업상 지적측량기준점을 설치할 경우에는 지적측량기준점 설치비를 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "선박 등 임차료 실비",
+        "source": "PDF 2쪽 ⑤ 기타사항 ㉲",
+        "cite": [
+          {
+            "chunk_id": "p614-x7",
+            "quote": "도서지역 등의 측량을 위하여 선박 등을 임차할 경우에는 임차료 실비를 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "외업 여비",
+        "source": "PDF 2쪽 ⑤ 기타사항 ㉳",
+        "cite": [
+          {
+            "chunk_id": "p614-x7",
+            "quote": "본 품의 외업에 필요한 여비는 공무원여비규정에 의한 국내여행자의 일비를 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "1필지당 직종별 품이 표로 주어지고, 면적 및 지역에 따른 계수를 합산하여 곱하는 방식이므로 단위당 품 계산에 해당합니다.",
+  "citations": [
+    {
+      "table_id": "p613-t1",
+      "row": "합계",
+      "column": "지적기사",
+      "value": "0.58"
+    },
+    {
+      "table_id": "p613-t1",
+      "row": "합계",
+      "column": "지적산업기사",
+      "value": "0.62"
+    },
+    {
+      "table_id": "p613-t1",
+      "row": "합계",
+      "column": "지적기능사",
+      "value": "0.34"
+    },
+    {
+      "table_id": "p614-t0",
+      "row": "계수",
+      "column": "0회",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p614-t0",
+      "row": "계수",
+      "column": "1회",
+      "value": "1.3"
+    },
+    {
+      "table_id": "p614-t0",
+      "row": "계수",
+      "column": "2회이상",
+      "value": "1.2+(0.10×n)"
+    },
+    {
+      "table_id": "p614-t1",
+      "row": "계수",
+      "column": "면",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p614-t1",
+      "row": "계수",
+      "column": "읍",
+      "value": "1.10"
+    },
+    {
+      "table_id": "p614-t1",
+      "row": "계수",
+      "column": "동 시",
+      "value": "1.30"
+    },
+    {
+      "table_id": "p614-t1",
+      "row": "계수",
+      "column": "동 구",
+      "value": "1.40"
+    },
+    {
+      "chunk_id": "p614-x0",
+      "quote": "본 품은 1필지당 300㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고, 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다."
+    },
+    {
+      "chunk_id": "p614-x4",
+      "quote": "n은 가산횟수로 (대상면적-기준면적) ÷ 기준면적"
+    },
+    {
+      "chunk_id": "p614-x7",
+      "quote": "본 품의 측량결과에 대한 설명을 부가한 감정도 및 감정서 발급을 요청할 경우에는 추가 품을 가산 적용할 수 있다"
+    },
+    {
+      "chunk_id": "p614-x7",
+      "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p614-x7",
+      "quote": "작업상 지적측량기준점을 설치할 경우에는 지적측량기준점 설치비를 별도 계상한다."
+    },
+    {
+      "chunk_id": "p614-x7",
+      "quote": "도서지역 등의 측량을 위하여 선박 등을 임차할 경우에는 임차료 실비를 별도 계상한다."
+    },
+    {
+      "chunk_id": "p614-x7",
+      "quote": "본 품의 외업에 필요한 여비는 공무원여비규정에 의한 국내여행자의 일비를 별도 계상한다."
+    },
+    {
+      "chunk_id": "p614-x7",
+      "quote": "㉠기본계수：1.00 ㉡등록계수：0.00 ㉢지역구분계수：0.40 ㉣면적계수：0.60 합계 : 2.00 = (㉠+㉡+㉢+㉣)"
+    }
+  ],
+  "open_questions": [
+    "계산예에 '등록계수: 0.00'이 포함되어 있으나, 본문에는 등록계수에 대한 설명이나 표가 없어 항상 0.00으로 적용해야 하는지 불명확합니다.",
+    "감정도 및 감정서 발급 요청 시 '추가 품을 가산 적용할 수 있다'고 되어 있으나, 구체적인 가산 수치가 없어 계산이 불가능합니다."
+  ],
+  "questions": [
+    "면적이 1,500㎡이고 시의 동 지역일 때 측량 품은 어떻게 계산하나요?",
+    "감정도 발급을 요청하면 품이 얼마나 추가되나요?",
+    "측량할 토지의 면적을 입력하지 않았습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:12:33.391570+00:00",
+    "input_tokens": 13964,
+    "output_tokens": 3293,
+    "source_pages": [
+      613,
+      614,
+      615
+    ],
+    "prompt_sha256": "feaef64b96e526931f2f1abed90c198f0486751ebdfe2c118a4ce645b2349b26",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p614-x7 조각 텍스트에 없음"
+    ]
+  }
+}

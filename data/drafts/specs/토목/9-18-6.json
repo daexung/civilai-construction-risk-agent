@@ -1,0 +1,121 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-18-6/연속지적도품질개선",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-18-6",
+    "title": "연속지적도 품질개선(수치)('26년 신설)",
+    "work": "연속지적도 품질개선(수치) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      566
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "도곽",
+        "required": true,
+        "ask": "지적(임야)도 도곽 수는 몇 도곽입니까?",
+        "source": "PDF 566쪽 ③ 기타사항 ㉮"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p622-t0",
+        "role": "연속지적도 품질개선(수치) 인원수",
+        "source": "PDF 566쪽 표",
+        "unit": "인",
+        "values": {
+          "작업구분": {
+            "인원수 지적기사": "(0.001) (0.002) 0.002",
+            "인원수 지적산업기사": "(0.001) (0.010) (0.002) (0.014) 0.014",
+            "인원수 지적기능사": "(0.010) 0.010"
+          }
+        },
+        "cite": {
+          "table_id": "p622-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "지적(임야)도 1도곽을 기준으로 한 품이다.",
+        "표의 파싱 결과에 작업구분(행 이름)이 누락되어 있어 직종별 합계 인원수를 자동 추출하여 계산할 수 없다."
+      ],
+      "source": "PDF 566쪽",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 566쪽 ③ 기타사항 ㉯",
+        "cite": {
+          "chunk_id": "p622-x1",
+          "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표 데이터에 작업구분(행 이름)이 누락되어 있어, 직종별 합계 인원수를 명확히 식별하여 단위당 품 계산식에 적용할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p622-t0",
+      "row": "작업구분",
+      "column": "인원수 지적기사",
+      "value": "(0.001) (0.002) 0.002"
+    },
+    {
+      "table_id": "p622-t0",
+      "row": "작업구분",
+      "column": "인원수 지적산업기사",
+      "value": "(0.001) (0.010) (0.002) (0.014) 0.014"
+    },
+    {
+      "table_id": "p622-t0",
+      "row": "작업구분",
+      "column": "인원수 지적기능사",
+      "value": "(0.010) 0.010"
+    },
+    {
+      "chunk_id": "p622-x1",
+      "quote": "본 품은 지적(임야)도 1도곽을 기준한 것이다."
+    },
+    {
+      "chunk_id": "p622-x1",
+      "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표의 파싱 결과에 '계획 및 준비', '자료조사 및 수집', '합계' 등의 작업구분 행 이름이 모두 누락되어 있어, 각 직종별 합계 인원수를 정확히 추출하여 계산식에 반영할 수 없습니다."
+  ],
+  "questions": [
+    "연속지적도 품질개선 작업 물량은 몇 도곽입니까?",
+    "기계경비와 재료소모품비는 어떻게 별도로 계상해야 합니까?",
+    "정비 전후 비교나 완료보고서 작성 외에 추가로 요구되는 성과물이 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:10:53.141684+00:00",
+    "input_tokens": 23665,
+    "output_tokens": 2825,
+    "source_pages": [
+      622,
+      623
+    ],
+    "prompt_sha256": "0da3d964bc70480182176b0545afe863bcc798955b5e17803e8228429828376c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

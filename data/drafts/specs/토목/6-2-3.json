@@ -1,0 +1,232 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/6-2-3/관절단",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "6-2-3",
+    "title": "관 절단('23년 보완)",
+    "work": "관 절단 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      365,
+      366
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "100이하",
+          "125",
+          "150",
+          "200",
+          "250",
+          "300",
+          "350",
+          "400",
+          "450",
+          "500",
+          "600",
+          "700",
+          "800",
+          "900",
+          "1,000",
+          "1,100",
+          "1,200"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "절단할 관경은 얼마입니까?",
+        "source": "PDF 365쪽 6-2-3 관 절단 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "관 절단 개소 수는 몇 개소입니까?",
+        "source": "PDF 365쪽 6-2-3 관 절단 표 우측 상단 '(개소당)'"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p421-t3",
+        "role": "관경별 관 절단 단위당 품",
+        "source": "PDF 365쪽 6-2-3 관 절단 표",
+        "unit": "인/개소",
+        "values": {
+          "100이하": {
+            "배관공(수도)": "0.08"
+          },
+          "125": {
+            "배관공(수도)": "0.09"
+          },
+          "150": {
+            "배관공(수도)": "0.10"
+          },
+          "200": {
+            "배관공(수도)": "0.12"
+          },
+          "250": {
+            "배관공(수도)": "0.14"
+          },
+          "300": {
+            "배관공(수도)": "0.16"
+          },
+          "350": {
+            "배관공(수도)": "0.18"
+          },
+          "400": {
+            "배관공(수도)": "0.20"
+          },
+          "450": {
+            "배관공(수도)": "0.22"
+          },
+          "500": {
+            "배관공(수도)": "0.24"
+          },
+          "600": {
+            "배관공(수도)": "0.28"
+          },
+          "700": {
+            "배관공(수도)": "0.32"
+          },
+          "800": {
+            "배관공(수도)": "0.36"
+          },
+          "900": {
+            "배관공(수도)": "0.40"
+          },
+          "1,000": {
+            "배관공(수도)": "0.44"
+          },
+          "1,100": {
+            "배관공(수도)": "0.48"
+          },
+          "1,200": {
+            "배관공(수도)": "0.52"
+          }
+        },
+        "cite": {
+          "table_id": "p421-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p421-t3",
+          "row_input": "pipe_diameter",
+          "column_input": "배관공(수도)",
+          "trades": [
+            "배관공(수도)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p421-t3 표에서 관경에 해당하는 배관공(수도)의 단위당 품을 찾는다.",
+        "단위당 품에 절단 개소 수(quantity)를 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 365쪽 6-2-3 관 절단 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "보호조치를 위한 안전시설물 및 환경시설물 비용",
+        "source": "PDF 366쪽 [주] ③",
+        "cite": [
+          {
+            "chunk_id": "p422-x0"
+          }
+        ]
+      },
+      {
+        "item": "소모재료(커터 등)비",
+        "source": "PDF 366쪽 [주] ⑤",
+        "cite": [
+          {
+            "chunk_id": "p422-x0"
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(절단기 등) 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": [
+          {
+            "chunk_id": "p422-x0"
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 관경별로 개소당 배관공(수도)의 인원이 직접 명시되어 있어 단위당 품 계산 방식을 따릅니다.",
+  "citations": [
+    {
+      "table_id": "p421-t3",
+      "row": "100이하",
+      "column": "배관공(수도)",
+      "value": "0.08"
+    },
+    {
+      "table_id": "p421-t3",
+      "row": "500",
+      "column": "배관공(수도)",
+      "value": "0.24"
+    },
+    {
+      "chunk_id": "p421-x29",
+      "quote": "본 품은 절단기를 사용하여 주철관을 절단하는 기준이다."
+    },
+    {
+      "chunk_id": "p422-x0",
+      "quote": "보호조치를 위한 안전시설물 및 환경시설물의 비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p422-x0",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 5%로 계상한다."
+    },
+    {
+      "chunk_id": "p422-x0",
+      "quote": "소모재료(커터 등)비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 p421-t3 표 텍스트가 심하게 깨져 있어, 원문 PDF 이미지를 기준으로 관경별 배관공(수도) 값을 복원하여 tables에 입력했습니다."
+  ],
+  "questions": [
+    "관경 300mm 주철관을 절단할 때 배관공 품은 얼마인가요?",
+    "절단기 외에 다른 장비(예: 발전기)를 사용하면 기계경비는 어떻게 산정하나요?",
+    "절단할 관의 개소 수는 몇 개인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:59:11.400541+00:00",
+    "input_tokens": 12775,
+    "output_tokens": 2137,
+    "source_pages": [
+      421,
+      422,
+      423
+    ],
+    "prompt_sha256": "ec56f7d83b92c72e9b34f8e6d7de5ad0ba45807815a5c51192734ee158932455",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

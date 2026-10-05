@@ -1,0 +1,181 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-24/도로반사경교체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-24",
+    "title": "도로반사경 교체",
+    "work": "도로반사경 교체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      888
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "매",
+        "required": true,
+        "ask": "교체할 도로반사경의 수량은 몇 매입니까?",
+        "source": "PDF 888쪽 2-1-24 표의 시공량(매)"
+      },
+      {
+        "name": "is_acrylic_stainless",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "교체하는 도로반사경이 아크릴스테인리스제(ø800∼1,000㎜)입니까?",
+        "source": "PDF 888쪽 2-1-24 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p944-t1",
+        "role": "도로반사경 교체 일당 작업조 및 시공량",
+        "source": "PDF 888쪽 2-1-24 표",
+        "unit": "인, 대, 매",
+        "values": {
+          "특별인부": {
+            "단위": "인",
+            "수량": "1"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(매)": "7"
+          },
+          "트럭": {
+            "규격": "2.5ton",
+            "단위": "대",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p944-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p944-t1",
+          "row": "보통인부",
+          "column": "시공량(매)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p944-t1",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "트럭",
+          "table": "p944-t1",
+          "unit": "대·일",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p944-t1에서 일당 시공량(7매)을 가져온다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 트럭 대·일 = 작업일수 × 1로 구한다."
+      ],
+      "source": "PDF 888쪽 2-1-24 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "is_acrylic_stainless == false",
+        "blocked_if": {
+          "input": "is_acrylic_stainless",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 아크릴스테인리스제(ø800∼1,000㎜) 도로반사경의 교체 기준이므로, 다른 재질이나 규격인 경우 적용할 수 없습니다.",
+        "source": "PDF 888쪽 2-1-24 [주] ①",
+        "cite": {
+          "section_no": "2-1-24",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 표로 주어져 있어, 전체 물량을 일일 시공량으로 나누어 작업일수를 구하는 전형적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p944-t1",
+      "row": "보통인부",
+      "column": "시공량(매)",
+      "value": "7"
+    },
+    {
+      "table_id": "p944-t1",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p944-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p944-t1",
+      "row": "트럭",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p944-x8",
+      "quote": "본 품은 아크릴스테인리스제(ø800∼1,000㎜) 도로반사경의 교체 기준이다."
+    },
+    {
+      "chunk_id": "p944-x8",
+      "quote": "트럭은 자재, 공구 및 경장비의 현장내 운반 작업에 적용한다."
+    }
+  ],
+  "open_questions": [
+    "동일 페이지의 2-1-23(철거)이나 2-1-25(제거)에는 공구손료 및 경장비 기계경비(인력품의 3% 또는 5%) 계상 규정이 있으나, 2-1-24(교체)에는 해당 주석이 누락되어 있습니다. 원문 그대로 공구손료를 계상하지 않는 것이 맞는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "도로반사경 20매를 교체하려고 합니다. 품을 어떻게 계산하나요?",
+    "폴리카보네이트 재질의 도로반사경을 교체할 때도 이 품을 적용할 수 있나요?",
+    "교체 작업 시 발생하는 기존 반사경의 폐기물 처리 비용은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T23:01:00.665473+00:00",
+    "input_tokens": 11487,
+    "output_tokens": 1800,
+    "source_pages": [
+      944,
+      945
+    ],
+    "prompt_sha256": "38b1169862b6951b4949fe4d0ed05eee0d6d7de8adbaa4a6504dcccab80066c6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

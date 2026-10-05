@@ -1,0 +1,1341 @@
+{
+  "testset": "evals/router_testset.jsonl",
+  "criteria": {
+    "overall_accuracy_min": 0.9,
+    "boundary_accuracy_min": 0.8,
+    "estimate_to_out_of_scope_max": 0,
+    "mean_latency_ms_max": 1500
+  },
+  "modes": {
+    "rule": {
+      "summary": {
+        "count": 46,
+        "overall_accuracy": 0.5434782608695652,
+        "boundary_count": 20,
+        "boundary_accuracy": 0.4,
+        "confusion_matrix": {
+          "estimate": {
+            "estimate": 14,
+            "qa": 0,
+            "out_of_scope": 2
+          },
+          "qa": {
+            "estimate": 13,
+            "qa": 0,
+            "out_of_scope": 2
+          },
+          "out_of_scope": {
+            "estimate": 4,
+            "qa": 0,
+            "out_of_scope": 11
+          }
+        },
+        "estimate_to_out_of_scope": 2,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0,
+        "rule_fallback_count": 46,
+        "low_confidence_count": 0,
+        "wrong": [
+          {
+            "id": "e12",
+            "question": "아까 거 사급 레미콘 9만원으로 다시 계산해줘",
+            "expected": "estimate",
+            "predicted": "out_of_scope",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "e16",
+            "question": "아까 거 다시 계산해줘",
+            "expected": "estimate",
+            "predicted": "out_of_scope",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q01",
+            "question": "펌프차 타설할 때 콘크리트공 품이 얼마야?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q02",
+            "question": "펌프차 재셋팅하면 품을 어떻게 적용해?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q03",
+            "question": "거푸집 높이 할증 기준이 뭐야?",
+            "expected": "qa",
+            "predicted": "out_of_scope",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q04",
+            "question": "자동문 1개소 설치하는 데 창호공 몇 명 들어가?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q05",
+            "question": "진동기 안 쓰면 인원이 줄어?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q06",
+            "question": "일위대가 금액 끝자리는 어떻게 버려?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q07",
+            "question": "기계경비 운전원 단가는 어떻게 산정해?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q08",
+            "question": "레미콘 할증률은 몇 %야?",
+            "expected": "qa",
+            "predicted": "out_of_scope",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q09",
+            "question": "천장에 에폭시 바르면 품 가산돼?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q10",
+            "question": "벌목할 때 굴착기 시간은 얼마나 잡아?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q11",
+            "question": "공구손료는 보통 인력품의 몇 퍼센트로 잡아?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q12",
+            "question": "간접노무비는 공사비에서 어떤 기준으로 계산해?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q13",
+            "question": "도어체크 설치 품에 브라켓 조립도 포함돼?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q14",
+            "question": "슬럼프 18cm면 펌프차 일일시공량이 어떻게 돼?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "q15",
+            "question": "합판거푸집 300㎡ 설치에 형틀목공 품은?",
+            "expected": "qa",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "o04",
+            "question": "요즘 아파트 평당 공사비 얼마야?",
+            "expected": "out_of_scope",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "o06",
+            "question": "이번 달 철근 시세 얼마야?",
+            "expected": "out_of_scope",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "o10",
+            "question": "이 도면에서 콘크리트 물량 좀 뽑아줘",
+            "expected": "out_of_scope",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          },
+          {
+            "id": "o12",
+            "question": "시공능력평가 1위 건설사가 어디야?",
+            "expected": "out_of_scope",
+            "predicted": "estimate",
+            "reason": "기존 단서 낱말 규칙으로 분류했습니다."
+          }
+        ],
+        "criteria_pass": {
+          "overall_accuracy": false,
+          "boundary_accuracy": false,
+          "estimate_to_out_of_scope": false,
+          "mean_latency_ms": true
+        }
+      },
+      "items": [
+        {
+          "id": "e01",
+          "question": "철근콘크리트 벽체 260㎥ 펌프차 타설 비용 알려줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e02",
+          "question": "자동문 3개소 설치하면 공사비 얼마 나와?",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e03",
+          "question": "수성페인트 붓칠 500㎡ 견적 좀 뽑아줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e04",
+          "question": "합판거푸집 1,200㎡ 설치 해체 인건비 계산해줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e05",
+          "question": "도어록 50개소 설치 노무비가 얼마야",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e06",
+          "question": "데크플레이트 800㎡ 깔면 금액이 어느 정도야?",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e07",
+          "question": "에폭시 접착제 바르기 비용 얼마야?",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e08",
+          "question": "콘크리트 인력타설 100㎥ 품이랑 금액 둘 다 알려줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e09",
+          "question": "철골 현장용접 200m 견적서 만들어줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e10",
+          "question": "벽 콘크리트 부을 때 인건비 대충 얼마 들어?",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e11",
+          "question": "플로어힌지 20개 설치 공사비 산출해줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e12",
+          "question": "아까 거 사급 레미콘 9만원으로 다시 계산해줘",
+          "expected": "estimate",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "e16",
+          "question": "아까 거 다시 계산해줘",
+          "expected": "estimate",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "e13",
+          "question": "슬립폼 공법 1,000㎡ 노무비 견적 부탁해",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e14",
+          "question": "철근 기계적 이음 30개소 원가계산서 뽑아줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e15",
+          "question": "셔터 설치 5개소 비용 계산 부탁",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q01",
+          "question": "펌프차 타설할 때 콘크리트공 품이 얼마야?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "q02",
+          "question": "펌프차 재셋팅하면 품을 어떻게 적용해?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q03",
+          "question": "거푸집 높이 할증 기준이 뭐야?",
+          "expected": "qa",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q04",
+          "question": "자동문 1개소 설치하는 데 창호공 몇 명 들어가?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "q05",
+          "question": "진동기 안 쓰면 인원이 줄어?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q06",
+          "question": "일위대가 금액 끝자리는 어떻게 버려?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q07",
+          "question": "기계경비 운전원 단가는 어떻게 산정해?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "q08",
+          "question": "레미콘 할증률은 몇 %야?",
+          "expected": "qa",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q09",
+          "question": "천장에 에폭시 바르면 품 가산돼?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q10",
+          "question": "벌목할 때 굴착기 시간은 얼마나 잡아?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "q11",
+          "question": "공구손료는 보통 인력품의 몇 퍼센트로 잡아?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q12",
+          "question": "간접노무비는 공사비에서 어떤 기준으로 계산해?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "q13",
+          "question": "도어체크 설치 품에 브라켓 조립도 포함돼?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q14",
+          "question": "슬럼프 18cm면 펌프차 일일시공량이 어떻게 돼?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": false
+        },
+        {
+          "id": "q15",
+          "question": "합판거푸집 300㎡ 설치에 형틀목공 품은?",
+          "expected": "qa",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "o01",
+          "question": "오늘 서울 날씨 어때?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o02",
+          "question": "파이썬으로 리스트 정렬하는 코드 짜줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o03",
+          "question": "점심 메뉴 추천해줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o04",
+          "question": "요즘 아파트 평당 공사비 얼마야?",
+          "expected": "out_of_scope",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "o05",
+          "question": "하도급 대금 안 주면 어디에 신고해?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o06",
+          "question": "이번 달 철근 시세 얼마야?",
+          "expected": "out_of_scope",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "o07",
+          "question": "너는 누가 만들었어?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o08",
+          "question": "콘크리트 양생은 왜 해야 돼?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o09",
+          "question": "주식 지금 사도 될까?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o10",
+          "question": "이 도면에서 콘크리트 물량 좀 뽑아줘",
+          "expected": "out_of_scope",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "o11",
+          "question": "영어로 번역해줘: 안녕하세요",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o12",
+          "question": "시공능력평가 1위 건설사가 어디야?",
+          "expected": "out_of_scope",
+          "predicted": "estimate",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": false
+        },
+        {
+          "id": "o13",
+          "question": "ㅋㅋㅋㅋ",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o14",
+          "question": "고소작업 안전대 착용 기준 알려줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o15",
+          "question": "비트코인 가격 알려줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": null,
+          "source": "rule",
+          "reason": "기존 단서 낱말 규칙으로 분류했습니다.",
+          "latency_ms": 0.0,
+          "boundary": false,
+          "correct": true
+        }
+      ]
+    },
+    "llm": {
+      "summary": {
+        "count": 46,
+        "overall_accuracy": 1.0,
+        "boundary_count": 20,
+        "boundary_accuracy": 1.0,
+        "confusion_matrix": {
+          "estimate": {
+            "estimate": 16,
+            "qa": 0,
+            "out_of_scope": 0
+          },
+          "qa": {
+            "estimate": 0,
+            "qa": 15,
+            "out_of_scope": 0
+          },
+          "out_of_scope": {
+            "estimate": 0,
+            "qa": 0,
+            "out_of_scope": 15
+          }
+        },
+        "estimate_to_out_of_scope": 0,
+        "mean_latency_ms": 2675.3,
+        "max_latency_ms": 7531.0,
+        "rule_fallback_count": 0,
+        "low_confidence_count": 0,
+        "wrong": [],
+        "criteria_pass": {
+          "overall_accuracy": true,
+          "boundary_accuracy": true,
+          "estimate_to_out_of_scope": true,
+          "mean_latency_ms": false
+        }
+      },
+      "items": [
+        {
+          "id": "e01",
+          "question": "철근콘크리트 벽체 260㎥ 펌프차 타설 비용 알려줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "철근콘크리트 벽체 타설에 대한 구체적인 비용을 묻는 견적 질문이기 때문입니다.",
+          "latency_ms": 7531.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e02",
+          "question": "자동문 3개소 설치하면 공사비 얼마 나와?",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "자동문 설치에 드는 공사비를 묻는 질문이므로 견적으로 분류합니다.",
+          "latency_ms": 2719.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e03",
+          "question": "수성페인트 붓칠 500㎡ 견적 좀 뽑아줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "비용과 견적을 직접적으로 묻는 질문이므로 견적(estimate)으로 분류합니다.",
+          "latency_ms": 2640.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e04",
+          "question": "합판거푸집 1,200㎡ 설치 해체 인건비 계산해줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "합판거푸집 설치 및 해체에 대한 구체적인 물량을 제시하고 인건비 및 비용 계산을 요구하였으므로 견적 질문에 해당합니다.",
+          "latency_ms": 2688.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e05",
+          "question": "도어록 50개소 설치 노무비가 얼마야",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "설치 수량에 따른 노무비용과 금액을 묻는 견적 질문이기 때문입니다.",
+          "latency_ms": 2687.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e06",
+          "question": "데크플레이트 800㎡ 깔면 금액이 어느 정도야?",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "데크플레이트 설치 공사에 대한 금액을 묻는 견적 질문이기 때문입니다.",
+          "latency_ms": 2407.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e07",
+          "question": "에폭시 접착제 바르기 비용 얼마야?",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "에폭시 접착제 바르기 작업의 비용을 묻는 견적 질문입니다.",
+          "latency_ms": 2625.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e08",
+          "question": "콘크리트 인력타설 100㎥ 품이랑 금액 둘 다 알려줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "비용과 금액을 함께 요구하는 견적 질문이므로 estimate로 분류합니다.",
+          "latency_ms": 2562.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e09",
+          "question": "철골 현장용접 200m 견적서 만들어줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "철골 현장용접 공사에 대한 비용과 견적서 작성을 요구하는 질문이므로 견적으로 분류합니다.",
+          "latency_ms": 2547.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e10",
+          "question": "벽 콘크리트 부을 때 인건비 대충 얼마 들어?",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 0.95,
+          "source": "llm",
+          "reason": "콘크리트 타설 시 인건비와 같은 비용을 묻는 질문이므로 견적으로 분류합니다.",
+          "latency_ms": 2578.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e11",
+          "question": "플로어힌지 20개 설치 공사비 산출해줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "플로어힌지 설치에 대한 공사비 산출을 요구하는 견적 질문이므로 estimate로 분류합니다.",
+          "latency_ms": 2625.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e12",
+          "question": "아까 거 사급 레미콘 9만원으로 다시 계산해줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "직전 견적에 대한 조건 변경 및 재계산 요청이므로 견적으로 분류합니다.",
+          "latency_ms": 2672.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e16",
+          "question": "아까 거 다시 계산해줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "직전 대화가 없어도 아까 거 다시 계산해달라는 요청은 견적 산정 요청으로 분류합니다.",
+          "latency_ms": 2844.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e13",
+          "question": "슬립폼 공법 1,000㎡ 노무비 견적 부탁해",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "슬립폼 공법 1,000제곱미터에 대한 노무비 견적을 직접적으로 요구하고 있습니다.",
+          "latency_ms": 2562.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "e14",
+          "question": "철근 기계적 이음 30개소 원가계산서 뽑아줘",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "비용과 원가계산서를 요구하는 견적 질문이므로 estimate로 분류합니다.",
+          "latency_ms": 2625.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "e15",
+          "question": "셔터 설치 5개소 비용 계산 부탁",
+          "expected": "estimate",
+          "predicted": "estimate",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "비용 계산을 요청하는 견적 질문이므로 estimate로 분류합니다.",
+          "latency_ms": 2672.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q01",
+          "question": "펌프차 타설할 때 콘크리트공 품이 얼마야?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "돈이 아니라 품을 묻는 질문이므로 qa로 분류합니다.",
+          "latency_ms": 2906.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "q02",
+          "question": "펌프차 재셋팅하면 품을 어떻게 적용해?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "돈이 아니라 펌프차 재셋팅 시 품의 적용 기준을 묻는 품셈 질문이기 때문입니다.",
+          "latency_ms": 2219.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q03",
+          "question": "거푸집 높이 할증 기준이 뭐야?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "거푸집 높이 할증의 적용 기준을 묻는 질문이므로 품셈 상담에 해당합니다.",
+          "latency_ms": 2359.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q04",
+          "question": "자동문 1개소 설치하는 데 창호공 몇 명 들어가?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 0.99,
+          "source": "llm",
+          "reason": "자동문 설치에 필요한 인원을 묻는 질문으로 금액이 아닌 품셈 기준을 확인하므로 qa로 분류합니다.",
+          "latency_ms": 2454.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "q05",
+          "question": "진동기 안 쓰면 인원이 줄어?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 0.95,
+          "source": "llm",
+          "reason": "돈을 묻지 않고 진동기 미사용 시 인원(품) 변동 기준을 묻는 질문이므로 qa로 분류합니다.",
+          "latency_ms": 2515.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q06",
+          "question": "일위대가 금액 끝자리는 어떻게 버려?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 0.95,
+          "source": "llm",
+          "reason": "일위대가 금액의 끝자리 처리 기준과 방법을 묻는 품셈 관련 질문이므로 qa로 분류합니다.",
+          "latency_ms": 2344.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q07",
+          "question": "기계경비 운전원 단가는 어떻게 산정해?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "기계경비 운전원의 단가 산정 방법에 대한 기준을 묻고 있으므로 품셈 질문인 qa로 분류합니다.",
+          "latency_ms": 2406.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "q08",
+          "question": "레미콘 할증률은 몇 %야?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "레미콘 할증률이라는 기준과 적용 방법을 묻는 품셈 질문이므로 qa로 분류합니다.",
+          "latency_ms": 2078.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q09",
+          "question": "천장에 에폭시 바르면 품 가산돼?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 0.95,
+          "source": "llm",
+          "reason": "천장 도장 시 품 가산 여부라는 시공 기준과 할증을 묻는 질문이므로 품셈 상담에 해당합니다.",
+          "latency_ms": 2250.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q10",
+          "question": "벌목할 때 굴착기 시간은 얼마나 잡아?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 0.99,
+          "source": "llm",
+          "reason": "벌목 작업 시 필요한 장비 투입 시간을 묻는 품셈 관련 질의이므로 qa로 분류합니다.",
+          "latency_ms": 2453.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "q11",
+          "question": "공구손료는 보통 인력품의 몇 퍼센트로 잡아?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "공구손료의 산정 기준과 적용 방법을 묻는 품셈 질문이므로 qa로 분류합니다.",
+          "latency_ms": 2641.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q12",
+          "question": "간접노무비는 공사비에서 어떤 기준으로 계산해?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 0.95,
+          "source": "llm",
+          "reason": "간접노무비의 산정 기준과 적용 방법을 묻는 질문이므로 품셈 상담에 해당합니다.",
+          "latency_ms": 2563.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "q13",
+          "question": "도어체크 설치 품에 브라켓 조립도 포함돼?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "도어체크 설치 품의 포함 범위와 기준을 묻는 질문이므로 품셈 질의인 qa로 분류합니다.",
+          "latency_ms": 2578.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q14",
+          "question": "슬럼프 18cm면 펌프차 일일시공량이 어떻게 돼?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "슬럼프에 따른 펌프차 일일시공량이라는 품셈 기준을 묻는 질문이므로 qa로 분류합니다.",
+          "latency_ms": 2422.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "q15",
+          "question": "합판거푸집 300㎡ 설치에 형틀목공 품은?",
+          "expected": "qa",
+          "predicted": "qa",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "돈이 아닌 소요되는 품(인원)을 묻는 품셈 질문이기 때문입니다.",
+          "latency_ms": 2671.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o01",
+          "question": "오늘 서울 날씨 어때?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "건설 표준품셈과 무관한 일반 날씨에 대한 질문입니다.",
+          "latency_ms": 2907.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o02",
+          "question": "파이썬으로 리스트 정렬하는 코드 짜줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "건설 표준품셈과 무관한 프로그래밍 관련 질문이므로 범위를 벗어납니다.",
+          "latency_ms": 2750.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o03",
+          "question": "점심 메뉴 추천해줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "점심 메뉴 추천은 건설 표준품셈과 무관한 잡담에 해당합니다.",
+          "latency_ms": 3234.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o04",
+          "question": "요즘 아파트 평당 공사비 얼마야?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "평당 공사비는 건설 표준품셈 서비스에서 다루지 않는 항목입니다.",
+          "latency_ms": 2719.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o05",
+          "question": "하도급 대금 안 주면 어디에 신고해?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "건설 표준품셈의 범위에 해당하지 않는 법률 및 신고 절차에 대한 질문이기 때문입니다.",
+          "latency_ms": 2672.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o06",
+          "question": "이번 달 철근 시세 얼마야?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "자재 시세를 묻는 질문은 건설 표준품셈의 범위를 벗어나므로 out_of_scope로 분류합니다.",
+          "latency_ms": 2250.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o07",
+          "question": "너는 누가 만들었어?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "건설 표준품셈과 무관한 일반적인 잡담이나 AI 정체성에 대한 질문이기 때문입니다.",
+          "latency_ms": 2406.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o08",
+          "question": "콘크리트 양생은 왜 해야 돼?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "건설 일반 지식에 해당하는 질문이므로 품셈 범위에 속하지 않습니다.",
+          "latency_ms": 2219.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o09",
+          "question": "주식 지금 사도 될까?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "주식 투자는 건설 표준품셈과 무관한 내용입니다.",
+          "latency_ms": 2093.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o10",
+          "question": "이 도면에서 콘크리트 물량 좀 뽑아줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "도면을 보고 물량을 산출해 달라는 요청은 품셈의 범위를 벗어납니다.",
+          "latency_ms": 2110.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o11",
+          "question": "영어로 번역해줘: 안녕하세요",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "건설 표준품셈과 전혀 무관한 일반적인 번역 요청이기 때문입니다.",
+          "latency_ms": 2328.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o12",
+          "question": "시공능력평가 1위 건설사가 어디야?",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "시공능력평가 순위는 건설 표준품셈의 적용 기준이나 비용 산정과 무관한 건설 일반 지식이기 때문입니다.",
+          "latency_ms": 2984.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o13",
+          "question": "ㅋㅋㅋㅋ",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "건설 표준품셈과 무관한 잡담에 해당하므로 범위를 벗어납니다.",
+          "latency_ms": 2672.0,
+          "boundary": false,
+          "correct": true
+        },
+        {
+          "id": "o14",
+          "question": "고소작업 안전대 착용 기준 알려줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "안전대 착용 기준은 건설 표준품셈의 영역이 아니라 안전 규정 및 법률에 해당합니다.",
+          "latency_ms": 2938.0,
+          "boundary": true,
+          "correct": true
+        },
+        {
+          "id": "o15",
+          "question": "비트코인 가격 알려줘",
+          "expected": "out_of_scope",
+          "predicted": "out_of_scope",
+          "confidence": 1.0,
+          "source": "llm",
+          "reason": "건설 표준품셈과 무관한 암호화폐 시세를 묻는 질문입니다.",
+          "latency_ms": 2937.0,
+          "boundary": false,
+          "correct": true
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,255 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-8-13/유색포장(미끄럼방지)",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-8-13",
+    "title": "유색포장(미끄럼방지)",
+    "work": "유색포장 도포 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      326,
+      327
+    ],
+    "inputs": [
+      {
+        "name": "type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "유색포장(미끄럼방지)의 유형은 무엇입니까? 적용기준을 확인하려면 판정표를 참조하세요.",
+        "decision_table": "p382-t3",
+        "source": "PDF 326쪽 1-8-13 표 및 [주] ③",
+        "synonyms": {
+          "A-Type": [
+            "A타입",
+            "전면처리방식"
+          ],
+          "B-Type": [
+            "B타입",
+            "이격식 처리방식"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 326쪽 1-8-13 표 시공량 단위"
+      },
+      {
+        "name": "material_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "유색포장 자재(열경화성 아크릴수지, 규사)는 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "PDF 326쪽 1-8-13 [주] ①",
+        "synonyms": {
+          "관급": [
+            "관급자재",
+            "지급자재",
+            "발주처 지급"
+          ],
+          "사급": [
+            "사급자재",
+            "시공사 구매",
+            "자체 구매"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p382-t2",
+        "role": "작업조 인원 및 시공량",
+        "source": "PDF 326쪽 1-8-13 표",
+        "unit": "인, 대, ㎡/일",
+        "values": {
+          "도장공": {
+            "수량": "3",
+            "A-Type": "300",
+            "B-Type": "200"
+          },
+          "보통인부": {
+            "수량": "2"
+          },
+          "트럭": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p382-t2"
+        }
+      },
+      {
+        "id": "p382-t3",
+        "role": "유형별 적용기준",
+        "source": "PDF 326쪽 1-8-13 [주] ③ 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "- 미끄럼 대상 전체 구간에 설치하는 전면처리방식"
+          },
+          "B-Type": {
+            "적용기준": "- 미끄럼 대상 구간에 띠 모양으로 일정 간격씩 띄워 설치하는 이격식 처리방식"
+          }
+        },
+        "cite": {
+          "table_id": "p382-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p382-t2",
+          "row": "도장공",
+          "column_input": "type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p382-t2",
+          "column": "수량",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "도장공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "트럭",
+          "table": "p382-t2",
+          "unit": "대·일",
+          "column": "수량"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p382-t2에서 유형(type)에 따른 시공량을 고른다.",
+        "작업일수 = quantity ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 수량 열의 직종별 인원, 트럭 대·일 = 작업일수 × 수량 열의 트럭 대수로 구한다."
+      ],
+      "source": "PDF 326쪽 1-8-13 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [
+      {
+        "item": "유색포장(열경화성 아크릴수지+규사) 재료비",
+        "input": "material_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "미산정",
+            "reason": "지역별 자재 단가 미입력"
+          }
+        },
+        "source": "PDF 326쪽 1-8-13 [주] ①",
+        "cite": {
+          "chunk_id": "p382-x16",
+          "quote": "유색포장(열경화성 아크릴수지+규사)를 도포하는"
+        }
+      }
+    ],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p383-x0",
+          "quote": "공구손료 및 경장비(핸드믹서 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 표로 제시되어 있어, 물량을 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p382-t2",
+      "row": "도장공",
+      "column": "A-Type",
+      "value": "300"
+    },
+    {
+      "table_id": "p382-t2",
+      "row": "도장공",
+      "column": "B-Type",
+      "value": "200"
+    },
+    {
+      "table_id": "p382-t2",
+      "row": "도장공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p382-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p382-t2",
+      "row": "트럭",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p383-x0",
+      "quote": "공구손료 및 경장비(핸드믹서 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p382-x16",
+      "quote": "유색포장(열경화성 아크릴수지+규사)를 도포하는"
+    }
+  ],
+  "open_questions": [
+    "표의 시공량이 '도장공' 행에만 적혀 있고 병합되어 있는데, 기계적으로 파싱할 때 이를 어떻게 처리할지 명확한 기준이 필요함.",
+    "트럭의 규격이 2.5ton으로 명시되어 있으나, 장비 코드 매핑 시 정확한 코드를 확인해야 함."
+  ],
+  "questions": [
+    "유색포장 A-Type 1000㎡ 시공 시 도장공은 몇 인·일이 필요한가요?",
+    "공구손료 및 경장비는 어떻게 계산하나요?",
+    "유색포장 자재비는 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:56:54.914066+00:00",
+    "input_tokens": 12437,
+    "output_tokens": 2434,
+    "source_pages": [
+      382,
+      383,
+      384
+    ],
+    "prompt_sha256": "ee52be09ff3c468b55250e260d527c74e495bbdc3692133d0395ae2f782ab190",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

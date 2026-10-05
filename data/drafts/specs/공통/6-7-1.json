@@ -1,0 +1,193 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-7-1/플륨관설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-7-1",
+    "title": "플륨관 설치",
+    "work": "플륨관 설치 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      155,
+      156
+    ],
+    "inputs": [
+      {
+        "name": "weight_band",
+        "type": "enum",
+        "allowed_values": [
+          "50∼150미만",
+          "150∼300미만",
+          "300∼500미만",
+          "500∼700미만",
+          "700∼900미만",
+          "900∼1,100미만",
+          "1,100∼1,300미만",
+          "1,300~1,500미만",
+          "1,500~1,800미만",
+          "1,800~2,100미만"
+        ],
+        "unit": "kg",
+        "required": true,
+        "ask": "플륨관의 본당 중량은 어느 구간에 해당합니까?",
+        "source": "PDF 155쪽 6-7-1 표의 본당 중량(kg) 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "본",
+        "required": true,
+        "ask": "설치할 플륨관의 수량은 몇 본입니까?",
+        "source": "PDF 155쪽 6-7-1 표의 시공량 단위(본)"
+      },
+      {
+        "name": "excavator_spec",
+        "type": "enum",
+        "allowed_values": [
+          "현장조건에 맞는 굴착기 규격"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업여건(시공높이, 위치 등) 및 안전율을 고려하여 적용할 굴착기 규격은 무엇입니까?",
+        "source": "PDF 156쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p211-t2",
+        "role": "플륨관 설치 작업조 인원, 장비 대수 및 본당 중량별 일일 시공량",
+        "source": "PDF 155쪽 6-7-1 표",
+        "unit": "인/작업조, 대/작업조, 본/일",
+        "values": {
+          "수량": {
+            "특별인부": "2",
+            "보통인부": "1",
+            "굴착기": "1"
+          },
+          "시공량": {
+            "50∼150미만": "75",
+            "150∼300미만": "63",
+            "300∼500미만": "52",
+            "500∼700미만": "42",
+            "700∼900미만": "36",
+            "900∼1,100미만": "31",
+            "1,100∼1,300미만": "27",
+            "1,300~1,500미만": "23",
+            "1,500~1,800미만": "20",
+            "1,800~2,100미만": "17"
+          }
+        },
+        "cite": {
+          "table_id": "p211-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p211-t2",
+          "row": "시공량",
+          "column_input": "weight_band"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p211-t2",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "굴착기",
+          "table": "p211-t2",
+          "unit": "대·일",
+          "machine_code_input": "excavator_spec",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p211-t2에서 본당 중량 구간에 해당하는 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 굴착기 대·일 = 작업일수 × 1로 구한다."
+      ],
+      "source": "PDF 155쪽 6-7-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "터파기, 기초(콘크리트, 자갈, 모래), 지반고르기, 되메우기",
+        "source": "PDF 155쪽 [주] ③",
+        "cite": {
+          "section_no": "6-7-1",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 소모재료(이음 모르타르 등)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.08",
+        "cite": {
+          "section_no": "6-7-1",
+          "marker": "⑤"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(특별인부, 보통인부, 굴착기)와 본당 중량에 따른 일일 시공량이 표로 제시되어 있으므로 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p211-t2",
+      "row": "시공량(본)",
+      "column": "50∼150미만",
+      "value": "75"
+    },
+    {
+      "chunk_id": "p211-x18",
+      "quote": "터파기, 기초(콘크리트, 자갈, 모래), 지반고르기, 되메우기 등은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p212-x0",
+      "quote": "공구손료 및 소모재료(이음 모르타르 등)는 인력품의 8%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "굴착기 규격에 대한 구체적인 기준이 없어 사용자가 직접 선택해야 합니다."
+  ],
+  "questions": [
+    "플륨관 본당 중량이 400kg일 때 일일 시공량은 얼마인가요?",
+    "플륨관 설치 시 터파기 비용도 이 품셈에 포함되나요?",
+    "굴착기 규격은 어떻게 결정해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:41:47.668307+00:00",
+    "input_tokens": 25645,
+    "output_tokens": 4245,
+    "source_pages": [
+      211,
+      212,
+      213
+    ],
+    "prompt_sha256": "ada366998722e07b83a4a192e67bfe71c3744cd8d3b6a5c401565df5e46d2a4f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

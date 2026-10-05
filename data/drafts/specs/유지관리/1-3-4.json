@@ -1,0 +1,192 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/1-3-4/콘크리트균열보수_충전공법",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "1-3-4",
+    "title": "콘크리트 균열 보수(충전공법)",
+    "work": "충전공법 보수 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      868
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "콘크리트 균열 보수 길이는 몇 m입니까?",
+        "source": "p924-t1 시공량(m)"
+      },
+      {
+        "name": "crack_width_exceeds",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "균열폭이 10㎜를 초과하거나 형태가 다양하여 본 품에 준할 수 없습니까?",
+        "source": "[주] ②"
+      },
+      {
+        "name": "equipment_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건상 인력인상에 장비가 필요합니까?",
+        "source": "[주] ⑤"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p924-t1",
+        "role": "일당 작업조 및 시공량",
+        "source": "1-3-4 콘크리트 균열 보수(충전공법)('21년 보완)",
+        "values": {
+          "특별인부 보통인부": {
+            "수량": "1",
+            "시공량(m)": "23"
+          }
+        },
+        "cite": {
+          "table_id": "p924-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱된 표의 구조가 불명확하여 자동 계산을 지원하지 않습니다.",
+        "일당 시공량 23m를 기준으로 특별인부 1인, 보통인부 1인을 적용하여 직접 계산해야 합니다."
+      ],
+      "source": "1-3-4 콘크리트 균열 보수(충전공법)",
+      "rounding": "단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "균열폭이 10㎜를 초과하거나 형태가 다양하여 본 품에 준할 수 없는 경우",
+        "blocked_if": {
+          "input": "crack_width_exceeds",
+          "op": "==",
+          "value": true
+        },
+        "reason": "적의 산출해야 함",
+        "source": "[주] ②",
+        "cite": {
+          "chunk_id": "p924-x11",
+          "quote": "② 균열폭은 10㎜까지를 기준으로 한 것이며, 균열의 폭이나 형태가 다양하여 본 품에 준할 수 없을\n설명 | 때에는 적의 산출한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "주재료(충전재) 수량",
+        "source": "[주] ④",
+        "cite": {
+          "chunk_id": "p924-x11",
+          "quote": "④ 주재료(충전재)는 설계수량에 따르며"
+        }
+      },
+      {
+        "item": "잡재료 및 소모재료",
+        "source": "[주] ④",
+        "cite": {
+          "chunk_id": "p924-x11",
+          "quote": "잡재료 및 소모재료는 주재료의 5%까지 계상한다."
+        }
+      },
+      {
+        "item": "인력인상 장비 기계경비",
+        "source": "[주] ⑤",
+        "cite": {
+          "chunk_id": "p924-x11",
+          "quote": "⑤ 현장 여건상 인력인상에 장비가 필요할 시 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p924-x11",
+          "quote": "③ 공구손료 및 경장비의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표의 구조가 1차원 텍스트로 뭉개져 있어, 직종별 인원과 일일시공량을 기계적으로 분리하여 자동 계산 모델에 매핑하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p924-t1",
+      "row": "특별인부 보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p924-t1",
+      "row": "특별인부 보통인부",
+      "column": "시공량(m)",
+      "value": "23"
+    },
+    {
+      "chunk_id": "p924-x11",
+      "quote": "② 균열폭은 10㎜까지를 기준으로 한 것이며, 균열의 폭이나 형태가 다양하여 본 품에 준할 수 없을\n설명 | 때에는 적의 산출한다."
+    },
+    {
+      "chunk_id": "p924-x11",
+      "quote": "③ 공구손료 및 경장비의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p924-x11",
+      "quote": "④ 주재료(충전재)는 설계수량에 따르며"
+    },
+    {
+      "chunk_id": "p924-x11",
+      "quote": "잡재료 및 소모재료는 주재료의 5%까지 계상한다."
+    },
+    {
+      "chunk_id": "p924-x11",
+      "quote": "⑤ 현장 여건상 인력인상에 장비가 필요할 시 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표(p924-t1)의 텍스트가 '특별인부 보통인부 | 단위 인 | 수량 1 | 시공량(m) 23'로 병합되어 있어, 직종별 인원(특별인부 1, 보통인부 1)을 기계적으로 분리하기 어렵습니다.",
+    "잡재료 및 소모재료는 주재료의 5%로 계상해야 하나, 현재 cost_rules는 labor_subtotal 기준만 지원하므로 자동 계산에서 제외하고 not_calculated에 명시했습니다."
+  ],
+  "questions": [
+    "콘크리트 균열 보수(충전공법) 시공량이 100m일 때 인건비는 어떻게 계산하나요?",
+    "균열폭이 15mm인 경우 이 품셈을 적용할 수 있나요?",
+    "주재료(충전재)의 수량과 단가는 어떻게 입력해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:50:13.726171+00:00",
+    "input_tokens": 23322,
+    "output_tokens": 4540,
+    "source_pages": [
+      924,
+      925
+    ],
+    "prompt_sha256": "6c20b88f5c08104f7364a7eee823ed615ea9a6a28bd56e04b99a28d4953a2ecc",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

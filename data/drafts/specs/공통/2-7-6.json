@@ -1,0 +1,167 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-7-6/강관조립말비계설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-7-6",
+    "title": "강관 조립말비계(이동식)설치 및 해체",
+    "work": "1회 설치 및 해체 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      105
+    ],
+    "inputs": [
+      {
+        "name": "height",
+        "type": "enum",
+        "allowed_values": [
+          "수량 높이 2m",
+          "수량 높이 4m"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계의 높이는 얼마입니까?",
+        "source": "p105-t1 표의 열 구분",
+        "synonyms": {
+          "수량 높이 2m": [
+            "2m",
+            "높이 2m",
+            "2미터"
+          ],
+          "수량 높이 4m": [
+            "4m",
+            "높이 4m",
+            "4미터"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치 및 해체할 강관 조립말비계의 대수는 몇 대입니까?",
+        "source": "단위 (1대당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p105-t1",
+        "role": "강관 조립말비계 설치 및 해체 품",
+        "source": "2-7-6 강관 조립말비계(이동식)설치 및 해체",
+        "unit": "인/대",
+        "values": {
+          "비계공": {
+            "수량 높이 2m": "0.25",
+            "수량 높이 4m": "0.41"
+          },
+          "보통인부": {
+            "수량 높이 2m": "0.14",
+            "수량 높이 4m": "0.24"
+          }
+        },
+        "cite": {
+          "table_id": "p105-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p105-t1",
+          "column_input": "height",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p105-t1에서 높이에 따른 단위당 품을 고른다.",
+        "물량(대수)을 곱해 총 품을 구한다."
+      ],
+      "source": "p105-t1 및 [주] 본 품은 강관 조립말비계(이동식)의 1회 설치 및 해체 작업 기준이다.",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "연결핀 및 암록 별도 계상",
+        "source": "※ 1대당 비계기본틀(기둥) 높이가 증가할 때는 연결핀 및 암록을 별도 계상한다.",
+        "cite": {
+          "chunk_id": "p105-x15",
+          "quote": "1대당 비계기본틀(기둥) 높이가 증가할 때는 연결핀 및 암록을 별도 계상한다."
+        }
+      },
+      {
+        "item": "재료량 및 손율",
+        "source": "※ 손율은 ‘[공통부문] 2-2-5 구조물 비계’를 따른다.",
+        "cite": {
+          "chunk_id": "p105-x15",
+          "quote": "손율은 ‘[공통부문] 2-2-5 구조물 비계’를 따른다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(1대당)당 직종별 인원이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p105-t1",
+      "row": "비계공",
+      "column": "수량 높이 2m",
+      "value": "0.25"
+    },
+    {
+      "table_id": "p105-t1",
+      "row": "보통인부",
+      "column": "수량 높이 4m",
+      "value": "0.24"
+    },
+    {
+      "chunk_id": "p105-x8",
+      "quote": "본 품은 강관 조립말비계(이동식)의 1회 설치 및 해체 작업 기준이다."
+    },
+    {
+      "chunk_id": "p105-x15",
+      "quote": "1대당 비계기본틀(기둥) 높이가 증가할 때는 연결핀 및 암록을 별도 계상한다."
+    },
+    {
+      "chunk_id": "p105-x15",
+      "quote": "손율은 ‘[공통부문] 2-2-5 구조물 비계’를 따른다."
+    }
+  ],
+  "open_questions": [
+    "참고자료인 재료량 표(p105-t2)의 파싱 결과가 행 이름과 규격, 수량이 모두 뭉개져 있어 명세 표에 정상적으로 담기 어렵습니다. 따라서 재료량 표는 제외했습니다.",
+    "높이가 2m와 4m 이외의 값(예: 3m)일 경우 보간법을 적용해야 하는지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "높이 2m짜리 강관 조립말비계 5대를 설치하고 해체할 때 비계공 품은 어떻게 되나요?",
+    "높이가 3m인 경우는 2m와 4m 중 어떤 기준을 적용해야 하나요, 아니면 보간해야 하나요?",
+    "비계기본틀 높이가 증가하여 연결핀과 암록이 추가로 필요한데, 이 재료비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:14:26.306266+00:00",
+    "input_tokens": 11969,
+    "output_tokens": 1744,
+    "source_pages": [
+      105,
+      106
+    ],
+    "prompt_sha256": "2c7b7597beddd8271511e6e3d651ca12d5a94d483df09cbe3999086e52cb30bb",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

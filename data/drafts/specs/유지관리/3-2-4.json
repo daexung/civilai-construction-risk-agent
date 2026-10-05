@@ -1,0 +1,180 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-2-4/조적벽해체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-2-4",
+    "title": "조적벽 해체('22년 신설)",
+    "work": "조적벽 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      914,
+      915
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "해체할 조적벽의 물량은 몇 ㎥입니까?",
+        "source": "PDF 914쪽 p970-t3 기준 단위"
+      },
+      {
+        "name": "wall_height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "해체할 조적벽의 높이는 몇 m입니까?",
+        "source": "PDF 914쪽 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p970-t3",
+        "role": "조적벽 해체 단위당 품",
+        "source": "PDF 914쪽 3-2-4 조적벽 해체 표",
+        "unit": "인/㎥",
+        "values": {
+          "조적공": {
+            "수량": "0.380"
+          },
+          "보통인부": {
+            "수량": "0.252"
+          }
+        },
+        "cite": {
+          "table_id": "p970-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p970-t3",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "조적공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 914쪽 p970-t3",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "조적벽 높이가 3.6m를 초과하는 경우",
+        "blocked_if": {
+          "input": "wall_height",
+          "op": ">",
+          "value": 3.6
+        },
+        "reason": "본 품은 조적벽 높이 3.6m 이하를 기준으로 하므로 초과 시 적용 불가",
+        "source": "PDF 914쪽 [주] ①",
+        "cite": {
+          "section_no": "3-2-4",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비산방지, 보호 및 안전시설 등의 설치비",
+        "source": "PDF 915쪽 [주] ③",
+        "cite": {
+          "section_no": "3-2-4",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "폐기물 처리비용",
+        "source": "PDF 915쪽 [주] ④",
+        "cite": {
+          "section_no": "3-2-4",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "section_no": "3-2-4",
+          "marker": "⑤"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎥)당 직종별 인원이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit을 선택함.",
+  "citations": [
+    {
+      "table_id": "p970-t3",
+      "row": "조적공",
+      "column": "수량",
+      "value": "0.380"
+    },
+    {
+      "table_id": "p970-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.252"
+    },
+    {
+      "chunk_id": "p970-x18",
+      "quote": "본 품은 조적벽(높이 3.6m이하)을 재사용하지 아니하는 때의 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p971-x0",
+      "quote": "비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p971-x0",
+      "quote": "폐기물 처리비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p971-x0",
+      "quote": "공구손료 및 경장비(함마 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "조적벽 해체 물량이 10㎥일 때 조적공과 보통인부의 품은 어떻게 되나요?",
+    "조적벽 높이가 4m인 경우에는 이 품을 어떻게 적용해야 하나요?",
+    "해체할 조적벽의 물량(㎥)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:56.095905+00:00",
+    "input_tokens": 12140,
+    "output_tokens": 1619,
+    "source_pages": [
+      970,
+      971,
+      972
+    ],
+    "prompt_sha256": "3d867ed58791bcb0d44fbb5f9cfd3de1f7f1d1ae4518215fa71aac81325b4958",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

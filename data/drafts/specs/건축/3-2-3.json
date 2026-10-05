@@ -1,0 +1,186 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/3-2-3/접착붙이기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "3-2-3",
+    "title": "접착 붙이기('98년 신설, '13, '16, '20, '25년 보완)",
+    "work": "유기질접착제를 사용한 타일의 접착붙이기(벽면)",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "tile_size",
+        "type": "enum",
+        "allowed_values": [
+          "0.04~0.10이하",
+          "0.11~0.20이하",
+          "0.21~0.40이하"
+        ],
+        "unit": "㎡",
+        "required": true,
+        "ask": "타일 규격은 어떻게 됩니까?",
+        "source": "파싱 결과 p643-t0"
+      },
+      {
+        "name": "tile_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반타일",
+          "모자이크(유니트형) 타일",
+          "특수타일",
+          "특정 모양으로 형상화된 타일"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공하는 타일의 종류는 무엇입니까?",
+        "source": "파싱 결과 p643-x4 비고 및 [주] ③"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "타일 붙임 물량은 몇 ㎡입니까?",
+        "source": "일반적인 타일공사 물량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p643-t0",
+        "role": "타일규격별 인원 (시공량 및 보통인부 누락)",
+        "source": "PDF 1쪽 3-2-3 표",
+        "values": {
+          "수량": {
+            "0.04~0.10이하": "2",
+            "0.11~0.20이하": "2",
+            "0.21~0.40이하": "2"
+          }
+        },
+        "cite": {
+          "table_id": "p643-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과에 시공량과 보통인부 수량이 누락되어 자동 계산식을 구성할 수 없습니다."
+      ],
+      "source": "파싱 결과 p643-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "tile_type == 특수타일",
+        "blocked_if": {
+          "input": "tile_type",
+          "op": "==",
+          "value": "특수타일"
+        },
+        "reason": "특수타일 붙임은 시공량의 26~33%를 감산하도록 되어 있어, 단일 비율로 자동 계산할 수 없습니다.",
+        "source": "파싱 결과 p643-x4 비고",
+        "cite": {
+          "chunk_id": "p643-x4",
+          "quote": "이형타일 등) 붙임은 시공량의 26~33%를 감한다."
+        }
+      },
+      {
+        "condition": "tile_type == 특정 모양으로 형상화된 타일",
+        "blocked_if": {
+          "input": "tile_type",
+          "op": "==",
+          "value": "특정 모양으로 형상화된 타일"
+        },
+        "reason": "특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상합니다.",
+        "source": "파싱 결과 p643-x4 [주] ③",
+        "cite": {
+          "chunk_id": "p643-x4",
+          "quote": "③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p643-x4",
+          "quote": "④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과 표에 시공량과 보통인부 수량이 누락되어 일당 작업조 계산식을 구성할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p643-t0",
+      "row": "수량",
+      "column": "0.04~0.10이하",
+      "value": "2"
+    },
+    {
+      "table_id": "p643-t0",
+      "row": "수량",
+      "column": "0.11~0.20이하",
+      "value": "2"
+    },
+    {
+      "table_id": "p643-t0",
+      "row": "수량",
+      "column": "0.21~0.40이하",
+      "value": "2"
+    },
+    {
+      "chunk_id": "p643-x4",
+      "quote": "- 모자이크(유니트형) 타일 붙임은 시공량의 20%를 감한다."
+    },
+    {
+      "chunk_id": "p643-x4",
+      "quote": "이형타일 등) 붙임은 시공량의 26~33%를 감한다."
+    },
+    {
+      "chunk_id": "p643-x4",
+      "quote": "③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p643-x4",
+      "quote": "④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p643-t0)에 시공량(25, 26, 28)과 보통인부(1인) 데이터가 누락되어 있어 자동 계산식을 구성할 수 없습니다.",
+    "특수타일 붙임 시 시공량 감산 비율이 26~33%로 범위로 제시되어 있어 정확한 계산이 불가능합니다."
+  ],
+  "questions": [
+    "타일 규격이 0.15㎡일 때 적용되는 기준은 무엇인가요?",
+    "특수타일 시공 시 감산 비율 26~33% 중 어떤 값을 적용해야 하나요?",
+    "타일 붙임 물량(㎡)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:01:09.618299+00:00",
+    "input_tokens": 23591,
+    "output_tokens": 3951,
+    "source_pages": [
+      643,
+      644
+    ],
+    "prompt_sha256": "d11a20e757b3a3f9d4fa70dd95c5fd2288b4af186c417e54432920a0fa37b3b7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

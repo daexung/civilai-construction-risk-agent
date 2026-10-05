@@ -1,0 +1,104 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-12-3/축중계설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-12-3",
+    "title": "축중계 설치 및 해체",
+    "work": "축중계 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      64
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "회",
+        "required": true,
+        "ask": "축중계 설치 및 해체 횟수는 몇 회입니까?",
+        "source": "PDF 64쪽 2-12-3 표 (회당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p120-t3",
+        "role": "축중계 설치 및 해체 품",
+        "source": "PDF 64쪽 2-12-3 표",
+        "unit": "인/회",
+        "values": {
+          "특별인부": {
+            "수량": "0.051"
+          }
+        },
+        "cite": {
+          "table_id": "p120-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p120-t3",
+          "row_input": "특별인부",
+          "column_input": "수량",
+          "trades": [
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p120-t3에서 특별인부의 단위당 품을 찾는다.",
+        "물량(횟수)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 64쪽 2-12-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 단위(회당)당 품이 직접 명시되어 있어 물량을 곱하는 방식으로 계산합니다.",
+  "citations": [
+    {
+      "table_id": "p120-t3",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.051"
+    },
+    {
+      "chunk_id": "p120-x15",
+      "quote": "[주] 본 품은 이동식 축중계 및 계측기의 조립･설치･해체 기준이다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "축중계 설치 및 해체 품셈은 어디에 있나요?",
+    "이동식 축중계 외에 고정식 축중계 설치 시에도 이 품을 적용할 수 있나요?",
+    "설치 및 해체 횟수를 입력해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:53.661777+00:00",
+    "input_tokens": 11448,
+    "output_tokens": 897,
+    "source_pages": [
+      120,
+      121
+    ],
+    "prompt_sha256": "b29ed75cefc62b7be7869deef154068b184cf88bad1c1b30f1d6d0d6d4831848",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

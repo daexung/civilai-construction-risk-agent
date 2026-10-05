@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-from agent.tools.search.bm25 import CHUNKS, Index, load
+from agent.tools.search.bm25 import Index
 from agent.tools.search.vector import VectorIndex
 
 K = 60             # RRF 표준 상수
@@ -21,9 +21,10 @@ CANDIDATES = 20    # 방식마다 합치기에 쓰는 상위 순위 수
 
 
 class HybridIndex:
-    def __init__(self, bm25: Index | None = None, vector: VectorIndex | None = None):
-        self.vector = vector or VectorIndex()
-        self.bm25 = bm25 or Index(load(CHUNKS))
+    def __init__(self, bm25: Index | None = None, vector: VectorIndex | None = None,
+                 *, config_path: Path | None = None):
+        self.vector = vector or VectorIndex(config_path=config_path)
+        self.bm25 = bm25 or Index(self.vector.chunks)
         self.chunks = self.vector.chunks
         self.by_id = {c["chunk_id"]: c for c in self.chunks}
         self.last_ranks: dict[str, dict] = {}
@@ -32,16 +33,22 @@ class HybridIndex:
     def api_calls(self) -> int:
         return self.vector.api_calls
 
-    def search(self, query: str, k: int = 5) -> list[tuple[float, dict]]:
+    def search_many(self, queries: list[str], k: int = 5) -> list[tuple[float, dict]]:
+        unique = list(dict.fromkeys(queries))
+        vector_results = self.vector.search_many(unique, CANDIDATES)
         ranks: dict[str, dict] = {}
-        for name, hits in (("bm25", self.bm25.search(query, CANDIDATES)),
-                           ("vector", self.vector.search(query, CANDIDATES))):
-            for rank, (_, chunk) in enumerate(hits, 1):
-                ranks.setdefault(chunk["chunk_id"], {})[name] = rank
-        scored = [(sum(1 / (K + r) for r in rs.values()), cid) for cid, rs in ranks.items()]
-        scored.sort(key=lambda s: -s[0])
+        for query, vector_hits in zip(unique, vector_results):
+            for name, hits in (("bm25", self.bm25.search(query, CANDIDATES)), ("vector", vector_hits)):
+                for rank, (_, chunk) in enumerate(hits, 1):
+                    ranks.setdefault(chunk["chunk_id"], {})[(query, name)] = rank
+        scored = [(sum(1 / (K + rank) for rank in rs.values()), cid) for cid, rs in ranks.items()]
+        scored.sort(key=lambda item: -item[0])
         self.last_ranks = ranks
         return [(score, self.by_id[cid]) for score, cid in scored[:k]]
+
+    def search(self, query: str, k: int = 5) -> list[tuple[float, dict]]:
+        return self.search_many([query], k)
+
 
 
 def main() -> None:

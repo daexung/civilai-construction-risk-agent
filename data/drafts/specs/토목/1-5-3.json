@@ -1,0 +1,137 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-5-3/아스팔트기층기계포설_소형장비",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-5-3",
+    "title": "아스팔트 기층 기계포설(소형장비)",
+    "work": "아스팔트 기층 포설 및 고르기, 다짐",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      311
+    ],
+    "inputs": [
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "5~7㎝",
+          "8~10㎝"
+        ],
+        "unit": "㎝",
+        "required": true,
+        "ask": "1층 포설두께는 얼마입니까?",
+        "source": "PDF 311쪽 1-5-3 표"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 311쪽 1-5-3 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p367-t1",
+        "role": "작업조 인원, 장비 대수 및 기준 일일시공량",
+        "source": "PDF 311쪽 1-5-3 표",
+        "values": {
+          "포장공": {
+            "수량": "3"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "아스팔트피니셔": {
+            "수량": "1"
+          },
+          "굴착기": {
+            "수량": "1"
+          },
+          "머캐덤롤러": {
+            "수량": "1"
+          },
+          "타이어롤러": {
+            "수량": "1"
+          },
+          "탠덤롤러": {
+            "수량": "1"
+          },
+          "살수차": {
+            "수량": "0.5"
+          },
+          "시공량(㎡)": {
+            "5~7㎝": "1,750",
+            "8~10㎝": "1,600"
+          }
+        },
+        "cite": {
+          "table_id": "p367-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p367-t1에서 1층 포설두께에 따른 시공량을 확인한다.",
+        "시공 면적을 시공량으로 나누어 작업일수를 구한다.",
+        "작업일수에 표의 직종별 인원 및 장비 대수를 곱하여 총 투입량을 산출한다."
+      ],
+      "source": "PDF 311쪽 1-5-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "일당 작업조형이나, 다수의 고정 규격 장비가 투입되는 반면 현재 명세 형식의 equipment 파라미터는 단일 장비 및 규격 선택형으로 설계되어 있어 모든 장비를 명세할 수 없음.",
+  "citations": [
+    {
+      "table_id": "p367-t1",
+      "row": "시공량(㎡)",
+      "column": "5~7㎝",
+      "value": "1,750"
+    },
+    {
+      "table_id": "p367-t1",
+      "row": "포장공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "chunk_id": "p367-x18",
+      "quote": "본 품은 소형장비(피니셔)를 사용한 아스팔트 기층 포설 기준이다."
+    }
+  ],
+  "open_questions": [
+    "현재 adjusted_daily_crew 모델의 equipment 파라미터가 단일 장비 및 규격 선택형(machine_code_input)으로 설계되어 있어, 본 절과 같이 다수의 고정 규격 장비가 투입되는 경우를 명세할 수 없음."
+  ],
+  "questions": [
+    "1층 포설두께가 6cm일 때 아스팔트 기층 기계포설(소형장비)의 일당 시공량은 얼마인가요?",
+    "현장 여건에 따라 탠덤롤러 대신 다른 다짐 장비를 사용해도 되나요?",
+    "시공 면적을 입력하지 않았는데 총 투입 인원을 알 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:56:41.217899+00:00",
+    "input_tokens": 11720,
+    "output_tokens": 1325,
+    "source_pages": [
+      367,
+      368
+    ],
+    "prompt_sha256": "71d4f7997def1d6241440c508aff754b00532f1955773c3044ba22985c04cf07",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

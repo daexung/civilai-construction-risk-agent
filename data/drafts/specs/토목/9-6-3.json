@@ -1,0 +1,197 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-6-3/지적기준점현황조사",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-6-3",
+    "title": "지적기준점현황조사('21년 신설)",
+    "work": "지적기준점현황조사 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      524,
+      525
+    ],
+    "inputs": [
+      {
+        "name": "point_type",
+        "type": "enum",
+        "allowed_values": [
+          "지적삼각점",
+          "지적도근점",
+          "지적삼각보조점"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현황조사할 지적기준점의 종류는 무엇입니까?",
+        "source": "PDF 524쪽 가. 지적삼각점, 나. 지적도근점 및 [주] ③"
+      },
+      {
+        "name": "is_mountainous",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지적삼각보조점인 경우, 위치가 산악지입니까? (지적삼각점이나 지적도근점인 경우 '아니오'를 선택하세요)",
+        "source": "PDF 524쪽 [주] ③"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "점",
+        "required": true,
+        "ask": "현황조사할 기준점은 몇 점입니까?",
+        "source": "PDF 524쪽 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p580-t0",
+        "role": "지적삼각점 10점당 현황조사 품",
+        "source": "PDF 524쪽 가. 지적삼각점 표",
+        "unit": "인·일/10점",
+        "values": {
+          "합계": {
+            "인원수 합계 지적\n기사": "5.69",
+            "인원수 지적\n산업기\n사": "4.33"
+          }
+        },
+        "cite": {
+          "table_id": "p580-t0"
+        }
+      },
+      {
+        "id": "p580-t1",
+        "role": "지적도근점 10점당 현황조사 품",
+        "source": "PDF 524쪽 나. 지적도근점 표",
+        "unit": "인·일/10점",
+        "values": {
+          "합계": {
+            "인원수 합계 지적\n기사": "0.30",
+            "인원수 지적\n산업기\n사": "0.21"
+          }
+        },
+        "cite": {
+          "table_id": "p580-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p580-t0 또는 p580-t1",
+          "row_input": "합계",
+          "column_input": "직종",
+          "trades": [
+            "지적기사",
+            "지적산업기사"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "표의 품은 10점 기준이므로 1/10 적용",
+            "source": "PDF 524쪽 [주] ②"
+          }
+        ]
+      },
+      "steps": [
+        "기준점 종류(point_type)와 산악지 여부(is_mountainous)에 따라 적용할 표를 결정한다. (지적삼각점: p580-t0, 지적도근점: p580-t1, 지적삼각보조점(일반): p580-t1, 지적삼각보조점(산악지): p580-t0)",
+        "선택된 표의 '합계' 행에서 직종별 품을 찾는다.",
+        "표의 품은 10점 기준이므로 10으로 나누어 1점당 품을 구한다.",
+        "1점당 품에 물량(quantity)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 524쪽 표 및 [주] ②, ③",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "지적도근점측량 등 수반 시 비용",
+        "source": "PDF 524쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p580-x20",
+          "quote": "작업상 지적도근점측량 등이 수반되는 경우에는 별도 계상한다."
+        }
+      },
+      {
+        "item": "선박 등 임차료 실비",
+        "source": "PDF 524쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p580-x20",
+          "quote": "도서지역 등의 조사업무를 위하여 선박 등을 임차할 경우에는 임차료 실비를 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "10점당 품이 표에 직접 제시되어 있으며, 물량(점 수)에 비례하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p580-t0",
+      "row": "합계",
+      "column": "인원수 합계 지적\n기사",
+      "value": "5.69"
+    },
+    {
+      "table_id": "p580-t0",
+      "row": "합계",
+      "column": "인원수 지적\n산업기\n사",
+      "value": "4.33"
+    },
+    {
+      "table_id": "p580-t1",
+      "row": "합계",
+      "column": "인원수 합계 지적\n기사",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p580-t1",
+      "row": "합계",
+      "column": "인원수 지적\n산업기\n사",
+      "value": "0.21"
+    },
+    {
+      "chunk_id": "p580-x20",
+      "quote": "본 품은 지적기준점 10점을 현황조사하는데 소요되는 품으로 1점의 품셈을 산출하기 위해서는 위의\n설명 | 품의 10분의 1을 적용한다."
+    },
+    {
+      "chunk_id": "p580-x20",
+      "quote": "지적삼각보조점의 현황조사는 지적도근점 현황조사품을 준용한다. 다만, 지적삼각보조점의 위치가\n설명 | 산악지에 위치한 경우에는 지적삼각점 현황조사품을 준용할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "지적삼각보조점의 산악지 여부에 대한 명확한 기준(경사도, 표고 등)이 원문에 없어 사용자의 판단에 의존해야 합니다."
+  ],
+  "questions": [
+    "지적도근점 30점을 현황조사할 때 지적기사 품은 어떻게 되나요?",
+    "지적삼각보조점이 산악지에 위치한 경우 어떤 품을 적용해야 하나요?",
+    "현황조사할 기준점의 종류가 무엇인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:16:32.943753+00:00",
+    "input_tokens": 13473,
+    "output_tokens": 2139,
+    "source_pages": [
+      580,
+      581,
+      582
+    ],
+    "prompt_sha256": "a453273099c6f546f4b507b3e90c2e26df3fa496cef8fad6141465d5370641cd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "spec_id": "2026-정오표1차/공통/6-1-4/펌프차타설",
+  "review": "???",
+  "basis": "PDF 74-75 1-2-8 and PDF 59 1-2-1; hand-calculated values from original crew and daily output. Inputs copied from existing A-D cases.",
+  "cases": [
+    {
+      "id": "unit-A",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "unit_basis": {
+          "per": "1㎥",
+          "daily_output": "130",
+          "places": 4
+        },
+        "unit_lines": {
+          "콘크리트공": [
+            "2/65",
+            "0.0308"
+          ],
+          "특별인부": [
+            "1/130",
+            "0.0077"
+          ],
+          "형틀목공": [
+            "1/130",
+            "0.0077"
+          ],
+          "보통인부": [
+            "1/130",
+            "0.0077"
+          ],
+          "콘크리트펌프차": [
+            "4/65",
+            "0.0615"
+          ]
+        }
+      }
+    },
+    {
+      "id": "unit-B",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": false,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "unit_basis": {
+          "per": "1㎥",
+          "daily_output": "130",
+          "places": 4
+        },
+        "unit_lines": {
+          "콘크리트공": [
+            "3/130",
+            "0.0231"
+          ],
+          "특별인부": [
+            "0",
+            "0.0000"
+          ],
+          "형틀목공": [
+            "1/130",
+            "0.0077"
+          ],
+          "보통인부": [
+            "1/130",
+            "0.0077"
+          ],
+          "콘크리트펌프차": [
+            "4/65",
+            "0.0615"
+          ]
+        }
+      }
+    },
+    {
+      "id": "unit-C",
+      "input": {
+        "pump_size": "32m",
+        "volume": "218.4",
+        "structure": "무근",
+        "slump_band": "8~12㎝",
+        "facility_type": "Type-Ⅰ",
+        "site_type": "Type-Ⅰ",
+        "placement": "배관",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "unit_basis": {
+          "per": "1㎥",
+          "daily_output": "218.4",
+          "places": 4
+        },
+        "unit_lines": {
+          "콘크리트공": [
+            "5/364",
+            "0.0137"
+          ],
+          "특별인부": [
+            "5/546",
+            "0.0092"
+          ],
+          "형틀목공": [
+            "5/1092",
+            "0.0046"
+          ],
+          "보통인부": [
+            "5/1092",
+            "0.0046"
+          ],
+          "콘크리트펌프차": [
+            "10/273",
+            "0.0366"
+          ]
+        }
+      }
+    },
+    {
+      "id": "unit-D",
+      "input": {
+        "pump_size": "32m",
+        "volume": "100",
+        "structure": "철근",
+        "slump_band": "18㎝이상",
+        "facility_type": "Type-Ⅲ",
+        "site_type": "Type-Ⅲ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "unit_basis": {
+          "per": "1㎥",
+          "daily_output": "89.6",
+          "places": 3
+        },
+        "unit_lines": {
+          "콘크리트공": [
+            "5/112",
+            "0.045"
+          ],
+          "특별인부": [
+            "5/448",
+            "0.011"
+          ],
+          "형틀목공": [
+            "5/448",
+            "0.011"
+          ],
+          "보통인부": [
+            "5/448",
+            "0.011"
+          ],
+          "콘크리트펌프차": [
+            "5/56",
+            "0.089"
+          ]
+        }
+      }
+    }
+  ],
+  "unit_places_cases": [
+    {
+      "daily_output": "0.5",
+      "places": 2
+    },
+    {
+      "daily_output": "3",
+      "places": 2
+    },
+    {
+      "daily_output": "9.99",
+      "places": 2
+    },
+    {
+      "daily_output": "10",
+      "places": 3
+    },
+    {
+      "daily_output": "99.9",
+      "places": 3
+    },
+    {
+      "daily_output": "100",
+      "places": 4
+    },
+    {
+      "daily_output": "1000",
+      "places": 5
+    }
+  ],
+  "round_quantity_cases": [
+    {
+      "value": "0.00445",
+      "places": 4,
+      "expected": "0.0045"
+    },
+    {
+      "value": "0.00444999",
+      "places": 4,
+      "expected": "0.0044"
+    },
+    {
+      "value": "0",
+      "places": 4,
+      "expected": "0.0000"
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/12-2-4/Control_Air_배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "12-2-4",
+    "title": "Control Air 배관",
+    "work": "Control Air 배관 및 Valve 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      720
+    ],
+    "inputs": [
+      {
+        "name": "item_spec",
+        "type": "enum",
+        "allowed_values": [
+          "1/2 B",
+          "3/4B",
+          "1B",
+          "1 1/2B",
+          "2B",
+          "각종"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배관 규격(1/2 B ~ 2B) 또는 Valve(각종) 중 어느 것입니까?",
+        "source": "PDF 720쪽 12-2-4 표의 규격",
+        "synonyms": {
+          "각종": [
+            "Valve",
+            "밸브"
+          ]
+        }
+      },
+      {
+        "name": "connection_type",
+        "type": "enum",
+        "allowed_values": [
+          "Screw형",
+          "용접"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "접속 방식은 Screw형입니까, 용접입니까?",
+        "source": "PDF 720쪽 12-2-4 표의 열"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m 또는 개",
+        "required": true,
+        "ask": "설치 물량은 얼마입니까? (배관은 m, Valve는 개)",
+        "source": "PDF 720쪽 12-2-4 표 기준 (m당) 및 Valve (개당)"
+      },
+      {
+        "name": "is_no_fire_zone",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "화기사용 금지구역입니까?",
+        "source": "PDF 720쪽 12-2-4 표 비고"
+      },
+      {
+        "name": "is_flange_high_pressure_special",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Flange 접속, 고압 및 특수강관에 해당합니까?",
+        "source": "PDF 720쪽 12-2-4 표 비고"
+      },
+      {
+        "name": "is_stainless",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Stainless관입니까?",
+        "source": "PDF 720쪽 12-2-4 표 비고"
+      },
+      {
+        "name": "is_loop_test",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Loop 시험을 포함합니까?",
+        "source": "PDF 720쪽 12-2-4 표 비고"
+      },
+      {
+        "name": "is_process_pipe",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도압배관 및 Process 배관입니까?",
+        "source": "PDF 720쪽 12-2-4 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p776-t2",
+        "role": "Control Air 배관 및 Valve 설치 단위당 품",
+        "source": "PDF 720쪽 12-2-4 표",
+        "unit": "인/m 또는 인/개",
+        "values": {
+          "1/2 B": {
+            "Screw형": "0.18",
+            "용접": "0.21"
+          },
+          "3/4B": {
+            "Screw형": "0.21",
+            "용접": "0.26"
+          },
+          "1B": {
+            "Screw형": "0.24",
+            "용접": "0.29"
+          },
+          "1 1/2B": {
+            "Screw형": "0.36",
+            "용접": "0.43"
+          },
+          "2B": {
+            "Screw형": "0.48",
+            "용접": "0.58"
+          },
+          "각종": {
+            "Screw형": "0.15",
+            "용접": "0.20"
+          }
+        },
+        "cite": {
+          "table_id": "p776-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p776-t2",
+          "row_input": "item_spec",
+          "column_input": "connection_type",
+          "trades": [
+            "계장공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "is_flange_high_pressure_special": true
+            },
+            "rate": "0.2",
+            "applies_to": [
+              "계장공"
+            ],
+            "source": "PDF 720쪽 12-2-4 표 비고"
+          },
+          {
+            "when": {
+              "is_stainless": true
+            },
+            "rate": "0.3",
+            "applies_to": [
+              "계장공"
+            ],
+            "source": "PDF 720쪽 12-2-4 표 비고"
+          },
+          {
+            "when": {
+              "is_loop_test": true
+            },
+            "rate": "0.25",
+            "applies_to": [
+              "계장공"
+            ],
+            "source": "PDF 720쪽 12-2-4 표 비고"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_no_fire_zone": true
+            },
+            "change": "1.5배 가산",
+            "source": "PDF 720쪽 12-2-4 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p776-t2에서 규격과 접속 방식에 따른 계장공 단위당 품을 찾는다.",
+        "물량을 곱해 기본 총 품을 구한다.",
+        "비고의 조건에 따라 할증(20%, 30%, 25%) 및 1.5배 가산을 적용한다."
+      ],
+      "source": "PDF 720쪽 12-2-4 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "도압배관 및 Process 배관인 경우",
+        "blocked_if": {
+          "input": "is_process_pipe",
+          "op": "==",
+          "value": true
+        },
+        "reason": "도압배관 및 Process 배관에는 본 품을 적용하지 않음",
+        "source": "PDF 720쪽 12-2-4 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p776-x20",
+            "quote": "도압배관 및 Process 배관에는 적용치 않는다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "배관지지물 설치",
+        "source": "PDF 720쪽 12-2-4 [주] ②",
+        "cite": {
+          "chunk_id": "p776-x20",
+          "quote": "배관지지물은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m, 개)당 계장공의 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p776-t2",
+      "row": "1/2 B",
+      "column": "Screw형",
+      "value": "0.18"
+    },
+    {
+      "table_id": "p776-t2",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 화기사용 금지구역은 1.5배 가산한다. - Flange 접속, 고압 및 특수강관은 20% 가산한다. - Stainless관은 30% 가산한다. - Loop 시험은 25%를 가산한다."
+    },
+    {
+      "chunk_id": "p776-x20",
+      "quote": "도압배관 및 Process 배관에는 적용치 않는다."
+    },
+    {
+      "chunk_id": "p776-x20",
+      "quote": "배관지지물은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p776-x20",
+      "quote": "관의 절관, 나사내기, 구부림, Union, Elbow, Tee 부속품 설치품은 포함되어 있다."
+    }
+  ],
+  "open_questions": [
+    "화기사용 금지구역의 '1.5배 가산한다'가 기존 품에 1.5배를 더하는 것(+150%)인지, 기존 품에 1.5배를 곱하여 적용하는 것(*1.5, 즉 +50%)인지 명확하지 않습니다.",
+    "Flange 접속, 고압 및 특수강관(20% 가산), Stainless관(30% 가산) 등의 할증이 배관뿐만 아니라 Valve(개당) 항목에도 동일하게 적용되는지 원문상 명확하지 않습니다."
+  ],
+  "questions": [
+    "배관 규격이 1B이고 용접 접속일 때 계장공 품은 얼마인가요?",
+    "화기사용 금지구역에서 1.5배 가산은 기존 품에 1.5배를 더하는 것인가요, 아니면 총 품을 1.5배로 계산하는 것인가요?",
+    "배관지지물 설치 품은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:30:06.495977+00:00",
+    "input_tokens": 11775,
+    "output_tokens": 2838,
+    "source_pages": [
+      776,
+      777
+    ],
+    "prompt_sha256": "9818586e71344bc8006ba1a0e7f0b5af969032be65d6f308c413a76e9c3b5af8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

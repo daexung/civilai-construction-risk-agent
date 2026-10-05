@@ -1,0 +1,127 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/7-1-5/카운터형세면기설치_분리형",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "7-1-5",
+    "title": "카운터형 세면기 설치(분리형)",
+    "work": "기본 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      684
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 카운터형 세면기(분리형)의 개수는 몇 개인가요?",
+        "source": "PDF 684쪽 7-1-5 표 단위 (세면기 개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p740-t1",
+        "role": "카운터형 세면기 설치(분리형) 단위당 품",
+        "source": "PDF 684쪽 7-1-5 표",
+        "unit": "인/개",
+        "values": {
+          "위생공": {
+            "수량": "0.285"
+          },
+          "보통인부": {
+            "수량": "0.112"
+          }
+        },
+        "cite": {
+          "table_id": "p740-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p740-t1",
+          "row_input": null,
+          "column_input": "수량",
+          "trades": [
+            "위생공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p740-t1에서 직종별 단위당 품을 확인한다.",
+        "물량(quantity)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 684쪽 7-1-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p740-x9",
+          "quote": "③ 공구손료 및 경장비(드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p740-t1",
+      "row": "위생공",
+      "column": "수량",
+      "value": "0.285"
+    },
+    {
+      "table_id": "p740-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.112"
+    },
+    {
+      "chunk_id": "p740-x9",
+      "quote": "③ 공구손료 및 경장비(드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "원문 PDF 페이지 번호는 684쪽이나 파싱 결과의 ID는 p740으로 되어 있어 파싱 결과를 그대로 사용함."
+  ],
+  "questions": [
+    "설치할 카운터형 세면기(분리형)의 개수는 몇 개인가요?",
+    "세면기와 세면대가 일체형으로 반입된 경우에도 이 품을 적용하나요? (일체형은 7-1-4 적용)",
+    "기존 세면기의 철거 작업이 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T23:00:51.064231+00:00",
+    "input_tokens": 11552,
+    "output_tokens": 1194,
+    "source_pages": [
+      740,
+      741
+    ],
+    "prompt_sha256": "09b37d324618626e0b3e9e215b76a9e30a1159f6ccbed10129029028023d3c56",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -12,12 +12,14 @@
 # 행 하나라도 구조가 불확실하면 그 표 청크 전체를 structure=uncertain으로 두고 자동 적산에 쓰지 않는다.
 
 import argparse
+from collections import defaultdict
 import json
 import re
 import unicodedata
 from pathlib import Path
 
 PDF = "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
+PAGE_MAP = Path(__file__).resolve().parents[1] / "data/processed/page_map.json"
 
 SECTION_NO_RE = re.compile(r"^(\d+-\d+(?:-\d+)?)")
 # 표 바로 위에 따로 인쇄되는 기준 표기: (일당), (㎥당), (100㎡당), (ton당), (개소당)
@@ -42,6 +44,29 @@ def section_no(title: str) -> str | None:
     return match.group(1) if match else None
 
 
+def has_label_shift(rows: list[dict]) -> bool:
+    """Find duplicate named values beside an unnamed numeric row in one group.
+
+    p747-t0 is confirmed against the source image; other matches use this rule.
+    Equal values alone are common in valid tables; require an unnamed row with
+    the same group key before treating repeated named rows as a label shift.
+    """
+    groups = defaultdict(lambda: {"named": [], "unnamed": False})
+    for row in rows:
+        cells = [cell.strip() for cell in row["text"].split("|")]
+        if len(cells) < 4:
+            continue
+        key = tuple(cells[:2])
+        label = cells[2]
+        values = tuple(cells[3:])
+        if re.match(r"^\d", label):
+            groups[key]["unnamed"] = True
+        elif label and values:
+            groups[key]["named"].append(values)
+    return any(group["unnamed"] and len(group["named"]) > 1
+               and len(group["named"]) != len(set(group["named"]))
+               for group in groups.values())
+
 def parse_heading(content: str) -> dict | None:
     """'2. 인력편성 (일당)' → {no, title, basis, has_body}. 소제목이 아니면 None."""
     # 전각 번호('２.')만 반각으로 바꾼다. 전체를 정규화하면 본문의 '①'이 '1'이 되어 본문 시작을 놓친다
@@ -62,7 +87,21 @@ def parse_heading(content: str) -> dict | None:
     return {"no": match.group(1), "title": title, "basis": basis, "has_body": has_body}
 
 
-def make_chunks(records: list[dict], pdf: str = PDF) -> list[dict]:
+def page_divisions(path: Path = PAGE_MAP) -> dict[int, str | None]:
+    pages = json.loads(path.read_text(encoding="utf-8"))["pages"]
+    return {int(page): details["division"].removesuffix("부문") if details.get("division") else None
+            for page, details in pages.items()}
+
+
+def make_chunks(records: list[dict], pdf: str = PDF,
+                divisions: dict[int, str | None] | None = None) -> list[dict]:
+    divisions = page_divisions() if divisions is None else divisions
+    page_ordinals = []
+    page_counts = defaultdict(int)
+    for record in records:
+        page = record["page"]
+        page_ordinals.append(page_counts[page])
+        page_counts[page] += 1
     chunks = []
     pending_basis = None     # (레코드 번호, 글자): 다음 표에 붙일 기준 표기
     text_group = []          # 이어지는 줄글 레코드 번호
@@ -95,10 +134,11 @@ def make_chunks(records: list[dict], pdf: str = PDF) -> list[dict]:
         subsection = current_sub(first["section"])
         starts_with_heading = subsection is not None and subsection["record_id"] == ids[0]
         chunks.append({
-            "chunk_id": f"p{first['page']}-x{ids[0]}",
+            "chunk_id": f"p{first['page']}-x{page_ordinals[ids[0]]}",
             "kind": "text",
             "section": first["section"],
             "section_no": section_no(first["section"]),
+            "division": divisions.get(first["page"]),
             "subsection": subsection,
             "pages": [first["page"]],
             "source": {"pdf": pdf, "page": first["page"], "table_id": None, "bbox": None},
@@ -130,6 +170,7 @@ def make_chunks(records: list[dict], pdf: str = PDF) -> list[dict]:
                 basis = pending_basis[1]
             pending_basis = None
             subsection = current_sub(record["section"])
+            label_shift = has_label_shift([records[j] for j in ids])
             uncertain = [j for j in ids if records[j]["structure"]["status"] != "ok"]
             lines = header_lines(record, subsection, False) + ([f"기준 {basis}"] if basis else []) \
                 + [body(records[j]) for j in ids]
@@ -138,12 +179,14 @@ def make_chunks(records: list[dict], pdf: str = PDF) -> list[dict]:
                 "kind": "table",
                 "section": record["section"],
                 "section_no": section_no(record["section"]),
+                "division": divisions.get(record["page"]),
                 "subsection": subsection,
                 "pages": [record["page"]],
                 "source": {"pdf": pdf, "page": record["page"], "table_id": table_id, "bbox": record["bbox"]},
                 "basis": basis,
-                "structure": "uncertain" if uncertain else "ok",
+                "structure": "uncertain" if uncertain or label_shift else "ok",
                 "uncertain_record_ids": uncertain,
+                "issues": ["label_shift: 이름 있는 행과 이름 없는 숫자 행이 같은 그룹에 있고 이름 있는 행의 값이 중복됨"] if label_shift else [],
                 "record_ids": ids,
                 "text": "\n".join(lines),
             })
@@ -199,6 +242,7 @@ def main() -> None:
     print(f"절 {len(sections)}개 중 소제목이 있는 절 {len(with_sub)}개")
     print(f"구조 불확실 표 {sum(c['structure'] == 'uncertain' for c in tables)}개, "
           f"기준 표기 없는 표 {sum(not c['basis'] for c in tables)}개")
+    print(f"부문 없는 조각 {sum(c['division'] is None for c in chunks)}개")
 
 
 if __name__ == "__main__":

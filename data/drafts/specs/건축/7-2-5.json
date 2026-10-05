@@ -1,0 +1,154 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/7-2-5/물받이홈통설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "7-2-5",
+    "title": "물받이홈통 설치",
+    "work": "물받이홈통 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      614,
+      615
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "물받이홈통 설치 물량은 몇 개소입니까?",
+        "source": "PDF 614쪽 7-2-5 표 단위 (개소당)"
+      },
+      {
+        "name": "use_equipment",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "고소작업차 등 장비를 사용합니까? (사용 시 기계경비 별도 계상)",
+        "source": "PDF 615쪽 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p670-t3",
+        "role": "물받이홈통 설치 단위당 품",
+        "source": "PDF 614쪽 7-2-5 물받이홈통 설치 표",
+        "unit": "인/개소",
+        "values": {
+          "배관공": {
+            "수량": "0.08"
+          },
+          "보통인부": {
+            "수량": "0.02"
+          }
+        },
+        "cite": {
+          "table_id": "p670-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p670-t3",
+          "column_input": "수량",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 614쪽 7-2-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "장비(고소작업차 등) 기계경비",
+        "source": "PDF 615쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p671-x0",
+          "quote": "장비(고소작업차 등)가 필요할 경우 기계경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "잡재료 및 소모재료(실리콘 등)",
+        "source": "PDF 615쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p671-x0",
+          "quote": "잡재료 및 소모재료(실리콘 등)는 주재료비의 2%로 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당) 품이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p670-t3",
+      "row": "배관공",
+      "column": "수량",
+      "value": "0.08"
+    },
+    {
+      "table_id": "p670-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.02"
+    },
+    {
+      "chunk_id": "p671-x0",
+      "quote": "본 품은 처마 또는 지붕배수구에 연결하는 물받이홈통의 설치 기준이다."
+    },
+    {
+      "chunk_id": "p671-x0",
+      "quote": "장비(고소작업차 등)가 필요할 경우 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p671-x0",
+      "quote": "잡재료 및 소모재료(실리콘 등)는 주재료비의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "잡재료 및 소모재료는 주재료비의 2%로 계상하도록 되어 있으나, 현재 cost_rules는 labor_subtotal만 지원하므로 not_calculated로 처리했습니다."
+  ],
+  "questions": [
+    "물받이홈통 설치 물량은 몇 개소입니까?",
+    "고소작업차 등 장비를 사용합니까?",
+    "주재료비는 얼마입니까? (잡재료비 계산용)"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:05:28.940302+00:00",
+    "input_tokens": 12124,
+    "output_tokens": 1428,
+    "source_pages": [
+      670,
+      671,
+      672
+    ],
+    "prompt_sha256": "ab65568fc5460245c93f1ba99bc4344c102e9242a9c93e842fa6661e91df16ad",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

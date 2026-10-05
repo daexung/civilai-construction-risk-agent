@@ -1,0 +1,150 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/4-4-5/녹지경계분리재설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "4-4-5",
+    "title": "녹지경계분리재 설치",
+    "work": "녹지경계분리재 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "녹지경계분리재 설치 물량은 몇 m입니까?",
+        "source": "PDF 1쪽 4-4-5 표 시공량(m)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p154-t1",
+        "role": "녹지경계분리재 설치 작업조 인원 및 시공량",
+        "source": "PDF 1쪽 4-4-5 표",
+        "unit": "인/작업조; m/일",
+        "values": {
+          "조경공": {
+            "수량": "2",
+            "시공량(m)": "50"
+          },
+          "보통인부": {
+            "수량": "1",
+            "시공량(m)": "50"
+          }
+        },
+        "cite": {
+          "table_id": "p154-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p154-t1",
+          "row": "조경공",
+          "column": "시공량(m)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p154-t1",
+          "column": "수량",
+          "trades": [
+            "조경공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p154-t1에서 기준시공량(50m)을 가져온다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 1쪽 4-4-5 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "터파기, 되메우기, 다짐 등 토공 작업",
+        "source": "PDF 1쪽 4-4-5 [주] ③",
+        "cite": {
+          "chunk_id": "p154-x8",
+          "quote": "터파기, 되메우기, 다짐 등 토공 작업은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p154-x8",
+          "quote": "공구손료 및 경장비(드릴, 절단기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 표로 주어져 있어 기준 일일시공량과 작업조 인원을 이용해 계산하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p154-t1",
+      "row": "조경공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p154-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p154-t1",
+      "row": "조경공",
+      "column": "시공량(m)",
+      "value": "50"
+    },
+    {
+      "chunk_id": "p154-x8",
+      "quote": "터파기, 되메우기, 다짐 등 토공 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p154-x8",
+      "quote": "공구손료 및 경장비(드릴, 절단기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "녹지경계분리재 설치 물량은 몇 m입니까?",
+    "바탕면정리 및 먹매김 작업이 포함되어 있는데, 현장 여건상 추가적인 바탕면 처리가 필요한 경우 어떻게 적용합니까?",
+    "터파기, 되메우기 등 토공 작업 물량은 어떻게 됩니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:12.056760+00:00",
+    "input_tokens": 11553,
+    "output_tokens": 1420,
+    "source_pages": [
+      154,
+      155
+    ],
+    "prompt_sha256": "38a05da95bd4b4280af40a097eaaa220195d2a055fdb4c8a6cb98805bc47df2f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

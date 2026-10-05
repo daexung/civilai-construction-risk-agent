@@ -1,0 +1,182 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-20/재래난간철거공",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-20",
+    "title": "재래난간 철거공",
+    "work": "재래난간 철거 및 재료 산출",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      886,
+      887
+    ],
+    "inputs": [
+      {
+        "name": "part",
+        "type": "enum",
+        "allowed_values": [
+          "횡재부",
+          "속주"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철거할 부분이 횡재부입니까, 속주입니까?",
+        "source": "PDF 886쪽 2-1-20 재래난간 철거공 표의 구분"
+      },
+      {
+        "name": "material",
+        "type": "enum",
+        "allowed_values": [
+          "강재난간",
+          "경량형강제난간",
+          "알루미늄합금제난간"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "난간의 규격(재질)은 무엇입니까?",
+        "source": "PDF 886쪽 2-1-20 재래난간 철거공 표의 규격"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "철거할 난간의 물량은 몇 m입니까?",
+        "source": "PDF 886쪽 2-1-20 재래난간 철거공 표의 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p943-t0",
+        "role": "사용 재료",
+        "source": "PDF 887쪽 ⑤ 사용 재료",
+        "values": {
+          "강재난간": {
+            "횡 재 부(10m당) 산소(㎥)": "1.8",
+            "횡 재 부(10m당) 아세틸렌(㎏)": "0.8"
+          },
+          "경량형강제난간": {
+            "횡 재 부(10m당) 산소(㎥)": "1.2",
+            "횡 재 부(10m당) 아세틸렌(㎏)": "0.8"
+          },
+          "알루미늄합금제난간": {
+            "횡 재 부(10m당) 산소(㎥)": "1.2",
+            "횡 재 부(10m당) 아세틸렌(㎏)": "0.8"
+          }
+        },
+        "cite": {
+          "table_id": "p943-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "입력된 구분(횡재부/속주)과 규격(강재난간 등)에 따라 p942-t1에서 배치인원과 시공량을 찾는다.",
+        "작업일수 = 철거 물량 ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 배치인원으로 구한다.",
+        "횡재부의 경우 p943-t0에서 규격에 맞는 산소와 아세틸렌 사용량을 찾아 물량(10m당)에 비례하여 산출한다."
+      ],
+      "source": "PDF 886쪽 2-1-20 재래난간 철거공 표 및 887쪽 ⑤ 사용 재료",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "발생재 운반비",
+        "source": "PDF 886쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p942-x20",
+          "quote": "③ 발생재 운반비는 개개의 발생량으로 산출한다."
+        }
+      },
+      {
+        "item": "발생된 강재, 알루미늄재의 운반",
+        "source": "PDF 886쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p942-x20",
+          "quote": "④ 발생된 강재, 알루미늄재의 운반은 지정지로 한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "표의 파싱 결과(p942-t1)가 다차원 구조를 띠고 있어 행/열 이름 중복 없이 JSON 객체로 매핑하기 어렵고, 자동 계산 모델에 직접 적용하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p943-t0",
+      "row": "강재난간",
+      "column": "횡 재 부(10m당) 산소(㎥)",
+      "value": "1.8"
+    },
+    {
+      "table_id": "p943-t0",
+      "row": "강재난간",
+      "column": "횡 재 부(10m당) 아세틸렌(㎏)",
+      "value": "0.8"
+    },
+    {
+      "table_id": "p943-t0",
+      "row": "경량형강제난간",
+      "column": "횡 재 부(10m당) 산소(㎥)",
+      "value": "1.2"
+    },
+    {
+      "table_id": "p943-t0",
+      "row": "경량형강제난간",
+      "column": "횡 재 부(10m당) 아세틸렌(㎏)",
+      "value": "0.8"
+    },
+    {
+      "table_id": "p943-t0",
+      "row": "알루미늄합금제난간",
+      "column": "횡 재 부(10m당) 산소(㎥)",
+      "value": "1.2"
+    },
+    {
+      "table_id": "p943-t0",
+      "row": "알루미늄합금제난간",
+      "column": "횡 재 부(10m당) 아세틸렌(㎏)",
+      "value": "0.8"
+    },
+    {
+      "chunk_id": "p942-x20",
+      "quote": "③ 발생재 운반비는 개개의 발생량으로 산출한다."
+    },
+    {
+      "chunk_id": "p942-x20",
+      "quote": "④ 발생된 강재, 알루미늄재의 운반은 지정지로 한다."
+    }
+  ],
+  "open_questions": [
+    "p942-t1 표의 파싱 결과가 행 이름이 중복되는 형태(예: '횡재부' 행이 여러 개)로 되어 있어, JSON의 2차원 딕셔너리 구조로 완벽히 변환하기 어렵습니다."
+  ],
+  "questions": [
+    "재래난간 철거공에서 횡재부 강재난간 50m를 철거할 때 필요한 인력과 재료는 어떻게 계산하나요?",
+    "속주 철거 시에도 산소와 아세틸렌 재료비가 계상되나요?",
+    "철거 후 발생한 강재의 운반비는 어떻게 처리해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:52:05.986572+00:00",
+    "input_tokens": 25700,
+    "output_tokens": 4378,
+    "source_pages": [
+      942,
+      943,
+      944
+    ],
+    "prompt_sha256": "b7aebc9be17d90bb87b2f1a0fa8ec077750e1c0b1952ee9324033944d1dfe5ee",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

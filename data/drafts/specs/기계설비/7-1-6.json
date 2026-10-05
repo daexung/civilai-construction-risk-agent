@@ -1,0 +1,169 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/7-1-6/욕조설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "7-1-6",
+    "title": "욕조 설치",
+    "work": "욕조 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      684
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 욕조의 수량은 몇 개입니까?",
+        "source": "7-1-6 표 단위 (개당)"
+      },
+      {
+        "name": "bathtub_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반욕조",
+          "월풀욕조"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 욕조의 종류는 무엇입니까? (월풀욕조는 본 품셈 적용 제외)",
+        "source": "7-1-6 [주] ①",
+        "excluded": {
+          "월풀욕조": "월풀욕조 제외"
+        },
+        "synonyms": {
+          "일반욕조": [
+            "일반 욕조",
+            "기본 욕조"
+          ],
+          "월풀욕조": [
+            "월풀 욕조",
+            "스파 욕조"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p740-t2",
+        "role": "욕조 설치 직종별 인력 품",
+        "source": "7-1-6 욕조 설치 표",
+        "unit": "인/개",
+        "values": {
+          "위생공": {
+            "수량": "0.634"
+          },
+          "보통인부": {
+            "수량": "0.203"
+          }
+        },
+        "cite": {
+          "table_id": "p740-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p740-t2",
+          "row_input": "trades",
+          "column_input": "수량",
+          "trades": [
+            "위생공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p740-t2에서 직종별 단위당 품을 가져온다.",
+        "물량(quantity)을 곱해 총 품을 구한다."
+      ],
+      "source": "7-1-6 욕조 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "bathtub_type == 월풀욕조",
+        "blocked_if": {
+          "input": "bathtub_type",
+          "op": "==",
+          "value": "월풀욕조"
+        },
+        "reason": "월풀욕조는 본 품셈 적용 기준에서 제외됨",
+        "source": "7-1-6 [주] ①",
+        "cite": {
+          "chunk_id": "p740-x15",
+          "quote": "본 품은 욕조(월풀욕조 제외)를 설치하는 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p740-x15",
+          "quote": "공구손료 및 경장비(드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 명시되어 있어 물량을 곱하는 방식으로 계산합니다.",
+  "citations": [
+    {
+      "table_id": "p740-t2",
+      "row": "위생공",
+      "column": "수량",
+      "value": "0.634"
+    },
+    {
+      "table_id": "p740-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.203"
+    },
+    {
+      "chunk_id": "p740-x15",
+      "quote": "본 품은 욕조(월풀욕조 제외)를 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p740-x15",
+      "quote": "공구손료 및 경장비(드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "욕조 10개를 설치할 때 위생공과 보통인부의 품은 각각 얼마나 드나요?",
+    "월풀욕조를 설치하려고 하는데 이 품셈을 적용해서 계산할 수 있나요?",
+    "설치할 욕조의 수량을 입력하지 않았습니다. 몇 개를 설치하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:40:52.363607+00:00",
+    "input_tokens": 11532,
+    "output_tokens": 1489,
+    "source_pages": [
+      740,
+      741
+    ],
+    "prompt_sha256": "25c4a21e3b71a3d76b81309a75e9f5adf0a1f3b63c6801178f7fcc29d59ce436",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

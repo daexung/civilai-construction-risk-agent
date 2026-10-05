@@ -1,0 +1,250 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-3/아스팔트포장절삭후덧씌우기",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-3",
+    "title": "아스팔트 포장 절삭 후 아스팔트 덧씌우기(1회 절삭, 1회 포장)('20, '24, '25 '26년 보완)",
+    "work": "아스팔트 포장 절삭 후 아스팔트 덧씌우기(1회 절삭, 1회 포장)",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      873,
+      874
+    ],
+    "inputs": [
+      {
+        "name": "type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type",
+          "C-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건별 적용기준(A-Type, B-Type, C-Type)은 무엇입니까?",
+        "decision_table": "p930-t0",
+        "source": "PDF 873쪽 p929-t1, 874쪽 p930-t0"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 면적은 몇 ㎡입니까?",
+        "source": "PDF 873쪽 p929-t1 시공량 단위"
+      },
+      {
+        "name": "roundabout_included",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "일당시공량 내에 회전교차로 1개소가 포함되어 있습니까?",
+        "source": "PDF 873쪽 p929-t1 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p929-t1",
+        "role": "타입별 인원, 장비 수량 및 시공량",
+        "source": "PDF 873쪽 2-1-3 표",
+        "values": {
+          "포장공 보통인부_1": {
+            "단위": "인",
+            "A-Type 수량": "4",
+            "A-Type 시공량\n(㎡)": "5,000",
+            "B-Type 수량": "4",
+            "B-Type 시공량\n(㎡)": "3,400",
+            "C-Type 수량": "4",
+            "C-Type 시공량\n(㎡)": "1,800"
+          },
+          "포장공 보통인부_2": {
+            "단위": "인",
+            "A-Type 수량": "2",
+            "A-Type 시공량\n(㎡)": "5,000",
+            "B-Type 수량": "2",
+            "B-Type 시공량\n(㎡)": "3,400",
+            "C-Type 수량": "2",
+            "C-Type 시공량\n(㎡)": "1,800"
+          },
+          "노면파쇄기": {
+            "규격": "2m",
+            "단위": "대",
+            "A-Type 수량": "2",
+            "B-Type 수량": "2",
+            "C-Type 수량": "1"
+          },
+          "로더(타이어)+소형노면파쇄기": {
+            "규격": "0.95㎥",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "로더(타이어)": {
+            "규격": "0.57㎥",
+            "단위": "대",
+            "A-Type 수량": "3",
+            "B-Type 수량": "2",
+            "C-Type 수량": "1"
+          },
+          "아스팔트피니셔": {
+            "규격": "3.0m",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "머캐덤롤러": {
+            "규격": "10∼12t",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "타이어롤러": {
+            "규격": "8∼15t",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "탠덤롤러": {
+            "규격": "5∼8t",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "아스팔트디스트리뷰터": {
+            "규격": "3,800L",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "살수차": {
+            "규격": "16,000ℓ",
+            "단위": "대",
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "비고": {
+            "내용": "- 일당시공량 내에 회전교차로 1개소를 포함한 경우는 시공량의 17%를 감하여 적용한다."
+          }
+        },
+        "cite": {
+          "table_id": "p929-t1"
+        }
+      },
+      {
+        "id": "p930-t0",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 874쪽 현장 여건별 적용기준 표",
+        "values": {
+          "A Type": {
+            "적용기준": "- 고속도로, 자동차전용도로, 평면교차로가 없는 일반도로 등과 같이 시공구간이 연결되어\n있는 경우"
+          },
+          "B Type": {
+            "적용기준": "- 평면교차로 등으로 인해 시공구간이 단절되어 일시적인 장비의 이동이 발생하되, 이동을\n위한 장비의 운반이 발생되지 않는 경우"
+          },
+          "C Type": {
+            "적용기준": "- 평면교차로 등으로 인해 시공구간이 단절되어 작업위치 이동을 위한 장비의 운반이\n발생되는 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p930-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p929-t1에서 type에 해당하는 시공량과 인원, 장비 수량을 찾는다.",
+        "roundabout_included가 true인 경우 시공량의 17%를 감산한다.",
+        "작업일수 = volume ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 인원, 장비 대·일 = 작업일수 × 장비 수량으로 구한다."
+      ],
+      "source": "PDF 873쪽 p929-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "절삭시 팁(날) 계상",
+        "source": "PDF 874쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p930-x8",
+          "quote": "④ 절삭시 1㎥당 팁(날)을 0.69개 계상한다."
+        }
+      },
+      {
+        "item": "본 품외의 장비 기계경비",
+        "source": "PDF 874쪽 [주] ⑥",
+        "cite": {
+          "chunk_id": "p930-x8",
+          "quote": "⑥ 본 품외의 장비(아스팔트온도조절장비, 진공청소차 등)를 추가 투입하는 경우에 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "표 구조가 adjusted_daily_crew 모델의 base_output 파라미터 형식(별도의 시공량 표)과 맞지 않아 자동 계산이 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p929-t1",
+      "row": "포장공 보통인부",
+      "column": "A-Type 시공량\n(㎡)",
+      "value": "5,000"
+    },
+    {
+      "table_id": "p930-t0",
+      "row": "A Type",
+      "column": "적용기준"
+    },
+    {
+      "chunk_id": "p930-x8",
+      "quote": "④ 절삭시 1㎥당 팁(날)을 0.69개 계상한다."
+    },
+    {
+      "chunk_id": "p930-x8",
+      "quote": "⑥ 본 품외의 장비(아스팔트온도조절장비, 진공청소차 등)를 추가 투입하는 경우에 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 '포장공 보통인부'가 두 번 나오는데, 원문에서는 '포장공'과 '보통인부'가 각각 4인, 2인으로 나뉘어 있습니다. 파싱 오류로 인해 표를 정확히 반영하기 어렵습니다.",
+    "회전교차로가 2개소 이상 포함된 경우의 감산 비율이 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "현장 여건이 A-Type일 때 시공량은 얼마입니까?",
+    "회전교차로가 2개소 포함된 경우 시공량 감산은 어떻게 적용합니까?",
+    "절삭 깊이가 70mm를 초과하는 경우 이 품을 적용할 수 있습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:54:10.710042+00:00",
+    "input_tokens": 26358,
+    "output_tokens": 5873,
+    "source_pages": [
+      929,
+      930,
+      931
+    ],
+    "prompt_sha256": "34b2e35087c40beebf008d68809d1d6730e6ddb7c5f4d71d4c3c74ea814cb146",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

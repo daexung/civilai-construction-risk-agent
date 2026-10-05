@@ -1,0 +1,202 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-2-3/자갈살포",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-2-3",
+    "title": "자갈살포",
+    "work": "자갈살포",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      346
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "자갈 살포 물량은 몇 ㎥입니까?",
+        "source": "표 p402-t0 시공량 단위"
+      },
+      {
+        "name": "signalman_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "모터카와 자갈화차 운행 시 작업자 안전을 위한 신호수(보통인부)를 계상합니까?",
+        "source": "4-2-3 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p402-t0",
+        "role": "자갈살포 작업조 인원 및 장비 대수, 시공량",
+        "source": "4-2-3 자갈살포 표",
+        "unit": "인/작업조; 대/작업조; ㎥/일",
+        "values": {
+          "궤도공": {
+            "수량": "1",
+            "시공량(㎥)": "240"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "모터카": {
+            "수량": "1"
+          },
+          "자갈화차": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p402-t0"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "signalman_needed": true
+        },
+        "when_text": "신호수(보통인부) 1인을 별도 계상하는 경우",
+        "change": {
+          "보통인부": "+1"
+        },
+        "source": "4-2-3 [주] ③",
+        "cite": {
+          "chunk_id": "p402-x4",
+          "quote": "모터카와 자갈화차의 운행시 작업자의 안전을 위하여 신호수(보통인부) 1인을 별도 계상할 수 있다."
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p402-t0",
+          "row": "궤도공",
+          "column": "시공량(㎥)"
+        },
+        "crew": {
+          "table": "p402-t0",
+          "column": "수량",
+          "trades": [
+            "궤도공",
+            "보통인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "모터카",
+            "table": "p402-t0",
+            "row": "모터카",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "자갈화차",
+            "table": "p402-t0",
+            "row": "자갈화차",
+            "column": "수량",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p402-t0에서 기준 일일시공량(240㎥)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 조정된 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "4-2-3 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "자갈상차 및 운반비",
+        "source": "4-2-3 [주] ②",
+        "cite": {
+          "chunk_id": "p402-x4",
+          "quote": "자갈상차 및 운반비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "기준 일일시공량(240㎥)과 그에 따른 작업조 인원 및 장비 대수가 명시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p402-t0",
+      "row": "궤도공",
+      "column": "시공량(㎥)",
+      "value": "240"
+    },
+    {
+      "table_id": "p402-t0",
+      "row": "궤도공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p402-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p402-t0",
+      "row": "모터카",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p402-t0",
+      "row": "자갈화차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p402-x4",
+      "quote": "모터카와 자갈화차의 운행시 작업자의 안전을 위하여 신호수(보통인부) 1인을 별도 계상할 수 있다."
+    },
+    {
+      "chunk_id": "p402-x4",
+      "quote": "자갈상차 및 운반비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "장비가 모터카, 자갈화차 2종류이므로 quantity_model.params.equipment를 배열로 확장하여 작성했습니다.",
+    "시공량이 단일 값이므로 base_output에 row_input/column_input 대신 고정 row/column을 사용했습니다.",
+    "[주] ④ '투입장비는 작업여건에 따라 장비조합을 변경하여 적용할 수 있다'는 조건은 정량화하기 어려워 명세에 반영하지 않았습니다."
+  ],
+  "questions": [
+    "자갈 살포 물량이 500㎥일 때 궤도공은 몇 인·일이 필요한가요?",
+    "신호수를 배치해야 하는 기준이 따로 있나요?",
+    "자갈 살포 작업에 필요한 품을 계산해줘."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:57:09.081260+00:00",
+    "input_tokens": 11561,
+    "output_tokens": 1901,
+    "source_pages": [
+      402,
+      403
+    ],
+    "prompt_sha256": "1a7d75079d8e7b6cff70b5ff1c53c7c3c34f7d327f364a426acedc6bc21d8b4d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

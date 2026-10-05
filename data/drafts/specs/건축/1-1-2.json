@@ -1,0 +1,228 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-1-2/철골공수산정",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-1-2",
+    "title": "철골공수 산정방법('23년 보완)",
+    "work": "철골공수 및 소요 부자재량 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "base_labor",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "인·일/t",
+        "required": true,
+        "ask": "1-1-1에서 산정된 기본철골공수는 얼마입니까?",
+        "source": "1-1-2 철골공수 산정식"
+      },
+      {
+        "name": "structure_type",
+        "type": "enum",
+        "allowed_values": [
+          "조립공장, 창고 등으로 가공부재종류가 적은 구조",
+          "사무청사 등 표준라멘구조",
+          "기타 가공부재 종류가 많은 구조"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "구조공별 유형은 무엇입니까?",
+        "decision_table": "p625-t1",
+        "source": "작업난이도 표"
+      },
+      {
+        "name": "difficulty_factor",
+        "type": "positive_rational",
+        "allowed_values": "선택한 구조공별 작업난이도 범위 내의 수",
+        "unit": null,
+        "required": true,
+        "ask": "선택한 구조공별 작업난이도 범위 내에서 적용할 난이도 값을 입력해주세요.",
+        "source": "작업난이도 표"
+      },
+      {
+        "name": "material_type",
+        "type": "enum",
+        "allowed_values": [
+          "전용접부재",
+          "H형강부재"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "부재 종류는 무엇입니까?",
+        "decision_table": "p625-t2",
+        "source": "소요 부자재량 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "철골 물량은 몇 ton입니까?",
+        "source": "소요 부자재량 표 기준 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p625-t1",
+        "role": "구조공별 작업난이도",
+        "source": "1-1-2 <작업난이도> 표",
+        "unit": "무차원",
+        "values": {
+          "난이도": {
+            "조립공장, 창고 등으로 가공부재종류가 적은 구조": "0.8∼0.95",
+            "사무청사 등 표준라멘구조": "1.0",
+            "기타 가공부재 종류가 많은 구조": "1.05∼1.2"
+          }
+        },
+        "cite": {
+          "table_id": "p625-t1"
+        }
+      },
+      {
+        "id": "p625-t2",
+        "role": "부재 종류별 소요 부자재량",
+        "source": "1-1-2 <소요 부자재량> 표",
+        "unit": "ton당",
+        "values": {
+          "산소": {
+            "단위": "㎥",
+            "전용접부재": "7.0",
+            "H형강부재": "3.5"
+          },
+          "L.P.G": {
+            "단위": "㎏",
+            "전용접부재": "2.8",
+            "H형강부재": "1.4"
+          },
+          "서비스볼트": {
+            "단위": "본",
+            "전용접부재": "2.0",
+            "H형강부재": "1.0"
+          },
+          "보조강재": {
+            "단위": "㎏",
+            "전용접부재": "6.0",
+            "H형강부재": "2.0"
+          }
+        },
+        "cite": {
+          "table_id": "p625-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "입력받은 기본철골공수에 사용자가 선택한 작업난이도를 곱하여 철골공수를 산정한다.",
+        "철골 물량(ton)에 p625-t2 표의 부재 종류별 소요 부자재량을 곱하여 총 부자재량을 산정한다."
+      ],
+      "source": "1-1-2 철골공수 산정방법 및 소요 부자재량 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "서비스 볼트 규격 산정",
+        "reason": "서비스 볼트는 일반 볼트이며 규격은 설계에 따라 계상함",
+        "source": "1-1-2 소요 부자재량 주석",
+        "cite": {
+          "chunk_id": "p625-x13"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "현장 철골 세우기",
+        "source": "1-1-2 소요 부자재량 주석",
+        "cite": {
+          "chunk_id": "p625-x13"
+        }
+      },
+      {
+        "item": "용접 소요 부자재량",
+        "source": "1-1-2 소요 부자재량 주석",
+        "cite": {
+          "chunk_id": "p625-x13"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "작업난이도가 단일 값이 아닌 범위(0.8~0.95 등)로 제시되어 있어, 사용자의 판단 없이 자동 계산하기 어렵습니다.",
+  "citations": [
+    {
+      "chunk_id": "p625-x4",
+      "quote": "철골공수=기본철골공수×작업난이도"
+    },
+    {
+      "table_id": "p625-t1",
+      "row": "난이도",
+      "column": "조립공장, 창고 등으로 가공부재종류가 적은 구조",
+      "value": "0.8∼0.95"
+    },
+    {
+      "table_id": "p625-t1",
+      "row": "난이도",
+      "column": "사무청사 등 표준라멘구조",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p625-t1",
+      "row": "난이도",
+      "column": "기타 가공부재 종류가 많은 구조",
+      "value": "1.05∼1.2"
+    },
+    {
+      "table_id": "p625-t2",
+      "row": "산소",
+      "column": "전용접부재",
+      "value": "7.0"
+    },
+    {
+      "table_id": "p625-t2",
+      "row": "L.P.G",
+      "column": "H형강부재",
+      "value": "1.4"
+    },
+    {
+      "chunk_id": "p625-x13",
+      "quote": "철골제작에서 용접을 제외한 철골가공 조립과정에서 소요되는 부자재량이며, 현장 철골 세우기는 별도 계상함."
+    },
+    {
+      "chunk_id": "p625-x13",
+      "quote": "서비스 볼트는 일반 볼트이며 규격은 설계에 따라 계상함."
+    }
+  ],
+  "open_questions": [
+    "작업난이도가 범위(0.8~0.95, 1.05~1.2)로 주어져 있어, 정확한 값을 결정하는 기준이 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "사무청사 표준라멘구조의 작업난이도는 얼마인가요?",
+    "조립공장 구조에서 작업난이도를 0.8과 0.95 중 어떤 기준으로 선택해야 하나요?",
+    "기본철골공수는 어디서 가져와야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:45:00.268605+00:00",
+    "input_tokens": 11839,
+    "output_tokens": 2310,
+    "source_pages": [
+      625,
+      626
+    ],
+    "prompt_sha256": "2c5e4c7cb93f740de6c902d6aecd661ef4acd781279949d2ce04c9edb56ee91c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

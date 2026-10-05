@@ -1,0 +1,82 @@
+{
+  "rules": [
+    {
+      "material": "레디믹스트 콘크리트 타설(현장플랜트 포함)",
+      "structure": "무근",
+      "allowance": "0.02",
+      "source": {
+        "section_no": "1-3-1",
+        "pdf_page": 78,
+        "printed_page": 22,
+        "item": "8. 기타재료",
+        "row": "레디믹스트 콘크리트 타설(현장플랜트 포함) · 무근구조물",
+        "value": "2%"
+      }
+    },
+    {
+      "material": "레디믹스트 콘크리트 타설(현장플랜트 포함)",
+      "structure": "철근",
+      "allowance": "0.01",
+      "source": {
+        "section_no": "1-3-1",
+        "pdf_page": 78,
+        "printed_page": 22,
+        "item": "8. 기타재료",
+        "row": "레디믹스트 콘크리트 타설(현장플랜트 포함) · 철근구조물",
+        "value": "1%"
+      }
+    },
+    {
+      "material": "레디믹스트 콘크리트 타설(현장플랜트 포함)",
+      "structure": "철골",
+      "allowance": "0.01",
+      "source": {
+        "section_no": "1-3-1",
+        "pdf_page": 78,
+        "printed_page": 22,
+        "item": "8. 기타재료",
+        "row": "레디믹스트 콘크리트 타설(현장플랜트 포함) · 철골구조물",
+        "value": "1%"
+      }
+    },
+    {
+      "material": "현장 혼합 콘크리트 타설(인력 및 믹서)",
+      "structure": "무근",
+      "allowance": "0.03",
+      "source": {
+        "section_no": "1-3-1",
+        "pdf_page": 78,
+        "printed_page": 22,
+        "item": "8. 기타재료",
+        "row": "현장 혼합 콘크리트 타설(인력 및 믹서) · 무근",
+        "value": "3%"
+      }
+    },
+    {
+      "material": "현장 혼합 콘크리트 타설(인력 및 믹서)",
+      "structure": "철근",
+      "allowance": "0.02",
+      "source": {
+        "section_no": "1-3-1",
+        "pdf_page": 78,
+        "printed_page": 22,
+        "item": "8. 기타재료",
+        "row": "현장 혼합 콘크리트 타설(인력 및 믹서) · 철근",
+        "value": "2%"
+      }
+    },
+    {
+      "material": "현장 혼합 콘크리트 타설(인력 및 믹서)",
+      "structure": "소형",
+      "allowance": "0.05",
+      "source": {
+        "section_no": "1-3-1",
+        "pdf_page": 78,
+        "printed_page": 22,
+        "item": "8. 기타재료",
+        "row": "현장 혼합 콘크리트 타설(인력 및 믹서) · 소형",
+        "value": "5%"
+      }
+    }
+  ]
+}

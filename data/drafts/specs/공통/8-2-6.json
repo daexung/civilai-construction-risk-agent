@@ -1,0 +1,272 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-6/모터스크레이퍼",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-6",
+    "title": "모터 스크레이퍼",
+    "work": "시간당 작업량 산출",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      176,
+      177
+    ],
+    "inputs": [
+      {
+        "name": "soil_condition",
+        "type": "enum",
+        "allowed_values": [
+          "조건이 좋은 보통토",
+          "조건이 좋은 모래, 보통토",
+          "역질토, 모래, 역이섞인 점질토, 점토",
+          "조건이 좋은 점질토, 점토",
+          "조건이 나쁜 점질토, 점토, 암괴, 호박돌, 역"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질상태는 어떠합니까?",
+        "source": "1. 적재계수(K)",
+        "decision_table": "p232-t0"
+      },
+      {
+        "name": "site_condition",
+        "type": "enum",
+        "allowed_values": [
+          "작업현장이 넓으며 지형과 토질조건이 좋고 어느 정도 모여 있으므로 작업이 순조롭게 될 때",
+          "작업현장이 넓으나 함수비로 토질의 변화가 일어나기 쉬운 때 등으로 작업이 보통으로 진행될 때",
+          "작업현장이 넓지 않고 다른 작업기계와의 교차가 많고 토질조건도 좋지 않으므로 작업이 순조롭지 못할 때",
+          "작업현장이 좁고 작업이 복잡할 때, 또는 토질조건이 나쁘므로 작업진행이 불량할 때"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장조건은 어떠합니까?",
+        "source": "2. 작업효율(E)"
+      },
+      {
+        "name": "road_condition",
+        "type": "enum",
+        "allowed_values": [
+          "노면이 단단하고 안전한 도로로서 주행시 타이어가 노면에 침투되지 않고 살수 등 유지된 도로",
+          "노면상태가 별로 좋지 않고 주행시 타이어가 노면에 약간 침투되며 살수된 도로",
+          "노면상태가 잘 정비되어 있지 않으므로 다소 정비는 하나 주행시 타이어가 노면에 약간 침투되는 도로",
+          "노면이 차량에 의하여 울퉁불퉁하여졌고 잘 정비되어 있지 않아 주행시 타이어가 노면에 심하게 침투되는 도로",
+          "흐트러진 모래 또는 자갈",
+          "노면이 극히 불량한 상태"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도로 상태는 어떠합니까?",
+        "source": "4. V1 및 V2의 값",
+        "decision_table": "p233-t1"
+      },
+      {
+        "name": "push_dozer_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "푸쉬도우저를 사용합니까?",
+        "source": "3. 1회 싸이클시간(㎝) t 값"
+      },
+      {
+        "name": "has_large_cobble",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "30㎝ 이상의 호박돌이 있습니까?",
+        "source": "1. 적재계수(K) [주] ①"
+      },
+      {
+        "name": "L1",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "적재시의 주행거리(L1)는 몇 m입니까?",
+        "source": "3. 1회 싸이클시간(㎝)"
+      },
+      {
+        "name": "L2",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "공차시의 주행거리(L2)는 몇 m입니까?",
+        "source": "3. 1회 싸이클시간(㎝)"
+      },
+      {
+        "name": "q_capacity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "적재함용적은 몇 ㎥입니까?",
+        "source": "Q 산출 공식"
+      },
+      {
+        "name": "f_factor",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": null,
+        "required": true,
+        "ask": "체적환산계수(f)는 얼마입니까?",
+        "source": "Q 산출 공식"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p232-t0",
+        "role": "적재계수(K)",
+        "source": "1. 적재계수(K)",
+        "unit": "무차원",
+        "values": {
+          "조건이 좋은 보통토": {
+            "적재계수": "1.13"
+          },
+          "조건이 좋은 모래, 보통토": {
+            "적재계수": "1.00"
+          },
+          "역질토, 모래, 역이섞인 점질토, 점토": {
+            "적재계수": "0.90"
+          },
+          "조건이 좋은 점질토, 점토": {
+            "적재계수": "0.90"
+          },
+          "조건이 나쁜 점질토, 점토, 암괴, 호박돌, 역": {
+            "적재계수": "0.80"
+          }
+        },
+        "cite": {
+          "table_id": "p232-t0"
+        }
+      },
+      {
+        "id": "p233-t1",
+        "role": "V1 및 V2의 값",
+        "source": "4. V1 및 V2의 값",
+        "unit": "m/분",
+        "values": {
+          "노면이 단단하고 안전한 도로로서 주행시 타이어가 노면에 침투되지 않고 살수 등 유지된 도로": {
+            "적재시주행\n속도(m/분)": "400",
+            "공차시주행\n속도(m/분)": "600"
+          },
+          "노면상태가 별로 좋지 않고 주행시 타이어가 노면에 약간 침투되며 살수된 도로": {
+            "적재시주행\n속도(m/분)": "300",
+            "공차시주행\n속도(m/분)": "400"
+          },
+          "노면상태가 잘 정비되어 있지 않으므로 다소 정비는 하나 주행시 타이어가 노면에 약간 침투되는 도로": {
+            "적재시주행\n속도(m/분)": "200",
+            "공차시주행\n속도(m/분)": "300"
+          },
+          "노면이 차량에 의하여 울퉁불퉁하여졌고 잘 정비되어 있지 않아 주행시 타이어가 노면에 심하게 침투되는 도로": {
+            "적재시주행\n속도(m/분)": "150",
+            "공차시주행\n속도(m/분)": "200"
+          },
+          "흐트러진 모래 또는 자갈": {
+            "적재시주행\n속도(m/분)": "100",
+            "공차시주행\n속도(m/분)": "150"
+          },
+          "노면이 극히 불량한 상태": {
+            "적재시주행\n속도(m/분)": "80",
+            "공차시주행\n속도(m/분)": "100"
+          }
+        },
+        "cite": {
+          "table_id": "p233-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "입력된 조건에 따라 적재계수(K), 작업효율(E), 주행속도(V1, V2)를 구한다.",
+        "푸쉬도우저 사용 여부에 따라 기어변속시간(t)을 결정한다.",
+        "1회 싸이클시간(cm) = L1/V1 + L2/V2 + t 를 계산한다.",
+        "시간당 작업량(Q) = (60 * q * f * E) / cm 를 계산한다."
+      ],
+      "source": "PDF 176~177쪽",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "30㎝ 이상의 호박돌이 있을 때",
+        "blocked_if": {
+          "input": "has_large_cobble",
+          "op": "==",
+          "value": true
+        },
+        "reason": "30㎝ 이상의 호박돌이 있을 때에는 사용하지 않는 것이 좋음",
+        "source": "1. 적재계수(K) [주] ①",
+        "cite": {
+          "chunk_id": "p232-x11",
+          "quote": "30㎝ 이상의 호박돌이 있을 때에는 사용하지 않는 것이 좋다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "기계의 시간당 작업량(Q)을 산출하는 공식으로, 현재 지원하는 일당 작업조형이나 단위당 품 계산 모델에 해당하지 않습니다.",
+  "citations": [
+    {
+      "table_id": "p232-t0",
+      "row": "조건이 좋은 보통토",
+      "column": "적재계수",
+      "value": "1.13"
+    },
+    {
+      "table_id": "p233-t1",
+      "row": "흐트러진 모래 또는 자갈",
+      "column": "적재시주행\n속도(m/분)",
+      "value": "100"
+    },
+    {
+      "chunk_id": "p232-x11",
+      "quote": "30㎝ 이상의 호박돌이 있을 때에는 사용하지 않는 것이 좋다."
+    },
+    {
+      "chunk_id": "p233-x1",
+      "quote": "작업현장이 넓으며 지형과 토질조건이 좋고 어느 정도 모여 있으므로 작업이 순조롭게 될 때 0.85"
+    },
+    {
+      "chunk_id": "p233-x6",
+      "quote": "푸쉬도우저를 사용할 때 1.6분, 사용하지 않을 때 2.8분"
+    }
+  ],
+  "open_questions": [
+    "작업효율(E)이 표가 아닌 텍스트로 파싱되어 있어, 별도의 표로 구성하지 않고 입력값의 선택지로 처리했습니다."
+  ],
+  "questions": [
+    "모터 스크레이퍼의 시간당 작업량은 어떻게 계산하나요?",
+    "푸쉬도우저를 사용할 때와 안 할 때 1회 싸이클시간 계산 시 기어변속시간(t)은 어떻게 적용하나요?",
+    "적재함용적과 체적환산계수는 어디서 확인하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:03.821997+00:00",
+    "input_tokens": 13131,
+    "output_tokens": 3036,
+    "source_pages": [
+      232,
+      233,
+      234
+    ],
+    "prompt_sha256": "cc9078ada637ad8a111226633e83770ac9603e51dc8fec4889fa01f66ad0969b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

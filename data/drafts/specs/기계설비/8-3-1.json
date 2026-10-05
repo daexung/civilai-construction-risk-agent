@@ -1,0 +1,329 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/8-3-1/보일러설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "8-3-1",
+    "title": "보일러 설치",
+    "work": "보일러 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      696
+    ],
+    "inputs": [
+      {
+        "name": "boiler_type",
+        "type": "enum",
+        "allowed_values": [
+          "주철제 보일러 | 1호(20∼60미만) 1,000Kcal/hr",
+          "주철제 보일러 | 2호(60∼135미만) 〃",
+          "주철제 보일러 | 3호(135∼230미만)〃",
+          "주철제 보일러 | 4호(230∼330미만)〃",
+          "주철제 보일러 | 5호(330∼640미만)〃",
+          "주철제 보일러 | 6호(640∼1,180미만) 〃",
+          "강판제보일러",
+          "패키지형수관식보일러"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 보일러의 규격은 무엇입니까?",
+        "source": "PDF 696쪽 8-3-1 보일러 설치 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "절 또는 중량톤",
+        "required": true,
+        "ask": "설치할 보일러의 물량(주철제는 절, 강판제/패키지형은 중량톤)은 얼마입니까?",
+        "source": "PDF 696쪽 8-3-1 보일러 설치 표 단위"
+      },
+      {
+        "name": "is_industrial",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "산업용 보일러입니까?",
+        "source": "PDF 696쪽 8-3-1 [주] ④"
+      },
+      {
+        "name": "same_level",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지면과 동일한 평면에 설치합니까?",
+        "source": "PDF 696쪽 8-3-1 [주] ①"
+      },
+      {
+        "name": "truck_access",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "운반자동차가 설치위치까지 들어갈 수 있습니까?",
+        "source": "PDF 696쪽 8-3-1 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p752-t1",
+        "role": "보일러 규격별 설치 품",
+        "source": "PDF 696쪽 8-3-1 보일러 설치 표",
+        "unit": "인/절 또는 인/중량톤",
+        "values": {
+          "주철제 보일러 | 1호(20∼60미만) 1,000Kcal/hr": {
+            "보일러공": "0.90",
+            "특별인부": "0.30"
+          },
+          "주철제 보일러 | 2호(60∼135미만) 〃": {
+            "보일러공": "1.10",
+            "특별인부": "0.30"
+          },
+          "주철제 보일러 | 3호(135∼230미만)〃": {
+            "보일러공": "1.10",
+            "특별인부": "0.30"
+          },
+          "주철제 보일러 | 4호(230∼330미만)〃": {
+            "보일러공": "2.10",
+            "특별인부": "0.50"
+          },
+          "주철제 보일러 | 5호(330∼640미만)〃": {
+            "보일러공": "3.0",
+            "특별인부": "0.70"
+          },
+          "주철제 보일러 | 6호(640∼1,180미만) 〃": {
+            "보일러공": "4.5",
+            "특별인부": "0.70"
+          },
+          "강판제보일러": {
+            "보일러공": "1.2",
+            "특별인부": "0.8"
+          },
+          "패키지형수관식보일러": {
+            "보일러공": "6.0",
+            "특별인부": "2.0"
+          }
+        },
+        "cite": {
+          "table_id": "p752-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p752-t1",
+          "row_input": "boiler_type",
+          "trades": [
+            "보일러공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p752-t1에서 보일러 규격에 해당하는 단위당 품을 찾는다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 696쪽 8-3-1 보일러 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "산업용 보일러인 경우",
+        "blocked_if": {
+          "input": "is_industrial",
+          "op": "==",
+          "value": true
+        },
+        "reason": "산업용 보일러 설치는 '[기계설비부문] 13-5-1 보일러 설치'를 따름",
+        "source": "PDF 696쪽 8-3-1 [주] ④",
+        "cite": {
+          "section_no": "8-3-1",
+          "marker": "④"
+        }
+      },
+      {
+        "condition": "지면과 동일한 평면에 설치하지 않는 경우",
+        "blocked_if": {
+          "input": "same_level",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 지면과 동일한 평면에 설치하는 경우를 기준으로 하며, 그 외의 경우에 대한 할증이나 별도 기준이 명시되지 않음",
+        "source": "PDF 696쪽 8-3-1 [주] ①",
+        "cite": {
+          "section_no": "8-3-1",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "하치장에서의 반입비",
+        "source": "PDF 696쪽 8-3-1 [주] ①",
+        "cite": {
+          "section_no": "8-3-1",
+          "marker": "①"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품(인/절, 인/중량톤)이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 1호(20∼60미만) 1,000Kcal/hr",
+      "column": "보일러공",
+      "value": "0.90"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 1호(20∼60미만) 1,000Kcal/hr",
+      "column": "특별인부",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 2호(60∼135미만) 〃",
+      "column": "보일러공",
+      "value": "1.10"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 2호(60∼135미만) 〃",
+      "column": "특별인부",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 3호(135∼230미만)〃",
+      "column": "보일러공",
+      "value": "1.10"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 3호(135∼230미만)〃",
+      "column": "특별인부",
+      "value": "0.30"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 4호(230∼330미만)〃",
+      "column": "보일러공",
+      "value": "2.10"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 4호(230∼330미만)〃",
+      "column": "특별인부",
+      "value": "0.50"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 5호(330∼640미만)〃",
+      "column": "보일러공",
+      "value": "3.0"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 5호(330∼640미만)〃",
+      "column": "특별인부",
+      "value": "0.70"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 6호(640∼1,180미만) 〃",
+      "column": "보일러공",
+      "value": "4.5"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "주철제 보일러 | 6호(640∼1,180미만) 〃",
+      "column": "특별인부",
+      "value": "0.70"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "강판제보일러",
+      "column": "보일러공",
+      "value": "1.2"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "강판제보일러",
+      "column": "특별인부",
+      "value": "0.8"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "패키지형수관식보일러",
+      "column": "보일러공",
+      "value": "6.0"
+    },
+    {
+      "table_id": "p752-t1",
+      "row": "패키지형수관식보일러",
+      "column": "특별인부",
+      "value": "2.0"
+    },
+    {
+      "chunk_id": "p752-x13",
+      "quote": "① 각 보일러 품은 지면과 동일한 평면에 설치하는 경우이며 운반자동차가 설치위치까지 들어가지 못할\n설명 | 시는 하치장에서의 반입비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p752-x13",
+      "quote": "② 조립, 설치, 수압시험 및 시운전 등을 포함한다."
+    },
+    {
+      "chunk_id": "p752-x13",
+      "quote": "③ 강판제 및 패키지형 보일러는 내화시설품이 포함되었다."
+    },
+    {
+      "chunk_id": "p752-x13",
+      "quote": "④ 산업용 보일러 설치는 ‘[기계설비부문] 13-5-1 보일러 설치’를 따른다."
+    }
+  ],
+  "open_questions": [
+    "지면과 동일한 평면에 설치하지 않는 경우에 대한 할증이나 별도 품셈 적용 기준이 명시되어 있지 않아 계산을 보류했습니다."
+  ],
+  "questions": [
+    "주철제 보일러 3호를 설치할 때 필요한 보일러공과 특별인부의 품은 얼마인가요?",
+    "보일러를 지면과 다른 평면에 설치해야 하는데, 이 경우 품셈을 어떻게 적용해야 하나요?",
+    "운반자동차가 설치위치까지 들어가지 못해 하치장에서 반입해야 하는데, 반입비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:01.112264+00:00",
+    "input_tokens": 23806,
+    "output_tokens": 6629,
+    "source_pages": [
+      752,
+      753
+    ],
+    "prompt_sha256": "039ca9de8f1923cd35a77573b27da3432ae3d3c27a22cbc05a7137b9e20c5751",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-4-4/시멘트혼입폴리머계도막방수바름",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-4-4",
+    "title": "시멘트 혼입 폴리머계 도막방수 바름",
+    "work": "도막방수 바름 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      607
+    ],
+    "inputs": [
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "노출 공법",
+          "비노출 공법"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 공법으로 시공합니까? (노출 공법 / 비노출 공법)",
+        "source": "PDF 607쪽 p663-t0",
+        "synonyms": {
+          "노출 공법": [
+            "노출",
+            "노출공법"
+          ],
+          "비노출 공법": [
+            "비노출",
+            "비노출공법"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공 물량은 몇 ㎡입니까?",
+        "source": "PDF 607쪽 p663-t0 단위"
+      },
+      {
+        "name": "spray_applied",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "뿜칠 시공입니까?",
+        "source": "PDF 607쪽 [주] ④",
+        "synonyms": {
+          "true": [
+            "뿜칠",
+            "뿜칠시공",
+            "뿜칠 시공"
+          ],
+          "false": [
+            "일반",
+            "일반시공",
+            "도포"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p663-t0",
+        "role": "공법별 단위당 품",
+        "source": "PDF 607쪽 6-4-4 표",
+        "unit": "인/㎡",
+        "values": {
+          "방수공": {
+            "노출 공법": "0.100",
+            "비노출 공법": "0.090"
+          },
+          "보통인부": {
+            "노출 공법": "0.070",
+            "비노출 공법": "0.060"
+          }
+        },
+        "cite": {
+          "table_id": "p663-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p663-t0",
+          "column_input": "method",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "spray_applied": true
+            },
+            "change": "재료량을 10% 가산한다.",
+            "source": "PDF 607쪽 [주] ④"
+          }
+        ]
+      },
+      "steps": [
+        "p663-t0에서 공법에 따른 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "뿜칠 시공 여부에 따라 재료량 가산 안내를 적용한다."
+      ],
+      "source": "PDF 607쪽 6-4-4 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "바탕처리, 프라이머바름 및 방수층 보호재 깔기",
+        "source": "PDF 607쪽 [주] ②",
+        "cite": {
+          "section_no": "6-4-4",
+          "marker": "②"
+        }
+      },
+      {
+        "item": "재료량",
+        "source": "PDF 607쪽 [주] ④",
+        "cite": {
+          "section_no": "6-4-4",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "section_no": "6-4-4",
+          "marker": "③"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인력이 표에 직접 제시되어 있으므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p663-t0",
+      "row": "방수공",
+      "column": "노출 공법",
+      "value": "0.100"
+    },
+    {
+      "table_id": "p663-t0",
+      "row": "방수공",
+      "column": "비노출 공법",
+      "value": "0.090"
+    },
+    {
+      "table_id": "p663-t0",
+      "row": "보통인부",
+      "column": "노출 공법",
+      "value": "0.070"
+    },
+    {
+      "table_id": "p663-t0",
+      "row": "보통인부",
+      "column": "비노출 공법",
+      "value": "0.060"
+    },
+    {
+      "chunk_id": "p663-x3",
+      "quote": "① 노출공법은 마감도료(Top-Coat)를 포함한 것이다."
+    },
+    {
+      "chunk_id": "p663-x3",
+      "quote": "② 본 품은 바탕처리, 프라이머바름 및 방수층 보호재 깔기가 제외되어 있다."
+    },
+    {
+      "chunk_id": "p663-x3",
+      "quote": "③ 공구손료는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p663-x3",
+      "quote": "④ 재료는 별도 계상하며, 뿜칠 시공시에는 재료량을 10% 가산한다."
+    }
+  ],
+  "open_questions": [
+    "재료량 산정 기준이 명시되어 있지 않아, 뿜칠 시공 시 10% 가산에 대한 구체적인 재료 물량 계산은 제외함."
+  ],
+  "questions": [
+    "노출 공법으로 100㎡ 시공 시 방수공 품은 어떻게 되나요?",
+    "뿜칠 시공을 할 경우 품셈 적용이 달라지나요?",
+    "바탕처리 품은 어디서 확인하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:03:57.993057+00:00",
+    "input_tokens": 11553,
+    "output_tokens": 1959,
+    "source_pages": [
+      663,
+      664
+    ],
+    "prompt_sha256": "b2394d574de18de31119b52f8d97340d2715f04781c5c2fa14c29539edc3dd7b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

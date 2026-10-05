@@ -1,0 +1,178 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-3-9/지수판설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-3-9",
+    "title": "지수판 설치('18년 보완)",
+    "work": "지수판 설치 (PVC 용접, 소켓 연결)",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      142,
+      143
+    ],
+    "inputs": [
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "PVC 용접",
+          "소켓 연결"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지수판 설치 방법은 무엇입니까?",
+        "source": "PDF 142쪽 1. PVC 용접, 143쪽 2. 소켓 연결"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "지수판 설치 물량은 몇 m입니까?",
+        "source": "PDF 142쪽 p198-t2, 143쪽 p199-t0 기준 (m당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p198-t2",
+        "role": "PVC 용접 인력품",
+        "source": "PDF 142쪽 1. PVC 용접 표",
+        "unit": "인/m",
+        "values": {
+          "특별인부": {
+            "수량": "0.151"
+          },
+          "보통인부": {
+            "수량": "0.116"
+          }
+        },
+        "cite": {
+          "table_id": "p198-t2"
+        }
+      },
+      {
+        "id": "p198-t3",
+        "role": "PVC 용접 재료량",
+        "source": "PDF 142쪽 1. PVC 용접 재료량 표",
+        "unit": "m, kg/m",
+        "values": {},
+        "cite": {
+          "table_id": "p198-t3"
+        }
+      },
+      {
+        "id": "p199-t0",
+        "role": "소켓 연결 인력품",
+        "source": "PDF 143쪽 2. 소켓 연결 표",
+        "unit": "인/m",
+        "values": {},
+        "cite": {
+          "table_id": "p199-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p198-t2",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "설치 방법(method)이 'PVC 용접'인 경우 p198-t2에서 단위당 품을 고른다. ('소켓 연결'은 파싱 누락으로 현재 계산 불가)",
+        "물량(quantity)을 곱해 총 품을 구한다.",
+        "PVC 용접의 경우 재료량은 p198-t3를 참고하여 별도 산정한다."
+      ],
+      "source": "PDF 142~143쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "method == '소켓 연결'",
+        "blocked_if": {
+          "input": "method",
+          "op": "==",
+          "value": "소켓 연결"
+        },
+        "reason": "파싱 결과(p199-t0)에 소켓 연결의 인력품 수량이 누락되어 있어 계산할 수 없습니다.",
+        "source": "PDF 143쪽 2. 소켓 연결 표",
+        "cite": {
+          "table_id": "p199-t0"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 (PVC 용접 시)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p198-x19",
+          "quote": "공구손료 및 경장비(PVC 용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m)당 인력품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p198-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.151"
+    },
+    {
+      "table_id": "p198-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.116"
+    },
+    {
+      "chunk_id": "p198-x19",
+      "quote": "공구손료 및 경장비(PVC 용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p199-t0에 소켓 연결의 인력품 수량(특별인부 0.085, 보통인부 0.029)이 누락되어 있어 명세 tables에 값을 포함하지 못했습니다.",
+    "파싱 결과 p198-t3의 행 이름이 모두 'PVC지수판 PVC용접봉 철선'으로 병합되어 있어, 원문 표의 각 재료별 수량을 tables에 분리하여 담지 못했습니다.",
+    "공구손료 및 경장비 3% 계상 규칙이 '1. PVC 용접'에만 명시되어 있는데, cost_rules에 조건부 적용(when) 필드가 없어 이름에 명시하는 것으로 대체했습니다."
+  ],
+  "questions": [
+    "지수판 설치 물량은 몇 m입니까?",
+    "설계에 따라 재료량이 증감되는 경우, 기준 재료량(PVC지수판 1.04m 등)을 어떻게 조정해야 합니까?",
+    "지수판 설치 방법이 PVC 용접입니까, 소켓 연결입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:36:04.954019+00:00",
+    "input_tokens": 12483,
+    "output_tokens": 1821,
+    "source_pages": [
+      198,
+      199,
+      200
+    ],
+    "prompt_sha256": "f93665f8c1fe509db5285c552c31f758c924a2ab5c9db218842cc7634a1c3d8a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

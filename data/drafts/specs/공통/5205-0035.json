@@ -1,0 +1,74 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/5205-0035/공기압축기(이동식)",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "5205-0035",
+    "title": "기계경비 산출표",
+    "work": "주연료, 잡재료, 조종원 산출",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      282
+    ],
+    "inputs": [],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과의 행 식별자(분류번호)가 하나의 긴 문자열로 병합되어 있어, 개별 기계 규격별 값을 참조할 수 있는 표 구조를 만들 수 없습니다."
+      ],
+      "source": "파싱 결과 p338-t0",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "파싱 결과 불량으로 인한 식별 불가",
+        "reason": "파싱 결과에서 여러 분류번호가 하나의 문자열로 병합되어 있어 개별 행을 식별할 수 없습니다.",
+        "source": "파싱 결과 p338-t0",
+        "cite": []
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과의 행 이름(분류번호)이 모두 병합되어 있어, 규격별로 값을 구분하여 참조할 수 있는 정상적인 표 구조를 구성할 수 없습니다.",
+  "citations": [
+    {
+      "chunk_id": "p338-t0",
+      "quote": "5205-0035 공기압축기( 이동식)"
+    },
+    {
+      "chunk_id": "p338-t0",
+      "quote": "5401-0015 0017 5405-0110 0150 5701-0010 0020 5801-0045 5805-0002 0003"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 분류번호가 하나의 긴 문자열로 병합되어 있어, 각 규격별 행을 식별할 수 없습니다. 원문 표 구조에 맞게 재파싱이 필요합니다.",
+    "대상 절이 5205-0035로 주어졌으나, 파싱 결과의 실제 데이터는 5401-0015(크롤러드릴)부터 시작합니다. 5205-0035에 대한 구체적인 수치 데이터 확인이 필요합니다."
+  ],
+  "questions": [
+    "크롤러드릴 15(120mm)의 조종원은 몇 명인가요?",
+    "터널전단면굴착기 4.5m의 주연료는 어떻게 되나요?",
+    "표에 없는 규격의 기계는 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:19:48.674341+00:00",
+    "input_tokens": 12484,
+    "output_tokens": 820,
+    "source_pages": [
+      338,
+      339
+    ],
+    "prompt_sha256": "e6f53c31031dae642925d25ab3972e02361cc4c1193157cc232dcdfcfabb55e7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

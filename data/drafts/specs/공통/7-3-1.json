@@ -1,0 +1,228 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/7-3-1/전석쌓기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "7-3-1",
+    "title": "전석쌓기",
+    "work": "전석쌓기 기본 품량 및 채움콘크리트 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      160,
+      161
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "석재의 전면면적은 몇 ㎡입니까?",
+        "source": "PDF 161쪽 7-3-1 [주] ②"
+      },
+      {
+        "name": "stone_size",
+        "type": "enum",
+        "allowed_values": [
+          "0.5㎥급",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용하는 전석의 크기는 0.5㎥급입니까?",
+        "source": "PDF 161쪽 7-3-1 [주] ①"
+      },
+      {
+        "name": "concrete_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "채움콘크리트는 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "채움콘크리트 재료비 산정용"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p216-t2",
+        "role": "전석쌓기 일당 작업조 및 시공량",
+        "source": "PDF 160쪽 7-3-1 표",
+        "unit": "인, 대, ㎡",
+        "values": {
+          "석공": {
+            "수량": "3",
+            "시공량(㎡)": "22"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "굴착기+ 부착용집게": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p216-t2"
+        }
+      },
+      {
+        "id": "p217-t0",
+        "role": "채움콘크리트 재료량",
+        "source": "PDF 161쪽 7-3-1 재료량 표",
+        "unit": "㎥/㎡",
+        "values": {
+          "채움콘크리트": {
+            "수량": "0.2"
+          }
+        },
+        "cite": {
+          "table_id": "p217-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p216-t2",
+          "row": "석공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p216-t2",
+          "column": "수량",
+          "trades": [
+            "석공",
+            "보통인부"
+          ]
+        },
+        "equipment": {
+          "name": "굴착기+ 부착용집게",
+          "table": "p216-t2",
+          "unit": "대",
+          "column": "수량"
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p216-t2에서 일당 시공량(22㎡)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다.",
+        "채움콘크리트 수량 = volume × p217-t0의 수량(0.2)으로 별도 산정한다."
+      ],
+      "source": "PDF 160~161쪽 7-3-1 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "전석 크기가 0.5㎥급이 아닌 경우",
+        "blocked_if": {
+          "input": "stone_size",
+          "op": "!=",
+          "value": "0.5㎥급"
+        },
+        "reason": "본 품은 0.5㎥급 전석을 쌓는 기준이므로 다른 규격은 적용할 수 없습니다.",
+        "source": "PDF 161쪽 7-3-1 [주] ①",
+        "cite": {
+          "chunk_id": "p217-x0",
+          "quote": "본 품은 굴착기를 이용하여 전석(0.5㎥급)을 쌓는 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기초콘크리트, 뒤채움 및 다짐",
+        "source": "PDF 161쪽 7-3-1 [주] ④",
+        "cite": {
+          "chunk_id": "p217-x0",
+          "quote": "기초콘크리트, 뒤채움 및 다짐은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [
+      {
+        "item": "채움콘크리트",
+        "input": "concrete_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "미산정",
+            "reason": "지역별 레미콘 단가 미입력"
+          }
+        },
+        "source": "일반적인 관급/사급 자재 처리 기준",
+        "cite": []
+      }
+    ],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(석공, 보통인부, 굴착기)와 일일시공량(22㎡)이 명시되어 있어 작업일수를 구한 뒤 인·일을 산출하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p216-t2",
+      "row": "석공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p216-t2",
+      "row": "석공",
+      "column": "시공량(㎡)",
+      "value": "22"
+    },
+    {
+      "table_id": "p217-t0",
+      "row": "채움콘크리트",
+      "column": "수량",
+      "value": "0.2"
+    },
+    {
+      "chunk_id": "p217-x0",
+      "quote": "본 품은 굴착기를 이용하여 전석(0.5㎥급)을 쌓는 기준이다."
+    },
+    {
+      "chunk_id": "p217-x0",
+      "quote": "시공량은 석재의 전면면적(㎡)을 기준한다."
+    },
+    {
+      "chunk_id": "p217-x0",
+      "quote": "기초콘크리트, 뒤채움 및 다짐은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 '석공 보통인부'가 하나의 텍스트로 묶여 있어, 표의 행 이름을 '석공', '보통인부'로 임의 분리하여 적용했습니다.",
+    "채움콘크리트 물량 계산(㎡당 0.2㎥)이 adjusted_daily_crew 모델 파라미터에 기본 포함되지 않아 steps에만 명시했습니다. 별도의 재료량 계산 모델 확장이 필요할 수 있습니다."
+  ],
+  "questions": [
+    "전석쌓기 100㎡ 시공 시 필요한 석공과 보통인부 품은 얼마인가요?",
+    "전석 크기가 1.0㎥급인 경우에도 이 품을 적용할 수 있나요?",
+    "채움콘크리트 물량은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:13.506383+00:00",
+    "input_tokens": 12322,
+    "output_tokens": 2260,
+    "source_pages": [
+      216,
+      217,
+      218
+    ],
+    "prompt_sha256": "c26648f7cac9ba506ce2ba848febf7393a9afda491e717ce4aec8c95f9fabb05",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

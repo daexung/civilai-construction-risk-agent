@@ -1,0 +1,220 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/3-2-4/에폭시접착제붙이기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "3-2-4",
+    "title": "접착 붙이기(에폭시 접착제)('25년 신설)",
+    "work": "에폭시 접착제를 사용한 타일의 접착 붙이기(벽면)",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      587
+    ],
+    "inputs": [
+      {
+        "name": "tile_size",
+        "type": "enum",
+        "allowed_values": [
+          "0.21~0.40이하",
+          "0.40~0.75이하"
+        ],
+        "unit": "㎡",
+        "required": true,
+        "ask": "타일 규격은 얼마입니까?",
+        "source": "PDF 587쪽 3-2-4 표 타일규격(㎡)",
+        "synonyms": {
+          "0.21~0.40이하": [
+            "0.21~0.40",
+            "0.4이하"
+          ],
+          "0.40~0.75이하": [
+            "0.40~0.75",
+            "0.75이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "시공할 타일의 총 면적(물량)은 몇 ㎡입니까?",
+        "source": "PDF 587쪽 3-2-4 표 시공량(㎡)"
+      },
+      {
+        "name": "special_shape",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우입니까?",
+        "source": "PDF 587쪽 3-2-4 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p643-t1",
+        "role": "타일규격별 작업조 인원 및 시공량",
+        "source": "PDF 587쪽 3-2-4 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "0.21~0.40이하": {
+            "타일공": "2",
+            "보통인부": "1",
+            "시공량(㎡)": "21"
+          },
+          "0.40~0.75이하": {
+            "타일공": "3",
+            "보통인부": "1",
+            "시공량(㎡)": "30"
+          }
+        },
+        "cite": {
+          "table_id": "p643-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p643-t1",
+          "row_input": "tile_size",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p643-t1",
+          "row_input": "tile_size",
+          "trades": [
+            "타일공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "타일공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p643-t1에서 타일규격별 시공량과 직종별 인원을 고른다.",
+        "작업일수 = quantity ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 587쪽 3-2-4 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "특정 모양으로 형상화된 타일(부조타일, 벽화타일) 시공",
+        "blocked_if": {
+          "input": "special_shape",
+          "op": "==",
+          "value": true
+        },
+        "reason": "특정 모양으로 형상화된 타일을 붙이는 경우 별도 계상해야 함",
+        "source": "PDF 587쪽 3-2-4 [주] ③",
+        "cite": {
+          "chunk_id": "p643-x14",
+          "quote": "특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p643-x14",
+          "quote": "공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 일당 시공량과 작업조 인원이 주어져 있어, 물량을 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p643-t1",
+      "row": "0.21~0.40이하",
+      "column": "타일공",
+      "value": "2"
+    },
+    {
+      "table_id": "p643-t1",
+      "row": "0.21~0.40이하",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p643-t1",
+      "row": "0.21~0.40이하",
+      "column": "시공량(㎡)",
+      "value": "21"
+    },
+    {
+      "table_id": "p643-t1",
+      "row": "0.40~0.75이하",
+      "column": "타일공",
+      "value": "3"
+    },
+    {
+      "table_id": "p643-t1",
+      "row": "0.40~0.75이하",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p643-t1",
+      "row": "0.40~0.75이하",
+      "column": "시공량(㎡)",
+      "value": "30"
+    },
+    {
+      "chunk_id": "p643-x14",
+      "quote": "본 품은 에폭시 접착제를 사용한 타일의 접착 붙이기(벽면) 기준이다."
+    },
+    {
+      "chunk_id": "p643-x14",
+      "quote": "특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p643-x14",
+      "quote": "공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "타일 규격이 0.21㎡ 미만이거나 0.75㎡ 초과인 경우에 대한 시공량 기준이 표에 없어 계산이 불가능함."
+  ],
+  "questions": [
+    "타일 규격이 0.3㎡일 때 타일공과 보통인부의 품은 어떻게 되나요?",
+    "벽화타일처럼 특정 모양으로 형상화된 타일을 시공할 때는 어떻게 계산하나요?",
+    "시공할 타일의 총 면적(물량)은 몇 ㎡인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:00:28.130465+00:00",
+    "input_tokens": 11706,
+    "output_tokens": 2256,
+    "source_pages": [
+      643,
+      644
+    ],
+    "prompt_sha256": "683955ae5408173836c428fb083fc8ea5628da513bc2f41afbec27739ded502b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-9-10/점멸등설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-9-10",
+    "title": "점멸등 설치 및 해체",
+    "work": "점멸등 설치 및 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      58
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치 및 해체할 점멸등의 수량은 몇 개입니까?",
+        "source": "PDF 58쪽 2-9-10 표 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p114-t2",
+        "role": "점멸등 설치 및 해체 품",
+        "source": "PDF 58쪽 2-9-10 표",
+        "unit": "인/개",
+        "values": {
+          "특별인부": {
+            "수량": "0.01"
+          }
+        },
+        "cite": {
+          "table_id": "p114-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p114-t2",
+          "row_input": "특별인부",
+          "column_input": "수량",
+          "trades": [
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 58쪽 2-9-10 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p114-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "0.01"
+    },
+    {
+      "chunk_id": "p114-x12",
+      "quote": "[주] 본 품은 점멸등(델리네이터)을 설치 및 해체하는 기준이다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "점멸등 50개를 설치하고 해체할 때 특별인부 품은 얼마인가요?",
+    "점멸등 설치만 하고 해체는 나중에 하는 경우 품을 분리해서 적용할 수 있나요?",
+    "점멸등(델리네이터) 자재비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:15:59.255092+00:00",
+    "input_tokens": 11425,
+    "output_tokens": 881,
+    "source_pages": [
+      114,
+      115
+    ],
+    "prompt_sha256": "22bdfc12f174affc7890be97ef87ae7b9b8031d1d7f365f2c88e56e802088bb1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

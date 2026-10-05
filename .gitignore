@@ -3,8 +3,13 @@
 .env
 __pycache__/
 
+frontend/node_modules/
+frontend/build/
+
 data/processed/*.jsonl
 data/processed/*.parquet
+data/processed/page_map.json
+data/processed/sources/
 experiments/table_census/results/parsed_all.jsonl
 
 # 파서 비교 실험의 재생성 가능한 산출물(원시 출력·렌더링 이미지·쪽 PDF·로그)
@@ -13,3 +18,10 @@ experiments/parser_bench/results/**/raw/
 experiments/parser_bench/results/**/*.png
 experiments/parser_bench/results/**/*.pdf
 experiments/parser_bench/results/**/*.log
+
+# 강한 모델 원 응답(용량 큼, 재생성 가능). 초안 JSON(data/drafts/specs/)은 추적한다.
+data/drafts/raw/
+
+# Graphify가 다시 만들 수 있는 분석 산출물
+graphify-out/
+evals/results/embedding_query_cache.jsonl

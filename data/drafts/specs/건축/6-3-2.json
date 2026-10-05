@@ -1,0 +1,175 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/6-3-2/접착식시트붙임",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "6-3-2",
+    "title": "접착식시트 붙임('18, '23년 보완)",
+    "work": "접착식시트 붙임 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      605
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "접착식시트를 시공할 면적은 몇 ㎡입니까?",
+        "source": "6-3-2 접착식시트 붙임 표 단위 (㎡당)"
+      },
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "바닥",
+          "수직부"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위가 바닥입니까, 아니면 수직부입니까?",
+        "source": "6-3-2 접착식시트 붙임 표 열 구분",
+        "synonyms": {
+          "바닥": [
+            "바닥면"
+          ],
+          "수직부": [
+            "벽면",
+            "수직면",
+            "벽체"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p661-t2",
+        "role": "접착식시트 붙임 단위당 품",
+        "source": "6-3-2 접착식시트 붙임 표",
+        "unit": "인/㎡",
+        "values": {
+          "방수공": {
+            "바닥": "0.034",
+            "수직부": "0.046"
+          },
+          "보통인부": {
+            "바닥": "0.020",
+            "수직부": "0.025"
+          }
+        },
+        "cite": {
+          "table_id": "p661-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p661-t2",
+          "column_input": "surface_type",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p661-t2 표에서 바닥/수직부 구분에 따른 직종별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "6-3-2 접착식시트 붙임 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료량",
+        "source": "6-3-2 [주] ⑤",
+        "cite": {
+          "chunk_id": "p661-x10",
+          "quote": "⑤ 재료량은 ‘[건축부문] 6-3-1 가열식시트 붙임’을 참고하여 적용한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p661-x10",
+          "quote": "④ 공구손료는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인력이 표에 직접 명시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p661-t2",
+      "row": "방수공",
+      "column": "바닥",
+      "value": "0.034"
+    },
+    {
+      "table_id": "p661-t2",
+      "row": "방수공",
+      "column": "수직부",
+      "value": "0.046"
+    },
+    {
+      "table_id": "p661-t2",
+      "row": "보통인부",
+      "column": "바닥",
+      "value": "0.020"
+    },
+    {
+      "table_id": "p661-t2",
+      "row": "보통인부",
+      "column": "수직부",
+      "value": "0.025"
+    },
+    {
+      "chunk_id": "p661-x10",
+      "quote": "④ 공구손료는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p661-x10",
+      "quote": "⑤ 재료량은 ‘[건축부문] 6-3-1 가열식시트 붙임’을 참고하여 적용한다."
+    }
+  ],
+  "open_questions": [
+    "재료량 산출을 위해 6-3-1 가열식시트 붙임 명세를 자동으로 호출하거나 연동하는 기능이 필요한지 여부"
+  ],
+  "questions": [
+    "접착식시트를 시공할 면적은 몇 ㎡입니까?",
+    "시공 부위가 바닥입니까, 아니면 수직부입니까?",
+    "재료량은 6-3-1 가열식시트 붙임 기준을 참고해야 하는데, 해당 재료량 산출도 함께 진행하시겠습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:03:44.053579+00:00",
+    "input_tokens": 11584,
+    "output_tokens": 1617,
+    "source_pages": [
+      661,
+      662
+    ],
+    "prompt_sha256": "c39c5aa1df156fc4ce748af5c9cdc295bca8245eea25030442f340239fd0ce09",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

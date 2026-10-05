@@ -1,0 +1,231 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/8-2-4/평판재하시험",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "8-2-4",
+    "title": "평판재하시험('08년 신설)",
+    "work": "평판재하시험",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      399,
+      400
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "회",
+        "required": true,
+        "ask": "평판재하시험 횟수는 몇 회입니까?",
+        "source": "8-2-4 평판재하시험 표 기준 (회당)"
+      },
+      {
+        "name": "reaction_device",
+        "type": "enum",
+        "allowed_values": [
+          "굴착기",
+          "H-beam",
+          "Screw anchor",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "반력장치로 무엇을 사용합니까?",
+        "source": "[주] ② 본 품은 반력장치로서 굴착기를 적용한 것을 기준으로 한 것으로 H-beam, Screw anchor 등을 사용하는 경우에는 별도 계상한다."
+      },
+      {
+        "name": "allowable_bearing_capacity",
+        "type": "enum",
+        "allowed_values": [
+          "5ton 이하",
+          "5ton 초과 10ton 이하",
+          "10ton 초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "허용지지력은 어느 범위입니까?",
+        "source": "[주] ③ 굴착기는 허용지지력이 5ton 이하의 경우 0.6㎥을 10ton 이하의 경우 1.0㎥의 규격을 적용하여 별도 계상하며, 하중이 10ton 이상 필요하여 추가적인 반력장치가 소요되는 경우 그 비용은 추가 계상한다."
+      }
+    ],
+    "tables": [
+      {
+        "id": "p455-t2",
+        "role": "평판재하시험 단위당 품",
+        "source": "8-2-4 평판재하시험 표",
+        "unit": "인, ㎏ / 회당",
+        "values": {
+          "중급기술자": {
+            "수량": "1.06"
+          },
+          "초급기술자": {
+            "수량": "1.88"
+          },
+          "보통인부": {
+            "수량": "2.19"
+          },
+          "표준사": {
+            "수량": "1.0"
+          }
+        },
+        "cite": {
+          "table_id": "p455-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p455-t2",
+          "column_input": "수량",
+          "trades": [
+            "중급기술자",
+            "초급기술자",
+            "보통인부",
+            "표준사"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "8-2-4 평판재하시험 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "반력장치로 굴착기 외의 장비(H-beam, Screw anchor 등) 사용",
+        "blocked_if": {
+          "input": "reaction_device",
+          "op": "!=",
+          "value": "굴착기"
+        },
+        "reason": "본 품은 반력장치로서 굴착기를 적용한 것을 기준으로 하므로, 그 외의 장비 사용 시 별도 계상해야 함",
+        "source": "[주] ②",
+        "cite": [
+          {
+            "chunk_id": "p456-x0",
+            "quote": "본 품은 반력장치로서 굴착기를 적용한 것을 기준으로 한 것으로 H-beam, Screw anchor 등을 사용하는 경우에는 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "condition": "하중이 10ton 이상 필요하여 추가적인 반력장치가 소요되는 경우",
+        "blocked_if": {
+          "input": "allowable_bearing_capacity",
+          "op": "==",
+          "value": "10ton 초과"
+        },
+        "reason": "하중이 10ton 이상 필요하여 추가적인 반력장치가 소요되는 경우 그 비용은 추가 계상해야 함",
+        "source": "[주] ③",
+        "cite": [
+          {
+            "chunk_id": "p456-x0",
+            "quote": "하중이 10ton 이상 필요하여 추가적인 반력장치가 소요되는 경우 그 비용은 추가 계상한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "굴착기 기계경비",
+        "source": "[주] ③",
+        "cite": [
+          {
+            "chunk_id": "p456-x0",
+            "quote": "굴착기는 허용지지력이 5ton 이하의 경우 0.6㎥을 10ton 이하의 경우 1.0㎥의 규격을 적용하여 별도 계상하며"
+          }
+        ]
+      },
+      {
+        "item": "운반비, 잡재료 및 손료",
+        "source": "[주] ④",
+        "cite": [
+          {
+            "chunk_id": "p456-x0",
+            "quote": "운반비, 잡재료 및 손료는 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "회당 직종별 인원과 재료 수량이 표에 직접 제시되어 있어 단위당 품 계산 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p455-t2",
+      "row": "중급기술자",
+      "column": "수량",
+      "value": "1.06"
+    },
+    {
+      "table_id": "p455-t2",
+      "row": "초급기술자",
+      "column": "수량",
+      "value": "1.88"
+    },
+    {
+      "table_id": "p455-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2.19"
+    },
+    {
+      "table_id": "p455-t2",
+      "row": "표준사",
+      "column": "수량",
+      "value": "1.0"
+    },
+    {
+      "chunk_id": "p456-x0",
+      "quote": "본 품은 반력장치로서 굴착기를 적용한 것을 기준으로 한 것으로 H-beam, Screw anchor 등을 사용하는 경우에는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p456-x0",
+      "quote": "굴착기는 허용지지력이 5ton 이하의 경우 0.6㎥을 10ton 이하의 경우 1.0㎥의 규격을 적용하여 별도 계상하며"
+    },
+    {
+      "chunk_id": "p456-x0",
+      "quote": "하중이 10ton 이상 필요하여 추가적인 반력장치가 소요되는 경우 그 비용은 추가 계상한다."
+    },
+    {
+      "chunk_id": "p456-x0",
+      "quote": "운반비, 잡재료 및 손료는 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "평판재하시험 1회당 보통인부는 몇 인이 필요한가요?",
+    "반력장치로 H-beam을 사용하면 품셈을 어떻게 적용하나요?",
+    "허용지지력이 15ton인 경우 굴착기 규격은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:11.119162+00:00",
+    "input_tokens": 12154,
+    "output_tokens": 2204,
+    "source_pages": [
+      455,
+      456,
+      457
+    ],
+    "prompt_sha256": "10c4d1f99a4451a008902009c9ed22a041b43720769f0434959b727d7234d533",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p456-x0 조각 텍스트에 없음",
+      "quote가 p456-x0 조각 텍스트에 없음"
+    ]
+  }
+}

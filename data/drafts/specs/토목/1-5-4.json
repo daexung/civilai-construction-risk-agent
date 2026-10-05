@@ -1,0 +1,286 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-5-4/아스팔트기층기계포설_대형장비",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-5-4",
+    "title": "아스팔트 기층 기계포설(대형장비)('24년 보완)",
+    "work": "기본 포설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      312
+    ],
+    "inputs": [
+      {
+        "name": "width",
+        "type": "enum",
+        "allowed_values": [
+          "2m≤시공폭<3m",
+          "3m≤시공폭"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공폭은 어느 범위에 해당합니까?",
+        "source": "PDF 312쪽 1-5-4 표의 시공량 열 구분 및 [주] ③",
+        "synonyms": {
+          "2m≤시공폭<3m": [
+            "2m 이상 3m 미만",
+            "길어깨"
+          ],
+          "3m≤시공폭": [
+            "3m 이상",
+            "본선"
+          ]
+        }
+      },
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "5~7㎝",
+          "8~10㎝"
+        ],
+        "unit": "㎝",
+        "required": true,
+        "ask": "1층 포설두께는 얼마입니까?",
+        "source": "PDF 312쪽 1-5-4 표의 시공량 하위 열 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "아스팔트 기층 포설 물량은 몇 ㎡입니까?",
+        "source": "PDF 312쪽 1-5-4 표의 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p368-t0",
+        "role": "작업조 인원/장비 대수 및 조건별 기준 일일시공량",
+        "source": "PDF 312쪽 1-5-4 표",
+        "unit": "인/작업조, 대/작업조, ㎡/일",
+        "values": {
+          "포장공": {
+            "수량": "4"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "아스팔트 피니셔": {
+            "수량": "1"
+          },
+          "머캐덤롤러": {
+            "수량": "1"
+          },
+          "타이어롤러": {
+            "수량": "1"
+          },
+          "탠덤롤러": {
+            "수량": "1"
+          },
+          "살수차": {
+            "수량": "0.5"
+          },
+          "5~7㎝": {
+            "2m≤시공폭<3m": "2,700",
+            "3m≤시공폭": "4,900"
+          },
+          "8~10㎝": {
+            "2m≤시공폭<3m": "2,500",
+            "3m≤시공폭": "4,500"
+          }
+        },
+        "cite": {
+          "table_id": "p368-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p368-t0",
+          "row_input": "thickness",
+          "column_input": "width"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p368-t0",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "아스팔트 피니셔",
+            "table": "p368-t0",
+            "unit": "대·일"
+          },
+          {
+            "name": "머캐덤롤러",
+            "table": "p368-t0",
+            "unit": "대·일"
+          },
+          {
+            "name": "타이어롤러",
+            "table": "p368-t0",
+            "unit": "대·일"
+          },
+          {
+            "name": "탠덤롤러",
+            "table": "p368-t0",
+            "unit": "대·일"
+          },
+          {
+            "name": "살수차",
+            "table": "p368-t0",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p368-t0에서 시공폭과 포설두께에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량, 장비별 대·일 = 작업일수 × 표의 장비별 수량으로 구한다."
+      ],
+      "source": "PDF 312쪽 1-5-4 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "현장여건 및 시험포장 결과에 따라 장비조합 및 규격을 변경하는 경우",
+        "reason": "장비조합 및 규격 변경 시 품셈 기준과 달라져 별도 산정이 필요함",
+        "source": "PDF 312쪽 1-5-4 [주] ⑤ (두 번째 ⑤)",
+        "cite": {
+          "chunk_id": "p368-x5",
+          "quote": "⑤ 현장여건 및 시험포장 결과에 따라 장비조합 및 규격을 변경하여 적용할 수 있다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "아스팔트온도조절장비 등 추가 투입 장비의 기계경비",
+        "source": "PDF 312쪽 1-5-4 [주] ⑤ (첫 번째 ⑤)",
+        "cite": {
+          "chunk_id": "p368-x5",
+          "quote": "⑤ 본 품외의 장비(아스팔트온도조절장비 등)를 추가 투입하는 경우에 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "작업조의 인원 및 장비 대수와 조건별 일일시공량이 표로 주어져 있어, 전체 물량을 일일시공량으로 나누어 작업일수를 구한 뒤 작업조를 곱하는 전형적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p368-t0",
+      "row": "포장공",
+      "column": "수량",
+      "value": "4"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "아스팔트 피니셔",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "머캐덤롤러",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "타이어롤러",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "탠덤롤러",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "살수차",
+      "column": "수량",
+      "value": "0.5"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "5~7㎝",
+      "column": "2m≤시공폭<3m",
+      "value": "2,700"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "5~7㎝",
+      "column": "3m≤시공폭",
+      "value": "4,900"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "8~10㎝",
+      "column": "2m≤시공폭<3m",
+      "value": "2,500"
+    },
+    {
+      "table_id": "p368-t0",
+      "row": "8~10㎝",
+      "column": "3m≤시공폭",
+      "value": "4,500"
+    },
+    {
+      "chunk_id": "p368-x5",
+      "quote": "① 본 품은 대형장비(피니셔)를 사용한 아스팔트 기층 포설 기준이다."
+    },
+    {
+      "chunk_id": "p368-x5",
+      "quote": "② 본 품은 포설 및 고르기, 다짐 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p368-x5",
+      "quote": "③ 시공폭 2m이상 3m미만은 길어깨 등, 시공폭 3m이상은 본선에 적용한다."
+    }
+  ],
+  "open_questions": [
+    "quantity_model의 crew 및 equipment 파라미터에서 인원/장비 수량이 조건에 따라 변하지 않고 고정된 단일 열(수량)에 있을 때, column_input을 생략하고 구현체가 기본 열을 읽도록 하는 방식이 맞는지 확인이 필요합니다.",
+    "equipment가 여러 대 투입될 때 명세 형식 예시와 달리 배열로 작성했는데, 이 구조가 계산 엔진에서 올바르게 처리되는지 확인이 필요합니다.",
+    "원문 [주]에 ⑤번 항목이 두 번 중복되어 기재되어 있으며, 파싱 결과에도 그대로 반영되어 있습니다. 이를 그대로 인용했습니다."
+  ],
+  "questions": [
+    "시공폭이 3.5m(본선)이고 1층 포설두께가 5cm일 때, 기준 일일시공량은 얼마인가요?",
+    "아스팔트온도조절장비를 추가로 투입했는데, 이 장비의 기계경비는 어떻게 계산해야 하나요?",
+    "포설할 아스팔트 기층의 총 물량(㎡)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:30.085080+00:00",
+    "input_tokens": 12125,
+    "output_tokens": 2914,
+    "source_pages": [
+      368,
+      369
+    ],
+    "prompt_sha256": "4ccb6977d7878419d6dbbf6f5f6e46f902d8f9689e3612dd2f7710e9b107b76b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-2-6/축중계손율",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-2-6",
+    "title": "축중계",
+    "work": "기간별 손율",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      40
+    ],
+    "inputs": [
+      {
+        "name": "duration",
+        "type": "enum",
+        "allowed_values": [
+          "3개월",
+          "6개월",
+          "9개월",
+          "12개월",
+          "24개월",
+          "36개월",
+          "48개월",
+          "60개월",
+          "120개월"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "축중계 사용 기간은 표에 있는 기간 중 어디에 해당합니까?",
+        "source": "PDF 40쪽 2-2-6 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p96-t2",
+        "role": "기간별 축중계 손율",
+        "source": "PDF 40쪽 2-2-6 표",
+        "unit": "%",
+        "values": {
+          "손율(%)": {
+            "3개월": "3",
+            "6개월": "5",
+            "9개월": "8",
+            "12개월": "10",
+            "24개월": "20",
+            "36개월": "30",
+            "48개월": "40",
+            "60개월": "50",
+            "120개월": "100"
+          }
+        },
+        "cite": {
+          "table_id": "p96-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 기간에 해당하는 손율(%)을 표에서 찾는다."
+      ],
+      "source": "PDF 40쪽 2-2-6 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "입력된 기간에 따라 표에서 손율(%) 값 하나를 찾아 보여주기만 하면 되므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p96-t2",
+      "row": "손율(%)",
+      "column": "3개월",
+      "value": "3"
+    }
+  ],
+  "open_questions": [
+    "표에 명시되지 않은 중간 기간(예: 4개월, 15개월 등)에 대한 손율 적용 방식(보간법 적용 여부 등)이 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "축중계를 6개월 사용할 때 적용되는 손율은 몇 %인가요?",
+    "사용 기간이 4개월인 경우 손율은 3개월과 6개월 중 어느 것을 적용해야 하나요, 아니면 보간해야 하나요?",
+    "축중계 손율을 확인하려면 사용 기간이 필요합니다. 몇 개월 사용하실 예정인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:12:33.787160+00:00",
+    "input_tokens": 11390,
+    "output_tokens": 885,
+    "source_pages": [
+      96,
+      97
+    ],
+    "prompt_sha256": "7cb7f3c1ac6f9e599be4ee324b99ef276f8a3bc9ec532db857f534c63e588dc0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/4-1-4/마루널설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "4-1-4",
+    "title": "마루널 설치('24년 보완)",
+    "work": "마루널 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "마루널 설치 면적은 몇 ㎡입니까? (합판 위에 못을 사용한 두께 22㎜, 폭 60㎜ 마루널 기준)",
+        "source": "4-1-4 마루널 설치 표 및 [주] ①, ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p645-t3",
+        "role": "마루널 설치 작업조 인원 및 시공량",
+        "source": "PDF 1쪽 4-1-4 마루널 설치 표",
+        "unit": "인/일, ㎡/일",
+        "values": {
+          "건축목공": {
+            "수량": "4",
+            "시공량(㎡)": "70"
+          },
+          "보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "70"
+          }
+        },
+        "cite": {
+          "table_id": "p645-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p645-t3",
+          "row": "건축목공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p645-t3",
+          "column": "수량",
+          "trades": [
+            "건축목공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "건축목공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p645-t3에서 기준 일일시공량을 가져온다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(수량)으로 구한다."
+      ],
+      "source": "PDF 1쪽 4-1-4 마루널 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.04",
+        "cite": {
+          "chunk_id": "p645-x15",
+          "quote": "공구손료 및 경장비(절단기, 타정기 등)의 기계경비는 인력품의 4%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 일당 작업조의 인원과 일일 시공량이 명시되어 있어, 물량을 일일 시공량으로 나누어 작업일수를 구하는 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p645-t3",
+      "row": "건축목공",
+      "column": "수량",
+      "value": "4"
+    },
+    {
+      "table_id": "p645-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p645-t3",
+      "row": "건축목공",
+      "column": "시공량(㎡)",
+      "value": "70"
+    },
+    {
+      "chunk_id": "p645-x15",
+      "quote": "공구손료 및 경장비(절단기, 타정기 등)의 기계경비는 인력품의 4%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "마루널의 두께가 22mm, 폭이 60mm가 아닌 경우 품을 어떻게 조정해야 하는지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "마루널 설치 면적이 100㎡일 때 필요한 건축목공과 보통인부의 인·일은 어떻게 되나요?",
+    "마루널 두께가 22mm가 아닌 30mm일 경우 품을 어떻게 조정해야 하나요?",
+    "합판 위에 못을 사용하지 않고 본드로 시공하는 경우에도 이 품셈을 적용할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:00:04.519035+00:00",
+    "input_tokens": 11504,
+    "output_tokens": 1398,
+    "source_pages": [
+      645,
+      646
+    ],
+    "prompt_sha256": "fb5b343a57abfd17a7cc11883c4ece88910a3d916bcd54b2d43567d0a30d432c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

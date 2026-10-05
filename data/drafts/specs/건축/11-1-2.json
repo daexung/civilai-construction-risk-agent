@@ -1,0 +1,193 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/11-1-2/석고보드면_바탕만들기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "11-1-2",
+    "title": "석고보드면 바탕만들기",
+    "work": "석고보드면 바탕만들기 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      635
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "올퍼티",
+          "줄퍼티"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류는 올퍼티와 줄퍼티 중 무엇입니까?",
+        "source": "표 p691-t2 열 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "작업 물량은 몇 ㎡입니까?",
+        "source": "표 p691-t2 단위 (㎡당)"
+      },
+      {
+        "name": "is_ceiling",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 부위가 천장입니까?",
+        "source": "표 p691-t2 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p691-t2",
+        "role": "석고보드면 바탕만들기 단위당 품",
+        "source": "PDF 635쪽 11-1-2 표",
+        "unit": "인/㎡",
+        "values": {
+          "도장공": {
+            "올퍼티": "0.066",
+            "줄퍼티": "0.035"
+          },
+          "보통인부": {
+            "올퍼티": "0.018",
+            "줄퍼티": "0.010"
+          }
+        },
+        "cite": {
+          "table_id": "p691-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p691-t2",
+          "row_input": "고정",
+          "column_input": "work_type",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_ceiling": true
+            },
+            "change": "본 품의 20%를 가산한다.",
+            "source": "표 p691-t2 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p691-t2에서 작업 종류(올퍼티/줄퍼티)에 따른 도장공, 보통인부의 단위당 품을 찾는다.",
+        "천장 작업인 경우 단위당 품에 20%를 가산한다.",
+        "조정된 단위당 품에 물량(quantity)을 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "PDF 635쪽 11-1-2 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료량(퍼티 등)",
+        "source": "PDF 635쪽 11-1-2 [주] ⑤",
+        "cite": {
+          "chunk_id": "p691-x14",
+          "quote": "⑤ 재료량(퍼티 등)은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 기계경비, 잡재료비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.04",
+        "cite": {
+          "chunk_id": "p691-x14",
+          "quote": "④ 공구손료 및 경장비(샌딩머신 등)의 기계경비, 잡재료비(연마지, F-Tape 등)는 인력품의 4%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 ㎡당 도장공과 보통인부의 품이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p691-t2",
+      "row": "도장공",
+      "column": "올퍼티",
+      "value": "0.066"
+    },
+    {
+      "table_id": "p691-t2",
+      "row": "도장공",
+      "column": "줄퍼티",
+      "value": "0.035"
+    },
+    {
+      "table_id": "p691-t2",
+      "row": "보통인부",
+      "column": "올퍼티",
+      "value": "0.018"
+    },
+    {
+      "table_id": "p691-t2",
+      "row": "보통인부",
+      "column": "줄퍼티",
+      "value": "0.010"
+    },
+    {
+      "table_id": "p691-t2",
+      "row": "비고",
+      "column": "올퍼티",
+      "value": "- 천장은 본 품의 20%를 가산한다."
+    },
+    {
+      "chunk_id": "p691-x14",
+      "quote": "④ 공구손료 및 경장비(샌딩머신 등)의 기계경비, 잡재료비(연마지, F-Tape 등)는 인력품의 4%로 계상한다."
+    },
+    {
+      "chunk_id": "p691-x14",
+      "quote": "⑤ 재료량(퍼티 등)은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "공구손료, 기계경비, 잡재료비가 합쳐서 인력품의 4%로 규정되어 있는데, 이를 원가계산 시 경비와 재료비 항목으로 어떻게 분리할지 명확하지 않아 일괄 경비로 처리했습니다."
+  ],
+  "questions": [
+    "올퍼티 작업 시 도장공의 단위당 품은 얼마인가요?",
+    "천장 작업 시 품 할증은 어떻게 적용하나요?",
+    "작업 부위가 천장인지 벽면인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:53:24.229880+00:00",
+    "input_tokens": 11691,
+    "output_tokens": 1898,
+    "source_pages": [
+      691,
+      692
+    ],
+    "prompt_sha256": "9a4588849d00c8553375bc0c84229dc58cb44765a93ed328623c57bb2e50aa2c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

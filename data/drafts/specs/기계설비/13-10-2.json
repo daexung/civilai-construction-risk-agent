@@ -1,0 +1,229 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-10-2/OVER_HEAD_CRANE_설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-10-2",
+    "title": "OVER HEAD CRANE 설치",
+    "work": "OVER HEAD CRANE 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      846,
+      847
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "OVER HEAD CRANE 설치 물량은 몇 ton입니까?",
+        "source": "PDF 846쪽 1. 직종별 설치품 기준 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p902-t1",
+        "role": "직종별 설치품",
+        "source": "PDF 846쪽 1. 직종별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "기계산업기사": {
+            "수량": "0.50"
+          },
+          "비계공": {
+            "수량": "2.499"
+          },
+          "플랜트기계설치공": {
+            "수량": "2.478"
+          },
+          "특별인부": {
+            "수량": "2.555"
+          },
+          "측량사": {
+            "수량": "0.250"
+          },
+          "용접공": {
+            "수량": "0.297"
+          },
+          "시험및조정": {
+            "수량": "0.807"
+          }
+        },
+        "cite": {
+          "table_id": "p902-t1"
+        }
+      },
+      {
+        "id": "p903-t0",
+        "role": "참고 장비명",
+        "source": "PDF 847쪽 [참고] 장비명",
+        "values": {
+          "Truck Crane Trailer Truck Compressor 전기용접기 Guy derrick Wich Portable drill M Portable electric G Angle Grinder Transit": {
+            "규격": "20 ton",
+            "단위": "대",
+            "수량": "1",
+            "비고": "Bolt"
+          }
+        },
+        "cite": {
+          "table_id": "p903-t0"
+        }
+      },
+      {
+        "id": "p903-t1",
+        "role": "참고 소모자재",
+        "source": "PDF 847쪽 [참고] 소모자재",
+        "values": {
+          "산소 아세틸렌 전기용접봉 걸레 세유 Grease Machine oil": {
+            "규격": "6,000ℓ입",
+            "단위": "병",
+            "수량": "0.2"
+          }
+        },
+        "cite": {
+          "table_id": "p903-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p902-t1",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "기계산업기사",
+            "비계공",
+            "플랜트기계설치공",
+            "특별인부",
+            "측량사",
+            "용접공",
+            "시험및조정"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p902-t1에서 직종별 단위당 품을 확인한다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 846쪽 1. 직종별 설치품",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "제청, 제유 및 도장 품",
+        "source": "PDF 847쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p903-x0",
+          "quote": "본 품에는 제청, 제유 및 도장이 포함되어 있지 않다."
+        }
+      },
+      {
+        "item": "전원 배선 및 전기기기 설치 품",
+        "source": "PDF 847쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p903-x0",
+          "quote": "본 품에는 전원 배선 및 전기기기 설치 품은 제외되어 있다."
+        }
+      },
+      {
+        "item": "공정별 설치품",
+        "source": "PDF 846쪽 2. 공정별 설치품",
+        "cite": {
+          "table_id": "p902-t2"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 품이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p902-t1",
+      "row": "기계산업기사",
+      "column": "수량",
+      "value": "0.50"
+    },
+    {
+      "table_id": "p902-t1",
+      "row": "비계공",
+      "column": "수량",
+      "value": "2.499"
+    },
+    {
+      "table_id": "p902-t1",
+      "row": "플랜트기계설치공",
+      "column": "수량",
+      "value": "2.478"
+    },
+    {
+      "table_id": "p902-t1",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "2.555"
+    },
+    {
+      "table_id": "p902-t1",
+      "row": "측량사",
+      "column": "수량",
+      "value": "0.250"
+    },
+    {
+      "table_id": "p902-t1",
+      "row": "용접공",
+      "column": "수량",
+      "value": "0.297"
+    },
+    {
+      "table_id": "p902-t1",
+      "row": "시험및조정",
+      "column": "수량",
+      "value": "0.807"
+    },
+    {
+      "chunk_id": "p903-x0",
+      "quote": "본 품에는 제청, 제유 및 도장이 포함되어 있지 않다."
+    },
+    {
+      "chunk_id": "p903-x0",
+      "quote": "본 품에는 전원 배선 및 전기기기 설치 품은 제외되어 있다."
+    }
+  ],
+  "open_questions": [
+    "공정별 설치품 표(p902-t2)의 파싱 결과가 깨져 있어 정확한 행/열 매핑이 어렵습니다. 직종별 설치품(p902-t1)을 기준으로 명세를 작성했습니다.",
+    "시험및조정은 직종이 아니라 공정명에 가까운데, 직종별 설치품 표에 포함되어 있어 그대로 직종으로 취급했습니다.",
+    "참고 장비명(p903-t0)과 소모자재(p903-t1) 표의 파싱 결과가 여러 행을 하나로 뭉뚱그려 놓아 정확한 값을 분리하기 어렵습니다. 원문 파싱 텍스트를 그대로 사용했습니다."
+  ],
+  "questions": [
+    "OVER HEAD CRANE 10ton 설치 시 직종별 품은 어떻게 계산하나요?",
+    "전원 배선 및 전기기기 설치 품도 이 품셈에 포함되나요?",
+    "설치 물량(ton) 입력이 누락되었습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:41:34.190715+00:00",
+    "input_tokens": 13642,
+    "output_tokens": 2180,
+    "source_pages": [
+      902,
+      903,
+      904
+    ],
+    "prompt_sha256": "9de2a0d0398fb92287c6621b573a4d08e15fd38714bdab7252f427e7a138f877",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

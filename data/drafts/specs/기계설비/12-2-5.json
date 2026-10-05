@@ -1,0 +1,272 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/12-2-5/압축공기발생장치및공기관배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "12-2-5",
+    "title": "압축공기 발생장치 및 공기관 배관",
+    "work": "압축공기 발생장치 및 공기관 배관 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      721
+    ],
+    "inputs": [
+      {
+        "name": "item_spec",
+        "type": "enum",
+        "allowed_values": [
+          "압축공기발생장치_5㎏/㎠이하",
+          "압축공기발생장치_10㎏/㎠이하",
+          "압축공기발생장치_30㎏/㎠이하",
+          "주공기Tank_500ℓ 이하",
+          "주공기Tank_700ℓ 이하",
+          "주공기Tank_700ℓ 이상",
+          "유니온엘보_20∼25㎜",
+          "유압Cylinder_60K",
+          "유압Cylinder_90K",
+          "유압Cylinder_130K",
+          "OilPump_0.75㎾",
+          "OilPump_1.50㎾",
+          "OilPump_2.25㎾",
+          "OilPump_3.00㎾",
+          "AirCylinder_100ø 이하",
+          "AirCylinder_100ø 이상",
+          "AirCompressor_소형",
+          "AirCompressor_대형",
+          "제습기",
+          "공기압축기시험",
+          "조작함(설비물)_분전반, 계기, 스위치 기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 장치의 명칭 및 규격은 무엇입니까?",
+        "source": "PDF 721쪽 12-2-5 표의 명칭 및 규격"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "조/개/대",
+        "required": true,
+        "ask": "설치 물량은 얼마입니까? (단위는 선택한 장치에 따라 조, 개, 대 중 하나입니다)",
+        "source": "PDF 721쪽 12-2-5 표의 단위"
+      },
+      {
+        "name": "is_testing",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시험을 수행합니까? (시험시 기계 기술자 1인 가산)",
+        "source": "PDF 721쪽 12-2-5 표 하단 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p777-t0",
+        "role": "압축공기 발생장치 및 공기관 배관 설치 품",
+        "source": "PDF 721쪽 12-2-5 표",
+        "unit": "인",
+        "values": {
+          "압축공기발생장치_5㎏/㎠이하": {
+            "단위": "조당",
+            "계장공": "1.40",
+            "보통인부": "0.40"
+          },
+          "압축공기발생장치_10㎏/㎠이하": {
+            "단위": "조당",
+            "계장공": "2.90",
+            "보통인부": "0.90"
+          },
+          "압축공기발생장치_30㎏/㎠이하": {
+            "단위": "조당",
+            "계장공": "8.50",
+            "보통인부": "2.50"
+          },
+          "주공기Tank_500ℓ 이하": {
+            "단위": "조당",
+            "계장공": "2.60",
+            "보통인부": "0.80"
+          },
+          "주공기Tank_700ℓ 이하": {
+            "단위": "조당",
+            "계장공": "3.0",
+            "보통인부": "1.5"
+          },
+          "주공기Tank_700ℓ 이상": {
+            "단위": "조당",
+            "계장공": "4.5",
+            "보통인부": "2.5"
+          },
+          "유니온엘보_20∼25㎜": {
+            "단위": "개당",
+            "계장공": "0.25",
+            "보통인부": "0.05"
+          },
+          "유압Cylinder_60K": {
+            "단위": "대",
+            "계장공": "0.7"
+          },
+          "유압Cylinder_90K": {
+            "단위": "대",
+            "계장공": "0.8"
+          },
+          "유압Cylinder_130K": {
+            "단위": "대",
+            "계장공": "1.0"
+          },
+          "OilPump_0.75㎾": {
+            "단위": "대",
+            "계장공": "1.5"
+          },
+          "OilPump_1.50㎾": {
+            "단위": "대",
+            "계장공": "1.6"
+          },
+          "OilPump_2.25㎾": {
+            "단위": "대",
+            "계장공": "1.7"
+          },
+          "OilPump_3.00㎾": {
+            "단위": "대",
+            "계장공": "1.8"
+          },
+          "AirCylinder_100ø 이하": {
+            "단위": "대",
+            "계장공": "1.0"
+          },
+          "AirCylinder_100ø 이상": {
+            "단위": "대",
+            "계장공": "1.2"
+          },
+          "AirCompressor_소형": {
+            "단위": "대",
+            "계장공": "1.5"
+          },
+          "AirCompressor_대형": {
+            "단위": "대",
+            "계장공": "2.0"
+          },
+          "제습기": {
+            "단위": "대",
+            "계장공": "1.5"
+          },
+          "공기압축기시험": {
+            "단위": "조당",
+            "계장공": "1.0",
+            "보통인부": "1.0"
+          },
+          "조작함(설비물)_분전반, 계기, 스위치 기타": {
+            "단위": "조당",
+            "계장공": "2.0",
+            "보통인부": "1.0"
+          }
+        },
+        "cite": {
+          "table_id": "p777-t0"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "is_testing": true
+        },
+        "when_text": "is_testing = true",
+        "change": {
+          "기계기술자": "+1"
+        },
+        "source": "PDF 721쪽 12-2-5 표 하단 비고",
+        "cite": {
+          "table_id": "p777-t0",
+          "row": "비고",
+          "column": "비고"
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p777-t0",
+          "row_input": "item_spec",
+          "trades": [
+            "계장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_testing": true
+            },
+            "change": "기계 기술자 1인을 가산한다.",
+            "source": "PDF 721쪽 12-2-5 표 하단 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p777-t0 표에서 명칭 및 규격에 해당하는 단위당 품(계장공, 보통인부)을 찾는다.",
+        "물량을 곱해 총 품을 구한다.",
+        "시험 여부(is_testing)가 참일 경우 기계 기술자 1인을 가산한다."
+      ],
+      "source": "PDF 721쪽 12-2-5 표 및 비고",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품(계장공, 보통인부)이 표에 직접 명시되어 있어 물량을 곱해 계산하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p777-t0",
+      "row": "압축공기발생장치 | 규격 5㎏/㎠이하",
+      "column": "계장공",
+      "value": "1.40"
+    },
+    {
+      "table_id": "p777-t0",
+      "row": "압축공기발생장치 | 규격 5㎏/㎠이하",
+      "column": "보통인부",
+      "value": "0.40"
+    },
+    {
+      "table_id": "p777-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 시험시 기계 기술자 1인을 가산한다."
+    }
+  ],
+  "open_questions": [
+    "비고의 '시험시 기계 기술자 1인을 가산한다'가 표 내의 '공기압축기시험' 항목에만 적용되는 것인지, 아니면 다른 장치 설치 후 시험할 때마다 적용되는 것인지 명확하지 않아 별도 입력(is_testing)으로 처리했습니다."
+  ],
+  "questions": [
+    "설치하려는 장치의 명칭과 규격은 무엇입니까?",
+    "비고란의 '시험시 기계 기술자 1인 가산'은 '공기압축기시험' 항목을 수행할 때만 적용되나요, 아니면 다른 장비 설치 후 시험할 때도 적용되나요?",
+    "설치할 장비의 수량(조, 개, 대)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:41:06.503593+00:00",
+    "input_tokens": 11979,
+    "output_tokens": 2787,
+    "source_pages": [
+      777,
+      778
+    ],
+    "prompt_sha256": "550f7016ad0c5b64a1b3a70639a5977dcd3b2f009cf86d3587f8b2985eb1dee0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -55,12 +55,13 @@ def judge(item: dict, hits: list) -> dict:
 def main() -> int:
     spec = json.loads(QUESTIONS.read_text(encoding="utf-8"))
     items = spec["questions"] + spec.get("evidence_checks", [])
-    vector = VectorIndex()
+    config = ROOT / "evals/index_configs/6chapter_studio.json"
+    vector = VectorIndex(config_path=config)
     if vector.stale or vector.missing:
         raise SystemExit(f"벡터가 청크와 맞지 않는다(옛 {len(vector.stale)}, 없음 {len(vector.missing)}). embed.py를 다시 실행")
     bm25 = Index(load(CHUNKS))
     # 하이브리드는 따로 만든 벡터 인덱스로 자기 질문 임베딩을 직접 호출한다(호출 수·시간을 따로 잰다)
-    methods = {"bm25": bm25, "vector": vector, "hybrid": HybridIndex(bm25=bm25, vector=VectorIndex())}
+    methods = {"bm25": bm25, "vector": vector, "hybrid": HybridIndex(bm25=bm25, vector=VectorIndex(config_path=config))}
 
     rows = []
     for item in items:

@@ -1,0 +1,258 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/5-4-1/차수재공",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "5-4-1",
+    "title": "차수재공('26년 보완)",
+    "work": "차수재 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      127
+    ],
+    "inputs": [
+      {
+        "name": "material_type",
+        "type": "enum",
+        "allowed_values": [
+          "부직포",
+          "지오콤포지트",
+          "벤토나이트매트",
+          "HDPE시트"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 차수재의 종류는 무엇입니까?",
+        "source": "PDF 127쪽 5-4-1 표의 시공량 구분",
+        "synonyms": {
+          "HDPE시트": [
+            "HDPE Sheet",
+            "고밀도 폴리에틸렌"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "차수재 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 127쪽 5-4-1 표 시공량(㎡)"
+      },
+      {
+        "name": "layers",
+        "type": "nonnegative_integer",
+        "allowed_values": "1 이상의 정수",
+        "unit": "겹",
+        "required": true,
+        "ask": "차수재를 몇 겹으로 설치합니까?",
+        "source": "PDF 127쪽 [주] ①"
+      },
+      {
+        "name": "vertical_height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "작업의 수직고는 몇 m입니까?",
+        "source": "PDF 127쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p183-t3",
+        "role": "차수재공 일당 작업조 및 자재별 일일시공량",
+        "source": "PDF 127쪽 5-4-1 표",
+        "unit": "인, 대, ㎡/일",
+        "values": {
+          "방수공": {
+            "부직포": "6",
+            "지오콤포지트": "6",
+            "벤토나이트매트": "6",
+            "HDPE시트": "6"
+          },
+          "보통인부": {
+            "부직포": "2",
+            "지오콤포지트": "2",
+            "벤토나이트매트": "2",
+            "HDPE시트": "2"
+          },
+          "크레인": {
+            "부직포": "1",
+            "지오콤포지트": "1",
+            "벤토나이트매트": "1",
+            "HDPE시트": "1"
+          },
+          "일일시공량": {
+            "부직포": "3,000",
+            "지오콤포지트": "2,000",
+            "벤토나이트매트": "2,000",
+            "HDPE시트": "800"
+          }
+        },
+        "cite": {
+          "table_id": "p183-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p183-t3",
+          "row": "일일시공량",
+          "column_input": "material_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p183-t3",
+          "column_input": "material_type",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "방수공": "1014",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "크레인",
+          "table": "p183-t3",
+          "unit": "대·일",
+          "machine_code_input": null,
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p183-t3에서 자재 종류(material_type)에 따른 일일시공량을 찾는다.",
+        "작업일수 = quantity ÷ 일일시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 인원, 크레인 대·일 = 작업일수 × 표의 대수로 구한다.",
+        "겹 수(layers)가 2 이상일 경우, 산출된 총 품(인·일 및 대·일)에 겹 수를 곱하여 최종 품을 구한다."
+      ],
+      "source": "PDF 127쪽 5-4-1 표 및 [주] ①",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "수직고 50m 초과",
+        "blocked_if": {
+          "input": "vertical_height",
+          "op": ">",
+          "value": 50
+        },
+        "reason": "본 품은 수직고 50m 이하를 기준한 것으로, 50m 초과 시의 적용 기준이나 할증이 명시되어 있지 않음",
+        "source": "PDF 127쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p183-x14",
+          "quote": "본 품은 수직고 50m 이하를 기준한 것으로, 높이 할증은 별도 계상하지 않는다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "지반고르기 및 되메우기",
+        "source": "PDF 127쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p183-x14",
+          "quote": "지반고르기, 되메우기가 필요한 경우 별도 계상한다."
+        }
+      },
+      {
+        "item": "크레인 규격 산정",
+        "source": "PDF 127쪽 [주] ⑥",
+        "cite": {
+          "chunk_id": "p183-x14",
+          "quote": "장비(크레인)의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율(적정하중, 작업반경 등)을 고려하여"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조의 인원 및 장비 대수와 자재별 일일시공량이 표로 주어져 있어, 물량을 일일시공량으로 나누어 작업일수를 구하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p183-t3",
+      "row": "방수공 보통인부",
+      "column": "수량 6",
+      "value": "6"
+    },
+    {
+      "table_id": "p183-t3",
+      "row": "방수공 보통인부",
+      "column": "수량 2",
+      "value": "2"
+    },
+    {
+      "table_id": "p183-t3",
+      "row": "크레인",
+      "column": "수량 1",
+      "value": "1"
+    },
+    {
+      "table_id": "p183-t3",
+      "row": "방수공 보통인부",
+      "column": "시공량(㎡) 부직포",
+      "value": "3,000"
+    },
+    {
+      "table_id": "p183-t3",
+      "row": "방수공 보통인부",
+      "column": "시공량(㎡) 지오콤포지트",
+      "value": "2,000"
+    },
+    {
+      "table_id": "p183-t3",
+      "row": "방수공 보통인부",
+      "column": "시공량(㎡) 벤토나이트매트",
+      "value": "2,000"
+    },
+    {
+      "table_id": "p183-t3",
+      "row": "방수공 보통인부",
+      "column": "시공량(㎡) HDPE시트",
+      "value": "800"
+    },
+    {
+      "chunk_id": "p183-x14",
+      "quote": "본 품은 부직포, 지오콤포지트, 벤토나이트매트, HDPE Sheet(고밀도 폴리에틸렌)의 재료를 각각 1겹\n설치하는 기준으로 2겹을 설치 할 경우에는 해당 품의 2회를 적용한다."
+    },
+    {
+      "chunk_id": "p183-x14",
+      "quote": "본 품은 수직고 50m 이하를 기준한 것으로, 높이 할증은 별도 계상하지 않는다."
+    }
+  ],
+  "open_questions": [
+    "원문 128쪽(OCR page 2)에 있는 공구손료 및 경장비 요율(주석 ⑦)과 재료량 할증 기준(주석 ⑧)이 파싱 결과에 누락되어 있어 계산식(cost_rules 등)에 포함하지 못했습니다.",
+    "파싱 결과 p183-t3의 텍스트가 원문의 행/열 구조(방수공 6, 보통인부 2, 크레인 1)와 다르게 병합되어 있어, 계산 모델에 맞게 표를 논리적으로 재구성하여 사용했습니다.",
+    "주석 ④의 '수직고 50m 이하를 기준한 것으로, 높이 할증은 별도 계상하지 않는다'가 50m 초과 시 이 품을 사용할 수 없다는 뜻인지 명확하지 않아 50m 초과 시 blocked 처리했습니다."
+  ],
+  "questions": [
+    "HDPE시트 1,000㎡를 1겹 설치할 때 필요한 방수공과 보통인부 품은 얼마인가요?",
+    "수직고가 60m인 곳에 부직포를 설치하려고 하는데 이 품셈을 적용할 수 있나요?",
+    "지오콤포지트를 2겹으로 설치할 때 품은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:23:02.785665+00:00",
+    "input_tokens": 11756,
+    "output_tokens": 2811,
+    "source_pages": [
+      183,
+      184
+    ],
+    "prompt_sha256": "7c930ab6c47942f5964bc8e712cb2babd97305f38d3dac35f8af13e14358b1b0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p183-x14 조각 텍스트에 없음"
+    ]
+  }
+}

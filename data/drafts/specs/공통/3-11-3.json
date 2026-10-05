@@ -1,0 +1,286 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-11-3/머신가이던스_불도저",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-11-3",
+    "title": "머신 가이던스(MG) 불도저('24년 신설)",
+    "work": "장비조립･해체 및 작업능력",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      87
+    ],
+    "inputs": [
+      {
+        "name": "total_volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "전체 토공량은 몇 ㎥입니까?",
+        "source": "2. 작업능력 [주] ⑦"
+      },
+      {
+        "name": "soil_condition",
+        "type": "enum",
+        "allowed_values": [
+          "보통토사",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 대상 토질은 무엇입니까?",
+        "source": "2. 작업능력 [주] ⑧"
+      },
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "깎기, 집토 및 소운반",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류는 무엇입니까?",
+        "source": "2. 작업능력 [주] ⑧"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p143-t0",
+        "role": "장비조립･해체 품",
+        "source": "1. 3D GNSS 머신 가이던스 장비조립･해체",
+        "unit": "인, 일",
+        "values": {
+          "고급기술자": {
+            "수량": "1"
+          },
+          "중급기술자": {
+            "수량": "1"
+          },
+          "용접공": {
+            "수량": "1"
+          },
+          "조립": {
+            "수량": "1"
+          },
+          "해체": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p143-t0"
+        }
+      },
+      {
+        "id": "p143-t1",
+        "role": "불도저 작업능력",
+        "source": "2. 3D GNSS 머신 가이던스 불도저 작업능력",
+        "unit": "㎥/일",
+        "values": {
+          "흙깎기": {
+            "시공량": "630"
+          }
+        },
+        "cite": {
+          "table_id": "p143-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "장비조립·해체 표의 '조립', '해체' 항목이 어떤 직종이나 장비를 의미하는지 명확하지 않아 자동 계산이 어렵습니다.",
+        "작업능력 표에는 인력 편성 없이 불도저의 일당 시공량만 제시되어 있어 표준적인 일당 작업조 계산식에 맞지 않습니다."
+      ],
+      "source": "1. 장비조립･해체 및 2. 작업능력",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "전체 토공량이 10,000㎥ 미만인 경우",
+        "blocked_if": {
+          "input": "total_volume",
+          "op": "<",
+          "value": 10000
+        },
+        "reason": "중규모(10,000㎥) 미만의 공사에 적용할 수 없음",
+        "source": "2. 작업능력 [주] ⑦",
+        "cite": {
+          "section_no": "3-11-3",
+          "subsection_no": "2",
+          "marker": "⑦"
+        }
+      },
+      {
+        "condition": "보통토사의 깎기, 집토 및 소운반 작업이 아닌 경우",
+        "blocked_if": {
+          "input": "soil_condition",
+          "op": "!=",
+          "value": "보통토사"
+        },
+        "reason": "보통토사의 깎기, 집토 및 소운반 작업에만 적용함",
+        "source": "2. 작업능력 [주] ⑧",
+        "cite": {
+          "section_no": "3-11-3",
+          "subsection_no": "2",
+          "marker": "⑧"
+        }
+      },
+      {
+        "condition": "보통토사의 깎기, 집토 및 소운반 작업이 아닌 경우",
+        "blocked_if": {
+          "input": "work_type",
+          "op": "!=",
+          "value": "깎기, 집토 및 소운반"
+        },
+        "reason": "보통토사의 깎기, 집토 및 소운반 작업에만 적용함",
+        "source": "2. 작업능력 [주] ⑧",
+        "cite": {
+          "section_no": "3-11-3",
+          "subsection_no": "2",
+          "marker": "⑧"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "GNSS 기준국(Base station) 설치 및 해체품",
+        "source": "1. 장비조립･해체 [주] ①",
+        "cite": {
+          "section_no": "3-11-3",
+          "subsection_no": "1",
+          "marker": "①"
+        }
+      },
+      {
+        "item": "공구손료 및 경장비의 기계경비(측량기기, 용접기 등)",
+        "source": "1. 장비조립･해체 [주] ②",
+        "cite": {
+          "section_no": "3-11-3",
+          "subsection_no": "1",
+          "marker": "②"
+        }
+      },
+      {
+        "item": "3D 도면 제작·변환 작업",
+        "source": "2. 작업능력 [주] ⑤",
+        "cite": {
+          "section_no": "3-11-3",
+          "subsection_no": "2",
+          "marker": "⑤"
+        }
+      },
+      {
+        "item": "불도저 주연료 15% 할증",
+        "source": "2. 작업능력 [주] ⑨",
+        "cite": {
+          "section_no": "3-11-3",
+          "subsection_no": "2",
+          "marker": "⑨"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "장비조립·해체 표의 '조립', '해체' 항목이 어떤 직종이나 장비를 의미하는지 명확하지 않으며, 작업능력 표에는 인력 편성 없이 불도저의 일당 시공량만 제시되어 있어 표준적인 일당 작업조나 단위당 품 계산식으로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p143-t0",
+      "row": "고급기술자",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p143-t0",
+      "row": "중급기술자",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p143-t0",
+      "row": "용접공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p143-t0",
+      "row": "조립",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p143-t0",
+      "row": "해체",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p143-t1",
+      "row": "흙깎기",
+      "column": "시공량",
+      "value": "630"
+    },
+    {
+      "chunk_id": "p143-x14",
+      "quote": "⑦ 본 품은 전체 토공량이 중규모(10,000㎥) (8-1-2 공사규모별 표준건설기계) 이상의 공사 규모에 대한"
+    },
+    {
+      "chunk_id": "p143-x14",
+      "quote": "품으로 중규모 미만의 공사에 적용할 수 없다."
+    },
+    {
+      "chunk_id": "p143-x14",
+      "quote": "⑧ 본 품은 보통토사의 깎기, 집토 및 소운반 작업에 적용한다."
+    },
+    {
+      "chunk_id": "p143-x10",
+      "quote": "① 본 품은 머신 가이던스(불도저용) 장치들을 굴착기에 조립 및 해체하는데 소요되는 품이며, GNSS 기준국(Base"
+    },
+    {
+      "chunk_id": "p143-x10",
+      "quote": "station) 설치 및 해체품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p143-x10",
+      "quote": "② 공구손료 및 경장비의 기계경비(측량기기, 용접기 등)는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p143-x14",
+      "quote": "⑤ 3D GNSS 머신 컨트롤 굴착기의 운용에 3D 도면 제작·변환 작업이 필요한 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p143-x14",
+      "quote": "⑨ 3D GNSS 머신 가이던스를 사용하는 불도저는 주연료에 15% 할증을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "장비조립·해체 표(p143-t0)의 '조립', '해체' 항목이 인력(직종)인지 장비인지 명확하지 않습니다.",
+    "작업능력 표(p143-t1)에 인력 편성이 없어 일당 작업조 계산을 어떻게 구성해야 할지 불분명합니다."
+  ],
+  "questions": [
+    "전체 토공량이 10,000㎥ 미만인 경우 이 품을 적용할 수 있나요?",
+    "장비조립·해체 표에 있는 '조립'과 '해체' 1일은 어떤 직종이나 장비를 의미하나요?",
+    "GNSS 기준국 설치 및 해체품은 어떻게 계상해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:19:03.598122+00:00",
+    "input_tokens": 36757,
+    "output_tokens": 7998,
+    "source_pages": [
+      143,
+      144
+    ],
+    "prompt_sha256": "651380d9c56ba635b336c897765eb0f3c9645e620ca368123ae15089e65a3626",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

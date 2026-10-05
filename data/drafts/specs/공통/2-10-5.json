@@ -1,0 +1,173 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-10-5/조립식간이흙막이설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-10-5",
+    "title": "조립식 간이흙막이 설치 및 해체('22년 신설)",
+    "work": "조립식 간이흙막이 설치 및 해체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "depth",
+        "type": "enum",
+        "allowed_values": [
+          "설치깊이 H=3.0m이하",
+          "설치깊이 H=4.0m이하",
+          "설치깊이 H=5.0m이하",
+          "설치깊이 H=6.0m이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치깊이는 얼마입니까?",
+        "source": "PDF 1쪽 2-10-5 표",
+        "synonyms": {
+          "설치깊이 H=3.0m이하": [
+            "3.0m이하",
+            "3m이하"
+          ],
+          "설치깊이 H=4.0m이하": [
+            "4.0m이하",
+            "4m이하"
+          ],
+          "설치깊이 H=5.0m이하": [
+            "5.0m이하",
+            "5m이하"
+          ],
+          "설치깊이 H=6.0m이하": [
+            "6.0m이하",
+            "6m이하"
+          ]
+        }
+      },
+      {
+        "name": "length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "설치 길이는 몇 m입니까?",
+        "source": "PDF 1쪽 2-10-5 표 기준 (m당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p116-t1",
+        "role": "조립식 간이흙막이 설치 및 해체 단위당 품",
+        "source": "PDF 1쪽 2-10-5 표",
+        "unit": "인/m, hr/m",
+        "values": {
+          "특별인부": {
+            "설치깊이 H=3.0m이하": "0.19",
+            "설치깊이 H=4.0m이하": "0.28",
+            "설치깊이 H=5.0m이하": "0.40",
+            "설치깊이 H=6.0m이하": "0.57"
+          },
+          "보통인부": {
+            "설치깊이 H=3.0m이하": "0.07",
+            "설치깊이 H=4.0m이하": "0.10",
+            "설치깊이 H=5.0m이하": "0.15",
+            "설치깊이 H=6.0m이하": "0.22"
+          },
+          "크레인": {
+            "설치깊이 H=3.0m이하": "0.46",
+            "설치깊이 H=4.0m이하": "0.90",
+            "설치깊이 H=5.0m이하": "1.48",
+            "설치깊이 H=6.0m이하": "2.20"
+          }
+        },
+        "cite": {
+          "table_id": "p116-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p116-t1",
+          "column_input": "depth",
+          "trades": [
+            "특별인부",
+            "보통인부",
+            "크레인"
+          ]
+        },
+        "quantity_input": "length",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p116-t1에서 설치깊이에 따른 단위당 품을 고른다.",
+        "설치 길이(m)를 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 1쪽 2-10-5 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "터파기 및 뒤채우기 등의 토공작업",
+        "source": "PDF 1쪽 2-10-5 [주] ③",
+        "cite": {
+          "chunk_id": "p116-x10",
+          "quote": "가설흙막이 설치를 위한 터파기 및 뒤채우기 등의 토공작업은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m)당 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p116-t1",
+      "row": "특별인부",
+      "column": "설치깊이 H=3.0m이하",
+      "value": "0.19"
+    },
+    {
+      "table_id": "p116-t1",
+      "row": "보통인부",
+      "column": "설치깊이 H=4.0m이하",
+      "value": "0.10"
+    },
+    {
+      "table_id": "p116-t1",
+      "row": "크레인",
+      "column": "설치깊이 H=5.0m이하",
+      "value": "1.48"
+    },
+    {
+      "chunk_id": "p116-x10",
+      "quote": "가설흙막이 설치를 위한 터파기 및 뒤채우기 등의 토공작업은 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "설치 길이는 몇 m입니까?",
+    "설치깊이가 4.5m인 경우 어떤 기준을 적용해야 하나요?",
+    "크레인 규격이 10ton이 아닌 경우 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:11:07.122306+00:00",
+    "input_tokens": 11718,
+    "output_tokens": 1723,
+    "source_pages": [
+      116,
+      117
+    ],
+    "prompt_sha256": "cf202f5d84b76eb5378c93fa6fbfb50154003afb2715cb06155dc9851f9672b1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

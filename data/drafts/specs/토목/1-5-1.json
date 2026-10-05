@@ -1,0 +1,216 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-5-1/텍코팅_및_프라임코팅_살포",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-5-1",
+    "title": "텍코팅 및 프라임 코팅 살포",
+    "work": "텍코팅 및 프라임 코팅 살포 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      310
+    ],
+    "inputs": [
+      {
+        "name": "method",
+        "type": "enum",
+        "allowed_values": [
+          "인력식",
+          "기계식"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "살포 방식은 인력식과 기계식 중 무엇입니까?",
+        "source": "PDF 310쪽 p366-t2 표 구분",
+        "synonyms": {
+          "인력식": [
+            "인력"
+          ],
+          "기계식": [
+            "기계"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "살포 면적은 몇 ㎡입니까?",
+        "source": "PDF 310쪽 p366-t2 표 시공량 단위"
+      },
+      {
+        "name": "need_anti_scattering",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "역청재의 비산 방지가 필요합니까?",
+        "source": "PDF 310쪽 p366-t2 비고"
+      },
+      {
+        "name": "need_sand_curing",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "양생에 모래가 필요합니까?",
+        "source": "PDF 310쪽 p366-t2 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p366-t2",
+        "role": "방식별 일당 시공량 및 작업조 인원/장비",
+        "source": "PDF 310쪽 1-5-1 표",
+        "unit": "인, 대, ㎡/일",
+        "values": {
+          "인력식": {
+            "보통인부": "2",
+            "아스팔트스프레어(수동식 살포기)": "1",
+            "시공량(㎡)": "8,000"
+          },
+          "기계식": {
+            "보통인부": "1",
+            "아스팔트디스트리뷰터(폭 2.4m)": "1",
+            "시공량(㎡)": "20,000"
+          }
+        },
+        "cite": {
+          "table_id": "p366-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "표 p366-t2에서 방식(인력식/기계식)에 따른 일당 시공량과 작업조(보통인부, 장비)를 확인한다.",
+        "작업일수 = 살포 면적 ÷ 일당 시공량으로 계산한다.",
+        "비고에 따라 역청재 비산 방지가 필요한 경우 역청재 2,000ℓ당 보통인부 1인을 가산한다.",
+        "비고에 따라 양생에 모래가 필요한 경우 모래 2㎥당 보통인부 1인을 가산한다."
+      ],
+      "source": "PDF 310쪽 p366-t2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "역청재 비산 방지 필요",
+        "blocked_if": {
+          "input": "need_anti_scattering",
+          "op": "==",
+          "value": true
+        },
+        "reason": "역청재 2,000ℓ당 보통인부 1인을 가산해야 하며, 역청재 투입 물량에 대한 추가 입력 및 비례 계산이 필요하여 기본 작업조 모델로 자동 산정할 수 없습니다.",
+        "source": "PDF 310쪽 p366-t2 비고",
+        "cite": {
+          "table_id": "p366-t2"
+        }
+      },
+      {
+        "condition": "양생에 모래 필요",
+        "blocked_if": {
+          "input": "need_sand_curing",
+          "op": "==",
+          "value": true
+        },
+        "reason": "모래 2㎥당 보통인부 1인을 가산해야 하며, 모래 투입 물량에 대한 추가 입력 및 비례 계산이 필요하여 기본 작업조 모델로 자동 산정할 수 없습니다.",
+        "source": "PDF 310쪽 p366-t2 비고",
+        "cite": {
+          "table_id": "p366-t2"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "역청재 및 모래 재료비",
+        "source": "본 품은 살포 작업 기준이므로 재료비는 별도 산정 필요",
+        "cite": {
+          "chunk_id": "p366-x23"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "방식(인력식/기계식)에 따라 투입되는 장비 종류가 다르고, 비고란의 인원 가산 조건이 고정 인원이 아닌 별도 물량(역청재 ℓ, 모래 ㎥)에 비례하여 증가하므로 현재의 단일 장비 및 고정 인원 가감 모델(adjusted_daily_crew)로 자동 계산하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p366-t2",
+      "row": "인력식",
+      "column": "보통인부",
+      "value": "2"
+    },
+    {
+      "table_id": "p366-t2",
+      "row": "인력식",
+      "column": "아스팔트스프레어(수동식 살포기)",
+      "value": "1"
+    },
+    {
+      "table_id": "p366-t2",
+      "row": "인력식",
+      "column": "시공량(㎡)",
+      "value": "8,000"
+    },
+    {
+      "table_id": "p366-t2",
+      "row": "기계식",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p366-t2",
+      "row": "기계식",
+      "column": "아스팔트디스트리뷰터(폭 2.4m)",
+      "value": "1"
+    },
+    {
+      "table_id": "p366-t2",
+      "row": "기계식",
+      "column": "시공량(㎡)",
+      "value": "20,000"
+    },
+    {
+      "chunk_id": "p366-x23",
+      "quote": "본 품은 텍코팅 및 프라임코팅 역청재 살포하는 작업 기준이다."
+    },
+    {
+      "chunk_id": "p366-x23",
+      "quote": "장비는 현장여건 및 시험포장 결과에 따라 장비조합 및 규격을 변경하여 적용할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "비고란의 가산 인력(역청재 2,000ℓ당 1인, 모래 2㎥당 1인)을 계산하기 위한 역청재 및 모래의 소요량 산출 기준이 본 절에 명시되어 있지 않아, 사용자가 직접 해당 물량을 입력해야 하는지 불분명합니다."
+  ],
+  "questions": [
+    "기계식으로 텍코팅을 10,000㎡ 살포할 때 필요한 장비와 인력은 어떻게 되나요?",
+    "역청재 비산 방지를 위해 인력을 가산하려고 하는데, 역청재 소요량은 어떻게 산정하나요?",
+    "양생용 모래를 살포할 때 모래 재료비는 어떻게 처리하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:54:50.734630+00:00",
+    "input_tokens": 11656,
+    "output_tokens": 2282,
+    "source_pages": [
+      366,
+      367
+    ],
+    "prompt_sha256": "cb59ebc77242ddccf6ecdaeef5eaee773858bcc45c9ba92f4a051d4169d32a6b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

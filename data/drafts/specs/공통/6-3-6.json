@@ -1,0 +1,313 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-3-6/슬립폼공법",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-3-6",
+    "title": "슬립폼 공법",
+    "work": "설치, 인상, 철근조립 및 콘크리트타설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      140
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "설치",
+          "인상",
+          "철근조립",
+          "콘크리트타설"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까? (해체 작업은 현재 데이터 누락으로 계산 불가)",
+        "source": "1. 설치 및 해체, 2. 인상, 3. 철근조립 및 콘크리트타설"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "슬립폼 설치 또는 인상 면적은 몇 ㎡입니까?",
+        "source": "1. 설치 및 해체, 2. 인상 기준 (㎡당)"
+      },
+      {
+        "name": "rebar_weight",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "철근조립 물량은 몇 ton입니까?",
+        "source": "3. 철근조립 및 콘크리트타설 표"
+      },
+      {
+        "name": "concrete_volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "콘크리트 타설 물량은 몇 ㎥입니까?",
+        "source": "3. 철근조립 및 콘크리트타설 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p196-t0",
+        "role": "설치 품 (파싱 결과 한계로 해체 직종명 사용)",
+        "source": "1. 설치 및 해체",
+        "unit": "㎡당",
+        "values": {
+          "특수비계공": {
+            "설치 수량": "0.199"
+          },
+          "보통인부": {
+            "설치 수량": "0.091"
+          },
+          "크레인": {
+            "설치 수량": "0.132"
+          }
+        },
+        "cite": {
+          "table_id": "p196-t0"
+        }
+      },
+      {
+        "id": "p196-t1",
+        "role": "인상 품",
+        "source": "2. 인상(SLIP-UP)",
+        "unit": "㎡당",
+        "values": {
+          "기계설비공": {
+            "수량": "0.034"
+          },
+          "보통인부": {
+            "수량": "0.073"
+          }
+        },
+        "cite": {
+          "table_id": "p196-t1"
+        }
+      },
+      {
+        "id": "p196-t2",
+        "role": "철근조립 및 콘크리트타설 품",
+        "source": "3. 철근조립 및 콘크리트타설",
+        "unit": "ton당, ㎥당",
+        "values": {
+          "철근공": {
+            "수량": "0.887"
+          },
+          "콘크리트공": {
+            "수량": "0.125"
+          }
+        },
+        "cite": {
+          "table_id": "p196-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p196-t0",
+          "row_input": "work_type",
+          "column_input": "설치 수량",
+          "trades": []
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "작업 종류에 따라 해당 표(p196-t0, p196-t1, p196-t2)에서 단위당 품을 찾는다.",
+        "해당 물량(면적, 철근 중량, 콘크리트 체적)을 곱하여 총 품을 구한다."
+      ],
+      "source": "1. 설치 및 해체, 2. 인상, 3. 철근조립 및 콘크리트타설",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "해체 작업 요청",
+        "blocked_if": {
+          "input": "work_type",
+          "op": "==",
+          "value": "해체"
+        },
+        "reason": "파싱 결과에 해체 수량이 누락되어 계산할 수 없습니다.",
+        "source": "1. 설치 및 해체",
+        "cite": {
+          "table_id": "p196-t0"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "슬립폼 제작비용",
+        "source": "1. 설치 및 해체 [주] ①",
+        "cite": {
+          "section_no": "6-3-6",
+          "subsection_no": "1",
+          "marker": "①"
+        }
+      },
+      {
+        "item": "고재처리비용",
+        "source": "1. 설치 및 해체 [주] ④",
+        "cite": {
+          "section_no": "6-3-6",
+          "subsection_no": "1",
+          "marker": "④"
+        }
+      },
+      {
+        "item": "야간작업시 할증",
+        "source": "2. 인상 [주] ④, 3. 철근조립 및 콘크리트타설 [주] ③",
+        "cite": [
+          {
+            "section_no": "6-3-6",
+            "subsection_no": "2",
+            "marker": "④"
+          },
+          {
+            "section_no": "6-3-6",
+            "subsection_no": "3",
+            "marker": "③"
+          }
+        ]
+      },
+      {
+        "item": "철근가공",
+        "source": "3. 철근조립 및 콘크리트타설 [주] ①",
+        "cite": {
+          "section_no": "6-3-6",
+          "subsection_no": "3",
+          "marker": "①"
+        }
+      },
+      {
+        "item": "철근운반 비용",
+        "source": "3. 철근조립 및 콘크리트타설 [주] ④",
+        "cite": {
+          "section_no": "6-3-6",
+          "subsection_no": "3",
+          "marker": "④"
+        }
+      },
+      {
+        "item": "크레인 비용 (철근조립 및 콘크리트타설 시)",
+        "source": "3. 철근조립 및 콘크리트타설 [주] ⑤",
+        "cite": {
+          "section_no": "6-3-6",
+          "subsection_no": "3",
+          "marker": "⑤"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적, 중량, 체적당 품이 표에 직접 제시되어 있으므로 per_unit 모델이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p196-t0",
+      "row": "특수비계공",
+      "column": "설치 수량",
+      "value": "0.199"
+    },
+    {
+      "table_id": "p196-t0",
+      "row": "보통인부",
+      "column": "설치 수량",
+      "value": "0.091"
+    },
+    {
+      "table_id": "p196-t0",
+      "row": "크레인",
+      "column": "설치 수량",
+      "value": "0.132"
+    },
+    {
+      "table_id": "p196-t1",
+      "row": "기계설비공",
+      "column": "수량",
+      "value": "0.034"
+    },
+    {
+      "table_id": "p196-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.073"
+    },
+    {
+      "table_id": "p196-t2",
+      "row": "철근공",
+      "column": "수량",
+      "value": "0.887"
+    },
+    {
+      "table_id": "p196-t2",
+      "row": "콘크리트공",
+      "column": "수량",
+      "value": "0.125"
+    },
+    {
+      "chunk_id": "p196-x5",
+      "quote": "① 슬립폼 제작비용은 별도계상하되"
+    },
+    {
+      "chunk_id": "p196-x5",
+      "quote": "④ 고재처리비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p196-x10",
+      "quote": "④ 슬립폼 인상은 24시간 연속작업으로 하며, 야간작업시 할증은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p196-x15",
+      "quote": "① 본 품은 슬립폼 내부에서 철근조립 및 콘크리트 타설 기준이며, 철근가공은 ‘[공통부문] 6-2-2 현장가공’의"
+    },
+    {
+      "chunk_id": "p196-x15",
+      "quote": "③ 슬립폼 인상 시 철근조립 및 콘크리트 타설은 24시간 연속작업으로 하며, 야간작업 시 할증은 별도"
+    },
+    {
+      "chunk_id": "p196-x15",
+      "quote": "④ 철근운반 비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p196-x15",
+      "quote": "⑤ 크레인 비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p196-t0에서 해체 수량(0.154, 0.064, 0.170)이 누락되어 해체 품을 계산할 수 없습니다.",
+    "파싱 결과 p196-t0에서 설치 구분의 '비계공' 텍스트가 누락되어, 부득이하게 해체 구분의 '특수비계공'을 행 이름으로 사용했습니다."
+  ],
+  "questions": [
+    "슬립폼 설치 면적이 100㎡일 때 필요한 보통인부 품은 얼마인가요?",
+    "슬립폼 해체 작업의 품은 어떻게 계산하나요?",
+    "철근조립 물량은 몇 ton인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:35:41.700826+00:00",
+    "input_tokens": 24642,
+    "output_tokens": 6430,
+    "source_pages": [
+      196,
+      197
+    ],
+    "prompt_sha256": "2fefedecfff997e35446653db754593ddc4b316ad8ffbfb4e7d78ab4f2259b2f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

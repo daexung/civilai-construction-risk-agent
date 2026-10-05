@@ -1,0 +1,183 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-13/Tainter_Gate_Guide_Metal_제작",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-13",
+    "title": "Tainter Gate Guide Metal 제작",
+    "work": "공정별 제작품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "제작 물량은 몇 ton입니까?",
+        "source": "PDF 1쪽 1. 공정별 제작품 표 단위 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p873-t1",
+        "role": "공정별 제작품 품셈",
+        "source": "PDF 1쪽 1. 공정별 제작품",
+        "unit": "인/ton",
+        "values": {
+          "기술관리": {
+            "기계기사": "8.0"
+          },
+          "재료절단사도": {
+            "제도공": "2.0"
+          },
+          "현도": {
+            "현도공": "1.4"
+          },
+          "괘서": {
+            "마킹공": "2.8"
+          },
+          "재료절단": {
+            "절단공": "0.52"
+          },
+          "단재가공괘서": {
+            "마킹공": "2.8"
+          },
+          "절단": {
+            "산소절단공": "0.26",
+            "플랜트기계설치공": "2.3"
+          },
+          "Edge": {
+            "산소절단공": "1.1"
+          },
+          "용접": {
+            "플랜트용접공": "0.78"
+          },
+          "교정": {
+            "플랜트제관공": "0.75"
+          },
+          "Holing": {
+            "플랜트제관공": "0.62"
+          },
+          "부분조립취부조정": {
+            "플랜트기계설치공": "6.2"
+          },
+          "용접 ": {
+            "플랜트용접공": "3.9"
+          },
+          "교정 ": {
+            "플랜트제관공": "1.75"
+          },
+          "기계가공": {
+            "기계설비공": "10"
+          },
+          "가조립조립": {
+            "플랜트기계설치공": "2.0"
+          },
+          "해체": {
+            "플랜트기계설치공": "1.0"
+          },
+          "운반조작": {
+            "특수비계공": "5.0"
+          },
+          "동력조작": {
+            "플랜트전공": "2.0"
+          },
+          "보조": {
+            "특별인부": "2.5"
+          },
+          "검사": {
+            "인력품의7%": "7"
+          }
+        },
+        "cite": {
+          "table_id": "p873-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p873-t1",
+          "row_input": "고정 행이름",
+          "column_input": "고정 열이름",
+          "trades": [
+            "기계기사",
+            "제도공",
+            "현도공",
+            "마킹공",
+            "절단공",
+            "산소절단공",
+            "플랜트기계설치공",
+            "플랜트용접공",
+            "플랜트제관공",
+            "기계설비공",
+            "특수비계공",
+            "플랜트전공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p873-t1 표에서 각 직종별 단위당 품을 모두 합산한다.",
+        "물량(ton)을 곱해 직종별 총 품을 구한다.",
+        "검사 품은 전체 인력품의 7%로 별도 산정한다."
+      ],
+      "source": "PDF 1쪽 1. 공정별 제작품",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p873-t1",
+      "row": "직종 기계기사",
+      "column": "수량 8.0",
+      "value": "8.0"
+    },
+    {
+      "chunk_id": "p874-x0",
+      "quote": "13-6-13 Tainter Gate Guide Metal 제작"
+    }
+  ],
+  "open_questions": [
+    "검사 항목의 '인력품의 7%'가 직종별 인·일 합계의 7%를 의미하는지, 노무비 합계의 7%를 의미하는지 명확하지 않습니다.",
+    "원문 표에 '용접', '교정' 등 동일한 공정명이 여러 번 등장하여 JSON 키 중복을 피하기 위해 공백을 추가했습니다.",
+    "파싱 결과 p874-t0는 13-6-14의 소모자재 표 내용을 담고 있으며, 13-6-13에는 소모자재 표가 명시되어 있지 않아 제외했습니다."
+  ],
+  "questions": [
+    "제작 물량은 몇 ton입니까?",
+    "검사 공정의 '인력품의 7%'는 노무비 기준입니까, 품(인·일) 기준입니까?",
+    "소모자재는 별도로 산정해야 합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:29:31.187413+00:00",
+    "input_tokens": 13465,
+    "output_tokens": 1710,
+    "source_pages": [
+      873,
+      874,
+      875
+    ],
+    "prompt_sha256": "ed77ba19cc516fbc000f676f9f4b7b04e430e090f4100f965df50dd6278b2a13",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

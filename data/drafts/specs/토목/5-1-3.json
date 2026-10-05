@@ -1,0 +1,213 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/5-1-3/재료비",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "5-1-3",
+    "title": "재료비('08, '13, '14, '24년 보완)",
+    "work": "강교 제작 재료비 및 제작도 작성 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      358
+    ],
+    "inputs": [
+      {
+        "name": "weight",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "강교 제작중량은 몇 ton입니까?",
+        "source": "PDF 358쪽 기타재료 소요량 표 단위 (ton당)"
+      },
+      {
+        "name": "girder_type",
+        "type": "enum",
+        "allowed_values": [
+          "박스거더/플레이트거더",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "거더의 종류는 무엇입니까?",
+        "source": "PDF 358쪽 하단 [주] ①",
+        "synonyms": {
+          "박스거더/플레이트거더": [
+            "박스거더",
+            "플레이트거더",
+            "Box Girder",
+            "Plate Girder"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p414-t1",
+        "role": "기타재료 소요량 (ton당)",
+        "source": "PDF 358쪽 기타재료 소요량 표",
+        "unit": "ton당",
+        "values": {
+          "용접봉": {
+            "수량": "26"
+          },
+          "산소": {
+            "수량": "15.0"
+          },
+          "LPG가스": {
+            "수량": "10.0"
+          },
+          "잡품·기타": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p414-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p414-t1",
+          "row_input": "고정 행이름 없음",
+          "column_input": "수량",
+          "trades": []
+        },
+        "quantity_input": "weight",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "강판 설계중량에 의한 재료 손실량 6% 이내 가산",
+            "source": "PDF 358쪽 강판 비고 7",
+            "cite": {
+              "table_id": "p414-t0"
+            }
+          },
+          {
+            "when": {},
+            "change": "앵커바 러그, 스터드 및 다월 등의 예비품수는 설계수량의 3.5% 가산",
+            "source": "PDF 358쪽 앵커바 비고",
+            "cite": {
+              "table_id": "p414-t0"
+            }
+          },
+          {
+            "when": {},
+            "change": "잡품·기타는 용접 재료비의 5% 이내로 계상",
+            "source": "PDF 358쪽 기타재료 소요량 [주] ②",
+            "cite": {
+              "table_id": "p414-t0"
+            }
+          },
+          {
+            "when": {
+              "girder_type": "박스거더/플레이트거더"
+            },
+            "change": "제작도 작성 비용: 중급숙련기술자 0.4인/톤 적용",
+            "source": "PDF 358쪽 하단 [주] ①",
+            "cite": {
+              "chunk_id": "p414-x29"
+            }
+          },
+          {
+            "when": {
+              "girder_type": "기타"
+            },
+            "change": "제작도 작성 비용: 중급숙련기술자 0.56인/톤 적용",
+            "source": "PDF 358쪽 하단 [주] ①",
+            "cite": {
+              "chunk_id": "p414-x29"
+            }
+          }
+        ]
+      },
+      "steps": [
+        "p414-t1에서 ton당 기타재료 소요량을 확인한다.",
+        "물량(weight)을 곱해 총 소요량을 구한다.",
+        "강판 손실량, 앵커바 예비품수, 잡품 비율, 제작도 작성 인력을 note_adjustments에 따라 적용한다."
+      ],
+      "source": "PDF 358쪽 5-1-3 재료비",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "각종 검사시험비 및 시방서에서 특별히 요구하는 재료시험비",
+        "source": "PDF 358쪽 기타재료 소요량 [주] ③",
+        "cite": {
+          "table_id": "p414-t0"
+        }
+      },
+      {
+        "item": "고장력 볼트 조임품",
+        "source": "PDF 358쪽 하단 [주] ②",
+        "cite": {
+          "chunk_id": "p414-x29"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "강교 제작중량(ton)당 기타재료 소요량과 제작도 작성 인력이 명시되어 있어 단위당 품 계산에 해당합니다.",
+  "citations": [
+    {
+      "table_id": "p414-t1",
+      "row": "용접봉",
+      "column": "수량",
+      "value": "26"
+    },
+    {
+      "table_id": "p414-t0",
+      "row": "강판",
+      "column": "비고",
+      "value": "7. 설계중량에 의한 재료 손실량은 6% 이내로 한다."
+    },
+    {
+      "table_id": "p414-t0",
+      "row": "기타재료 소요량",
+      "column": "비고",
+      "value": "② 잡품·기타는 용접 재료비의 5% 이내로 한다"
+    },
+    {
+      "chunk_id": "p414-x29",
+      "quote": "① 제작도(Shop drawing) 작성 비용은 별도 계상하되, 박스거더, 플레이트거더의 역우 0.4인/톤, 박스거더, 플레이트거더 이외의 경우 0.56인/톤을 적용할 수 있으며"
+    },
+    {
+      "chunk_id": "p414-x29",
+      "quote": "② 본 품은 고장력 볼트 조임품이 제외된 것이다."
+    }
+  ],
+  "open_questions": [
+    "잡품·기타는 용접 재료비의 5% 이내로 한다고 되어 있는데, 용접 재료비(용접봉, 산소, LPG가스 등)의 단가가 입력되어야 정확한 계산이 가능합니다. 현재 구조에서는 재료비 기반 비율 계산을 어떻게 처리할지 확정이 필요합니다.",
+    "강판의 재료 손실량(6% 이내)과 앵커바 예비품수(3.5%)는 설계중량/설계수량에 곱해지는 할증 개념인데, 이를 별도의 재료 할증률로 처리할지 명세가 필요합니다."
+  ],
+  "questions": [
+    "강교 제작 시 ton당 용접봉 소요량은 얼마인가요?",
+    "제작도(Shop drawing) 작성 비용은 어떻게 계상하나요?",
+    "잡품 및 기타 비용 산정을 위한 용접 재료비 단가는 어디서 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:44:11.316869+00:00",
+    "input_tokens": 12386,
+    "output_tokens": 2159,
+    "source_pages": [
+      414,
+      415
+    ],
+    "prompt_sha256": "e1d1a7ee459e16e5cc0b30c5f55458ac6747c697a02870227e9bdaccde47efb3",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p414-x29 조각 텍스트에 없음"
+    ]
+  }
+}

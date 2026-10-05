@@ -1,0 +1,257 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/1-3-5/주름관접합및배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "1-3-5",
+    "title": "주름관 접합 및 배관('92, '13, '19, '25년 보완)",
+    "work": "주름관 접합 및 배관 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø15㎜",
+          "ø20㎜"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "관규격은 무엇입니까?",
+        "source": "1-3-5 표 관규격"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "시공 물량은 몇 m입니까?",
+        "source": "1-3-5 표 시공량 단위"
+      },
+      {
+        "name": "work_method",
+        "type": "enum",
+        "allowed_values": [
+          "인력시공",
+          "자체 추진 고소작업대(시저형)시공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 방법은 무엇입니까?",
+        "source": "1-3-5 표 비고 및 [주] ⑤"
+      },
+      {
+        "name": "insert_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반(거푸집용)",
+          "콘크리트용"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "인서트는 어떤 종류를 사용합니까?",
+        "source": "1-3-5 [주] ②, ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p709-t2",
+        "role": "주름관 접합 및 배관 작업조 및 시공량",
+        "source": "1-3-5 주름관 접합 및 배관 표",
+        "unit": "인/작업조; m/일",
+        "values": {
+          "배관공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "시공량": {
+            "ø15㎜": "50",
+            "ø20㎜": "45"
+          },
+          "고소작업대_시공량_계수": {
+            "인력시공": "1.0",
+            "자체 추진 고소작업대(시저형)시공": "1.26"
+          }
+        },
+        "cite": {
+          "table_id": "p709-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p709-t2",
+          "row": "시공량",
+          "column_input": "pipe_size"
+        },
+        "coefficients": [
+          {
+            "table": "p709-t2",
+            "row": "고소작업대_시공량_계수",
+            "input": "work_method"
+          }
+        ],
+        "crew": {
+          "table": "p709-t2",
+          "column": "수량",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공": "1023",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p709-t2에서 관규격별 기준 일일시공량을 고른다.",
+        "시공방법에 따라 고소작업대 시공량 계수(1.0 또는 1.26)를 곱해 조정된 일일시공량을 구한다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "1-3-5 주름관 접합 및 배관 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "콘크리트용 인서트 사용",
+        "blocked_if": {
+          "input": "insert_type",
+          "op": "==",
+          "value": "콘크리트용"
+        },
+        "reason": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따름",
+        "source": "1-3-5 [주] ③",
+        "cite": {
+          "chunk_id": "p709-x20",
+          "quote": "③ 현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "단열 지지대 및 관 지지대 설치",
+        "source": "1-3-5 [주] ④",
+        "cite": {
+          "chunk_id": "p709-x20",
+          "quote": "④ 단열 지지대 및 관 지지대 설치 시에는 별도 계상한다."
+        }
+      },
+      {
+        "item": "공구손료 및 경장비 기계경비",
+        "source": "1-3-5 [주] ⑤",
+        "cite": {
+          "chunk_id": "p709-x20",
+          "quote": "⑤ 공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 인력품의 2%(인력시공),"
+        }
+      },
+      {
+        "item": "자체 추진 고소작업대 이동 비용",
+        "source": "1-3-5 [주] ⑥",
+        "cite": {
+          "chunk_id": "p709-x20",
+          "quote": "⑥ 자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "작업조 인원과 일일시공량이 주어지는 일당 작업조형 명세입니다.",
+  "citations": [
+    {
+      "table_id": "p709-t2",
+      "row": "배관공 보통인부",
+      "column": "수량 2",
+      "value": "2"
+    },
+    {
+      "table_id": "p709-t2",
+      "row": "배관공 보통인부",
+      "column": "수량 1",
+      "value": "1"
+    },
+    {
+      "table_id": "p709-t2",
+      "row": "배관공 보통인부",
+      "column": "시공량(m) ø15㎜ 50",
+      "value": "50"
+    },
+    {
+      "table_id": "p709-t2",
+      "row": "배관공 보통인부",
+      "column": "시공량(m) ø20㎜ 45",
+      "value": "45"
+    },
+    {
+      "table_id": "p709-t2",
+      "row": "비고",
+      "column": "- 자체 추진 고소작업대(시저형)시공의 경우 시공량의 26%를 가산한다.",
+      "value": "26%"
+    },
+    {
+      "chunk_id": "p709-x20",
+      "quote": "① 본 품은 스테인리스 주름관의 옥내일반배관 기준이다."
+    },
+    {
+      "chunk_id": "p709-x20",
+      "quote": "② 인서트(거푸집용), 지지철물설치, 절단, 배관 및 접합, 배관시험을 포함한다."
+    },
+    {
+      "chunk_id": "p709-x20",
+      "quote": "③ 현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+    },
+    {
+      "chunk_id": "p709-x20",
+      "quote": "④ 단열 지지대 및 관 지지대 설치 시에는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p709-x20",
+      "quote": "⑤ 공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 인력품의 2%(인력시공),"
+    },
+    {
+      "chunk_id": "p709-x20",
+      "quote": "10%(자체 추진 고소작업대(시저형)시공)로 계상한다."
+    },
+    {
+      "chunk_id": "p709-x20",
+      "quote": "⑥ 자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "공구손료 및 경장비 기계경비가 시공방법에 따라 2% 또는 10%로 달라지는데, 현재 cost_rules에서 조건부 비율을 지원하지 않아 미산정 항목으로 분류했습니다."
+  ],
+  "questions": [
+    "주름관 배관 시공 물량이 100m이고 관규격이 ø15㎜일 때 품은 어떻게 되나요?",
+    "자체 추진 고소작업대를 사용하여 시공할 경우 시공량과 경비는 어떻게 할증되나요?",
+    "콘크리트용 인서트를 사용할 경우 품셈 적용은 어떻게 해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:40:02.520196+00:00",
+    "input_tokens": 23635,
+    "output_tokens": 5776,
+    "source_pages": [
+      709,
+      710
+    ],
+    "prompt_sha256": "7c8fa39f67a1d6e4f7d8f39c4e1e82e8628f177f9969d37c6dbca05e0eaf7029",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

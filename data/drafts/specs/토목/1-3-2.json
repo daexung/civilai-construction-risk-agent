@@ -1,0 +1,168 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-3-2/기계포설_길어깨",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-3-2",
+    "title": "기계포설(길어깨)",
+    "work": "보조기층 포설 및 다짐",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      365
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "보조기층 포설 물량은 몇 ㎥입니까?",
+        "source": "p365-t0 시공량 단위"
+      },
+      {
+        "name": "watering_method",
+        "type": "enum",
+        "allowed_values": [
+          "살수차",
+          "순수 인력"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "살수 방식은 살수차를 이용합니까, 순수 인력으로 합니까?",
+        "source": "p365-t0 비고"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "포설 면적은 몇 ㎡입니까? (순수 인력 살수 시 필요)",
+        "source": "p365-t0 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p365-t0",
+        "role": "기계포설(길어깨) 일당 작업조 및 시공량",
+        "source": "1-3-2 기계포설(길어깨) 표",
+        "unit": "인/작업조, 대/작업조, ㎥/일",
+        "values": {
+          "포설공": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎥)": "225"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(㎥)": "225"
+          },
+          "굴착기": {
+            "규격": "1.0㎥",
+            "단위": "대",
+            "수량": "1"
+          },
+          "진동롤러": {
+            "규격": "12ton",
+            "단위": "대",
+            "수량": "1"
+          },
+          "살수차": {
+            "규격": "16,000ℓ",
+            "단위": "대",
+            "수량": "0.5"
+          },
+          "비고": {
+            "비고": "- 순수 인력 살수 시에는 살수품을 100㎡당 1인 가산한다."
+          }
+        },
+        "cite": {
+          "table_id": "p365-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "포설 물량(㎥)을 기준 일일시공량(225㎥)으로 나누어 작업일수를 구한다.",
+        "작업일수에 직종별 인원 및 장비 대수를 곱하여 기본 투입량을 산출한다.",
+        "순수 인력 살수 시에는 살수차를 제외하고, 포설 면적(㎡) 100㎡당 살수품(보통인부 등) 1인을 별도로 가산한다."
+      ],
+      "source": "p365-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "순수 인력 살수 시",
+        "blocked_if": {
+          "input": "watering_method",
+          "op": "==",
+          "value": "순수 인력"
+        },
+        "reason": "살수품을 100㎡당 1인 가산하는 방식은 일당 작업조(일일시공량 기준) 계산과 단위 면적당 품 계산이 혼합되어 있어 단일 자동 계산 모델로 처리하기 어렵습니다.",
+        "source": "p365-t0 비고",
+        "cite": {
+          "table_id": "p365-t0",
+          "row": "비고",
+          "column": "비고"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에서 직종 행이 명확히 분리되지 않았으며, 순수 인력 살수 시 면적당 인원을 가산하는 조건이 일당 작업조 계산과 혼합되어 있어 단일 모델로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p365-t0",
+      "row": "포설공",
+      "column": "시공량(㎥)",
+      "value": "225"
+    },
+    {
+      "table_id": "p365-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 순수 인력 살수 시에는 살수품을 100㎡당 1인 가산한다."
+    },
+    {
+      "chunk_id": "p365-x7",
+      "quote": "본 품은 굴착기를 사용한 소로구간의 보조기층 포설 및 다짐 기준이다."
+    },
+    {
+      "chunk_id": "p365-x7",
+      "quote": "본 품은 포설준비, 포설 및 고르기, 다짐작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "순수 인력 살수 시 가산하는 '살수품'의 정확한 직종(보통인부 등)이 명시되지 않았습니다.",
+    "파싱 결과에서 '포설공'과 '보통인부' 행이 '포설공 보통인부'로 병합되어 추출되어, 테이블 재구성이 필요했습니다."
+  ],
+  "questions": [
+    "기계포설(길어깨) 작업 시 굴착기와 진동롤러 외에 어떤 장비가 기본으로 포함되나요?",
+    "순수 인력으로 살수할 때 가산하는 '살수품'은 구체적으로 어떤 직종을 의미하나요?",
+    "순수 인력 살수 시 가산되는 인원을 계산하려면 포설 면적(㎡) 정보가 필요한데, 어디에 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:54:21.345875+00:00",
+    "input_tokens": 11635,
+    "output_tokens": 1778,
+    "source_pages": [
+      365,
+      366
+    ],
+    "prompt_sha256": "65083567fe9be559e558bfb58684766d2aff4098f5aea1b692ac5d095d3ef154",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/11-1-1/콘크리트_모르타르면_바탕만들기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "11-1-1",
+    "title": "콘크리트･모르타르면 바탕만들기('15년 보완)",
+    "work": "바탕만들기 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      635
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "바탕만들기 물량은 몇 ㎡입니까?",
+        "source": "PDF 635쪽 11-1-1 표 단위"
+      },
+      {
+        "name": "is_ceiling",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "천장 작업입니까?",
+        "source": "PDF 635쪽 11-1-1 표 비고"
+      },
+      {
+        "name": "use_scaffold",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계를 사용합니까?",
+        "source": "PDF 635쪽 11-1-1 [주] ④"
+      },
+      {
+        "name": "floor_level",
+        "type": "enum",
+        "allowed_values": [
+          "지하층 및 1∼3층",
+          "4∼6층",
+          "7∼9층",
+          "10∼12층",
+          "13∼15층",
+          "16∼18층",
+          "19층 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 층수는 어디에 해당합니까? (외벽에서 층 구분이 어려우면 층고 3.6m 기준으로 환산한 층수를 선택하세요)",
+        "source": "PDF 635쪽 11-1-1 할증률 표 및 [주] ※"
+      },
+      {
+        "name": "floor_level_19_plus",
+        "type": "nonnegative_integer",
+        "allowed_values": "19 이상의 정수 (19층 이상이 아닌 경우 0)",
+        "unit": "층",
+        "required": true,
+        "ask": "19층 이상인 경우 정확한 층수를 입력하세요. (해당 없으면 0)",
+        "source": "PDF 635쪽 11-1-1 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p691-t0",
+        "role": "기본 품",
+        "source": "PDF 635쪽 11-1-1 표",
+        "unit": "인/㎡",
+        "values": {
+          "도장공": {
+            "수량": "0.010"
+          },
+          "보통인부": {
+            "수량": "0.001"
+          }
+        },
+        "cite": {
+          "table_id": "p691-t0"
+        }
+      },
+      {
+        "id": "p691-t1",
+        "role": "비계사용시 높이별 할증률",
+        "source": "PDF 635쪽 11-1-1 할증률 표",
+        "unit": "비율",
+        "values": {
+          "할증률": {
+            "지하층 및\n1∼3층": "0",
+            "4∼6층": "5%",
+            "7∼9층": "8%",
+            "10∼12층": "12%",
+            "13∼15층": "16%",
+            "16∼18층": "20%"
+          }
+        },
+        "cite": {
+          "table_id": "p691-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p691-t0",
+          "column_input": "수량",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "is_ceiling": true
+            },
+            "rate": "0.20",
+            "applies_to": [
+              "도장공",
+              "보통인부"
+            ],
+            "source": "p691-t0 비고"
+          },
+          {
+            "when": {
+              "use_scaffold": true,
+              "floor_level": "4∼6층"
+            },
+            "rate": "0.05",
+            "applies_to": [
+              "도장공",
+              "보통인부"
+            ],
+            "source": "p691-t1"
+          },
+          {
+            "when": {
+              "use_scaffold": true,
+              "floor_level": "7∼9층"
+            },
+            "rate": "0.08",
+            "applies_to": [
+              "도장공",
+              "보통인부"
+            ],
+            "source": "p691-t1"
+          },
+          {
+            "when": {
+              "use_scaffold": true,
+              "floor_level": "10∼12층"
+            },
+            "rate": "0.12",
+            "applies_to": [
+              "도장공",
+              "보통인부"
+            ],
+            "source": "p691-t1"
+          },
+          {
+            "when": {
+              "use_scaffold": true,
+              "floor_level": "13∼15층"
+            },
+            "rate": "0.16",
+            "applies_to": [
+              "도장공",
+              "보통인부"
+            ],
+            "source": "p691-t1"
+          },
+          {
+            "when": {
+              "use_scaffold": true,
+              "floor_level": "16∼18층"
+            },
+            "rate": "0.20",
+            "applies_to": [
+              "도장공",
+              "보통인부"
+            ],
+            "source": "p691-t1"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "use_scaffold": true,
+              "floor_level": "19층 이상"
+            },
+            "change": "19층 이상은 매 3층 증가마다 4%씩 가산",
+            "source": "p691-x4 ④"
+          }
+        ]
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "surcharges/note_adjustments를 원문 순서대로 적용한다."
+      ],
+      "source": "PDF 635쪽 11-1-1",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [
+      {
+        "condition": "외벽에서 층의 구분을 할 수 없는 경우",
+        "reason": "층고를 3.6m로 기준하여 층수를 환산해야 하므로, 환산된 층수를 사용자가 직접 입력해야 함",
+        "source": "p691-x8 ※",
+        "cite": {
+          "chunk_id": "p691-x8"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "콘크리트 견출 및 마감미장, 프라이머 바름",
+        "source": "p691-x4 ③",
+        "cite": {
+          "chunk_id": "p691-x4"
+        }
+      },
+      {
+        "item": "재료량(퍼티 등)",
+        "source": "p691-x9 ⑦",
+        "cite": {
+          "chunk_id": "p691-x9"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 잡재료비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p691-x9"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품이 표에 직접 제시되어 있으며, 물량을 곱하여 계산하는 방식임.",
+  "citations": [
+    {
+      "table_id": "p691-t0",
+      "row": "도장공",
+      "column": "수량",
+      "value": "0.010"
+    },
+    {
+      "table_id": "p691-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.001"
+    },
+    {
+      "table_id": "p691-t1",
+      "row": "할증률",
+      "column": "지하층 및\n1∼3층",
+      "value": "0"
+    },
+    {
+      "table_id": "p691-t1",
+      "row": "할증률",
+      "column": "4∼6층",
+      "value": "5%"
+    },
+    {
+      "table_id": "p691-t1",
+      "row": "할증률",
+      "column": "7∼9층",
+      "value": "8%"
+    },
+    {
+      "table_id": "p691-t1",
+      "row": "할증률",
+      "column": "10∼12층",
+      "value": "12%"
+    },
+    {
+      "table_id": "p691-t1",
+      "row": "할증률",
+      "column": "13∼15층",
+      "value": "16%"
+    },
+    {
+      "table_id": "p691-t1",
+      "row": "할증률",
+      "column": "16∼18층",
+      "value": "20%"
+    },
+    {
+      "chunk_id": "p691-x4",
+      "quote": "콘크리트 견출 및 마감미장, 프라이머 바름은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p691-x4",
+      "quote": "비계사용시 높이에 따라 다음 할증률에 의한 품을 가산할 수 있으며 19층 이상은 매 3층 증가마다"
+    },
+    {
+      "chunk_id": "p691-x4",
+      "quote": "4%씩 가산한다."
+    },
+    {
+      "chunk_id": "p691-x8",
+      "quote": "외벽에서 층의 구분을 할 수 없을 때에는 층고를 3.6m로 기준하여 층수를 환산하고"
+    },
+    {
+      "chunk_id": "p691-x9",
+      "quote": "공구손료 및 잡재료비(연마지 등)는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p691-x9",
+      "quote": "재료량(퍼티 등)은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "콘크리트 바탕만들기 물량이 100㎡일 때 도장공과 보통인부의 품은 얼마인가요?",
+    "비계를 사용하고 25층에서 작업할 때 할증률은 어떻게 계산되나요?",
+    "천장 작업 여부를 입력하지 않았습니다. 천장 작업인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:54:41.576658+00:00",
+    "input_tokens": 23997,
+    "output_tokens": 6230,
+    "source_pages": [
+      691,
+      692
+    ],
+    "prompt_sha256": "c57a7d1dda7791c8b46909a7fd1a00299f4a591cd381a21b70d69bdc33dee5a7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '할증률'이 p691-t1 조각 텍스트에 없음",
+      "row '할증률'이 p691-t1 조각 텍스트에 없음",
+      "row '할증률'이 p691-t1 조각 텍스트에 없음",
+      "row '할증률'이 p691-t1 조각 텍스트에 없음",
+      "row '할증률'이 p691-t1 조각 텍스트에 없음",
+      "row '할증률'이 p691-t1 조각 텍스트에 없음"
+    ]
+  }
+}

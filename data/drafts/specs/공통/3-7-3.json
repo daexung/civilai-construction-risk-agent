@@ -1,0 +1,208 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-7-3/천연섬유사면보호공설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-7-3",
+    "title": "천연섬유사면보호공 설치",
+    "work": "천연섬유매트 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      79
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "천연섬유매트 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 79쪽 3-7-3 표 시공량 단위"
+      },
+      {
+        "name": "slope_condition_met",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비탈경사가 1:1.0~1.5 이하입니까?",
+        "source": "PDF 79쪽 3-7-3 [주] ①, ②"
+      },
+      {
+        "name": "height_condition_met",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 높이가 30m 이하입니까?",
+        "source": "PDF 79쪽 3-7-3 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p135-t1",
+        "role": "일당 작업조 인원 및 시공량",
+        "source": "PDF 79쪽 3-7-3 표",
+        "unit": "인/일, ㎡/일",
+        "values": {
+          "특별인부": {
+            "수량": "3",
+            "시공량(㎡)": "290"
+          },
+          "보통인부": {
+            "수량": "2",
+            "시공량(㎡)": "290"
+          }
+        },
+        "cite": {
+          "table_id": "p135-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p135-t1",
+          "row": "특별인부",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p135-t1",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p135-t1에서 일당 시공량(290㎡)을 가져온다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 79쪽 3-7-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "비탈경사가 1:1.5를 초과하는 경우",
+        "blocked_if": {
+          "input": "slope_condition_met",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 비탈경사 1:1.0~1.5 이하 기준이며, 초과 시의 할증이나 품 조정 기준이 명시되어 있지 않음",
+        "source": "PDF 79쪽 3-7-3 [주] ①, ②",
+        "cite": [
+          {
+            "section_no": "3-7-3",
+            "marker": "①"
+          },
+          {
+            "section_no": "3-7-3",
+            "marker": "②"
+          }
+        ]
+      },
+      {
+        "condition": "시공 높이가 30m를 초과하는 경우",
+        "blocked_if": {
+          "input": "height_condition_met",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 높이 30m 이하 기준이며, 초과 시의 할증이나 품 조정 기준이 명시되어 있지 않음",
+        "source": "PDF 79쪽 3-7-3 [주] ②",
+        "cite": {
+          "section_no": "3-7-3",
+          "marker": "②"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비탈면 고르기",
+        "source": "PDF 79쪽 3-7-3 [주] ④",
+        "cite": {
+          "section_no": "3-7-3",
+          "marker": "④"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 일당 시공량(290㎡)과 그에 따른 작업조 인원(특별인부 3인, 보통인부 2인)이 명시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p135-t1",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p135-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p135-t1",
+      "row": "특별인부",
+      "column": "시공량(㎡)",
+      "value": "290"
+    },
+    {
+      "chunk_id": "p135-x14",
+      "quote": "본 품은 토공사면(비탈경사 1:1.0~1.5)에 천연섬유매트 설치 기준이다."
+    },
+    {
+      "chunk_id": "p135-x14",
+      "quote": "본 품은 비탈경사 1:1.0~1.5이하, 높이 30m 기준이다."
+    },
+    {
+      "chunk_id": "p135-x14",
+      "quote": "비탈면 고르기는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비탈경사가 1:1.5를 초과하거나 높이가 30m를 초과하는 경우에 대한 할증률이나 품 조정 기준이 원문에 명시되어 있지 않아 계산을 보류하도록 처리했습니다."
+  ],
+  "questions": [
+    "천연섬유매트 1000㎡를 설치할 때 필요한 특별인부와 보통인부 품은 얼마인가요?",
+    "비탈경사가 1:2.0인 경우에도 이 품셈을 그대로 적용할 수 있나요?",
+    "천연섬유매트 재료비는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:21.841781+00:00",
+    "input_tokens": 11575,
+    "output_tokens": 1988,
+    "source_pages": [
+      135,
+      136
+    ],
+    "prompt_sha256": "0a49ef65bd765592d98c048ad715d9188658c0e9bc83744a7e6d0e1ff0973578",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

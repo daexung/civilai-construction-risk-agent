@@ -1,0 +1,234 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-3-5/합성수지원형맨홀거푸집",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-3-5",
+    "title": "합성수지(P.E)원형 맨홀 거푸집 설치 및 해체('08년 보완)",
+    "work": "합성수지 원형 맨홀거푸집 조립 및 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      139
+    ],
+    "inputs": [
+      {
+        "name": "structure_part",
+        "type": "enum",
+        "allowed_values": [
+          "기초 및 슬래브",
+          "벽체"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "거푸집을 설치할 부위는 기초 및 슬래브입니까, 아니면 벽체입니까?",
+        "source": "PDF 139쪽 6-3-5 표 구분",
+        "synonyms": {
+          "기초 및 슬래브": [
+            "기초",
+            "슬래브",
+            "기초및슬래브"
+          ],
+          "벽체": [
+            "벽"
+          ]
+        }
+      },
+      {
+        "name": "diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø740",
+          "ø900",
+          "ø1200",
+          "ø1500",
+          "ø1800"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "맨홀의 규격(지름)은 얼마입니까?",
+        "source": "PDF 139쪽 6-3-5 표 단위",
+        "synonyms": {
+          "ø740": [
+            "740",
+            "D740"
+          ],
+          "ø900": [
+            "900",
+            "D900"
+          ],
+          "ø1200": [
+            "1200",
+            "D1200"
+          ],
+          "ø1500": [
+            "1500",
+            "D1500"
+          ],
+          "ø1800": [
+            "1800",
+            "D1800"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치 및 해체할 맨홀 거푸집의 수량은 몇 개소입니까?",
+        "source": "PDF 139쪽 6-3-5 표 단위 (개소당)"
+      },
+      {
+        "name": "wall_height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "벽체의 높이는 몇 m입니까? (기초 및 슬래브인 경우 1 입력)",
+        "source": "PDF 139쪽 6-3-5 [주] ② 및 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p195-t3",
+        "role": "합성수지 원형 맨홀 거푸집 설치 및 해체 단위당 품",
+        "source": "PDF 139쪽 6-3-5 표",
+        "unit": "인/개소",
+        "values": {
+          "기초 및 슬래브_특별인부": {
+            "ø740": "0.13",
+            "ø900": "0.14",
+            "ø1200": "0.15",
+            "ø1500": "0.17",
+            "ø1800": "0.21"
+          },
+          "기초 및 슬래브_보통인부": {
+            "ø740": "0.17",
+            "ø900": "0.25",
+            "ø1200": "0.30",
+            "ø1500": "0.40",
+            "ø1800": "0.50"
+          },
+          "벽체_특별인부": {
+            "ø740": "0.23",
+            "ø900": "0.26",
+            "ø1200": "0.31",
+            "ø1500": "0.37",
+            "ø1800": "0.42"
+          },
+          "벽체_보통인부": {
+            "ø740": "0.39",
+            "ø900": "0.47",
+            "ø1200": "0.63",
+            "ø1500": "0.80",
+            "ø1800": "0.97"
+          }
+        },
+        "cite": {
+          "table_id": "p195-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p195-t3",
+          "row_input": "structure_part",
+          "column_input": "diameter",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "structure_part": "벽체"
+            },
+            "change": "벽체품 × (wall_height / 1.0)",
+            "source": "PDF 139쪽 6-3-5 [주] ②"
+          }
+        ]
+      },
+      "steps": [
+        "p195-t3 표에서 부위(structure_part)와 규격(diameter)에 해당하는 특별인부, 보통인부의 단위당 품을 찾는다.",
+        "부위가 '벽체'인 경우, 찾은 단위당 품에 (wall_height / 1.0)을 곱하여 높이에 따른 품을 보정한다.",
+        "보정된 단위당 품에 물량(quantity)을 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "PDF 139쪽 6-3-5 표 및 [주] ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "비계 설치 및 해체 (수직고 H=2.0m 이상인 경우)",
+        "source": "PDF 139쪽 6-3-5 [주] ③",
+        "cite": {
+          "chunk_id": "p195-x20",
+          "quote": "③ 수직고 H=2.0m 이상인 경우에는 비계를 별도 계상한다."
+        }
+      },
+      {
+        "item": "합성수지 원형 맨홀거푸집 재료비 (사용횟수 10회 기준 손율 적용 등)",
+        "source": "PDF 139쪽 6-3-5 [주] ④",
+        "cite": {
+          "chunk_id": "p195-x20",
+          "quote": "④ 합성수지 원형 맨홀거푸집의 사용횟수는 10회로 한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당) 품이 표에 직접 제시되어 있으며, 벽체의 경우 높이에 비례하여 품을 산정하는 방식이므로 per_unit 모델이 적합하다.",
+  "citations": [
+    {
+      "table_id": "p195-t3",
+      "row": "기초및",
+      "column": "ø740",
+      "value": "0.13"
+    },
+    {
+      "chunk_id": "p195-x20",
+      "quote": "② 본 품의 벽체는 높이 1.0m를 기준한 것으로 높이에 따라 벽체품을 계상 적용한다."
+    },
+    {
+      "chunk_id": "p195-x20",
+      "quote": "③ 수직고 H=2.0m 이상인 경우에는 비계를 별도 계상한다."
+    },
+    {
+      "chunk_id": "p195-x20",
+      "quote": "④ 합성수지 원형 맨홀거푸집의 사용횟수는 10회로 한다."
+    }
+  ],
+  "open_questions": [
+    "벽체 높이에 따른 벽체품 계상 적용 시, 정확히 선형 비례(H/1.0)하여 곱하는 방식이 맞는지 실무적 확인이 필요함."
+  ],
+  "questions": [
+    "맨홀 규격이 ø1200이고 기초 부위에 거푸집을 5개소 설치할 때 품은 어떻게 되나요?",
+    "벽체 높이가 2.5m인 경우 벽체품 할증과 비계 별도 계상은 어떻게 적용해야 하나요?",
+    "합성수지 맨홀 거푸집의 재료비는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:35:08.295345+00:00",
+    "input_tokens": 23651,
+    "output_tokens": 4618,
+    "source_pages": [
+      195,
+      196
+    ],
+    "prompt_sha256": "d91ef74c9036d4e3ca3d5eb65317f333ce58204b420c9881d2d122a12d320769",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

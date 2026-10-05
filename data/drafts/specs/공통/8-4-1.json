@@ -1,0 +1,65 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-4-1/토공기계",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-4-1",
+    "title": "[00]토공기계",
+    "work": "토공기계 운전경비 산정 기준",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      275
+    ],
+    "inputs": [],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "기계 분류번호 또는 기계명 및 규격에 따라 주연료, 잡재료율, 조종원 수를 표에서 확인한다."
+      ],
+      "source": "PDF 275쪽 8-4-1 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표의 행 이름(분류번호)이 모든 기계에 대해 하나의 긴 문자열로 병합되어 있어, 개별 기계 규격별로 값을 조회하는 자동화 모델을 구성하거나 정상적인 JSON 표 구조를 만들 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p331-t0"
+    },
+    {
+      "chunk_id": "p331-x31",
+      "quote": "8-4-1 [00]토공기계"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 표(p331-t0)의 첫 번째 열(분류번호)이 모든 행에 대해 하나의 긴 문자열로 병합되어 출력되었습니다. 이로 인해 JSON 객체의 키가 중복되어 표 데이터를 정상적으로 구조화할 수 없어 tables 배열을 비워두었습니다. 재파싱이 필요합니다."
+  ],
+  "questions": [
+    "불도저(무한궤도) 32ton의 시간당 주연료 소모량은 얼마인가요?",
+    "표에 명시되지 않은 중간 규격의 기계는 운전경비를 어떻게 산정해야 하나요?",
+    "기계의 연간 표준 가동시간이나 상각비 산정 기준은 어디서 확인할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:31.412980+00:00",
+    "input_tokens": 19419,
+    "output_tokens": 629,
+    "source_pages": [
+      331,
+      332
+    ],
+    "prompt_sha256": "108cefc3400a5de13773277143e2190d4c04675850a37e7c536a906ac54d9bb9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

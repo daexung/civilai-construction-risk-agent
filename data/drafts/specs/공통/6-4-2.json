@@ -1,0 +1,69 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-4-2/PSC_BOX_설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-4-2",
+    "title": "PSC BOX 설치",
+    "work": "PSC BOX 포스트텐션 시공 전체",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      147,
+      148,
+      149
+    ],
+    "inputs": [],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "이 절은 정착구 설치, 쉬즈관 설치, 강연선 설치, 인장, 그라우팅 등 여러 세부 작업으로 구성되어 있습니다.",
+        "각 작업별로 별도의 단위당 품 표가 존재하여 단일 계산 모델로 통합하기 어렵습니다.",
+        "또한 정착구 설치 및 쉬즈관 설치 표의 파싱 결과에 직종 이름이 누락되어 있어 정확한 계산이 불가능합니다."
+      ],
+      "source": "PDF 147~149쪽 전체",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "하나의 절에 여러 세부 작업의 단위당 품이 혼재되어 단일 계산 모델로 처리하기 어려우며, 일부 표의 파싱 결과에 직종 이름이 누락되어 있습니다.",
+  "citations": [
+    {
+      "chunk_id": "p203-x0",
+      "quote": "① 본 품은 PSC BOX 제작 시 필요한 포스트텐션(Post Tension) 시공에 적용한다."
+    }
+  ],
+  "open_questions": [
+    "정착구 설치(p203-t0)와 쉬즈관 설치(p204-t0) 표의 파싱 결과에 직종 이름(형틀목공, 보통인부 등)이 누락되어 있어 계산 명세에 포함할 수 없습니다.",
+    "하나의 절에 5개의 서로 다른 세부 작업(정착구, 쉬즈관, 강연선, 인장, 그라우팅)이 포함되어 있어, 이를 하나의 명세로 묶을지 개별 명세로 분리할지 결정이 필요합니다."
+  ],
+  "questions": [
+    "PSC BOX 포스트텐션 시공 시 정착구 설치 품은 어떻게 계산하나요?",
+    "강연선 양단 인장 시 19mm 규격의 기계설비공 품은 얼마인가요?",
+    "그라우팅 작업 시 물 공급을 위한 살수차 장비 비용은 어떻게 처리하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:38:25.232258+00:00",
+    "input_tokens": 31179,
+    "output_tokens": 5275,
+    "source_pages": [
+      203,
+      204,
+      205,
+      206
+    ],
+    "prompt_sha256": "8ee28d3de224d8de2ef128f448582278cdca7afe26c76fb08dd3663fefae7d39",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

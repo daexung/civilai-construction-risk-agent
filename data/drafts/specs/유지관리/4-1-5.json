@@ -1,0 +1,175 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/4-1-5/덕트보온해체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "4-1-5",
+    "title": "덕트보온 해체('22년 신설)",
+    "work": "덕트보온 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      923
+    ],
+    "inputs": [
+      {
+        "name": "insulation_type",
+        "type": "enum",
+        "allowed_values": [
+          "고무발포보온재 발포폴리에틸렌보온재",
+          "유리면보온재(글라스울)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해체하는 보온재의 종류는 무엇입니까?",
+        "source": "파싱 결과 p979-t0 표의 열 구분",
+        "synonyms": {
+          "고무발포보온재 발포폴리에틸렌보온재": [
+            "고무발포보온재",
+            "발포폴리에틸렌보온재"
+          ],
+          "유리면보온재(글라스울)": [
+            "유리면보온재",
+            "글라스울"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "해체할 덕트 보온재의 면적은 몇 ㎡입니까?",
+        "source": "파싱 결과 p979-t0 표의 기준 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p979-t0",
+        "role": "덕트보온 해체 단위당 품",
+        "source": "4-1-5 덕트보온 해체 표",
+        "unit": "인/㎡",
+        "values": {
+          "보온공": {
+            "고무발포보온재 발포폴리에틸렌보온재": "0.081",
+            "유리면보온재(글라스울)": "0.096"
+          },
+          "보통인부": {
+            "고무발포보온재 발포폴리에틸렌보온재": "0.054",
+            "유리면보온재(글라스울)": "0.064"
+          }
+        },
+        "cite": {
+          "table_id": "p979-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p979-t0",
+          "row_input": "고정 행이름",
+          "column_input": "insulation_type",
+          "trades": [
+            "보온공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p979-t0 표에서 보온재 종류에 따른 보온공과 보통인부의 단위당 품을 찾는다.",
+        "찾은 단위당 품에 해체 면적(quantity)을 곱하여 총 품을 구한다."
+      ],
+      "source": "4-1-5 덕트보온 해체 표 및 [주] ①",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "비산방지, 보호 및 안전시설 등의 설치비",
+        "source": "4-1-5 덕트보온 해체 [주] ②",
+        "cite": {
+          "chunk_id": "p979-x3"
+        }
+      },
+      {
+        "item": "폐기물 처리비용",
+        "source": "4-1-5 덕트보온 해체 [주] ③",
+        "cite": {
+          "chunk_id": "p979-x3"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 보온공과 보통인부의 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p979-t0",
+      "row": "보온공",
+      "column": "고무발포보온재\n발포폴리에틸렌보온재",
+      "value": "0.081"
+    },
+    {
+      "table_id": "p979-t0",
+      "row": "보온공",
+      "column": "유리면보온재(글라스울)",
+      "value": "0.096"
+    },
+    {
+      "table_id": "p979-t0",
+      "row": "보통인부",
+      "column": "고무발포보온재\n발포폴리에틸렌보온재",
+      "value": "0.054"
+    },
+    {
+      "table_id": "p979-t0",
+      "row": "보통인부",
+      "column": "유리면보온재(글라스울)",
+      "value": "0.064"
+    },
+    {
+      "chunk_id": "p979-x3",
+      "quote": "① 본 품은 재사용하지 아니하는 때의 보온재를 절단하여 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p979-x3",
+      "quote": "② 비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p979-x3",
+      "quote": "③ 폐기물 처리비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "고무발포보온재와 발포폴리에틸렌보온재가 표에서 같은 열로 묶여 있는데, 입력 시 이를 하나의 옵션으로 처리할지 분리할지 명확하지 않아 동의어로 처리함."
+  ],
+  "questions": [
+    "보온재 종류가 유리면보온재(글라스울)일 때 ㎡당 보온공 품은 얼마인가요?",
+    "비산방지 시설 설치비나 폐기물 처리비용은 어떻게 계산하나요?",
+    "해체할 덕트 보온재의 면적(㎡)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:53:03.338954+00:00",
+    "input_tokens": 11544,
+    "output_tokens": 1766,
+    "source_pages": [
+      979,
+      980
+    ],
+    "prompt_sha256": "5a5ee055818c5732ae08be1b385944a776d50c4b9ed2868371d9922ec0d993a4",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

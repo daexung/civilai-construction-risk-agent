@@ -1,0 +1,1507 @@
+{
+  "date": "2026-09-29",
+  "configs": {
+    "A": "evals\\index_configs\\6chapter_studio.json",
+    "B": "evals\\index_configs\\6chapter_vertex.json"
+  },
+  "summary": {
+    "A": {
+      "model": "gemini-embedding-2",
+      "provider": "studio",
+      "rag_correct": 23,
+      "rag_searchable": 23,
+      "rag_total": 27,
+      "select_correct": 14,
+      "select_wrong": 0,
+      "select_ask": 20,
+      "select_total": 34,
+      "api_calls": 34
+    },
+    "B": {
+      "model": "gemini-embedding-001",
+      "provider": "vertex",
+      "rag_correct": 21,
+      "rag_searchable": 23,
+      "rag_total": 27,
+      "select_correct": 14,
+      "select_wrong": 2,
+      "select_ask": 18,
+      "select_total": 34,
+      "api_calls": 34
+    }
+  },
+  "rag": [
+    {
+      "id": "q01",
+      "query": "레미콘 인력운반 타설할 때 콘크리트공과 보통인부는 몇 명인가",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q02",
+      "query": "콘크리트 펌프차 타설 품",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-4"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q03",
+      "query": "에폭시 콘크리트 접착제 바르기에 드는 시너 양",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-5"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-5",
+          "label": "공통 6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-5",
+          "label": "공통 6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q04",
+      "query": "철근 현장가공 인력 품",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-2-2"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-2",
+          "label": "공통 6-2-2 현장가공('08, '14, '22, '24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-2",
+          "label": "공통 6-2-2 현장가공('08, '14, '22, '24년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q05",
+      "query": "합판거푸집 설치 및 해체 형틀목공 시공량",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-3-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q06",
+      "query": "강재거푸집 사용횟수",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-3-2"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-2",
+          "label": "공통 6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-2",
+          "label": "공통 6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q07",
+      "query": "PSC빔 제작 형틀목공 인원",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-4-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-4-1",
+          "label": "공통 6-4-1 PSC빔 제작('16, '21, '25년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-4-1",
+          "label": "공통 6-4-1 PSC빔 제작('16, '21, '25년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q08",
+      "query": "수상 교량받침 설치 품",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-6-2"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-2",
+          "label": "공통 6-6-2 교량받침 설치(수상)('21, '24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-2",
+          "label": "공통 6-6-2 교량받침 설치(수상)('21, '24년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q09",
+      "query": "PC기둥 설치 시공량",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-7-4"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-7-4",
+          "label": "공통 6-7-4 PC기둥 설치('23년 신설, '24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-7-4",
+          "label": "공통 6-7-4 PC기둥 설치('23년 신설, '24년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "q10",
+      "query": "레미콘 타설 공구손료 및 경장비 기계경비는 인력품의 몇 %",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-2",
+          "label": "공통 6-6-2 교량받침 설치(수상)('21, '24년 보완)"
+        },
+        "correct": false
+      }
+    },
+    {
+      "id": "q11",
+      "query": "슬립폼 공법",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-3-6"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-6",
+          "label": "공통 6-3-6 슬립폼 공법"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-6",
+          "label": "공통 6-3-6 슬립폼 공법"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n01",
+      "query": "펌프카로 콘크리트 부을 때 작업조는 몇 명으로 짜나",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-4"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n02",
+      "query": "합판 거푸집을 두 번째 다시 쓸 때 자재비는 처음의 몇 퍼센트",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-3-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n03",
+      "query": "육지에서 다리 받침 놓는 데 필요한 인력",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-6-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-1",
+          "label": "공통 6-6-1 교량받침 설치(육상)('16, '21, '24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-1",
+          "label": "공통 6-6-1 교량받침 설치(육상)('16, '21, '24년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n04",
+      "query": "콘크리트 수로관 하루에 몇 본 설치",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-7-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-7-1",
+          "label": "공통 6-7-1 플륨관 설치('01, '06, '09, '16, '18, '21, '25년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": false
+      }
+    },
+    {
+      "id": "n05",
+      "query": "6-3-3",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-3-3"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-3",
+          "label": "공통 6-3-3 유로폼 설치 및 해체('08, '09, '17, '22, '26년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-3",
+          "label": "공통 6-3-3 유로폼 설치 및 해체('08, '09, '17, '22, '26년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n06",
+      "query": "6-6-7 품",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-6-7"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-7",
+          "label": "공통 6-6-7 프리캐스트 콘크리트 패널 설치('08년 신설, '21, '24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-7",
+          "label": "공통 6-6-7 프리캐스트 콘크리트 패널 설치('08년 신설, '21, '24년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n07",
+      "query": "6-2-4 Type-Ⅱ 철근공",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-2-4"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-4",
+          "label": "공통 6-2-4 공장가공('08년 신설, '09, '22년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-4",
+          "label": "공통 6-2-4 공장가공('08년 신설, '09, '22년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n08",
+      "query": "펌프차 타설 현장조건 f2 계수",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-4"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n09",
+      "query": "압송관 설치 및 철거 비계공 시공량",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-4"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "n10",
+      "query": "PSC빔 그라우팅 기계설비공 인원",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-4-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-4-1",
+          "label": "공통 6-4-1 PSC빔 제작('16, '21, '25년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-4-1",
+          "label": "공통 6-4-1 PSC빔 제작('16, '21, '25년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "v01",
+      "query": "6-1-1 레디믹스트콘크리트 타설",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-1"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "v02",
+      "query": "콘크리트 펌프차 타설 2. 인력편성",
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-4"
+      },
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "correct": true
+      }
+    },
+    {
+      "id": "e01",
+      "query": null,
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-1"
+      },
+      "A": {
+        "top": null,
+        "correct": null
+      },
+      "B": {
+        "top": null,
+        "correct": null
+      },
+      "skip_reason": "적산 사례에 검색 질문이 없음"
+    },
+    {
+      "id": "e02",
+      "query": null,
+      "expected": {
+        "division": "공통",
+        "section_no": "6-1-1"
+      },
+      "A": {
+        "top": null,
+        "correct": null
+      },
+      "B": {
+        "top": null,
+        "correct": null
+      },
+      "skip_reason": "적산 사례에 검색 질문이 없음"
+    },
+    {
+      "id": "e03",
+      "query": null,
+      "expected": {
+        "division": "공통",
+        "section_no": "6-4-1"
+      },
+      "A": {
+        "top": null,
+        "correct": null
+      },
+      "B": {
+        "top": null,
+        "correct": null
+      },
+      "skip_reason": "적산 사례에 검색 질문이 없음"
+    },
+    {
+      "id": "e04",
+      "query": null,
+      "expected": {
+        "division": "공통",
+        "section_no": "6-7-4"
+      },
+      "A": {
+        "top": null,
+        "correct": null
+      },
+      "B": {
+        "top": null,
+        "correct": null
+      },
+      "skip_reason": "적산 사례에 검색 질문이 없음"
+    }
+  ],
+  "select": [
+    {
+      "id": "q01",
+      "query": "레미콘 인력운반 타설할 때 콘크리트공과 보통인부는 몇 명인가",
+      "expected": "6-1-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "q02",
+      "query": "콘크리트 펌프차 타설 품",
+      "expected": "6-1-4",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "q03",
+      "query": "에폭시 콘크리트 접착제 바르기에 드는 시너 양",
+      "expected": "6-1-5",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-5",
+          "label": "공통 6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-5",
+          "label": "공통 6-1-5 에폭시(Epoxy) 콘크리트 접착제 바르기('04, '08, '11, '22년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "q04",
+      "query": "철근 현장가공 인력 품",
+      "expected": "6-2-2",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-2",
+          "label": "공통 6-2-2 현장가공('08, '14, '22, '24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-2",
+          "label": "공통 6-2-2 현장가공('08, '14, '22, '24년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "q05",
+      "query": "합판거푸집 설치 및 해체 형틀목공 시공량",
+      "expected": "6-3-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "q06",
+      "query": "강재거푸집 사용횟수",
+      "expected": "6-3-2",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-2",
+          "label": "공통 6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-2",
+          "label": "공통 6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "q07",
+      "query": "PSC빔 제작 형틀목공 인원",
+      "expected": "6-4-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-4-1",
+          "label": "공통 6-4-1 PSC빔 제작('16, '21, '25년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-4-1",
+          "label": "공통 6-4-1 PSC빔 제작('16, '21, '25년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "q08",
+      "query": "수상 교량받침 설치 품",
+      "expected": "6-6-2",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-2",
+          "label": "공통 6-6-2 교량받침 설치(수상)('21, '24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-2",
+          "label": "공통 6-6-2 교량받침 설치(수상)('21, '24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "q09",
+      "query": "PC기둥 설치 시공량",
+      "expected": "6-7-4",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-7-4",
+          "label": "공통 6-7-4 PC기둥 설치('23년 신설, '24년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-7-4",
+          "label": "공통 6-7-4 PC기둥 설치('23년 신설, '24년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "q10",
+      "query": "레미콘 타설 공구손료 및 경장비 기계경비는 인력품의 몇 %",
+      "expected": "6-1-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-2",
+          "label": "공통 6-6-2 교량받침 설치(수상)('21, '24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "q11",
+      "query": "슬립폼 공법",
+      "expected": "6-3-6",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-6",
+          "label": "공통 6-3-6 슬립폼 공법"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-6",
+          "label": "공통 6-3-6 슬립폼 공법"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "n01",
+      "query": "펌프카로 콘크리트 부을 때 작업조는 몇 명으로 짜나",
+      "expected": "6-1-4",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "n02",
+      "query": "합판 거푸집을 두 번째 다시 쓸 때 자재비는 처음의 몇 퍼센트",
+      "expected": "6-3-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "n03",
+      "query": "육지에서 다리 받침 놓는 데 필요한 인력",
+      "expected": "6-6-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-1",
+          "label": "공통 6-6-1 교량받침 설치(육상)('16, '21, '24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-1",
+          "label": "공통 6-6-1 교량받침 설치(육상)('16, '21, '24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "n04",
+      "query": "콘크리트 수로관 하루에 몇 본 설치",
+      "expected": "6-7-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-7-1",
+          "label": "공통 6-7-1 플륨관 설치('01, '06, '09, '16, '18, '21, '25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "wrong",
+        "correct": false
+      }
+    },
+    {
+      "id": "n05",
+      "query": "6-3-3",
+      "expected": "6-3-3",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-3",
+          "label": "공통 6-3-3 유로폼 설치 및 해체('08, '09, '17, '22, '26년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-3",
+          "label": "공통 6-3-3 유로폼 설치 및 해체('08, '09, '17, '22, '26년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "n06",
+      "query": "6-6-7 품",
+      "expected": "6-6-7",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-7",
+          "label": "공통 6-6-7 프리캐스트 콘크리트 패널 설치('08년 신설, '21, '24년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-6-7",
+          "label": "공통 6-6-7 프리캐스트 콘크리트 패널 설치('08년 신설, '21, '24년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "n07",
+      "query": "6-2-4 Type-Ⅱ 철근공",
+      "expected": "6-2-4",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-4",
+          "label": "공통 6-2-4 공장가공('08년 신설, '09, '22년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-4",
+          "label": "공통 6-2-4 공장가공('08년 신설, '09, '22년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "n08",
+      "query": "펌프차 타설 현장조건 f2 계수",
+      "expected": "6-1-4",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "n09",
+      "query": "압송관 설치 및 철거 비계공 시공량",
+      "expected": "6-1-4",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "n10",
+      "query": "PSC빔 그라우팅 기계설비공 인원",
+      "expected": "6-4-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-4-1",
+          "label": "공통 6-4-1 PSC빔 제작('16, '21, '25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-4-1",
+          "label": "공통 6-4-1 PSC빔 제작('16, '21, '25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "v01",
+      "query": "6-1-1 레디믹스트콘크리트 타설",
+      "expected": "6-1-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "v02",
+      "query": "콘크리트 펌프차 타설 2. 인력편성",
+      "expected": "6-1-4",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "a01",
+      "query": "콘크리트 타설 노무비 알려줘",
+      "expected": "ask",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "wrong",
+        "correct": false
+      }
+    },
+    {
+      "id": "a02",
+      "query": "타설 비용 계산해줘",
+      "expected": "ask",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      }
+    },
+    {
+      "id": "a03",
+      "query": "철근 작업 인건비",
+      "expected": "ask",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-6",
+          "label": "공통 6-2-6 GFRP 보강근 현장조립('26년 신설)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-2-6",
+          "label": "공통 6-2-6 GFRP 보강근 현장조립('26년 신설)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      }
+    },
+    {
+      "id": "a04",
+      "query": "철근콘크리트 작업중인데 타설해야해 비용 계산해줘",
+      "expected": "ask",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      }
+    },
+    {
+      "id": "a05",
+      "query": "콘크리트 작업 비용",
+      "expected": "ask",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1",
+          "label": "공통 6-1 콘크리트('25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1",
+          "label": "공통 6-1 콘크리트('25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      }
+    },
+    {
+      "id": "a06",
+      "query": "콘크리트 타설 작업 비용",
+      "expected": "ask",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1",
+          "label": "공통 6-1 콘크리트('25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": true
+      }
+    },
+    {
+      "id": "c01",
+      "query": "레미콘 타설 노무비 알려줘",
+      "expected": "6-1-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "c02",
+      "query": "레미콘 인력운반 타설 100㎥ 노무비",
+      "expected": "6-1-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "label": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "c03",
+      "query": "콘크리트 펌프차 타설 비용",
+      "expected": "6-1-4",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "label": "공통 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완)"
+        },
+        "decision": "chosen",
+        "outcome": "correct",
+        "correct": true
+      }
+    },
+    {
+      "id": "c04",
+      "query": "현장비빔 타설 노무비",
+      "expected": "6-1-2",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-2",
+          "label": "공통 6-1-2 현장비빔타설"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-1-2",
+          "label": "공통 6-1-2 현장비빔타설"
+        },
+        "decision": "provisional",
+        "outcome": "ask",
+        "correct": false
+      }
+    },
+    {
+      "id": "c05",
+      "query": "합판거푸집 설치 인건비",
+      "expected": "6-3-1",
+      "A": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      },
+      "B": {
+        "top": {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "label": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)"
+        },
+        "decision": "no_spec",
+        "outcome": "correct",
+        "correct": true
+      }
+    }
+  ]
+}

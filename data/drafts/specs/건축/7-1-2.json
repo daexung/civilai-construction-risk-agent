@@ -1,0 +1,249 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/7-1-2/금속판평잇기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "7-1-2",
+    "title": "금속판 평잇기",
+    "work": "금속판 평잇기 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      611
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "금속판 평잇기 시공 물량은 몇 ㎡입니까?",
+        "source": "PDF 611쪽 7-1-2 [주] ①"
+      },
+      {
+        "name": "location",
+        "type": "enum",
+        "allowed_values": [
+          "지붕",
+          "벽"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 부위는 지붕입니까, 벽입니까?",
+        "source": "PDF 611쪽 7-1-2 표 시공량 구분"
+      },
+      {
+        "name": "roof_slope_over_30",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지붕경사가 30° 이상입니까?",
+        "source": "PDF 611쪽 7-1-2 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p667-t1",
+        "role": "작업조 인원 및 시공량",
+        "source": "PDF 611쪽 7-1-2 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "지붕잇기공": {
+            "수량": "3"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "시공량": {
+            "지붕": "50",
+            "벽": "45"
+          },
+          "비고": {
+            "비고": "- 지붕경사 30°이상일 경우 시공량의 17%를 감하여 적용한다."
+          }
+        },
+        "cite": {
+          "table_id": "p667-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p667-t1",
+          "row": "시공량",
+          "column_input": "location"
+        },
+        "crew": {
+          "table": "p667-t1",
+          "column": "수량",
+          "trades": [
+            "지붕잇기공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p667-t1에서 시공 부위(지붕/벽)에 따른 기준 시공량을 찾는다.",
+        "작업일수 = quantity ÷ 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 611쪽 7-1-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "지붕경사 30° 이상",
+        "blocked_if": {
+          "input": "roof_slope_over_30",
+          "op": "==",
+          "value": true
+        },
+        "reason": "지붕경사 30°이상일 경우 시공량의 17%를 감하여 적용해야 하나, 현재 일당 작업조 계산 모델에서 시공량 직접 감산(계수 적용 외)을 지원하지 않아 보류함.",
+        "source": "PDF 611쪽 7-1-2 표 비고",
+        "cite": {
+          "table_id": "p667-t1",
+          "row": "비고",
+          "column": "비고"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "후레싱 설치",
+        "source": "PDF 611쪽 7-1-2 [주] ③",
+        "cite": {
+          "chunk_id": "p667-x10",
+          "quote": "③ 후레싱 설치는 ‘[건축부문] 7-1-7 후레싱 설치’를 따른다."
+        }
+      },
+      {
+        "item": "방수 및 기와걸이 작업",
+        "source": "PDF 611쪽 7-1-2 [주] ④",
+        "cite": {
+          "chunk_id": "p667-x10",
+          "quote": "④ 방수 및 기와걸이 작업은 별도 계상한다."
+        }
+      },
+      {
+        "item": "가설비계, 안전난간, 추락방지시설 등",
+        "source": "PDF 611쪽 7-1-2 [주] ⑤",
+        "cite": {
+          "chunk_id": "p667-x10",
+          "quote": "⑤ 가설비계, 안전난간, 추락방지시설 등 시설물이 필요한 경우 작업여건을 고려하여 별도 계상한다."
+        }
+      },
+      {
+        "item": "잡재료 및 소모재료",
+        "source": "PDF 611쪽 7-1-2 [주] ⑦",
+        "cite": {
+          "chunk_id": "p667-x10",
+          "quote": "⑦ 잡재료 및 소모재료(고정철물 등)는 주재료비의 5%로 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p667-x10",
+          "quote": "⑥ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 직종별 인원과 일일시공량이 명시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p667-t1",
+      "row": "지붕잇기공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p667-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p667-t1",
+      "row": "시공량",
+      "column": "지붕",
+      "value": "50"
+    },
+    {
+      "table_id": "p667-t1",
+      "row": "시공량",
+      "column": "벽",
+      "value": "45"
+    },
+    {
+      "table_id": "p667-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 지붕경사 30°이상일 경우 시공량의 17%를 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p667-x10",
+      "quote": "① 본 품은 금속판 지붕재(1.0㎡이하)의 평잇기 설치 기준이다."
+    },
+    {
+      "chunk_id": "p667-x10",
+      "quote": "③ 후레싱 설치는 ‘[건축부문] 7-1-7 후레싱 설치’를 따른다."
+    },
+    {
+      "chunk_id": "p667-x10",
+      "quote": "④ 방수 및 기와걸이 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p667-x10",
+      "quote": "⑤ 가설비계, 안전난간, 추락방지시설 등 시설물이 필요한 경우 작업여건을 고려하여 별도 계상한다."
+    },
+    {
+      "chunk_id": "p667-x10",
+      "quote": "⑥ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p667-x10",
+      "quote": "⑦ 잡재료 및 소모재료(고정철물 등)는 주재료비의 5%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "지붕경사 30° 이상일 경우 시공량 17% 감산을 `adjusted_daily_crew` 모델에서 어떻게 처리해야 할지 명확하지 않아 `blocked`로 처리했습니다. 계수(0.83)를 적용하는 방식으로 모델을 확장할 수 있는지 확인이 필요합니다.",
+    "잡재료 및 소모재료가 주재료비의 5%로 명시되어 있으나, 현재 시스템이 노무비 기준(labor_subtotal)만 지원하여 계산에서 제외(not_calculated)했습니다."
+  ],
+  "questions": [
+    "지붕에 금속판 평잇기를 시공할 때 일일 시공량은 얼마인가요?",
+    "지붕경사가 35도인 경우 시공량 감산은 어떻게 계산하나요?",
+    "금속판 평잇기 시공 부위가 지붕인가요, 벽인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:05:59.650432+00:00",
+    "input_tokens": 11691,
+    "output_tokens": 2619,
+    "source_pages": [
+      667,
+      668
+    ],
+    "prompt_sha256": "c884d145a147403152cefccaae0cde07ac23c203a90d0b41dde398d83bf143f4",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

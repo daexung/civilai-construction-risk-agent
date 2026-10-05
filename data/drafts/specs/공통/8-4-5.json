@@ -1,0 +1,143 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-4-5/콘크리트기계",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-4-5",
+    "title": "[40]콘크리트기계",
+    "work": "기계별 조종원 참조",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      280,
+      281
+    ],
+    "inputs": [
+      {
+        "name": "machine_name",
+        "type": "enum",
+        "allowed_values": [
+          "콘크리트배치플랜트"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기계명은 무엇입니까?",
+        "source": "파싱 결과 p336-t1 표 기계명"
+      },
+      {
+        "name": "spec",
+        "type": "enum",
+        "allowed_values": [
+          "60㎥/hr(96㎾)",
+          "90 (144)",
+          "120 (160)",
+          "150 (177)",
+          "180 (213)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "콘크리트배치플랜트의 규격은 무엇입니까?",
+        "source": "파싱 결과 p336-t1 표 규격"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p336-t1",
+        "role": "콘크리트기계 규격별 조종원",
+        "source": "PDF 280쪽 8-4-5 [40]콘크리트기계 표",
+        "unit": "인/일",
+        "values": {
+          "60㎥/hr(96㎾)": {
+            "조종원\n(인/일)": "1"
+          },
+          "90 (144)": {
+            "조종원\n(인/일)": "1"
+          },
+          "120 (160)": {
+            "조종원\n(인/일)": "1"
+          },
+          "150 (177)": {
+            "조종원\n(인/일)": "1"
+          },
+          "180 (213)": {
+            "조종원\n(인/일)": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p336-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 기계명과 규격에 해당하는 조종원(인/일) 값을 표에서 찾는다."
+      ],
+      "source": "p336-t1",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "기계 규격에 따른 조종원 인원수를 표에서 찾아 참조하는 단순 조회 성격의 절이므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p336-t1",
+      "row": "60㎥/hr(96㎾)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p336-t1",
+      "row": "90 (144)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p336-t1",
+      "row": "120 (160)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p336-t1",
+      "row": "150 (177)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    },
+    {
+      "table_id": "p336-t1",
+      "row": "180 (213)",
+      "column": "조종원\n(인/일)",
+      "value": "1"
+    }
+  ],
+  "open_questions": [
+    "원문 이미지에는 281페이지에 걸쳐 콘크리트믹서, 콘크리트펌프차 등 다양한 콘크리트기계가 있으나, 제공된 파싱 결과(p336-t1)에는 '콘크리트배치플랜트'의 일부 규격만 포함되어 있어 나머지 기계에 대한 명세를 작성할 수 없습니다."
+  ],
+  "questions": [
+    "콘크리트배치플랜트 120 (160) 규격의 조종원은 몇 명인가요?",
+    "표에 없는 규격의 콘크리트배치플랜트를 사용할 경우 조종원 수는 어떻게 산정하나요?",
+    "콘크리트펌프차의 조종원 수를 알고 싶은데 어떻게 해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:24:10.028351+00:00",
+    "input_tokens": 11725,
+    "output_tokens": 1380,
+    "source_pages": [
+      336,
+      337
+    ],
+    "prompt_sha256": "aa24ce35dc674a322f5947913a17655ee009faeb1c141a355d25110956f4d864",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

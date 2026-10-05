@@ -1,0 +1,192 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/3-2-10/기존방수층_및_보호층_철거",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "3-2-10",
+    "title": "기존방수층 및 보호층 철거",
+    "work": "기존방수층 및 보호층 철거 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      916
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "철거할 면적은 몇 ㎡입니까?",
+        "source": "PDF 916쪽 3-2-10 표 단위 (㎡당)"
+      },
+      {
+        "name": "is_small_scale",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "개소당 작업면적이 40㎡ 미만인 소규모공사입니까?",
+        "source": "PDF 916쪽 3-2-10 [주] ②"
+      },
+      {
+        "name": "concrete_thickness",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎝",
+        "required": true,
+        "ask": "누름 콘크리트 두께는 몇 ㎝입니까? (기준은 8㎝입니다)",
+        "source": "PDF 916쪽 3-2-10 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p972-t1",
+        "role": "기존방수층 및 보호층 철거 단위당 품",
+        "source": "PDF 916쪽 3-2-10 표",
+        "unit": "인/㎡, 시간/㎡",
+        "values": {
+          "착암공": {
+            "수량": "0.06"
+          },
+          "보통인부": {
+            "수량": "0.22"
+          },
+          "소형브레이커": {
+            "수량": "0.10"
+          },
+          "공기압축기": {
+            "수량": "0.05"
+          }
+        },
+        "cite": {
+          "table_id": "p972-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p972-t1",
+          "row_input": null,
+          "column_input": "수량",
+          "trades": [
+            "착암공",
+            "보통인부",
+            "소형브레이커",
+            "공기압축기"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "is_small_scale": true
+            },
+            "rate": "0.4",
+            "applies_to": [
+              "착암공",
+              "보통인부",
+              "소형브레이커",
+              "공기압축기"
+            ],
+            "source": "PDF 916쪽 3-2-10 [주] ②"
+          }
+        ],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p972-t1에서 직종 및 장비별 단위당 품을 가져온다.",
+        "물량(quantity)을 곱해 총 품을 구한다.",
+        "소규모공사(is_small_scale=true)인 경우 장비 사용기간 및 품에 40%를 가산한다."
+      ],
+      "source": "PDF 916쪽 3-2-10 표 및 [주] ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "누름 콘크리트 두께가 8㎝가 아닌 경우",
+        "blocked_if": {
+          "input": "concrete_thickness",
+          "op": "!=",
+          "value": 8
+        },
+        "reason": "누름 콘크리트 두께 8㎝ 기준이며, 두께가 다를 경우의 품 조정 비율이 원문에 명시되어 있지 않음",
+        "source": "PDF 916쪽 3-2-10 [주] ③",
+        "cite": {
+          "chunk_id": "p972-x12",
+          "quote": "누름 콘크리트 두께 8㎝ 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 인력 및 장비 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p972-t1",
+      "row": "착암공",
+      "column": "수량",
+      "value": "0.06"
+    },
+    {
+      "table_id": "p972-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.22"
+    },
+    {
+      "table_id": "p972-t1",
+      "row": "소형브레이커",
+      "column": "수량",
+      "value": "0.10"
+    },
+    {
+      "table_id": "p972-t1",
+      "row": "공기압축기",
+      "column": "수량",
+      "value": "0.05"
+    },
+    {
+      "chunk_id": "p972-x12",
+      "quote": "소규모공사(개소당 작업면적 40㎡미만)인 경우는 장비 사용기간 및 품을 40% 범위 내에서 가산하여"
+    },
+    {
+      "chunk_id": "p972-x12",
+      "quote": "누름 콘크리트 두께 8㎝ 기준이다."
+    }
+  ],
+  "open_questions": [
+    "누름 콘크리트 두께가 8㎝가 아닐 경우 품을 어떻게 조정해야 하는지 원문에 명시되어 있지 않습니다.",
+    "소규모공사 할증 시 '40% 범위 내에서 가산'이라고 되어 있어, 정확히 40%를 일괄 적용할지 현장 여건에 따라 0~40% 사이의 값을 적용할지 불명확합니다."
+  ],
+  "questions": [
+    "철거할 기존방수층 및 보호층의 총 면적은 몇 ㎡입니까?",
+    "개소당 작업면적이 40㎡ 미만인 소규모 공사에 해당합니까?",
+    "누름 콘크리트 두께가 기준인 8㎝와 다를 경우, 품 할증이나 감산 비율을 어떻게 적용해야 합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:50.771760+00:00",
+    "input_tokens": 11659,
+    "output_tokens": 1900,
+    "source_pages": [
+      972,
+      973
+    ],
+    "prompt_sha256": "fe31fa36d1a45d7d34a45b13cf5ca9cc6147313d1e3084e132619817d1da0258",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

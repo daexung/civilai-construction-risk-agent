@@ -1,0 +1,311 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-2-3/흙깎기_기계",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-2-3",
+    "title": "흙깎기(기계)('25년 신설)",
+    "work": "토공 장비에 의한 깎기, 집토 작업",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      68,
+      69
+    ],
+    "inputs": [
+      {
+        "name": "soil_type",
+        "type": "enum",
+        "allowed_values": [
+          "보통토사",
+          "혼합토사",
+          "암"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질은 보통토사, 혼합토사, 암 중 무엇입니까?",
+        "source": "PDF 68~69쪽 가. 보통토사, 나. 혼합토사, 다. 암"
+      },
+      {
+        "name": "scale",
+        "type": "enum",
+        "allowed_values": [
+          "대규모",
+          "중규모",
+          "소규모"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "공사규모는 대규모, 중규모, 소규모 중 무엇입니까?",
+        "decision_table": "p124-t1",
+        "source": "PDF 68쪽 3. 공사규모의 구분"
+      },
+      {
+        "name": "rock_type",
+        "type": "enum",
+        "allowed_values": [
+          "풍화암",
+          "연암",
+          "보통암",
+          "경암"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "암 분류는 무엇입니까? (토질이 암인 경우)",
+        "source": "PDF 69쪽 다. 암"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "흙깎기 물량은 몇 ㎥입니까?",
+        "source": "PDF 68쪽 4. 체적환산계수를 기반영한 것으로 자연상태의 토량에 적용한다."
+      },
+      {
+        "name": "separate_gathering",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "집토 작업을 별도로 수행합니까? (토질이 암인 경우)",
+        "source": "PDF 69쪽 다. 암 [주] ①"
+      },
+      {
+        "name": "ripper_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "유압식 리퍼 작업이 병행 시공됩니까? (혼합토사인 경우)",
+        "source": "PDF 69쪽 [주] ① ㉮ 및 ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p124-t1",
+        "role": "공사규모 구분",
+        "source": "PDF 68쪽 3. 공사규모의 구분",
+        "values": {
+          "공사수량이 100,000㎥": {
+            "중규모 공사수량이 100,000㎥": "소규모 공사수량 10,000㎥ 미만인 경우 또는"
+          },
+          "이상인 경우": {
+            "중규모 미만인 경우": "소규모 작업공간이 협소 등 장비운영이 원활하지 않은 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p124-t1"
+        }
+      },
+      {
+        "id": "p124-t2",
+        "role": "보통토사 일당 시공량",
+        "source": "PDF 68쪽 가. 보통토사",
+        "unit": "㎥/일",
+        "values": {
+          "불도저": {
+            "대규모 시공량(㎥)": "930",
+            "중규모 시공량(㎥)": "560",
+            "소규모 시공량(㎥)": "310"
+          },
+          "굴착기": {
+            "소규모 수량 1": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p124-t2"
+        }
+      },
+      {
+        "id": "p124-t3",
+        "role": "혼합토사 일당 시공량",
+        "source": "PDF 68쪽 나. 혼합토사",
+        "unit": "㎥/일",
+        "values": {
+          "불도저": {
+            "대규모 시공량(㎥)": "640",
+            "중규모 시공량(㎥)": "390",
+            "소규모 시공량(㎥)": "230"
+          }
+        },
+        "cite": {
+          "table_id": "p124-t3"
+        }
+      },
+      {
+        "id": "p125-t0",
+        "role": "암 일당 시공량",
+        "source": "PDF 69쪽 다. 암",
+        "unit": "㎥/일",
+        "values": {
+          "굴착기 대형브레이커": {
+            "시공량(㎥) 풍화암": "65",
+            "시공량(㎥) 연암": "50",
+            "시공량(㎥) 보통암": "30",
+            "시공량(㎥) 경암": "25"
+          }
+        },
+        "cite": {
+          "table_id": "p125-t0"
+        }
+      },
+      {
+        "id": "p125-t1",
+        "role": "암 집토 작업 별도 수행 시 일당 시공량",
+        "source": "PDF 69쪽 다. 암 [주] ①",
+        "unit": "㎥/일",
+        "values": {
+          "불도저": {
+            "시공량(㎥) 풍화암": "550",
+            "시공량(㎥) 연암": "520",
+            "시공량(㎥) 보통암": "450",
+            "시공량(㎥) 경암": "450"
+          }
+        },
+        "cite": {
+          "table_id": "p125-t1"
+        }
+      },
+      {
+        "id": "p125-t2",
+        "role": "소모재료(치즐) 요율",
+        "source": "PDF 69쪽 다. 암 [주] ②",
+        "unit": "%",
+        "values": {
+          "요율": {
+            "풍화암 1%": "1",
+            "연암 2%": "2",
+            "보통암 5%": "5",
+            "경암 7%": "7"
+          }
+        },
+        "cite": {
+          "table_id": "p125-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "토질, 공사규모, 암 분류에 따라 해당 표에서 장비의 일당 시공량을 찾는다.",
+        "물량을 일당 시공량으로 나누어 장비의 투입 대·일을 구한다.",
+        "혼합토사에서 유압식 리퍼 사용 시, 또는 암 굴착 시 치즐 소모재료비는 기계경비에 요율을 곱하여 별도 계상한다."
+      ],
+      "source": "PDF 68~69쪽 3-2-3 흙깎기(기계)",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "유압식 리퍼 경비 및 소모재료(치즐) 비용 산정",
+        "reason": "기계경비(재료비, 노무비, 경비)를 기준으로 요율을 적용해야 하나, 현재 cost_rules는 labor_subtotal(노무비 합계) 기준만 지원하므로 자동 계산 불가",
+        "source": "PDF 69쪽 [주] ② 및 다. 암 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p125-x0",
+            "quote": "② 유압식 리퍼의 경비는 깎기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다."
+          },
+          {
+            "chunk_id": "p125-x6",
+            "quote": "② 소모재료(치즐)는 깎기장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "흙의 외부 반출을 위한 적재 및 운반 작업",
+        "source": "PDF 68쪽 2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다.",
+        "cite": {
+          "chunk_id": "p124-x11",
+          "quote": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "인력 투입 없이 장비의 일당 시공량만 제시되어 있어 현재 지원하는 adjusted_daily_crew 모델(인력+장비)에 정확히 부합하지 않으며, 파싱 결과 누락이 많아 자동 계산이 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p124-t1",
+      "row": "공사수량이 100,000㎥",
+      "column": "중규모 공사수량이 100,000㎥",
+      "value": "소규모 공사수량 10,000㎥ 미만인 경우 또는"
+    },
+    {
+      "table_id": "p124-t2",
+      "row": "불도저",
+      "column": "대규모 시공량(㎥)",
+      "value": "930"
+    },
+    {
+      "table_id": "p124-t3",
+      "row": "불도저",
+      "column": "대규모 시공량(㎥)",
+      "value": "640"
+    },
+    {
+      "table_id": "p125-t0",
+      "row": "굴착기 대형브레이커",
+      "column": "시공량(㎥) 풍화암",
+      "value": "65"
+    },
+    {
+      "table_id": "p125-t1",
+      "row": "불도저",
+      "column": "시공량(㎥) 풍화암",
+      "value": "550"
+    },
+    {
+      "table_id": "p125-t2",
+      "row": "요율",
+      "column": "풍화암 1%",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p125-x0",
+      "quote": "② 유압식 리퍼의 경비는 깎기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p125-x6",
+      "quote": "② 소모재료(치즐)는 깎기장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p124-t2에서 중규모 19ton 불도저의 시공량과 소규모 1.0㎥ 굴착기의 시공량이 누락되어 있어 표에 반영하지 못했습니다.",
+    "파싱 결과 p124-t3에서 중규모 19ton 불도저의 시공량과 소규모 1.0㎥ 굴착기의 시공량이 누락되어 있어 표에 반영하지 못했습니다.",
+    "유압식 리퍼 경비와 소모재료(치즐) 비용이 '기계경비'를 기준으로 산정되나, 현재 cost_rules는 labor_subtotal만 지원하여 반영할 수 없습니다."
+  ],
+  "questions": [
+    "보통토사 대규모 공사에서 32ton 불도저의 일당 시공량은 얼마인가요?",
+    "혼합토사 굴착 시 유압식 리퍼를 병행 사용하면 경비는 어떻게 추가 계상하나요?",
+    "암 굴착 시 집토 작업을 별도로 수행하는 경우 불도저의 시공량은 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:16.200929+00:00",
+    "input_tokens": 27356,
+    "output_tokens": 6746,
+    "source_pages": [
+      124,
+      125,
+      126
+    ],
+    "prompt_sha256": "ed1706143cc0170fcc8fc135b3312424feaa01a29cf28a7a4667587268403a54",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

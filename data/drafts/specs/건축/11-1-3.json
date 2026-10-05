@@ -1,0 +1,170 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/11-1-3/철재면 바탕만들기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "11-1-3",
+    "title": "철재면 바탕만들기('21년 신설)",
+    "work": "철재면 바탕만들기 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      636
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "철재면 바탕만들기 면적은 몇 ㎡입니까?",
+        "source": "PDF 636쪽 11-1-3 표 단위 (㎡당)"
+      },
+      {
+        "name": "prep_method",
+        "type": "enum",
+        "allowed_values": [
+          "일반 불순물 제거",
+          "인산염처리",
+          "블라스트법"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "바탕처리 방법은 무엇입니까? (일반 불순물 제거 / 인산염처리 / 블라스트법)",
+        "source": "PDF 636쪽 11-1-3 [주] ①, ②",
+        "synonyms": {
+          "일반 불순물 제거": [
+            "먼지 제거",
+            "오염 제거",
+            "용접 불순물 제거"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p692-t0",
+        "role": "철재면 바탕만들기 단위당 품",
+        "source": "PDF 636쪽 11-1-3 표",
+        "unit": "인/㎡",
+        "values": {
+          "도장공": {
+            "수량": "0.006"
+          },
+          "보통인부": {
+            "수량": "0.001"
+          }
+        },
+        "cite": {
+          "table_id": "p692-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p692-t0",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p692-t0에서 직종별 단위당 품을 찾는다.",
+        "물량(volume)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 636쪽 11-1-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "인산염처리 또는 블라스트법 적용",
+        "blocked_if": {
+          "input": "prep_method",
+          "op": "!=",
+          "value": "일반 불순물 제거"
+        },
+        "reason": "인산염처리, 블라스트법을 하는 경우 별도 계상함",
+        "source": "PDF 636쪽 11-1-3 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p692-x3",
+            "quote": "② 인산염처리, 블라스트법을 하는 경우 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 잡재료비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p692-x3",
+          "quote": "③ 공구손료 및 잡재료비(브러시 등)는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(㎡)당 직종별 투입 인력이 표에 직접 명시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p692-t0",
+      "row": "도장공",
+      "column": "수량",
+      "value": "0.006"
+    },
+    {
+      "table_id": "p692-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.001"
+    },
+    {
+      "chunk_id": "p692-x3",
+      "quote": "① 본 품은 철재면의 도장 전 먼지, 오염, 용접 등 부착된 불순물을 제거하는 기준으로 필요한 경우 적용한다."
+    },
+    {
+      "chunk_id": "p692-x3",
+      "quote": "② 인산염처리, 블라스트법을 하는 경우 별도 계상한다."
+    },
+    {
+      "chunk_id": "p692-x3",
+      "quote": "③ 공구손료 및 잡재료비(브러시 등)는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "철재면 바탕만들기 면적이 100㎡일 때 도장공 품은 얼마인가요?",
+    "인산염처리를 하는 경우 품셈 적용은 어떻게 하나요?",
+    "공구손료는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:53:10.106846+00:00",
+    "input_tokens": 11506,
+    "output_tokens": 1585,
+    "source_pages": [
+      692,
+      693
+    ],
+    "prompt_sha256": "36292ae9752cea64b0c7d3b09a75bfeb5d9258f3f6f8c6716cf7ca43f15f81f9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

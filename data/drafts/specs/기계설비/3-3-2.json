@@ -1,0 +1,142 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/3-3-2/원형덕트보온",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "3-3-2",
+    "title": "원형덕트 보온('14, '20년 보완)",
+    "work": "원형덕트 보온 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      724
+    ],
+    "inputs": [
+      {
+        "name": "insulation_thickness",
+        "type": "enum",
+        "allowed_values": [
+          "25이하",
+          "50이하"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "보온두께는 몇 mm입니까? (25이하 / 50이하)",
+        "source": "p724-t1 보온두께(mm) 열"
+      },
+      {
+        "name": "insulation_material",
+        "type": "enum",
+        "allowed_values": [
+          "고무발포보온재/발포폴리에틸렌보온재",
+          "유리면보온재(글라스울)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용하는 보온재의 종류는 무엇입니까?",
+        "source": "p724-t1 시공량 열 제목"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "원형덕트 보온 시공 면적은 몇 ㎡입니까?",
+        "source": "p724-t1 시공량(㎡)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p724-t1",
+        "role": "원형덕트 보온 일당 시공량 및 인원",
+        "source": "3-3-2 원형덕트 보온 표",
+        "unit": "인, ㎡/일",
+        "values": {
+          "보온공": {
+            "단위": "인",
+            "수량": "2",
+            "보온두께(mm)": "25이하",
+            "시공량(㎡) 고무발포보온재 발포폴리에틸렌보온재": "9.5",
+            "시공량(㎡) 유리면보온재 (글라스울)": "8.0"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "보온두께(mm)": "50이하",
+            "시공량(㎡) 고무발포보온재 발포폴리에틸렌보온재": "8.5",
+            "시공량(㎡) 유리면보온재 (글라스울)": "7.0"
+          }
+        },
+        "cite": {
+          "table_id": "p724-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "표의 행이 직종(보온공, 보통인부)과 보온두께(25이하, 50이하)를 동시에 나타내고 있어 작업조 구성이 불명확하므로 자동 계산을 보류한다."
+      ],
+      "source": "p724-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "표의 행이 직종(보온공, 보통인부)과 보온두께(25이하, 50이하)를 동시에 나타내고 있어, 전체 작업조가 고정인지 두께별로 투입 인원이 다른지 원문만으로 확정할 수 없어 자동 계산을 보류합니다.",
+  "citations": [
+    {
+      "table_id": "p724-t1",
+      "row": "보온공",
+      "column": "보온두께(mm)",
+      "value": "25이하"
+    },
+    {
+      "table_id": "p724-t1",
+      "row": "보통인부",
+      "column": "보온두께(mm)",
+      "value": "50이하"
+    },
+    {
+      "chunk_id": "p724-x8",
+      "quote": "본 품은 접착제가 부착된 고무발포 보온재, 발포 폴리에틸렌 보온재와 접착제가 부착되지 않은"
+    },
+    {
+      "chunk_id": "p724-x8",
+      "quote": "유리면보온재(글라스울)를 사용한 원형덕트 보온 기준이다."
+    },
+    {
+      "chunk_id": "p724-x8",
+      "quote": "본 품은 보온재의 소운반, 보온재 재단, 보온재 및 알루미늄밴드 설치, 마무리 작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "표에서 '보온공 2인'과 '25이하', '보통인부 1인'과 '50이하'가 같은 행에 배치되어 있습니다. 이것이 작업조(보온공 2인 + 보통인부 1인)가 두께에 따라 시공량이 달라지는 것을 의미하는지, 아니면 두께별로 투입 직종과 인원이 다른 것을 의미하는지 불명확하여 계산을 보류했습니다."
+  ],
+  "questions": [
+    "원형덕트 보온 작업 시 보온재의 소운반이나 재단 작업도 품에 포함되나요?",
+    "표에 보온공 2인과 25이하가 같은 줄에 있고, 보통인부 1인과 50이하가 같은 줄에 있는데, 25이하 두께를 시공할 때 보통인부 1인도 같이 투입되는 건가요?",
+    "보온두께가 50mm를 초과하는 경우에는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:19.723106+00:00",
+    "input_tokens": 11652,
+    "output_tokens": 1645,
+    "source_pages": [
+      724,
+      725
+    ],
+    "prompt_sha256": "b5f94d995f97bda910dcd3de0de2ff3c8654a6da17f98a75bbe211a787437853",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

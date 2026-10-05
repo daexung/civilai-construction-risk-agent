@@ -1,0 +1,149 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-2-5/현장용접",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-2-5",
+    "title": "현장용접",
+    "work": "각장 6㎜ 환산용접 길이 1m당 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      629,
+      630
+    ],
+    "inputs": [
+      {
+        "name": "converted_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "각장 6㎜ 환산용접 길이는 몇 m입니까?",
+        "source": "p629-t3 기준 (각장 6㎜ 환산용접 길이 1m당)"
+      },
+      {
+        "name": "wind_protection",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "별도의 방풍설비가 필요합니까?",
+        "source": "p630-x0 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p629-t3",
+        "role": "현장용접 단위당 품",
+        "source": "1-2-5 현장용접 표",
+        "unit": "인/m",
+        "values": {
+          "용접공": {
+            "수량": "0.04"
+          }
+        },
+        "cite": {
+          "table_id": "p629-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p629-t3",
+          "row_input": "용접공",
+          "column_input": "수량",
+          "trades": [
+            "용접공"
+          ]
+        },
+        "quantity_input": "converted_length",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p629-t3에서 용접공의 단위당 품을 찾는다.",
+        "환산용접 길이를 곱해 총 품을 구한다."
+      ],
+      "source": "p629-t3",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "방풍설비",
+        "source": "p630-x0 [주] ④",
+        "cite": {
+          "chunk_id": "p630-x0"
+        }
+      },
+      {
+        "item": "재료량 (CO2 와이어, 탄산가스)",
+        "source": "p630-t0 파싱 오류로 제외",
+        "cite": {
+          "table_id": "p630-t0"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.04",
+        "cite": {
+          "chunk_id": "p630-x0"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당(1m당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p629-t3",
+      "row": "용접공",
+      "column": "수량",
+      "value": "0.04"
+    },
+    {
+      "chunk_id": "p630-x0",
+      "quote": "③ 공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 4%로 계상한다."
+    },
+    {
+      "chunk_id": "p630-x0",
+      "quote": "④ 별도의 방풍설비가 필요한 경우 별도로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "p630-t0 표의 행 이름이 'CO 와이어 2 탄산가스'로 중복 파싱되어 CO2 와이어와 탄산가스의 재료량을 구분하여 명세에 포함할 수 없음."
+  ],
+  "questions": [
+    "각장 6mm 환산용접 길이가 100m일 때 용접공 품은 어떻게 되나요?",
+    "방풍설비가 필요한 경우 어떻게 계산하나요?",
+    "CO2 와이어와 탄산가스 재료량은 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:46:54.733112+00:00",
+    "input_tokens": 24607,
+    "output_tokens": 3019,
+    "source_pages": [
+      629,
+      630,
+      631
+    ],
+    "prompt_sha256": "cc510d05e1be7809f9bf326f14b39bdc06dd1dddb5a090c442d27f511b4c887d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

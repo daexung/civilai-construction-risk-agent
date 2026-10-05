@@ -1,0 +1,173 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-6-1/자갈채집_및_운반",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-6-1",
+    "title": "자갈채집 및 운반('12년 보완)",
+    "work": "자갈채집 및 운반",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      407
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "자갈채집 및 운반 물량은 몇 ㎥입니까?",
+        "source": "PDF 407쪽 p407-t0 기준 (㎥당)"
+      },
+      {
+        "name": "distance",
+        "type": "enum",
+        "allowed_values": [
+          "부순자갈현장채집 50m",
+          "부순자갈현장채집 100m",
+          "부순자갈현장채집 150m",
+          "부순자갈현장채집 200m",
+          "부순자갈현장채집 250m",
+          "부순자갈현장채집 300m",
+          "부순자갈현장채집 350m",
+          "부순자갈현장채집 400m"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "운반거리는 얼마입니까?",
+        "source": "PDF 407쪽 p407-t0",
+        "synonyms": {
+          "부순자갈현장채집 50m": [
+            "50m"
+          ],
+          "부순자갈현장채집 100m": [
+            "100m"
+          ],
+          "부순자갈현장채집 150m": [
+            "150m"
+          ],
+          "부순자갈현장채집 200m": [
+            "200m"
+          ],
+          "부순자갈현장채집 250m": [
+            "250m"
+          ],
+          "부순자갈현장채집 300m": [
+            "300m"
+          ],
+          "부순자갈현장채집 350m": [
+            "350m"
+          ],
+          "부순자갈현장채집 400m": [
+            "400m"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p407-t0",
+        "role": "자갈채집 및 운반 단위당 품",
+        "source": "PDF 407쪽 4-6-1 표",
+        "unit": "인/㎥",
+        "values": {
+          "채집 | 보통인부": {
+            "부순자갈현장채집 50m": "0.79",
+            "부순자갈현장채집 100m": "0.79",
+            "부순자갈현장채집 150m": "0.79",
+            "부순자갈현장채집 200m": "0.79",
+            "부순자갈현장채집 250m": "0.79",
+            "부순자갈현장채집 300m": "0.79",
+            "부순자갈현장채집 350m": "0.79",
+            "부순자갈현장채집 400m": "0.79"
+          },
+          "운반 | 보통인부": {
+            "부순자갈현장채집 50m": "0.22",
+            "부순자갈현장채집 100m": "0.27",
+            "부순자갈현장채집 150m": "0.34",
+            "부순자갈현장채집 200m": "0.40",
+            "부순자갈현장채집 250m": "0.46",
+            "부순자갈현장채집 300m": "0.52",
+            "부순자갈현장채집 350m": "0.59",
+            "부순자갈현장채집 400m": "0.65"
+          }
+        },
+        "cite": {
+          "table_id": "p407-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p407-t0",
+          "column_input": "distance",
+          "trades": [
+            "채집 | 보통인부",
+            "운반 | 보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p407-t0에서 운반거리에 따른 채집 및 운반의 단위당 품을 찾는다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 407쪽 p407-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎥)당 보통인부 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p407-t0",
+      "row": "채집 | 보통인부",
+      "column": "부순자갈현장채집 50m",
+      "value": "0.79"
+    },
+    {
+      "table_id": "p407-t0",
+      "row": "운반 | 보통인부",
+      "column": "부순자갈현장채집 100m",
+      "value": "0.27"
+    },
+    {
+      "chunk_id": "p407-x3",
+      "quote": "[주] 본 품은 현장에서 자갈을 채집하여 트롤리로 운반하는 기준이다."
+    }
+  ],
+  "open_questions": [
+    "운반거리가 400m를 초과하거나 50m 미만인 경우, 또는 50m 단위가 아닌 중간 거리인 경우의 보간/외삽 기준이 명시되어 있지 않음."
+  ],
+  "questions": [
+    "운반거리가 100m일 때 보통인부 품은 얼마인가요?",
+    "운반거리가 120m인 경우 품을 어떻게 계산하나요?",
+    "자갈채집 물량이 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:57:55.575527+00:00",
+    "input_tokens": 11726,
+    "output_tokens": 1860,
+    "source_pages": [
+      407,
+      408
+    ],
+    "prompt_sha256": "700229ccbc8c35eed068b1c4c8fbf60796328ad510f5b8ba56593ce667d216f2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

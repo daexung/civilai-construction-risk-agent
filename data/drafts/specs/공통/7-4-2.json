@@ -1,0 +1,73 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/7-4-2/앵커긴결공법",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "7-4-2",
+    "title": "앵커 긴결공법",
+    "work": "앵커 긴결공법 시공",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      162
+    ],
+    "inputs": [],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과에 직종 이름과 시공량 구분이 누락되어 계산식을 구성할 수 없습니다."
+      ],
+      "source": "PDF 162쪽 7-4-2",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p218-x4",
+          "quote": "공구손료 및 경장비(절단기, 윈치 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에 직종 이름과 시공량 구분이 누락되어 계산식을 구성할 수 없습니다.",
+  "citations": [
+    {
+      "chunk_id": "p218-x4",
+      "quote": "공구손료 및 경장비(절단기, 윈치 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p218-t0)에 직종 이름(석공, 줄눈공, 보통인부)과 시공량 열(0.3㎡초과~0.8㎡이하)이 누락되어 있어, 표를 재구성하고 계산식을 만들 수 없습니다."
+  ],
+  "questions": [
+    "앵커 긴결공법 시공 시 공구손료는 어떻게 계상하나요?",
+    "석재판 절단 및 설치 작업이 품에 포함되나요?",
+    "시공량이 0.5㎡인 경우 어떤 기준을 적용해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:46.907823+00:00",
+    "input_tokens": 23369,
+    "output_tokens": 2555,
+    "source_pages": [
+      218,
+      219
+    ],
+    "prompt_sha256": "42d0e0ca70bb8ea4cd425b5a8d82b67c4dc9aa47d829a7ae1fdaa83b7b393eb9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

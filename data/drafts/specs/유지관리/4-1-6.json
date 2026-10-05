@@ -1,0 +1,274 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/4-1-6/펌프해체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "4-1-6",
+    "title": "펌프 해체('22년 신설)",
+    "work": "펌프 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      923
+    ],
+    "inputs": [
+      {
+        "name": "pump_capacity",
+        "type": "enum",
+        "allowed_values": [
+          "0.75 이하",
+          "1.5 이하",
+          "2.2 이하",
+          "3.7 이하",
+          "5.5 이하",
+          "7.5 이하",
+          "11 이하",
+          "15 이하",
+          "22 이하",
+          "37 이하",
+          "55 이하",
+          "75 이하"
+        ],
+        "unit": "kW",
+        "required": true,
+        "ask": "해체할 펌프의 규격(kW)은 무엇입니까?",
+        "source": "PDF 923쪽 4-1-6 펌프 해체 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "해체할 펌프의 수량은 몇 대입니까?",
+        "source": "PDF 923쪽 4-1-6 펌프 해체 표 기준 (대당)"
+      },
+      {
+        "name": "is_reused",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해체 후 펌프를 재사용합니까?",
+        "source": "PDF 923쪽 4-1-6 [주] ①"
+      },
+      {
+        "name": "is_general_pump",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해체할 펌프가 일반펌프(급수 및 소방펌프)입니까?",
+        "source": "PDF 923쪽 4-1-6 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p979-t1",
+        "role": "펌프 규격별 해체 품",
+        "source": "PDF 923쪽 4-1-6 펌프 해체 표",
+        "unit": "인/대",
+        "values": {
+          "0.75 이하": {
+            "기계설비공(인)": "0.245",
+            "보통인부(인)": "0.163"
+          },
+          "1.5 이하": {
+            "기계설비공(인)": "0.271",
+            "보통인부(인)": "0.181"
+          },
+          "2.2 이하": {
+            "기계설비공(인)": "0.312",
+            "보통인부(인)": "0.208"
+          },
+          "3.7 이하": {
+            "기계설비공(인)": "0.359",
+            "보통인부(인)": "0.239"
+          },
+          "5.5 이하": {
+            "기계설비공(인)": "0.432",
+            "보통인부(인)": "0.288"
+          },
+          "7.5 이하": {
+            "기계설비공(인)": "0.545",
+            "보통인부(인)": "0.363"
+          },
+          "11 이하": {
+            "기계설비공(인)": "0.685",
+            "보통인부(인)": "0.457"
+          },
+          "15 이하": {
+            "기계설비공(인)": "0.727",
+            "보통인부(인)": "0.485"
+          },
+          "22 이하": {
+            "기계설비공(인)": "1.175",
+            "보통인부(인)": "0.783"
+          },
+          "37 이하": {
+            "기계설비공(인)": "1.517",
+            "보통인부(인)": "1.011"
+          },
+          "55 이하": {
+            "기계설비공(인)": "2.440",
+            "보통인부(인)": "1.627"
+          },
+          "75 이하": {
+            "기계설비공(인)": "2.989",
+            "보통인부(인)": "1.993"
+          }
+        },
+        "cite": {
+          "table_id": "p979-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p979-t1",
+          "row_input": "pump_capacity",
+          "trades": [
+            "기계설비공(인)",
+            "보통인부(인)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p979-t1 표에서 펌프 규격에 해당하는 기계설비공과 보통인부의 단위당 품을 찾는다.",
+        "찾은 단위당 품에 해체 수량(quantity)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 923쪽 4-1-6 펌프 해체 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "해체 후 펌프를 재사용하는 경우",
+        "blocked_if": {
+          "input": "is_reused",
+          "op": "==",
+          "value": true
+        },
+        "reason": "본 품은 재사용하지 아니하는 때의 절단하여 해체하는 기준이므로, 재사용 시에는 적용할 수 없음",
+        "source": "PDF 923쪽 4-1-6 [주] ①",
+        "cite": {
+          "chunk_id": "p979-x12",
+          "quote": "본 품은 일반펌프(급수 및 소방펌프)를 재사용하지 아니하는 때의 절단하여 해체하는 기준이다."
+        }
+      },
+      {
+        "condition": "일반펌프(급수 및 소방펌프)가 아닌 경우",
+        "blocked_if": {
+          "input": "is_general_pump",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 일반펌프(급수 및 소방펌프)를 기준으로 하므로, 특수 펌프 등에는 적용할 수 없음",
+        "source": "PDF 923쪽 4-1-6 [주] ①",
+        "cite": {
+          "chunk_id": "p979-x12",
+          "quote": "본 품은 일반펌프(급수 및 소방펌프)를 재사용하지 아니하는 때의 절단하여 해체하는 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "비산방지, 보호 및 안전시설 등의 설치비",
+        "source": "PDF 923쪽 4-1-6 [주] ③",
+        "cite": {
+          "chunk_id": "p979-x12",
+          "quote": "비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "폐기물 처리비용",
+        "source": "PDF 923쪽 4-1-6 [주] ④",
+        "cite": {
+          "chunk_id": "p979-x12",
+          "quote": "폐기물 처리비용은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(절단기 등)의 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p979-x12",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit을 선택함.",
+  "citations": [
+    {
+      "table_id": "p979-t1",
+      "row": "0.75 이하",
+      "column": "기계설비공(인)",
+      "value": "0.245"
+    },
+    {
+      "table_id": "p979-t1",
+      "row": "75 이하",
+      "column": "보통인부(인)",
+      "value": "1.993"
+    },
+    {
+      "chunk_id": "p979-x12",
+      "quote": "본 품은 일반펌프(급수 및 소방펌프)를 재사용하지 아니하는 때의 절단하여 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p979-x12",
+      "quote": "본 품은 방진가대 해체, 펌프 절단 및 해체를 포함한다."
+    },
+    {
+      "chunk_id": "p979-x12",
+      "quote": "비산방지, 보호 및 안전시설 등의 설치비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p979-x12",
+      "quote": "폐기물 처리비용은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p979-x12",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "해체할 펌프의 규격(kW)과 수량은 어떻게 됩니까?",
+    "해체 후 펌프를 재사용할 계획이 있습니까?",
+    "해체 작업 시 비산방지나 안전시설 설치가 필요한 현장입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:53:08.562379+00:00",
+    "input_tokens": 11910,
+    "output_tokens": 2862,
+    "source_pages": [
+      979,
+      980
+    ],
+    "prompt_sha256": "7345b8a2f5df8844723eaf0c733106613747f2fc2aadfe275bff3d3e3927808e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

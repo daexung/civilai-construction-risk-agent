@@ -1,0 +1,137 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-1-3/플로어링마루설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-1-3",
+    "title": "플로어링 마루 설치",
+    "work": "플로어링 마루 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      593,
+      594
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "플로어링 마루 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 593쪽 5-1-3 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p649-t4",
+        "role": "플로어링 마루 설치 일당 품",
+        "source": "PDF 593쪽 5-1-3 표",
+        "unit": "인, ㎡",
+        "values": {
+          "내장공": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎡)": "50"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(㎡)": "50"
+          }
+        },
+        "cite": {
+          "table_id": "p649-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p649-t4",
+          "row_input": "고정",
+          "column_input": "고정",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "volume",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "표 p649-t4에서 직종별 수량을 시공량(50)으로 나누어 단위(㎡)당 품을 구한다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 593쪽 5-1-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p650-x0",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "일당 시공량(50㎡)과 그에 따른 작업조 인원이 고정값으로 제시되어 있어, (인원/시공량)을 통해 단위당 품을 산출하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p649-t4",
+      "row": "내장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p649-t4",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p649-t4",
+      "row": "내장공",
+      "column": "시공량(㎡)",
+      "value": "50"
+    },
+    {
+      "chunk_id": "p650-x0",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "플로어링 마루 100㎡ 설치 시 필요한 내장공과 보통인부 품은 어떻게 되나요?",
+    "합판마루, 강화마루, 온돌마루 외에 강마루 설치 시에도 이 품을 동일하게 적용할 수 있나요?",
+    "마루 설치 물량(㎡)을 입력하지 않았습니다. 설치할 면적이 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:00:49.338106+00:00",
+    "input_tokens": 12112,
+    "output_tokens": 1265,
+    "source_pages": [
+      649,
+      650,
+      651
+    ],
+    "prompt_sha256": "15c2b890b87b002a3b3bb0086ca867c65d7e7ee426b46079a82d0db5014928e8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

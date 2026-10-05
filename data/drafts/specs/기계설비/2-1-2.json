@@ -1,0 +1,259 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/2-1-2/아연도금강판덕트(스파이럴덕트)설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "2-1-2",
+    "title": "아연도금강판덕트(스파이럴덕트) 설치",
+    "work": "기본 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      659,
+      660
+    ],
+    "inputs": [
+      {
+        "name": "duct_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø80~150",
+          "160~200",
+          "225~250",
+          "275~300",
+          "350~400",
+          "450~500",
+          "550~600",
+          "650~800",
+          "850~1,000"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "스파이럴덕트의 규격(mm)은 무엇입니까?",
+        "source": "PDF 659쪽 2-1-2 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "덕트 설치 물량은 몇 m입니까?",
+        "source": "PDF 659쪽 2-1-2 표"
+      },
+      {
+        "name": "work_method",
+        "type": "enum",
+        "allowed_values": [
+          "인력시공",
+          "자체 추진 고소작업대(시저형) 시공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 방법은 무엇입니까? (인력시공 / 자체 추진 고소작업대(시저형) 시공)",
+        "source": "PDF 659쪽 2-1-2 비고 및 ④ 표"
+      },
+      {
+        "name": "base_output_row",
+        "type": "enum",
+        "allowed_values": [
+          "시공량(m)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "계산 기준 항목을 선택하세요. (자동 선택: 시공량(m))",
+        "source": "계산 모델(adjusted_daily_crew)의 고정 행 참조를 위한 내부 입력"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p715-t2",
+        "role": "규격별 시공량 및 작업조 인원",
+        "source": "PDF 659쪽 2-1-2 표",
+        "unit": "인/작업조; m/일",
+        "values": {
+          "시공량(m)": {
+            "ø80~150": "27",
+            "160~200": "22",
+            "225~250": "18",
+            "275~300": "15",
+            "350~400": "12",
+            "450~500": "9",
+            "550~600": "7",
+            "650~800": "6",
+            "850~1,000": "5"
+          },
+          "덕트공": {
+            "ø80~150": "3",
+            "160~200": "3",
+            "225~250": "3",
+            "275~300": "3",
+            "350~400": "3",
+            "450~500": "3",
+            "550~600": "3",
+            "650~800": "3",
+            "850~1,000": "3"
+          },
+          "보통인부": {
+            "ø80~150": "1",
+            "160~200": "1",
+            "225~250": "1",
+            "275~300": "1",
+            "350~400": "1",
+            "450~500": "1",
+            "550~600": "1",
+            "650~800": "1",
+            "850~1,000": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p715-t2"
+        }
+      },
+      {
+        "id": "p716-t0",
+        "role": "기계경비 요율",
+        "source": "PDF 659쪽 2-1-2 ④ 표",
+        "unit": "%",
+        "values": {
+          "요율": {
+            "인력시공": "2%",
+            "자체 추진 고소작업대(시저형) 시공": "10%"
+          }
+        },
+        "cite": {
+          "table_id": "p716-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p715-t2",
+          "row_input": "base_output_row",
+          "column_input": "duct_size"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p715-t2",
+          "column_input": "duct_size",
+          "trades": [
+            "덕트공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "덕트공": "1013",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p715-t2에서 규격별 기준시공량(m)을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 659쪽 2-1-2 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "자체 추진 고소작업대(시저형) 시공",
+        "blocked_if": {
+          "input": "work_method",
+          "op": "==",
+          "value": "자체 추진 고소작업대(시저형) 시공"
+        },
+        "reason": "비고란에 따라 시공량의 13%를 가산해야 하나, 현재 계산 모델(adjusted_daily_crew)은 표를 통한 계수 적용만 지원하여 자동 계산 불가",
+        "source": "PDF 659쪽 2-1-2 비고",
+        "cite": {
+          "table_id": "p715-t2"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "공구손료 및 경장비 기계경비 (시공방법에 따라 2% 또는 10% 적용)",
+        "source": "PDF 659쪽 2-1-2 ④",
+        "cite": {
+          "table_id": "p716-t0"
+        }
+      },
+      {
+        "item": "벽체통과 구간의 콘크리트 깨기(쪼아내기)",
+        "source": "PDF 660쪽 2-1-2 ⑤",
+        "cite": {
+          "chunk_id": "p716-x2"
+        }
+      },
+      {
+        "item": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용",
+        "source": "PDF 660쪽 2-1-2 ⑥",
+        "cite": {
+          "chunk_id": "p716-x2"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "규격별로 기준 일일시공량이 제시되어 있고, 작업조 인원이 고정되어 있는 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p715-t2",
+      "row": "시공량(m)",
+      "column": "ø80~150",
+      "value": "27"
+    },
+    {
+      "table_id": "p716-t0",
+      "row": "요율",
+      "column": "인력시공",
+      "value": "2%"
+    },
+    {
+      "chunk_id": "p715-x23",
+      "quote": "본 품은 제작이 완료된 상태의 스파이럴덕트를 설치하는 기준이다."
+    },
+    {
+      "chunk_id": "p716-x0",
+      "quote": "공구손료 및 경장비(드릴,자체 추진 고소작업대(시저형) 등)의 기계경비는 다음 요율을 적용한다,"
+    },
+    {
+      "chunk_id": "p716-x2",
+      "quote": "벽체통과 구간의 콘크리트 깨기(쪼아내기) 등이 필요한 경우에는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p716-x2",
+      "quote": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "비고란의 '자체 추진 고소작업대(시저형) 시공의 경우 시공량의 13%를 가산한다'는 규칙은 adjusted_daily_crew 모델의 coefficients(표 참조 방식)로 처리할 수 없어 blocked 처리했습니다.",
+    "기계경비 요율이 시공방법에 따라 2% 또는 10%로 다르나, cost_rules에서 조건부 비율 적용을 지원하지 않아 not_calculated 항목으로 안내하도록 처리했습니다."
+  ],
+  "questions": [
+    "스파이럴덕트 규격이 250mm일 때 시공량은 얼마인가요?",
+    "자체 추진 고소작업대를 사용하여 시공할 때 기계경비는 어떻게 계상하나요?",
+    "덕트 시공 물량이 몇 m인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:50.966345+00:00",
+    "input_tokens": 12832,
+    "output_tokens": 2790,
+    "source_pages": [
+      715,
+      716,
+      717
+    ],
+    "prompt_sha256": "1a9eb5e6686534591c5808df806212a62442a7d3f13e20013a11bc33346c067d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

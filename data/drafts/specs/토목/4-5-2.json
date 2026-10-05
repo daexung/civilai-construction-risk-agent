@@ -1,0 +1,303 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-5-2/테르밋용접",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-5-2",
+    "title": "테르밋 용접('19년 보완)",
+    "work": "테르밋 용접 인력 및 소모재료 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      350
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "테르밋 용접 개소 수는 몇 개소입니까?",
+        "source": "p406-t0 기준 (개소당)"
+      },
+      {
+        "name": "rail_weight",
+        "type": "enum",
+        "allowed_values": [
+          "50㎏",
+          "60㎏"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "레일 규격은 무엇입니까?",
+        "source": "p406-t1 수 량(레일규격)"
+      },
+      {
+        "name": "is_operating_line",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "운행선 공사입니까?",
+        "source": "p406-t0 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p406-t0",
+        "role": "테르밋 용접 인력 품",
+        "source": "PDF 350쪽 4-5-2 테르밋 용접 표",
+        "unit": "인/개소",
+        "values": {
+          "용접공": {
+            "수량": "0.34"
+          },
+          "궤도공": {
+            "수량": "0.23"
+          },
+          "보통인부": {
+            "수량": "0.12"
+          }
+        },
+        "cite": {
+          "table_id": "p406-t0"
+        }
+      },
+      {
+        "id": "p406-t1",
+        "role": "테르밋 용접 소모재료",
+        "source": "PDF 350쪽 [참고자료] 레일공사 테르밋 용접 소모재료 표",
+        "unit": "포, 개, ㎘, ㎏/개소",
+        "values": {
+          "테르밋용재": {
+            "50㎏": "1",
+            "60㎏": "1"
+          },
+          "몰드": {
+            "50㎏": "1",
+            "60㎏": "1"
+          },
+          "골무": {
+            "50㎏": "1",
+            "60㎏": "1"
+          },
+          "퓨즈": {
+            "50㎏": "1",
+            "60㎏": "1"
+          },
+          "산소": {
+            "50㎏": "1.5",
+            "60㎏": "1.8"
+          },
+          "프로판가스": {
+            "50㎏": "1.5",
+            "60㎏": "1.8"
+          }
+        },
+        "cite": {
+          "table_id": "p406-t1"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "is_operating_line": true
+        },
+        "when_text": "운행선 공사인 경우",
+        "change": {
+          "보통인부": "+0.11"
+        },
+        "source": "p406-t0 비고",
+        "cite": {
+          "table_id": "p406-t0",
+          "row": "비고",
+          "column": "비고"
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p406-t0",
+          "row_input": "고정",
+          "column_input": "수량",
+          "trades": [
+            "용접공",
+            "궤도공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p406-t0에서 단위당 인력 품을 가져온다.",
+        "운행선 공사인 경우 보통인부 품을 0.11인 추가한다.",
+        "물량을 곱해 총 인력 품을 구한다.",
+        "p406-t1에서 레일 규격에 따른 소모재료 수량을 가져와 물량을 곱해 총 소모재료를 구한다."
+      ],
+      "source": "p406-t0, p406-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "외부검사비용, 운전경비, 기계경비",
+        "source": "p406-x5 [주] ③",
+        "cite": {
+          "chunk_id": "p406-x5",
+          "quote": "외부검사비용, 운전경비, 기계경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "기타 재료비",
+        "source": "p406-x13 [주] ①",
+        "cite": {
+          "chunk_id": "p406-x13",
+          "quote": "기타 재료비는 주재료비의 30% 범위 내에서 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소당) 품이 표에 직접 제시되어 있으므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p406-t0",
+      "row": "용접공",
+      "column": "수량",
+      "value": "0.34"
+    },
+    {
+      "table_id": "p406-t0",
+      "row": "궤도공",
+      "column": "수량",
+      "value": "0.23"
+    },
+    {
+      "table_id": "p406-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.12"
+    },
+    {
+      "table_id": "p406-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 운행선 공사의 경우 열차감시원(보통인부) 0.11인을 개소당 추가 계상한다."
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "테르밋용재",
+      "column": "50㎏",
+      "value": "1"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "테르밋용재",
+      "column": "60㎏",
+      "value": "1"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "몰드",
+      "column": "50㎏",
+      "value": "1"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "몰드",
+      "column": "60㎏",
+      "value": "1"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "골무",
+      "column": "50㎏",
+      "value": "1"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "골무",
+      "column": "60㎏",
+      "value": "1"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "퓨즈",
+      "column": "50㎏",
+      "value": "1"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "퓨즈",
+      "column": "60㎏",
+      "value": "1"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "산소",
+      "column": "50㎏",
+      "value": "1.5"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "산소",
+      "column": "60㎏",
+      "value": "1.8"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "프로판가스",
+      "column": "50㎏",
+      "value": "1.5"
+    },
+    {
+      "table_id": "p406-t1",
+      "row": "프로판가스",
+      "column": "60㎏",
+      "value": "1.8"
+    },
+    {
+      "chunk_id": "p406-x5",
+      "quote": "외부검사비용, 운전경비, 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p406-x13",
+      "quote": "기타 재료비는 주재료비의 30% 범위 내에서 계상한다."
+    }
+  ],
+  "open_questions": [
+    "p406-t1의 파싱 결과에서 행 이름이 '테르밋용재 몰드 골무 퓨즈 산소 프로판가스'로 뭉쳐져 있어, 원문을 참고하여 개별 행으로 분리함.",
+    "기타 재료비는 주재료비의 30% 범위 내에서 계상하라고 되어 있으나, 현재 cost_rules는 노무비(labor_subtotal) 기준만 지원하므로 not_calculated로 처리함."
+  ],
+  "questions": [
+    "테르밋 용접 50kg 레일 10개소 작업 시 인력과 소모재료는 어떻게 되나요?",
+    "운행선 공사에서 테르밋 용접을 할 때 열차감시원 인건비는 어떻게 반영하나요?",
+    "테르밋 용접 시 외부검사비용이나 기계경비도 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:57:56.243039+00:00",
+    "input_tokens": 12070,
+    "output_tokens": 2826,
+    "source_pages": [
+      406,
+      407
+    ],
+    "prompt_sha256": "053f74862d65acc69ec100783678e89969e787f2bbdedd690b1a1f10dc873b7e",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

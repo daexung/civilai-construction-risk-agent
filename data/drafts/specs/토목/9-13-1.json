@@ -1,0 +1,299 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-13-1/지적재조사측량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-13-1",
+    "title": "지적재조사측량('25년 보완)",
+    "work": "지적재조사측량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      547,
+      548
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "필지",
+        "required": true,
+        "ask": "측량할 필지 수는 몇 필지입니까?",
+        "source": "PDF 548쪽 ④ 기타사항 ㉯"
+      },
+      {
+        "name": "region_type",
+        "type": "enum",
+        "allowed_values": [
+          "군지역",
+          "시지역",
+          "구지역"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량 지역은 어디에 해당합니까?",
+        "source": "PDF 547쪽 ② 지역구분계수"
+      },
+      {
+        "name": "survey_method",
+        "type": "enum",
+        "allowed_values": [
+          "지상측량",
+          "드론측량"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량 방법은 무엇입니까?",
+        "source": "PDF 548쪽 ④ 기타사항 ㉱"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p603-t0",
+        "role": "지적재조사측량 작업별 인원수",
+        "source": "PDF 547쪽 9-13-1 표",
+        "unit": "인",
+        "values": {
+          "합계": {
+            "일수": "0.89",
+            "합계 지적\n기사": "0.84",
+            "지적\n산업\n기사": "0.83",
+            "지적\n기능사": "0.76"
+          }
+        },
+        "cite": {
+          "table_id": "p603-t0"
+        }
+      },
+      {
+        "id": "p603-t1",
+        "role": "지역구분계수",
+        "source": "PDF 547쪽 ② 지역구분계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "군지역": "1.00",
+            "시지역": "1.26",
+            "구지역": "1.36"
+          }
+        },
+        "cite": {
+          "table_id": "p603-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p603-t0",
+          "row_input": "합계",
+          "trades": [
+            "합계 지적\n기사",
+            "지적\n산업\n기사",
+            "지적\n기능사"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "region_type": "시지역"
+            },
+            "change": "1.26 승수 적용",
+            "source": "PDF 547쪽 ② 지역구분계수"
+          },
+          {
+            "when": {
+              "region_type": "구지역"
+            },
+            "change": "1.36 승수 적용",
+            "source": "PDF 547쪽 ② 지역구분계수"
+          }
+        ]
+      },
+      "steps": [
+        "p603-t0에서 합계 행의 직종별 단위당 품을 찾는다.",
+        "물량(필지 수)을 곱하여 기본 품을 구한다.",
+        "지역구분계수(p603-t1)에 따라 품에 계수를 곱하여 최종 품을 산출한다."
+      ],
+      "source": "PDF 547쪽 9-13-1 표 및 ② 지역구분계수",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "드론측량인 경우",
+        "blocked_if": {
+          "input": "survey_method",
+          "op": "==",
+          "value": "드론측량"
+        },
+        "reason": "드론지적측량규정에 의한 드론측량은 별도의 품에 의함",
+        "source": "PDF 548쪽 ④ 기타사항 ㉱",
+        "cite": [
+          {
+            "chunk_id": "p604-x0",
+            "quote": "다만, 드론지적측량규정에 의한 드론측량은 별도의 품에 의한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "외업 여비",
+        "source": "PDF 548쪽 ④ 기타사항 ㉰",
+        "cite": [
+          {
+            "chunk_id": "p604-x0",
+            "quote": "본 품의 외업에 필요한 여비는 공무원여비규정에 의한 국내 여행자의 일부를 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "선박 등 임차료",
+        "source": "PDF 548쪽 ④ 기타사항 ㉲",
+        "cite": [
+          {
+            "chunk_id": "p604-x0",
+            "quote": "도서지역 등의 측량을 위하여 선박 등을 임차할 경우에는 임차료 실비를 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 548쪽 ④ 기타사항 ㉳",
+        "cite": [
+          {
+            "chunk_id": "p604-x0",
+            "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "영상 후처리 소프트웨어 비용",
+        "source": "PDF 548쪽 ④ 기타사항 ㉴",
+        "cite": [
+          {
+            "chunk_id": "p604-x0",
+            "quote": "작업상 드론지적측량 실시할 경우 영상 후처리 사용되는 소프트웨어 비용은 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "지적기준점 설치비",
+        "source": "PDF 548쪽 ④ 기타사항 ㉵",
+        "cite": [
+          {
+            "chunk_id": "p604-x0",
+            "quote": "작업상 필요한 지적기준점을 설치하는 경우에는 지적기준점측량에 따른 비용을 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "지적기준점 매설작업 자재대, 운반비, 인부임",
+        "source": "PDF 548쪽 ④ 기타사항 ㉶",
+        "cite": [
+          {
+            "chunk_id": "p604-x0",
+            "quote": "지적기준점 매설작업에 따르는 자재대, 운반비, 인부임은 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "item": "경계점표지 표석 설치 자재대, 운반비, 인부임",
+        "source": "PDF 548쪽 ④ 기타사항 ㉷",
+        "cite": [
+          {
+            "chunk_id": "p604-x0",
+            "quote": "토지소유자 등이 경계점표지를 표석으로 설치를 요청하는 경우 자재대, 운반비, 인부임은 소유자\n설명 | 부담으로 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 1필지당 합계 인원수가 직접 제시되어 있으며, 물량(필지 수)과 지역구분계수를 곱하여 산출하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p603-t0",
+      "row": "합계",
+      "column": "합계 지적\n기사",
+      "value": "0.84"
+    },
+    {
+      "table_id": "p603-t0",
+      "row": "합계",
+      "column": "지적\n산업\n기사",
+      "value": "0.83"
+    },
+    {
+      "table_id": "p603-t0",
+      "row": "합계",
+      "column": "지적\n기능사",
+      "value": "0.76"
+    },
+    {
+      "table_id": "p603-t1",
+      "row": "계수",
+      "column": "군지역",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p603-t1",
+      "row": "계수",
+      "column": "시지역",
+      "value": "1.26"
+    },
+    {
+      "table_id": "p603-t1",
+      "row": "계수",
+      "column": "구지역",
+      "value": "1.36"
+    },
+    {
+      "chunk_id": "p603-x16",
+      "quote": "본 품은 군지역을 기준으로 하였으며 행정구역이 다를 경우 다음의 계수를 곱하여 계상한다."
+    },
+    {
+      "chunk_id": "p604-x0",
+      "quote": "본 품은 지구당 400필지 ∼ 450필지를 기준으로 조사한 것이며, 필지 수가 증·감되어도 본 품을\n설명 | 적용한다."
+    },
+    {
+      "chunk_id": "p604-x0",
+      "quote": "본 품의 적용계수는 지상측량에 의할 경우로 국한한다."
+    },
+    {
+      "chunk_id": "p604-x0",
+      "quote": "다만, 드론지적측량규정에 의한 드론측량은 별도의 품에 의한다."
+    }
+  ],
+  "open_questions": [
+    "표 p603-t0의 내업/외업 소계와 합계가 있는데, 일반적으로 합계 품만 산출하면 되는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "지적재조사측량 시 시지역의 경우 품 할증은 어떻게 되나요?",
+    "드론을 이용하여 지적재조사측량을 할 경우 이 품셈을 적용할 수 있나요?",
+    "측량할 필지 수가 400필지 미만인 경우에도 이 품셈을 그대로 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:08:12.232868+00:00",
+    "input_tokens": 14288,
+    "output_tokens": 2941,
+    "source_pages": [
+      603,
+      604,
+      605
+    ],
+    "prompt_sha256": "9d9ffa41685840fbaa65c3df638bab81b90d464672f0328ca404c6f5f3223b9d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

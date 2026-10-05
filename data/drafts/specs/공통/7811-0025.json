@@ -1,0 +1,56 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/7811-0025/엔진(가솔린)",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "7811-0025",
+    "title": "엔진(가솔린)",
+    "work": "연료 및 잡재료 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      284
+    ],
+    "inputs": [],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "원문 표에 7811-0025(엔진(가솔린))에 대한 규격별 주연료 및 잡재료 데이터가 존재하지 않아 계산할 수 없습니다."
+      ],
+      "source": "PDF 284쪽"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "제공된 원문 및 파싱 결과에 7811-0025(엔진(가솔린))에 대한 구체적인 수치 데이터가 없어 계산식을 구성할 수 없습니다.",
+  "citations": [],
+  "open_questions": [
+    "파싱 결과 텍스트에 '7811-0025 엔 진( 가 솔 린)'이 언급되어 있으나, 실제 표 데이터에는 해당 분류번호의 규격 및 연료 소비량 데이터가 없습니다. 원문 누락인지 확인이 필요합니다."
+  ],
+  "questions": [
+    "가솔린 엔진의 연료 소비량은 어떻게 산정하나요?",
+    "표에 가솔린 엔진 규격이 없는데 어떻게 적용해야 하나요?",
+    "가솔린 엔진의 잡재료 비율은 디젤과 동일하게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:09.662857+00:00",
+    "input_tokens": 14425,
+    "output_tokens": 514,
+    "source_pages": [
+      340,
+      341
+    ],
+    "prompt_sha256": "a935d909306f8468ba9e35d25b66b935825140b2f05a3af387d978e8104958eb",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

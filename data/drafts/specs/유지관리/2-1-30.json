@@ -1,0 +1,178 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-30/보도용_블록_재설치_대형",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-30",
+    "title": "보도용 블록 재설치(대형)",
+    "work": "보도용 블록 재설치(대형) 일당 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      890
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "보도용 블록 재설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 890쪽 p946-t2 시공량 단위"
+      },
+      {
+        "name": "type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건은 A-Type과 B-Type 중 무엇입니까?",
+        "source": "PDF 890쪽 p946-t2 열 이름"
+      },
+      {
+        "name": "tactile_block",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "유도·점자블록을 설치합니까?",
+        "source": "PDF 890쪽 p946-t2 비고"
+      },
+      {
+        "name": "precision_cut",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "블록 정밀절단(전동절단기)에 의한 시공입니까?",
+        "source": "PDF 890쪽 p946-t2 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p946-t2",
+        "role": "보도용 블록 재설치(대형) 일당 작업조 및 시공량",
+        "source": "PDF 890쪽 2-1-30 표",
+        "unit": "인, 대, ㎡",
+        "values": {
+          "포장공": {
+            "A-Type": "3",
+            "B-Type": "2"
+          },
+          "특별인부": {
+            "A-Type": "2",
+            "B-Type": "2"
+          },
+          "보통인부": {
+            "A-Type": "2",
+            "B-Type": "1"
+          },
+          "굴착기 0.4㎥": {
+            "A-Type": "1",
+            "B-Type": "0"
+          },
+          "굴착기 0.2㎥": {
+            "A-Type": "0",
+            "B-Type": "1"
+          },
+          "플레이트콤팩터 1.5ton": {
+            "A-Type": "1",
+            "B-Type": "1"
+          },
+          "트럭 2.5ton": {
+            "A-Type": "1",
+            "B-Type": "1"
+          },
+          "시공량": {
+            "A-Type": "160",
+            "B-Type": "100"
+          }
+        },
+        "cite": {
+          "table_id": "p946-t2"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "precision_cut": false
+        },
+        "when_text": "precision_cut = false",
+        "change": {
+          "특별인부": "-1"
+        },
+        "source": "PDF 890쪽 p946-t2 비고",
+        "cite": {
+          "table_id": "p946-t2",
+          "row": "비고",
+          "column": "비고"
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p946-t2에서 type에 따른 기준 시공량과 직종별 인원, 장비 대수를 찾는다.",
+        "tactile_block이 true이면 기준 시공량의 10%를 감산하여 최종 일당 시공량을 구한다.",
+        "precision_cut이 false이면 특별인부 1인을 감산한다.",
+        "물량을 최종 일당 시공량으로 나누어 작업일수를 구하고, 인원과 장비 대수에 곱해 총 투입량을 산출한다."
+      ],
+      "source": "PDF 890쪽 p946-t2 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "투입 장비가 굴착기, 플레이트콤팩터, 트럭 등 여러 종류이나 현재 adjusted_daily_crew 모델은 단일 장비만 지원하며, 시공량 10% 감산 규칙을 계수표 없이 수식으로 적용해야 하므로 자동 계산 모델에 맞지 않습니다.",
+  "citations": [
+    {
+      "table_id": "p946-t2",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 유도･점자블록을 설치하는 경우 시공량의 10%를 감하여 적용한다. - 블록 정밀절단(전동절단기)에 의한 시공이 아닌 경우, 특별인부 1인을 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p946-x25",
+      "quote": "본 품은 기존에 설치되었던 블록이 철거된 상태에서 신규블록(규격 0.10㎡초과 0.25㎡이하, 두께 8cm이하)을\n설명 | 재설치하는 기준이다."
+    }
+  ],
+  "open_questions": [
+    "원문 PDF 891쪽(2페이지) 상단에 있는 ③ 현장 여건별 적용기준, ④ 기층 별도 계상, ⑤ 기계경비 산정 기준이 2-1-29(소형)에만 적용되는 것인지, 2-1-30(대형)에도 공통으로 적용되는 것인지 원문 배치상 모호하며, 파싱 결과에도 누락되어 있어 확인이 필요합니다.",
+    "유도·점자블록 설치 시 시공량의 10%를 감산할 때, 계산된 시공량의 소수점 이하 처리 기준(반올림 등)이 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "보도용 블록 재설치(대형) A-Type의 일당 시공량은 얼마인가요?",
+    "유도·점자블록을 설치할 때 시공량 10% 감산은 어떻게 계산하나요?",
+    "블록 정밀절단(전동절단기) 시공 여부를 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:52:58.502291+00:00",
+    "input_tokens": 11875,
+    "output_tokens": 1915,
+    "source_pages": [
+      946,
+      947
+    ],
+    "prompt_sha256": "65e9fd829190cb67f60f4af805da9000ade8f15ad6e2339ae30519bcc7b5ece5",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

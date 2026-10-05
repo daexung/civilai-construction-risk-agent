@@ -1,0 +1,264 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-6-3/교량신축이음장치설치_도로교",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-6-3",
+    "title": "교량신축이음장치 설치(도로교)('21, '24년 보완)",
+    "work": "교량신축이음장치 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      209
+    ],
+    "inputs": [
+      {
+        "name": "cutting_width",
+        "type": "enum",
+        "allowed_values": [
+          "900이하",
+          "1,200이하",
+          "1,500이하",
+          "1,800이하"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "절단폭은 얼마입니까? (900이하 / 1,200이하 / 1,500이하 / 1,800이하)",
+        "source": "PDF 209쪽 6-6-3 표의 절단폭(㎜) 구분",
+        "synonyms": {
+          "900이하": [
+            "900",
+            "900mm 이하"
+          ],
+          "1,200이하": [
+            "1200",
+            "1,200",
+            "1200이하",
+            "1200mm 이하"
+          ],
+          "1,500이하": [
+            "1500",
+            "1,500",
+            "1500이하",
+            "1500mm 이하"
+          ],
+          "1,800이하": [
+            "1800",
+            "1,800",
+            "1800이하",
+            "1800mm 이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "시공 물량은 몇 m입니까?",
+        "source": "PDF 209쪽 6-6-3 표의 시공량(m) 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p209-t0",
+        "role": "작업조 인원/장비 및 절단폭별 시공량",
+        "source": "PDF 209쪽 6-6-3 표",
+        "unit": "인, 대, m/일",
+        "values": {
+          "용접공": {
+            "수량": "2"
+          },
+          "콘크리트공": {
+            "수량": "1"
+          },
+          "특별인부": {
+            "수량": "3"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "크레인": {
+            "수량": "1"
+          },
+          "굴착기+브레이커": {
+            "수량": "1"
+          },
+          "900이하": {
+            "시공량": "17"
+          },
+          "1,200이하": {
+            "시공량": "15"
+          },
+          "1,500이하": {
+            "시공량": "13"
+          },
+          "1,800이하": {
+            "시공량": "10"
+          }
+        },
+        "cite": {
+          "table_id": "p209-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p209-t0",
+          "row_input": "cutting_width",
+          "column": "시공량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p209-t0",
+          "column": "수량",
+          "trades": [
+            "용접공",
+            "콘크리트공",
+            "특별인부",
+            "보통인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "크레인",
+            "table": "p209-t0",
+            "unit": "대·일"
+          },
+          {
+            "name": "굴착기+브레이커",
+            "table": "p209-t0",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p209-t0에서 절단폭에 따른 기준 일일시공량을 찾는다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량으로 구한다.",
+        "장비 대·일 = 작업일수 × 표의 장비별 수량으로 구한다."
+      ],
+      "source": "PDF 209쪽 6-6-3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료량",
+        "source": "PDF 209쪽 6-6-3 [주] ⑤",
+        "cite": {
+          "chunk_id": "p209-x7",
+          "quote": "재료량은 설계수량을 적용한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.06",
+        "cite": {
+          "chunk_id": "p209-x7",
+          "quote": "공구손료 및 경장비(발전기, 소형브레이커, 용접기, 절단기 등)의 기계경비는 인력품의 6%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원 및 장비가 고정되어 있고, 조건(절단폭)에 따른 일일시공량이 표로 주어져 작업일수를 통해 총 투입량을 계산하는 방식이므로 daily_crew 모델이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p209-t0",
+      "row": "용접공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p209-t0",
+      "row": "콘크리트공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p209-t0",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p209-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p209-t0",
+      "row": "크레인 굴착기+브레이커",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p209-t0",
+      "row": "900이하",
+      "column": "시공량(m)",
+      "value": "17"
+    },
+    {
+      "table_id": "p209-t0",
+      "row": "1,200이하",
+      "column": "시공량(m)",
+      "value": "15"
+    },
+    {
+      "table_id": "p209-t0",
+      "row": "1,500이하",
+      "column": "시공량(m)",
+      "value": "13"
+    },
+    {
+      "table_id": "p209-t0",
+      "row": "1,800이하",
+      "column": "시공량(m)",
+      "value": "10"
+    },
+    {
+      "chunk_id": "p209-x7",
+      "quote": "공구손료 및 경장비(발전기, 소형브레이커, 용접기, 절단기 등)의 기계경비는 인력품의 6%로 계상한다."
+    },
+    {
+      "chunk_id": "p209-x7",
+      "quote": "재료량은 설계수량을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "크레인의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율을 고려하여 적합한 규격을 적용하도록 되어 있어, 일률적인 장비 단가 코드를 매핑할 수 없습니다. 사용자가 직접 단가를 입력하거나 선택할 수 있는 추가 로직이 필요할 수 있습니다.",
+    "파싱된 표 데이터에서 작업조 수량과 시공량이 하나의 표에 혼재되어 있어, 명세의 tables.values 구조를 임의로 재구성하여 매핑했습니다. 파싱 원본 구조와 계산 모델 간의 호환성 확인이 필요합니다."
+  ],
+  "questions": [
+    "절단폭이 1,000mm인 경우 시공량은 표의 어느 기준을 적용해야 하나요?",
+    "크레인 장비의 규격은 품셈에 명시되어 있지 않은데, 어떤 기준으로 단가를 산정해야 하나요?",
+    "신축이음장치 자체의 자재비나 무수축 콘크리트 재료비는 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:39:31.809436+00:00",
+    "input_tokens": 11822,
+    "output_tokens": 2595,
+    "source_pages": [
+      209,
+      210
+    ],
+    "prompt_sha256": "6e333c120a5c5784dc45abc5ace5b745f5094f7bfd94d0d6ef842c6cbefca0a7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

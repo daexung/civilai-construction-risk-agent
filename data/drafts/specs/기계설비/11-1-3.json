@@ -1,0 +1,254 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/11-1-3/나사식접합및배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "11-1-3",
+    "title": "나사식 접합 및 배관",
+    "work": "나사식 접합 및 배관 인력품 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      714
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø20",
+          "25",
+          "30",
+          "32",
+          "40",
+          "50"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "강관의 규격(구경)은 몇 ㎜입니까?",
+        "source": "PDF 714쪽 11-1-3 표 1(인력품) 및 표 2(재료량)",
+        "synonyms": {
+          "ø20": [
+            "20",
+            "20mm"
+          ],
+          "25": [
+            "25mm"
+          ],
+          "30": [
+            "30mm"
+          ],
+          "32": [
+            "32mm"
+          ],
+          "40": [
+            "40mm"
+          ],
+          "50": [
+            "50mm"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "접합 개소는 몇 개소입니까?",
+        "source": "PDF 714쪽 11-1-3 표 우측 상단 '(접합개소당)'"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p770-t1",
+        "role": "규격별 나사식 접합 및 배관 인력품",
+        "source": "PDF 714쪽 11-1-3 첫 번째 표",
+        "unit": "인/접합개소",
+        "values": {
+          "ø20": {
+            "배관공(인)": "0.061",
+            "보통인부(인)": "0.017"
+          },
+          "25": {
+            "배관공(인)": "0.087",
+            "보통인부(인)": "0.024"
+          },
+          "32": {
+            "배관공(인)": "0.109",
+            "보통인부(인)": "0.030"
+          },
+          "40": {
+            "배관공(인)": "0.123",
+            "보통인부(인)": "0.034"
+          },
+          "50": {
+            "배관공(인)": "0.168",
+            "보통인부(인)": "0.046"
+          }
+        },
+        "cite": {
+          "table_id": "p770-t1"
+        }
+      },
+      {
+        "id": "p770-t2",
+        "role": "구경별 재료량 (스레트실테이프, 컴파운드)",
+        "source": "PDF 714쪽 11-1-3 두 번째 표",
+        "unit": "㎝, g/접합개소",
+        "values": {
+          "ø20": {
+            "스레트실테이프(㎝)": "34.3",
+            "컴파운드(g)": "3.0"
+          },
+          "25": {
+            "스레트실테이프(㎝)": "43.0",
+            "컴파운드(g)": "4.2"
+          },
+          "30": {
+            "스레트실테이프(㎝)": "53.8",
+            "컴파운드(g)": "5.8"
+          },
+          "40": {
+            "스레트실테이프(㎝)": "78.7",
+            "컴파운드(g)": "7.3"
+          },
+          "50": {
+            "스레트실테이프(㎝)": "95.1",
+            "컴파운드(g)": "10.6"
+          }
+        },
+        "cite": {
+          "table_id": "p770-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p770-t1",
+          "row_input": "pipe_diameter",
+          "trades": [
+            "배관공(인)",
+            "보통인부(인)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p770-t1에서 규격(pipe_diameter)에 해당하는 배관공, 보통인부의 단위당 품을 찾는다.",
+        "p770-t2에서 구경(pipe_diameter)에 해당하는 스레트실테이프, 컴파운드의 단위당 재료량을 찾는다.",
+        "찾은 단위당 품과 재료량에 접합 개소(quantity)를 곱하여 총 투입량을 구한다."
+      ],
+      "source": "PDF 714쪽 11-1-3 표 1, 표 2",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "pipe_diameter == 30",
+        "blocked_if": {
+          "input": "pipe_diameter",
+          "op": "==",
+          "value": "30"
+        },
+        "reason": "인력품 표(p770-t1)에 30mm 규격이 없어 인력품을 산정할 수 없습니다.",
+        "source": "PDF 714쪽 11-1-3 첫 번째 표",
+        "cite": [
+          {
+            "table_id": "p770-t1"
+          }
+        ]
+      },
+      {
+        "condition": "pipe_diameter == 32",
+        "blocked_if": {
+          "input": "pipe_diameter",
+          "op": "==",
+          "value": "32"
+        },
+        "reason": "재료량 표(p770-t2)에 32mm 규격이 없어 재료량을 산정할 수 없습니다.",
+        "source": "PDF 714쪽 11-1-3 두 번째 표",
+        "cite": [
+          {
+            "table_id": "p770-t2"
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": [
+          {
+            "chunk_id": "p770-x12",
+            "quote": "③ 공구손료 및 경장비(절단기, 나사홈가공기 등)의 기계경비는 인력품의 2%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(접합개소)당 인력품과 재료량이 표에 직접 제시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p770-t1",
+      "row": "ø20",
+      "column": "배관공(인)",
+      "value": "0.061"
+    },
+    {
+      "table_id": "p770-t1",
+      "row": "50",
+      "column": "보통인부(인)",
+      "value": "0.046"
+    },
+    {
+      "table_id": "p770-t2",
+      "row": "ø20",
+      "column": "스레트실테이프(㎝)",
+      "value": "34.3"
+    },
+    {
+      "table_id": "p770-t2",
+      "row": "50",
+      "column": "컴파운드(g)",
+      "value": "10.6"
+    },
+    {
+      "chunk_id": "p770-x12",
+      "quote": "③ 공구손료 및 경장비(절단기, 나사홈가공기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "인력품 표(p770-t1)에는 규격 32mm가 있고 30mm가 없으나, 재료량 표(p770-t2)에는 구경 30mm가 있고 32mm가 없습니다. 원문의 오타(30mm -> 32mm)로 추정되나, 명확한 지침이 없어 두 규격 입력 시 각각 일부 계산을 보류하도록 처리했습니다."
+  ],
+  "questions": [
+    "강관 구경 40mm 10개소 접합 시 배관공 품은 얼마인가요?",
+    "구경 32mm 배관을 접합할 때 재료량(스레트실테이프, 컴파운드)은 어떻게 산정하나요?",
+    "가스용 강관 나사식 접합 품을 계산해주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:40:45.265894+00:00",
+    "input_tokens": 11965,
+    "output_tokens": 2576,
+    "source_pages": [
+      770,
+      771
+    ],
+    "prompt_sha256": "a09de02056d63f5fc6db59f207cecc6ce39e5d9b3538e1ba29d1a0e880bb419a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

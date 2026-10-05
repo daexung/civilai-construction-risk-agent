@@ -1,0 +1,152 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-8-10/수직형추락방망설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-8-10",
+    "title": "수직형 추락방망 설치 및 해체",
+    "work": "수직형 추락방망 설치 및 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      54
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "enum",
+        "allowed_values": [
+          "개구부 면적 1.0㎡이하",
+          "개구부 면적 1.0~3.0㎡이하",
+          "개구부 면적 3.0~6.0㎡이하",
+          "개구부 면적 6.0~9.0㎡이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "개구부 면적은 얼마입니까?",
+        "source": "p110-t0 표 열 이름"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "수직형 추락방망 설치 및 해체 개소 수는 몇 개소입니까?",
+        "source": "p110-t0 기준 (10개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p110-t0",
+        "role": "개구부 면적별 수직형 추락방망 설치 및 해체 품",
+        "source": "PDF 54쪽 2-8-10 표",
+        "unit": "인/10개소",
+        "values": {
+          "구분": {
+            "개구부 면적 1.0㎡이하": "0.49",
+            "개구부 면적 1.0~3.0㎡이하": "0.63",
+            "개구부 면적 3.0~6.0㎡이하": "1.01",
+            "개구부 면적 6.0~9.0㎡이하": "1.30"
+          }
+        },
+        "cite": {
+          "table_id": "p110-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p110-t0",
+          "row_input": "구분",
+          "column_input": "area",
+          "trades": [
+            "구분"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p110-t0에서 개구부 면적에 따른 단위당 품을 찾는다.",
+        "물량(quantity)을 10으로 나누어 10개소당 수량으로 환산한 뒤 단위당 품을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 54쪽 2-8-10",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p110-x2",
+          "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(10개소)당 품이 표에 직접 제시되어 있어 물량을 곱해 계산하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p110-t0",
+      "row": "구분",
+      "column": "개구부 면적 1.0㎡이하",
+      "value": "0.49"
+    },
+    {
+      "table_id": "p110-t0",
+      "row": "구분",
+      "column": "개구부 면적 1.0~3.0㎡이하",
+      "value": "0.63"
+    },
+    {
+      "table_id": "p110-t0",
+      "row": "구분",
+      "column": "개구부 면적 3.0~6.0㎡이하",
+      "value": "1.01"
+    },
+    {
+      "table_id": "p110-t0",
+      "row": "구분",
+      "column": "개구부 면적 6.0~9.0㎡이하",
+      "value": "1.30"
+    },
+    {
+      "chunk_id": "p110-x2",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표 p110-t0에 '비계공' 직종명과 '9.0~12.0㎡이하' 열(1.60)이 누락되어 있어, 임시로 행 이름을 '구분'으로 처리하고 누락된 열은 제외함."
+  ],
+  "questions": [
+    "개구부 면적이 1.0㎡ 이하인 경우 수직형 추락방망 설치 품은 어떻게 되나요?",
+    "개구부 면적이 10㎡인 경우 품셈 적용은 어떻게 하나요?",
+    "수직형 추락방망 설치 개소 수는 몇 개소입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:14:43.870082+00:00",
+    "input_tokens": 23357,
+    "output_tokens": 3136,
+    "source_pages": [
+      110,
+      111
+    ],
+    "prompt_sha256": "591247b0e399fc9bd36673f69fae975cc0ef6acd933706290ff954e6dac91753",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

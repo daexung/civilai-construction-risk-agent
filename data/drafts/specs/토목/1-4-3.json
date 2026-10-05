@@ -1,0 +1,202 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-4-3/기계포설_본선",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-4-3",
+    "title": "기계포설(본선)",
+    "work": "입도조정기층 포설 및 다짐",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      366
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "포설할 물량은 몇 ㎥입니까?",
+        "source": "p366-t1 시공량(㎥)"
+      },
+      {
+        "name": "manual_watering",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "순수 인력 살수를 진행합니까?",
+        "source": "p366-t1 비고"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "포설 면적은 몇 ㎡입니까? (순수 인력 살수 시 인원 가산에 필요)",
+        "source": "p366-t1 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p366-t1",
+        "role": "기계포설(본선) 작업조 인원, 장비 대수 및 일일시공량",
+        "source": "1-4-3 기계포설(본선) 표",
+        "values": {
+          "포설공": {
+            "단위": "인",
+            "수량": "2",
+            "시공량(㎥)": "500"
+          },
+          "모터그레이더": {
+            "규격": "3.6m",
+            "단위": "대",
+            "수량": "1"
+          },
+          "진동롤러": {
+            "규격": "12ton",
+            "단위": "대",
+            "수량": "1"
+          },
+          "살수차": {
+            "규격": "16,000ℓ",
+            "단위": "대",
+            "수량": "0.5"
+          },
+          "비고": {
+            "비고": "- 순수 인력 살수시에는 살수품을 100㎡당 1인 가산한다."
+          }
+        },
+        "cite": {
+          "table_id": "p366-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p366-t1에서 기준 일일시공량(500㎥)과 작업조(포설공 2인, 모터그레이더 1대, 진동롤러 1대, 살수차 0.5대)를 확인한다.",
+        "작업일수 = volume ÷ 500 으로 구한다.",
+        "직종별 인·일 및 장비 대·일 = 작업일수 × 수량 으로 구한다.",
+        "순수 인력 살수 시 area ÷ 100 만큼 살수품 인·일을 가산한다."
+      ],
+      "source": "p366-t1 및 p366-x15",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "순수 인력 살수 시 면적당 인원 가산",
+        "blocked_if": {
+          "input": "manual_watering",
+          "op": "==",
+          "value": true
+        },
+        "reason": "순수 인력 살수 시 100㎡당 1인을 가산해야 하나, 현재 모델은 체적(㎥) 기반의 일당 작업조 계산이므로 면적(㎡) 기반의 동적 인원 가산을 자동 처리하기 어렵습니다.",
+        "source": "p366-t1 비고",
+        "cite": {
+          "table_id": "p366-t1",
+          "row": "비고"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "살수량 산출 (두께 20㎝일 때 100㎡당 2ton 표준)",
+        "source": "p366-x15 [주] ④",
+        "cite": {
+          "chunk_id": "p366-x15",
+          "quote": "④ 두께 20㎝일 때 100㎡당 살수량은 일반적으로 2ton을 표준으로 한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "장비가 여러 대 투입되고, 순수 인력 살수 시 체적(㎥)이 아닌 면적(㎡) 비례로 인원을 가산해야 하므로 기본 adjusted_daily_crew 모델로 자동 계산하기 복잡합니다.",
+  "citations": [
+    {
+      "table_id": "p366-t1",
+      "row": "포설공",
+      "column": "시공량(㎥)",
+      "value": "500"
+    },
+    {
+      "table_id": "p366-t1",
+      "row": "포설공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p366-t1",
+      "row": "모터그레이더",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p366-t1",
+      "row": "진동롤러",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p366-t1",
+      "row": "살수차",
+      "column": "수량",
+      "value": "0.5"
+    },
+    {
+      "table_id": "p366-t1",
+      "row": "비고",
+      "value": "- 순수 인력 살수시에는 살수품을 100㎡당 1인 가산한다."
+    },
+    {
+      "chunk_id": "p366-x15",
+      "quote": "① 본 품은 모터그레이더를 사용한 본선구간의 입도조정기층 포설 및 다짐 기준이다."
+    },
+    {
+      "chunk_id": "p366-x15",
+      "quote": "② 본 품은 포설준비, 포설 및 고르기, 다짐작업을 포함한다."
+    },
+    {
+      "chunk_id": "p366-x15",
+      "quote": "③ 장비는 현장여건 및 시험포장 결과에 따라 장비조합 및 규격을 변경하여 적용할 수 있다"
+    },
+    {
+      "chunk_id": "p366-x15",
+      "quote": "④ 두께 20㎝일 때 100㎡당 살수량은 일반적으로 2ton을 표준으로 한다."
+    }
+  ],
+  "open_questions": [
+    "비고란의 '살수품'이 구체적으로 어떤 직종(예: 보통인부)을 의미하는지 명시되어 있지 않습니다.",
+    "장비조합 및 규격 변경 시 품셈 조정 방식이 구체적으로 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "기계포설(본선) 작업 시 기준 일일시공량은 얼마인가요?",
+    "순수 인력으로 살수할 경우 품은 어떻게 가산하나요?",
+    "포설 두께가 20cm가 아닐 경우 살수량 기준은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:40:12.950060+00:00",
+    "input_tokens": 23337,
+    "output_tokens": 4335,
+    "source_pages": [
+      366,
+      367
+    ],
+    "prompt_sha256": "76337c0c357b597726e0b3c43e399b7237c02a9a22b0ef189b2973d9d73300a1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-7-4/투수아스팔트표층기계포설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-7-4",
+    "title": "투수아스팔트 표층 기계포설(소형장비)('21년 신설, '25년 보완)",
+    "work": "투수아스팔트 표층 포설",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      319
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "투수아스팔트 표층 포설 면적은 몇 ㎡입니까?",
+        "source": "1-7-4 표 시공량 단위"
+      },
+      {
+        "name": "is_standard_thickness",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "1층 포설두께가 5~7㎝ 기준에 해당합니까?",
+        "source": "1-7-4 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p375-t2",
+        "role": "일당 작업조 인원 및 장비 대수, 시공량",
+        "source": "PDF 319쪽 1-7-4 표",
+        "unit": "인/일, 대/일, ㎡/일",
+        "values": {
+          "포장공": {
+            "단위": "인",
+            "수량": "3",
+            "시공량(㎡)": "1,200"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(㎡)": "1,200"
+          },
+          "아스팔트피니셔": {
+            "규격": "1.7m",
+            "단위": "대",
+            "수량": "1"
+          },
+          "굴착기": {
+            "규격": "0.6㎥",
+            "단위": "대",
+            "수량": "1"
+          },
+          "머캐덤롤러": {
+            "규격": "8∼10ton",
+            "단위": "대",
+            "수량": "1"
+          },
+          "탠덤롤러": {
+            "규격": "5∼8t",
+            "단위": "대",
+            "수량": "1"
+          },
+          "살수차": {
+            "규격": "16,000ℓ",
+            "단위": "대",
+            "수량": "0.5"
+          }
+        },
+        "cite": {
+          "table_id": "p375-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p375-t2",
+          "row": "포장공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p375-t2",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "아스팔트피니셔",
+            "table": "p375-t2",
+            "unit": "대·일"
+          },
+          {
+            "name": "굴착기",
+            "table": "p375-t2",
+            "unit": "대·일"
+          },
+          {
+            "name": "머캐덤롤러",
+            "table": "p375-t2",
+            "unit": "대·일"
+          },
+          {
+            "name": "탠덤롤러",
+            "table": "p375-t2",
+            "unit": "대·일"
+          },
+          {
+            "name": "살수차",
+            "table": "p375-t2",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p375-t2에서 기준 일일시공량(1,200㎡)을 가져온다.",
+        "작업일수 = area ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량으로 구한다.",
+        "장비별 대·일 = 작업일수 × 표의 장비별 수량으로 구한다."
+      ],
+      "source": "PDF 319쪽 1-7-4 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "포설두께가 5~7㎝ 기준을 벗어나는 경우",
+        "blocked_if": {
+          "input": "is_standard_thickness",
+          "op": "==",
+          "value": false
+        },
+        "reason": "1층 포설두께는 5~7㎝ 기준이며, 이를 벗어나는 경우의 품은 명시되어 있지 않음",
+        "source": "1-7-4 [주] ②",
+        "cite": {
+          "chunk_id": "p375-x23",
+          "quote": "② 1층 포설두께는 5~7㎝ 기준이다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "필터층(모래층), 보조기층 및 기층 포설",
+        "source": "1-7-4 [주] ④",
+        "cite": {
+          "chunk_id": "p375-x23",
+          "quote": "④ 필터층(모래층), 보조기층 및 기층 포설은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 일당 작업조 인원, 장비 대수 및 일일 시공량이 명시되어 있어 이를 바탕으로 작업일수를 구하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p375-t2",
+      "row": "포장공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p375-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p375-t2",
+      "row": "아스팔트피니셔",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p375-t2",
+      "row": "포장공",
+      "column": "시공량(㎡)",
+      "value": "1,200"
+    },
+    {
+      "chunk_id": "p375-x23",
+      "quote": "② 1층 포설두께는 5~7㎝ 기준이다."
+    },
+    {
+      "chunk_id": "p375-x23",
+      "quote": "④ 필터층(모래층), 보조기층 및 기층 포설은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "장비가 여러 대 투입되는 경우 quantity_model.params.equipment를 배열로 작성하는 것이 맞는지 확인이 필요합니다.",
+    "1-7-3의 [주] ⑤ (공구손료 및 경장비)가 1-7-4에도 적용되는지 원문 상 모호합니다. 파싱 결과에는 1-7-4에 해당 내용이 없어 제외했습니다."
+  ],
+  "questions": [
+    "투수아스팔트 표층 기계포설 시 1일 시공량은 얼마인가요?",
+    "포설두께가 8cm인 경우 품을 어떻게 계산하나요?",
+    "포설 면적을 입력하지 않았습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:56.522429+00:00",
+    "input_tokens": 11718,
+    "output_tokens": 2198,
+    "source_pages": [
+      375,
+      376
+    ],
+    "prompt_sha256": "35c9b32fae782129a1e8d3425b46a98c0810117a72c9bfcd0918795e475fa48b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

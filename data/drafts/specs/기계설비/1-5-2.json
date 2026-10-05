@@ -1,0 +1,240 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/1-5-2/고무링캡조임접합및배관_일반PVC",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "1-5-2",
+    "title": "고무링 캡조임 접합 및 배관(일반 PVC)",
+    "work": "일반용 경질 폴리염화 비닐관 옥내일반배관",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      711,
+      712
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø30",
+          "35",
+          "40",
+          "50",
+          "65",
+          "75",
+          "100",
+          "125",
+          "150",
+          "200"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "관규격은 몇 ㎜입니까?",
+        "source": "PDF 711쪽 1-5-2 표",
+        "synonyms": {
+          "ø30": [
+            "30"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "배관 시공 물량은 몇 m입니까?",
+        "source": "PDF 711쪽 1-5-2 표 시공량 단위"
+      },
+      {
+        "name": "work_method",
+        "type": "enum",
+        "allowed_values": [
+          "인력시공",
+          "자체 추진 고소작업대(시저형)시공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 방법은 인력시공입니까, 자체 추진 고소작업대(시저형)시공입니까?",
+        "source": "PDF 711쪽 1-5-2 표 비고 및 주 ⑤",
+        "synonyms": {
+          "인력시공": [
+            "인력",
+            "일반시공"
+          ],
+          "자체 추진 고소작업대(시저형)시공": [
+            "고소작업대",
+            "시저형",
+            "고소작업대시공"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p711-t1",
+        "role": "관규격별 시공량, 작업조 인원 및 할증 계수",
+        "source": "PDF 711쪽 1-5-2 표 및 비고",
+        "unit": "시공량: m/일, 인원: 인/일",
+        "values": {
+          "시공량(m)": {
+            "ø30": "105",
+            "35": "98",
+            "40": "90",
+            "50": "80",
+            "65": "70",
+            "75": "55",
+            "100": "42",
+            "125": "35",
+            "150": "28",
+            "200": "23"
+          },
+          "배관공": {
+            "인원": "3"
+          },
+          "보통인부": {
+            "인원": "1"
+          },
+          "시공량할증": {
+            "인력시공": "1.0",
+            "자체 추진 고소작업대(시저형)시공": "1.26"
+          }
+        },
+        "cite": {
+          "table_id": "p711-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p711-t1",
+          "row": "시공량(m)",
+          "column_input": "pipe_size"
+        },
+        "coefficients": [
+          {
+            "table": "p711-t1",
+            "row": "시공량할증",
+            "input": "work_method"
+          }
+        ],
+        "crew": {
+          "table": "p711-t1",
+          "column": "인원",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공": "1016",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p711-t1에서 관규격별 기준 시공량을 고른다.",
+        "작업방법에 따른 시공량 할증 계수(고소작업대 사용 시 1.26)를 곱하여 일당시공량을 구한다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 인원으로 구한다."
+      ],
+      "source": "PDF 711쪽 1-5-2 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "콘크리트용 인서트 설치",
+        "source": "PDF 711쪽 1-5-2 [주] ③",
+        "cite": {
+          "section_no": "1-5-2",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "단열 지지대 및 관 지지대 설치",
+        "source": "PDF 712쪽 1-5-2 [주] ④",
+        "cite": {
+          "section_no": "1-5-2",
+          "marker": "④"
+        }
+      },
+      {
+        "item": "공구손료 및 경장비 기계경비",
+        "source": "PDF 712쪽 1-5-2 [주] ⑤ (작업방법에 따라 인력품의 2% 또는 10%로 변동되나 현재 명세 형식에서 조건부 경비율 미지원)",
+        "cite": {
+          "section_no": "1-5-2",
+          "marker": "⑤"
+        }
+      },
+      {
+        "item": "크레인, 지게차 등 이동 비용",
+        "source": "PDF 712쪽 1-5-2 [주] ⑥",
+        "cite": {
+          "section_no": "1-5-2",
+          "marker": "⑥"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "기준 일일시공량과 작업조 인원이 표로 제시되어 있으며, 물량을 일당시공량으로 나누어 작업일수를 구하는 방식이므로 daily_crew가 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p711-t1",
+      "row": "배관공 보통인부",
+      "column": "시공량(m)",
+      "value": "105"
+    },
+    {
+      "chunk_id": "p711-t1",
+      "quote": "자체 추진 고소작업대(시저형)시공의 경우 시공량의 26%를 가산한다."
+    },
+    {
+      "chunk_id": "p711-x27",
+      "quote": "③ 현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+    },
+    {
+      "chunk_id": "p712-x0",
+      "quote": "④ 단열 지지대 및 관 지지대 설치시에는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p712-x0",
+      "quote": "⑤ 공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 인력품의 2%(인력시공),"
+    },
+    {
+      "chunk_id": "p712-x0",
+      "quote": "⑥ 자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "cost_rules에서 입력값(작업방법)에 따라 기계경비율(2% 또는 10%)을 다르게 적용해야 하는데, 현재 스키마에서 이를 표현할 방법이 없어 not_calculated로 처리했습니다."
+  ],
+  "questions": [
+    "관규격 50mm 일반 PVC관 100m를 인력으로 시공할 때 배관공 품은 얼마인가요?",
+    "자체 추진 고소작업대를 사용하여 시공할 때 기계경비는 어떻게 계산하나요?",
+    "콘크리트용 인서트를 설치해야 하는데 이 품셈에 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:39:46.354698+00:00",
+    "input_tokens": 12673,
+    "output_tokens": 2432,
+    "source_pages": [
+      711,
+      712,
+      713
+    ],
+    "prompt_sha256": "c5ac5db877f726648ee89f2fff028920054cac0d36c3b40d46a1bf73e89943ad",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

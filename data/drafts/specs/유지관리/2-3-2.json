@@ -1,0 +1,312 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-3-2/강교보수_바탕처리_장비",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-3-2",
+    "title": "강교보수 바탕처리(장비)('21년 신설)",
+    "work": "강교보수 바탕처리(장비) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      902
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "바탕처리할 강교의 면적은 몇 ㎡입니까?",
+        "source": "PDF 902쪽 p958-t1 시공량(㎡)"
+      },
+      {
+        "name": "equipment_changed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건에 따라 크레인, 굴절차 등 다른 장비로 변경하여 적용합니까?",
+        "source": "PDF 902쪽 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p958-t1",
+        "role": "강교보수 바탕처리(장비) 일당 인력 및 장비 수량",
+        "source": "PDF 902쪽 2-3-2 표",
+        "unit": "인/일, 대/일, ㎡/일",
+        "values": {
+          "도장공": {
+            "단위": "인",
+            "수량": "5",
+            "시공량(㎡)": "240"
+          },
+          "특별인부": {
+            "단위": "인",
+            "수량": "3",
+            "시공량(㎡)": "240"
+          },
+          "공기압축기": {
+            "규격": "23.5M3/MIN",
+            "단위": "대",
+            "수량": "2"
+          },
+          "믹싱기( BLAST UNIT)": {
+            "규격": "600kg/대",
+            "단위": "대",
+            "수량": "4"
+          },
+          "진공흡입기(V/Recovery)": {
+            "규격": "100마력",
+            "단위": "대",
+            "수량": "1"
+          },
+          "발전기": {
+            "규격": "250kw",
+            "단위": "대",
+            "수량": "1"
+          },
+          "집진기": {
+            "규격": "140M3/MIN",
+            "단위": "대",
+            "수량": "2"
+          },
+          "지게차": {
+            "규격": "3.0Ton",
+            "단위": "대",
+            "수량": "1"
+          },
+          "에어 제습장치 시스템": {
+            "규격": "1.5Ton",
+            "단위": "대",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p958-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p958-t1",
+          "row": "도장공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p958-t1",
+          "column": "수량",
+          "trades": [
+            "도장공",
+            "특별인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "공기압축기",
+            "table": "p958-t1",
+            "unit": "대·일"
+          },
+          {
+            "name": "믹싱기( BLAST UNIT)",
+            "table": "p958-t1",
+            "unit": "대·일"
+          },
+          {
+            "name": "진공흡입기(V/Recovery)",
+            "table": "p958-t1",
+            "unit": "대·일"
+          },
+          {
+            "name": "발전기",
+            "table": "p958-t1",
+            "unit": "대·일"
+          },
+          {
+            "name": "집진기",
+            "table": "p958-t1",
+            "unit": "대·일"
+          },
+          {
+            "name": "지게차",
+            "table": "p958-t1",
+            "unit": "대·일"
+          },
+          {
+            "name": "에어 제습장치 시스템",
+            "table": "p958-t1",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p958-t1에서 일당 시공량(240㎡)을 확인한다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량으로 구한다.",
+        "장비별 대·일 = 작업일수 × 표의 장비별 수량으로 구한다."
+      ],
+      "source": "PDF 902쪽 p958-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "현장 여건에 따라 장비 종류나 규격을 변경하는 경우",
+        "blocked_if": {
+          "input": "equipment_changed",
+          "op": "==",
+          "value": true
+        },
+        "reason": "보수도장 및 바탕처리를 위한 장비는 현장에 따라 다양한 종류(크레인, 굴절차 등)의 적용이 가능하며, 장비의 규격은 작업여건에 따라 변경할 수 있으나 구체적인 수량 기준이 없음",
+        "source": "PDF 902쪽 [주] ④",
+        "cite": {
+          "chunk_id": "p958-x19",
+          "quote": "보수도장 및 바탕처리를 위한 장비는 현장에 따라 다양한 종류(크레인, 굴절차 등)의 적용이 가능하며,\n설명 | 장비의 규격은 작업여건(작업범위, 위치 등)에 따라 변경할 수 있다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "강교보수를 위한 장비(믹싱기, 진공흡입기, 집진기, 에어 제습장치 시스템)의 기계경비",
+        "source": "PDF 902쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p958-x19",
+          "quote": "강교보수를 위한 장비(믹싱기, 진공흡입기, 집진기, 에어 제습장치 시스템)의 기계경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "시공을 위한 비계, 방진막 등의 가시설",
+        "source": "PDF 902쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p958-x19",
+          "quote": "시공을 위한 비계, 방진막 등의 가시설이 필요한 경우는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p958-x19",
+          "quote": "공구손료 및 경장비의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량(240㎡)과 그에 따른 인력 및 장비 투입량이 표로 제시되어 있어 작업일수를 구한 뒤 곱하는 일당 작업조형 계산이 적합하다.",
+  "citations": [
+    {
+      "table_id": "p958-t1",
+      "row": "도장공",
+      "column": "수량",
+      "value": "5"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "도장공",
+      "column": "시공량(㎡)",
+      "value": "240"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "공기압축기",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "믹싱기( BLAST UNIT)",
+      "column": "수량",
+      "value": "4"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "진공흡입기(V/Recovery)",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "발전기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "집진기",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "지게차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p958-t1",
+      "row": "에어 제습장치 시스템",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p958-x19",
+      "quote": "강교보수를 위한 장비(믹싱기, 진공흡입기, 집진기, 에어 제습장치 시스템)의 기계경비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p958-x19",
+      "quote": "보수도장 및 바탕처리를 위한 장비는 현장에 따라 다양한 종류(크레인, 굴절차 등)의 적용이 가능하며,\n설명 | 장비의 규격은 작업여건(작업범위, 위치 등)에 따라 변경할 수 있다."
+    },
+    {
+      "chunk_id": "p958-x19",
+      "quote": "시공을 위한 비계, 방진막 등의 가시설이 필요한 경우는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p958-x19",
+      "quote": "공구손료 및 경장비의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "주 ④에서 장비의 규격은 작업여건에 따라 변경할 수 있다고 하였으나, 구체적인 변경 기준이나 대체 장비(크레인, 굴절차 등)의 투입량 기준이 없어 기본 표의 장비만으로 계산함."
+  ],
+  "questions": [
+    "바탕처리할 강교의 면적은 몇 ㎡입니까?",
+    "현장 여건에 따라 크레인이나 굴절차 등 다른 장비로 변경하여 적용합니까?",
+    "비계나 방진막 등 가시설 설치가 필요한 현장입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:36:10.705138+00:00",
+    "input_tokens": 11869,
+    "output_tokens": 3165,
+    "source_pages": [
+      958,
+      959
+    ],
+    "prompt_sha256": "e3c5d3806645b9bcbfe13d0f2bb81cc2c0f0c557132f0a4e07d447931c1d2111",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

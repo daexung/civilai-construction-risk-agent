@@ -1,0 +1,162 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-2-28/터널전단면_굴착기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-2-28",
+    "title": "터널전단면 굴착기(TBM)",
+    "work": "1시간당 작업량 산출",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      217,
+      218
+    ],
+    "inputs": [
+      {
+        "name": "excavation_diameter",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "굴착직경(D)은 몇 m입니까?",
+        "source": "PDF 218쪽 1. 굴착면적(A)"
+      },
+      {
+        "name": "stroke_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "1회의 작업거리(ℓ)는 몇 m입니까? (장비 성능에 따라 결정, 예: ø4.5m 경우 1.2m)",
+        "source": "PDF 218쪽 2. 1회의 작업거리(ℓ)"
+      },
+      {
+        "name": "rotation_speed",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "rpm",
+        "required": true,
+        "ask": "굴착면의 분당 회전속도(R)는 얼마입니까? (장비 제원에 따라 결정)",
+        "source": "PDF 218쪽 4. 1회 싸이클 시간"
+      },
+      {
+        "name": "penetration_depth",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "cm/회",
+        "required": true,
+        "ask": "굴착면 1회전당 컷터의 투과깊이(Pe)는 몇 cm입니까? (장비 제원에 따라 결정)",
+        "source": "PDF 218쪽 4. 1회 싸이클 시간"
+      },
+      {
+        "name": "efficiency_condition",
+        "type": "enum",
+        "allowed_values": [
+          "양호",
+          "보통",
+          "불량"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업효율 조건은 양호, 보통, 불량 중 무엇입니까? (암질, 파쇄층, 석영분 함유량, 굴진 연장에 따라 결정)",
+        "source": "PDF 218쪽 3. 작업효율(E) 및 [주] ①~④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p274-t0",
+        "role": "작업효율(E)",
+        "source": "PDF 218쪽 3. 작업효율(E) 표",
+        "unit": "무차원",
+        "values": {
+          "작업효율": {
+            "양호": "0.75",
+            "보통": "0.65",
+            "불량": "0.55"
+          }
+        },
+        "cite": {
+          "table_id": "p274-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "1. 굴착면적(A) = (π * D^2) / 4 를 계산한다.",
+        "2. 1스트록 시간(T1) = (ℓ / (R * Pe)) * 100 을 계산한다.",
+        "3. 1회 싸이클 시간(cm) = T1 + 정치시간(10분) 을 계산한다.",
+        "4. 1시간당 작업량(Q) = (60 * A * ℓ * E) / cm 을 계산한다."
+      ],
+      "source": "PDF 217~218쪽 8-2-28 본문",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "철분, 석영분 등 함유량이 상이한 경우",
+        "reason": "실적치를 참조하여 별도 계상해야 함",
+        "source": "PDF 218쪽 4. 1회 싸이클 시간 [주] ②",
+        "cite": {
+          "chunk_id": "p274-x10",
+          "quote": "② 철분, 석영분 등 함유량이 상이한 경우 실적치를 참조하여 별도 계상한다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 TBM 장비의 시간당 작업량(Q)을 산출하는 공식만을 제공하며, 직접적인 품(인·일, 대·일)을 산출하는 기준이 아니므로 자동 계산 명세로 적합하지 않습니다.",
+  "citations": [
+    {
+      "chunk_id": "p273-x17",
+      "quote": "Q =  cm ⋅A⋅⋅E"
+    },
+    {
+      "chunk_id": "p274-x2",
+      "quote": "1. 굴착면적(A) :   D "
+    },
+    {
+      "chunk_id": "p274-x10",
+      "quote": "cm = T1 + T2"
+    },
+    {
+      "chunk_id": "p274-x10",
+      "quote": "T1 =  R×Pe"
+    },
+    {
+      "table_id": "p274-t0",
+      "row": "작업효율",
+      "column": "양호",
+      "value": "0.75"
+    }
+  ],
+  "open_questions": [
+    "T1 계산식에서 100을 곱하는 부분(T1 = (ℓ / (R×Pe)) × 100)이 단위 환산 때문인지 명확한 설명이 없음."
+  ],
+  "questions": [
+    "TBM 굴착직경이 4.5m일 때 1시간당 작업량 산출을 위한 굴착면적은 얼마인가요?",
+    "철분 함유량이 높은 암반에서 작업할 때 1회 싸이클 시간은 어떻게 계산하나요?",
+    "장비의 분당 회전속도(R)와 컷터 투과깊이(Pe) 값이 누락되었습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:21:59.938201+00:00",
+    "input_tokens": 12744,
+    "output_tokens": 1768,
+    "source_pages": [
+      273,
+      274,
+      275
+    ],
+    "prompt_sha256": "312b2d0cb00172ec720670f1581feb1ee0b6795bd8522bd0e63d00f548bfcd64",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

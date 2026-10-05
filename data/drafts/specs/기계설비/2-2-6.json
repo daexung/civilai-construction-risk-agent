@@ -1,0 +1,199 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/2-2-6/제연댐퍼설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "2-2-6",
+    "title": "제연댐퍼 설치('21년 보완)",
+    "work": "제연댐퍼 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      719
+    ],
+    "inputs": [
+      {
+        "name": "connection_type",
+        "type": "enum",
+        "allowed_values": [
+          "수직덕트 연결방식",
+          "승강로 연결방식"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "연결방식은 수직덕트 연결방식과 승강로 연결방식 중 무엇입니까?",
+        "source": "PDF 719쪽 p719-t3",
+        "synonyms": {
+          "수직덕트 연결방식": [
+            "수직덕트",
+            "수직덕트 연결"
+          ],
+          "승강로 연결방식": [
+            "승강로",
+            "승강로 연결"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "제연댐퍼 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 719쪽 p719-t3 기준 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p719-t3",
+        "role": "제연댐퍼 설치 단위당 품",
+        "source": "PDF 719쪽 2-2-6 제연댐퍼 설치('21년 보완) 표",
+        "unit": "인/㎡",
+        "values": {
+          "덕트공": {
+            "수직덕트 연결방식": "2.041",
+            "승강로 연결방식": "1.216"
+          },
+          "보통인부": {
+            "수직덕트 연결방식": "0.588",
+            "승강로 연결방식": "0.350"
+          }
+        },
+        "cite": {
+          "table_id": "p719-t3"
+        }
+      },
+      {
+        "id": "p719-t4",
+        "role": "제연댐퍼 재료량",
+        "source": "PDF 719쪽 [참고자료] 제연댐퍼 재료량 표",
+        "unit": "개/㎡, ㎏/㎡",
+        "values": {
+          "앵커": {
+            "수량": "20"
+          },
+          "블라인드리벳": {
+            "수량": "75"
+          },
+          "철물": {
+            "수량": "12.5"
+          },
+          "실리콘": {
+            "수량": "1.25"
+          }
+        },
+        "cite": {
+          "table_id": "p719-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p719-t3",
+          "row_input": "connection_type",
+          "column_input": "connection_type",
+          "trades": [
+            "덕트공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p719-t3에서 연결방식별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 719쪽 p719-t3",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "전기배관 및 입선",
+        "source": "PDF 719쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p719-x16",
+          "quote": "② 전기배관 및 입선은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p719-x16",
+          "quote": "③ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 인력이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p719-t3",
+      "row": "덕트공",
+      "column": "수직덕트 연결방식",
+      "value": "2.041"
+    },
+    {
+      "table_id": "p719-t3",
+      "row": "덕트공",
+      "column": "승강로 연결방식",
+      "value": "1.216"
+    },
+    {
+      "table_id": "p719-t3",
+      "row": "보통인부",
+      "column": "수직덕트 연결방식",
+      "value": "0.588"
+    },
+    {
+      "table_id": "p719-t3",
+      "row": "보통인부",
+      "column": "승강로 연결방식",
+      "value": "0.350"
+    },
+    {
+      "chunk_id": "p719-x16",
+      "quote": "② 전기배관 및 입선은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p719-x16",
+      "quote": "③ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "p719-t4의 재료량 표에서 '앵커 블라인드리벳 철물 실리콘'이 한 행으로 묶여 파싱되었는데, 원문에서는 각각의 항목(앵커, 블라인드리벳, 철물, 실리콘)에 대한 수량(20, 75, 12.5, 1.25)이 별도로 제시되어 있습니다. 파싱 결과를 바탕으로 임의로 분리하여 표를 구성했습니다."
+  ],
+  "questions": [
+    "제연댐퍼 설치 물량은 몇 ㎡입니까?",
+    "연결방식은 수직덕트 연결방식과 승강로 연결방식 중 무엇입니까?",
+    "제연댐퍼 재료량은 어떻게 산정합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:44:43.771092+00:00",
+    "input_tokens": 23591,
+    "output_tokens": 4011,
+    "source_pages": [
+      719,
+      720
+    ],
+    "prompt_sha256": "3779403cba0bfeec0f11f45cd0d76d5da8218db42952968b8a4f70137720eb2b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/6-5-5/분기관천공및접합",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "6-5-5",
+    "title": "분기관 천공 및 접합",
+    "work": "분기관 천공 및 접합",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      371
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "75",
+          "100",
+          "150",
+          "200",
+          "250",
+          "300"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "분기관 관경은 몇 ㎜입니까?",
+        "source": "p427-t2 분기관 관경"
+      },
+      {
+        "name": "quantity",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "개소",
+        "required": true,
+        "ask": "천공 및 접합할 분기관은 몇 개소입니까?",
+        "source": "p427-t2 기준 (개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p427-t2",
+        "role": "분기관 관경별 단위당 품",
+        "source": "6-5-5 분기관 천공 및 접합 표",
+        "unit": "인/개소",
+        "values": {
+          "75": {
+            "배관공(수도)": "0.10",
+            "보통인부": "0.05"
+          },
+          "100": {
+            "배관공(수도)": "0.11",
+            "보통인부": "0.06"
+          },
+          "150": {
+            "배관공(수도)": "0.13",
+            "보통인부": "0.06"
+          },
+          "200": {
+            "배관공(수도)": "0.15",
+            "보통인부": "0.07"
+          },
+          "250": {
+            "배관공(수도)": "0.18",
+            "보통인부": "0.09"
+          },
+          "300": {
+            "배관공(수도)": "0.20",
+            "보통인부": "0.10"
+          }
+        },
+        "cite": {
+          "table_id": "p427-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p427-t2",
+          "row_input": "pipe_diameter",
+          "trades": [
+            "배관공(수도)",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p427-t2에서 분기관 관경별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "6-5-5 분기관 천공 및 접합 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "chunk_id": "p427-x30",
+          "quote": "공구손료 및 경장비(발전기, 융착기 등)의 기계경비는 인력품의 5%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 개소당 인력이 직접 명시되어 있어 단위당 품 계산 방식을 적용합니다.",
+  "citations": [
+    {
+      "table_id": "p427-t2",
+      "row": "75",
+      "column": "배관공(수도)",
+      "value": "0.10"
+    },
+    {
+      "table_id": "p427-t2",
+      "row": "300",
+      "column": "보통인부",
+      "value": "0.10"
+    },
+    {
+      "chunk_id": "p427-x30",
+      "quote": "공구손료 및 경장비(발전기, 융착기 등)의 기계경비는 인력품의 5%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표에 명시되지 않은 중간 관경(예: 125mm)에 대한 보간 적용 여부가 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "분기관 관경이 150mm일 때 배관공(수도)의 품은 얼마인가요?",
+    "P.E관이 아닌 다른 재질의 관에도 이 품을 적용할 수 있나요?",
+    "작업할 분기관의 개소 수는 몇 개소인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:47.517102+00:00",
+    "input_tokens": 11749,
+    "output_tokens": 1463,
+    "source_pages": [
+      427,
+      428
+    ],
+    "prompt_sha256": "cb019904210b732481d050596beb86fbbf1c791974cdee25b76f2931d7f52a93",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

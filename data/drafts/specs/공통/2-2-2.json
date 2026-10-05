@@ -1,0 +1,213 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-2-2/주요자재손율",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-2-2",
+    "title": "주요자재('22, '26년 보완)",
+    "work": "주요자재 손율 및 강재 손료 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      38
+    ],
+    "inputs": [
+      {
+        "name": "material_type",
+        "type": "enum",
+        "allowed_values": [
+          "철물",
+          "창호",
+          "흄관",
+          "강재류"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "주요자재의 종류는 무엇입니까?",
+        "source": "PDF 38쪽 2-2-2 주요자재 표"
+      },
+      {
+        "name": "usage_period",
+        "type": "enum",
+        "allowed_values": [
+          "3개월",
+          "6개월",
+          "1개년",
+          "2개년",
+          "2개년초과 평균손율"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용기간은 어떻게 됩니까?",
+        "source": "PDF 38쪽 2-2-2 주요자재 표"
+      },
+      {
+        "name": "length_under_2m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "재료의 길이가 2m 이하입니까?",
+        "source": "PDF 38쪽 [주] ① ㉮"
+      },
+      {
+        "name": "is_retaining_wall_or_bridge",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "강재를 토류벽과 가교 등의 재료로 사용합니까?",
+        "source": "PDF 38쪽 [주] ① ㉯"
+      },
+      {
+        "name": "is_cut",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "강재를 절단하여 사용합니까?",
+        "source": "PDF 38쪽 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p94-t0",
+        "role": "사용기간별 주요자재 손율",
+        "source": "PDF 38쪽 2-2-2 주요자재 표",
+        "unit": "%",
+        "values": {
+          "철물": {
+            "3개월\n(%)": "30",
+            "6개월\n(%)": "45",
+            "1개년\n(%)": "60",
+            "2개년\n(%)": "80",
+            "2개년초과\n평균손율\n(%)": "85"
+          },
+          "창호": {
+            "3개월\n(%)": "30",
+            "6개월\n(%)": "40",
+            "1개년\n(%)": "60",
+            "2개년\n(%)": "80",
+            "2개년초과\n평균손율\n(%)": "100"
+          },
+          "흄관": {
+            "3개월\n(%)": "80",
+            "6개월\n(%)": "100",
+            "1개년\n(%)": "100",
+            "2개년\n(%)": "100",
+            "2개년초과\n평균손율\n(%)": "100"
+          },
+          "강재류": {
+            "3개월\n(%)": "15",
+            "6개월\n(%)": "30",
+            "1개년\n(%)": "50",
+            "2개년\n(%)": "75",
+            "2개년초과\n평균손율\n(%)": "85"
+          }
+        },
+        "cite": {
+          "table_id": "p94-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p94-t0에서 자재 종류와 사용기간에 따른 손율을 찾는다.",
+        "철물 및 강재류의 길이가 2m 이하인 경우 1회 사용 후 손율을 100%로 적용한다.",
+        "강재의 경우 절단 여부에 따라 주어진 산정식으로 손료를 계산한다."
+      ],
+      "source": "PDF 38쪽 2-2-2 주요자재 표 및 [주]",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "강재류가 토류벽과 가교 등의 재료로 사용되지 않는 경우",
+        "blocked_if": {
+          "input": "is_retaining_wall_or_bridge",
+          "op": "==",
+          "value": false
+        },
+        "reason": "강재의 손율은 토류벽과 가교 등의 재료로 사용할 때의 기준임",
+        "source": "PDF 38쪽 [주] ① ㉯",
+        "cite": {
+          "section_no": "2-2-2",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "단가가 포함된 최종 손료 금액 산출",
+        "source": "PDF 38쪽 [주] ②",
+        "cite": {
+          "section_no": "2-2-2",
+          "marker": "②"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 인·일 품을 계산하는 것이 아니라 자재의 손율(%)을 조회하고 단가가 포함된 손료(금액)를 산정하는 기준이므로 자동 계산 모델에 맞지 않습니다.",
+  "citations": [
+    {
+      "table_id": "p94-t0",
+      "row": "철물",
+      "column": "3개월\n(%)",
+      "value": "30"
+    },
+    {
+      "chunk_id": "p94-x7",
+      "quote": "재료의 길이가 2m 이하인 것은 1회 사용 후 손율은 100%로 계상한다."
+    },
+    {
+      "chunk_id": "p94-x7",
+      "quote": "강재(강널말뚝, 강관파일, H파일, 복공판 등)는 토류벽과 가교 등의 재료로 사용할 때의 기준이다."
+    },
+    {
+      "chunk_id": "p94-x7",
+      "quote": "손 료 = 강재수량×(1+재료의 할증률)×신재단가×손율"
+    },
+    {
+      "chunk_id": "p94-x7",
+      "quote": "손 료 = 강재수량×신재단가×손율+할증량×신재단가-할증량×공제율×고재단가"
+    }
+  ],
+  "open_questions": [
+    "\"재료의 길이가 2m 이하인 것은 1회 사용 후 손율은 100%로 계상한다\"에서 '1회 사용'의 기간이 표의 사용기간(3개월 등)과 어떻게 매핑되는지 명확하지 않음.",
+    "강재 절단 시 '할증량이 스크랩으로 발생되는 경우'의 할증량 및 공제율 산출 기준이 본 절에 명시되어 있지 않음."
+  ],
+  "questions": [
+    "강재류를 6개월 사용했을 때의 손율은 얼마인가요?",
+    "철물의 길이가 1.5m인데 2번 사용했습니다. 손율을 어떻게 적용해야 하나요?",
+    "강재를 절단하여 사용할 때 손료를 계산하려면 어떤 단가들이 필요한가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:00.853221+00:00",
+    "input_tokens": 11881,
+    "output_tokens": 2150,
+    "source_pages": [
+      94,
+      95
+    ],
+    "prompt_sha256": "2a13c9fb43746428c4ada8a871a4fc85dbc18b4faef2f3ae3921fa94cab37e8a",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

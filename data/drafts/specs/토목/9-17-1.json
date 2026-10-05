@@ -1,0 +1,283 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-17-1/자동제도(좌표독취)",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-17-1",
+    "title": "자동제도(좌표독취)",
+    "work": "도면작성 및 조서작성",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      559
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "매",
+        "required": true,
+        "ask": "작성할 도면 매수는 몇 매입니까? (지적도 크기 1매 기준)",
+        "source": "PDF 559쪽 ③ 기타사항 ㉯"
+      },
+      {
+        "name": "land_type",
+        "type": "enum",
+        "allowed_values": [
+          "토지",
+          "임야"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지적공부 등록지는 토지입니까, 임야입니까?",
+        "source": "PDF 559쪽 [주] ① 등록계수 및 p615-t1"
+      },
+      {
+        "name": "paper_size",
+        "type": "enum",
+        "allowed_values": [
+          "기준규격",
+          "기준규격의 1/2 이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도면 규격은 기준규격입니까, 기준규격의 1/2 이하입니까?",
+        "source": "PDF 559쪽 ③ 기타사항 ㉲"
+      },
+      {
+        "name": "special_paper",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "특수한 용지를 사용합니까?",
+        "source": "PDF 559쪽 ③ 기타사항 ㉱"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p615-t0",
+        "role": "작업별 일수 및 인원수",
+        "source": "PDF 559쪽 9-17-1 자동제도(좌표독취) 표",
+        "unit": "인·일",
+        "values": {
+          "자료조사": {
+            "일수": "(0.04)",
+            "인원수 지적산업기사": "1",
+            "인원수 합계 지적산업기사": "(0.04)"
+          },
+          "계획준비": {
+            "일수": "(0.03)",
+            "인원수 1일당 지적기사": "1",
+            "인원수 지적산업기사": "1",
+            "인원수 합계 지적기사": "(0.03)",
+            "인원수 합계 지적산업기사": "(0.03)"
+          },
+          "좌표독취": {
+            "일수": "(0.37)",
+            "인원수 지적산업기사": "1",
+            "인원수 합계 지적산업기사": "(0.37)"
+          },
+          "도면작성편집": {
+            "일수": "(0.15)",
+            "인원수 지적산업기사": "1",
+            "인원수 합계 지적산업기사": "(0.15)"
+          },
+          "대조수정": {
+            "일수": "(0.09)",
+            "인원수 1일당 지적기사": "1",
+            "인원수 합계 지적기사": "(0.09)"
+          },
+          "성과작성": {
+            "일수": "(0.06)",
+            "인원수 지적산업기사": "1",
+            "인원수 합계 지적산업기사": "(0.06)"
+          },
+          "점검": {
+            "일수": "(0.07)",
+            "인원수 1일당 지적기사": "1",
+            "인원수 합계 지적기사": "(0.07)"
+          },
+          "성과인계": {
+            "일수": "(0.02)",
+            "인원수 1일당 지적기사": "1",
+            "인원수 합계 지적기사": "(0.02)"
+          },
+          "합계": {
+            "일수": "(0.83)",
+            "인원수 합계 지적기사": "(0.21)",
+            "인원수 지적산업기사": "(0.65)"
+          }
+        },
+        "cite": {
+          "table_id": "p615-t0"
+        }
+      },
+      {
+        "id": "p615-t1",
+        "role": "등록계수",
+        "source": "PDF 559쪽 [주] ① 등록계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "토지": "1.00",
+            "임야": "1.28"
+          }
+        },
+        "cite": {
+          "table_id": "p615-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p615-t0",
+          "row_input": "합계",
+          "column_input": "인원수 합계 지적기사, 인원수 지적산업기사",
+          "trades": [
+            "지적기사",
+            "지적산업기사"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "land_type": "임야"
+            },
+            "rate": "1.28",
+            "applies_to": [
+              "지적기사",
+              "지적산업기사"
+            ],
+            "source": "PDF 559쪽 [주] ① 등록계수"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "paper_size": "기준규격의 1/2 이하"
+            },
+            "change": "도면작성수수료의 50%의 값을 적용",
+            "source": "PDF 559쪽 ③ 기타사항 ㉲"
+          }
+        ]
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다.",
+        "surcharges/note_adjustments를 원문 순서대로 적용한다."
+      ],
+      "source": "PDF 559쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "특수한 용지를 사용할 때",
+        "blocked_if": {
+          "input": "special_paper",
+          "op": "==",
+          "value": true
+        },
+        "reason": "실정에 따라 재료비를 별도 계상해야 함",
+        "source": "PDF 559쪽 ③ 기타사항 ㉱",
+        "cite": [
+          {
+            "chunk_id": "p615-x13",
+            "quote": "특수한 용지를 사용할 때에는 실정에 따라 재료비를 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 559쪽 ③ 기타사항 ㉰",
+        "cite": {
+          "chunk_id": "p615-x13",
+          "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당(도면 1매) 품이 표에 직접 제시되어 있으며, 물량(매수)을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p615-t0",
+      "row": "합계",
+      "column": "인원수 합계 지적기사",
+      "value": "(0.21)"
+    },
+    {
+      "table_id": "p615-t0",
+      "row": "합계",
+      "column": "인원수 지적산업기사",
+      "value": "(0.65)"
+    },
+    {
+      "table_id": "p615-t1",
+      "row": "계수",
+      "column": "토지",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p615-t1",
+      "row": "계수",
+      "column": "임야",
+      "value": "1.28"
+    },
+    {
+      "chunk_id": "p615-x10",
+      "quote": "지적공부 등록지(토지, 임야)별로 다음의 계수를 곱하여 계상한다."
+    },
+    {
+      "chunk_id": "p615-x13",
+      "quote": "본 품은 지적도 크기의 1매를 기준으로 한 것이다."
+    },
+    {
+      "chunk_id": "p615-x13",
+      "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p615-x13",
+      "quote": "특수한 용지를 사용할 때에는 실정에 따라 재료비를 별도 계상한다."
+    },
+    {
+      "chunk_id": "p615-x13",
+      "quote": "기준규격의 1/2 이하의 도면작성시에는 본 품에 의한 도면작성수수료의 50%의 값을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "기타사항 ㉲의 '도면작성수수료의 50%의 값을 적용한다'가 전체 품(인·일)에 0.5를 곱하라는 의미인지, 아니면 별도의 수수료 항목에만 적용되는지 명확하지 않음."
+  ],
+  "questions": [
+    "임야 지적도 10매를 자동제도(좌표독취)로 작성할 때 품은 어떻게 되나요?",
+    "기준규격의 1/2 이하 도면을 작성할 때 도면작성수수료 50% 적용은 품셈 인원수에 0.5를 곱하라는 뜻인가요?",
+    "특수 용지를 사용했는데 재료비는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:08:15.916663+00:00",
+    "input_tokens": 12228,
+    "output_tokens": 2857,
+    "source_pages": [
+      615,
+      616
+    ],
+    "prompt_sha256": "c139c16bd0ad44ac6ea4fdd24af09719e3ec8cc612aab4aab17ea83267ca96d4",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

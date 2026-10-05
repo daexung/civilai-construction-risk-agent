@@ -1,0 +1,277 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-14-2/경계복원측량_수치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-14-2",
+    "title": "경계복원 측량(수치)('23, '25년 보완)",
+    "work": "경계복원 측량(수치) 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      550,
+      551
+    ],
+    "inputs": [
+      {
+        "name": "parcels",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "필지",
+        "required": true,
+        "ask": "측량할 토지는 몇 필지입니까?",
+        "source": "PDF 550쪽 ② 면적계수 '본 품은 1필지당...'"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "1필지당 평균 면적은 몇 ㎡입니까?",
+        "source": "PDF 550쪽 ② 면적계수"
+      },
+      {
+        "name": "region_type",
+        "type": "enum",
+        "allowed_values": [
+          "면",
+          "읍",
+          "시(동지역)",
+          "구(동지역)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량할 토지의 행정구역은 어디에 해당합니까?",
+        "source": "PDF 550쪽 ③ 지역구분계수",
+        "synonyms": {
+          "시(동지역)": [
+            "시",
+            "동(시)"
+          ],
+          "구(동지역)": [
+            "구",
+            "동(구)"
+          ]
+        }
+      },
+      {
+        "name": "appraisal_requested",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량결과에 대한 설명을 부가한 감정도 및 감정서 발급을 요청합니까?",
+        "source": "PDF 550쪽 ⑤ 기타사항 ㉳"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p606-t0",
+        "role": "경계복원 측량(수치) 기본 품",
+        "source": "PDF 550쪽 작업별 품 표",
+        "unit": "인/필지",
+        "values": {
+          "합계": {
+            "지적기사": "0.58",
+            "지적산업기사": "0.62",
+            "지적기능사": "0.34"
+          }
+        },
+        "cite": {
+          "table_id": "p606-t0"
+        }
+      },
+      {
+        "id": "p606-t1",
+        "role": "면적계수",
+        "source": "PDF 550쪽 ② 면적계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "0회": "1.0",
+            "1회": "1.3",
+            "2회이상": "1.2+(0.10×n)"
+          }
+        },
+        "cite": {
+          "table_id": "p606-t1"
+        }
+      },
+      {
+        "id": "p606-t2",
+        "role": "지역구분계수",
+        "source": "PDF 550쪽 ③ 지역구분계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "면": "1.00",
+            "읍": "1.10",
+            "시(동지역)": "1.30",
+            "구(동지역)": "1.40"
+          }
+        },
+        "cite": {
+          "table_id": "p606-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p606-t0",
+          "row_input": "합계",
+          "trades": [
+            "지적기사",
+            "지적산업기사",
+            "지적기능사"
+          ]
+        },
+        "quantity_input": "parcels",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "총 적용계수 = 1.0 + (면적계수 - 1.0) + (지역구분계수 - 1.0)을 계산하여 기본 품에 곱함. 면적계수는 기준면적 300㎡ 초과 시 가산횟수 n=(area-300)/300을 구하여 p606-t1 적용. 지역구분계수는 p606-t2 적용.",
+            "source": "PDF 551쪽 [계산예] ① 기준단가 합계 산식"
+          }
+        ]
+      },
+      "steps": [
+        "p606-t0에서 직종별 기본 품(합계)을 가져온다.",
+        "area를 이용하여 가산횟수 n = (area - 300) / 300 을 계산하고, p606-t1에 따라 면적계수를 구한다. (n<=0이면 1.0, 0<n<=1이면 1.3, n>1이면 1.2+0.1*n)",
+        "region_type을 이용하여 p606-t2에서 지역구분계수를 구한다.",
+        "총 적용계수 = 1.0 + (면적계수 - 1.0) + (지역구분계수 - 1.0) 을 계산한다.",
+        "1필지당 품 = 기본 품 × 총 적용계수",
+        "총 품 = 1필지당 품 × parcels(필지 수) 로 계산한다."
+      ],
+      "source": "PDF 550~551쪽 9-14-2 본문 및 계산예",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "appraisal_requested == true",
+        "blocked_if": {
+          "input": "appraisal_requested",
+          "op": "==",
+          "value": true
+        },
+        "reason": "감정도 및 감정서 발급을 요청할 경우 추가 품을 가산한다고 명시되어 있으나, 구체적인 가산 수치가 원문에 없어 자동 계산 불가",
+        "source": "PDF 550쪽 ⑤ 기타사항 ㉳",
+        "cite": [
+          {
+            "chunk_id": "p606-x18",
+            "quote": "㉳ 본 품의 측량결과에 대한 설명을 부가한 감정도 및 감정서 발급을 요청할 경우에는 추가 품을"
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 550쪽 ⑤ 기타사항 ㉯",
+        "cite": {
+          "chunk_id": "p606-x18",
+          "quote": "㉯ 본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "지적측량기준점 설치비",
+        "source": "PDF 550쪽 ⑤ 기타사항 ㉰",
+        "cite": {
+          "chunk_id": "p606-x18",
+          "quote": "㉰ 작업상 지적측량기준점을 설치할 경우에는 지적측량기준점 설치비를 별도 계상한다."
+        }
+      },
+      {
+        "item": "선박 등 임차료 실비",
+        "source": "PDF 550쪽 ⑤ 기타사항 ㉱",
+        "cite": {
+          "chunk_id": "p606-x18",
+          "quote": "㉱ 도서지역 등의 측량을 위하여 선박 등을 임차할 경우에는 임차료 실비를 별도 계상한다."
+        }
+      },
+      {
+        "item": "외업에 필요한 여비",
+        "source": "PDF 550쪽 ⑤ 기타사항 ㉲",
+        "cite": {
+          "chunk_id": "p606-x18",
+          "quote": "㉲ 본 품의 외업에 필요한 여비는 공무원여비규정에 의한 국내여행자의 일비를 별도 계상한다."
+        }
+      },
+      {
+        "item": "직접경비 및 간접측량비",
+        "source": "PDF 551쪽 [결정단가] 산식 아래 ※",
+        "cite": {
+          "chunk_id": "p607-x10",
+          "quote": "※ 측량비 산출단가는직접경비(현장여비･기계경비･재료소모품비) 및 간접측량비(제경비･기술료)를 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "1필지당 기본 품이 표로 주어지고, 면적 및 지역에 따른 계수를 합산하여 곱하는 방식이므로 단위당 품 계산 구조에 해당합니다.",
+  "citations": [
+    {
+      "table_id": "p606-t0",
+      "row": "합계",
+      "column": "지적기사",
+      "value": "0.58"
+    },
+    {
+      "table_id": "p606-t1",
+      "row": "계수",
+      "column": "0회",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p606-t2",
+      "row": "계수",
+      "column": "면",
+      "value": "1.00"
+    },
+    {
+      "chunk_id": "p606-x10",
+      "quote": "본 품은 1필지당 300㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고, 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다."
+    },
+    {
+      "chunk_id": "p606-x14",
+      "quote": "본 품은 면지역을 기준으로 하였으며, 행정구역이 다를 경우 다음의 계수를 곱하여 품을 계상한다."
+    },
+    {
+      "chunk_id": "p607-x0",
+      "quote": "합계 : 2.00 = (㉠+㉡+㉢+㉣)"
+    }
+  ],
+  "open_questions": [
+    "감정도 및 감정서 발급 요청 시 추가 품을 가산한다고 되어 있으나, 구체적인 가산 수치나 비율이 원문에 명시되어 있지 않아 계산식에 반영할 수 없습니다."
+  ],
+  "questions": [
+    "1필지 면적이 250㎡인 면지역 토지 1필지의 경계복원 측량 품은 어떻게 되나요?",
+    "감정도 발급을 요청하면 품을 얼마나 추가해야 하나요?",
+    "경계복원 측량 품을 계산해줘."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:07:16.591038+00:00",
+    "input_tokens": 13992,
+    "output_tokens": 3014,
+    "source_pages": [
+      606,
+      607,
+      608
+    ],
+    "prompt_sha256": "0e2bb84dc325912e29a5383a2a214f9bf33577f7b7a0a601a4ef6d17658bd7f0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-6-5/파워렌치조임및해체",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-6-5",
+    "title": "파워렌치 조임 및 해체",
+    "work": "파워렌치 조임 및 해체 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      352
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "수량 조임",
+          "수량 해체"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류는 조임입니까, 해체입니까?",
+        "source": "PDF 352쪽 p408-t0 표의 열 구분",
+        "synonyms": {
+          "수량 조임": [
+            "조임",
+            "조임 작업"
+          ],
+          "수량 해체": [
+            "해체",
+            "해체 작업"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "작업할 침목은 총 몇 개소입니까?",
+        "source": "PDF 352쪽 p408-t0 표의 기준 (침목 개소당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p408-t0",
+        "role": "파워렌치 조임 및 해체 단위당 품",
+        "source": "PDF 352쪽 4-6-5 표",
+        "unit": "인/개소, hr/개소",
+        "values": {
+          "궤도공": {
+            "수량 조임": "0.010",
+            "수량 해체": "0.010"
+          },
+          "보통인부": {
+            "수량 조임": "0.010",
+            "수량 해체": "0.010"
+          },
+          "파워렌치": {
+            "수량 조임": "0.076",
+            "수량 해체": "0.076"
+          }
+        },
+        "cite": {
+          "table_id": "p408-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p408-t0",
+          "column_input": "work_type",
+          "trades": [
+            "궤도공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p408-t0에서 작업 종류(조임/해체)에 따른 궤도공, 보통인부, 파워렌치의 단위당 품을 찾는다.",
+        "물량(침목 개소)을 곱해 총 투입 인·일 및 장비 hr를 구한다.",
+        "인력품(노무비)의 5%를 주연료 및 잡재료비로 계상한다."
+      ],
+      "source": "PDF 352쪽 4-6-5 표 및 [주] ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "주연료 및 잡재료비",
+        "category": "재료비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "section_no": "4-6-5",
+          "marker": "②"
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(침목 개소)당 직종별 인원과 장비 시간이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit을 선택했습니다.",
+  "citations": [
+    {
+      "table_id": "p408-t0",
+      "row": "궤도공",
+      "column": "수량 조임",
+      "value": "0.010"
+    },
+    {
+      "table_id": "p408-t0",
+      "row": "파워렌치",
+      "column": "수량 해체",
+      "value": "0.076"
+    },
+    {
+      "chunk_id": "p408-x4",
+      "quote": "파워렌치의 주연료와 잡재료비는 인력품의 5%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "침목 1개소당 나사 스파이크가 8개소가 아닌 경우(예: 4개소 등) 품을 비례해서 조정해야 하는지 원문에 명시되어 있지 않음."
+  ],
+  "questions": [
+    "작업할 침목은 총 몇 개소입니까?",
+    "조임 작업입니까, 해체 작업입니까?",
+    "침목 1개소당 나사 스파이크 개수가 8개소가 아닌 경우 어떻게 계산해야 합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:58:23.541487+00:00",
+    "input_tokens": 11566,
+    "output_tokens": 1457,
+    "source_pages": [
+      408,
+      409
+    ],
+    "prompt_sha256": "732a1bffbd35570adc85fdb96834dd55b7ce7bf66e89f4fd8a83e9de1925a885",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

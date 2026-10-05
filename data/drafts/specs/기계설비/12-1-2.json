@@ -1,0 +1,355 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/12-1-2/플랜트계기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "12-1-2",
+    "title": "플랜트 계기 설치",
+    "work": "플랜트 계기 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      717,
+      718
+    ],
+    "inputs": [
+      {
+        "name": "instrument_item",
+        "type": "enum",
+        "allowed_values": [
+          "파이프스텐션",
+          "계기",
+          "발신기",
+          "수신기",
+          "AirSet",
+          "변환기",
+          "수동조작기",
+          "비율설정기",
+          "기록계",
+          "현장지시계 | 규격 LG",
+          "현장지시계 | 규격 LPG, VG",
+          "현장지시계 | 규격 PG",
+          "현장지시계 | 규격 TG",
+          "후로드식액면계",
+          "측온계",
+          "분석계 | 규격 적외선식, 자기식",
+          "MonoMeter",
+          "Thermocouple",
+          "Dispressor | 규격 외통식",
+          "스위치 | 규격 일반각종",
+          "전자Valve | 규격 소형",
+          "전자Valve | 규격 대형",
+          "강압Valve | 규격 소형",
+          "강압Valve | 규격 대형",
+          "여과기 | 규격 소형",
+          "여과기 | 규격 대형",
+          "조절Valve | 규격 1B",
+          "조절Valve | 규격 2B",
+          "조절Valve | 규격 3B",
+          "조절Valve | 규격 4B",
+          "ButterflyValve | 규격 200ø",
+          "ButterflyValve | 규격 300ø",
+          "ButterflyValve | 규격 400ø",
+          "ButterflyValve | 규격 500ø",
+          "Orifice | 규격 200ø 이하",
+          "Orifice | 규격 201ø∼500ø",
+          "Orifice | 규격 501ø이상",
+          "출력Gauge | 규격 공기식",
+          "CylinderValve",
+          "탈습장치",
+          "탁도검출기",
+          "P - H m e t e r 검출기",
+          "X-Ray발생장치",
+          "α-Ray발생장치",
+          "PowerPack",
+          "현장조절계 | 규격 일반각종",
+          "중성자발생장치 | 규격 〃",
+          "FLAME DETECTOR"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 계기의 명칭 및 규격을 선택해주세요.",
+        "source": "PDF 717쪽 p773-t1, 718쪽 p774-t0 표의 명칭 및 규격 조합"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "단위(본, 대, Set 등)",
+        "required": true,
+        "ask": "설치 수량은 얼마입니까?",
+        "source": "기본 물량 입력"
+      },
+      {
+        "name": "is_explosion_proof",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "방폭공사입니까?",
+        "source": "PDF 718쪽 p774-t0 비고"
+      },
+      {
+        "name": "is_loop_test",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Loop 시험을 수행합니까?",
+        "source": "PDF 718쪽 p774-t0 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p773-t1",
+        "role": "플랜트 계기 설치 품 (1)",
+        "source": "PDF 717쪽 12-1-2 플랜트 계기 설치 표",
+        "unit": "인/단위",
+        "values": {
+          "파이프스텐션": {
+            "계장공": "0.37"
+          },
+          "계기": {
+            "계장공": "0.3"
+          },
+          "발신기": {
+            "계장공": "0.27"
+          },
+          "수신기": {
+            "계장공": "0.22"
+          },
+          "AirSet": {
+            "계장공": "0.22"
+          },
+          "변환기": {
+            "계장공": "0.25"
+          },
+          "수동조작기": {
+            "계장공": "0.2"
+          },
+          "비율설정기": {
+            "계장공": "0.2"
+          },
+          "기록계": {
+            "계장공": "0.75"
+          }
+        },
+        "cite": {
+          "table_id": "p773-t1"
+        }
+      },
+      {
+        "id": "p774-t0",
+        "role": "플랜트 계기 설치 품 (2)",
+        "source": "PDF 718쪽 12-1-2 플랜트 계기 설치 표",
+        "unit": "인/단위",
+        "values": {
+          "현장지시계 | 규격 LG": {
+            "계장공": "0.75"
+          },
+          "현장지시계 | 규격 LPG, VG": {
+            "계장공": "0.4"
+          },
+          "현장지시계 | 규격 PG": {
+            "계장공": "0.22"
+          },
+          "현장지시계 | 규격 TG": {
+            "계장공": "0.15"
+          },
+          "후로드식액면계": {
+            "계장공": "1.8"
+          },
+          "측온계": {
+            "계장공": "0.15"
+          },
+          "분석계 | 규격 적외선식, 자기식": {
+            "계장공": "12.0"
+          },
+          "MonoMeter": {
+            "계장공": "0.3"
+          },
+          "Thermocouple": {
+            "계장공": "0.37"
+          },
+          "Dispressor | 규격 외통식": {
+            "계장공": "3.0"
+          },
+          "스위치 | 규격 일반각종": {
+            "계장공": "0.22"
+          },
+          "전자Valve | 규격 소형": {
+            "계장공": "0.1"
+          },
+          "전자Valve | 규격 대형": {
+            "계장공": "0.3"
+          },
+          "강압Valve | 규격 소형": {
+            "계장공": "0.1"
+          },
+          "강압Valve | 규격 대형": {
+            "계장공": "0.3"
+          },
+          "여과기 | 규격 소형": {
+            "계장공": "0.1"
+          },
+          "여과기 | 규격 대형": {
+            "계장공": "0.3"
+          },
+          "조절Valve | 규격 1B": {
+            "계장공": "0.8"
+          },
+          "조절Valve | 규격 2B": {
+            "계장공": "1.0"
+          },
+          "조절Valve | 규격 3B": {
+            "계장공": "1.2"
+          },
+          "조절Valve | 규격 4B": {
+            "계장공": "1.5"
+          },
+          "ButterflyValve | 규격 200ø": {
+            "계장공": "1.2"
+          },
+          "ButterflyValve | 규격 300ø": {
+            "계장공": "2.5"
+          },
+          "ButterflyValve | 규격 400ø": {
+            "계장공": "3.7"
+          },
+          "ButterflyValve | 규격 500ø": {
+            "계장공": "5.0"
+          },
+          "Orifice | 규격 200ø 이하": {
+            "계장공": "0.5"
+          },
+          "Orifice | 규격 201ø∼500ø": {
+            "계장공": "0.7"
+          },
+          "Orifice | 규격 501ø이상": {
+            "계장공": "1.0"
+          },
+          "출력Gauge | 규격 공기식": {
+            "계장공": "0.22"
+          },
+          "CylinderValve": {
+            "계장공": "4.5"
+          },
+          "탈습장치": {
+            "계장공": "22.5"
+          },
+          "탁도검출기": {
+            "계장공": "0.4"
+          },
+          "P - H m e t e r 검출기": {
+            "계장공": "0.4"
+          },
+          "X-Ray발생장치": {
+            "계장공": "15"
+          },
+          "α-Ray발생장치": {
+            "계장공": "15"
+          },
+          "PowerPack": {
+            "계장공": "3"
+          },
+          "현장조절계 | 규격 일반각종": {
+            "계장공": "0.75"
+          },
+          "중성자발생장치 | 규격 〃": {
+            "계장공": "15"
+          },
+          "FLAME DETECTOR": {
+            "계장공": "0.25"
+          }
+        },
+        "cite": {
+          "table_id": "p774-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "선택한 instrument_item에 해당하는 계장공 품을 p773-t1 또는 p774-t0 표에서 찾는다.",
+        "물량(quantity)을 곱하여 기본 품을 구한다.",
+        "방폭공사(is_explosion_proof)인 경우 기본 품에 20%를 가산한다.",
+        "Loop 시험(is_loop_test)인 경우 기본 품에 25%를 가산한다."
+      ],
+      "source": "PDF 717쪽 p773-t1, 718쪽 p774-t0 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "파이프스텐션 기초",
+        "source": "PDF 717쪽 p773-t1 비고",
+        "cite": {
+          "table_id": "p773-t1"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "항목이 두 개의 표(p773-t1, p774-t0)에 나뉘어 있고, 일부 항목은 명칭이 중복되어 규격과 조합해야만 고유 식별이 가능하여 단일 표 기반의 per_unit 모델로 완벽히 표현하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p773-t1",
+      "row": "파이프스텐션",
+      "column": "계장공",
+      "value": "0.37"
+    },
+    {
+      "table_id": "p774-t0",
+      "row": "현장지시계 | 규격 LG",
+      "column": "계장공",
+      "value": "0.75"
+    },
+    {
+      "table_id": "p774-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 방폭공사시는 본 품의 20%를 가산한다. - Loop 시험시는 본 품의 25%를 가산한다."
+    },
+    {
+      "table_id": "p773-t1",
+      "row": "파이프스텐션",
+      "column": "비고",
+      "value": "기초별도"
+    }
+  ],
+  "open_questions": [
+    "표의 명칭 열에 중복된 값(예: 현장지시계)이 있어 규격과 조합해야 고유 식별이 가능합니다. 원문 표기를 유지하기 위해 파싱 결과의 텍스트를 그대로 행 이름으로 사용했습니다.",
+    "방폭공사와 Loop 시험이 동시에 적용될 때, 가산율을 각각 기본 품에 적용하여 합산하는지(45%), 아니면 복리처럼 적용하는지 원문에 명시되지 않았습니다."
+  ],
+  "questions": [
+    "현장지시계(LG) 5대를 설치할 때 계장공 품은 얼마인가요?",
+    "방폭공사이면서 Loop 시험도 하는 경우, 가산율은 각각 적용되나요 아니면 합산(45%)하여 적용되나요?",
+    "전자Valve를 설치하려고 합니다. (규격 소형/대형 누락)"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:29.836877+00:00",
+    "input_tokens": 13194,
+    "output_tokens": 3520,
+    "source_pages": [
+      773,
+      774,
+      775
+    ],
+    "prompt_sha256": "7510949f45598c72069303e77156f87e8c0f1e1df10dff640d874e35a2f1fbf9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

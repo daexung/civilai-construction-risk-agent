@@ -1,0 +1,209 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-6-7/프리캐스트콘크리트패널설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-6-7",
+    "title": "프리캐스트 콘크리트 패널 설치",
+    "work": "기본 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      154,
+      155
+    ],
+    "inputs": [
+      {
+        "name": "construction_method",
+        "type": "enum",
+        "allowed_values": [
+          "대차시공",
+          "크레인시공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공방법은 대차시공과 크레인시공 중 무엇입니까?",
+        "decision_table": "p211-t0",
+        "source": "PDF 154쪽 6-6-7 표 및 155쪽 [주] ①"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "프리캐스트 콘크리트 패널 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 154쪽 6-6-7 표 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p210-t1",
+        "role": "시공방법별 작업조 인원, 장비 대수 및 시공량",
+        "source": "PDF 154쪽 6-6-7 표",
+        "unit": "인/작업조; 대/작업조; ㎡/일",
+        "values": {
+          "특별인부": {
+            "대차시공": "4",
+            "크레인시공": "4"
+          },
+          "보통인부": {
+            "대차시공": "1",
+            "크레인시공": "1"
+          },
+          "콘크리트공": {
+            "대차시공": "1",
+            "크레인시공": "1"
+          },
+          "이동용대차+ 크레인": {
+            "대차시공": "1"
+          },
+          "크레인": {
+            "크레인시공": "1"
+          },
+          "지게차": {
+            "대차시공": "1",
+            "크레인시공": "1"
+          },
+          "시공량": {
+            "대차시공": "85",
+            "크레인시공": "70"
+          }
+        },
+        "cite": {
+          "table_id": "p210-t1"
+        }
+      },
+      {
+        "id": "p211-t0",
+        "role": "시공 타입 적용기준",
+        "source": "PDF 155쪽 [주] ① 표",
+        "values": {
+          "대차시공": {
+            "적용기준": "- 교량상부(거더)에 전용 대차(이동용대차+크레인)를 설치하여 시공하는 경우"
+          },
+          "크레인시공": {
+            "적용기준": "- 교량 외부에서 크레인으로 시공하는 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p211-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p210-t1",
+          "row": "시공량",
+          "column_input": "construction_method"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p210-t1",
+          "column_input": "construction_method",
+          "trades": [
+            "특별인부",
+            "보통인부",
+            "콘크리트공"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002",
+            "콘크리트공": "1013"
+          }
+        },
+        "equipment": [
+          {
+            "name": "이동용대차+ 크레인",
+            "table": "p210-t1",
+            "unit": "대·일"
+          },
+          {
+            "name": "크레인",
+            "table": "p210-t1",
+            "unit": "대·일"
+          },
+          {
+            "name": "지게차",
+            "table": "p210-t1",
+            "unit": "대·일"
+          }
+        ],
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p210-t1에서 시공방법에 따른 기준시공량을 고른다.",
+        "작업일수 = quantity ÷ 기준시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+      ],
+      "source": "PDF 154쪽 6-6-7 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "레일을 사용한 대차의 레일 설치 및 철거 비용과 대차의 기계경비",
+        "source": "PDF 155쪽 [주] ③",
+        "cite": {
+          "section_no": "6-6-7",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수, 그리고 일일 시공량이 표로 주어져 있어 작업일수를 구한 뒤 인·일을 산출하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p210-t1",
+      "row": "대차시공",
+      "column": "시공량(㎡)",
+      "value": "85"
+    },
+    {
+      "table_id": "p210-t1",
+      "row": "크레인시공",
+      "column": "시공량(㎡)",
+      "value": "70"
+    },
+    {
+      "table_id": "p211-t0",
+      "row": "대차시공",
+      "column": "적용기준",
+      "value": "- 교량상부(거더)에 전용 대차(이동용대차+크레인)를 설치하여 시공하는 경우"
+    },
+    {
+      "chunk_id": "p211-x3",
+      "quote": "레일을 사용한 대차의 레일 설치 및 철거 비용과 대차의\n설명 | 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "대차시공의 '이동용대차+크레인'과 크레인시공의 '크레인' 규격이 표에 명시되지 않았으며, 주 ④에서 작업여건에 따라 적합한 규격을 적용하라고 되어 있어, 장비 규격에 대한 추가 입력 및 단가 코드 매핑이 필요할 수 있습니다."
+  ],
+  "questions": [
+    "프리캐스트 콘크리트 패널 설치 시 대차시공과 크레인시공 중 어느 방식을 사용하나요?",
+    "레일을 사용한 대차의 레일 설치 및 철거 비용은 어떻게 별도로 계상하나요?",
+    "크레인의 규격은 작업여건(시공높이, 시공위치 등)에 따라 어떻게 결정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:40:38.129747+00:00",
+    "input_tokens": 12674,
+    "output_tokens": 2068,
+    "source_pages": [
+      210,
+      211,
+      212
+    ],
+    "prompt_sha256": "00948542cb920e426a27a9550f065c0dd3133b18beb62336b30400b9e54e77b9",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

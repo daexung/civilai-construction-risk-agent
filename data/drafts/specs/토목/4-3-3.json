@@ -1,0 +1,127 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-3-3/타설후정리",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-3-3",
+    "title": "타설후 정리('11년 신설, '19년 보완)",
+    "work": "타설후 정리",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      403
+    ],
+    "inputs": [
+      {
+        "name": "track_type",
+        "type": "enum",
+        "allowed_values": [
+          "단선",
+          "복선"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "단선궤도입니까, 복선궤도입니까?",
+        "source": "p403-t1 비고 및 p403-x25 [주] ①"
+      },
+      {
+        "name": "length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "타설후 정리 구간 길이는 몇 m입니까?",
+        "source": "p403-t1 시공량(m)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p403-t1",
+        "role": "타설후 정리 작업조 인원 및 장비",
+        "source": "4-3-3 타설후 정리",
+        "values": {
+          "궤도공 보통인부 측량중급기술자": {
+            "단위": "인",
+            "시공량(m)": "250"
+          },
+          "양로기": {
+            "규격": "11.19㎾",
+            "단위": "대",
+            "수량": "1"
+          },
+          "비고": {
+            "- 단선궤도는 시공량을 5%까지 감하여 적용한다.": ""
+          }
+        },
+        "cite": {
+          "table_id": "p403-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱된 표의 행 이름이 여러 직종으로 병합되어 있어 직종별 인원을 기계적으로 분리할 수 없습니다.",
+        "단선궤도인 경우 시공량을 5% 감하여 적용합니다."
+      ],
+      "source": "p403-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기타 기계경비",
+        "source": "p403-x25 [주] ③",
+        "cite": {
+          "chunk_id": "p403-x25",
+          "quote": "③ 기타 기계경비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표의 행 이름이 여러 직종('궤도공 보통인부 측량중급기술자')으로 병합되어 있어 직종별 인원을 기계적으로 분리하여 계산식에 매핑할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p403-t1",
+      "row": "비고",
+      "column": "- 단선궤도는 시공량을 5%까지 감하여 적용한다.",
+      "value": ""
+    },
+    {
+      "chunk_id": "p403-x25",
+      "quote": "① 본 품은 60㎏ 레일의 복선 일반철도 기준이다."
+    },
+    {
+      "chunk_id": "p403-x25",
+      "quote": "③ 기타 기계경비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표 p403-t1에서 직종별 수량(9, 6, 1)이 같은 행 이름('궤도공 보통인부 측량중급기술자')으로 묶여 있어 JSON 키 중복 문제로 인해 수량을 tables에 온전히 담지 못했습니다."
+  ],
+  "questions": [
+    "타설후 정리 구간 길이는 몇 m입니까?",
+    "단선궤도인 경우 시공량 감산은 어떻게 적용합니까?",
+    "기타 기계경비는 어떻게 계상합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:59:27.682056+00:00",
+    "input_tokens": 23325,
+    "output_tokens": 3299,
+    "source_pages": [
+      403,
+      404
+    ],
+    "prompt_sha256": "ab038d06437a642d9fcf491277a4d8f2d3400837b1fb92bfe5dbd7f167903f86",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

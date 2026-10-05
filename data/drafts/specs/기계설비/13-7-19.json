@@ -1,0 +1,196 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-7-19/Mill Line 기기류 조립설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-7-19",
+    "title": "Mill Line 기기류 조립설치",
+    "work": "기기류 조립설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      832
+    ],
+    "inputs": [
+      {
+        "name": "equipment_type",
+        "type": "enum",
+        "allowed_values": [
+          "Slas depiler",
+          "Depiler Pusher",
+          "Dumper",
+          "Reducer",
+          "Down coiler",
+          "Down ender",
+          "Ingot scale",
+          "Finishing mill, Roughing mill",
+          "Coil car",
+          "Crop shear"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조립 설치하는 기기의 종류는 무엇입니까?",
+        "source": "주석 ① 적용 기기 목록"
+      },
+      {
+        "name": "weight",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "기기의 중량은 몇 ton입니까? (가조립 및 해체, 조립설치 품 산정에 사용)",
+        "source": "표 p888-t0의 가조립 및 해체, 조립설치 단위 (인/ton)"
+      },
+      {
+        "name": "surface_area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "표면손질 면적은 몇 ㎡입니까?",
+        "source": "표 p888-t0의 표면손질 단위 (인/㎡)"
+      },
+      {
+        "name": "duration_days",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "일",
+        "required": true,
+        "ask": "기술관리 공사기간은 며칠입니까?",
+        "source": "표 p888-t0의 기술관리 단위 (인/일)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p888-t0",
+        "role": "Mill Line 기기류 조립설치 품",
+        "source": "PDF 832쪽 13-7-19 표",
+        "unit": "인/일, 인/㎡, 인/ton",
+        "values": {
+          "기계기사": {
+            "수량": "1.40"
+          },
+          "특별인부": {
+            "수량": "1.803"
+          },
+          "플랜트기계설치공": {
+            "수량": "3.245"
+          },
+          "비계공": {
+            "수량": "1.622"
+          },
+          "플랜트용접공": {
+            "수량": "0.541"
+          },
+          "시험및교정": {
+            "수량": "기술관리를 제외한 본 품의 10%"
+          }
+        },
+        "cite": {
+          "table_id": "p888-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "작업구분별(기술관리, 표면손질, 가조립 및 해체, 조립설치)로 단위(일, ㎡, ton)에 맞는 물량을 곱하여 품을 산출한다.",
+        "시험 및 교정은 기술관리를 제외한 나머지 품의 10%를 가산한다."
+      ],
+      "source": "PDF 832쪽 13-7-19 표 및 주석",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "포장해체 및 소운반",
+        "source": "주석 ②",
+        "cite": {
+          "chunk_id": "p888-x10",
+          "quote": "② 본 품에는 포장해체 및 소운반이 제외되어 있다."
+        }
+      },
+      {
+        "item": "Foundation chipping, marking 및 Centering 작업",
+        "source": "주석 ③",
+        "cite": {
+          "chunk_id": "p888-x10",
+          "quote": "③ 본 품에는 Foundation chipping, marking 및 Centering 작업이 제외되어 있다."
+        }
+      },
+      {
+        "item": "전기 배선공사",
+        "source": "주석 ⑤",
+        "cite": {
+          "chunk_id": "p888-x10",
+          "quote": "⑤ 본 품에는 전기 배선공사는 제외되어 있다."
+        }
+      },
+      {
+        "item": "현장가공 품",
+        "source": "주석 ⑥",
+        "cite": {
+          "chunk_id": "p888-x10",
+          "quote": "⑥ 현장가공 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "작업구분별로 적용 단위(인/일, 인/㎡, 인/ton)가 다르고, 파싱 결과에서 직종 이름이 중복되어 자동 계산 모델을 구성하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p888-t0",
+      "row": "기술관리 표면손질 가조립및해체 조립설치",
+      "column": "수량",
+      "value": "1.40"
+    },
+    {
+      "chunk_id": "p888-x10",
+      "quote": "① 본 품은 아래 기기를 조립 설치하는 품이다."
+    },
+    {
+      "chunk_id": "p888-x10",
+      "quote": "② 본 품에는 포장해체 및 소운반이 제외되어 있다."
+    },
+    {
+      "chunk_id": "p888-x10",
+      "quote": "③ 본 품에는 Foundation chipping, marking 및 Centering 작업이 제외되어 있다."
+    },
+    {
+      "chunk_id": "p888-x10",
+      "quote": "⑤ 본 품에는 전기 배선공사는 제외되어 있다."
+    },
+    {
+      "chunk_id": "p888-x10",
+      "quote": "⑥ 현장가공 품은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p888-t0)에서 '특별인부', '플랜트기계설치공' 등의 직종이 여러 번 등장하여 JSON 객체의 키로 사용할 때 중복(덮어쓰기)이 발생합니다. 또한 작업구분(기술관리, 표면손질 등)이 하나의 문자열로 뭉쳐 있어 정확한 매핑이 어렵습니다."
+  ],
+  "questions": [
+    "Mill Line 기기류 조립설치 시 포장해체 작업도 품에 포함되나요?",
+    "시험 및 교정 작업의 10% 할증은 어떤 항목들을 기준으로 계산하나요?",
+    "조립설치할 기기의 중량(ton)과 표면손질 면적(㎡)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:35:37.720338+00:00",
+    "input_tokens": 11889,
+    "output_tokens": 1988,
+    "source_pages": [
+      888,
+      889
+    ],
+    "prompt_sha256": "091bd1a34d269ef10502ffefd0c9674bf465a547d8b0024aceb42c052f7fb31d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

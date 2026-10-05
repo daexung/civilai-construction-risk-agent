@@ -1,0 +1,302 @@
+{
+  "spec_id": "2026-정오표1차/공통/6-1-4/펌프차타설",
+  "review": "미완료",
+  "basis": "PDF 186~187쪽 표·주석에서 독립적으로 손계산한 기본 품량. 계산 코드 출력은 사용하지 않음. 유리수는 기약분수로 기록하고 공통 정책은 적용하지 않음.",
+  "cases": [
+    {
+      "id": "A",
+      "checks": "철근·15㎝·계수 1.0·붐·진동기 사용 시 작업조와 일당시공량을 확인한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "130",
+        "work_days": "2",
+        "person_days": {
+          "콘크리트공": "8",
+          "특별인부": "2",
+          "형틀목공": "2",
+          "보통인부": "2"
+        },
+        "pump_truck_days": "2"
+      },
+      "derivation": "p187-t0 철근·15㎝ 130 × p187-t1 Type-Ⅱ 1.0 × p187-t3 Type-Ⅱ 1.0 = 130㎥/일; 260÷130=2일; p186-t1 작업조 4·1·1·1인 및 펌프차 1대에 각각 2를 곱함.",
+      "sources": [
+        "PDF 186쪽 p186-t1",
+        "PDF 187쪽 p187-t0·p187-t1·p187-t3 및 3. 일일시공량 [주] ②"
+      ]
+    },
+    {
+      "id": "B",
+      "checks": "진동기 미사용으로 콘크리트공·특별인부가 각 1명 줄고 특별인부 0이 정상임을 확인한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": false,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "130",
+        "work_days": "2",
+        "person_days": {
+          "콘크리트공": "6",
+          "특별인부": "0",
+          "형틀목공": "2",
+          "보통인부": "2"
+        },
+        "pump_truck_days": "2"
+      },
+      "derivation": "A와 동일하게 2일; p186-t1 4·1·1·1인에서 2. 인력편성 [주] ①로 콘크리트공·특별인부 각 1인 제외 → 3·0·1·1인; 2일을 곱함.",
+      "sources": [
+        "PDF 186쪽 p186-t1 및 2. 인력편성 [주] ① (p186-x16)",
+        "PDF 187쪽 p187-t0·p187-t1·p187-t3"
+      ]
+    },
+    {
+      "id": "C",
+      "checks": "무근·Ⅰ/Ⅰ 계수, 배관타설 특별인부 1인 추가, 정확히 1일인 사례를 확인한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "218.4",
+        "structure": "무근",
+        "slump_band": "8~12㎝",
+        "facility_type": "Type-Ⅰ",
+        "site_type": "Type-Ⅰ",
+        "placement": "배관",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "218.4",
+        "work_days": "1",
+        "person_days": {
+          "콘크리트공": "3",
+          "특별인부": "2",
+          "형틀목공": "1",
+          "보통인부": "1"
+        },
+        "pump_truck_days": "1"
+      },
+      "derivation": "p187-t0 무근·8~12㎝ 130 × p187-t1 Type-Ⅰ 1.4 × p187-t3 Type-Ⅰ 1.2 = 218.4㎥/일; 218.4÷218.4=1일; p186-t1 특별인부 1인에 배관타설 비고의 1인을 추가함. 압송관 설치·철거는 포함하지 않음.",
+      "sources": [
+        "PDF 186쪽 p186-t1 특별인부 비고",
+        "PDF 187쪽 p187-t0·p187-t1·p187-t3 및 p187-t5"
+      ]
+    },
+    {
+      "id": "D",
+      "checks": "나누어떨어지지 않는 작업일수와 직종별 품량을 반올림하지 않고 기약분수로 확인한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "100",
+        "structure": "철근",
+        "slump_band": "18㎝이상",
+        "facility_type": "Type-Ⅲ",
+        "site_type": "Type-Ⅲ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "448/5",
+        "work_days": "125/112",
+        "person_days": {
+          "콘크리트공": "125/28",
+          "특별인부": "125/112",
+          "형틀목공": "125/112",
+          "보통인부": "125/112"
+        },
+        "pump_truck_days": "125/112"
+      },
+      "derivation": "p187-t0 철근·18㎝이상 140 × p187-t1 Type-Ⅲ 0.8 × p187-t3 Type-Ⅲ 0.8 = 140×4/5×4/5 = 448/5㎥/일; 100÷(448/5)=500/448=125/112일; p186-t1 철근 작업조 4·1·1·1인 및 펌프차 1대이므로 콘크리트공 4×125/112=125/28인·일, 나머지 각 125/112인·일, 펌프차 125/112대·일.",
+      "sources": [
+        "PDF 186쪽 p186-t1",
+        "PDF 187쪽 p187-t0·p187-t1·p187-t3 및 3. 일일시공량 [주] ②"
+      ]
+    },
+    {
+      "id": "reset-blocked",
+      "checks": "재셋팅 1회일 때 감산 누적 해석을 확정하지 않고 보류한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "있음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "blocked",
+        "reason": "재셋팅 감산 적용 방식 미확정"
+      },
+      "sources": [
+        "PDF 187쪽 3. 일일시공량 [주] ② 뒤 ※ (p187-x5)"
+      ]
+    },
+    {
+      "id": "slump-rejected",
+      "checks": "슬럼프 10㎝를 표의 선택지로 임의 변환하거나 보간하지 않고 거부한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "10㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음"
+      },
+      "expected": {
+        "status": "rejected",
+        "reason": "slump_band는 표의 8~12㎝·15㎝·18㎝이상 중 하나여야 함"
+      },
+      "sources": [
+        "PDF 187쪽 p187-t0"
+      ]
+    },
+    {
+      "id": "vibrator-ask",
+      "checks": "진동기 사용 여부에 기본값을 넣지 않고 되묻는다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "ask",
+        "missing": [
+          "vibrator_used"
+        ],
+        "question": "콘크리트 진동기를 사용합니까?"
+      },
+      "sources": [
+        "PDF 186쪽 2. 인력편성 [주] ① (p186-x16)"
+      ]
+    },
+    {
+      "id": "facility-ask",
+      "checks": "시설유형이 없으면 판정표 근거를 제시하며 되묻는다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "ask",
+        "missing": [
+          "facility_type"
+        ],
+        "decision_table": "p187-t2",
+        "question": "시설유형은 Type-Ⅰ~Ⅳ 중 무엇입니까? 시설물과 펌프차 작업 제약을 알려주시면 판정표를 함께 확인하겠습니다."
+      },
+      "sources": [
+        "PDF 187쪽 p187-t1·p187-t2"
+      ]
+    },
+    {
+      "id": "volume-zero-rejected",
+      "checks": "물량 0은 기본 타설 작업 품량의 양수 입력 조건에서 거부한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "0",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음"
+      },
+      "expected": {
+        "status": "rejected",
+        "reason": "volume은 0보다 커야 함"
+      },
+      "sources": [
+        "PDF 186쪽 1. 적용범위 나·라; PDF 187쪽 p187-t0"
+      ]
+    },
+    {
+      "id": "volume-negative-rejected",
+      "checks": "음수 물량을 거부한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "-1",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음"
+      },
+      "expected": {
+        "status": "rejected",
+        "reason": "volume은 0보다 커야 함"
+      },
+      "sources": [
+        "PDF 186쪽 1. 적용범위 나·라; PDF 187쪽 p187-t0"
+      ]
+    },
+    {
+      "id": "reset-unknown",
+      "checks": "재셋팅 필요 여부가 모름이면 계산을 보류한다.",
+      "input": {
+        "pump_size": "32m",
+        "volume": "260",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅱ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "모름",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "blocked",
+        "reason": "재셋팅 감산 적용 방식 미확정"
+      },
+      "sources": [
+        "PDF 187쪽 3. 일일시공량 [주] ② 뒤 ※ (p187-x5)"
+      ]
+    }
+  ]
+}

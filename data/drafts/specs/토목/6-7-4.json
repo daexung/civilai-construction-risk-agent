@@ -1,0 +1,163 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/6-7-4/내충격PVC수도관부설및접합",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "6-7-4",
+    "title": "내충격PVC수도관 부설 및 접합('23년 신설)",
+    "work": "기본 부설 및 접합 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      433
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "50",
+          "75",
+          "100",
+          "150",
+          "200",
+          "250",
+          "300"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "관경은 몇 ㎜입니까?",
+        "source": "p433-t0 관경(㎜)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "본",
+        "required": true,
+        "ask": "부설 및 접합할 관의 수량은 몇 본입니까?",
+        "source": "p433-t0 기준 (본당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p433-t0",
+        "role": "관경별 내충격PVC수도관 부설 및 접합 인력 품",
+        "source": "6-7-4 표",
+        "unit": "인/본",
+        "values": {
+          "50": {
+            "배관공(수도)": "0.07",
+            "보통인부": "0.04"
+          },
+          "75": {
+            "배관공(수도)": "0.09",
+            "보통인부": "0.05"
+          },
+          "100": {
+            "배관공(수도)": "0.11",
+            "보통인부": "0.06"
+          },
+          "150": {
+            "배관공(수도)": "0.15",
+            "보통인부": "0.08"
+          },
+          "200": {
+            "배관공(수도)": "0.19",
+            "보통인부": "0.10"
+          },
+          "250": {
+            "배관공(수도)": "0.23",
+            "보통인부": "0.12"
+          },
+          "300": {
+            "배관공(수도)": "0.27",
+            "보통인부": "0.14"
+          }
+        },
+        "cite": {
+          "table_id": "p433-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p433-t0",
+          "row_input": "pipe_diameter",
+          "trades": [
+            "배관공(수도)",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p433-t0에서 관경별 단위당 품을 고른다.",
+        "물량(본)을 곱해 총 품을 구한다."
+      ],
+      "source": "6-7-4 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p433-x8",
+          "quote": "공구손료 및 경장비(전동드릴 등)는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(본당)당 품이 표에 직접 명시되어 있어 물량을 곱하는 방식이므로 per_unit을 선택함.",
+  "citations": [
+    {
+      "table_id": "p433-t0",
+      "row": "50",
+      "column": "배관공(수도)",
+      "value": "0.07"
+    },
+    {
+      "table_id": "p433-t0",
+      "row": "300",
+      "column": "보통인부",
+      "value": "0.14"
+    },
+    {
+      "chunk_id": "p433-x8",
+      "quote": "공구손료 및 경장비(전동드릴 등)는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "관경 100mm 내충격PVC수도관 50본을 부설할 때 필요한 배관공 품은 얼마인가요?",
+    "공구손료는 어떻게 계산하나요?",
+    "관경을 입력하지 않으면 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:00:30.895947+00:00",
+    "input_tokens": 11789,
+    "output_tokens": 1481,
+    "source_pages": [
+      433,
+      434
+    ],
+    "prompt_sha256": "5363d654a20e32338b37afed4f79892e27db84493cc1df834580e05fba631548",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

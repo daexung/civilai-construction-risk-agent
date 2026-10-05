@@ -1,0 +1,550 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/1-2-1/현장세우기",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "1-2-1",
+    "title": "현장 세우기('08, '18년 보완)",
+    "work": "철골 현장 세우기 기본 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      571,
+      572
+    ],
+    "inputs": [
+      {
+        "name": "building_height",
+        "type": "enum",
+        "allowed_values": [
+          "6층 미만",
+          "20층 미만",
+          "30층 미만",
+          "40층 미만",
+          "40층 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "건물의 층수 기준은 무엇입니까?",
+        "source": "PDF 571쪽 p627-t0 열 이름"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "철골 세우기 물량은 몇 ton입니까?",
+        "source": "PDF 571쪽 p627-t0 단위 (ton당)"
+      },
+      {
+        "name": "site_condition",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "자재의 진출입이 어렵고, 작업공간이 협소한 현장(도심지 등)입니까?",
+        "source": "PDF 571쪽 [주] ④"
+      },
+      {
+        "name": "is_special_structure",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "발전소, 공항터미널 등 특수구조물 또는 50층 이상(또는 150M 이상)의 초고층건물입니까?",
+        "source": "PDF 571쪽 ⑥ 현장세우기 보정 ※"
+      },
+      {
+        "name": "apply_correction",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장세우기 보정(K1=a×b×c×d)을 적용합니까?",
+        "source": "PDF 571쪽 ⑥ 현장세우기 보정"
+      },
+      {
+        "name": "steel_per_sqm",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "kg/㎡",
+        "required": true,
+        "ask": "㎡당 강재사용량은 얼마입니까? (보정치 a 산출용)",
+        "source": "PDF 571쪽 ⑥ 현장세우기 보정 a"
+      },
+      {
+        "name": "total_steel",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "강재총사용량은 얼마입니까? (보정치 b 산출용)",
+        "source": "PDF 571쪽 ⑥ 현장세우기 보정 b"
+      },
+      {
+        "name": "height_m",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "건물 높이는 몇 m입니까? (보정치 c 산출용)",
+        "source": "PDF 571쪽 ⑥ 현장세우기 보정 c"
+      },
+      {
+        "name": "span_area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "스판평균면적은 몇 ㎡입니까? (보정치 d 산출용)",
+        "source": "PDF 571쪽 ⑥ 현장세우기 보정 d"
+      },
+      {
+        "name": "span_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "간사이(Span) 길이는 몇 m입니까?",
+        "source": "PDF 572쪽 <표･d> 하단 ※"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p627-t0",
+        "role": "현장 세우기 기본 품",
+        "source": "PDF 571쪽 1-2-1 현장 세우기 표",
+        "unit": "인/ton",
+        "values": {
+          "철골공": {
+            "6층 미만": "0.33",
+            "20층 미만": "0.44",
+            "30층 미만": "0.52",
+            "40층 미만": "0.59",
+            "40층 이상": "0.65"
+          },
+          "비계공": {
+            "6층 미만": "0.14",
+            "20층 미만": "0.18",
+            "30층 미만": "0.22",
+            "40층 미만": "0.24",
+            "40층 이상": "0.27"
+          },
+          "특별인부": {
+            "6층 미만": "0.07",
+            "20층 미만": "0.09",
+            "30층 미만": "0.11",
+            "40층 미만": "0.12",
+            "40층 이상": "0.14"
+          }
+        },
+        "cite": {
+          "table_id": "p627-t0"
+        }
+      },
+      {
+        "id": "p627-t1",
+        "role": "재료량 참고",
+        "source": "PDF 571쪽 [주] ⑤ 재료량 표",
+        "unit": "본/ton",
+        "values": {
+          "보통볼트": {
+            "규격 가조임": "가조임",
+            "단위 본": "본",
+            "수량 20.0": "20.0",
+            "비고 손율 4%": "손율 4%"
+          }
+        },
+        "cite": {
+          "table_id": "p627-t1"
+        }
+      },
+      {
+        "id": "p627-t2",
+        "role": "보정치 a (6층 미만, 50~80미만)",
+        "source": "PDF 571쪽 <표･a-1>",
+        "unit": "무차원",
+        "values": {
+          "보정치(a)": {
+            "50\n미만": "1.3",
+            "50이상\n55미만": "1.26",
+            "55이상\n60미만": "1.22",
+            "60이상\n65미만": "1.18",
+            "65이상\n70미만": "1.14",
+            "70이상\n80미만": "1.1"
+          }
+        },
+        "cite": {
+          "table_id": "p627-t2"
+        }
+      },
+      {
+        "id": "p627-t3",
+        "role": "보정치 a (6층 미만, 80이상~250미만)",
+        "source": "PDF 571쪽 <표･a-1> 하단",
+        "unit": "무차원",
+        "values": {
+          "보정치(a)": {
+            "80이상\n90미만": "1.05",
+            "90이상\n110미만": "1.0",
+            "110이상\n130미만": "0.95",
+            "130이상\n150미만": "0.89",
+            "150이상\n190미만": "0.84",
+            "190이상\n250미만": "0.77"
+          }
+        },
+        "cite": {
+          "table_id": "p627-t3"
+        }
+      },
+      {
+        "id": "p627-t4",
+        "role": "보정치 a (6층 이상)",
+        "source": "PDF 571쪽 <표･a-2>",
+        "unit": "무차원",
+        "values": {
+          "보정치(a)": {
+            "40": "1.06",
+            "50": "1.03",
+            "60": "1.00",
+            "70": "0.97",
+            "80": "0.94",
+            "90": "0.91",
+            "100": "0.88",
+            "110": "0.85",
+            "120": "0.82",
+            "130": "0.79"
+          }
+        },
+        "cite": {
+          "table_id": "p627-t4"
+        }
+      },
+      {
+        "id": "p628-t0",
+        "role": "보정치 b (6층 미만)",
+        "source": "PDF 572쪽 <표･b-1>",
+        "unit": "무차원",
+        "values": {
+          "보정치(b)": {
+            "10\n미만": "1.34",
+            "10이상\n15미만": "1.3",
+            "15이상\n20미만": "1.26",
+            "20이상\n30미만": "1.22",
+            "30이상\n50미만": "1.18",
+            "50이상\n80미만": "1.14",
+            "80이상\n150미만": "1.1",
+            "150이상\n250미만": "1.05",
+            "250이상\n500미만": "1.0",
+            "500 이상\n1,000미만": "0.95",
+            "1,000\n이상": "0.89"
+          }
+        },
+        "cite": {
+          "table_id": "p628-t0"
+        }
+      },
+      {
+        "id": "p628-t1",
+        "role": "보정치 b (6층 이상, 40~400)",
+        "source": "PDF 572쪽 <표･b-2>",
+        "unit": "무차원",
+        "values": {
+          "보정치(b)": {
+            "이하": "1.3",
+            "50": "1.26",
+            "60": "1.24",
+            "70": "1.22",
+            "80": "1.21",
+            "90": "1.20",
+            "100": "1.19",
+            "200": "1.045",
+            "300": "1.02",
+            "400": "1.008"
+          }
+        },
+        "cite": {
+          "table_id": "p628-t1"
+        }
+      },
+      {
+        "id": "p628-t2",
+        "role": "보정치 b (6층 이상, 500~1400)",
+        "source": "PDF 572쪽 <표･b-2> 하단",
+        "unit": "무차원",
+        "values": {
+          "보정치(b)": {
+            "500": "1.00",
+            "600": "0.995",
+            "700": "0.991",
+            "800": "0.989",
+            "900": "0.987",
+            "1,000": "0.985",
+            "1,100": "0.984",
+            "1,200": "0.983",
+            "1,300": "0.982",
+            "1,400": "0.981"
+          }
+        },
+        "cite": {
+          "table_id": "p628-t2"
+        }
+      },
+      {
+        "id": "p628-t3",
+        "role": "보정치 c (6층 이상)",
+        "source": "PDF 572쪽 <표･c>",
+        "unit": "무차원",
+        "values": {
+          "보정치(c)": {
+            "50m": "1.045",
+            "45": "1.038",
+            "40": "1.030",
+            "35": "1.023",
+            "30": "1.015",
+            "25": "1.008",
+            "20": "1.000",
+            "15": "0.993",
+            "10": "0.985",
+            "5": "0.978"
+          }
+        },
+        "cite": {
+          "table_id": "p628-t3"
+        }
+      },
+      {
+        "id": "p628-t4",
+        "role": "보정치 d (6층 이상)",
+        "source": "PDF 572쪽 <표･d>",
+        "unit": "무차원",
+        "values": {
+          "보정치(d)": {
+            "20㎡\n(16-25)": "1.98",
+            "30\n(26-35)": "1.43",
+            "40\n(36-45)": "1.16",
+            "50\n(46-55)": "0.99",
+            "60\n(56-65)": "0.88",
+            "70\n(66-75)": "0.80",
+            "80\n(76-85)": "0.74"
+          }
+        },
+        "cite": {
+          "table_id": "p628-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p627-t0",
+          "row_input": "직종별",
+          "column_input": "building_height",
+          "trades": [
+            "철골공",
+            "비계공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "site_condition": true
+            },
+            "rate": "0.2",
+            "applies_to": [
+              "철골공",
+              "비계공",
+              "특별인부"
+            ],
+            "source": "PDF 571쪽 [주] ④"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "apply_correction": true
+            },
+            "change": "표준단가에 보정계수 K1(a×b×c×d)을 곱함. a, b, c, d는 6층 미만/이상 여부와 각 입력값에 따라 표 또는 수식으로 산출",
+            "source": "PDF 571쪽 ⑥ 현장세우기 보정"
+          }
+        ]
+      },
+      "steps": [
+        "p627-t0에서 건물 층수에 따른 직종별 단위당 품을 고른다.",
+        "물량(quantity)을 곱해 총 품을 구한다.",
+        "site_condition이 true이면 20% 할증을 적용한다.",
+        "apply_correction이 true이면 보정계수 K1을 산출하여 곱한다."
+      ],
+      "source": "PDF 571쪽 1-2-1 현장 세우기",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "특수구조물 또는 50층 이상(150M 이상) 초고층건물",
+        "blocked_if": {
+          "input": "is_special_structure",
+          "op": "==",
+          "value": true
+        },
+        "reason": "발전소, 공항터미널 등과 같은 특수구조물과 50층 이상(또는 150M 이상)의 초고층건물 현장세우기는 별도 계상함",
+        "source": "PDF 571쪽 ⑥ 현장세우기 보정 ※",
+        "cite": {
+          "chunk_id": "p627-x8",
+          "quote": "※ 발전소, 공항터미널 등과 같은 특수구조물과 50층 이상(또는 150M 이상)의 초고층건물 현장세우기는\n설명 | 별도 계상한다."
+        }
+      },
+      {
+        "condition": "간사이(Span)가 10m 초과",
+        "blocked_if": {
+          "input": "span_length",
+          "op": ">",
+          "value": 10
+        },
+        "reason": "스판평균면적에 따른 보정치 표는 간사이(Span)가 10m 이하인 경우에만 적용됨",
+        "source": "PDF 572쪽 <표･d> 하단 ※",
+        "cite": {
+          "chunk_id": "p628-x14",
+          "quote": "※ 본 표는 간사이(Span)가 10m 이하인 경우임"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "타워크레인의 가설･이동･해체에 소요되는 품",
+        "source": "PDF 571쪽 [주] ③",
+        "cite": {
+          "chunk_id": "p627-x4",
+          "quote": "③ 타워크레인의 가설･이동･해체에 소요되는 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(ton)당 직종별 인원이 표에 직접 제시되어 있으며, 물량에 이를 곱하고 할증 및 보정계수를 적용하는 방식이므로 per_unit이 적합하다.",
+  "citations": [
+    {
+      "table_id": "p627-t0",
+      "row": "철골공",
+      "column": "6층 미만",
+      "value": "0.33"
+    },
+    {
+      "table_id": "p627-t1",
+      "row": "보통볼트",
+      "column": "규격 가조임",
+      "value": "가조임"
+    },
+    {
+      "table_id": "p627-t2",
+      "row": "보정치(a)",
+      "column": "50\n미만",
+      "value": "1.3"
+    },
+    {
+      "table_id": "p627-t3",
+      "row": "보정치(a)",
+      "column": "80이상\n90미만",
+      "value": "1.05"
+    },
+    {
+      "table_id": "p627-t4",
+      "row": "보정치(a)",
+      "column": "40",
+      "value": "1.06"
+    },
+    {
+      "table_id": "p628-t0",
+      "row": "보정치(b)",
+      "column": "10\n미만",
+      "value": "1.34"
+    },
+    {
+      "table_id": "p628-t1",
+      "row": "보정치(b)",
+      "column": "이하",
+      "value": "1.3"
+    },
+    {
+      "table_id": "p628-t2",
+      "row": "보정치(b)",
+      "column": "500",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p628-t3",
+      "row": "보정치(c)",
+      "column": "50m",
+      "value": "1.045"
+    },
+    {
+      "table_id": "p628-t4",
+      "row": "보정치(d)",
+      "column": "20㎡\n(16-25)",
+      "value": "1.98"
+    },
+    {
+      "chunk_id": "p627-x4",
+      "quote": "④ 자재의 진출입이 어렵고, 작업공간이 협소한 현장(도심지 등)에서는 본 품의 20%를 할증하여 적용\n설명 | 한다."
+    },
+    {
+      "chunk_id": "p627-x8",
+      "quote": "⑥ 현장세우기 보정 ※ 현장조립비=표준단가×K1(보정계수 K1=a×b×c×d)"
+    },
+    {
+      "chunk_id": "p627-x14",
+      "quote": "a=1＋(60-N)×0.003, N : ㎡당 강재사용량(㎏/㎡)"
+    },
+    {
+      "chunk_id": "p628-x2",
+      "quote": "100ton이하 b=1.12＋7/T, 100ton이상 b=0.97＋15/T"
+    },
+    {
+      "chunk_id": "p628-x9",
+      "quote": "c=1＋(0.5H-10)×0.003, H : 건물높이"
+    },
+    {
+      "chunk_id": "p628-x12",
+      "quote": "d=33/S＋0.33, S : 스판 평균면적(㎡)"
+    }
+  ],
+  "open_questions": [
+    "보정계수 K1을 산출할 때, 6층 이상인 경우의 수식(a, b, c, d) 계산 결과의 소수점 처리 기준이 명시되어 있지 않음."
+  ],
+  "questions": [
+    "도심지 현장이라 작업공간이 좁은데 할증이 있나요?",
+    "6층 이상 건물에서 강재사용량에 따른 보정치 a를 계산할 때 소수점 몇째 자리까지 적용해야 하나요?",
+    "건물 층수가 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:47:27.718607+00:00",
+    "input_tokens": 29745,
+    "output_tokens": 11634,
+    "source_pages": [
+      627,
+      628,
+      629
+    ],
+    "prompt_sha256": "d142a096bdcbba9cb54153d7643f1e396133e4c2a704c6db499a282e35908a22",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

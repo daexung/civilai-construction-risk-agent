@@ -1,0 +1,169 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/1-2-18/방풍벽설치",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "1-2-18",
+    "title": "방풍벽 설치(거적세우기)",
+    "work": "방풍벽 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      866
+    ],
+    "inputs": [
+      {
+        "name": "height",
+        "type": "enum",
+        "allowed_values": [
+          "설치높이 0.45m",
+          "설치높이 0.9m"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "방풍벽 설치 높이는 얼마입니까?",
+        "source": "PDF 866쪽 1-2-18 표",
+        "synonyms": {
+          "설치높이 0.45m": [
+            "0.45m",
+            "0.45"
+          ],
+          "설치높이 0.9m": [
+            "0.9m",
+            "0.9"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "방풍벽 설치 물량은 몇 m입니까?",
+        "source": "PDF 866쪽 1-2-18 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p922-t0",
+        "role": "방풍벽 설치 일당 시공량 및 인력",
+        "source": "PDF 866쪽 1-2-18 표",
+        "unit": "인/일, m/일",
+        "values": {
+          "조경공": {
+            "수량": "2",
+            "설치높이 0.45m": "350",
+            "설치높이 0.9m": "250"
+          },
+          "보통인부": {
+            "수량": "1",
+            "설치높이 0.45m": "350",
+            "설치높이 0.9m": "250"
+          }
+        },
+        "cite": {
+          "table_id": "p922-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p922-t0",
+          "row": "조경공",
+          "column_input": "height"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p922-t0",
+          "column": "수량",
+          "trades": [
+            "조경공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "조경공": "1016",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p922-t0에서 설치높이에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 수량으로 구한다."
+      ],
+      "source": "PDF 866쪽 1-2-18 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "지지대, 지지철선, 거적 등 재료비",
+        "source": "PDF 866쪽 1-2-18 [주] ②",
+        "cite": {
+          "chunk_id": "p922-x3",
+          "quote": "본 품은 지지대 및 지지철선 설치, 거적 설치, 고정 및 마무리 작업을 포함한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(조경공 2인, 보통인부 1인)가 설치높이에 따라 정해진 일일시공량(350m 또는 250m)을 수행하는 전형적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p922-t0",
+      "row": "조경공",
+      "column": "설치높이 0.45m",
+      "value": "350"
+    },
+    {
+      "table_id": "p922-t0",
+      "row": "조경공",
+      "column": "설치높이 0.9m",
+      "value": "250"
+    },
+    {
+      "table_id": "p922-t0",
+      "row": "조경공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p922-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p922-x3",
+      "quote": "본 품은 지지대 및 지지철선 설치, 거적 설치, 고정 및 마무리 작업을 포함한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "방풍벽 설치 높이가 0.45m일 때 일일 시공량은 얼마인가요?",
+    "방풍벽 설치 시 거적이나 지지대 등의 재료비는 품셈에 포함되어 있나요?",
+    "방풍벽을 설치할 총 물량(m)이 입력되지 않았습니다. 몇 m를 시공하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:33:12.614650+00:00",
+    "input_tokens": 11585,
+    "output_tokens": 1600,
+    "source_pages": [
+      922,
+      923
+    ],
+    "prompt_sha256": "977f280db21d04969523102f516b67ac13ee884963c3da94bd9b36691be4b07c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

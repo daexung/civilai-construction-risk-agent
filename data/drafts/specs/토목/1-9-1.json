@@ -1,0 +1,391 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-9-1/방음벽설치",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-9-1",
+    "title": "방음벽 설치('08, '17, '21년 보완)",
+    "work": "방음벽 설치 (앵커볼트, 지주, 방음판)",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      384,
+      385
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "앵커볼트 설치",
+          "지주설치",
+          "방음판 설치"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까?",
+        "source": "PDF 328쪽 1-9-1 방음벽 설치 작업 구분"
+      },
+      {
+        "name": "anchor_type",
+        "type": "enum",
+        "allowed_values": [
+          "매설앵커볼트(L형)",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "앵커볼트의 종류는 무엇입니까?",
+        "source": "PDF 328쪽 1. 앵커볼트 설치 [주] ①"
+      },
+      {
+        "name": "post_method",
+        "type": "enum",
+        "allowed_values": [
+          "매설앵커방식",
+          "기타"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지주를 세우는 방식은 무엇입니까?",
+        "source": "PDF 328쪽 2. 지주설치 [주] ①"
+      },
+      {
+        "name": "post_height",
+        "type": "enum",
+        "allowed_values": [
+          "3m 이하",
+          "7m 이하",
+          "9m 이하",
+          "11m 이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지주높이는 얼마입니까?",
+        "source": "PDF 328쪽 2. 지주설치 표"
+      },
+      {
+        "name": "post_spacing",
+        "type": "enum",
+        "allowed_values": [
+          "2m",
+          "3m",
+          "4m"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지주 간격은 얼마입니까?",
+        "source": "PDF 328쪽 2. 지주설치 표"
+      },
+      {
+        "name": "panel_area",
+        "type": "enum",
+        "allowed_values": [
+          "1㎡ 이하",
+          "2㎡ 이하",
+          "3㎡ 이하",
+          "4㎡ 이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "방음벽 개당 면적은 얼마입니까?",
+        "source": "PDF 328쪽 3. 방음판 설치 표"
+      },
+      {
+        "name": "high_altitude_vehicle_needed",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "고가도로 등 현장여건에 따라 고소작업차가 필요합니까?",
+        "source": "PDF 328쪽 2. 지주설치 [주] ③"
+      },
+      {
+        "name": "anchor_quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "앵커볼트 설치 수량은 몇 개입니까?",
+        "source": "PDF 328쪽 1. 앵커볼트 설치 표 단위"
+      },
+      {
+        "name": "post_quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "지주설치 수량은 몇 개소입니까?",
+        "source": "PDF 328쪽 2. 지주설치 표 단위"
+      },
+      {
+        "name": "panel_quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "방음판 설치 수량은 몇 개입니까?",
+        "source": "PDF 328쪽 3. 방음판 설치 표 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p384-t0",
+        "role": "앵커볼트 설치 일당 시공량 및 작업조",
+        "source": "PDF 328쪽 1. 앵커볼트 설치",
+        "unit": "인, 개",
+        "values": {
+          "철공": {
+            "수량": "2",
+            "시공량(개)": "40"
+          },
+          "보통인부": {
+            "수량": "1",
+            "시공량(개)": "40"
+          }
+        },
+        "cite": {
+          "table_id": "p384-t0"
+        }
+      },
+      {
+        "id": "p384-t1",
+        "role": "지주설치 일당 시공량",
+        "source": "PDF 328쪽 2. 지주설치",
+        "unit": "개소",
+        "values": {
+          "3m 이하": {
+            "2m": "23",
+            "3m": "22",
+            "4m": "21"
+          },
+          "7m 이하": {
+            "2m": "20",
+            "3m": "19",
+            "4m": "18"
+          },
+          "9m 이하": {
+            "2m": "17",
+            "3m": "-",
+            "4m": "-"
+          },
+          "11m 이하": {
+            "2m": "13",
+            "3m": "-",
+            "4m": "-"
+          }
+        },
+        "cite": {
+          "table_id": "p384-t1"
+        }
+      },
+      {
+        "id": "p384-t2",
+        "role": "방음판 설치 일당 시공량",
+        "source": "PDF 328쪽 3. 방음판 설치",
+        "unit": "개",
+        "values": {
+          "3m이하": {
+            "1㎡ 이하": "109",
+            "2㎡ 이하": "87",
+            "3㎡ 이하": "85",
+            "4㎡ 이하": "72"
+          },
+          "5m이하": {
+            "1㎡ 이하": "138",
+            "2㎡ 이하": "121",
+            "3㎡ 이하": "111",
+            "4㎡ 이하": "77"
+          },
+          "7m이하": {
+            "1㎡ 이하": "129",
+            "2㎡ 이하": "103",
+            "3㎡ 이하": "90",
+            "4㎡ 이하": "-"
+          },
+          "9m이하": {
+            "1㎡ 이하": "119",
+            "2㎡ 이하": "95",
+            "3㎡ 이하": "-",
+            "4㎡ 이하": "-"
+          },
+          "11m이하": {
+            "1㎡ 이하": "108",
+            "2㎡ 이하": "86",
+            "3㎡ 이하": "-",
+            "4㎡ 이하": "-"
+          }
+        },
+        "cite": {
+          "table_id": "p384-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "작업 종류(앵커볼트, 지주, 방음판)에 따라 적용할 표와 작업조가 다릅니다.",
+        "선택한 작업의 표에서 조건에 맞는 일당 시공량을 찾습니다.",
+        "물량을 일당 시공량으로 나누어 작업일수를 구하고, 해당 작업조 인원 및 장비 대수를 곱하여 산정합니다."
+      ],
+      "source": "PDF 328쪽 1-9-1 방음벽 설치",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "anchor_type != 매설앵커볼트(L형)",
+        "blocked_if": {
+          "input": "anchor_type",
+          "op": "!=",
+          "value": "매설앵커볼트(L형)"
+        },
+        "reason": "매설앵커볼트(L형) 기준이며, 시공방법이 다를 경우 별도 계상",
+        "source": "PDF 328쪽 1. 앵커볼트 설치 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p384-x4",
+            "quote": "본 품은 매설앵커볼트(L형)를 기준한 것이며, 이와 시공방법이 다를 경우에는 별도로 계상한다."
+          }
+        ]
+      },
+      {
+        "condition": "post_method != 매설앵커방식",
+        "blocked_if": {
+          "input": "post_method",
+          "op": "!=",
+          "value": "매설앵커방식"
+        },
+        "reason": "매설앵커방식으로 지주를 세울 경우 기준이며, 시공방법이 다를 경우 별도 계상",
+        "source": "PDF 328쪽 2. 지주설치 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p384-x15",
+            "quote": "본 품은 매설앵커방식으로 지주를 세울 경우에 적용하며, 이와 시공방법이 다를 경우에는 별도로 계상한다."
+          }
+        ]
+      },
+      {
+        "condition": "high_altitude_vehicle_needed == true",
+        "blocked_if": {
+          "input": "high_altitude_vehicle_needed",
+          "op": "==",
+          "value": true
+        },
+        "reason": "고가도로 등 현장여건에 따라 고소작업차가 필요한 경우 추가 계상 가능하나, 본 명세에서는 자동 계산하지 않음",
+        "source": "PDF 328쪽 2. 지주설치 [주] ③",
+        "cite": [
+          {
+            "chunk_id": "p384-x15",
+            "quote": "고가도로 등 현장여건에 따라 고소작업차가 필요한 경우, 추가 계상이 가능하다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": [
+          {
+            "chunk_id": "p384-x4",
+            "quote": "공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+          },
+          {
+            "chunk_id": "p384-x15",
+            "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+          },
+          {
+            "chunk_id": "p385-x0",
+            "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "앵커볼트, 지주, 방음판 설치 등 세 가지 독립된 작업의 일당 시공량과 작업조가 각각 달라 단일 모델로 통합 계산하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p384-t0",
+      "row": "철공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p384-t0",
+      "row": "철공",
+      "column": "시공량(개)",
+      "value": "40"
+    },
+    {
+      "table_id": "p384-t1",
+      "row": "3m 이하",
+      "column": "2m",
+      "value": "23"
+    },
+    {
+      "table_id": "p384-t2",
+      "row": "3m이하",
+      "column": "1㎡ 이하",
+      "value": "109"
+    },
+    {
+      "chunk_id": "p384-x4",
+      "quote": "본 품은 매설앵커볼트(L형)를 기준한 것이며, 이와 시공방법이 다를 경우에는 별도로 계상한다."
+    },
+    {
+      "chunk_id": "p384-x15",
+      "quote": "본 품은 매설앵커방식으로 지주를 세울 경우에 적용하며, 이와 시공방법이 다를 경우에는 별도로 계상한다."
+    },
+    {
+      "chunk_id": "p384-x15",
+      "quote": "고가도로 등 현장여건에 따라 고소작업차가 필요한 경우, 추가 계상이 가능하다."
+    },
+    {
+      "chunk_id": "p384-x4",
+      "quote": "공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p384-x15",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p385-x0",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "지주설치와 방음판 설치 표에서 지주높이에 따른 작업조 인원 및 장비 대수 배분이 병합된 셀로 인해 명확하지 않아, 정확한 매핑을 위해 추가 확인이 필요합니다.",
+    "세 가지 작업(앵커볼트, 지주, 방음판)이 하나의 절에 묶여 있어, 단일 계산 모델로 처리하기 어렵습니다."
+  ],
+  "questions": [
+    "방음벽 지주설치 시 지주높이가 3m이고 간격이 2m일 때 시공량은 얼마인가요?",
+    "고가도로에서 방음벽 지주를 설치할 때 고소작업차 품은 어떻게 계상하나요?",
+    "방음판 설치 시 방음벽 개당 면적은 어떻게 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:42:01.312460+00:00",
+    "input_tokens": 14185,
+    "output_tokens": 3929,
+    "source_pages": [
+      384,
+      385,
+      386
+    ],
+    "prompt_sha256": "0445214302524d6e37972b4bb91d8986239786ed23f3b7ef0bc78fc3e898d1a3",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

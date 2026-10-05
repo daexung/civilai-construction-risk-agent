@@ -1,0 +1,292 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-10/소파보수",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-10",
+    "title": "소파보수(도로복구)",
+    "work": "소파보수 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      879,
+      880
+    ],
+    "inputs": [
+      {
+        "name": "site_type",
+        "type": "enum",
+        "allowed_values": [
+          "A Type",
+          "B Type",
+          "C Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건별 적용기준(포장 시공시간 및 작업구간 상태)에 따라 A, B, C Type 중 어디에 해당합니까?",
+        "decision_table": "p935-t4",
+        "source": "PDF 879쪽 p935-t4 현장 여건별 적용기준 표",
+        "synonyms": {
+          "A Type": [
+            "A-Type",
+            "A타입"
+          ],
+          "B Type": [
+            "B-Type",
+            "B타입"
+          ],
+          "C Type": [
+            "C-Type",
+            "C타입"
+          ]
+        }
+      },
+      {
+        "name": "area_per_location",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "개소별 평균 시공면적은 몇 ㎡입니까?",
+        "source": "PDF 880쪽 p936-t0, p936-t1, p936-t2 시공량 할증계수 표"
+      },
+      {
+        "name": "total_area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "총 시공면적(물량)은 몇 ㎡입니까?",
+        "source": "일당 작업조형 계산을 위한 총 물량"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p935-t2",
+        "role": "Type별 작업조 인원, 장비 대수 및 기준 시공량",
+        "source": "PDF 879쪽 2-1-10 소파보수 표",
+        "unit": "인, 대, ㎡",
+        "values": {
+          "포장공": {
+            "A-Type 수량": "4",
+            "B-Type 수량": "4",
+            "C-Type 수량": "4",
+            "A-Type 시공량(㎡)": "85",
+            "B-Type 시공량(㎡)": "35",
+            "C-Type 시공량(㎡)": "15"
+          },
+          "보통인부": {
+            "A-Type 수량": "2",
+            "B-Type 수량": "2",
+            "C-Type 수량": "2"
+          },
+          "굴착기+대형브레이커": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "로더(타이어)": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "커터(콘크리트 및 아스팔트용)": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "진동롤러(진동+타이어)": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1"
+          },
+          "진동롤러(핸드가이드식)": {
+            "C-Type 수량": "1"
+          },
+          "플레이트콤팩터": {
+            "C-Type 수량": "1"
+          },
+          "아스팔트스프레이어": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "트럭": {
+            "A-Type 수량": "2",
+            "B-Type 수량": "2",
+            "C-Type 수량": "2"
+          }
+        },
+        "cite": {
+          "table_id": "p935-t2"
+        }
+      },
+      {
+        "id": "p935-t4",
+        "role": "현장 여건별 적용기준 (Type 판정)",
+        "source": "PDF 879쪽 현장 여건별 적용기준 표",
+        "values": {
+          "A Type": {
+            "포장 시공시간": "7시간 이상",
+            "적용기준": "- 보수 개소가 작업구간에 밀집(연결)되어, 운반장비를 활용한 시공 장비의 이동 및 작업대기로 인한 포장 시공시간 손실이 미미한 경우"
+          },
+          "B Type": {
+            "포장 시공시간": "5시간 이상",
+            "적용기준": "- 보수 개소가 작업구간에 부분적으로 산재하여, 운반장비를 활용한 시공 장비의 이동 및 작업대기가 발생되는 경우"
+          },
+          "C Type": {
+            "포장 시공시간": "3시간 이상",
+            "적용기준": "- 보수 개소가 작업구간에 산발적으로 발생하여, 운반장비를 활용한 시공 장비의 이동 및 작업대기가 빈번히 발생되는 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p935-t4"
+        }
+      },
+      {
+        "id": "p936-t0",
+        "role": "A-Type 시공량 할증계수",
+        "source": "PDF 880쪽 A-Type 일당 작업 개소별 평균 시공면적 표",
+        "unit": "무차원",
+        "values": {
+          "시공량 할증계수": {
+            "6㎡ 이하": "0.89",
+            "12㎡ 이하": "0.94",
+            "24㎡ 이하": "1.00",
+            "36㎡ 이하": "1.06",
+            "36㎡ 초과": "1.13"
+          }
+        },
+        "cite": {
+          "table_id": "p936-t0"
+        }
+      },
+      {
+        "id": "p936-t1",
+        "role": "B-Type 시공량 할증계수",
+        "source": "PDF 880쪽 B-Type 일당 작업 개소별 평균 시공면적 표",
+        "unit": "무차원",
+        "values": {
+          "시공량 할증계수": {
+            "4㎡ 이하": "0.89",
+            "8㎡ 이하": "0.94",
+            "16㎡ 이하": "1.00",
+            "24㎡ 이하": "1.06",
+            "24㎡ 초과": "1.13"
+          }
+        },
+        "cite": {
+          "table_id": "p936-t1"
+        }
+      },
+      {
+        "id": "p936-t2",
+        "role": "C-Type 시공량 할증계수",
+        "source": "PDF 880쪽 C-Type 일당 작업 개소별 평균 시공면적 표",
+        "unit": "무차원",
+        "values": {
+          "시공량 할증계수": {
+            "2㎡ 이하": "0.89",
+            "4㎡ 이하": "0.94",
+            "8㎡ 이하": "1.00",
+            "12㎡ 이하": "1.06",
+            "12㎡ 초과": "1.13"
+          }
+        },
+        "cite": {
+          "table_id": "p936-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p935-t4를 참조하여 현장 여건에 따른 Type(A, B, C)을 결정한다.",
+        "p935-t2에서 해당 Type의 기준 시공량과 작업조 인원/장비 대수를 찾는다.",
+        "결정된 Type에 따라 p936-t0(A), p936-t1(B), p936-t2(C) 중 하나를 선택하여 개소별 평균 시공면적에 해당하는 시공량 할증계수를 찾는다.",
+        "일당시공량 = 기준 시공량 × 시공량 할증계수",
+        "작업일수 = 총 시공면적 ÷ 일당시공량",
+        "직종별 인·일 및 장비 대·일 = 작업일수 × 작업조 투입량"
+      ],
+      "source": "PDF 879~880쪽 2-1-10 소파보수 전체",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "공사 시방에 따라 장비 조합을 변경하는 경우",
+        "reason": "원문에 장비 조합을 변경할 수 있다고 명시되어 있으나, 변경 기준이 구체적으로 제시되지 않아 자동 계산 불가",
+        "source": "PDF 879쪽 [주] ⑥",
+        "cite": {
+          "chunk_id": "p936-x3",
+          "quote": "⑥ 작업시 공사 시방에 따라 장비 조합을 변경할 수 있다."
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "현장 여건(A, B, C Type)에 따라 시공량 할증계수를 찾는 면적 구간 기준표가 달라져, 단일 입력으로 여러 표를 조건부 참조해야 하므로 현재의 adjusted_daily_crew 모델로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p935-t4",
+      "row": "A Type",
+      "column": "포장 시공시간",
+      "value": "7시간 이상"
+    },
+    {
+      "table_id": "p936-t0",
+      "row": "시공량 할증계수",
+      "column": "일당 작업 개소별 평균 시공면적 6㎡ 이하",
+      "value": "0.89"
+    },
+    {
+      "table_id": "p936-t1",
+      "row": "시공량 할증계수",
+      "column": "일당 작업 개소별 평균 시공면적 4㎡ 이하",
+      "value": "0.89"
+    },
+    {
+      "table_id": "p936-t2",
+      "row": "시공량 할증계수",
+      "column": "일당 작업 개소별 평균 시공면적 2㎡ 이하",
+      "value": "0.89"
+    },
+    {
+      "table_id": "p935-t2",
+      "row": "포장공 보통인부",
+      "column": "A-Type 수량",
+      "value": "4"
+    },
+    {
+      "chunk_id": "p936-x3",
+      "quote": "⑥ 작업시 공사 시방에 따라 장비 조합을 변경할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "시공량 할증계수 표가 A, B, C Type별로 면적 구간이 다르게 설정되어 있어, 이를 하나의 입력 변수로 받아 처리하기 위한 로직 확장이 필요합니다."
+  ],
+  "questions": [
+    "소파보수 작업 시 현장 여건이 B Type이고 개소별 평균 시공면적이 10㎡일 때 시공량 할증계수는 얼마인가요?",
+    "현장 여건 Type을 결정할 때 '포장 시공시간'에서 제외되는 시간은 구체적으로 어떤 것들이 있나요?",
+    "공사 시방에 따라 장비 조합을 변경할 경우, 품셈 계산은 어떻게 조정해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:45:59.943176+00:00",
+    "input_tokens": 13780,
+    "output_tokens": 3211,
+    "source_pages": [
+      935,
+      936,
+      937
+    ],
+    "prompt_sha256": "33d68613c0dcac06d2bcd5f36f8d7f1f286cb08f27afa26344f4e3e5eec09e7c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-2-4/터파기(기계)",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-2-4",
+    "title": "터파기(기계)('25년 신설)",
+    "work": "터파기(기계) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      125,
+      126
+    ],
+    "inputs": [
+      {
+        "name": "soil_type",
+        "type": "enum",
+        "allowed_values": [
+          "보통토사",
+          "혼합토사",
+          "암"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질은 무엇입니까?",
+        "source": "PDF 125쪽 가. 보통토사, 126쪽 나. 혼합토사, 다. 암"
+      },
+      {
+        "name": "rock_type",
+        "type": "enum",
+        "allowed_values": [
+          "풍화암",
+          "연암",
+          "보통암",
+          "경암"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "암분류는 무엇입니까? (토질이 암인 경우)",
+        "source": "PDF 126쪽 p126-t1"
+      },
+      {
+        "name": "type_class",
+        "type": "enum",
+        "allowed_values": [
+          "TypeⅠ",
+          "TypeⅡ",
+          "TypeⅢ"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "규격 구분(Type)은 무엇입니까? 현장조건을 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p125-t3",
+        "source": "PDF 125쪽 p125-t3"
+      },
+      {
+        "name": "water_issue",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "용수 발생으로 인해 터파기 작업에 지장이 발생합니까?",
+        "source": "PDF 125쪽 p125-t4 비고, 126쪽 p126-t1 비고"
+      },
+      {
+        "name": "depth_over_5m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "굴착 깊이가 5m를 초과합니까?",
+        "source": "PDF 125쪽 p125-t4 비고"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "터파기 물량(자연상태 토량)은 몇 ㎥입니까?",
+        "source": "PDF 125쪽 4. 체적환산 계수를 기 반영한 것으로 자연상태의 토량에 적용한다."
+      },
+      {
+        "name": "ripper_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질이 견고하여 리퍼 작업이 병행 시공됩니까? (혼합토사인 경우)",
+        "source": "PDF 126쪽 [주] ① ㉮"
+      },
+      {
+        "name": "urban_narrow",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도심지/주택가 지역에서 상하수도 관로부설 등의 공사시 작업장소가 협소하고 지하매설물 등으로 인하여 작업이 현저하게 저하됩니까?",
+        "source": "PDF 125쪽 ※도심지/주택가 지역에서..."
+      }
+    ],
+    "tables": [
+      {
+        "id": "p125-t3",
+        "role": "규격 구분 적용기준",
+        "source": "PDF 125쪽 3. 규격 구분은 다음에 준하여 적용한다.",
+        "values": {
+          "TypeⅠ": {
+            "적용기준": "- 지반 및 현장조건이 일반적인 경우"
+          },
+          "TypeⅡ": {
+            "적용기준": "- 지장물, 가시설 등에 의해 연속작업이 곤란하며 작업방해가 발생하는 조건"
+          },
+          "TypeⅢ": {
+            "적용기준": "- 작업공간이 협소(측구 터파기 등)하여 작업효율이 현저하게 저하하는 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p125-t3"
+        }
+      },
+      {
+        "id": "p125-t4",
+        "role": "보통토사 시공량",
+        "source": "PDF 125쪽 가. 보통토사",
+        "unit": "㎥/일",
+        "values": {
+          "굴착기 1.0㎥": {
+            "TypeⅠ 시공량(㎥)": "560",
+            "TypeⅡ 시공량(㎥)": "420",
+            "TypeⅢ 시공량(㎥)": "190"
+          },
+          "굴착기 0.6㎥": {
+            "TypeⅢ 시공량(㎥)": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p125-t4"
+        }
+      },
+      {
+        "id": "p126-t0",
+        "role": "혼합토사 시공량",
+        "source": "PDF 126쪽 나. 혼합토사",
+        "unit": "㎥/일",
+        "values": {
+          "굴착기 1.0㎥": {
+            "TypeⅠ 시공량(㎥)": "390",
+            "TypeⅡ 시공량(㎥)": "300",
+            "TypeⅢ 시공량(㎥)": "150"
+          },
+          "굴착기 0.6㎥": {
+            "TypeⅢ 시공량(㎥)": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p126-t0"
+        }
+      },
+      {
+        "id": "p126-t1",
+        "role": "암 시공량",
+        "source": "PDF 126쪽 다. 암",
+        "unit": "㎥/일",
+        "values": {
+          "풍화암": {
+            "시공량(㎥) TypeⅠ": "38",
+            "시공량(㎥) TypeⅡ": "35"
+          },
+          "연암": {
+            "시공량(㎥) TypeⅠ": "30",
+            "시공량(㎥) TypeⅡ": "28"
+          },
+          "보통암": {
+            "시공량(㎥) TypeⅠ": "22",
+            "시공량(㎥) TypeⅡ": "19"
+          },
+          "경암": {
+            "시공량(㎥) TypeⅠ": "16",
+            "시공량(㎥) TypeⅡ": "14"
+          }
+        },
+        "cite": {
+          "table_id": "p126-t1"
+        }
+      },
+      {
+        "id": "p126-t2",
+        "role": "소모재료(치즐) 요율",
+        "source": "PDF 126쪽 [주] 소모재료(치즐)는 터파기 장비(굴착기) 기계경비에 다음 요율을 적용한다.",
+        "unit": "%",
+        "values": {
+          "요율": {
+            "풍화암": "1%",
+            "연암": "2%",
+            "보통암": "5%",
+            "경암": "7%"
+          }
+        },
+        "cite": {
+          "table_id": "p126-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "토질(보통토사, 혼합토사, 암)에 따라 참조해야 할 시공량 표가 다릅니다.",
+        "해당 표에서 규격 구분(Type) 및 암분류에 따른 일일 시공량을 찾습니다.",
+        "용수 발생 시 시공량을 25% 감산하고, 굴착 깊이 5m 초과 시 시공량을 9% 감산합니다.",
+        "물량을 일일 시공량으로 나누어 장비 대·일을 산출합니다."
+      ],
+      "source": "PDF 125~126쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "도심지/주택가 지역에서 작업장소가 협소하고 지하매설물 등으로 인하여 작업이 현저하게 저하되는 경우",
+        "blocked_if": {
+          "input": "urban_narrow",
+          "op": "==",
+          "value": true
+        },
+        "reason": "'[공통부문] 8-2-3 굴착기'를 적용하여 산정해야 함",
+        "source": "PDF 125쪽 ※도심지/주택가 지역에서...",
+        "cite": {
+          "chunk_id": "p125-x12",
+          "quote": "작업이 현저하게 저하되는 경우에는 ‘[공통부문] 8-2-3 굴착기’를 적용하여 산정한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "흙의 외부 반출을 위한 적재 및 운반 작업",
+        "source": "PDF 125쪽 2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다.",
+        "cite": {
+          "table_id": "p125-t3",
+          "row": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다.",
+          "column": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다.",
+          "value": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다."
+        }
+      },
+      {
+        "item": "유압식 리퍼 경비 (터파기장비 기계경비의 2%)",
+        "source": "PDF 126쪽 [주] ② 유압식 리퍼의 경비는 터파기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다.",
+        "cite": {
+          "chunk_id": "p126-x2",
+          "quote": "② 유압식 리퍼의 경비는 터파기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다."
+        }
+      },
+      {
+        "item": "소모재료(치즐) 비용 (터파기 장비 기계경비의 1~7%)",
+        "source": "PDF 126쪽 [주] 소모재료(치즐)는 터파기 장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다.",
+        "cite": {
+          "chunk_id": "p126-x10",
+          "quote": "[주] 소모재료(치즐)는 터파기 장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "토질(보통토사, 혼합토사, 암)에 따라 기준 시공량 표가 3개로 나뉘어 있어 현재의 adjusted_daily_crew 단일 표 참조 구조로 자동 계산하기 어렵습니다. 또한 기계경비 기준의 요율 적용이 필요합니다.",
+  "citations": [
+    {
+      "table_id": "p125-t3",
+      "row": "TypeⅠ",
+      "column": "적용기준",
+      "value": "- 지반 및 현장조건이 일반적인 경우"
+    },
+    {
+      "table_id": "p125-t4",
+      "row": "굴착기",
+      "column": "TypeⅠ 시공량(㎥)",
+      "value": "560"
+    },
+    {
+      "table_id": "p126-t0",
+      "row": "굴착기",
+      "column": "TypeⅠ 시공량(㎥)",
+      "value": "390"
+    },
+    {
+      "table_id": "p126-t1",
+      "row": "굴착기 대형브레이커",
+      "column": "시공량(㎥) TypeⅠ",
+      "value": "38"
+    },
+    {
+      "table_id": "p126-t2",
+      "row": "요율",
+      "column": "풍화암",
+      "value": "1%"
+    },
+    {
+      "chunk_id": "p125-x12",
+      "quote": "작업이 현저하게 저하되는 경우에는 ‘[공통부문] 8-2-3 굴착기’를 적용하여 산정한다."
+    },
+    {
+      "chunk_id": "p126-x2",
+      "quote": "② 유압식 리퍼의 경비는 터파기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p126-x10",
+      "quote": "[주] 소모재료(치즐)는 터파기 장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "용수 발생(25% 감산)과 굴착 깊이 5m 초과(9% 감산)가 동시에 발생할 경우, 감산율을 합산(34%)하여 적용하는지, 순차적으로 곱하여 적용하는지 원문에 명시되어 있지 않습니다.",
+    "유압식 리퍼 경비(2%)와 소모재료(치즐) 요율(1~7%)은 '기계경비'를 기준으로 산정하도록 되어 있으나, 현재 명세 형식의 cost_rules는 노무비 합계(labor_subtotal) 기준만 지원하므로 자동 계산에 포함하지 못했습니다."
+  ],
+  "questions": [
+    "보통토사에서 굴착 깊이가 5m를 초과할 때 시공량은 어떻게 계산하나요?",
+    "용수 발생과 굴착 깊이 5m 초과가 동시에 발생하면 감산율은 어떻게 적용해야 하나요?",
+    "도심지에서 작업장소가 협소하여 작업이 저하되는 경우 어떤 품을 적용해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:40.278997+00:00",
+    "input_tokens": 26995,
+    "output_tokens": 5226,
+    "source_pages": [
+      125,
+      126,
+      127
+    ],
+    "prompt_sha256": "bd8582f2e4860568df78c84445fc89ad3b5077b7e9b5d703d0666f57e2490c01",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/1-1-3/나사식접합및배관",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "1-1-3",
+    "title": "나사식 접합 및 배관",
+    "work": "나사식 접합 및 배관 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      646
+    ],
+    "inputs": [
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "ø15",
+          "20",
+          "25",
+          "32",
+          "40",
+          "50"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "관규격은 몇 ㎜입니까?",
+        "source": "PDF 646쪽 1-1-3 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "배관 시공 물량은 몇 m입니까?",
+        "source": "PDF 646쪽 1-1-3 표 시공량 단위"
+      },
+      {
+        "name": "work_method",
+        "type": "enum",
+        "allowed_values": [
+          "인력시공",
+          "고소작업대(시저형) 시공"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 방식은 인력시공입니까, 자체 추진 고소작업대(시저형) 시공입니까?",
+        "source": "PDF 646쪽 1-1-3 비고 및 [주] ⑥"
+      },
+      {
+        "name": "location",
+        "type": "enum",
+        "allowed_values": [
+          "일반",
+          "화장실배관",
+          "기계실배관",
+          "옥외배관(암거내)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공위치는 어디입니까?",
+        "source": "PDF 646쪽 1-1-3 비고 표"
+      },
+      {
+        "name": "insert_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반",
+          "콘크리트용"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용하는 인서트는 일반용입니까, 콘크리트용입니까?",
+        "source": "PDF 646쪽 1-1-3 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p702-t1",
+        "role": "관규격별 시공량 및 작업조 인원",
+        "source": "PDF 646쪽 1-1-3 표",
+        "values": {
+          "ø15": {
+            "시공량(m)": "70"
+          },
+          "20": {
+            "시공량(m)": "62"
+          },
+          "25": {
+            "시공량(m)": "50"
+          },
+          "32": {
+            "시공량(m)": "42"
+          },
+          "40": {
+            "시공량(m)": "38"
+          },
+          "50": {
+            "시공량(m)": "30"
+          },
+          "배관공": {
+            "수량": "3"
+          },
+          "보통인부": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p702-t1"
+        }
+      },
+      {
+        "id": "p702-t2",
+        "role": "시공위치별 요율",
+        "source": "PDF 646쪽 1-1-3 비고 표",
+        "values": {
+          "요율": {
+            "화장실배관": "- 17%",
+            "기계실배관": "- 23%",
+            "옥외배관(암거내)": "+ 11%"
+          }
+        },
+        "cite": {
+          "table_id": "p702-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p702-t1",
+          "row_input": "pipe_size",
+          "column_input": "시공량(m)"
+        },
+        "crew": {
+          "table": "p702-t1",
+          "column_input": "수량",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공": "1023",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p702-t1에서 관규격에 따른 기준 시공량을 찾는다.",
+        "작업 방식이 '고소작업대(시저형) 시공'인 경우 기준 시공량에 1.26을 곱하여 가산한다.",
+        "시공위치에 따라 p702-t2의 요율을 적용하여 최종 일당 시공량을 산출한다 (화장실 -17%, 기계실 -23%, 옥외암거내 +11%).",
+        "작업일수 = 배관 물량 ÷ 최종 일당 시공량으로 구한다.",
+        "p702-t1에서 직종별 인원을 찾아 작업일수를 곱하여 직종별 인·일을 구한다."
+      ],
+      "source": "PDF 646쪽 1-1-3 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "콘크리트용 인서트 사용",
+        "blocked_if": {
+          "input": "insert_type",
+          "op": "==",
+          "value": "콘크리트용"
+        },
+        "reason": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 '[건축부문] 8-1-4 인서트(Insert) 설치'를 따름",
+        "source": "PDF 646쪽 1-1-3 [주] ④",
+        "cite": {
+          "section_no": "1-1-3",
+          "marker": "④"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "밸브류 설치품",
+        "source": "PDF 646쪽 1-1-3 [주] ③",
+        "cite": {
+          "section_no": "1-1-3",
+          "marker": "③"
+        }
+      },
+      {
+        "item": "단열 지지대 및 관 지지대 설치",
+        "source": "PDF 646쪽 1-1-3 [주] ⑤",
+        "cite": {
+          "section_no": "1-1-3",
+          "marker": "⑤"
+        }
+      },
+      {
+        "item": "자체 추진 고소작업대(시저형)의 이동을 위한 크레인, 지게차 등의 비용",
+        "source": "PDF 646쪽 1-1-3 [주] ⑦",
+        "cite": {
+          "section_no": "1-1-3",
+          "marker": "⑦"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 (인력시공)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "section_no": "1-1-3",
+          "marker": "⑥"
+        }
+      },
+      {
+        "name": "공구손료 및 경장비 (고소작업대 시공)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.10",
+        "cite": {
+          "section_no": "1-1-3",
+          "marker": "⑥"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "기준 일일시공량과 작업조 인원이 주어지고, 물량을 시공량으로 나누어 작업일수를 구하는 일당 작업조형 품셈입니다.",
+  "citations": [
+    {
+      "table_id": "p702-t1",
+      "row": "ø15",
+      "column": "시공량(m)",
+      "value": "70"
+    },
+    {
+      "table_id": "p702-t1",
+      "row": "배관공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p702-t2",
+      "row": "요율",
+      "column": "화장실배관",
+      "value": "- 17%"
+    },
+    {
+      "chunk_id": "p702-x16",
+      "quote": "자체 추진 고소작업대(시저형)시공의 경우 시공량의 26%를 가산한다."
+    },
+    {
+      "chunk_id": "p702-x16",
+      "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 본 품의 2%(인력시공), 10%(자체 추진 고소작업대(시저형) 시공)로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "cost_rules에 조건부 적용(when) 기능이 없어 인력시공(2%)과 고소작업대 시공(10%) 경비율을 모두 나열했습니다.",
+    "adjusted_daily_crew 모델의 coefficients 파라미터가 표 참조만 지원하여, 비고란의 26% 가산 및 텍스트 형태의 요율(-17% 등) 연산을 steps에 서술했습니다."
+  ],
+  "questions": [
+    "관규격 25mm 배관 100m를 인력으로 시공할 때 배관공과 보통인부 품은 얼마나 되나요?",
+    "화장실 배관을 고소작업대를 이용해 시공할 경우 시공량 할증과 감산은 어떻게 중복 적용되나요?",
+    "콘크리트용 인서트를 사용할 경우 품은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:25:32.040026+00:00",
+    "input_tokens": 12144,
+    "output_tokens": 2838,
+    "source_pages": [
+      702,
+      703
+    ],
+    "prompt_sha256": "7e0e31129ebedf68eefebb1e477981db9df31c38c111a6ff01eecd87d4af2053",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p702-x16 조각 텍스트에 없음",
+      "quote가 p702-x16 조각 텍스트에 없음"
+    ]
+  }
+}

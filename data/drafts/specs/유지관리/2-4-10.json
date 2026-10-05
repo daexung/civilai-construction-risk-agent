@@ -1,0 +1,263 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-4-10/빗물받이준설_흡입식",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-4-10",
+    "title": "빗물받이 준설(흡입식)('25년 신설)",
+    "work": "빗물받이 준설(흡입식)",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      907
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "준설할 빗물받이는 몇 개소입니까?",
+        "source": "PDF 907쪽 2-4-10 표의 시공량 단위(개소)"
+      },
+      {
+        "name": "site_type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건은 A-Type과 B-Type 중 무엇입니까? 작업공간 및 장비 이동 원활 여부를 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p963-t4",
+        "source": "PDF 907쪽 2-4-10 [주] ③ 및 현장 여건별 적용기준 표",
+        "synonyms": {
+          "A-Type": [
+            "A타입",
+            "대로",
+            "넓은 곳"
+          ],
+          "B-Type": [
+            "B타입",
+            "주택가",
+            "좁은 곳"
+          ]
+        }
+      },
+      {
+        "name": "equipment_size",
+        "type": "enum",
+        "allowed_values": [
+          "25톤",
+          "13톤"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "진공흡입준설차의 규격은 무엇입니까? (기준: A-Type 25톤, B-Type 13톤이나 작업여건 고려하여 선정 가능)",
+        "source": "PDF 907쪽 2-4-10 [주] ④ 및 장비 규격 표",
+        "synonyms": {
+          "25톤": [
+            "25t",
+            "25톤(7.64㎥적)"
+          ],
+          "13톤": [
+            "13t",
+            "13톤(3.00㎥적)"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p963-t3",
+        "role": "일당 작업조 인원, 장비 대수 및 시공량",
+        "source": "PDF 907쪽 2-4-10 첫 번째 표",
+        "unit": "인/작업조; 대/작업조; 개소/일",
+        "values": {
+          "배관공(수도)": {
+            "수량": "1"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "진공흡입준설차": {
+            "수량": "1"
+          },
+          "시공량(개소)": {
+            "A-Type": "80",
+            "B-Type": "65"
+          }
+        },
+        "cite": {
+          "table_id": "p963-t3"
+        }
+      },
+      {
+        "id": "p963-t4",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 907쪽 2-4-10 [주] ③ 다음 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "작업위치가 대로 등 넓고, 작업공간이 확보되어 장비의 이동이 원활한 경우"
+          },
+          "B-Type": {
+            "적용기준": "작업위치가 주택가 도로 등 좁고 협소하여 장비의 이동이 원활하지 못한 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p963-t4"
+        }
+      },
+      {
+        "id": "p963-t5",
+        "role": "장비 규격 기준",
+        "source": "PDF 907쪽 2-4-10 [주] ④ 다음 표",
+        "values": {
+          "진공흡입준설차": {
+            "A-Type": "25톤(7.64㎥적)",
+            "B-Type": "13톤(3.00㎥적)"
+          }
+        },
+        "cite": {
+          "table_id": "p963-t5"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p963-t3",
+          "row": "시공량(개소)",
+          "column_input": "site_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p963-t3",
+          "column": "수량",
+          "trades": [
+            "배관공(수도)",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공(수도)": "1018",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "진공흡입준설차",
+          "table": "p963-t3",
+          "unit": "대·일",
+          "machine_code_input": "equipment_size",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p963-t3에서 현장 여건(site_type)에 따른 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(배관공 1, 보통인부 1), 장비 대·일 = 작업일수 × 1로 구한다."
+      ],
+      "source": "PDF 907쪽 2-4-10 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(배관공, 보통인부, 진공흡입준설차)와 현장 여건(A-Type, B-Type)에 따른 일일시공량이 명시되어 있으므로 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p963-t3",
+      "row": "배관공(수도) 보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p963-t3",
+      "row": "배관공(수도) 보통인부",
+      "column": "시공량(개소) A-Type",
+      "value": "80"
+    },
+    {
+      "table_id": "p963-t3",
+      "row": "배관공(수도) 보통인부",
+      "column": "시공량(개소) B-Type",
+      "value": "65"
+    },
+    {
+      "table_id": "p963-t3",
+      "row": "진공흡입준설차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p963-t4",
+      "row": "A-Type",
+      "column": "적용기준",
+      "value": "작업위치가 대로 등 넓고, 작업공간이 확보되어 장비의 이동이 원활한 경우"
+    },
+    {
+      "table_id": "p963-t4",
+      "row": "B-Type",
+      "column": "적용기준",
+      "value": "작업위치가 주택가 도로 등 좁고 협소하여 장비의 이동이 원활하지 못한 경우"
+    },
+    {
+      "table_id": "p963-t5",
+      "row": "진공흡입준설차",
+      "column": "A-Type",
+      "value": "25톤(7.64㎥적)"
+    },
+    {
+      "table_id": "p963-t5",
+      "row": "진공흡입준설차",
+      "column": "B-Type",
+      "value": "13톤(3.00㎥적)"
+    },
+    {
+      "chunk_id": "p963-x13",
+      "quote": "① 본 품은 흡입준설차를 활용하여 빗물받이를 준설하는 기준이다."
+    },
+    {
+      "chunk_id": "p963-x13",
+      "quote": "② 본 품은 장비셋팅, 빗물받이 내부준설, 정리 및 이동 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p963-x13",
+      "quote": "③ 현장 여건별 적용기준은 다음표를 기준한다."
+    },
+    {
+      "chunk_id": "p963-x17",
+      "quote": "④ 장비의 규격은 다음을 기준하나, 작업여건을 고려하여 적합한 규격 선정하여 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p963-t3에서 '배관공(수도)'와 '보통인부'가 한 행으로 합쳐져 파싱되었습니다. 원문 표에는 각각 1인으로 명시되어 있어, 명세에서는 이를 분리하여 적용했습니다."
+  ],
+  "questions": [
+    "빗물받이 준설(흡입식) 작업에서 A-Type 현장의 일일 시공량은 몇 개소인가요?",
+    "장비 규격은 A-Type일 때 반드시 25톤을 사용해야 하나요, 아니면 현장 여건에 따라 변경할 수 있나요?",
+    "준설할 빗물받이의 총 개소 수를 입력하지 않았습니다. 몇 개소인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:35:45.904081+00:00",
+    "input_tokens": 11850,
+    "output_tokens": 2763,
+    "source_pages": [
+      963,
+      964
+    ],
+    "prompt_sha256": "e130c0f217f55f736620ba69a3f84315b16e2a1852634dd87c4df83ed7528290",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

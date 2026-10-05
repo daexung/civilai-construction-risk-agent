@@ -1,0 +1,161 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/4-1-1/먹매김",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "4-1-1",
+    "title": "먹매김",
+    "work": "먹매김 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      589
+    ],
+    "inputs": [
+      {
+        "name": "category",
+        "type": "enum",
+        "allowed_values": [
+          "거푸집 먹매김 주택",
+          "거푸집 먹매김 일반",
+          "구조부 먹매김 주택",
+          "구조부 먹매김 일반"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류와 구조물 유형은 무엇입니까?",
+        "source": "PDF 589쪽 p645-t0 및 [주] ②, ③",
+        "synonyms": {
+          "거푸집 먹매김 주택": [
+            "거푸집 주택"
+          ],
+          "거푸집 먹매김 일반": [
+            "거푸집 일반"
+          ],
+          "구조부 먹매김 주택": [
+            "구조부 주택"
+          ],
+          "구조부 먹매김 일반": [
+            "구조부 일반"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "바닥면적은 몇 ㎡입니까?",
+        "source": "PDF 589쪽 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p645-t0",
+        "role": "먹매김 단위당 품",
+        "source": "PDF 589쪽 4-1-1 먹매김 표",
+        "unit": "인/㎡",
+        "values": {
+          "건축목공": {
+            "거푸집 먹매김 주택": "0.021",
+            "거푸집 먹매김 일반": "0.012",
+            "구조부 먹매김 주택": "0.009",
+            "구조부 먹매김 일반": "0.005"
+          }
+        },
+        "cite": {
+          "table_id": "p645-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p645-t0",
+          "row_input": "건축목공",
+          "column_input": "category",
+          "trades": [
+            "건축목공"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p645-t0에서 작업 종류 및 구조물 유형에 따른 건축목공의 단위당 품을 고른다.",
+        "바닥면적(area)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 589쪽 p645-t0 및 [주] ①",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p645-t0",
+      "row": "건축목공",
+      "column": "거푸집 먹매김 주택",
+      "value": "0.021"
+    },
+    {
+      "table_id": "p645-t0",
+      "row": "건축목공",
+      "column": "거푸집 먹매김 일반",
+      "value": "0.012"
+    },
+    {
+      "table_id": "p645-t0",
+      "row": "건축목공",
+      "column": "구조부 먹매김 주택",
+      "value": "0.009"
+    },
+    {
+      "table_id": "p645-t0",
+      "row": "건축목공",
+      "column": "구조부 먹매김 일반",
+      "value": "0.005"
+    },
+    {
+      "chunk_id": "p645-x1",
+      "quote": "① 본 품은 바닥면적 기준이다."
+    },
+    {
+      "chunk_id": "p645-x1",
+      "quote": "② 거푸집 먹매김은 거푸집을 설치하기 위한 작업이며, 구조부 먹매김은 거푸집해체 후 구조부 내부의\n설명 | 기준선을 표시하기 위한 작업이다."
+    },
+    {
+      "chunk_id": "p645-x1",
+      "quote": "③ '일반'은 학교, 공장, 사무소 등으로 ‘주택'에 비해 공간, 벽이 적은 구조물을 의미한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "먹매김 작업의 바닥면적은 얼마입니까?",
+    "작업 대상이 주택입니까, 아니면 학교/공장/사무소 등 일반 구조물입니까?",
+    "거푸집 먹매김과 구조부 먹매김 중 어느 작업입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:59:16.885427+00:00",
+    "input_tokens": 11524,
+    "output_tokens": 1492,
+    "source_pages": [
+      645,
+      646
+    ],
+    "prompt_sha256": "d1c8ada826573501f8b809172cbd7eba3e714289d923215837562df1bebcc10c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

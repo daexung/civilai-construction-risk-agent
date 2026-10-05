@@ -1,0 +1,186 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-4-2/하수관세정",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-4-2",
+    "title": "하수관 세정('21년 신설, '25년 보완)",
+    "work": "하수관 세정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      903
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "하수관 세정 물량은 몇 m입니까?",
+        "source": "PDF 903쪽 2-4-2 표 시공량(m)"
+      },
+      {
+        "name": "site_type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건은 A-Type과 B-Type 중 무엇입니까? 작업위치와 장비 이동 여건을 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p959-t2",
+        "source": "PDF 903쪽 2-4-2 표 및 [주] ④"
+      },
+      {
+        "name": "dredging_required",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "준설 작업이 필요합니까?",
+        "source": "PDF 903쪽 2-4-2 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p959-t1",
+        "role": "하수관 세정 일당 작업조 및 시공량",
+        "source": "PDF 903쪽 2-4-2 표",
+        "values": {
+          "배관공(수도) 보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(m) A-Type": "340",
+            "시공량(m) B-Type": "260"
+          },
+          "진공흡입준설차": {
+            "단위": "대",
+            "수량": "1"
+          },
+          "물탱크( 살수차)": {
+            "단위": "대",
+            "수량": "1"
+          },
+          "비고": {
+            "- 준설 작업이 필요하지 않은 경우에는 시공량의 20%를 증가하여 적용한다.": ""
+          }
+        },
+        "cite": {
+          "table_id": "p959-t1"
+        }
+      },
+      {
+        "id": "p959-t2",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 903쪽 2-4-2 [주] ④ 표",
+        "values": {
+          "A-Type": {
+            "적용기준": "작업위치(맨홀)가 대로 등 넓고, 작업공간이 확보되어 장비의 이동이 원활한 경우"
+          },
+          "B-Type": {
+            "적용기준": "작업위치(맨홀)가 주택가 도로 등 좁고 협소하여 장비의 이동이 원활하지 못한 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p959-t2"
+        }
+      },
+      {
+        "id": "p959-t3",
+        "role": "장비 규격",
+        "source": "PDF 903쪽 2-4-2 [주] ⑤ 표",
+        "values": {
+          "진공흡입준설차": {
+            "A-Type": "25톤(7.64㎥적)",
+            "B-Type": "13톤(3.00㎥적)"
+          },
+          "물탱크(살수차)": {
+            "A-Type": "16,000ℓ",
+            "B-Type": "5,500ℓ"
+          }
+        },
+        "cite": {
+          "table_id": "p959-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p959-t1에서 현장 여건(site_type)에 따른 시공량을 확인한다.",
+        "준설 작업이 필요하지 않은 경우(dredging_required = false), 시공량을 20% 증가시킨다.",
+        "물량을 시공량으로 나누어 작업일수를 구한다.",
+        "작업일수에 직종별 인원 및 장비 대수를 곱하여 총 투입량을 산출한다. (단, 파싱 오류로 직종별 인원 구분이 불가함)"
+      ],
+      "source": "PDF 903쪽 2-4-2 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에서 '배관공(수도)'와 '보통인부'의 행 이름이 '배관공(수도) 보통인부'로 병합되어 있어, JSON 객체 변환 시 키 중복이 발생하고 직종별 인원을 정확히 추출할 수 없으므로 자동 계산이 불가합니다.",
+  "citations": [
+    {
+      "table_id": "p959-t1",
+      "row": "배관공(수도) 보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p959-t1",
+      "row": "비고",
+      "column": "- 준설 작업이 필요하지 않은 경우에는 시공량의 20%를 증가하여 적용한다.",
+      "value": ""
+    },
+    {
+      "table_id": "p959-t2",
+      "row": "A-Type",
+      "column": "적용기준",
+      "value": "작업위치(맨홀)가 대로 등 넓고, 작업공간이 확보되어 장비의 이동이 원활한 경우"
+    },
+    {
+      "table_id": "p959-t3",
+      "row": "진공흡입준설차",
+      "column": "A-Type",
+      "value": "25톤(7.64㎥적)"
+    },
+    {
+      "chunk_id": "p959-x12",
+      "quote": "④ 현장 여건별 적용기준은 다음표를 기준한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p959-t1에서 '배관공(수도)' 3인과 '보통인부' 1인의 행 이름이 '배관공(수도) 보통인부'로 동일하게 병합되어 있어, JSON 객체에서 키 중복이 발생하고 직종별 인원을 정확히 구분할 수 없습니다. 파싱 로직의 수정이 필요합니다."
+  ],
+  "questions": [
+    "하수관 세정 물량은 몇 m입니까?",
+    "현장 여건이 A-Type인지 B-Type인지 어떻게 판단하나요?",
+    "준설 작업이 필요하지 않은 경우 시공량 할증은 어떻게 적용되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:37:07.960381+00:00",
+    "input_tokens": 24160,
+    "output_tokens": 4490,
+    "source_pages": [
+      959,
+      960
+    ],
+    "prompt_sha256": "98bd3b8da0741040b22988fc558b94cb8fe2dd57d17258cd6111f0034f28a424",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

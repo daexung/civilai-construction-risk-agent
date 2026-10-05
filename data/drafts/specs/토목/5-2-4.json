@@ -1,0 +1,204 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/5-2-4/도장",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "5-2-4",
+    "title": "도장('24년 보완)",
+    "work": "강재거더 도장 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      360
+    ],
+    "inputs": [
+      {
+        "name": "paint_location",
+        "type": "enum",
+        "allowed_values": [
+          "공장도장",
+          "현장도장"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "도장 장소는 공장입니까, 현장입니까?",
+        "source": "PDF 360쪽 표 p416-t0 구분",
+        "synonyms": {
+          "공장도장": [
+            "공장"
+          ],
+          "현장도장": [
+            "현장"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "1회 도장 기준 도장면적은 몇 ㎡입니까?",
+        "source": "PDF 360쪽 표 p416-t0 도장면적(㎡)"
+      },
+      {
+        "name": "paint_count",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "회",
+        "required": true,
+        "ask": "도장 횟수는 몇 회입니까? (본 품은 1회 기준이므로 총 횟수를 입력해주세요)",
+        "source": "PDF 360쪽 [주] ① 본 품은 도장횟수 1회를 기준한 것"
+      },
+      {
+        "name": "is_inner_box",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "박스거더 내면 도장과 같은 내면 도장입니까?",
+        "source": "PDF 360쪽 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p416-t0",
+        "role": "도장 장소별 작업조 인원 및 일일 도장면적",
+        "source": "PDF 360쪽 5-2-4 도장 표",
+        "unit": "인/작업조; ㎡/일",
+        "values": {
+          "도장공": {
+            "단위": "인",
+            "공장도장 수량": "1",
+            "공장도장 도장면적(㎡)": "100",
+            "현장도장 수량": "1",
+            "현장도장 도장면적(㎡)": "60"
+          },
+          "특별인부": {
+            "단위": "인",
+            "공장도장 수량": "1",
+            "현장도장 수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p416-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p416-t0",
+          "row_input": "도장공",
+          "column_input": "paint_location"
+        },
+        "crew": {
+          "table": "p416-t0",
+          "column_input": "paint_location",
+          "trades": [
+            "도장공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "area"
+      },
+      "steps": [
+        "paint_location에 따라 p416-t0에서 기준 일일시공량(도장면적)과 작업조 인원(도장공 1, 특별인부 1)을 찾는다.",
+        "is_inner_box가 true이면 기준 일일시공량에 0.67(33% 할감)을 곱해 조정된 일일시공량을 구한다.",
+        "총 도장면적 = area × paint_count를 구한다.",
+        "작업일수 = 총 도장면적 ÷ 조정된 일일시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 작업조 인원으로 구한다."
+      ],
+      "source": "PDF 360쪽 표 p416-t0 및 [주] ①, ③",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "비계 등 작업시설과 고소작업차",
+        "source": "PDF 360쪽 [주] ⑦",
+        "cite": {
+          "chunk_id": "p416-x2",
+          "quote": "⑦ 현장도장의 경우 비계 등 작업시설과 고소작업차 등이 필요한 경우에는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 (현장도장)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": {
+          "chunk_id": "p416-x2",
+          "quote": "⑥ 현장도장의 경우에는 공구손료 및 경장비(발전기, 에어리스 스프레이 등)의 기계경비를 인력품의 5%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "표에 도장면적(㎡)이 일일시공량으로 제시되어 있고, 그에 따른 작업조 인원(도장공 1, 특별인부 1)이 명시되어 있으므로 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p416-t0",
+      "row": "도장공",
+      "column": "공장도장 도장면적(㎡)",
+      "value": "100"
+    },
+    {
+      "table_id": "p416-t0",
+      "row": "도장공",
+      "column": "현장도장 도장면적(㎡)",
+      "value": "60"
+    },
+    {
+      "chunk_id": "p416-x2",
+      "quote": "① 본 품은 도장횟수 1회를 기준한 것이며"
+    },
+    {
+      "chunk_id": "p416-x2",
+      "quote": "③ 박스거더 내면 도장과 같은 내면 도장의 경우 일당시공량(도장면적)을 33% 할감하여 적용한다."
+    },
+    {
+      "chunk_id": "p416-x2",
+      "quote": "⑥ 현장도장의 경우에는 공구손료 및 경장비(발전기, 에어리스 스프레이 등)의 기계경비를 인력품의 5%로 계상한다."
+    },
+    {
+      "chunk_id": "p416-x2",
+      "quote": "⑦ 현장도장의 경우 비계 등 작업시설과 고소작업차 등이 필요한 경우에는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표 p416-t0는 인원과 일일시공량(도장면적)이 한 표에 혼재되어 있어, 현재의 adjusted_daily_crew 파라미터 스키마(base_output과 crew 분리)로 완벽히 매핑하기 어렵습니다.",
+    "내면 도장 시 33% 할감(고정 비율)을 adjusted_daily_crew 모델에서 처리할 수 있는 파라미터 스키마가 필요합니다.",
+    "현장도장에만 적용되는 경비율(5%)을 cost_rules에서 조건부(when)로 처리할 수 있는 스키마가 필요합니다."
+  ],
+  "questions": [
+    "공장도장과 현장도장의 일일 도장면적 기준은 각각 얼마인가요?",
+    "박스거더 내면을 도장할 때 할감률 33%는 전체 도장면적에서 빼는 건가요, 아니면 일일시공량 기준에서 빼는 건가요?",
+    "도장 횟수가 2회 이상일 경우 품셈을 어떻게 적용해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:44.326714+00:00",
+    "input_tokens": 11741,
+    "output_tokens": 2240,
+    "source_pages": [
+      416,
+      417
+    ],
+    "prompt_sha256": "f4e29bee6eaa5c24edc05cac503d7495e6fe1435eb860a3f6a11fa2610c0f6b8",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p416-x2 조각 텍스트에 없음"
+    ]
+  }
+}

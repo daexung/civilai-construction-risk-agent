@@ -1,0 +1,168 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/4-2-2/궤도양로",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "4-2-2",
+    "title": "궤도양로('11년 신설, '19, '26년 보완)",
+    "work": "기본 양로 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      345
+    ],
+    "inputs": [
+      {
+        "name": "rail_weight",
+        "type": "enum",
+        "allowed_values": [
+          "50kg",
+          "60kg"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "레일 중량은 50kg입니까, 60kg입니까?",
+        "source": "표 비고 및 [주] ①",
+        "synonyms": {
+          "50kg": [
+            "50킬로",
+            "50㎏"
+          ],
+          "60kg": [
+            "60킬로",
+            "60㎏"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "궤도양로 작업 물량은 몇 m입니까?",
+        "source": "표 시공량(m)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p401-t1",
+        "role": "궤도양로 작업조 인원 및 장비, 시공량",
+        "source": "4-2-2 궤도양로 표",
+        "unit": "인/작업조; 대/작업조; m/일",
+        "values": {
+          "궤도공": {
+            "수량": "4"
+          },
+          "보통인부": {
+            "수량": "2"
+          },
+          "측량중급기술자": {
+            "수량": "1"
+          },
+          "양로기": {
+            "수량": "1"
+          },
+          "시공량": {
+            "시공량(m)": "250"
+          }
+        },
+        "cite": {
+          "table_id": "p401-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p401-t1",
+          "row": "시공량",
+          "column": "시공량(m)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p401-t1",
+          "column_input": "수량",
+          "trades": [
+            "궤도공",
+            "보통인부",
+            "측량중급기술자"
+          ],
+          "rate_codes": {}
+        },
+        "equipment": {
+          "name": "양로기",
+          "table": "p401-t1",
+          "unit": "대·일",
+          "machine_code_input": null,
+          "operator_rate_code": ""
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p401-t1에서 기준 시공량(250m)을 가져온다.",
+        "rail_weight가 50kg인 경우 기준 시공량에 1.05를 곱하여 일당 시공량을 구한다.",
+        "작업일수 = quantity ÷ 일당 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 수량, 장비 대·일 = 작업일수 × 표의 수량으로 구한다."
+      ],
+      "source": "4-2-2 궤도양로 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "깬자갈 살포작업",
+        "source": "[주] ①",
+        "cite": {
+          "section_no": "4-2-2",
+          "marker": "①"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 시공량(250m)을 기준으로 작업조 인원과 장비가 투입되는 전형적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p401-t1",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 50㎏ 레일은 시공량의 5%를 증하여 적용한다."
+    },
+    {
+      "chunk_id": "p401-x15",
+      "quote": "본 품은 60kg레일의 1회 양로작업 기준이며"
+    },
+    {
+      "chunk_id": "p401-x15",
+      "quote": "깬자갈 살포작업 후"
+    }
+  ],
+  "open_questions": [
+    "50kg 레일 적용 시 시공량 5% 증가 조건을 `adjusted_daily_crew` 모델의 `coefficients` 파라미터로 어떻게 표현할지 명확하지 않아 `steps`에만 서술했습니다. 별도의 계수표가 없기 때문입니다."
+  ],
+  "questions": [
+    "60kg 레일 1000m 양로 작업 시 궤도공은 몇 인·일이 필요한가요?",
+    "50kg 레일 작업 시 시공량 5% 증가는 인원 수량을 줄이는 것과 동일한가요?",
+    "궤도양로 작업 물량이 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:57:17.106024+00:00",
+    "input_tokens": 11626,
+    "output_tokens": 1551,
+    "source_pages": [
+      401,
+      402
+    ],
+    "prompt_sha256": "7269fa5f26a423f91ef9651b3ce8f21b8fcb2680dac56ce123f1b2aafd96ea27",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

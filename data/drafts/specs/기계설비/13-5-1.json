@@ -1,0 +1,304 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-5-1/보일러설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-5-1",
+    "title": "보일러 설치",
+    "work": "보일러 설치 단위당 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      770,
+      771
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "기술관리",
+          "포장해체",
+          "표면손질",
+          "용접면손질",
+          "소운반",
+          "Scaffolder 조립설치 및 철거",
+          "Chain block 설치 및 철거",
+          "윈치설치 및 철거",
+          "조양",
+          "Tube Panel 조립조정",
+          "Header류 조립조정",
+          "Buckstay 조립조정",
+          "Tube piece 조립조정",
+          "Casing 조립",
+          "Casing 설치"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까?",
+        "source": "PDF 770~771쪽 표의 작업구분"
+      },
+      {
+        "name": "boiler_capacity_500mw_over",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "50만㎾ 이상 보일러 설치입니까?",
+        "source": "PDF 771쪽 [주]"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "작업별 단위(인/일, ㎥, ㎡, ton, 개, 대 등)",
+        "required": true,
+        "ask": "작업 물량은 얼마입니까?",
+        "source": "단위당 품 계산을 위한 물량"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p826-t0",
+        "role": "보일러 설치 기본 품 (1)",
+        "source": "PDF 770쪽 표",
+        "values": {
+          "기술관리 Boiler 본체 설비공사 기간중": {
+            "기계기사": "2.0"
+          },
+          "포장해체 수송을 위해 포장된 목재를 해체하고 목재를 소정 위치에 정리함": {
+            "목공": "0.02",
+            "특별인부": "0.02"
+          },
+          "표면손질": {
+            "특별인부": "0.1"
+          },
+          "용접면손질 용착 효율을 높이기 위하여 용접전에 Grinder 혹은 sand paper로 깨끗이 손질하는 작업 joint당 면적은 2×3.63t(D-t)": {
+            "특별인부": "0.39"
+          },
+          "소운반 Boiler tube용 자재 기타 작업에 필요한 자재를 조양위치까지 운반": {
+            "비계공": "0.445",
+            "건설기계운전조": "0.124"
+          },
+          "Scaffolder 조립설치 및 철거 용접, 검사, 위치조정 등에 필요한 Scaffolder 조립설치(1.5×2.0×1.6m Unit 기준)": {
+            "일반기계운전사": "0.0083",
+            "(윈치운전)": "0.0083",
+            "비계공": "0.0083",
+            "특별인부": "0.0083"
+          },
+          "Chain block 설치 및 철거 Tube Panel 조립시는 6개 설치 기준 Header, Buck stay 조립시는 4개설치 기준": {
+            "용접공": "0.021",
+            "비계공": "0.021",
+            "일반기계운전사": "0.021",
+            "(윈치운전)": "0.021"
+          },
+          "윈치설치 및 철거 조양을 위한 윈치 플리 로프 등의 설치와 사용후 철거까지 포함됨.": {
+            "기계설비공": "3.3",
+            "비계공": "11.0",
+            "용접공": "3.3",
+            "특별인부": "4.95",
+            "건설기계운전조": "4.3"
+          },
+          "조양 tube 및 header류, 기타 자재 등을 설치 위치까지 조양해서 가고정하는 작업": {
+            "플랜트기계설치공": "0.63",
+            "비계공": "0.84",
+            "플랜트용접공": "0.42",
+            "건설기계운전조": "0.56"
+          }
+        },
+        "cite": {
+          "table_id": "p826-t0"
+        }
+      },
+      {
+        "id": "p827-t0",
+        "role": "보일러 설치 기본 품 (2)",
+        "source": "PDF 771쪽 표",
+        "values": {
+          "Tube Panel 조립조정 조양된 Panel을 alignment하고 hangering 혹은 supporting 후 가고정 해체함": {
+            "플랜트기계설치공": "2.0",
+            "특별인부": "2.0",
+            "플랜트용접공": "2.0"
+          },
+          "Header류 조립조정 header 및 그에 준하는 것으로서 조양 된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함": {
+            "플랜트기계설치공": "1.5",
+            "특별인부": "1.5",
+            "플랜트용접공": "1.5"
+          },
+          "Buckstay 조립조정": {
+            "플랜트기계설치공": "1.5"
+          },
+          "조양된 buckstay를 alignment하고": {
+            "특별인부": "1.5"
+          },
+          "tiebar 취급함.": {
+            "플랜트용접공": "1.5"
+          },
+          "Tube piece 조립조정 낱개로 되어 있는 tube 및 7개 미만의 tube set로 된 것으로서 alignment hangering 부착물 취부함.": {
+            "플랜트기계설치공": "0.4",
+            "특별인부": "0.4",
+            "플랜트용접공": "0.2"
+          },
+          "Casing 조립 조작으로 분리된 casing의 소재를 성형 용접함": {
+            "플랜제관공": "0.82",
+            "플랜트용접공": "0.22",
+            "특별인부": "0.92",
+            "건설기계운전조": "0.61"
+          },
+          "Casing 설치": {
+            "윈치운전조": "1.01"
+          },
+          "성형된 casing을 운반, 조양 alignment": {
+            "비계공": "2.87"
+          },
+          "후 설치": {
+            "특별인부": "1.33"
+          }
+        },
+        "cite": {
+          "table_id": "p827-t0"
+        }
+      },
+      {
+        "id": "p827-t1",
+        "role": "50만㎾ 이상 보일러 설치 참고 품",
+        "source": "PDF 771쪽 [참고] 표",
+        "values": {
+          "Tube Panel 조립조정": {
+            "플랜트기계설치공": "1.38"
+          },
+          "조양된 Panel을 alignment하고 hangering": {
+            "특별인부": "1.45"
+          },
+          "혹은 supporting 후 가고정 해체함": {
+            "플랜트용접공": "1.16"
+          },
+          "Header류 조립조정 header 및 그에 준하는 것으로서 조양된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함": {
+            "플랜트기계설치공": "0.90",
+            "특별인부": "1.02",
+            "플랜트용접공": "0.78"
+          }
+        },
+        "cite": {
+          "table_id": "p827-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p826-t0 및 p827-t0",
+          "row_input": "work_type",
+          "column_input": "직종",
+          "trades": []
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "work_type에 해당하는 행을 p826-t0 또는 p827-t0에서 찾는다.",
+        "boiler_capacity_500mw_over가 true이고 work_type이 Tube Panel 조립조정 또는 Header류 조립조정인 경우 p827-t1의 값을 우선 적용한다.",
+        "찾은 단위당 품에 quantity를 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 770~771쪽",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "50만㎾ 이상 보일러의 Buckstay 조립조정",
+        "blocked_if": {
+          "input": "boiler_capacity_500mw_over",
+          "op": "==",
+          "value": true
+        },
+        "reason": "파싱 결과(p828-t0)에 50만㎾ 이상 Buckstay 조립조정의 수량이 누락되어 계산 불가",
+        "source": "PDF 771쪽 [참고] 표",
+        "cite": [
+          {
+            "table_id": "p828-t0"
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "본용접",
+        "source": "PDF 771쪽 p827-t0 본용접 비고",
+        "cite": {
+          "table_id": "p827-t0",
+          "row": "본용접 Preheating, 본용접, annealing 작업",
+          "column": "직종"
+        }
+      },
+      {
+        "item": "검사 및 교정",
+        "source": "PDF 771쪽 p827-t0 검사 및 교정 비고",
+        "cite": {
+          "table_id": "p827-t0",
+          "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+          "column": "직종"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품(인/일, 인/㎥ 등)이 표에 직접 제시되어 있으며, 물량을 곱해 총 품을 산출하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p826-t0",
+      "row": "기술관리 Boiler 본체 설비공사 기간중",
+      "column": "기계기사",
+      "value": "2.0"
+    },
+    {
+      "table_id": "p827-t0",
+      "row": "Tube Panel 조립조정 조양된 Panel을 alignment하고 hangering 혹은 supporting 후 가고정 해체함",
+      "column": "플랜트기계설치공",
+      "value": "2.0"
+    },
+    {
+      "table_id": "p827-t1",
+      "row": "Tube Panel 조립조정",
+      "column": "플랜트기계설치공",
+      "value": "1.38"
+    },
+    {
+      "chunk_id": "p827-x21",
+      "quote": "[주] 50만㎾이상 보일러설치에 있어서 Tube Panel Header류 및 Buckstay 조립조정은 다음을 참고하여 적용할"
+    }
+  ],
+  "open_questions": [
+    "p828-t0 파싱 결과에 50만㎾ 이상 Buckstay 조립조정의 수량이 누락되어 있습니다. 원문에는 1.61, 1.81, 1.41이 있으나 파싱 텍스트에 없어 계산에서 제외(blocked)했습니다.",
+    "p827-t0의 '검사 및 교정'은 '기술관리, 포장해체를 제외한 모든 품의 10%'로 되어 있어, 전체 품을 합산한 후 계산해야 하므로 단일 작업 단위 계산(per_unit)에 포함하기 어려워 미산정(not_calculated) 처리했습니다."
+  ],
+  "questions": [
+    "보일러 설치 시 포장해체 작업의 물량은 어떻게 입력하나요?",
+    "50만㎾ 이상 보일러의 Tube Panel 조립조정 품은 일반 보일러와 어떻게 다르게 적용되나요?",
+    "본용접 작업의 품은 이 표에서 바로 계산할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:40:02.690246+00:00",
+    "input_tokens": 30724,
+    "output_tokens": 6624,
+    "source_pages": [
+      826,
+      827,
+      828,
+      829
+    ],
+    "prompt_sha256": "7f070656f7b3ebeb1683cff2cae49c2ffcf5c72b650fe305c5b44d4091dc39b7",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

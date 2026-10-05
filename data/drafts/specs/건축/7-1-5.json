@@ -1,0 +1,276 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/7-1-5/아스팔트싱글설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "7-1-5",
+    "title": "아스팔트싱글 설치",
+    "work": "아스팔트싱글 지붕재 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      612
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "아스팔트싱글 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 612쪽 7-1-5 표 시공량 단위(㎡)"
+      },
+      {
+        "name": "roof_slope_over_30",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지붕경사가 30° 이상입니까?",
+        "source": "PDF 612쪽 7-1-5 표 비고"
+      },
+      {
+        "name": "material_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "아스팔트싱글 자재는 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "일반적인 재료비 처리 기준",
+        "synonyms": {
+          "관급": [
+            "관급자재",
+            "지급자재",
+            "발주처 지급"
+          ],
+          "사급": [
+            "사급자재",
+            "시공사 구매",
+            "자체 구매"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p668-t1",
+        "role": "일당 작업조 인원 및 시공량",
+        "source": "PDF 612쪽 7-1-5 표",
+        "unit": "인/작업조, ㎡/일",
+        "values": {
+          "지붕잇기공": {
+            "수량": "3",
+            "시공량(㎡)": "50"
+          },
+          "보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "50"
+          }
+        },
+        "cite": {
+          "table_id": "p668-t1"
+        }
+      },
+      {
+        "id": "p668-t2",
+        "role": "재료량 참고자료",
+        "source": "PDF 612쪽 7-1-5 [참고자료] 표",
+        "unit": "매, %",
+        "values": {
+          "아스팔트싱글": {
+            "규격": "336×1.000×3㎜",
+            "단위": "매",
+            "수량": "7.30"
+          },
+          "잡재료 및 소모재료 ( 콘크리트 못 등)": {
+            "규격": "주재료비의",
+            "단위": "%",
+            "수량": "3"
+          }
+        },
+        "cite": {
+          "table_id": "p668-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p668-t1",
+          "row": "지붕잇기공",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p668-t1",
+          "column": "수량",
+          "trades": [
+            "지붕잇기공",
+            "보통인부"
+          ],
+          "rate_codes": {}
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p668-t1에서 기준 일일시공량(50㎡)을 확인한다.",
+        "roof_slope_over_30이 true일 경우, 기준 시공량에 0.83(17% 감산)을 곱하여 조정된 일일시공량을 구한다.",
+        "작업일수 = quantity ÷ 조정된 일일시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p668-t1의 직종별 수량으로 구한다.",
+        "재료량은 p668-t2를 참고하여 별도 산출한다."
+      ],
+      "source": "PDF 612쪽 7-1-5 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "후레싱 설치",
+        "source": "PDF 612쪽 7-1-5 [주] ③",
+        "cite": {
+          "chunk_id": "p668-x12",
+          "quote": "③ 후레싱 설치는 ‘[건축부문] 7-1-7 후레싱 설치’를 따른다."
+        }
+      },
+      {
+        "item": "방수 및 프라이머 바름 작업",
+        "source": "PDF 612쪽 7-1-5 [주] ④",
+        "cite": {
+          "chunk_id": "p668-x12",
+          "quote": "④ 방수 및 프라이머 바름 작업은 별도 계상한다."
+        }
+      },
+      {
+        "item": "가설비계, 안전난간, 추락방지시설 등",
+        "source": "PDF 612쪽 7-1-5 [주] ⑤",
+        "cite": {
+          "chunk_id": "p668-x12",
+          "quote": "⑤ 가설비계, 안전난간, 추락방지시설 등 시설물이 필요한 경우 작업여건을 고려하여 별도 계상한다."
+        }
+      },
+      {
+        "item": "용마루 및 골에 사용하는 싱글의 재료량",
+        "source": "PDF 612쪽 7-1-5 [참고자료] ※",
+        "cite": {
+          "chunk_id": "p668-x17",
+          "quote": "※ 용마루 및 골에 사용하는 싱글의 재료량은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [
+      {
+        "item": "아스팔트싱글 재료비",
+        "input": "material_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "산정",
+            "reason": "시공사 구매 자재"
+          }
+        },
+        "source": "일반적인 재료비 처리 기준",
+        "cite": []
+      }
+    ],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p668-x12",
+          "quote": "⑥ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(지붕잇기공 3인, 보통인부 1인)와 일일 시공량(50㎡)이 명시되어 있어 물량에 따른 작업일수와 인·일 계산이 가능합니다.",
+  "citations": [
+    {
+      "table_id": "p668-t1",
+      "row": "지붕잇기공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p668-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p668-t1",
+      "row": "지붕잇기공",
+      "column": "시공량(㎡)",
+      "value": "50"
+    },
+    {
+      "table_id": "p668-t2",
+      "row": "아스팔트싱글",
+      "column": "수량",
+      "value": "7.30"
+    },
+    {
+      "chunk_id": "p668-t1",
+      "quote": "- 지붕경사 30°이상일 경우 시공량의 17%를 감하여 적용한다."
+    },
+    {
+      "chunk_id": "p668-x12",
+      "quote": "③ 후레싱 설치는 ‘[건축부문] 7-1-7 후레싱 설치’를 따른다."
+    },
+    {
+      "chunk_id": "p668-x12",
+      "quote": "④ 방수 및 프라이머 바름 작업은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p668-x12",
+      "quote": "⑤ 가설비계, 안전난간, 추락방지시설 등 시설물이 필요한 경우 작업여건을 고려하여 별도 계상한다."
+    },
+    {
+      "chunk_id": "p668-x12",
+      "quote": "⑥ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p668-x17",
+      "quote": "※ 용마루 및 골에 사용하는 싱글의 재료량은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "지붕경사 30° 이상일 경우 시공량 17% 감산을 adjusted_daily_crew 모델의 coefficients 파라미터로 직접 표현할 수 없어 steps에 서술함."
+  ],
+  "questions": [
+    "아스팔트싱글 설치 물량은 몇 ㎡입니까?",
+    "지붕경사가 30° 이상입니까?",
+    "용마루 및 골에 사용하는 싱글 물량은 별도로 산출하셨습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:06:07.552517+00:00",
+    "input_tokens": 11923,
+    "output_tokens": 2806,
+    "source_pages": [
+      668,
+      669
+    ],
+    "prompt_sha256": "e6689fa581fd46c8e658124514847f98098ee911bed902b9e06554f44e71d635",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

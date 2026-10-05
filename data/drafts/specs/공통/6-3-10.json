@@ -1,0 +1,277 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-3-10/신축이음설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-3-10",
+    "title": "신축이음(Expansion Joint) 설치",
+    "work": "다웰바 설치, 채움재 설치, 실링 마감",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      143
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "다웰바 설치",
+          "채움재 설치",
+          "실링 마감"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까?",
+        "source": "PDF 143쪽 1, 2, 3 항목 제목"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": null,
+        "required": true,
+        "ask": "작업 물량은 얼마입니까? (다웰바: ea, 채움재: ㎡, 실링 마감: m)",
+        "source": "PDF 143쪽 각 표의 단위"
+      },
+      {
+        "name": "dowel_spacing",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎜",
+        "required": true,
+        "ask": "다웰바의 설치 간격은 몇 ㎜입니까? (기준: 150㎜, 다웰바 설치가 아니면 임의의 값 입력)",
+        "source": "PDF 143쪽 1. 다웰바 설치 [주] ②"
+      },
+      {
+        "name": "filler_thickness",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎜",
+        "required": true,
+        "ask": "채움재(발포폴리스티렌)의 두께는 몇 ㎜입니까? (기준: 20㎜, 채움재 설치가 아니면 임의의 값 입력)",
+        "source": "PDF 143쪽 2. 채움재 설치 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p199-t1",
+        "role": "다웰바 설치 단위당 품",
+        "source": "PDF 143쪽 1. 다웰바 설치 표",
+        "unit": "인/ea",
+        "values": {
+          "형틀목공": {
+            "수량": "0.043"
+          },
+          "보통인부": {
+            "수량": "0.009"
+          }
+        },
+        "cite": {
+          "table_id": "p199-t1"
+        }
+      },
+      {
+        "id": "p199-t2",
+        "role": "채움재 설치 단위당 품",
+        "source": "PDF 143쪽 2. 채움재 설치 표",
+        "unit": "인/㎡",
+        "values": {
+          "형틀목공": {
+            "수량": "0.029"
+          },
+          "보통인부": {
+            "수량": "0.006"
+          }
+        },
+        "cite": {
+          "table_id": "p199-t2"
+        }
+      },
+      {
+        "id": "p199-t3",
+        "role": "실링 마감 단위당 품",
+        "source": "PDF 143쪽 3. 실링 마감 표",
+        "unit": "인/m",
+        "values": {
+          "방수공": {
+            "수량": "0.021"
+          },
+          "보통인부": {
+            "수량": "0.004"
+          }
+        },
+        "cite": {
+          "table_id": "p199-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "work_type에 따라 p199-t1, p199-t2, p199-t3 중 선택",
+          "row_input": "직종",
+          "column_input": "수량",
+          "trades": [
+            "형틀목공",
+            "보통인부",
+            "방수공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "작업 종류(work_type)에 따라 해당하는 표(다웰바: p199-t1, 채움재: p199-t2, 실링 마감: p199-t3)에서 단위당 품을 찾는다.",
+        "물량(quantity)을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 143쪽 1, 2, 3 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "다웰바 설치 간격이 150㎜가 아닌 경우",
+        "blocked_if": {
+          "input": "dowel_spacing",
+          "op": "!=",
+          "value": 150
+        },
+        "reason": "다웰바 설치 간격 150㎜ 기준이며, 다를 경우의 품 보정 방식이 명시되어 있지 않음",
+        "source": "PDF 143쪽 1. 다웰바 설치 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p199-x7",
+            "quote": "② 다웰바의 설치 간격은 150㎜를 기준한 것이다."
+          }
+        ]
+      },
+      {
+        "condition": "채움재 두께가 20㎜가 아닌 경우",
+        "blocked_if": {
+          "input": "filler_thickness",
+          "op": "!=",
+          "value": 20
+        },
+        "reason": "채움재 두께 20㎜ 기준이며, 다를 경우의 품 보정 방식이 명시되어 있지 않음",
+        "source": "PDF 143쪽 2. 채움재 설치 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p199-x12",
+            "quote": "② 채움재(발포폴리스티렌)는 두께 20㎜를 기준한 것이다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "녹막이 페인트 작업",
+        "source": "PDF 143쪽 1. 다웰바 설치 [주] ③",
+        "cite": [
+          {
+            "chunk_id": "p199-x7",
+            "quote": "③ 녹막이 페인트 작업은 ‘[건축부문] 11-2-6 녹막이 페인트칠’을 따른다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.01",
+        "cite": [
+          {
+            "chunk_id": "p199-x16",
+            "quote": "③ 공구손료는 인력품의 1%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "각 작업(다웰바, 채움재, 실링 마감)의 단위당 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p199-t1",
+      "row": "형틀목공",
+      "column": "수량",
+      "value": "0.043"
+    },
+    {
+      "table_id": "p199-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.009"
+    },
+    {
+      "table_id": "p199-t2",
+      "row": "형틀목공",
+      "column": "수량",
+      "value": "0.029"
+    },
+    {
+      "table_id": "p199-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.006"
+    },
+    {
+      "table_id": "p199-t3",
+      "row": "방수공",
+      "column": "수량",
+      "value": "0.021"
+    },
+    {
+      "table_id": "p199-t3",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.004"
+    },
+    {
+      "chunk_id": "p199-x7",
+      "quote": "② 다웰바의 설치 간격은 150㎜를 기준한 것이다."
+    },
+    {
+      "chunk_id": "p199-x7",
+      "quote": "③ 녹막이 페인트 작업은 ‘[건축부문] 11-2-6 녹막이 페인트칠’을 따른다."
+    },
+    {
+      "chunk_id": "p199-x12",
+      "quote": "② 채움재(발포폴리스티렌)는 두께 20㎜를 기준한 것이다."
+    },
+    {
+      "chunk_id": "p199-x16",
+      "quote": "③ 공구손료는 인력품의 1%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "다웰바 설치 간격이 150mm가 아니거나 채움재 두께가 20mm가 아닐 경우의 품 보정 방식이 명시되어 있지 않아 계산을 보류(blocked) 처리했습니다.",
+    "공구손료 1% 계상은 '3. 실링 마감'에만 명시되어 있으나, 현재 cost_rules 스키마에 특정 작업(work_type)에만 조건부로 적용하는 기능이 없어 전체에 적용될 우려가 있습니다.",
+    "현재 inputs 스키마에 의존성(dependency) 표현이 없어, 특정 작업(예: 실링 마감)을 선택하더라도 다웰바 간격이나 채움재 두께를 필수로 물어보게 됩니다."
+  ],
+  "questions": [
+    "다웰바 설치 시 형틀목공과 보통인부의 품은 어떻게 되나요?",
+    "다웰바 설치 간격이 150mm가 아니라 200mm인 경우 품을 어떻게 조정해야 하나요?",
+    "어떤 작업(다웰바, 채움재, 실링 마감)을 수행하시나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:32:35.652234+00:00",
+    "input_tokens": 11978,
+    "output_tokens": 2884,
+    "source_pages": [
+      199,
+      200
+    ],
+    "prompt_sha256": "38d2f264613fe58b1e4847accf891b660c5a27bee736b6fcf5b15ffc67fc2afd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

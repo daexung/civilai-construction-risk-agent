@@ -1,0 +1,178 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-23/도로반사경철거",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-23",
+    "title": "도로반사경 철거('20년 보완)",
+    "work": "도로반사경과 지주의 철거",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      888
+    ],
+    "inputs": [
+      {
+        "name": "mirror_type",
+        "type": "enum",
+        "allowed_values": [
+          "1면",
+          "2면"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철거할 도로반사경은 1면입니까, 2면입니까?",
+        "source": "p944-t0 시공량 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "본",
+        "required": true,
+        "ask": "철거할 도로반사경의 수량은 몇 본입니까?",
+        "source": "p944-t0 시공량 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p944-t0",
+        "role": "도로반사경 철거 일당 작업조 및 시공량",
+        "source": "PDF 888쪽 2-1-23 표",
+        "unit": "인/작업조, 대/작업조, 본/일",
+        "values": {
+          "특별인부": {
+            "수량": "1"
+          },
+          "보통인부": {
+            "수량": "1",
+            "1면": "12",
+            "2면": "9"
+          },
+          "트럭": {
+            "규격": "2.5ton",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p944-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p944-t0",
+          "row": "보통인부",
+          "column_input": "mirror_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p944-t0",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "1003",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "트럭",
+          "table": "p944-t0",
+          "unit": "대·일",
+          "machine_code": "2.5ton",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p944-t0에서 반사경 면수(1면/2면)에 따른 기준 일일시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 수량, 트럭 대·일 = 작업일수 × 표의 트럭 수량으로 구한다."
+      ],
+      "source": "PDF 888쪽 2-1-23 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p944-x3",
+          "quote": "공구손료 및 경장비(전동드릴, 발전기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(특별인부, 보통인부, 트럭)와 1면/2면별 일일 시공량이 표로 명확히 제시되어 있어 기준 일일시공량 기반의 작업조 계산이 가능합니다.",
+  "citations": [
+    {
+      "table_id": "p944-t0",
+      "row": "보통인부",
+      "column": "1면",
+      "value": "12"
+    },
+    {
+      "table_id": "p944-t0",
+      "row": "보통인부",
+      "column": "2면",
+      "value": "9"
+    },
+    {
+      "table_id": "p944-t0",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p944-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p944-t0",
+      "row": "트럭",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p944-x3",
+      "quote": "공구손료 및 경장비(전동드릴, 발전기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "원문 [주] ①에 '도로반사경과 지주의 철거 기준이다'라고 명시되어 있으나, 지주 철거 없이 반사경만 철거하는 경우에 대한 감산 규정이 없어 전량 적용 여부가 모호함."
+  ],
+  "questions": [
+    "도로반사경이 1면인지 2면인지에 따라 품이 달라지나요?",
+    "지주 철거 없이 반사경만 철거하는 경우에도 이 품을 그대로 적용하나요?",
+    "철거할 도로반사경의 총 수량은 몇 본입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:49:51.436533+00:00",
+    "input_tokens": 11587,
+    "output_tokens": 1707,
+    "source_pages": [
+      944,
+      945
+    ],
+    "prompt_sha256": "a34b89f72269ef2e1ac2e3abcb2433ff19180fdc156ef24163821ee730be451d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

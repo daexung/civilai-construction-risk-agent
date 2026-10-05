@@ -1,0 +1,204 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/9-5-1/시운전",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "9-5-1",
+    "title": "시운전",
+    "work": "시운전 및 조정 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      705
+    ],
+    "inputs": [
+      {
+        "name": "item_type",
+        "type": "enum",
+        "allowed_values": [
+          "배관계통",
+          "각형덕트",
+          "스파이럴덕트",
+          "5,000㎡이하",
+          "6,000∼15,000㎡",
+          "16,000∼30,000㎡",
+          "각층기계 실내기기",
+          "팬코일 유닛"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시운전 및 조정 대상은 무엇입니까?",
+        "source": "PDF 705쪽 9-5-1 시운전 표",
+        "synonyms": {
+          "5,000㎡이하": [
+            "5000이하",
+            "5000제곱미터 이하"
+          ],
+          "6,000∼15,000㎡": [
+            "6000~15000",
+            "6000에서 15000"
+          ],
+          "16,000∼30,000㎡": [
+            "16000~30000",
+            "16000에서 30000"
+          ]
+        }
+      },
+      {
+        "name": "heating_type",
+        "type": "enum",
+        "allowed_values": [
+          "일반",
+          "온풍난방"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "주기계 실내기기의 경우 온풍난방입니까?",
+        "source": "PDF 705쪽 9-5-1 시운전 표 비고"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m, ㎡, 1식, 대",
+        "required": true,
+        "ask": "물량은 얼마입니까? (배관: m, 덕트: ㎡, 주기계: 1식, 기기: 대)",
+        "source": "PDF 705쪽 9-5-1 시운전 표 단위"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p761-t1",
+        "role": "시운전 및 조정 품",
+        "source": "PDF 705쪽 9-5-1 시운전 표",
+        "values": {
+          "배관계통": {
+            "배관공": "0.026"
+          },
+          "각형덕트": {
+            "덕트공": "0.021"
+          },
+          "스파이럴덕트": {
+            "덕트공": "0.012"
+          },
+          "5,000㎡이하": {
+            "배관공": "8.0"
+          },
+          "6,000∼15,000㎡": {
+            "배관공": "12.0"
+          },
+          "16,000∼30,000㎡": {
+            "배관공": "16.0"
+          },
+          "각층기계 실내기기": {
+            "배관공": "1.2"
+          },
+          "팬코일 유닛": {
+            "배관공": "0.08"
+          }
+        },
+        "cite": {
+          "table_id": "p761-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p761-t1",
+          "row_input": "item_type",
+          "trades": [
+            "배관공",
+            "덕트공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "heating_type": "온풍난방"
+            },
+            "change": "배관공 품을 50% 적용 (괄호 안 수치)",
+            "source": "PDF 705쪽 9-5-1 시운전 표 비고"
+          }
+        ]
+      },
+      "steps": [
+        "p761-t1에서 대상 항목별 단위당 품을 찾는다.",
+        "주기계 실내기기이면서 온풍난방인 경우 배관공 품을 50%로 조정한다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 705쪽 9-5-1 시운전 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품이 표에 직접 제시되어 있으며, 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p761-t1",
+      "row": "배관계통",
+      "column": "배관공",
+      "value": "0.026"
+    },
+    {
+      "table_id": "p761-t1",
+      "row": "덕트계통 (공조,환기 배연)",
+      "column": "덕트공",
+      "value": "0.021"
+    },
+    {
+      "table_id": "p761-t1",
+      "row": "주기계 실내기기",
+      "column": "배관공",
+      "value": "8.0(4.0)"
+    },
+    {
+      "table_id": "p761-t1",
+      "row": "각층기계 실내기기",
+      "column": "배관공",
+      "value": "1.2"
+    },
+    {
+      "table_id": "p761-t1",
+      "row": "팬코일 유닛",
+      "column": "배관공",
+      "value": "0.08"
+    },
+    {
+      "chunk_id": "p761-x16",
+      "quote": "본 품은 난방 및 공조계통에 대한 각각의 설비를 완료하고 시운전 및 조정을 실시할 경우 적용한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에 '스파이럴덕트' 행이 누락되어 있으나 원문 표를 기준으로 복원하여 행 이름으로 사용했습니다.",
+    "주기계 실내기기의 온풍난방 괄호 수치가 일반 수치의 정확히 50%이므로 note_adjustments로 50% 적용을 명시했습니다."
+  ],
+  "questions": [
+    "시운전 대상이 배관계통인지 덕트계통인지 어떻게 구분하나요?",
+    "주기계 실내기기의 온풍난방인 경우 품셈 적용은 어떻게 하나요?",
+    "시운전 물량(m, ㎡, 1식, 대)은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:45:56.841962+00:00",
+    "input_tokens": 11971,
+    "output_tokens": 1996,
+    "source_pages": [
+      761,
+      762
+    ],
+    "prompt_sha256": "dfc9e8c6ec6ee0395f6713c58a2e24e3bba613df82676e758b2a43128375a3b4",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

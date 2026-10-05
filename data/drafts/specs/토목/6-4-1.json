@@ -1,0 +1,125 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/6-4-1/T.S접합및부설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "6-4-1",
+    "title": "T.S 접합 및 부설('23, '25년 보완)",
+    "work": "T.S 접합 및 부설 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      1
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "100",
+          "150"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "관경은 몇 ㎜입니까?",
+        "source": "PDF 1쪽 6-4-1 표 p425-t1"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "시공량은 몇 개소입니까?",
+        "source": "PDF 1쪽 6-4-1 표 p425-t1"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p425-t1",
+        "role": "T.S 접합 및 부설 일당 시공량 및 인원",
+        "source": "PDF 1쪽 6-4-1 표",
+        "values": {
+          "배관공(수도)": {
+            "단위": "인",
+            "수량": "2",
+            "관경(㎜)": "100",
+            "시공량(개소)": "22"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "관경(㎜)": "150",
+            "시공량(개소)": "13"
+          }
+        },
+        "cite": {
+          "table_id": "p425-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "표에서 관경에 따른 일당 시공량을 확인한다.",
+        "작업조 인원(배관공 2인, 보통인부 1인)을 확인한다.",
+        "물량 ÷ 일당시공량으로 작업일수를 구하고, 직종별 인원 × 작업일수로 총 품을 계산한다."
+      ],
+      "source": "PDF 1쪽 6-4-1 표 p425-t1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱된 표 구조에서 직종과 관경/시공량이 같은 행에 병합되어 있어, 기계적인 daily_crew 모델의 파라미터로 매핑하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p425-t1",
+      "row": "배관공(수도)",
+      "column": "관경(㎜)",
+      "value": "100"
+    },
+    {
+      "table_id": "p425-t1",
+      "row": "보통인부",
+      "column": "관경(㎜)",
+      "value": "150"
+    },
+    {
+      "chunk_id": "p425-x19",
+      "quote": "본 품은 P.V.C관(개량형 P.V.C관 포함)을 부설 및 접합(T.S)하는 기준이다."
+    },
+    {
+      "chunk_id": "p425-x19",
+      "quote": "본 품은 관 부설, 접합제 바름 및 관 연결, 위치 및 구배 확인, 관로표시테이프 부설 작업을 포함한다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표(p425-t1)에서 직종(배관공, 보통인부)과 관경(100, 150)이 같은 행에 묶여 있어, 관경별 시공량과 고정 작업조 인원을 분리하여 자동 계산하기 어렵습니다."
+  ],
+  "questions": [
+    "관경 100mm P.V.C관을 50개소 T.S 접합할 때 필요한 배관공과 보통인부 품은 어떻게 되나요?",
+    "개량형 P.V.C관도 이 품셈을 적용할 수 있나요?",
+    "접합제 바름이나 관로표시테이프 부설 작업은 별도로 품을 계산해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:59:26.324969+00:00",
+    "input_tokens": 11543,
+    "output_tokens": 1308,
+    "source_pages": [
+      425,
+      426
+    ],
+    "prompt_sha256": "4b48e83db3f5b4a51443fc8943e3d3250001b74714017a7c1046f96fe99b8b12",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

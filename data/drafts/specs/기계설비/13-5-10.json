@@ -1,0 +1,199 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-5-10/복수기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-5-10",
+    "title": "복수기 설치",
+    "work": "복수기 설치 전체 공정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      783
+    ],
+    "inputs": [],
+    "tables": [
+      {
+        "id": "p839-t1",
+        "role": "복수기 설치 작업 구분별 품",
+        "source": "PDF 783쪽 13-5-10 복수기 설치 표",
+        "values": {
+          "기술관리 공사기간중": {
+            "직종": "기계기사",
+            "단위": "인/일",
+            "수량": "1.0"
+          },
+          "포장해체 수송을 위해 포장된 목재를 해체하고 목재를 정리함._1": {
+            "직종": "목공",
+            "단위": "인/㎡",
+            "수량": "0.02"
+          },
+          "포장해체 수송을 위해 포장된 목재를 해체하고 목재를 정리함._2": {
+            "직종": "특별인부",
+            "단위": "〃",
+            "수량": "0.02"
+          },
+          "표면손질": {
+            "직종": "특별인부",
+            "단위": "인/㎡",
+            "수량": "0.1"
+          },
+          "Foundation chipping & Grouting_1": {
+            "직종": "플랜트기계설치공",
+            "단위": "〃",
+            "수량": "0.41"
+          },
+          "Foundation chipping & Grouting_2": {
+            "직종": "특별인부",
+            "단위": "〃",
+            "수량": "0.595"
+          },
+          "소운반 shell의 소재, tube, tube sheet, tube supporting plate, Expansion joint, Water box 등의 운반_1": {
+            "직종": "건설기계운전조",
+            "단위": "조/ton",
+            "수량": "0.373"
+          },
+          "소운반 shell의 소재, tube, tube sheet, tube supporting plate, Expansion joint, Water box 등의 운반_2": {
+            "직종": "비계공",
+            "단위": "인/ton",
+            "수량": "0.138"
+          },
+          "소운반 shell의 소재, tube, tube sheet, tube supporting plate, Expansion joint, Water box 등의 운반_3": {
+            "직종": "특별인부",
+            "단위": "〃",
+            "수량": "0.288"
+          },
+          "body 조립 설치 body plate 설치 Lower shell, upper shell 조립설치 turbine exhaust hood 용접 Expansion joint 설치 Front & Rear water box 설치_1": {
+            "직종": "플랜트제관공",
+            "단위": "〃",
+            "수량": "0.78"
+          },
+          "body 조립 설치 body plate 설치 Lower shell, upper shell 조립설치 turbine exhaust hood 용접 Expansion joint 설치 Front & Rear water box 설치_2": {
+            "직종": "플랜트용접공",
+            "단위": "〃",
+            "수량": "1.04"
+          },
+          "body 조립 설치 body plate 설치 Lower shell, upper shell 조립설치 turbine exhaust hood 용접 Expansion joint 설치 Front & Rear water box 설치_3": {
+            "직종": "비계공",
+            "단위": "〃",
+            "수량": "2.05"
+          },
+          "body 조립 설치 body plate 설치 Lower shell, upper shell 조립설치 turbine exhaust hood 용접 Expansion joint 설치 Front & Rear water box 설치_4": {
+            "직종": "특별인부",
+            "단위": "〃",
+            "수량": "1.54"
+          },
+          "body 조립 설치 body plate 설치 Lower shell, upper shell 조립설치 turbine exhaust hood 용접 Expansion joint 설치 Front & Rear water box 설치_5": {
+            "직종": "Crane운전조",
+            "단위": "조/대",
+            "수량": "0.346"
+          },
+          "Tube 삽입 설치": {
+            "직종": "플랜트기계설치공",
+            "단위": "인/개",
+            "수량": "0.0332"
+          },
+          "Tube sheet support Plate 소재 tube": {
+            "직종": "특별인부",
+            "단위": "〃",
+            "수량": "0.0629"
+          },
+          "삽입, Tube expanding 작업": {
+            "직종": "Crane운전조",
+            "단위": "조/개",
+            "수량": "0.0029"
+          },
+          "Condenser 내부소재 Leak test 교정": {
+            "직종": "기술관리 포장해체를 제외한 품의 15%",
+            "단위": "",
+            "수량": ""
+          }
+        },
+        "cite": {
+          "table_id": "p839-t1"
+        }
+      },
+      {
+        "id": "p839-t2",
+        "role": "참고 사용장비",
+        "source": "PDF 783쪽 [참고] 사용장비 표",
+        "values": {
+          "Over head crane Truck crane Winch A.C Welder Truck_1": {
+            "규격": "20 ton",
+            "단위": "대",
+            "수량": "1"
+          },
+          "Over head crane Truck crane Winch A.C Welder Truck_2": {
+            "규격": "20 ton",
+            "단위": "〃",
+            "수량": "1"
+          },
+          "Over head crane Truck crane Winch A.C Welder Truck_3": {
+            "규격": "20 ton",
+            "단위": "〃",
+            "수량": "4"
+          }
+        },
+        "cite": {
+          "table_id": "p839-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "작업 구분별로 단위(일, ㎡, ton, 대, 개)가 달라 개별 물량 산출이 필요하다.",
+        "Leak test 교정은 기술관리와 포장해체를 제외한 나머지 품의 15%를 가산한다."
+      ],
+      "source": "PDF 783쪽 13-5-10 표",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "작업 구분별로 적용 단위(인/일, 인/㎡, 조/ton, 조/대, 인/개 등)가 모두 달라 단일 물량 입력으로 계산할 수 없으며, 종속 계산(특정 항목 제외 후 15% 가산)이 포함되어 있어 자동 계산 모델로 단순화하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p839-t1",
+      "row": "기술관리 공사기간중",
+      "column": "수량",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p839-t1",
+      "row": "Condenser 내부소재 Leak test 교정",
+      "column": "직종",
+      "value": "기술관리 포장해체를 제외한 품의 15%"
+    }
+  ],
+  "open_questions": [
+    "작업 구분별로 단위(인/일, 인/㎡, 조/ton, 조/대, 인/개 등)가 혼재되어 있어, 단일 물량으로 전체 품을 계산할 수 없습니다. 각 세부 작업별 물량을 별도로 입력받아야 하는지 확인이 필요합니다.",
+    "Condenser 내부소재 Leak test 교정의 '기술관리 포장해체를 제외한 품의 15%' 적용 시, 제외되는 품목이 정확히 '기술관리'와 '포장해체' 두 가지인지 명확하지 않습니다.",
+    "파싱된 참고 사용장비 표(p839-t2)의 내용이 원문 이미지와 크게 다릅니다(원문은 60ton, 4ton, 15㎥/min 등 다양한 규격이 있으나 파싱 결과는 20ton만 반복됨)."
+  ],
+  "questions": [
+    "복수기 설치 시 표면손질 작업의 단위는 무엇인가요?",
+    "Leak test 교정 품을 계산할 때 '기술관리 포장해체를 제외한 품의 15%'라고 되어 있는데, 정확히 어떤 작업들의 품을 합산한 후 15%를 곱해야 하나요?",
+    "복수기 설치 전체 품을 계산하려면 공사기간, 포장해체 면적, 소운반 중량 등 각 세부 작업별 물량이 모두 필요한가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:42:48.790641+00:00",
+    "input_tokens": 12229,
+    "output_tokens": 2345,
+    "source_pages": [
+      839,
+      840
+    ],
+    "prompt_sha256": "a0f2a174c5c72e7c39072bb1130307308387404065947a706588faa42957243b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

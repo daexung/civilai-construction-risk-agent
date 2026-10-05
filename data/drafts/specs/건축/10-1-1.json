@@ -1,0 +1,236 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/10-1-1/목재창호설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "10-1-1",
+    "title": "목재창호 설치",
+    "work": "목재창호 조립 및 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      629
+    ],
+    "inputs": [
+      {
+        "name": "window_type",
+        "type": "enum",
+        "allowed_values": [
+          "여닫이",
+          "미서기(단창)"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "창호의 종류는 무엇입니까?",
+        "source": "PDF 629쪽 10-1-1 표",
+        "synonyms": {
+          "여닫이": [
+            "여닫이창"
+          ],
+          "미서기(단창)": [
+            "미서기",
+            "단창",
+            "미서기창"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "enum",
+        "allowed_values": [
+          "수량 1.0㎡이하",
+          "수량 1.0∼3.0㎡이하",
+          "수량 3.0∼6.0㎡이하",
+          "수량 6.0∼8.0㎡이하"
+        ],
+        "unit": "㎡",
+        "required": true,
+        "ask": "창호의 면적은 어느 구간에 해당합니까?",
+        "source": "PDF 629쪽 10-1-1 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소",
+        "required": true,
+        "ask": "설치할 창호의 개소 수는 몇 개소입니까?",
+        "source": "PDF 629쪽 10-1-1 표 (개소당)"
+      },
+      {
+        "name": "has_architrave",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "문선을 설치합니까?",
+        "source": "PDF 629쪽 10-1-1 표 비고"
+      },
+      {
+        "name": "architrave_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "문선 설치 길이는 몇 m입니까? (문선을 설치하지 않는 경우 0 입력)",
+        "source": "PDF 629쪽 10-1-1 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p685-t0",
+        "role": "목재창호 설치 품",
+        "source": "PDF 629쪽 10-1-1 표",
+        "unit": "인/개소",
+        "values": {
+          "여닫이 | 창호공": {
+            "수량 1.0㎡이하": "0.261",
+            "수량 1.0∼3.0㎡이하": "0.313",
+            "수량 3.0∼6.0㎡이하": "0.431",
+            "수량 6.0∼8.0㎡이하": "0.554"
+          },
+          "여닫이 | 보통인부": {
+            "수량 1.0㎡이하": "0.056",
+            "수량 1.0∼3.0㎡이하": "0.064",
+            "수량 3.0∼6.0㎡이하": "0.088",
+            "수량 6.0∼8.0㎡이하": "0.113"
+          },
+          "미서기 | 창호공": {
+            "수량 1.0㎡이하": "0.248",
+            "수량 1.0∼3.0㎡이하": "0.297",
+            "수량 3.0∼6.0㎡이하": "0.409",
+            "수량 6.0∼8.0㎡이하": "0.526"
+          },
+          "(단창) | 보통인부": {
+            "수량 1.0㎡이하": "0.054",
+            "수량 1.0∼3.0㎡이하": "0.061",
+            "수량 3.0∼6.0㎡이하": "0.084",
+            "수량 6.0∼8.0㎡이하": "0.108"
+          },
+          "비고": {
+            "비고": "- 문선을 설치하는 경우 다음 품을 추가 계상한다. (m당) 구분단위수량 창 호 공 인 0.010"
+          }
+        },
+        "cite": {
+          "table_id": "p685-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p685-t0",
+          "row_input": "window_type",
+          "column_input": "area",
+          "trades": [
+            "창호공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "has_architrave": true
+            },
+            "change": "문선 설치 길이(m) × 0.010 인을 창호공 품에 가산",
+            "source": "PDF 629쪽 10-1-1 표 비고",
+            "cite": {
+              "table_id": "p685-t0",
+              "row": "비고",
+              "value": "- 문선을 설치하는 경우 다음 품을 추가 계상한다. (m당) 구분단위수량 창 호 공 인 0.010"
+            }
+          }
+        ]
+      },
+      "steps": [
+        "p685-t0에서 창호 종류와 면적에 따른 창호공, 보통인부의 단위당 품(인/개소)을 찾는다.",
+        "단위당 품에 창호 개소(quantity)를 곱하여 기본 총 품을 구한다.",
+        "문선을 설치하는 경우(has_architrave=true), 문선 설치 길이(architrave_length) × 0.010 인을 창호공 총 품에 더한다."
+      ],
+      "source": "PDF 629쪽 10-1-1 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p685-x7",
+          "quote": "③ 공구손료 및 경장비(전동대패, 전동드라이버 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개소)당 품이 표에 직접 제시되어 있으며, 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p685-t0",
+      "row": "여닫이 | 창호공",
+      "column": "수량 1.0㎡이하",
+      "value": "0.261"
+    },
+    {
+      "table_id": "p685-t0",
+      "row": "여닫이 | 보통인부",
+      "column": "수량 1.0㎡이하",
+      "value": "0.056"
+    },
+    {
+      "table_id": "p685-t0",
+      "row": "미서기 | 창호공",
+      "column": "수량 1.0㎡이하",
+      "value": "0.248"
+    },
+    {
+      "table_id": "p685-t0",
+      "row": "(단창) | 보통인부",
+      "column": "수량 1.0㎡이하",
+      "value": "0.054"
+    },
+    {
+      "table_id": "p685-t0",
+      "row": "비고",
+      "value": "- 문선을 설치하는 경우 다음 품을 추가 계상한다. (m당) 구분단위수량 창 호 공 인 0.010"
+    },
+    {
+      "chunk_id": "p685-x7",
+      "quote": "③ 공구손료 및 경장비(전동대패, 전동드라이버 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 '미서기' 행이 '미서기 | 창호공'과 '(단창) | 보통인부'로 분리되어 있어, 입력값 '미서기(단창)'에 대해 두 행을 매핑하는 로직이 필요합니다."
+  ],
+  "questions": [
+    "목재창호 여닫이 1.5㎡ 10개소를 설치할 때 창호공과 보통인부의 품은 어떻게 되나요?",
+    "미서기 단창을 설치하고 문선도 5m 설치하려고 하는데, 문선 설치에 따른 추가 품은 어떻게 계산하나요?",
+    "창호 설치 시 사용되는 전동대패 등의 기계경비는 어떻게 계상해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:50:13.776312+00:00",
+    "input_tokens": 24041,
+    "output_tokens": 5088,
+    "source_pages": [
+      685,
+      686
+    ],
+    "prompt_sha256": "6e0fb6b582430af63966976384ad7d911b4920cb9e6df8d12f4d2f4d37e54ea4",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

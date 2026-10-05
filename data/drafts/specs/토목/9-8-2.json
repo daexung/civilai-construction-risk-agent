@@ -1,0 +1,252 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-8-2/등록전환측량",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-8-2",
+    "title": "등록전환 측량(수치)('25년 보완)",
+    "work": "등록전환 측량 품",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      533,
+      534
+    ],
+    "inputs": [
+      {
+        "name": "parcel_count",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "필지",
+        "required": true,
+        "ask": "측량할 필지 수는 몇 개입니까?",
+        "source": "PDF 533쪽 [주] ② 면적계수 (1필지당 기준)"
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "1필지당 대상면적은 몇 ㎡입니까?",
+        "source": "PDF 533쪽 [주] ② 면적계수"
+      },
+      {
+        "name": "region",
+        "type": "enum",
+        "allowed_values": [
+          "면",
+          "읍",
+          "동 시",
+          "동 구"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "행정구역은 어디에 해당합니까?",
+        "decision_table": "p589-t2",
+        "source": "PDF 533쪽 [주] ③ 지역구분계수"
+      },
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "외업",
+          "내업",
+          "합계"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "산정할 작업 범위는 무엇입니까?",
+        "source": "PDF 533쪽 작업별 품 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p589-t0",
+        "role": "작업별 지적측량 품",
+        "source": "PDF 533쪽 작업별 품 표",
+        "unit": "인/필지",
+        "values": {
+          "외업": {
+            "지적기사": "0.51",
+            "지적산업기사": "0.47",
+            "지적기능사": "0.46"
+          },
+          "내업": {
+            "지적기사": "(0.24)",
+            "지적산업기사": "(0.34)"
+          },
+          "합계": {
+            "지적기사": "0.75",
+            "지적산업기사": "0.81",
+            "지적기능사": "0.46"
+          }
+        },
+        "cite": {
+          "table_id": "p589-t0"
+        }
+      },
+      {
+        "id": "p589-t1",
+        "role": "면적계수",
+        "source": "PDF 533쪽 [주] ② 면적계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "0회": "1.0",
+            "1회": "1.3",
+            "2회이상": "1.2+(0.10×n)"
+          }
+        },
+        "cite": {
+          "table_id": "p589-t1"
+        }
+      },
+      {
+        "id": "p589-t2",
+        "role": "지역구분계수",
+        "source": "PDF 533쪽 [주] ③ 지역구분계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "면": "1.00",
+            "읍": "1.10",
+            "동 시": "1.30",
+            "동 구": "1.40"
+          }
+        },
+        "cite": {
+          "table_id": "p589-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p589-t0",
+          "row_input": "work_type",
+          "trades": [
+            "지적기사",
+            "지적산업기사",
+            "지적기능사"
+          ]
+        },
+        "quantity_input": "parcel_count",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "1필지당 1,500㎡를 기준으로, 초과 시 n=(대상면적-1500)/1500을 구하여 가산횟수에 따른 계수(p589-t1)를 곱함",
+            "source": "PDF 533쪽 [주] ② 면적계수"
+          },
+          {
+            "when": {},
+            "change": "행정구역에 따라 지역구분계수(p589-t2)를 곱함",
+            "source": "PDF 533쪽 [주] ③ 지역구분계수"
+          }
+        ]
+      },
+      "steps": [
+        "p589-t0에서 작업구분(외업/내업/합계)에 따른 직종별 품을 찾는다.",
+        "필지 수(parcel_count)를 곱하여 기본 품을 구한다.",
+        "1필지당 면적(area)을 기준으로 면적계수를 산출하여 곱한다.",
+        "행정구역(region)에 따른 지역구분계수를 곱하여 최종 품을 산출한다."
+      ],
+      "source": "PDF 533쪽",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 533쪽 ⑤ 기타사항 ㉯",
+        "cite": {
+          "chunk_id": "p589-x18",
+          "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "지적측량기준점 설치비",
+        "source": "PDF 533쪽 ⑤ 기타사항 ㉰",
+        "cite": {
+          "chunk_id": "p589-x18",
+          "quote": "작업상 지적측량기준점을 설치할 경우에는 지적측량기준점 설치비를 별도 계상한다."
+        }
+      },
+      {
+        "item": "선박 임차료 실비",
+        "source": "PDF 534쪽 ⑤ 기타사항 ㉱",
+        "cite": {
+          "chunk_id": "p590-x0",
+          "quote": "도서지역 등의 측량을 위하여 선박 등을 임차할 경우에는 임차료 실비를 별도 계상한다."
+        }
+      },
+      {
+        "item": "외업 여비",
+        "source": "PDF 534쪽 ⑤ 기타사항 ㉲",
+        "cite": {
+          "chunk_id": "p590-x0",
+          "quote": "본 품의 외업에 필요한 여비는 공무원여비규정에 의한 국내여행자의 일비를 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "1필지당 직종별 품이 표에 직접 제시되어 있고, 면적 및 지역에 따른 계수를 곱하여 산정하는 방식이므로 per_unit이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p589-t0",
+      "row": "외업",
+      "column": "지적기사",
+      "value": "0.51"
+    },
+    {
+      "table_id": "p589-t1",
+      "row": "계수",
+      "column": "1회",
+      "value": "1.3"
+    },
+    {
+      "table_id": "p589-t2",
+      "row": "계수",
+      "column": "동 시",
+      "value": "1.30"
+    },
+    {
+      "chunk_id": "p589-x10",
+      "quote": "본 품은 1필지당 1,500㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다."
+    },
+    {
+      "chunk_id": "p589-x14",
+      "quote": "본 품은 면지역을 기준으로 하였으며, 행정구역이 다를 경우 다음의 계수를 곱하여 품을 계상한다."
+    }
+  ],
+  "open_questions": [
+    "내업 품의 경우 괄호로 표시되어 있는데, 계산 시 괄호를 제거하고 숫자만 적용하는 것이 맞는지 확인이 필요합니다."
+  ],
+  "questions": [
+    "면적이 1,500㎡ 이하일 때는 면적계수를 어떻게 적용하나요?",
+    "내업만 수행할 경우 지적기능사의 품은 0으로 계산하면 되나요?",
+    "지적측량기준점을 설치해야 하는데 이 비용은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:18:52.782892+00:00",
+    "input_tokens": 13390,
+    "output_tokens": 2509,
+    "source_pages": [
+      589,
+      590,
+      591
+    ],
+    "prompt_sha256": "5d8c4216930f78e6a407554a54ea197c9314e5c0ce5aea294ac972b7f7face5c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

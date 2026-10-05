@@ -1,0 +1,28 @@
+{
+  "id": "1-2-8_unit_decimals",
+  "title": "작업조 일당시공량의 시공단위별 품과 소수자리",
+  "edition": "2026 건설공사 표준품셈 정오표 1차 반영",
+  "source": {
+    "pdf": "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf",
+    "unit_decimals": "PDF 74쪽 1-2-8 3. 시공단위의 품 산정, 75쪽 [참고]",
+    "rounding": "PDF 59쪽 1-2-1 수량의 계산 2항"
+  },
+  "description": "작업조 인원과 장비 대수를 일당시공량으로 나누어 1시공단위당 품을 구한다. 장비는 1일 8시간이다.",
+  "adjustable_clause": "품의 규격과 단위수량을 고려하여 소수자리의 정도를 조정하여 적용할 수 있다.",
+  "places_by_daily_output": [
+    {"minimum": "0", "maximum_exclusive": "10", "places": 2, "label": "1단위이하(예시 3단위 포함)"},
+    {"minimum": "10", "maximum_exclusive": "100", "places": 3, "label": "10단위"},
+    {"minimum": "100", "maximum_exclusive": "1000", "places": 4, "label": "100단위"},
+    {"minimum": "1000", "maximum_exclusive": "10000", "places": 5, "label": "1,000단위"},
+    {"minimum": "10000", "maximum_exclusive": "100000", "places": 6, "label": "10,000단위"}
+  ],
+  "boundary_policy": "일당시공량의 정수부 자릿수로 판정한다. 1 미만 및 정수부 한 자리(3, 9.99 등)는 2자리, 두 자리부터 자릿수에 1을 더한다. 10만 단위 이상도 같은 패턴으로 연장한다.",
+  "formulas": {
+    "labor": "인력품(인) = 인력(인) ÷ 시공량(일당)",
+    "equipment": "장비품(hr) = 장비(대) × 8(hr) ÷ 시공량(일당)",
+    "equipment_hours_per_day": 8
+  },
+  "rounding_rule": "수량의 계산은 지정 소수자리 아래 1자리까지 산출하여 반올림 한다.",
+  "rounding_method": "사사오입; 정확한 유리수에서 지정 자리 다음 숫자가 5 이상이면 올림",
+  "note": "표는 기본 자릿수이며 1-2-8의 조정 가능 조항은 별도로 검토한다."
+}

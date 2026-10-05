@@ -1,0 +1,145 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/4-2-5/레인지후드설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "4-2-5",
+    "title": "레인지후드 설치",
+    "work": "레인지후드 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      673
+    ],
+    "inputs": [
+      {
+        "name": "hood_size",
+        "type": "enum",
+        "allowed_values": [
+          "700㎜이하",
+          "900㎜이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "레인지후드의 크기는 얼마입니까?",
+        "source": "4-2-5 표"
+      },
+      {
+        "name": "quantity",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "개",
+        "required": true,
+        "ask": "설치할 레인지후드의 수량은 몇 개입니까?",
+        "source": "4-2-5 표 단위 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p729-t3",
+        "role": "레인지후드 설치 단위당 품",
+        "source": "4-2-5 표",
+        "unit": "인/개",
+        "values": {
+          "기계설비공": {
+            "700㎜이하": "0.119",
+            "900㎜이하": "0.142"
+          },
+          "보통인부": {
+            "700㎜이하": "0.038",
+            "900㎜이하": "0.046"
+          }
+        },
+        "cite": {
+          "table_id": "p729-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p729-t3",
+          "column_input": "hood_size",
+          "trades": [
+            "기계설비공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p729-t3에서 레인지후드 크기에 따른 직종별 단위당 품을 찾는다.",
+        "수량을 곱하여 총 품을 구한다."
+      ],
+      "source": "4-2-5 표",
+      "rounding": "동일 원칙(1-2-8·1-2-1)"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당)당 직종별 인·일이 표에 직접 제시되어 있으므로 per_unit 방식을 사용한다.",
+  "citations": [
+    {
+      "table_id": "p729-t3",
+      "row": "기계설비공",
+      "column": "700㎜이하",
+      "value": "0.119"
+    },
+    {
+      "table_id": "p729-t3",
+      "row": "기계설비공",
+      "column": "900㎜이하",
+      "value": "0.142"
+    },
+    {
+      "table_id": "p729-t3",
+      "row": "보통인부",
+      "column": "700㎜이하",
+      "value": "0.038"
+    },
+    {
+      "table_id": "p729-t3",
+      "row": "보통인부",
+      "column": "900㎜이하",
+      "value": "0.046"
+    },
+    {
+      "chunk_id": "p729-x19",
+      "quote": "본 품은 가정용 주방에 설치하는 레인지후드(최대 풍량 6∼12㎥/분) 기준이다."
+    },
+    {
+      "chunk_id": "p729-x19",
+      "quote": "본 품에는 플랙시블 덕트의 연결, 후드 설치, 시운전 및 검사를 포함한다."
+    }
+  ],
+  "open_questions": [
+    "최대 풍량 6~12㎥/분 범위를 벗어나는 레인지후드에 대한 품셈 적용 기준이 명시되어 있지 않음."
+  ],
+  "questions": [
+    "레인지후드 크기가 700mm 이하인 경우 기계설비공 품은 얼마인가요?",
+    "최대 풍량이 15㎥/분인 레인지후드를 설치할 때 이 품셈을 적용할 수 있나요?",
+    "설치할 레인지후드의 수량은 몇 개인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:05.056716+00:00",
+    "input_tokens": 11544,
+    "output_tokens": 1327,
+    "source_pages": [
+      729,
+      730
+    ],
+    "prompt_sha256": "eec4d49ca4c1721ec9dac82fc9b574ab989120c2d1a53f53ca9efd0c0d6af348",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

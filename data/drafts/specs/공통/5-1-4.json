@@ -1,0 +1,250 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/5-1-4/H-Beam해체_띠장",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "5-1-4",
+    "title": "H-Beam 해체(띠장)",
+    "work": "H-Beam 띠장 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      100
+    ],
+    "inputs": [
+      {
+        "name": "h_beam_size",
+        "type": "enum",
+        "allowed_values": [
+          "H=250∼500",
+          "H=600∼800"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해체할 H-Beam의 규격은 무엇입니까?",
+        "source": "PDF 100쪽 5-1-4 표의 시공량 구분"
+      },
+      {
+        "name": "length",
+        "type": "enum",
+        "allowed_values": [
+          "5m이하",
+          "6~8m",
+          "9~11m",
+          "12~14m",
+          "15~18m"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "해체할 H-Beam의 길이(규격)는 어느 구간에 해당합니까?",
+        "source": "PDF 100쪽 5-1-4 표의 규격(m) 구분"
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "해체할 H-Beam 띠장의 총 길이는 몇 m입니까?",
+        "source": "PDF 100쪽 5-1-4 표의 시공량(m) 단위"
+      },
+      {
+        "name": "crane_type",
+        "type": "enum",
+        "allowed_values": [
+          "현장 적합 규격"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "장비(크레인)의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율을 고려하여 적합한 규격을 적용합니다. 확인하셨습니까?",
+        "source": "PDF 100쪽 5-1-4 [주] ⑦"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p156-t1",
+        "role": "작업조 인원, 장비 대수 및 규격별 일일시공량",
+        "source": "PDF 100쪽 5-1-4 표",
+        "unit": "인/작업조, 대/작업조, m/일",
+        "values": {
+          "철골공": {
+            "H=250∼500": "1",
+            "H=600∼800": "1"
+          },
+          "용접공": {
+            "H=250∼500": "2",
+            "H=600∼800": "2"
+          },
+          "보통인부": {
+            "H=250∼500": "1",
+            "H=600∼800": "1"
+          },
+          "크레인": {
+            "H=250∼500": "1",
+            "H=600∼800": "1"
+          },
+          "5m이하": {
+            "H=250∼500": "70",
+            "H=600∼800": "55"
+          },
+          "6~8m": {
+            "H=250∼500": "90",
+            "H=600∼800": "70"
+          },
+          "9~11m": {
+            "H=250∼500": "110",
+            "H=600∼800": "85"
+          },
+          "12~14m": {
+            "H=250∼500": "130",
+            "H=600∼800": "100"
+          },
+          "15~18m": {
+            "H=250∼500": "140",
+            "H=600∼800": "110"
+          }
+        },
+        "cite": {
+          "table_id": "p156-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p156-t1",
+          "row_input": "length",
+          "column_input": "h_beam_size"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p156-t1",
+          "column_input": "h_beam_size",
+          "trades": [
+            "철골공",
+            "용접공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "철골공": "",
+            "용접공": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": {
+          "name": "크레인",
+          "table": "p156-t1",
+          "unit": "대·일",
+          "machine_code_input": "crane_type",
+          "operator_rate_code": ""
+        },
+        "quantity_input": "volume"
+      },
+      "steps": [
+        "p156-t1 표에서 H-Beam 규격과 길이에 따른 기준 일일시공량을 찾는다.",
+        "작업일수 = volume ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 직종별 인원, 크레인 대·일 = 작업일수 × 표의 크레인 대수로 구한다."
+      ],
+      "source": "PDF 100쪽 5-1-4 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "운반을 위한 H-Beam의 상차 및 운반",
+        "source": "PDF 100쪽 5-1-4 [주] ③",
+        "cite": {
+          "chunk_id": "p156-x17",
+          "quote": "③ 운반을 위한 H-Beam의 상차 및 운반은 제외되어 있다."
+        }
+      },
+      {
+        "item": "받침재 및 브레이싱 해체",
+        "source": "PDF 100쪽 5-1-4 [주] ④",
+        "cite": {
+          "chunk_id": "p156-x17",
+          "quote": "④ 받침재 및 브레이싱 해체는 별도 계상한다."
+        }
+      },
+      {
+        "item": "소모재료",
+        "source": "PDF 100쪽 5-1-4 [주] ⑤",
+        "cite": {
+          "chunk_id": "p156-x17",
+          "quote": "⑤ 소모재료는 설계수량에 따라 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p156-x17",
+          "quote": "⑥ 공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수가 주어지고, 규격별 일일 시공량이 제시되어 있어 작업일수를 구한 뒤 인·일을 산출하는 표준적인 일당 작업조형 계산입니다.",
+  "citations": [
+    {
+      "table_id": "p156-t1",
+      "row": "5m이하",
+      "column": "H=250∼500",
+      "value": "70"
+    },
+    {
+      "table_id": "p156-t1",
+      "row": "철골공 용접공 보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p156-x17",
+      "quote": "⑥ 공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p156-x17",
+      "quote": "③ 운반을 위한 H-Beam의 상차 및 운반은 제외되어 있다."
+    },
+    {
+      "chunk_id": "p156-x17",
+      "quote": "④ 받침재 및 브레이싱 해체는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p156-x17",
+      "quote": "⑤ 소모재료는 설계수량에 따라 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트(`p156-t1`)에서 작업조 인원 수량이 '철골공 용접공 보통인부 | 단위 인 | 수량 1'로 묶여 있어, OCR 원문을 참고하여 철골공 1, 용접공 2, 보통인부 1로 분리하여 표를 재구성했습니다. 파싱 결과의 행 이름을 그대로 써야 하는 규칙과 충돌할 여지가 있습니다.",
+    "크레인 장비의 구체적인 규격이 명시되지 않고 주석 ⑦에 따라 현장 여건에 맞게 적용하도록 되어 있어, 단일 장비 코드로 매핑하기 어렵습니다."
+  ],
+  "questions": [
+    "H-Beam 띠장 해체 시 H=300 규격이고 길이가 7m일 때 일당 시공량은 얼마인가요?",
+    "크레인 규격은 어떻게 결정해서 적용해야 하나요?",
+    "해체할 H-Beam 띠장의 총 길이(물량)를 입력하지 않았습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:22:21.480633+00:00",
+    "input_tokens": 11976,
+    "output_tokens": 2726,
+    "source_pages": [
+      156,
+      157
+    ],
+    "prompt_sha256": "6fd5bbad67e3e1b007640b47878dd2fb5617d968e3e172aa9b13ee552db9db74",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

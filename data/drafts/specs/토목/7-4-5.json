@@ -1,0 +1,129 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-4-5/유보율",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-4-5",
+    "title": "펌프준설 매립시의 유보율 등",
+    "work": "유보율 참조",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      395
+    ],
+    "inputs": [
+      {
+        "name": "soil_type",
+        "type": "enum",
+        "allowed_values": [
+          "점토 및 점토질 실트",
+          "모래질 및 사질 실트",
+          "자갈"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질은 무엇입니까?",
+        "source": "PDF 395쪽 7-4-5 표",
+        "synonyms": {
+          "점토 및 점토질 실트": [
+            "점토및점토질실트",
+            "점토",
+            "점토질 실트"
+          ],
+          "모래질 및 사질 실트": [
+            "모래질및사질실트",
+            "모래질 실트",
+            "사질 실트"
+          ],
+          "자갈": []
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p451-t3",
+        "role": "토질별 유보율",
+        "source": "PDF 395쪽 7-4-5 표",
+        "unit": "%",
+        "values": {
+          "점토및점토질실트": {
+            "유 보 율(%)": "70이하"
+          },
+          "모래질및사질실트": {
+            "유 보 율(%)": "70∼95"
+          },
+          "자갈": {
+            "유 보 율(%)": "95∼100"
+          }
+        },
+        "cite": {
+          "table_id": "p451-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 토질에 해당하는 유보율(%) 범위를 표에서 찾는다.",
+        "실험적 방법 산정이 원칙이나, 불가 시 이 값을 적용한다."
+      ],
+      "source": "PDF 395쪽 7-4-5 표 및 [주]",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "토질에 따른 유보율 범위를 표에서 찾아 참조하는 항목이므로 lookup_only로 분류함.",
+  "citations": [
+    {
+      "table_id": "p451-t3",
+      "row": "점토및점토질실트",
+      "column": "유 보 율(%)",
+      "value": "70이하"
+    },
+    {
+      "table_id": "p451-t3",
+      "row": "모래질및사질실트",
+      "column": "유 보 율(%)",
+      "value": "70∼95"
+    },
+    {
+      "table_id": "p451-t3",
+      "row": "자갈",
+      "column": "유 보 율(%)",
+      "value": "95∼100"
+    },
+    {
+      "chunk_id": "p451-x21",
+      "quote": "실험적 방법으로 산정하는 것이 가장 정확하나, 그렇지 못할 경우 본 품의 값을 적용할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "유보율이 범위(예: 70~95)로 주어져 있어 단일 값으로 계산에 직접 적용하기 위해서는 추가적인 기준이나 판단이 필요함."
+  ],
+  "questions": [
+    "점토질 실트의 유보율은 얼마를 적용해야 하나요?",
+    "유보율이 70~95%로 되어 있는데 정확히 몇 %를 적용해야 하나요?",
+    "여수토의 위치나 매립고에 따른 유보율 보정 기준이 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:45:39.626819+00:00",
+    "input_tokens": 11517,
+    "output_tokens": 1135,
+    "source_pages": [
+      451,
+      452
+    ],
+    "prompt_sha256": "85cb56788c9034297fb51c0bd611e8191c765b74d902548665492787f7ca0b0b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

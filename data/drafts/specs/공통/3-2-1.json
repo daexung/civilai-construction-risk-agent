@@ -1,0 +1,234 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-2-1/굴착_인력_토사",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-2-1",
+    "title": "굴착(인력/토사)",
+    "work": "인력 토사 굴착 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      67
+    ],
+    "inputs": [
+      {
+        "name": "soil_type",
+        "type": "enum",
+        "allowed_values": [
+          "보통토사",
+          "경질토사",
+          "고사점토 및 자갈섞인 토사",
+          "호박돌 섞인 토사"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질은 무엇입니까?",
+        "source": "p123-t0 표 헤더",
+        "synonyms": {
+          "고사점토 및 자갈섞인 토사": [
+            "고사점토",
+            "자갈섞인 토사"
+          ],
+          "호박돌 섞인 토사": [
+            "호박돌"
+          ]
+        }
+      },
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "굴착 물량은 몇 ㎥입니까?",
+        "source": "p123-t0 시공량 단위"
+      },
+      {
+        "name": "wide_area",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "주위에 장애물이 없고, 넓은 구역의 터파기입니까?",
+        "source": "p123-t0 비고"
+      },
+      {
+        "name": "water_issue",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "용수가 있는 곳입니까?",
+        "source": "p123-x9 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p123-t0",
+        "role": "토질별 일당 시공량",
+        "source": "3-2-1 굴착(인력/토사) 표",
+        "unit": "㎥/일",
+        "values": {
+          "특별인부": {
+            "단위": "인",
+            "수량": "1",
+            "시공량(㎥) 보통토사": "3.6",
+            "시공량(㎥) 경질토사": "2.7",
+            "시공량(㎥) 고사점토 및\n자갈섞인 토사": "2.2",
+            "시공량(㎥) 호박돌 섞인 토사": "1.2"
+          },
+          "비고": {
+            "비고": "- 현장 내에서 소운반하여 깔고 고르는 잔토처리는 ㎥당 보통인부 0.2인을 별도 계상한다. - 주위에 장애물이 없고, 넓은 구역의 터파기인 경우에는 시공량을 40%까지 가산한다."
+          }
+        },
+        "cite": {
+          "table_id": "p123-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p123-t0에서 토질별 시공량을 확인한다.",
+        "넓은 구역 터파기인 경우 시공량을 최대 40%까지 가산한다.",
+        "용수가 있는 경우 시공량을 최대 33%까지 감산한다.",
+        "물량을 최종 시공량으로 나누어 작업일수를 구하고, 특별인부 1인을 곱해 총 품을 산출한다."
+      ],
+      "source": "p123-t0 비고 및 p123-x9 [주] ④",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "넓은 구역 터파기 (가산 비율 판단 필요)",
+        "blocked_if": {
+          "input": "wide_area",
+          "op": "==",
+          "value": true
+        },
+        "reason": "시공량을 40%까지 가산해야 하나, 정확한 가산 비율은 현장 여건에 따라 판단해야 하므로 자동 계산 보류",
+        "source": "p123-t0 비고",
+        "cite": {
+          "table_id": "p123-t0",
+          "row": "비고",
+          "column": "비고",
+          "value": "- 현장 내에서 소운반하여 깔고 고르는 잔토처리는 ㎥당 보통인부 0.2인을 별도 계상한다. - 주위에 장애물이 없고, 넓은 구역의 터파기인 경우에는 시공량을 40%까지 가산한다."
+        }
+      },
+      {
+        "condition": "용수가 있는 곳 (감산 비율 판단 필요)",
+        "blocked_if": {
+          "input": "water_issue",
+          "op": "==",
+          "value": true
+        },
+        "reason": "시공량의 33% 범위 내에서 감하여 적용해야 하나, 정확한 감산 비율은 현장 여건에 따라 판단해야 하므로 자동 계산 보류",
+        "source": "p123-x9 [주] ④",
+        "cite": {
+          "chunk_id": "p123-x9",
+          "quote": "④ 용수가 있는 곳은 시공량의 33% 범위 내에서 감하여 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "잔토처리 (현장 내 소운반하여 깔고 고르기)",
+        "source": "p123-t0 비고",
+        "cite": {
+          "table_id": "p123-t0",
+          "row": "비고",
+          "column": "비고",
+          "value": "- 현장 내에서 소운반하여 깔고 고르는 잔토처리는 ㎥당 보통인부 0.2인을 별도 계상한다. - 주위에 장애물이 없고, 넓은 구역의 터파기인 경우에는 시공량을 40%까지 가산한다."
+        }
+      },
+      {
+        "item": "흙막기 및 물푸기 품",
+        "source": "p123-x9 [주] ③",
+        "cite": {
+          "chunk_id": "p123-x9",
+          "quote": "③ 흙막기 및 물푸기 품은 필요시 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "시공량 가산(40%까지) 및 감산(33% 범위 내) 비율이 고정값이 아니라 범위로 제시되어 있어 사용자의 판단이 크게 필요하며, 현재의 adjusted_daily_crew 모델로는 주석에 명시된 시공량 가감산을 처리할 수 없기 때문입니다.",
+  "citations": [
+    {
+      "table_id": "p123-t0",
+      "row": "특별인부",
+      "column": "시공량(㎥) 보통토사",
+      "value": "3.6"
+    },
+    {
+      "table_id": "p123-t0",
+      "row": "특별인부",
+      "column": "시공량(㎥) 경질토사",
+      "value": "2.7"
+    },
+    {
+      "table_id": "p123-t0",
+      "row": "특별인부",
+      "column": "시공량(㎥) 고사점토 및\n자갈섞인 토사",
+      "value": "2.2"
+    },
+    {
+      "table_id": "p123-t0",
+      "row": "특별인부",
+      "column": "시공량(㎥) 호박돌 섞인 토사",
+      "value": "1.2"
+    },
+    {
+      "table_id": "p123-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 현장 내에서 소운반하여 깔고 고르는 잔토처리는 ㎥당 보통인부 0.2인을 별도 계상한다. - 주위에 장애물이 없고, 넓은 구역의 터파기인 경우에는 시공량을 40%까지 가산한다."
+    },
+    {
+      "chunk_id": "p123-x9",
+      "quote": "① 본 품은 자연상태 토사를 기준한 것이며, 깊이 1m이하의 인력에 의한 구조물 터파기 또는 흙깎기 등에\n설명 | 적용한다."
+    },
+    {
+      "chunk_id": "p123-x9",
+      "quote": "③ 흙막기 및 물푸기 품은 필요시 별도 계상한다."
+    },
+    {
+      "chunk_id": "p123-x9",
+      "quote": "④ 용수가 있는 곳은 시공량의 33% 범위 내에서 감하여 적용한다."
+    }
+  ],
+  "open_questions": [
+    "넓은 구역의 터파기인 경우 '40%까지 가산'의 구체적인 적용 기준(어떤 경우에 몇 %를 가산할지)이 명시되어 있지 않아 판단이 필요함.",
+    "용수가 있는 곳의 경우 '33% 범위 내에서 감하여 적용'의 구체적인 적용 기준이 명시되어 있지 않아 판단이 필요함."
+  ],
+  "questions": [
+    "보통토사 100㎥를 인력으로 굴착할 때 필요한 특별인부 품은 얼마인가요?",
+    "용수가 있는 곳에서 굴착 작업을 할 때 시공량은 어떻게 조정해야 하나요?",
+    "현장 내에서 소운반하여 깔고 고르는 잔토처리는 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:17:58.649057+00:00",
+    "input_tokens": 23427,
+    "output_tokens": 4965,
+    "source_pages": [
+      123,
+      124
+    ],
+    "prompt_sha256": "8b32bd4c301b555718ba41a66f634f136d82d3bb2e144ddb6bb3f6e8475f41cd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/3-4-1/터널방수",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "3-4-1",
+    "title": "터널 방수",
+    "work": "일체식 터널 방수시트 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      343
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "터널 방수 면적은 몇 ㎡입니까?",
+        "source": "PDF 343쪽 3-4-1 터널 방수 단위 (㎡당)"
+      },
+      {
+        "name": "material_supply",
+        "type": "enum",
+        "allowed_values": [
+          "관급",
+          "사급"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "방수시트는 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+        "source": "관급/사급 구분과 처리 방식은 실무 확인 전",
+        "synonyms": {
+          "관급": [
+            "관급자재",
+            "지급자재",
+            "발주처 지급"
+          ],
+          "사급": [
+            "사급자재",
+            "시공사 구매",
+            "자체 구매"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p399-t0",
+        "role": "터널 방수 노무 품",
+        "source": "PDF 343쪽 3-4-1 터널 방수 첫 번째 표",
+        "unit": "인/㎡",
+        "values": {
+          "방수공": {
+            "수량": "0.011"
+          },
+          "보통인부": {
+            "수량": "0.002"
+          }
+        },
+        "cite": {
+          "table_id": "p399-t0"
+        }
+      },
+      {
+        "id": "p399-t1",
+        "role": "터널 방수 재료량",
+        "source": "PDF 343쪽 3-4-1 터널 방수 두 번째 표",
+        "unit": "㎡/㎡",
+        "values": {
+          "일체식방수시트": {
+            "수량": "1.15"
+          }
+        },
+        "cite": {
+          "table_id": "p399-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p399-t0",
+          "row_input": null,
+          "column_input": null,
+          "trades": [
+            "방수공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p399-t0에서 단위당 품을 가져온다.",
+        "물량을 곱해 총 노무 품을 구한다.",
+        "p399-t1에서 단위당 재료량을 가져와 물량을 곱해 총 재료량을 구한다."
+      ],
+      "source": "PDF 343쪽 3-4-1 터널 방수",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "소모자재(타정못 등) 재료비",
+        "source": "PDF 343쪽 3-4-1 ※",
+        "cite": [
+          {
+            "chunk_id": "p399-x7",
+            "quote": "소모자재(타정못 등) 재료비는 별도 계상한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [
+      {
+        "item": "일체식 방수시트",
+        "input": "material_supply",
+        "category": "재료비",
+        "when": {
+          "관급": {
+            "status": "제외",
+            "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+          },
+          "사급": {
+            "status": "미산정",
+            "reason": "단가 미입력"
+          }
+        },
+        "source": "PDF 343쪽 3-4-1 두 번째 표",
+        "cite": [
+          {
+            "table_id": "p399-t1"
+          }
+        ]
+      }
+    ],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.06",
+        "cite": [
+          {
+            "chunk_id": "p399-x3",
+            "quote": "공구손료 및 경장비(용접기, 타정기, 공기압축기, 시험기기 등) 기계경비는 인력품의 6%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당(㎡당) 노무 품과 재료량이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p399-t0",
+      "row": "방수공",
+      "column": "수량",
+      "value": "0.011"
+    },
+    {
+      "table_id": "p399-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.002"
+    },
+    {
+      "table_id": "p399-t1",
+      "row": "일체식방수시트",
+      "column": "수량",
+      "value": "1.15"
+    },
+    {
+      "chunk_id": "p399-x3",
+      "quote": "공구손료 및 경장비(용접기, 타정기, 공기압축기, 시험기기 등) 기계경비는 인력품의 6%로 계상한다."
+    },
+    {
+      "chunk_id": "p399-x7",
+      "quote": "소모자재(타정못 등) 재료비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "재료량 표(p399-t1)의 재료비 계산을 quantity_model에 어떻게 통합할지 명확하지 않아 per_unit 모델의 steps에만 서술함."
+  ],
+  "questions": [
+    "터널 방수 면적이 1000㎡일 때 방수공과 보통인부의 품은 어떻게 계산하나요?",
+    "공구손료 및 경장비는 어떻게 계상하나요?",
+    "방수시트의 관급/사급 여부에 따른 재료비 처리는 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:32.047938+00:00",
+    "input_tokens": 11722,
+    "output_tokens": 1944,
+    "source_pages": [
+      399,
+      400
+    ],
+    "prompt_sha256": "78939c9a91bffd7785ed9b8ac9458ca6290beb19c0cc3369474b277aff1ac3ae",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

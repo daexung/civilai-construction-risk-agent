@@ -1,0 +1,189 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/9-2-1/콘크리트면정리",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "9-2-1",
+    "title": "콘크리트면 정리",
+    "work": "콘크리트면 정리 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      625
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "콘크리트면 정리 물량은 몇 ㎡입니까?",
+        "source": "p681-t1 기준 단위 (10㎡당)"
+      },
+      {
+        "name": "height_band",
+        "type": "enum",
+        "allowed_values": [
+          "3.6m이하",
+          "3.6m초과~7.2m이하",
+          "7.2m초과"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공 높이는 어느 구간에 해당합니까?",
+        "source": "p681-t1 수 량 (높이) 구분 및 비고"
+      },
+      {
+        "name": "is_ceiling",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 부위가 천장입니까?",
+        "source": "p681-t1 비고"
+      },
+      {
+        "name": "scaffold_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계를 사용합니까?",
+        "source": "p681-t1 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p681-t1",
+        "role": "콘크리트면 정리 단위당 품",
+        "source": "9-2-1 콘크리트면 정리 표",
+        "unit": "인/10㎡",
+        "values": {
+          "견출공": {
+            "3.6m이하": "0.11",
+            "3.6m초과~7.2m이하": "0.14"
+          }
+        },
+        "cite": {
+          "table_id": "p681-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p681-t1",
+          "row_input": "견출공",
+          "column_input": "height_band",
+          "trades": [
+            "견출공"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_ceiling": true
+            },
+            "change": "본 품의 20%를 가산한다.",
+            "source": "p681-t1 비고",
+            "cite": {
+              "table_id": "p681-t1"
+            }
+          }
+        ]
+      },
+      "steps": [
+        "p681-t1에서 시공 높이에 따른 견출공의 단위당 품(10㎡당)을 찾는다.",
+        "단위당 품을 10으로 나누어 1㎡당 품을 구한 뒤, 물량(quantity)을 곱해 기본 품을 구한다.",
+        "천장 작업일 경우 기본 품에 20%를 가산한다."
+      ],
+      "source": "9-2-1 콘크리트면 정리 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "시공 높이 7.2m 초과",
+        "blocked_if": {
+          "input": "height_band",
+          "op": "==",
+          "value": "7.2m초과"
+        },
+        "reason": "비계사용 시 시공량 3% 감산 규정을 품 할증으로 변환하는 방식과 3.6m마다의 누적 방식이 불명확하며, 비계 미사용 시 7.2m 초과에 대한 기준이 없음",
+        "source": "p681-t1 비고",
+        "cite": {
+          "table_id": "p681-t1"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "chunk_id": "p681-x6",
+          "quote": "공구손료 및 경장비(연마기 등)의 기계경비는 인력품의 3%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 면적(10㎡)당 견출공의 인력 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p681-t1",
+      "row": "견출공",
+      "column": "3.6m이하",
+      "value": "0.11"
+    },
+    {
+      "table_id": "p681-t1",
+      "row": "견출공",
+      "column": "3.6m초과~7.2m이하",
+      "value": "0.14"
+    },
+    {
+      "chunk_id": "p681-x6",
+      "quote": "공구손료 및 경장비(연마기 등)의 기계경비는 인력품의 3%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "'비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량의 3%를 감한다'는 규정에서, 시공량 감소를 품의 증가로 환산할 때 단순 할증(품 × 1.03)으로 처리할지, 역수(품 / 0.97)로 처리할지 명확하지 않습니다.",
+    "3.6m마다 감산할 때 누적 방식이 단리인지 복리인지 원문에 명시되어 있지 않습니다.",
+    "비계를 사용하지 않고 7.2m를 초과하는 경우에 대한 품셈 기준이 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "천장 면을 정리할 때 품 할증은 어떻게 되나요?",
+    "비계를 사용하고 시공 높이가 10m일 때, 시공량 3% 감산은 품 계산에 어떻게 적용해야 하나요?",
+    "시공 높이가 3.6m 이하인지 초과인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:07:40.935209+00:00",
+    "input_tokens": 11581,
+    "output_tokens": 1899,
+    "source_pages": [
+      681,
+      682
+    ],
+    "prompt_sha256": "db1106ed62caf90473a67a4ffc7624dbd41cc8ca050621194734150db259e5d0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

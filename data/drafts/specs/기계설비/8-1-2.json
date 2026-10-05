@@ -1,0 +1,229 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/8-1-2/냉동기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "8-1-2",
+    "title": "냉동기 설치",
+    "work": "냉동기 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      689
+    ],
+    "inputs": [
+      {
+        "name": "capacity",
+        "type": "enum",
+        "allowed_values": [
+          "왕복동식냉동기5",
+          "규격 7.5",
+          "규격 15",
+          "규격 20",
+          "규격 30",
+          "규격 50",
+          "규격 80"
+        ],
+        "unit": "냉동톤",
+        "required": true,
+        "ask": "설치할 냉동기의 규격(냉동톤)은 무엇입니까?",
+        "source": "파싱 결과 p745-t1 표의 규격",
+        "synonyms": {
+          "왕복동식냉동기5": [
+            "5",
+            "5냉동톤",
+            "5RT"
+          ],
+          "규격 7.5": [
+            "7.5",
+            "7.5냉동톤",
+            "7.5RT"
+          ],
+          "규격 15": [
+            "15",
+            "15냉동톤",
+            "15RT"
+          ],
+          "규격 20": [
+            "20",
+            "20냉동톤",
+            "20RT"
+          ],
+          "규격 30": [
+            "30",
+            "30냉동톤",
+            "30RT"
+          ],
+          "규격 50": [
+            "50",
+            "50냉동톤",
+            "50RT"
+          ],
+          "규격 80": [
+            "80",
+            "80냉동톤",
+            "80RT"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 냉동기의 수량은 몇 대입니까?",
+        "source": "파싱 결과 p745-t1 표의 기준 (대당)"
+      },
+      {
+        "name": "is_basement_1st_floor",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 반입 후 지하 1층에 설치하는 기준입니까?",
+        "source": "파싱 결과 p745-x20 [주] ①"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p745-t1",
+        "role": "냉동기 규격별 설치 품 (대당)",
+        "source": "8-1-2 냉동기 설치 표",
+        "unit": "인/대",
+        "values": {
+          "왕복동식냉동기5": {
+            "배관공": "2.19",
+            "보통인부": "1.09"
+          },
+          "규격 7.5": {
+            "배관공": "2.80",
+            "보통인부": "1.27"
+          },
+          "규격 15": {
+            "배관공": "3.37",
+            "보통인부": "1.70"
+          },
+          "규격 20": {
+            "배관공": "3.93",
+            "보통인부": "1.98"
+          },
+          "규격 30": {
+            "배관공": "5.04",
+            "보통인부": "2.53"
+          },
+          "규격 50": {
+            "배관공": "5.91",
+            "보통인부": "3.80"
+          },
+          "규격 80": {
+            "배관공": "12.03",
+            "보통인부": "5.91"
+          }
+        },
+        "cite": {
+          "table_id": "p745-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p745-t1",
+          "row_input": "capacity",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p745-t1 표에서 규격(capacity)에 해당하는 배관공과 보통인부의 단위당 품을 찾는다.",
+        "찾은 단위당 품에 설치 대수(quantity)를 곱하여 총 품을 구한다."
+      ],
+      "source": "파싱 결과 p745-t1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "is_basement_1st_floor == false",
+        "blocked_if": {
+          "input": "is_basement_1st_floor",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 지하 1층 설치를 기준한 것이며, 다른 층 설치에 대한 품 조정 기준이 원문에 명시되어 있지 않음",
+        "source": "파싱 결과 p745-x20 [주] ①",
+        "cite": {
+          "chunk_id": "p745-x20",
+          "quote": "본 품은 현장 반입 후 지하 1층 설치를 기준하였다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기초 및 소운반",
+        "source": "파싱 결과 p745-x20 [주] ③",
+        "cite": {
+          "chunk_id": "p745-x20",
+          "quote": "기초 및 소운반은 제외되었다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표에 규격별로 대당 배관공과 보통인부의 품이 직접 명시되어 있어, 단위당 품에 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p745-t1",
+      "row": "왕복동식냉동기5",
+      "column": "배관공",
+      "value": "2.19"
+    },
+    {
+      "chunk_id": "p745-x20",
+      "quote": "본 품은 현장 반입 후 지하 1층 설치를 기준하였다."
+    },
+    {
+      "chunk_id": "p745-x20",
+      "quote": "본 품에는 시운전품이 포함되어 있다."
+    },
+    {
+      "chunk_id": "p745-x20",
+      "quote": "기초 및 소운반은 제외되었다."
+    }
+  ],
+  "open_questions": [
+    "지하 1층이 아닌 다른 층(예: 지상층, 지하 2층 등)에 설치할 경우 품을 어떻게 조정해야 하는지 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "왕복동식냉동기 20냉동톤 2대를 지하 1층에 설치할 때 배관공과 보통인부의 품은 각각 얼마인가요?",
+    "지하 2층에 냉동기를 설치하려고 하는데, 이 품셈을 그대로 적용해도 되나요?",
+    "냉동기 30냉동톤을 지하 1층에 설치하려고 합니다. 품이 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:17.213272+00:00",
+    "input_tokens": 11618,
+    "output_tokens": 2124,
+    "source_pages": [
+      745,
+      746
+    ],
+    "prompt_sha256": "ff17bb975760b710abfd6a85bc5f5348ab777ea35a83627e9a5ea7f2f7ad48c0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

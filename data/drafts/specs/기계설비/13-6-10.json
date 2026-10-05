@@ -1,0 +1,138 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-10/Steel_Penstock_현장설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-10",
+    "title": "Steel Penstock 현장설치",
+    "work": "공정별 설치품 및 소모자재",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      813,
+      814
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "Steel Penstock 설치 물량은 몇 ton입니까?",
+        "source": "PDF 813쪽 1. 공정별 설치품 (ton 당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p869-t0",
+        "role": "공정별 설치품",
+        "source": "PDF 813쪽 1. 공정별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "기술관리 기준센타및기준 레벨표시작업 앵커및Jig설치 정치 1차센터링 가조립 2차센터링 용접 절단 전원가공 사상및Grinding 도장공 동력배선 X-Ray촬영 검사시험": {
+            "직종 기계기사": "1.5",
+            "직종 측량사": "1.5",
+            "직종 마킹공": "1.5",
+            "직종 특별인부": "1.5",
+            "직종 특수비계공": "1.5",
+            "직종 플랜트제관공": "1.5",
+            "직종 플랜트기계설치공": "1.5",
+            "직종 플랜트용접공": "1.5",
+            "직종 산소절단공": "1.5",
+            "직종 도장공": "1.5",
+            "직종 플랜트전공": "1.5",
+            "직종 시험사1급": "1.5",
+            "직종 상기인력품의7%": "1.5"
+          }
+        },
+        "cite": {
+          "table_id": "p869-t0"
+        }
+      },
+      {
+        "id": "p870-t0",
+        "role": "소모자재",
+        "source": "PDF 814쪽 [참고] 2. 소모자재",
+        "unit": "수량/ton",
+        "values": {
+          "용접 절단및진원가공 Finishing X-Ray 도장 동력": {
+            "품명 전기용접봉": "9.81㎏",
+            "품명 탄소봉": "3.53본",
+            "품명 산소": "0.55병",
+            "품명 아세틸렌": "0.39병",
+            "품명 그라인더돌": "0.5개",
+            "품명 Film": "4.8매",
+            "품명 Tar epoxy": "1.81ℓ",
+            "품명 마린B/T(선박도로용)": "0.96ℓ"
+          }
+        },
+        "cite": {
+          "table_id": "p870-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱된 표 데이터의 심각한 오류(행/열 병합, 수량 값 복사 등)로 인해 자동 계산 명세를 구성할 수 없습니다.",
+        "원문 표를 참조하여 단위당 품 및 자재 수량에 물량(ton)을 곱하여 산출해야 합니다."
+      ],
+      "source": "PDF 813~814쪽",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "제공된 파싱 결과의 표 데이터(p869-t0, p870-t0)가 행/열이 비정상적으로 병합되어 있고 수량/규격 값이 모두 동일하게 복사되는 등 심각한 오류가 있어, 자동 계산을 위한 표 구조를 구성할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p869-t0",
+      "row": "기술관리 기준센타및기준 레벨표시작업 앵커및Jig설치 정치 1차센터링 가조립 2차센터링 용접 절단 전원가공 사상및Grinding 도장공 동력배선 X-Ray촬영 검사시험",
+      "column": "직종 기계기사",
+      "value": "1.5"
+    },
+    {
+      "table_id": "p870-t0",
+      "row": "용접 절단및진원가공 Finishing X-Ray 도장 동력",
+      "column": "품명 전기용접봉",
+      "value": "9.81㎏"
+    },
+    {
+      "chunk_id": "p870-x9",
+      "quote": "산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을\n기준한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과의 표(p869-t0, p870-t0) 데이터가 원문 이미지와 다르게 행/열이 뭉쳐져 있고, 수량이나 규격 값이 비정상적으로 동일하게 파싱되어 있어 수정이 필요합니다.",
+    "검사시험 공정의 '상기인력품의 7%'는 어떤 인력품을 기준으로 하는지 명확한 정의가 필요합니다. (전체 공정 인력 합계인지 등)"
+  ],
+  "questions": [
+    "Steel Penstock 현장설치 물량이 10ton일 때 필요한 기계기사 품은 얼마인가요?",
+    "검사시험 공정의 '상기인력품의 7%'는 구체적으로 어떤 직종들의 품을 합산하여 계산해야 하나요?",
+    "설치할 Steel Penstock의 총 중량(ton)은 얼마입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:34:32.413887+00:00",
+    "input_tokens": 13510,
+    "output_tokens": 1673,
+    "source_pages": [
+      869,
+      870,
+      871
+    ],
+    "prompt_sha256": "a64bee9196343586a937b0237c79a7545d67ec405912a7de1dd47fa7b8077203",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p870-x9 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-4-2/기계포설_길어깨",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-4-2",
+    "title": "기계포설(길어깨)",
+    "work": "기계포설(길어깨) 기본 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      310
+    ],
+    "inputs": [
+      {
+        "name": "volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "기계포설(길어깨) 물량은 몇 ㎥입니까?",
+        "source": "1-4-2 기계포설(길어깨) 표 시공량 단위"
+      },
+      {
+        "name": "manual_watering",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "살수차 대신 순수 인력 살수를 진행합니까?",
+        "source": "1-4-2 기계포설(길어깨) 표 비고"
+      },
+      {
+        "name": "watering_area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "순수 인력 살수를 진행할 경우, 살수 면적은 몇 ㎡입니까?",
+        "source": "1-4-2 기계포설(길어깨) 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p366-t0",
+        "role": "기계포설(길어깨) 일당 작업조 및 시공량",
+        "source": "1-4-2 기계포설(길어깨) 표",
+        "unit": "인/작업조; 대/작업조; ㎥/일",
+        "values": {
+          "포설공": {
+            "수량": "2",
+            "시공량(㎥)": "200"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "굴착기": {
+            "수량": "1"
+          },
+          "진동롤러": {
+            "수량": "1"
+          },
+          "살수차": {
+            "수량": "0.5"
+          }
+        },
+        "cite": {
+          "table_id": "p366-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "p366-t0에서 기준시공량(200㎥)과 작업조 인원, 장비 대수를 확인한다.",
+        "작업일수 = volume ÷ 200으로 구한다.",
+        "직종별 인·일 = 작업일수 × 수량, 장비 대·일 = 작업일수 × 수량으로 계산한다.",
+        "순수 인력 살수 시에는 watering_area ÷ 100 만큼 보통인부(살수품)를 가산한다."
+      ],
+      "source": "1-4-2 기계포설(길어깨) 표 및 비고",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "manual_watering == true",
+        "blocked_if": {
+          "input": "manual_watering",
+          "op": "==",
+          "value": true
+        },
+        "reason": "순수 인력 살수 시 100㎡당 1인 가산은 체적(㎥) 기준인 기본 시공량과 단위가 달라 자동 계산 모델에 통합하기 어렵습니다.",
+        "source": "1-4-2 기계포설(길어깨) 표 비고",
+        "cite": {
+          "table_id": "p366-t0"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "두께 20㎝ 이외의 살수량 조정",
+        "source": "1-4-2 [주] ④",
+        "cite": {
+          "chunk_id": "p366-x7"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "비고의 순수 인력 살수 시 가산 인원이 면적(㎡) 기준이라 체적(㎥) 기준인 기본 시공량과 단위가 달라 자동 계산이 복잡하며, 장비가 여러 대 고정 투입되어 현재 단일 장비 매핑 중심의 명세 형식에 맞추기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p366-t0",
+      "row": "포설공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p366-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p366-t0",
+      "row": "굴착기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p366-t0",
+      "row": "진동롤러",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p366-t0",
+      "row": "살수차",
+      "column": "수량",
+      "value": "0.5"
+    },
+    {
+      "table_id": "p366-t0",
+      "row": "포설공",
+      "column": "시공량(㎥)",
+      "value": "200"
+    },
+    {
+      "table_id": "p366-t0",
+      "quote": "- 순수 인력 살수 시에는 살수품을 100㎡당 1인 가산한다."
+    },
+    {
+      "chunk_id": "p366-x7",
+      "quote": "본 품은 굴착기를 사용한 소로구간의 입도조정기층 포설 및 다짐 기준이다."
+    },
+    {
+      "chunk_id": "p366-x7",
+      "quote": "본 품은 포설준비, 포설 및 고르기, 다짐작업을 포함한다."
+    },
+    {
+      "chunk_id": "p366-x7",
+      "quote": "두께 20㎝일 때 100㎡당 살수량은 일반적으로 2ton을 표준으로 한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 텍스트에 '포설공 보통인부'가 하나의 행 이름처럼 묶여 있어, 원문 PDF를 참고하여 '포설공'과 '보통인부'로 분리하여 명세에 반영했습니다.",
+    "비고의 순수 인력 살수 시 가산 인원이 면적(㎡) 기준이라 체적(㎥) 기준인 기본 시공량과 단위가 달라 자동 계산 모델(daily_crew)에 통합하기 어려워 not_calculable로 분류했습니다."
+  ],
+  "questions": [
+    "기계포설(길어깨) 작업의 포설 물량이 500㎥일 때, 필요한 포설공과 보통인부의 인·일은 어떻게 계산하나요?",
+    "순수 인력 살수를 진행할 경우, 살수 면적이 300㎡라면 보통인부를 얼마나 가산해야 하나요?",
+    "살수차 대신 순수 인력 살수를 할지 여부와 그에 따른 살수 면적 입력이 누락되었습니다."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:40:16.018391+00:00",
+    "input_tokens": 23391,
+    "output_tokens": 4536,
+    "source_pages": [
+      366,
+      367
+    ],
+    "prompt_sha256": "daafe28420a5d8e98fee91db26b05d87fe540adc91840b452a8c5110381cd1cf",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

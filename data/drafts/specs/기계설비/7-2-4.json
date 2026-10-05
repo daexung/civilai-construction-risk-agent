@@ -1,0 +1,127 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/7-2-4/씽크수전설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "7-2-4",
+    "title": "씽크수전 설치",
+    "work": "씽크수전 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      686
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "씽크수전 설치 물량은 몇 개입니까?",
+        "source": "PDF 686쪽 7-2-4 씽크수전 설치 표 (개당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p742-t0",
+        "role": "씽크수전 설치 단위당 품",
+        "source": "PDF 686쪽 7-2-4 씽크수전 설치 표",
+        "unit": "인/개",
+        "values": {
+          "위생공": {
+            "수량": "0.164"
+          },
+          "보통인부": {
+            "수량": "0.033"
+          }
+        },
+        "cite": {
+          "table_id": "p742-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p742-t0",
+          "row_input": "고정",
+          "column_input": "고정",
+          "trades": [
+            "위생공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 686쪽 7-2-4 씽크수전 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p742-x3",
+          "quote": "공구손료 및 경장비의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 제시되어 있어 물량을 곱하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p742-t0",
+      "row": "위생공",
+      "column": "수량",
+      "value": "0.164"
+    },
+    {
+      "table_id": "p742-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.033"
+    },
+    {
+      "chunk_id": "p742-x3",
+      "quote": "공구손료 및 경장비의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "대붙임 혼합수전이 아닌 다른 형태의 수전(예: 벽붙임 등) 설치 시 품 적용 여부가 명시되어 있지 않음."
+  ],
+  "questions": [
+    "씽크수전 설치 물량은 몇 개입니까?",
+    "대붙임 혼합수전이 아닌 다른 형태의 수전 설치 시에도 이 품을 적용할 수 있습니까?",
+    "수전 자재비는 어떻게 산정합니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:40:46.884790+00:00",
+    "input_tokens": 11532,
+    "output_tokens": 1140,
+    "source_pages": [
+      742,
+      743
+    ],
+    "prompt_sha256": "04fedce56614e8f4a61aa3880e6885ce53bbe7db447efeada33c965043410c6d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

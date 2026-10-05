@@ -1,0 +1,98 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/1-2-2/단위표준",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "1-2-2",
+    "title": "단위표준('12, '23년 보완)",
+    "work": "설계서의 단위 및 소수자리, 금액의 단위표준",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      60,
+      61,
+      62
+    ],
+    "inputs": [],
+    "tables": [
+      {
+        "id": "p62-t1",
+        "role": "금액의 단위표준",
+        "source": "PDF 62쪽 2. 금액의 단위표준",
+        "values": {
+          "설계서의금액란": {
+            "단위": "원",
+            "자리": "1",
+            "비고": "미만버림"
+          },
+          "일위대가표의계금": {
+            "단위": "원",
+            "자리": "1",
+            "비고": "미만버림"
+          },
+          "일위대가표의금액란": {
+            "단위": "원",
+            "자리": "0.1",
+            "비고": "미만버림"
+          }
+        },
+        "cite": {
+          "table_id": "p62-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "이 절은 공사 수량이나 금액을 산출하는 계산식이 아니라, 설계서 작성 시 적용할 단위와 소수점 처리 기준을 제시하는 공통 기준이므로 자동 계산 대상이 아닙니다."
+      ],
+      "source": "PDF 60~62쪽",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "이 절은 특정 공종의 물량이나 인·일을 계산하는 것이 아니라, 설계서 작성 시 적용할 단위와 소수점 처리 기준을 제시하는 공통 기준이므로 자동 계산 대상이 아닙니다.",
+  "citations": [
+    {
+      "chunk_id": "p60-x21",
+      "quote": "1-2-2 단위표준('12, '23년 보완)"
+    },
+    {
+      "table_id": "p62-t1",
+      "row": "일위대가표의금액란",
+      "column": "자리",
+      "value": "0.1"
+    }
+  ],
+  "open_questions": [
+    "종목이 매우 다양하여 모든 종목에 대한 단위 및 소수자리 조회를 자동화하기보다는, 사용자가 표를 직접 참조하도록 하는 것이 적절해 보입니다."
+  ],
+  "questions": [
+    "설계서 작성 시 토적(체적)의 소수점은 몇 째 자리까지 표시해야 하나요?",
+    "일위대가표 금액란에서 소액이 산출되어 공종이 없어질 우려가 있을 때 소수점 처리는 어떻게 하나요?",
+    "표에 제시되지 않은 품의 단위와 소수자리는 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:08:20.691333+00:00",
+    "input_tokens": 16238,
+    "output_tokens": 873,
+    "source_pages": [
+      60,
+      61,
+      62,
+      63
+    ],
+    "prompt_sha256": "752ee697fc75aebb56fa5d7367230753f6761712f6f537944dadb9abffa4a45c",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

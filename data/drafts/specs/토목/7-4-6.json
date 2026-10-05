@@ -1,0 +1,139 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-4-6/펌프준설_매립시의_유실률",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-4-6",
+    "title": "펌프준설 매립시의 유실률",
+    "work": "유실률 참조",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      396
+    ],
+    "inputs": [
+      {
+        "name": "particle_size",
+        "type": "enum",
+        "allowed_values": [
+          "1.2이상",
+          "1.2∼0.5",
+          "0.6∼0.3",
+          "0.3∼0.15",
+          "0.15∼0.075",
+          "0.075이하"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "매립토의 입경(㎜)은 얼마입니까?",
+        "source": "PDF 396쪽 7-4-6 표",
+        "decision_table": "p452-t0"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p452-t0",
+        "role": "입경에 따른 유실율",
+        "source": "PDF 396쪽 7-4-6 표",
+        "unit": "%",
+        "values": {
+          "유실율(%)": {
+            "1.2이상": "없음",
+            "1.2∼0.5": "5∼8",
+            "0.6∼0.3": "10∼15",
+            "0.3∼0.15": "20∼27",
+            "0.15∼0.075": "30∼35",
+            "0.075이하": "30∼100"
+          }
+        },
+        "cite": {
+          "table_id": "p452-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입경(㎜)에 해당하는 유실율(%) 범위를 표에서 확인한다."
+      ],
+      "source": "PDF 396쪽 7-4-6 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "입경에 따른 유실율이 단일 값이 아닌 범위(%)로 제시되어 있어, 자동 계산보다는 표에서 값을 찾아 참조하는 것이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p452-t0",
+      "row": "1.2이상",
+      "column": "유실율(%)",
+      "value": "없음"
+    },
+    {
+      "table_id": "p452-t0",
+      "row": "1.2∼0.5",
+      "column": "유실율(%)",
+      "value": "5∼8"
+    },
+    {
+      "table_id": "p452-t0",
+      "row": "0.6∼0.3",
+      "column": "유실율(%)",
+      "value": "10∼15"
+    },
+    {
+      "table_id": "p452-t0",
+      "row": "0.3∼0.15",
+      "column": "유실율(%)",
+      "value": "20∼27"
+    },
+    {
+      "table_id": "p452-t0",
+      "row": "0.15∼0.075",
+      "column": "유실율(%)",
+      "value": "30∼35"
+    },
+    {
+      "table_id": "p452-t0",
+      "row": "0.075이하",
+      "column": "유실율(%)",
+      "value": "30∼100"
+    }
+  ],
+  "open_questions": [
+    "유실율이 범위(예: 5~8%)로 주어져 있는데, 설계 시 이 범위 내에서 어떤 값을 선택해야 하는지 명확한 기준이 원문에 없습니다."
+  ],
+  "questions": [
+    "입경이 0.4㎜일 때 유실율은 얼마를 적용해야 하나요?",
+    "유실율이 30~100%로 범위가 넓은데, 정확한 값은 어떻게 결정하나요?",
+    "매립토의 입경 분포가 혼합되어 있을 경우 유실율은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:12.697414+00:00",
+    "input_tokens": 11394,
+    "output_tokens": 1246,
+    "source_pages": [
+      452,
+      453
+    ],
+    "prompt_sha256": "e20453800d67681a38226d403086455fc6e78528b8eb12735674aa32c47ce7ac",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '1.2이상'이 p452-t0 조각 텍스트에 없음",
+      "row '1.2∼0.5'이 p452-t0 조각 텍스트에 없음",
+      "row '0.6∼0.3'이 p452-t0 조각 텍스트에 없음",
+      "value '20∼27'이 p452-t0 조각 텍스트에 없음",
+      "value '30∼35'이 p452-t0 조각 텍스트에 없음",
+      "value '30∼100'이 p452-t0 조각 텍스트에 없음"
+    ]
+  }
+}

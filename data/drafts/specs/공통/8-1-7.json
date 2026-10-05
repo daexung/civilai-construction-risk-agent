@@ -1,0 +1,194 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/8-1-7/손료보정",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "8-1-7",
+    "title": "손료보정 등('25년 보완)",
+    "work": "기계손료 보정 가산비율",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      168
+    ],
+    "inputs": [
+      {
+        "name": "machine_type",
+        "type": "enum",
+        "allowed_values": [
+          "불도저",
+          "굴착기 및 로더",
+          "덤프트럭"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "사용하는 건설기계 기종은 무엇입니까?",
+        "source": "PDF 168쪽 1. 기계손료의 보정 표 (원문 기준)"
+      },
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "암석작업",
+          "전석섞인토사"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류는 무엇입니까?",
+        "source": "PDF 168쪽 1. 기계손료의 보정 표 (원문 기준)"
+      },
+      {
+        "name": "is_special_bulldozer",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "타이어 불도저 또는 습지 불도저입니까? (불도저인 경우)",
+        "source": "PDF 168쪽 [주] ①"
+      },
+      {
+        "name": "bulldozer_weight_over_19t",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "불도저의 규격이 19톤 이상입니까?",
+        "source": "PDF 168쪽 [주] ①"
+      },
+      {
+        "name": "is_exclusive_dump",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "전용덤프트럭입니까? (덤프트럭인 경우)",
+        "source": "PDF 168쪽 [주] ①"
+      },
+      {
+        "name": "dump_weight_over_18t",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "덤프트럭의 규격이 18톤 이상입니까?",
+        "source": "PDF 168쪽 [주] ①"
+      }
+    ],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "기종과 작업 종류에 따라 기계손료 가산비율을 확인한다.",
+        "불도저와 덤프트럭의 경우 규격과 종류에 따라 보정 제외 여부를 판정한다."
+      ],
+      "source": "PDF 168쪽 1. 기계손료의 보정",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "전용덤프트럭(18톤이상) 또는 불도저(19톤이상, 타이어/습지 제외)인 경우",
+        "reason": "해당 규격의 장비는 손료를 보정하지 않음",
+        "source": "PDF 168쪽 [주] ①",
+        "cite": [
+          {
+            "chunk_id": "p224-x2",
+            "quote": "전용덤프트럭(18톤이상)과 불도저(19톤이상)의 경우는 보정하지 않는다."
+          },
+          {
+            "chunk_id": "p224-x2",
+            "quote": "단, 타이어 불도저, 습지 불도저는 보정한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기계경비 별도 산정 (운전시간 저하 시)",
+        "source": "PDF 168쪽 2. 기계경비의 보정",
+        "cite": {
+          "chunk_id": "p224-x4",
+          "quote": "건설기계의 운전시간이 현장조건 및 공정계획상 연간 표준 가동시간보다 현저하게 저하될 경우에는 기계손료 중 관리비와 운전경비 중 인건비를 별도 산정한다."
+        }
+      },
+      {
+        "item": "펌프식 준설선 손료 보정",
+        "source": "PDF 168쪽 3.",
+        "cite": {
+          "chunk_id": "p224-x4",
+          "quote": "펌프식 준설선으로 자갈 및 역전석과 쇄암된 암이 포함된 흙을 준설할 때에는 과다마모로 인한 수리비의 증가를 고려하여 손료를 보정하여 계상한다."
+        }
+      },
+      {
+        "item": "사석적재 및 투하시 기중기 효율",
+        "source": "PDF 168쪽 8.",
+        "cite": {
+          "chunk_id": "p224-x4",
+          "quote": "사석을 적재할 때의 효율은 0.8로 하고 해상 작업시에는 0.75로 한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과에 표의 기종(행)과 일부 작업(열) 텍스트가 누락되어 정확한 표 구성 및 인용이 불가능하므로 자동 계산 명세를 작성할 수 없습니다.",
+  "citations": [
+    {
+      "chunk_id": "p224-x2",
+      "quote": "전용덤프트럭(18톤이상)과 불도저(19톤이상)의 경우는 보정하지 않는다."
+    },
+    {
+      "chunk_id": "p224-x2",
+      "quote": "단, 타이어 불도저, 습지 불도저는 보정한다."
+    },
+    {
+      "chunk_id": "p224-x4",
+      "quote": "건설기계의 운전시간이 현장조건 및 공정계획상 연간 표준 가동시간보다 현저하게 저하될 경우에는 기계손료 중 관리비와 운전경비 중 인건비를 별도 산정한다."
+    },
+    {
+      "chunk_id": "p224-x4",
+      "quote": "펌프식 준설선으로 자갈 및 역전석과 쇄암된 암이 포함된 흙을 준설할 때에는 과다마모로 인한 수리비의 증가를 고려하여 손료를 보정하여 계상한다."
+    },
+    {
+      "chunk_id": "p224-x4",
+      "quote": "사석을 적재할 때의 효율은 0.8로 하고 해상 작업시에는 0.75로 한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p224-t0)에 표의 기종 이름(불도저, 굴착기, 덤프트럭)과 '전석섞인토사' 열이 누락되어 있어 표를 온전히 구성할 수 없습니다."
+  ],
+  "questions": [
+    "암석작업 시 굴착기의 기계손료 가산비율은 얼마인가요?",
+    "19톤 이상 타이어 불도저로 암석작업을 할 때 손료 보정이 적용되나요?",
+    "전석섞인 토사의 기준(혼입율)은 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:20:56.315402+00:00",
+    "input_tokens": 11941,
+    "output_tokens": 2056,
+    "source_pages": [
+      224,
+      225
+    ],
+    "prompt_sha256": "620becc7dc3e6be358d6532b672ee9faf37705060934845ea47cdef8ea6513dc",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

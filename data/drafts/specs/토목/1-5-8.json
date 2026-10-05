@@ -1,0 +1,221 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-5-8/SMA표층포설",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-5-8",
+    "title": "쇄석 매스틱 아스팔트(SMA) 표층 포설",
+    "work": "쇄석 매스틱 아스팔트(SMA) 표층 포설",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      370
+    ],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "포설 면적은 몇 ㎡입니까?",
+        "source": "PDF 370쪽 1-5-8 표의 시공량 단위(㎡)"
+      },
+      {
+        "name": "width",
+        "type": "enum",
+        "allowed_values": [
+          "2m미만",
+          "2m≤시공폭<3m",
+          "3m≤시공폭"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공폭은 어느 범위에 해당합니까?",
+        "source": "PDF 370쪽 1-5-8 표의 시공량 구분 및 [주] ②, ③",
+        "synonyms": {
+          "2m미만": [
+            "2미터 미만"
+          ],
+          "2m≤시공폭<3m": [
+            "2m 이상 3m 미만"
+          ],
+          "3m≤시공폭": [
+            "3m 이상",
+            "3미터 이상"
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "p370-t0",
+        "role": "일당 작업조 인원, 장비 대수 및 시공량",
+        "source": "PDF 370쪽 1-5-8 표",
+        "unit": "인, 대, ㎡",
+        "values": {
+          "포장공": {
+            "단위": "인",
+            "수량": "4",
+            "2m≤시공폭<3m": "2,500",
+            "3m≤시공폭": "4,500"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1",
+            "2m≤시공폭<3m": "2,500",
+            "3m≤시공폭": "4,500"
+          },
+          "아스팔트 피니셔": {
+            "규격": "3m",
+            "단위": "대",
+            "수량": "1"
+          },
+          "머캐덤롤러": {
+            "규격": "10∼12ton",
+            "단위": "대",
+            "수량": "2"
+          },
+          "탠덤롤러": {
+            "규격": "5∼8t",
+            "단위": "대",
+            "수량": "1"
+          },
+          "살수차": {
+            "규격": "16,000ℓ",
+            "단위": "대",
+            "수량": "0.5"
+          }
+        },
+        "cite": {
+          "table_id": "p370-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p370-t0",
+          "row": "포장공",
+          "column_input": "width"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p370-t0",
+          "column": "수량",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "area"
+      },
+      "steps": [
+        "p370-t0에서 시공폭(width)에 해당하는 일당 시공량을 고른다 (포장공 행의 값 사용).",
+        "작업일수 = area ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × p370-t0의 직종별 수량으로 구한다.",
+        "장비별 대·일 = 작업일수 × p370-t0의 장비별 수량(아스팔트 피니셔 1, 머캐덤롤러 2, 탠덤롤러 1, 살수차 0.5)으로 구한다."
+      ],
+      "source": "PDF 370쪽 1-5-8 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "시공폭 2m 미만",
+        "blocked_if": {
+          "input": "width",
+          "op": "==",
+          "value": "2m미만"
+        },
+        "reason": "시공폭 2m 미만은 '[토목부문] 1-5-6 아스팔트 표층 기계포설(소형장비)'을 따름",
+        "source": "PDF 370쪽 1-5-8 [주] ③",
+        "cite": {
+          "chunk_id": "p370-x7",
+          "quote": "③ 시공폭 2m미만은 ‘[토목부문] 1-5-6 아스팔트 표층 기계포설(소형장비)’을 따른다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "아스팔트온도조절장비 등 추가 투입 장비 기계경비",
+        "source": "PDF 370쪽 1-5-8 [주] ⑤",
+        "cite": {
+          "chunk_id": "p370-x7",
+          "quote": "⑤ 본 품외의 장비(아스팔트온도조절장비 등)를 추가 투입하는 경우에 기계경비는 별도 계상한다."
+        }
+      },
+      {
+        "item": "현장여건 및 시험포장 결과에 따른 장비조합 및 규격 변경",
+        "source": "PDF 370쪽 1-5-8 [주] ⑥",
+        "cite": {
+          "chunk_id": "p370-x7",
+          "quote": "⑥ 현장여건 및 시험포장 결과에 따라 장비조합 및 규격을 변경하여 적용할 수 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "고정된 작업조(인원 및 장비)와 시공폭에 따른 일당 시공량이 표로 제시되어 있어, 물량을 일당 시공량으로 나누어 작업일수를 구하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p370-t0",
+      "row": "포장공",
+      "column": "수량",
+      "value": "4"
+    },
+    {
+      "table_id": "p370-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p370-t0",
+      "row": "포장공",
+      "column": "2m≤시공폭<3m",
+      "value": "2,500"
+    },
+    {
+      "table_id": "p370-t0",
+      "row": "포장공",
+      "column": "3m≤시공폭",
+      "value": "4,500"
+    },
+    {
+      "chunk_id": "p370-x7",
+      "quote": "① 본 품은 쇄석 매스틱 아스팔트(SMA) 표층을 포설하는 품으로, 1층 포설두께는 5㎝ 기준이다."
+    },
+    {
+      "chunk_id": "p370-x7",
+      "quote": "② 본선은 시공폭 3m이상을 기준하며, 길어깨는 피니셔를 활용한 시공을 수행하는 시공폭 2m이상을\n설명 | 기준한다."
+    }
+  ],
+  "open_questions": [
+    "1층 포설두께는 5cm 기준이라고 명시되어 있으나, 두께가 5cm가 아닐 경우 품을 어떻게 환산(비례 등)해야 하는지 원문에 명시되어 있지 않습니다.",
+    "adjusted_daily_crew 모델의 명세 형식에서 여러 고정 장비(아스팔트 피니셔, 머캐덤롤러 등 4종)를 투입하는 구조가 명확하지 않아, 장비 대수 계산을 steps에 서술하였습니다."
+  ],
+  "questions": [
+    "시공폭이 3.5m일 때 일당 시공량은 얼마인가요?",
+    "포설두께가 5cm가 아니라 7cm인 경우 품을 어떻게 조정해야 하나요?",
+    "시공폭이 2m 미만인 경우 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:39:20.457799+00:00",
+    "input_tokens": 11839,
+    "output_tokens": 2404,
+    "source_pages": [
+      370,
+      371
+    ],
+    "prompt_sha256": "4312d1d6c8741a3d9be4afbe7d9e23c436bb37907cb223f7af4e4cbb5298f510",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

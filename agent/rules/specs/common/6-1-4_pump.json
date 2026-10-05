@@ -1,0 +1,610 @@
+{
+  "id": "2026-정오표1차/공통/6-1-4/펌프차타설",
+  "edition": "2026-정오표1차",
+  "division": "공통",
+  "section_no": "6-1-4",
+  "title": "콘크리트 펌프차 타설",
+  "work": "기본 타설 품량",
+  "review": "미완료",
+  "source_pages": [
+    186,
+    187
+  ],
+  "inputs": [
+    {
+      "name": "pump_size",
+      "type": "enum",
+      "allowed_values": [
+        "32m",
+        "36m",
+        "41m",
+        "43m",
+        "47m",
+        "52m"
+      ],
+      "unit": "m",
+      "required": true,
+      "ask": "펌프차 붐 길이는? (32m / 36m / 41m / 43m / 47m / 52m)",
+      "source": "6-1-4 적용범위 80㎥/hr 이상; 경비산출표 PDF 13~14쪽 4504. 21m·28m는 65~75㎥/hr로 제외",
+      "excluded": {
+        "21m": "65~75㎥/hr",
+        "28m": "65~75㎥/hr"
+      },
+      "machine_codes": {
+        "32m": "4504-0032",
+        "36m": "4504-0036",
+        "41m": "4504-0041",
+        "43m": "4504-0043",
+        "47m": "4504-0047",
+        "52m": "4504-0052"
+      },
+      "synonyms": {
+        "32m": [
+          "32미터"
+        ],
+        "36m": [
+          "36미터"
+        ],
+        "41m": [
+          "41미터"
+        ],
+        "43m": [
+          "43미터"
+        ],
+        "47m": [
+          "47미터"
+        ],
+        "52m": [
+          "52미터"
+        ]
+      }
+    },
+    {
+      "name": "volume",
+      "type": "positive_rational",
+      "allowed_values": "0보다 큰 수",
+      "unit": "㎥",
+      "required": true,
+      "ask": "콘크리트 타설 물량은 몇 ㎥입니까?",
+      "source": "PDF 186쪽 1. 적용범위 나·라, 187쪽 p187-t0 및 3. 일일시공량 [주] ②"
+    },
+    {
+      "name": "structure",
+      "type": "enum",
+      "allowed_values": [
+        "무근",
+        "철근"
+      ],
+      "unit": null,
+      "required": true,
+      "ask": "무근콘크리트와 철근콘크리트 중 어느 구조물입니까?",
+      "source": "PDF 186쪽 p186-t1, 187쪽 p187-t0",
+      "synonyms": {
+        "무근": [
+          "무근콘크리트"
+        ],
+        "철근": [
+          "철근콘크리트",
+          "철근 콘크리트",
+          "RC"
+        ]
+      }
+    },
+    {
+      "name": "slump_band",
+      "type": "enum",
+      "allowed_values": [
+        "8~12㎝",
+        "15㎝",
+        "18㎝이상"
+      ],
+      "unit": "㎝",
+      "required": true,
+      "ask": "슬럼프는 표의 8~12㎝, 15㎝, 18㎝이상 중 어디에 해당합니까?",
+      "source": "PDF 187쪽 p187-t0; 표에 없는 값은 보간하지 않음",
+      "synonyms": {
+        "8~12㎝": [
+          "8~12cm",
+          "8-12cm"
+        ],
+        "15㎝": [
+          "15cm",
+          "슬럼프 15"
+        ],
+        "18㎝이상": [
+          "18cm이상",
+          "18cm 이상",
+          "18㎝ 이상"
+        ]
+      }
+    },
+    {
+      "name": "facility_type",
+      "type": "enum",
+      "allowed_values": [
+        "Type-Ⅰ",
+        "Type-Ⅱ",
+        "Type-Ⅲ",
+        "Type-Ⅳ"
+      ],
+      "unit": null,
+      "required": true,
+      "ask": "시설유형은 Type-Ⅰ~Ⅳ 중 무엇입니까? 시설물과 펌프차 작업 제약을 알려주시면 판정표를 함께 확인하겠습니다.",
+      "decision_table": "p187-t2",
+      "source": "PDF 187쪽 p187-t1·p187-t2",
+      "synonyms": {
+        "Type-Ⅰ": [
+          "Type-I",
+          "타입1",
+          "1유형"
+        ],
+        "Type-Ⅱ": [
+          "Type-II",
+          "타입2",
+          "2유형"
+        ],
+        "Type-Ⅲ": [
+          "Type-III",
+          "타입3",
+          "3유형"
+        ],
+        "Type-Ⅳ": [
+          "Type-IV",
+          "타입4",
+          "4유형"
+        ]
+      }
+    },
+    {
+      "name": "site_type",
+      "type": "enum",
+      "allowed_values": [
+        "Type-Ⅰ",
+        "Type-Ⅱ",
+        "Type-Ⅲ"
+      ],
+      "unit": null,
+      "required": true,
+      "ask": "현장조건은 Type-Ⅰ~Ⅲ 중 무엇입니까? 믹서트럭의 대기공간과 진출입 조건을 알려주시면 판정표를 함께 확인하겠습니다.",
+      "decision_table": "p187-t4",
+      "source": "PDF 187쪽 p187-t3·p187-t4",
+      "synonyms": {
+        "Type-Ⅰ": [
+          "Type-I",
+          "타입1",
+          "1유형"
+        ],
+        "Type-Ⅱ": [
+          "Type-II",
+          "타입2",
+          "2유형"
+        ],
+        "Type-Ⅲ": [
+          "Type-III",
+          "타입3",
+          "3유형"
+        ]
+      }
+    },
+    {
+      "name": "placement",
+      "type": "enum",
+      "allowed_values": [
+        "붐",
+        "배관"
+      ],
+      "unit": null,
+      "required": true,
+      "ask": "붐 타설입니까, 배관 타설입니까?",
+      "source": "PDF 186쪽 1. 적용범위 바 및 p186-t1 특별인부 비고",
+      "synonyms": {
+        "붐": [
+          "붐타설",
+          "붐 타설"
+        ],
+        "배관": [
+          "배관타설",
+          "배관 타설"
+        ]
+      }
+    },
+    {
+      "name": "vibrator_used",
+      "type": "boolean",
+      "allowed_values": [
+        true,
+        false
+      ],
+      "unit": null,
+      "required": true,
+      "ask": "콘크리트 진동기를 사용합니까?",
+      "source": "PDF 186쪽 2. 인력편성 [주] ①"
+    },
+    {
+      "name": "reset_status",
+      "type": "enum",
+      "allowed_values": [
+        "없음",
+        "있음",
+        "모름"
+      ],
+      "unit": null,
+      "required": true,
+      "ask": "펌프차 타설범위를 넘어 이동·재셋팅이 필요합니까? (없음 / 있음 / 모름)",
+      "source": "PDF 187쪽 3. 일일시공량 [주] ② 뒤 ※"
+    },
+    {
+      "name": "concrete_supply",
+      "type": "enum",
+      "allowed_values": [
+        "관급",
+        "사급"
+      ],
+      "unit": null,
+      "required": true,
+      "ask": "레미콘은 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+      "source": "관급/사급 구분과 처리 방식은 실무 확인 전 — docs/ADVISOR_QUESTIONS.md 참고",
+      "synonyms": {
+        "관급": [
+          "관급자재",
+          "지급자재",
+          "발주처 지급"
+        ],
+        "사급": [
+          "사급자재",
+          "시공사 구매",
+          "자체 구매"
+        ]
+      }
+    },
+    {
+      "name": "ready_mix_price",
+      "type": "positive_currency",
+      "allowed_values": [
+        "모름"
+      ],
+      "unit": "원/㎥, 부가세 제외",
+      "required": true,
+      "when": {
+        "input": "concrete_supply",
+        "equals": "사급"
+      },
+      "ask": "레미콘 ㎥당 가격은? (부가세 제외, 거래처 견적 기준 / 모르면 '모름')",
+      "source": "사용자 입력 단가; 품셈 1-3-1 재료의 할증 8. 기타재료 PDF 78쪽"
+    }
+  ],
+  "tables": [
+    {
+      "id": "p186-t1",
+      "role": "구조물별 작업조 인원 및 펌프차 대수",
+      "source": "PDF 186쪽 2. 인력편성 표",
+      "unit": "인/작업조; 펌프차 대/작업조",
+      "values": {
+        "콘크리트공": {
+          "무근": "3",
+          "철근": "4"
+        },
+        "특별인부": {
+          "무근": "1",
+          "철근": "1"
+        },
+        "형틀목공": {
+          "무근": "1",
+          "철근": "1"
+        },
+        "보통인부": {
+          "무근": "1",
+          "철근": "1"
+        },
+        "콘크리트펌프차": {
+          "무근": "1",
+          "철근": "1"
+        }
+      },
+      "pump_capacity": "80㎥/hr 이상",
+      "pump_cell_note": "원문 펌프차 1대 셀은 무근·철근 두 열에 걸쳐 병합",
+      "cite": {
+        "table_id": "p186-t1"
+      }
+    },
+    {
+      "id": "p187-t0",
+      "role": "슬럼프·구조물별 기준 일일시공량",
+      "source": "PDF 187쪽 3. 일일시공량 표 (일당)",
+      "unit": "㎥/일",
+      "values": {
+        "8~12㎝": {
+          "무근": "130",
+          "철근": "125"
+        },
+        "15㎝": {
+          "무근": "135",
+          "철근": "130"
+        },
+        "18㎝이상": {
+          "무근": "145",
+          "철근": "140"
+        }
+      },
+      "cite": {
+        "table_id": "p187-t0"
+      }
+    },
+    {
+      "id": "p187-t1",
+      "role": "시설유형 계수 f1",
+      "source": "PDF 187쪽 3. 일일시공량 가. 시설유형 표",
+      "unit": "무차원",
+      "values": {
+        "f1": {
+          "Type-Ⅰ": "1.4",
+          "Type-Ⅱ": "1.0",
+          "Type-Ⅲ": "0.8",
+          "Type-Ⅳ": "0.3"
+        }
+      },
+      "cite": {
+        "table_id": "p187-t1"
+      }
+    },
+    {
+      "id": "p187-t2",
+      "role": "시설유형 판정 근거",
+      "source": "PDF 187쪽 3. 일일시공량 가. 시설유형 적용기준 표; chunks.jsonl structure=uncertain이므로 PDF 화면 대조",
+      "values": {
+        "Type-Ⅰ": {
+          "적용기준": "매트기초 등 펌프차 작업에 제약이 없는 시설물"
+        },
+        "Type-Ⅱ": {
+          "적용기준": "벽, 기둥, 보, 슬라브, 교대, 교각 등 펌프차 작업에 큰 지장이 없어 일반적인 시공이 가능한 시설물"
+        },
+        "Type-Ⅲ": {
+          "적용기준": "옹벽, 줄기초, 슬래브 없는[월거더:wall girder]구조의 기둥과 보 등 펌프차 작업에 제약을 받는 타설부위가 좁거나 깊은 시설물"
+        },
+        "Type-Ⅳ": {
+          "적용기준": "절･성토부 비탈면에 시공되는 구조물 등 펌프차 작업에 제약이 매우 큰 시설물"
+        }
+      },
+      "cite": {
+        "table_id": "p187-t2"
+      }
+    },
+    {
+      "id": "p187-t3",
+      "role": "현장조건 계수 f2",
+      "source": "PDF 187쪽 3. 일일시공량 나. 현장조건 표",
+      "unit": "무차원",
+      "values": {
+        "f2": {
+          "Type-Ⅰ": "1.2",
+          "Type-Ⅱ": "1.0",
+          "Type-Ⅲ": "0.8"
+        }
+      },
+      "cite": {
+        "table_id": "p187-t3"
+      }
+    },
+    {
+      "id": "p187-t4",
+      "role": "현장조건 판정 근거",
+      "source": "PDF 187쪽 3. 일일시공량 나. 현장조건 적용기준 표; chunks.jsonl structure=uncertain이므로 PDF 화면 대조",
+      "values": {
+        "Type-Ⅰ": {
+          "적용기준": "대기공간이 충분히 넓어 믹서트럭 2대가 병렬로 타설준비가 가능하며 지속적인 타설을 수행하는 경우"
+        },
+        "Type-Ⅱ": {
+          "적용기준": "믹서트럭이 1대씩 직렬로 대기하며 순차적으로 타설준비하여 타설하는 일반적인 경우"
+        },
+        "Type-Ⅲ": {
+          "적용기준": "믹서트럭의 대기공간이 매우 협소하고 진출입 길이가 길어 연속적인 타설이 어려운 경우"
+        }
+      },
+      "cite": {
+        "table_id": "p187-t4"
+      }
+    },
+    {
+      "id": "p187-t5",
+      "role": "압송관 설치·철거 별도 작업의 범위 근거; 이번 기본 타설 계산에는 미사용",
+      "source": "PDF 187쪽 4. 압송관 설치 및 철거 표 (일당); chunks.jsonl의 basis는 null",
+      "unit": "비계공 인, 설치·철거 m/일",
+      "values": {
+        "비계공": {
+          "인원": "2",
+          "설치": "220",
+          "철거": "330"
+        }
+      },
+      "cite": {
+        "table_id": "p187-t5"
+      }
+    }
+  ],
+  "crew_rules": [
+    {
+      "when": {
+        "placement": "배관"
+      },
+      "when_text": "placement = 배관",
+      "change": {
+        "특별인부": "+1"
+      },
+      "source": "PDF 186쪽 p186-t1 특별인부 비고",
+      "cite": {
+        "table_id": "p186-t1",
+        "row": "특별인부",
+        "column": "비고"
+      }
+    },
+    {
+      "when": {
+        "vibrator_used": false
+      },
+      "when_text": "vibrator_used = false",
+      "change": {
+        "콘크리트공": "-1",
+        "특별인부": "-1"
+      },
+      "source": "PDF 186쪽 2. 인력편성 [주] ① (p186-t1 뒤 p186-x16)",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "2",
+        "marker": "①"
+      }
+    }
+  ],
+  "quantity_model": {
+    "name": "adjusted_daily_crew",
+    "params": {
+      "base_output": {
+        "table": "p187-t0",
+        "row_input": "slump_band",
+        "column_input": "structure"
+      },
+      "coefficients": [
+        {
+          "table": "p187-t1",
+          "row": "f1",
+          "input": "facility_type"
+        },
+        {
+          "table": "p187-t3",
+          "row": "f2",
+          "input": "site_type"
+        }
+      ],
+      "crew": {
+        "table": "p186-t1",
+        "column_input": "structure",
+        "trades": [
+          "콘크리트공",
+          "특별인부",
+          "형틀목공",
+          "보통인부"
+        ],
+        "rate_codes": {
+          "콘크리트공": "1013",
+          "특별인부": "1003",
+          "형틀목공": "1007",
+          "보통인부": "1002"
+        }
+      },
+      "equipment": {
+        "name": "콘크리트펌프차",
+        "table": "p186-t1",
+        "unit": "대·일",
+        "machine_code_input": "pump_size",
+        "operator_rate_code": "1048"
+      },
+      "quantity_input": "volume"
+    },
+    "steps": [
+      "p187-t0에서 구조물·슬럼프별 기준시공량을 고른다.",
+      "p187-t1의 f1과 p187-t3의 f2를 곱해 일당시공량 = 기준시공량 × f1 × f2를 구한다.",
+      "p186-t1 작업조에 p186-t1 비고 및 2. 인력편성 [주] ①의 인원 조정을 적용한다.",
+      "작업일수 = volume ÷ 일당시공량으로 구한다.",
+      "직종별 인·일 = 작업일수 × 조정된 직종별 인원, 펌프차 대·일 = 작업일수 × 1로 구한다."
+    ],
+    "source": "PDF 186쪽 p186-t1 및 2. 인력편성 [주] ①; PDF 187쪽 p187-t0·p187-t1·p187-t3 및 3. 일일시공량 [주] ②",
+    "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+  },
+  "blocked": [
+    {
+      "condition": "reset_status != 없음 (모름도 보류)",
+      "blocked_if": {
+        "input": "reset_status",
+        "op": "!=",
+        "value": "없음"
+      },
+      "reason": "원문은 이동·재셋팅이 필요한 경우 회당 시공량의 5% 감산만 명시하며 여러 회의 누적 방식은 확정하지 않음; 모름도 보류",
+      "source": "PDF 187쪽 3. 일일시공량 [주] ② 뒤 ※ (p187-x5)",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "3",
+        "marker": "※"
+      }
+    },
+    {
+      "condition": "압송관 설치·철거 작업 요청",
+      "reason": "별도 작업이며 설치·철거 물량 입력이 필요함; 기본 타설 품량의 범위 밖",
+      "source": "PDF 186쪽 1. 적용범위 바; PDF 187쪽 p187-t5 (일당)",
+      "cite": [
+        {
+          "section_no": "6-1-4",
+          "subsection_no": "1",
+          "marker": "바."
+        },
+        {
+          "table_id": "p187-t5"
+        }
+      ]
+    }
+  ],
+  "not_calculated": [
+    {
+      "item": "공통 정책 1-2-9 소규모 적용",
+      "source": "공통부문 1-2-9; 이번 범위는 PDF 186~187쪽 6-1-4의 기본 품량",
+      "cite": {
+        "section_no": "1-2-9",
+        "marker": "본문"
+      }
+    },
+    {
+      "item": "살수 양생 품량",
+      "source": "PDF 186쪽 1. 적용범위 사",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "1",
+        "marker": "사."
+      }
+    }
+  ],
+  "supply_rules": [
+    {
+      "item": "레미콘(콘크리트) 재료비",
+      "input": "concrete_supply",
+      "category": "재료비",
+      "when": {
+        "관급": {
+          "status": "제외",
+          "reason": "관급자재(발주처 지급) — 시공사 일위대가에서 제외"
+        },
+        "사급": {
+          "status": "미산정",
+          "reason": "사급 레미콘 단가 미입력"
+        }
+      },
+      "source": "PDF 186쪽 1. 적용범위 및 2. 인력편성; 관급/사급 구분과 처리 방식은 실무 확인 전 — docs/ADVISOR_QUESTIONS.md",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "1",
+        "marker": "가."
+      }
+    }
+  ],
+  "cost_rules": [
+    {
+      "name": "공구손료 및 경장비",
+      "category": "경비",
+      "base": "labor_subtotal",
+      "rate": "0.05",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "2",
+        "marker": "②"
+      }
+    },
+    {
+      "name": "잔여 콘크리트 재료비",
+      "category": "재료비",
+      "base": "labor_subtotal",
+      "rate": "0.05",
+      "cite": {
+        "section_no": "6-1-4",
+        "subsection_no": "2",
+        "marker": "③"
+      }
+    }
+  ]
+}

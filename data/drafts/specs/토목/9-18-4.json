@@ -1,0 +1,136 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-18-4/연속지적도_품질개선_토지",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-18-4",
+    "title": "연속지적도 품질개선(토지)('26년 신설)",
+    "work": "연속지적도 품질개선(토지) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      620,
+      621
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "도곽",
+        "required": true,
+        "ask": "작업 대상 지적(임야)도는 몇 도곽입니까?",
+        "source": "PDF 621쪽 ③ 기타사항 ㉮"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p620-t1",
+        "role": "직종별 인원수",
+        "source": "PDF 620쪽 9-18-4 표",
+        "unit": "인",
+        "values": {
+          "합계": {
+            "지적기사": "0.004",
+            "지적산업기사": "0.040",
+            "지적기능사": "0.001"
+          }
+        },
+        "cite": {
+          "table_id": "p620-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p620-t1",
+          "row_input": "합계",
+          "trades": [
+            "지적기사",
+            "지적산업기사",
+            "지적기능사"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p620-t1에서 직종별 합계 인원(단위당 품)을 가져온다.",
+        "물량(도곽 수)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 620쪽 9-18-4 표 및 PDF 621쪽 ③ 기타사항 ㉮",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "기계경비 및 재료소모품비",
+        "source": "PDF 621쪽 ③ 기타사항 ㉯",
+        "cite": {
+          "chunk_id": "p621-x0",
+          "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "1도곽을 기준으로 한 직종별 인원수가 표에 직접 제시되어 있으므로 단위당 품 계산 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p620-t1",
+      "row": "합계",
+      "column": "인원수 지적기사",
+      "value": "0.004"
+    },
+    {
+      "table_id": "p620-t1",
+      "row": "합계",
+      "column": "인원수 지적산업기사",
+      "value": "0.040"
+    },
+    {
+      "table_id": "p620-t1",
+      "row": "합계",
+      "column": "인원수 지적기능사",
+      "value": "0.001"
+    },
+    {
+      "chunk_id": "p621-x0",
+      "quote": "본 품은 지적(임야)도 1도곽을 기준한 것이다."
+    },
+    {
+      "chunk_id": "p621-x0",
+      "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱된 표 데이터(p620-t1)의 텍스트가 원문의 세부 작업구분별 인원수를 모두 포함하지 않고 요약되어 있어, 합계 값만 추출하여 명세에 반영했습니다. 세부 공정별 계산이 필요한지 확인이 필요합니다."
+  ],
+  "questions": [
+    "물량 단위는 무엇인가요?",
+    "기계경비와 재료소모품비는 어떻게 산정하나요?",
+    "도곽 수가 소수점일 경우 어떻게 처리하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T23:00:57.851498+00:00",
+    "input_tokens": 12342,
+    "output_tokens": 1314,
+    "source_pages": [
+      620,
+      621,
+      622
+    ],
+    "prompt_sha256": "f0078368b2fb78997545e77acd3df5fce598c2d8745438c8716d4c5601393b8f",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

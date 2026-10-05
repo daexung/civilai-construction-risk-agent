@@ -1,0 +1,166 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/7-4-4/준설여굴",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "7-4-4",
+    "title": "준설여굴('10년 보완)",
+    "work": "여굴 두께 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      395
+    ],
+    "inputs": [
+      {
+        "name": "soil_and_dredger",
+        "type": "enum",
+        "allowed_values": [
+          "보통토사 | 선종 펌프준설선",
+          "보통토사 | 선종 그래브준설선",
+          "암반 | 선종 그래브준설선"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "토질 및 선종은 무엇입니까?",
+        "source": "PDF 395쪽 7-4-4 표의 토질 및 선종 구분"
+      },
+      {
+        "name": "water_depth",
+        "type": "enum",
+        "allowed_values": [
+          "시공수심별 여굴 두께 5.5m",
+          "시공수심별 여굴 두께 5.5∼9.0m 미만",
+          "시공수심별 여굴 두께 9.0m 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "시공수심(평균수면 기준)은 어느 구간에 해당합니까?",
+        "source": "PDF 395쪽 7-4-4 표의 시공수심 구분 및 [주]"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p451-t2",
+        "role": "토질, 선종, 시공수심별 여굴 두께",
+        "source": "PDF 395쪽 7-4-4 표",
+        "unit": "m",
+        "values": {
+          "보통토사 | 선종 펌프준설선": {
+            "시공수심별 여굴 두께 5.5m": "0.6m",
+            "시공수심별 여굴 두께 5.5∼9.0m 미만": "0.7m",
+            "시공수심별 여굴 두께 9.0m 이상": "1.0m"
+          },
+          "보통토사 | 선종 그래브준설선": {
+            "시공수심별 여굴 두께 5.5m": "0.5m",
+            "시공수심별 여굴 두께 5.5∼9.0m 미만": "0.6m"
+          },
+          "암반 | 선종 그래브준설선": {
+            "시공수심별 여굴 두께 5.5m": "0.5m"
+          }
+        },
+        "cite": {
+          "table_id": "p451-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 토질/선종과 시공수심에 해당하는 여굴 두께를 표에서 찾는다."
+      ],
+      "source": "PDF 395쪽 7-4-4 표",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "보통토사 | 선종 그래브준설선 이고 수심 9.0m 이상인 경우",
+        "reason": "표에 해당 조건의 여굴 두께 값이 없습니다.",
+        "source": "PDF 395쪽 7-4-4 표",
+        "cite": {
+          "table_id": "p451-t2"
+        }
+      },
+      {
+        "condition": "암반 | 선종 그래브준설선 이고 수심 5.5m 초과인 경우",
+        "reason": "표에 해당 조건의 여굴 두께 값이 없습니다.",
+        "source": "PDF 395쪽 7-4-4 표",
+        "cite": {
+          "table_id": "p451-t2"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "조건에 따라 표에서 여굴 두께 값을 찾아 보여주기만 하면 되며, 별도의 수량 계산식이 없기 때문입니다.",
+  "citations": [
+    {
+      "table_id": "p451-t2",
+      "row": "보통토사 | 선종 펌프준설선",
+      "column": "시공수심별 여굴 두께 5.5m",
+      "value": "0.6m"
+    },
+    {
+      "table_id": "p451-t2",
+      "row": "보통토사 | 선종 펌프준설선",
+      "column": "시공수심별 여굴 두께 5.5∼9.0m 미만",
+      "value": "0.7m"
+    },
+    {
+      "table_id": "p451-t2",
+      "row": "보통토사 | 선종 펌프준설선",
+      "column": "시공수심별 여굴 두께 9.0m 이상",
+      "value": "1.0m"
+    },
+    {
+      "table_id": "p451-t2",
+      "row": "보통토사 | 선종 그래브준설선",
+      "column": "시공수심별 여굴 두께 5.5m",
+      "value": "0.5m"
+    },
+    {
+      "table_id": "p451-t2",
+      "row": "보통토사 | 선종 그래브준설선",
+      "column": "시공수심별 여굴 두께 5.5∼9.0m 미만",
+      "value": "0.6m"
+    },
+    {
+      "table_id": "p451-t2",
+      "row": "암반 | 선종 그래브준설선",
+      "column": "시공수심별 여굴 두께 5.5m",
+      "value": "0.5m"
+    },
+    {
+      "chunk_id": "p451-x17",
+      "quote": "시공수심은 평균수면(M.S.L)을 기준으로 한 수심이다."
+    }
+  ],
+  "open_questions": [
+    "표에 빈칸으로 되어 있는 조건(예: 암반 그래브준설선 5.5m 초과 수심)에 대해서는 여굴을 인정하지 않는 것인지, 아니면 별도 산정 기준이 있는지 명시되어 있지 않아 보류 처리함."
+  ],
+  "questions": [
+    "보통토사에서 펌프준설선으로 수심 6m 작업 시 여굴 두께는 얼마인가요?",
+    "암반 지형에서 그래브준설선으로 수심 7m 작업 시 여굴 두께는 어떻게 적용하나요?",
+    "펌프준설선으로 작업할 때 여굴 두께를 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:45:42.683944+00:00",
+    "input_tokens": 11580,
+    "output_tokens": 1851,
+    "source_pages": [
+      451,
+      452
+    ],
+    "prompt_sha256": "55c2cd6774ddf2de5b509e201df04a2edeae1d185b04d8948dd240d8f80fbe51",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

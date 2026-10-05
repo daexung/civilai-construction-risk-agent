@@ -1,0 +1,322 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-5-2/대공표지",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-5-2",
+    "title": "대공표지('21, '26년 보완)",
+    "work": "대공표지 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      472
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "점",
+        "required": true,
+        "ask": "대공표지 설치 수량은 몇 점입니까?",
+        "source": "PDF 472쪽 [주] ①"
+      },
+      {
+        "name": "distance",
+        "type": "enum",
+        "allowed_values": [
+          "1km이내",
+          "2∼3km",
+          "3∼4km",
+          "4km이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "점당거리 평균은 얼마입니까?",
+        "source": "PDF 472쪽 [주] ④ 및 점간거리 계수 표"
+      },
+      {
+        "name": "elevation",
+        "type": "enum",
+        "allowed_values": [
+          "500m 미만",
+          "500m∼l,000m",
+          "1,000m이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업지역의 평균표고는 얼마입니까?",
+        "source": "PDF 472쪽 [주] ⑥"
+      },
+      {
+        "name": "tideland_multiplier",
+        "type": "positive_rational",
+        "allowed_values": "1.0 이상 3.0 이하",
+        "unit": "배",
+        "required": true,
+        "ask": "간석지 작업시 간조시간을 고려하여 가산할 배수를 입력하세요 (해당 없으면 1, 최대 3배).",
+        "source": "PDF 472쪽 [주] ⑦"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p528-t1",
+        "role": "대공표지 작업 인원수",
+        "source": "PDF 472쪽 9-5-2 대공표지 표",
+        "unit": "인",
+        "values": {
+          "계": {
+            "인원수 합계 고급\n기술\n자": "4",
+            "인원수 중급\n기술\n자": "30",
+            "인원수 초급\n기능사\n(측량)": "20"
+          }
+        },
+        "cite": {
+          "table_id": "p528-t1"
+        }
+      },
+      {
+        "id": "p528-t2",
+        "role": "점간거리 계수",
+        "source": "PDF 472쪽 [주] ④ 점간거리 계수 표",
+        "unit": "무차원",
+        "values": {
+          "계수": {
+            "1km이내": "1.00",
+            "2∼3km": "1.30",
+            "3∼4km": "1.60",
+            "4km이상": "2.00"
+          }
+        },
+        "cite": {
+          "table_id": "p528-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p528-t1",
+          "row_input": "계",
+          "trades": [
+            "고급기술자",
+            "중급기술자",
+            "초급기능사(측량)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "distance": "2∼3km"
+            },
+            "rate": "0.30",
+            "applies_to": [
+              "고급기술자",
+              "중급기술자",
+              "초급기능사(측량)"
+            ],
+            "source": "PDF 472쪽 [주] ④"
+          },
+          {
+            "when": {
+              "distance": "3∼4km"
+            },
+            "rate": "0.60",
+            "applies_to": [
+              "고급기술자",
+              "중급기술자",
+              "초급기능사(측량)"
+            ],
+            "source": "PDF 472쪽 [주] ④"
+          },
+          {
+            "when": {
+              "distance": "4km이상"
+            },
+            "rate": "1.00",
+            "applies_to": [
+              "고급기술자",
+              "중급기술자",
+              "초급기능사(측량)"
+            ],
+            "source": "PDF 472쪽 [주] ④"
+          },
+          {
+            "when": {
+              "elevation": "500m∼l,000m"
+            },
+            "rate": "0.20",
+            "applies_to": [
+              "고급기술자",
+              "중급기술자",
+              "초급기능사(측량)"
+            ],
+            "source": "PDF 472쪽 [주] ⑥"
+          },
+          {
+            "when": {
+              "elevation": "1,000m이상"
+            },
+            "rate": "0.40",
+            "applies_to": [
+              "고급기술자",
+              "중급기술자",
+              "초급기능사(측량)"
+            ],
+            "source": "PDF 472쪽 [주] ⑥"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {},
+            "change": "표의 합계 인원은 40점 기준이므로, (합계 인원 / 40) * quantity 로 계산",
+            "source": "PDF 472쪽 [주] ①"
+          },
+          {
+            "when": {},
+            "change": "간석지 작업시 tideland_multiplier 배수 곱하기 적용",
+            "source": "PDF 472쪽 [주] ⑦"
+          }
+        ]
+      },
+      "steps": [
+        "p528-t1에서 '계' 행의 합계 인원을 가져온다.",
+        "합계 인원을 40으로 나누어 1점당 품을 구한다.",
+        "1점당 품에 quantity를 곱하여 기본 총 품을 구한다.",
+        "distance, elevation에 따른 할증률을 합산하여 기본 총 품에 곱해 할증 품을 더한다.",
+        "간석지 작업 배수(tideland_multiplier)를 곱하여 최종 품을 산출한다."
+      ],
+      "source": "PDF 472쪽 9-5-2 대공표지",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "보조측량, 벌채 보상비 및 재료비",
+        "source": "PDF 472쪽 [주] ⑤",
+        "cite": {
+          "chunk_id": "p528-x20",
+          "quote": "⑤ 보조측량, 벌채 보상비 및 재료비 등은 별도 계상한다."
+        }
+      },
+      {
+        "item": "외업 동원 기술인원 여비",
+        "source": "PDF 472쪽 [주] ⑧",
+        "cite": {
+          "chunk_id": "p528-x20",
+          "quote": "⑧ 본 품의 외업에 동원되는 기술인원에 대한 여비는 국토교통부장관이 고시한 측량용역대가 기준에\n설명 | 따라 별도 계상한다."
+        }
+      },
+      {
+        "item": "성과작성품",
+        "source": "PDF 472쪽 [주] ⑨",
+        "cite": {
+          "chunk_id": "p528-x20",
+          "quote": "⑨ 본 품의 성과작성품은 관련한 최신 항공사진측량 작업 및 성과에 관한 규정을 따른다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "40점을 1작업단위로 하는 합계 인원이 표에 직접 제시되어 있으므로 단위당 품 계산 방식이 적합함.",
+  "citations": [
+    {
+      "table_id": "p528-t1",
+      "row": "계",
+      "column": "인원수 합계 고급\n기술\n자",
+      "value": "4"
+    },
+    {
+      "table_id": "p528-t1",
+      "row": "계",
+      "column": "인원수 중급\n기술\n자",
+      "value": "30"
+    },
+    {
+      "table_id": "p528-t1",
+      "row": "계",
+      "column": "인원수 초급\n기능사\n(측량)",
+      "value": "20"
+    },
+    {
+      "table_id": "p528-t2",
+      "row": "계수",
+      "column": "1km이내",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p528-t2",
+      "row": "계수",
+      "column": "2∼3km",
+      "value": "1.30"
+    },
+    {
+      "table_id": "p528-t2",
+      "row": "계수",
+      "column": "3∼4km",
+      "value": "1.60"
+    },
+    {
+      "table_id": "p528-t2",
+      "row": "계수",
+      "column": "4km이상",
+      "value": "2.00"
+    },
+    {
+      "chunk_id": "p528-x14",
+      "quote": "[주] ① 본 품은 40점을 1작업단위로 하고, 대공표지설치에 적용한다."
+    },
+    {
+      "chunk_id": "p528-x14",
+      "quote": "④ 본 품은 점당거리 평균 1km를 기준으로 한 것이며, 1km이상일 경우에는 다음의 계수를 곱하여 계상할\n설명 | 수 있다."
+    },
+    {
+      "chunk_id": "p528-x20",
+      "quote": "⑤ 보조측량, 벌채 보상비 및 재료비 등은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p528-x20",
+      "quote": "⑥ 작업지역의 평균표고가 500m∼l,000m일 때는 20%, 1,000m이상일 때는 40%를 가산할 수 있다."
+    },
+    {
+      "chunk_id": "p528-x20",
+      "quote": "⑦ 간석지 작업시는 간조시간을 고려하여 본 품에 3배까지 가산할 수 있다."
+    },
+    {
+      "chunk_id": "p528-x20",
+      "quote": "⑧ 본 품의 외업에 동원되는 기술인원에 대한 여비는 국토교통부장관이 고시한 측량용역대가 기준에\n설명 | 따라 별도 계상한다."
+    },
+    {
+      "chunk_id": "p528-x20",
+      "quote": "⑨ 본 품의 성과작성품은 관련한 최신 항공사진측량 작업 및 성과에 관한 규정을 따른다."
+    }
+  ],
+  "open_questions": [
+    "간석지 작업시 '3배까지 가산할 수 있다'고 되어 있어 정확한 가산 비율을 확정할 수 없어 사용자가 배수를 입력하도록 처리함."
+  ],
+  "questions": [
+    "대공표지 100점을 설치할 때 필요한 인원은 어떻게 계산하나요?",
+    "간석지에서 작업할 경우 품을 얼마나 가산해야 하나요?",
+    "점당거리 평균이 2.5km일 때 적용할 계수는 무엇인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:18:44.906396+00:00",
+    "input_tokens": 24720,
+    "output_tokens": 5999,
+    "source_pages": [
+      528,
+      529
+    ],
+    "prompt_sha256": "0f1a15e4097f8d1acf9231d2c87fe3efc4e9c4658bb3d7bd526559c7c4a8a450",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

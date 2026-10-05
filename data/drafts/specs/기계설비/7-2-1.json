@@ -1,0 +1,125 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/7-2-1/매립형욕조수전설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "7-2-1",
+    "title": "매립형 욕조수전 설치",
+    "work": "매립형 욕조수전 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      685
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "매립형 욕조수전 설치 수량은 몇 개입니까?",
+        "source": "PDF 685쪽 7-2-1 표"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p741-t0",
+        "role": "매립형 욕조수전 설치 단위당 품",
+        "source": "PDF 685쪽 7-2-1 표",
+        "unit": "인/개",
+        "values": {
+          "위생공": {
+            "수량": "1.000"
+          },
+          "보통인부": {
+            "수량": "0.200"
+          }
+        },
+        "cite": {
+          "table_id": "p741-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p741-t0",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "위생공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "PDF 685쪽 7-2-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비의 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p741-x3",
+          "quote": "공구손료 및 경장비의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 명시되어 있어 물량을 곱하는 방식입니다.",
+  "citations": [
+    {
+      "table_id": "p741-t0",
+      "row": "위생공",
+      "column": "수량",
+      "value": "1.000"
+    },
+    {
+      "table_id": "p741-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.200"
+    },
+    {
+      "chunk_id": "p741-x3",
+      "quote": "공구손료 및 경장비의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "매립형 욕조수전 설치 수량은 몇 개입니까?",
+    "매립 배관품이 이미 포함되어 있는데, 별도로 배관품을 산정해야 하는 경우가 있습니까?",
+    "수전의 종류나 규격에 따른 품의 차이는 없습니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:40:52.569656+00:00",
+    "input_tokens": 11539,
+    "output_tokens": 1099,
+    "source_pages": [
+      741,
+      742
+    ],
+    "prompt_sha256": "867d85b04daf3ad428cf7cc5de161c23bc3dbc7bebafadea2e236546d12d721d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

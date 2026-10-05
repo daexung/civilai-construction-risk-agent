@@ -1,0 +1,235 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/9-2-3/유성페인트칠",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "9-2-3",
+    "title": "유성페인트 칠('03, '15년 보완)",
+    "work": "유성페인트 칠",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      703
+    ],
+    "inputs": [
+      {
+        "name": "pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø50㎜이하",
+          "ø100㎜이하",
+          "ø200㎜이하",
+          "ø300㎜이하"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "배관 규격은 무엇입니까?",
+        "source": "p759-t0 표 열 이름",
+        "synonyms": {
+          "ø50㎜이하": [
+            "50이하",
+            "50mm이하"
+          ],
+          "ø100㎜이하": [
+            "100이하",
+            "100mm이하"
+          ],
+          "ø200㎜이하": [
+            "200이하",
+            "200mm이하"
+          ],
+          "ø300㎜이하": [
+            "300이하",
+            "300mm이하"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "유성페인트 칠 물량은 몇 m입니까?",
+        "source": "p759-t0 표 단위 (m당)"
+      },
+      {
+        "name": "scaffold_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "비계를 사용합니까?",
+        "source": "[주] ④ 비계사용시 할증 조건"
+      },
+      {
+        "name": "height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "작업 높이는 몇 m입니까?",
+        "source": "[주] ④ 비계사용시 높이에 따른 할증 조건"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p759-t0",
+        "role": "유성페인트 칠 단위당 품",
+        "source": "9-2-3 유성페인트 칠 표",
+        "unit": "인/m",
+        "values": {
+          "도장공": {
+            "ø50㎜이하": "0.008",
+            "ø100㎜이하": "0.012",
+            "ø200㎜이하": "0.021",
+            "ø300㎜이하": "0.030"
+          },
+          "보통인부": {
+            "ø50㎜이하": "0.001",
+            "ø100㎜이하": "0.002",
+            "ø200㎜이하": "0.004",
+            "ø300㎜이하": "0.005"
+          }
+        },
+        "cite": {
+          "table_id": "p759-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p759-t0",
+          "column_input": "pipe_diameter",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "scaffold_used": true
+            },
+            "change": "높이 6∼9m까지는 품을 15% 가산하고 높이 9m를 초과하는 경우 매 3m 증가마다 품을 5%씩 가산한다.",
+            "source": "[주] ④"
+          }
+        ]
+      },
+      "steps": [
+        "p759-t0에서 배관 규격에 따른 단위당 품(도장공, 보통인부)을 찾는다.",
+        "물량을 곱해 총 품을 구한다.",
+        "비계 사용 시 높이에 따른 할증을 적용한다."
+      ],
+      "source": "p759-t0 및 [주] ④",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "scaffold_used == true",
+        "blocked_if": {
+          "input": "scaffold_used",
+          "op": "==",
+          "value": true
+        },
+        "reason": "비계 사용 시 높이에 따른 할증(6~9m 15%, 9m 초과 시 매 3m마다 5% 가산)의 정확한 수식(초과분 올림 처리 등)이 명확하지 않아 자동 계산 보류",
+        "source": "[주] ④",
+        "cite": [
+          {
+            "chunk_id": "p759-x3",
+            "quote": "비계사용시에는 높이 6∼9m까지는 품을 15% 가산하고 높이 9m를 초과하는 경우 매 3m 증가마다 품을 5%씩 가산한다."
+          }
+        ]
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "도료 재료량",
+        "source": "[주] ③",
+        "cite": [
+          {
+            "chunk_id": "p759-x3",
+            "quote": "재료량은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+          }
+        ]
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 잡재료비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": [
+          {
+            "chunk_id": "p759-x3",
+            "quote": "공구손료 및 잡재료비는 인력품의 2%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(m)당 직종별 인원이 표에 직접 제시되어 있고, 물량을 곱하여 계산하는 방식이므로 per_unit을 선택함.",
+  "citations": [
+    {
+      "table_id": "p759-t0",
+      "row": "도장공",
+      "column": "ø50㎜이하",
+      "value": "0.008"
+    },
+    {
+      "table_id": "p759-t0",
+      "row": "보통인부",
+      "column": "ø50㎜이하",
+      "value": "0.001"
+    },
+    {
+      "chunk_id": "p759-x3",
+      "quote": "비계사용시에는 높이 6∼9m까지는 품을 15% 가산하고 높이 9m를 초과하는 경우 매 3m 증가마다 품을 5%씩 가산한다."
+    },
+    {
+      "chunk_id": "p759-x3",
+      "quote": "공구손료 및 잡재료비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p759-x3",
+      "quote": "재료량은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "'비계사용시 높이 9m를 초과하는 경우 매 3m 증가마다 품을 5%씩 가산한다'에서, 9.1m일 때 바로 5%가 가산되는지(올림), 아니면 12m에 도달해야 가산되는지(내림) 명확하지 않음.",
+    "'공구손료 및 잡재료비'가 합쳐서 2%로 제시되었는데, 원가계산 시 경비와 재료비로 어떻게 분배해야 하는지 명시되지 않음."
+  ],
+  "questions": [
+    "배관 규격이 ø100㎜인 경우 유성페인트 칠 품은 어떻게 되나요?",
+    "비계를 사용하여 10m 높이에서 작업할 때 할증률은 어떻게 계산하나요?",
+    "도료의 재료량은 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:48.265817+00:00",
+    "input_tokens": 11677,
+    "output_tokens": 2346,
+    "source_pages": [
+      759,
+      760
+    ],
+    "prompt_sha256": "b0ad2052fc22857a2140b1c2e4229ce17f8bc5f3a2a5b9a65eee45d0a2af3562",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p759-x3 조각 텍스트에 없음"
+    ]
+  }
+}

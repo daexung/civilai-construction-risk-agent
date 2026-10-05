@@ -1,0 +1,150 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/8-3-3/가스보일러(가정용)설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "8-3-3",
+    "title": "가스보일러(가정용) 설치('92년 신설, '16, '20년 보완)",
+    "work": "가스보일러 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      697
+    ],
+    "inputs": [
+      {
+        "name": "capacity",
+        "type": "enum",
+        "allowed_values": [
+          "13,000 Kcal/hr",
+          "16,000 Kcal/hr",
+          "20,000 Kcal/hr",
+          "25,000 Kcal/hr"
+        ],
+        "unit": "Kcal/hr",
+        "required": true,
+        "ask": "가스보일러의 용량은 얼마입니까?",
+        "source": "p753-t0 표 열 이름 (30,000 Kcal/hr는 파싱 누락으로 제외)"
+      },
+      {
+        "name": "install_type",
+        "type": "enum",
+        "allowed_values": [
+          "벽걸이형",
+          "바닥설치형"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치 형태는 벽걸이형입니까, 바닥설치형입니까?",
+        "source": "p753-x3 비고 및 [주] ①"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 가스보일러의 수량은 몇 대입니까?",
+        "source": "p753-t0 기준 (대당)"
+      }
+    ],
+    "tables": [],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "파싱 결과에 직종 이름(보일러공, 보통인부)과 30,000 Kcal/hr 열이 누락되어 단위당 품을 계산할 수 없습니다.",
+        "바닥설치형인 경우 본 품에 15%를 감산합니다."
+      ],
+      "source": "PDF 697쪽 8-3-3",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "보일러 하부 마감재(배관 커버 등)가 필요한 경우",
+        "reason": "별도 계상해야 함",
+        "source": "p753-x3 [주] ③",
+        "cite": {
+          "section_no": "8-3-3",
+          "marker": "③"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "보일러 하부 마감재(배관 커버 등) 설치",
+        "source": "p753-x3 [주] ③",
+        "cite": {
+          "section_no": "8-3-3",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과 표(p753-t0)에 직종 이름(보일러공, 보통인부)과 30,000 Kcal/hr 열이 누락되어 있고, 행 이름이 중복되어 계산식을 구성할 수 없습니다.",
+  "citations": [
+    {
+      "table_id": "p753-t0",
+      "row": "구분",
+      "column": "수량 13,000\nKcal/hr",
+      "value": "0.845"
+    },
+    {
+      "table_id": "p753-t0",
+      "row": "구분",
+      "column": "수량 16,000\nKcal/hr",
+      "value": "0.952"
+    },
+    {
+      "table_id": "p753-t0",
+      "row": "구분",
+      "column": "수량 20,000\nKcal/hr",
+      "value": "1.028"
+    },
+    {
+      "table_id": "p753-t0",
+      "row": "구분",
+      "column": "수량 25,000\nKcal/hr",
+      "value": "1.123"
+    },
+    {
+      "chunk_id": "p753-x3",
+      "quote": "비 고 - 바닥설치형은 본 품에 15%를 감한다."
+    },
+    {
+      "chunk_id": "p753-x3",
+      "quote": "① 본 품은 세대내 벽걸이형 가스보일러 설치 기준이다."
+    },
+    {
+      "chunk_id": "p753-x3",
+      "quote": "③ 보일러 하부 마감재(배관 커버 등)가 필요한 경우 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p753-t0)에 원문 표의 직종 이름('보일러공', '보통인부')과 '30,000 Kcal/hr' 열의 데이터가 누락되어 있고, 행 이름이 '구분'으로 중복되어 있어 정상적인 표 데이터(tables)를 구성할 수 없습니다. 따라서 계산 모델을 not_calculable로 설정했습니다."
+  ],
+  "questions": [
+    "가스보일러 20,000 Kcal/hr 벽걸이형을 설치할 때 품은 어떻게 되나요?",
+    "바닥설치형 가스보일러의 경우 품을 어떻게 감산하나요?",
+    "보일러 하부 마감재(배관 커버 등) 설치 품은 포함되어 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:47:48.439130+00:00",
+    "input_tokens": 23775,
+    "output_tokens": 4056,
+    "source_pages": [
+      753,
+      754
+    ],
+    "prompt_sha256": "bb0c11584d218dd814c80436032cfa0c74493e3b7e215ad4f6cdc0ea741d2d65",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

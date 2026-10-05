@@ -1,0 +1,164 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-6-11/Roller_Gate_Guide_Metal_제작",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-6-11",
+    "title": "Roller Gate Guide Metal 제작",
+    "work": "Roller Gate Guide Metal 제작",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      814,
+      815
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "제작 물량은 몇 ton입니까?",
+        "source": "PDF 814쪽 1. 공정별 설치품 기준 (ton당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p870-t1",
+        "role": "공정별 설치품 (1)",
+        "source": "PDF 814쪽 1. 공정별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "기술관리 사도 재료절단현도 괘서 절단 교정 단재가공괘서 절단 Edge 가 공 용접 교정 Holing 부분조립,취부조정 용접 절단 교정 기계가공": {
+            "직종 기계기사": "2.5",
+            "직종 제도공": "1.0",
+            "직종 현도공": "0.63",
+            "직종 마킹공": "1.26",
+            "직종 절단공": "0.33",
+            "직종 플랜트제관공": "0.6",
+            "직종 산소절단공": "0.17",
+            "직종 플랜트용접공": "1.3",
+            "직종 플랜트기계설치공": "3.7",
+            "직종 플랜트기계용접공": "8.4",
+            "직종 기계설비공": "1.26",
+            "직종 기계연마공": "0.126"
+          }
+        },
+        "cite": {
+          "table_id": "p870-t1"
+        }
+      },
+      {
+        "id": "p871-t0",
+        "role": "공정별 설치품 (2)",
+        "source": "PDF 815쪽 1. 공정별 설치품",
+        "unit": "인/ton",
+        "values": {
+          "가조립조립 가조립해체 도장준비 도장 운반조작 동력조작 보조 검사": {
+            "직종 플랜트기계설치공": "2.0",
+            "직종 플랜트제관공": "2.0",
+            "직종 도장공": "2.0",
+            "직종 특수비계공": "2.0",
+            "직종 플랜트전공": "2.0",
+            "직종 특별인부": "2.0",
+            "직종 인력품의7%": "2.0"
+          }
+        },
+        "cite": {
+          "table_id": "p871-t0"
+        }
+      },
+      {
+        "id": "p871-t1",
+        "role": "소모자재",
+        "source": "PDF 815쪽 [참고] 2. 소모자재",
+        "unit": "톤당",
+        "values": {
+          "절단및수정 현도 용접 도장 (하도1회) (상도3회) 전기 그라인딩": {
+            "품명 산소": "2.3병"
+          }
+        },
+        "cite": {
+          "table_id": "p871-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "제작 물량(ton)에 표의 직종별 수량을 곱하여 산출한다.",
+        "동일 직종이 여러 공정에 나뉘어 있으므로 모두 합산한다.",
+        "검사는 전체 인력품의 7%로 별도 계산한다."
+      ],
+      "source": "PDF 814~815쪽 13-6-11",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "소모자재",
+        "source": "PDF 815쪽 [참고] 2. 소모자재",
+        "cite": {
+          "chunk_id": "p871-x7",
+          "quote": "[참고] 2. 소모자재"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "파싱 결과의 표 구조가 심하게 깨져 있고, 동일 직종이 여러 공정에 나뉘어 있어 단순 단위당 품 계산으로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p870-t1",
+      "row": "기술관리 사도 재료절단현도 괘서 절단 교정 단재가공괘서 절단 Edge 가 공 용접 교정 Holing 부분조립,취부조정 용접 절단 교정 기계가공",
+      "column": "직종 기계기사",
+      "value": "2.5"
+    },
+    {
+      "table_id": "p871-t0",
+      "row": "가조립조립 가조립해체 도장준비 도장 운반조작 동력조작 보조 검사",
+      "column": "직종 플랜트기계설치공",
+      "value": "2.0"
+    },
+    {
+      "table_id": "p871-t1",
+      "row": "절단및수정 현도 용접 도장 (하도1회) (상도3회) 전기 그라인딩",
+      "column": "품명 산소",
+      "value": "2.3병"
+    },
+    {
+      "chunk_id": "p871-x7",
+      "quote": "[참고] 2. 소모자재"
+    }
+  ],
+  "open_questions": [
+    "파싱 결과에서 표의 행과 열이 심하게 병합되거나 깨져 있어, 직종별 수량과 소모자재 수량을 정확히 추출하기 어렵습니다.",
+    "검사 항목의 '인력품의 7%'가 전체 인력품을 의미하는지, 특정 공정의 인력품을 의미하는지 명확하지 않습니다."
+  ],
+  "questions": [
+    "Roller Gate Guide Metal 제작 물량이 10ton일 때, 플랜트기계설치공의 총 투입 인력은 어떻게 계산하나요?",
+    "검사 공정의 '인력품의 7%'는 어떤 직종들의 합계를 기준으로 계산해야 하나요?",
+    "소모자재 표에 있는 산소와 아세틸렌 수량은 어떻게 적용하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:41:13.382602+00:00",
+    "input_tokens": 14349,
+    "output_tokens": 1882,
+    "source_pages": [
+      870,
+      871,
+      872
+    ],
+    "prompt_sha256": "6ccef2dfeb994f774e2ca7b1449761e953a19dbd91f7fb5df474e4415d08856b",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

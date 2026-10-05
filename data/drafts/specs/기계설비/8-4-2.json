@@ -1,0 +1,200 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/8-4-2/전기온수기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "8-4-2",
+    "title": "전기온수기(벽걸이형) 설치",
+    "work": "전기온수기 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      699
+    ],
+    "inputs": [
+      {
+        "name": "capacity",
+        "type": "enum",
+        "allowed_values": [
+          "15L",
+          "30L",
+          "50L"
+        ],
+        "unit": "L",
+        "required": true,
+        "ask": "전기온수기의 용량은 얼마입니까? (15L / 30L / 50L)",
+        "source": "OCR 원문 표 (대당)"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "대",
+        "required": true,
+        "ask": "설치할 전기온수기의 수량은 몇 대입니까?",
+        "source": "OCR 원문 표 (대당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p755-t0",
+        "role": "전기온수기 용량별 설치 품",
+        "source": "OCR 원문 표",
+        "unit": "인/대",
+        "values": {
+          "보일러공": {
+            "15L": "0.17",
+            "30L": "0.18",
+            "50L": "0.23"
+          },
+          "보통인부": {
+            "15L": "0.07",
+            "30L": "0.08",
+            "50L": "0.09"
+          }
+        },
+        "cite": {
+          "table_id": "p755-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p755-t0",
+          "row_input": null,
+          "column_input": "capacity",
+          "trades": [
+            "보일러공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p755-t0에서 용량별 단위당 품을 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "OCR 원문 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "배관 및 밸브 등 부속 설치, 보온, 지지대 설치",
+        "source": "주 ③",
+        "cite": {
+          "chunk_id": "p755-x3",
+          "quote": "③ 배관 및 밸브 등 부속 설치, 보온, 지지대 설치는 별도 계상한다."
+        }
+      },
+      {
+        "item": "전선관, 전기배선",
+        "source": "주 ④",
+        "cite": {
+          "chunk_id": "p755-x3",
+          "quote": "④ 전선관, 전기배선은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p755-x3",
+          "quote": "⑤ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(대)당 품이 표에 직접 제시되어 있으므로 per_unit 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p755-t0",
+      "row": "보일러공",
+      "column": "15L",
+      "value": "0.17"
+    },
+    {
+      "table_id": "p755-t0",
+      "row": "보일러공",
+      "column": "30L",
+      "value": "0.18"
+    },
+    {
+      "table_id": "p755-t0",
+      "row": "보일러공",
+      "column": "50L",
+      "value": "0.23"
+    },
+    {
+      "table_id": "p755-t0",
+      "row": "보통인부",
+      "column": "15L",
+      "value": "0.07"
+    },
+    {
+      "table_id": "p755-t0",
+      "row": "보통인부",
+      "column": "30L",
+      "value": "0.08"
+    },
+    {
+      "table_id": "p755-t0",
+      "row": "보통인부",
+      "column": "50L",
+      "value": "0.09"
+    },
+    {
+      "chunk_id": "p755-x3",
+      "quote": "③ 배관 및 밸브 등 부속 설치, 보온, 지지대 설치는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p755-x3",
+      "quote": "④ 전선관, 전기배선은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p755-x3",
+      "quote": "⑤ 공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과(p755-t0)에 직종(보일러공, 보통인부)과 50L 열이 누락되어 있어 OCR 원문을 기준으로 표를 재구성했습니다."
+  ],
+  "questions": [
+    "전기온수기 용량(15L, 30L, 50L)은 어떻게 되나요?",
+    "배관 및 밸브 등 부속 설치는 별도로 계산하셨나요?",
+    "설치할 전기온수기의 수량은 몇 대입니까?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:43:45.131687+00:00",
+    "input_tokens": 23225,
+    "output_tokens": 3774,
+    "source_pages": [
+      755,
+      756
+    ],
+    "prompt_sha256": "faea824c5d037e13288ee1cc525fef4ea93dc1e629a2eaaf9a37186685175394",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '보일러공'이 p755-t0 조각 텍스트에 없음",
+      "row '보일러공'이 p755-t0 조각 텍스트에 없음",
+      "row '보일러공'이 p755-t0 조각 텍스트에 없음",
+      "row '보통인부'이 p755-t0 조각 텍스트에 없음",
+      "row '보통인부'이 p755-t0 조각 텍스트에 없음",
+      "row '보통인부'이 p755-t0 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/2-1-8/소파보수(표층)",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "2-1-8",
+    "title": "소파보수(표층)('20년 신설)",
+    "work": "소파보수(표층) 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      933,
+      934
+    ],
+    "inputs": [
+      {
+        "name": "site_type",
+        "type": "enum",
+        "allowed_values": [
+          "A-Type",
+          "B-Type",
+          "C-Type"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장 여건별 적용기준(A/B/C Type)은 무엇입니까? 포장 시공시간과 보수 개소 밀집도를 알려주시면 판정표를 함께 확인하겠습니다.",
+        "decision_table": "p933-t2",
+        "source": "p933-t0 및 p933-t2",
+        "synonyms": {
+          "A-Type": [
+            "A Type",
+            "A타입"
+          ],
+          "B-Type": [
+            "B Type",
+            "B타입"
+          ],
+          "C-Type": [
+            "C Type",
+            "C타입"
+          ]
+        }
+      },
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "총 시공면적은 몇 ㎡입니까?",
+        "source": "p933-t0 시공량 단위"
+      },
+      {
+        "name": "avg_area_per_spot",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "개소별 평균 시공면적은 몇 ㎡입니까? (시공량 할증계수 적용에 필요합니다)",
+        "source": "p933-t3, p933-t4, p934-t0"
+      },
+      {
+        "name": "overlay_only",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "절삭없이 아스팔트를 덧씌우는 경우입니까?",
+        "source": "p934-x1 ⑦"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p933-t0",
+        "role": "Type별 작업조 인원/장비 대수 및 기준 일일시공량",
+        "source": "PDF 933쪽 2-1-8 표",
+        "unit": "인, 대, ㎡",
+        "values": {
+          "포장공": {
+            "A-Type 수량": "3",
+            "A-Type 시공량": "400",
+            "B-Type 수량": "3",
+            "B-Type 시공량": "140",
+            "C-Type 수량": "3",
+            "C-Type 시공량": "50"
+          },
+          "보통인부": {
+            "A-Type 수량": "1",
+            "A-Type 시공량": "400",
+            "B-Type 수량": "1",
+            "B-Type 시공량": "140",
+            "C-Type 수량": "1",
+            "C-Type 시공량": "50"
+          },
+          "로더(타이어)+소형노면파쇄기": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "로더(타이어)": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "진동롤러(진동+타이어)": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "아스팔트스프레이어": {
+            "A-Type 수량": "1",
+            "B-Type 수량": "1",
+            "C-Type 수량": "1"
+          },
+          "트럭": {
+            "A-Type 수량": "2",
+            "B-Type 수량": "2",
+            "C-Type 수량": "2"
+          }
+        },
+        "cite": {
+          "table_id": "p933-t0"
+        }
+      },
+      {
+        "id": "p933-t2",
+        "role": "현장 여건별 적용기준",
+        "source": "PDF 933쪽 ④ 현장 여건별 적용기준 표",
+        "values": {
+          "A Type": {
+            "포장 시공시간": "7시간 이상",
+            "적용기준": "- 보수 개소가 작업구간에 밀집(연결)되어, 운반장비를 활용한 시공 장비의 이동 및 작업대기로 인한 포장 시공시간 손실이 미미한 경우"
+          },
+          "B Type": {
+            "포장 시공시간": "5시간 이상",
+            "적용기준": "- 보수 개소가 작업구간에 부분적으로 산재하여, 운반장비를 활용한 시공 장비의 이동 및 작업대기가 발생되는 경우"
+          },
+          "C Type": {
+            "포장 시공시간": "3시간 이상",
+            "적용기준": "- 보수 개소가 작업구간에 산발적으로 발생하여, 운반장비를 활용한 시공 장비의 이동 및 작업대기가 빈번히 발생되는 경우"
+          }
+        },
+        "cite": {
+          "table_id": "p933-t2"
+        }
+      },
+      {
+        "id": "p933-t3",
+        "role": "A-Type 시공량 할증계수",
+        "source": "PDF 933쪽 ⑤ A-Type 할증계수 표",
+        "unit": "무차원",
+        "values": {
+          "시공량 할증계수": {
+            "30㎡이하": "0.79",
+            "60㎡이하": "0.89",
+            "120㎡이하": "1.00",
+            "180㎡이하": "1.12",
+            "180㎡초과": "1.26"
+          }
+        },
+        "cite": {
+          "table_id": "p933-t3"
+        }
+      },
+      {
+        "id": "p933-t4",
+        "role": "B-Type 시공량 할증계수",
+        "source": "PDF 933쪽 ⑤ B-Type 할증계수 표",
+        "unit": "무차원",
+        "values": {
+          "시공량 할증계수": {
+            "15㎡ 이하": "0.79",
+            "30㎡ 이하": "0.89",
+            "60㎡ 이하": "1.00",
+            "90㎡ 이하": "1.12",
+            "90㎡ 초과": "1.26"
+          }
+        },
+        "cite": {
+          "table_id": "p933-t4"
+        }
+      },
+      {
+        "id": "p934-t0",
+        "role": "C-Type 시공량 할증계수",
+        "source": "PDF 934쪽 ⑤ C-Type 할증계수 표",
+        "unit": "무차원",
+        "values": {
+          "시공량 할증계수": {
+            "5㎡ 이하": "0.79",
+            "10㎡ 이하": "0.89",
+            "20㎡ 이하": "1.00",
+            "30㎡ 이하": "1.12",
+            "30㎡ 초과": "1.26"
+          }
+        },
+        "cite": {
+          "table_id": "p934-t0"
+        }
+      },
+      {
+        "id": "p933-t1",
+        "role": "트럭 작업 적용 범위",
+        "source": "PDF 933쪽 ③ 트럭 작업 표",
+        "values": {
+          "작업": {
+            "2.5ton 아스팔트 및 소모자재 운반": "적용",
+            "2.5ton 공구 및 경장비 운반": "적용"
+          }
+        },
+        "cite": {
+          "table_id": "p933-t1"
+        }
+      }
+    ],
+    "crew_rules": [
+      {
+        "when": {
+          "overlay_only": true
+        },
+        "when_text": "overlay_only = true",
+        "change": {
+          "포장공": "-1",
+          "로더(타이어)+소형노면파쇄기": "-1"
+        },
+        "source": "p934-x1 ⑦",
+        "cite": {
+          "chunk_id": "p934-x1",
+          "quote": "절삭없이 아스팔트를 덧씌우는 경우에는 포장공 1인, 파쇄기 1대를 제외하고"
+        }
+      }
+    ],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "1. 현장 여건(A/B/C Type)에 따라 p933-t0에서 기준 일일시공량과 작업조(인원, 장비)를 결정한다.",
+        "2. 개소별 평균 시공면적에 따라 해당 Type의 할증계수 표(p933-t3, p933-t4, p934-t0)에서 할증계수를 찾아 기준 시공량에 곱한다.",
+        "3. 절삭없이 덧씌우는 경우 시공량을 25% 증가시키고, 포장공 1인과 파쇄기 1대를 작업조에서 제외한다.",
+        "4. 총 시공면적을 최종 일일시공량으로 나누어 작업일수를 구하고, 작업조에 곱해 총 투입량을 산출한다."
+      ],
+      "source": "p933-t0, p933-t3, p933-t4, p934-t0, p934-x1",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "overlay_only == true",
+        "blocked_if": {
+          "input": "overlay_only",
+          "op": "==",
+          "value": true
+        },
+        "reason": "절삭없이 덧씌우는 경우 시공량을 25% 증가시켜야 하나, 현재 계산 모델에서 시공량 동적 증가를 지원하지 않음",
+        "source": "p934-x1 ⑦",
+        "cite": {
+          "chunk_id": "p934-x1",
+          "quote": "시공량은 25%를 증하여"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "트럭을 이용한 아스팔트 및 소모자재 운반, 공구 및 경장비 운반",
+        "source": "p933-t1",
+        "cite": {
+          "table_id": "p933-t1"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "장비가 여러 종류 투입되고, Type별로 시공량 할증계수 표가 분리되어 있으며, 덧씌우기 시 시공량 25% 증가 등 복합적인 계산 규칙이 있어 현재의 adjusted_daily_crew 단일 스키마로 표현하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p933-t0",
+      "row": "포장공",
+      "column": "A-Type 수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p933-t2",
+      "row": "A Type",
+      "column": "포장 시공시간",
+      "value": "7시간 이상"
+    },
+    {
+      "table_id": "p933-t3",
+      "row": "시공량 할증계수",
+      "column": "30㎡이하",
+      "value": "0.79"
+    },
+    {
+      "chunk_id": "p934-x1",
+      "quote": "절삭없이 아스팔트를 덧씌우는 경우에는 포장공 1인, 파쇄기 1대를 제외하고, 시공량은 25%를 증하여"
+    }
+  ],
+  "open_questions": [
+    "Type별로 시공량 할증계수 표가 3개로 분리되어 있어, 단일 입력으로 열을 매칭하기 까다로움",
+    "장비가 5종류 투입되는데 adjusted_daily_crew 모델이 다중 장비를 지원하는지 불명확함",
+    "덧씌우기 시 시공량 25% 증가를 adjusted_daily_crew 모델에 어떻게 반영할지 불명확함"
+  ],
+  "questions": [
+    "A-Type, B-Type, C-Type은 어떻게 구분하나요?",
+    "절삭없이 덧씌우는 경우 시공량 25% 증가는 할증계수 적용 전 기준 시공량에 곱하나요, 아니면 최종 시공량에 곱하나요?",
+    "개소별 평균 시공면적은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:53:22.710385+00:00",
+    "input_tokens": 13625,
+    "output_tokens": 3580,
+    "source_pages": [
+      933,
+      934,
+      935
+    ],
+    "prompt_sha256": "874a7ec575a2471860804a7629b3682dea9ba6f22cb0185f92d72c47d9780494",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

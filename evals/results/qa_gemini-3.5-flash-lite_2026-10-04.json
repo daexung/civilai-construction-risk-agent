@@ -1,0 +1,2673 @@
+{
+  "model": "gemini-3.5-flash-lite",
+  "seed": 191,
+  "enabled_divisions": [
+    "건축",
+    "공통",
+    "기계설비",
+    "토목"
+  ],
+  "summary": {
+    "count": 30,
+    "correct_section_citation_rate": 0.7,
+    "safety_pass_rate": 0.9,
+    "not_found_rate": 0.26666666666666666,
+    "mean_latency_ms": 2994.8,
+    "max_latency_ms": 15203.0,
+    "ambiguous_comparison_pass": 5,
+    "not_found_kind_counts": {
+      "section_not_found": 5,
+      "section_found_value_missing": 3
+    }
+  },
+  "items": [
+    {
+      "id": "draft-2460",
+      "question": "시공폭이 3.5m(본선)이고 1층 포설두께가 5cm일 때, 기준 일일시공량은 얼마인가요?",
+      "expected": [
+        "토목",
+        "1-5-4"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 15203.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "시공폭이 3m 이상이고 1층 포설두께가 5~7㎝인 아스파트 기층 기계포설(대형장비) 기준 일일시공량은 4,900㎡입니다.",
+        "explanation": "시공폭 3.5m(본선) 조건은 3m 이상 시공폭에 해당하며, 1층 포설두께 5cm는 5~7㎝ 구간에 적용됩니다. 쇄석 매스틱 아스팔트 표층 포설 기준은 1층 포설두께 5㎝ 기준에서 3m 이상 시공폭일 때 4,500㎡가 적용됩니다.",
+        "comparisons": [
+          {
+            "section": "토목 1-5-4 아스팔트 기층 기계포설(대형장비)('24년 보완)",
+            "summary": "시공폭 3m 이상 및 1층 포설두께 5~7㎝ 조건에서 일일시공량은 4,900㎡입니다."
+          },
+          {
+            "section": "토목 1-5-8 쇄석 매스틱 아스팔트(SMA) 표층 포설('24, '25년 보완)",
+            "summary": "시공폭 3m 이상 및 1층 포설두께 5㎝ 기준에서 일일시공량은 4,500㎡입니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p368-t0",
+            "quote": "포장공 보통인부 아스팔트 피니셔 머캐덤롤러 타이어롤러 탠덤롤러 살수차 | 규격 3m | 단위 인 | 수량 4 | 시공량(㎡) 2m≤시공폭<3m 1층 포설두께 5~7㎝ 2,700 | 시공량(㎡) 8~10㎝ 2,500 | 시공량(㎡) 3m≤시공폭 5~7㎝ 4,900 | 시공량(㎡) 8~10㎝ 4,500",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p370-t0",
+            "quote": "포장공 보통인부 | 단위 인 | 수량 4 | 시공량(㎡) 2m≤시공폭<3m 2,500 | 시공량(㎡) 3m≤시공폭 4,500",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "시공폭이 3m 이상이고 1층 포설두께가 5~7㎝인 아스파트 기층 기계포설(대형장비) 기준 일일시공량은 4,900㎡입니다.\n\n시공폭 3.5m(본선) 조건은 3m 이상 시공폭에 해당하며, 1층 포설두께 5cm는 5~7㎝ 구간에 적용됩니다. 쇄석 매스틱 아스팔트 표층 포설 기준은 1층 포설두께 5㎝ 기준에서 3m 이상 시공폭일 때 4,500㎡가 적용됩니다.\n\n토목 1-5-4 아스팔트 기층 기계포설(대형장비)('24년 보완): 시공폭 3m 이상 및 1층 포설두께 5~7㎝ 조건에서 일일시공량은 4,900㎡입니다.\n\n토목 1-5-8 쇄석 매스틱 아스팔트(SMA) 표층 포설('24, '25년 보완): 시공폭 3m 이상 및 1층 포설두께 5㎝ 기준에서 일일시공량은 4,500㎡입니다.\n\n[p368-t0] 포장공 보통인부 아스팔트 피니셔 머캐덤롤러 타이어롤러 탠덤롤러 살수차 | 규격 3m | 단위 인 | 수량 4 | 시공량(㎡) 2m≤시공폭<3m 1층 포설두께 5~7㎝ 2,700 | 시공량(㎡) 8~10㎝ 2,500 | 시공량(㎡) 3m≤시공폭 5~7㎝ 4,900 | 시공량(㎡) 8~10㎝ 4,500\n\n[p370-t0] 포장공 보통인부 | 단위 인 | 수량 4 | 시공량(㎡) 2m≤시공폭<3m 2,500 | 시공량(㎡) 3m≤시공폭 4,500",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 3609,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "토목",
+          "section_no": "1-5-4",
+          "section": "토목 1-5-4 아스팔트 기층 기계포설(대형장비)('24년 보완)",
+          "score": 1.0,
+          "has_spec": true
+        },
+        {
+          "division": "토목",
+          "section_no": "1-5-3",
+          "section": "토목 1-5-3 아스팔트 기층 기계포설(소형장비)",
+          "score": 0.5,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "1-5-8",
+          "section": "토목 1-5-8 쇄석 매스틱 아스팔트(SMA) 표층 포설",
+          "score": 0.47619047619047616,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-2589",
+      "question": "제작도(Shop drawing) 작성 비용은 어떻게 계상하나요?",
+      "expected": [
+        "토목",
+        "5-1-3"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 6047.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "제작도(Shop drawing) 작성 비용은 박스거더, 플레이트거더의 경우 0.4인/톤, 박스거더·플레이트거더 이외의 경우 0.56인/톤을 별도 계상할 수 있습니다.",
+        "explanation": "제작도 작성 비용은 대상 구조물의 종류에 따라 단위당 인공 품이 다르게 적용되며, 각종 조건에 따른 증감률을 함께 고려합니다. 철근 시공상세도 작성비용 또한 별도 계상하도록 규정되어 있습니다.",
+        "comparisons": [
+          {
+            "section": "토목 5-1-3 재료비",
+            "summary": "박스거더 및 플레이트거더는 0.4인/톤, 그 이외의 경우는 0.56인/톤을 적용하며 중급숙련기술자를 기준으로 합니다."
+          },
+          {
+            "section": "공통 6-2-1 적용범위",
+            "summary": "철근 시공상세도(shop drawing) 작성비용은 별도 계상하도록 정하고 있습니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p414-x29",
+            "quote": "설명 | [주] ① 제작도(Shop drawing) 작성 비용은 별도 계상하되, 박스거더, 플레이트거더의 역우 0.4인/톤, 박스거더,\n설명 | 플레이트거더 이외의 경우 0.56인/톤을 적용할 수 있으며, 이에 대해서도 각종 조건에 따른 증감율을 적용한다.{직종은 중급숙련기술자(건설 및 기타) 적용} ② 본 품은 고장력 볼트 조임품이 제외된 것이다. ③ 강교의 제작중량은 강판을 기준으로 하며, 영구부재는 제작중량에 포함한다.",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p189-x0",
+            "quote": "설명 | 인력에 의한 단독시공이 불가능한 경우 크레인 등 기계경비를 별도 계상한다. - 철근 시공상세도(shop drawing) 작성비용은 별도 계상한다. - PC강선의 가공 및 조립은 별도 계상한다. - 철근 가공 및 조립의 Type은 아래 표 유형의 각 호 중 어느 하나에 해당하는 경우에 적용한다. 1. 토목",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "제작도(Shop drawing) 작성 비용은 박스거더, 플레이트거더의 경우 0.4인/톤, 박스거더·플레이트거더 이외의 경우 0.56인/톤을 별도 계상할 수 있습니다.\n\n제작도 작성 비용은 대상 구조물의 종류에 따라 단위당 인공 품이 다르게 적용되며, 각종 조건에 따른 증감률을 함께 고려합니다. 철근 시공상세도 작성비용 또한 별도 계상하도록 규정되어 있습니다.\n\n토목 5-1-3 재료비: 박스거더 및 플레이트거더는 0.4인/톤, 그 이외의 경우는 0.56인/톤을 적용하며 중급숙련기술자를 기준으로 합니다.\n\n공통 6-2-1 적용범위: 철근 시공상세도(shop drawing) 작성비용은 별도 계상하도록 정하고 있습니다.\n\n[p414-x29] 설명 | [주] ① 제작도(Shop drawing) 작성 비용은 별도 계상하되, 박스거더, 플레이트거더의 역우 0.4인/톤, 박스거더,\n설명 | 플레이트거더 이외의 경우 0.56인/톤을 적용할 수 있으며, 이에 대해서도 각종 조건에 따른 증감율을 적용한다.{직종은 중급숙련기술자(건설 및 기타) 적용} ② 본 품은 고장력 볼트 조임품이 제외된 것이다. ③ 강교의 제작중량은 강판을 기준으로 하며, 영구부재는 제작중량에 포함한다.\n\n[p189-x0] 설명 | 인력에 의한 단독시공이 불가능한 경우 크레인 등 기계경비를 별도 계상한다. - 철근 시공상세도(shop drawing) 작성비용은 별도 계상한다. - PC강선의 가공 및 조립은 별도 계상한다. - 철근 가공 및 조립의 Type은 아래 표 유형의 각 호 중 어느 하나에 해당하는 경우에 적용한다. 1. 토목",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2437,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "토목",
+          "section_no": "5-1-3",
+          "section": "토목 5-1-3 재료비('08, '13, '14, '24년 보완)",
+          "score": 1.0,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "9-5-4",
+          "section": "토목 9-5-4 수치지도 작성('21, '22, '24, '26년 보완)",
+          "score": 0.7666666666666666,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "6-2-1",
+          "section": "공통 6-2-1 적용범위('22년 신설, '24년 보완)",
+          "score": 0.3333333333333333,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-2047",
+      "question": "품 값이 '2.5~3.0'처럼 범위로 되어 있는데, 현장 조건에 따라 어떻게 결정하나요?",
+      "expected": [
+        "기계설비",
+        "8-6-1"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 1937.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": false,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": true,
+        "not_found_kind": "section_not_found",
+        "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
+        "explanation": "가장 가까운 절: 공통 1-4-1 적용기준('23년, '25년 보완)",
+        "comparisons": [],
+        "citations": []
+      },
+      "answer": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.\n\n가장 가까운 절: 공통 1-4-1 적용기준('23년, '25년 보완)",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1313,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "1-4-1",
+          "section": "공통 1-4-1 적용기준('23년, '25년 보완)",
+          "score": 1.0,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "8-2-8",
+          "section": "공통 8-2-8 덤프트럭('17년 보완)",
+          "score": 0.5,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "1-2-8",
+          "section": "공통 1-2-8 작업조 구성 및 적용('24년 신설)",
+          "score": 0.3666666666666667,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-1995",
+      "question": "냉각탑 용량이 100이고 5층 건물 옥상에 1회 설치할 때 품은 어떻게 되나요?",
+      "expected": [
+        "기계설비",
+        "8-1-3"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2000.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": true,
+        "conclusion": "관련 기준은 기계설비 8-1-3 냉각탑 설치입니다. 질문하신 조건의 값은 원문에서 확인하지 못했습니다.",
+        "explanation": "",
+        "comparisons": [
+          {
+            "section": "기계설비 8-1-3 냉각탑 설치",
+            "summary": "옥상 탑옥1층 탑옥3층 탑옥1층 탑옥3층\n100",
+            "citation_ids": [
+              "p746-t0"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p746-t0",
+            "quote": "옥상 탑옥1층 탑옥3층 탑옥1층 탑옥3층"
+          },
+          {
+            "chunk_id": "p746-t0",
+            "quote": "100"
+          }
+        ],
+        "not_found_kind": "section_found_value_missing"
+      },
+      "answer": "관련 기준은 기계설비 8-1-3 냉각탑 설치입니다. 질문하신 조건의 값은 원문에서 확인하지 못했습니다.\n\n기계설비 8-1-3 냉각탑 설치\n\n[p746-t0] 옥상 탑옥1층 탑옥3층 탑옥1층 탑옥3층\n\n[p746-t0] 100",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1406,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "8-1-3",
+          "section": "기계설비 8-1-3 냉각탑 설치",
+          "score": 2.283333333333333,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-11-2",
+          "section": "기계설비 13-11-2 Cooling Tower 설치",
+          "score": 0.2111111111111111,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "8-1-1",
+          "section": "기계설비 8-1-1 냉동기 반입",
+          "score": 0.16666666666666666,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-0568",
+      "question": "바닥면적 입력란이 어디 있나요?",
+      "expected": [
+        "공통",
+        "2-11-4"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2000.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "바닥면적 기준은 입주청소 항목에 있습니다.",
+        "explanation": "제공된 자료 중 입주청소 항목의 설명란에 바닥면적(㎡) 단위가 기재되어 있습니다. 건축물 현장정리는 연면적(㎡) 기준을 사용합니다.",
+        "comparisons": [
+          {
+            "section": "공통 2-11-4 입주청소('23년 신설)",
+            "summary": "바닥면적(㎡) 기준 설명"
+          },
+          {
+            "section": "공통 2-11-2 건축물 현장정리",
+            "summary": "연면적(㎡) 기준 설명"
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p118-x2",
+            "quote": "설명 | (바닥면적 ㎡)",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p117-x13",
+            "quote": "설명 | (연면적 ㎡)",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "바닥면적 기준은 입주청소 항목에 있습니다.\n\n제공된 자료 중 입주청소 항목의 설명란에 바닥면적(㎡) 단위가 기재되어 있습니다. 건축물 현장정리는 연면적(㎡) 기준을 사용합니다.\n\n공통 2-11-4 입주청소('23년 신설): 바닥면적(㎡) 기준 설명\n\n공통 2-11-2 건축물 현장정리: 연면적(㎡) 기준 설명\n\n[p118-x2] 설명 | (바닥면적 ㎡)\n\n[p117-x13] 설명 | (연면적 ㎡)",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1531,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "2-11-4",
+          "section": "공통 2-11-4 입주청소('23년 신설)",
+          "score": 1.0,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "2-11-2",
+          "section": "공통 2-11-2 건축물 현장정리",
+          "score": 0.5,
+          "has_spec": true
+        },
+        {
+          "division": "건축",
+          "section_no": "1-2-1",
+          "section": "건축 1-2-1 현장 세우기('08, '18년 보완)",
+          "score": 0.34285714285714286,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-1676",
+      "question": "터빈 설치 시 검사 및 교정 품은 어떻게 산정하나요?",
+      "expected": [
+        "기계설비",
+        "13-5-8"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 2250.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": false,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": true,
+        "not_found_kind": "section_not_found",
+        "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
+        "explanation": "가장 가까운 절: 기계설비 13-6-4 수문 설치",
+        "comparisons": [],
+        "citations": []
+      },
+      "answer": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.\n\n가장 가까운 절: 기계설비 13-6-4 수문 설치",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1375,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "13-6-4",
+          "section": "기계설비 13-6-4 수문 설치",
+          "score": 1.0,
+          "has_spec": true
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-5-8",
+          "section": "기계설비 13-5-8 터빈 설치",
+          "score": 0.8873015873015874,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "7-4-5",
+          "section": "토목 7-4-5 펌프준설 매립시의 유보율 등('10년 보완)",
+          "score": 0.5,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-1873",
+      "question": "밸브 규격이 100mm일 때 보온공 품은 얼마인가요?",
+      "expected": [
+        "기계설비",
+        "3-2-2"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 3907.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "밸브 규격이 100mm일 때 일반마감 밸브보온의 보온공 품은 보온두께 25mm 이하에서 0.342인, 보온두께 50mm 이하에서 0.531인이며, 플랜트 배관보온(pipe보온)의 밸브 보온공 품은 보온두께 30mm 이하에서 0.225인입니다.",
+        "explanation": "밸브 규격이 100mm인 경우에 대해 일반마감 밸브보온과 플랜트 배관보온(pipe보온) 기준의 보온공 품을 각각 확인할 수 있습니다. 일반마감 밸브보온은 보온두께 조건에 따라 두 가지 값이 적용되며, 플랜트 배관보온은 보온두께 30mm 이하 기준의 값이 적용됩니다.",
+        "comparisons": [
+          {
+            "section": "일반마감 밸브보온",
+            "summary": "보온두께 25mm 이하일 때 고무발포보온재 보온공 0.342인, 보온두께 50mm 이하일 때 0.531인입니다."
+          },
+          {
+            "section": "pipe보온",
+            "summary": "보온두께 30mm 이하에서 Valve및Flange(개당) 보온공 0.225인입니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p723-t0",
+            "quote": "구분 규격\n(㎜) 100 | 구분 보온두께\n(㎜) 25이하 | 단위 인 | 고무발포보온재 보온공 0.342 | 고무발포보온재 보통인부 0.113 | 발포폴리에틸렌보온재 보온공 0.257 | 발포폴리에틸렌보온재 보통인부 0.085",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p723-t0",
+            "quote": "구분 규격\n(㎜) 100 | 구분 보온두께\n(㎜) 50이하 | 단위 인 | 고무발포보온재 보온공 0.531 | 고무발포보온재 보통인부 0.176 | 발포폴리에틸렌보온재 보온공 0.400 | 발포폴리에틸렌보온재 보통인부 0.132",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p813-t0",
+            "quote": "Pipe Size\nmm 100 | 관(m당) 보온공 0.063 | 관(m당) 특별인부 0.093 | Fitting(개당) 보온공 0.088 | Fitting(개당) 특별인부 0.096 | Hanger(개당) 보온공 0.015 | Hanger(개당) 특별인부 0.015 | Valve및Flange(개당) 보온공 0.225 | Valve및Flange(개당) 특별인부 0.225 | 직관의물량 성형물(m) 1 | 직관의물량 철선(m) 4.360 | 직관의물량 Lagging\nSheet(㎡) 0.567 | 직관의물량 Sheet\nMetal\nScrew(개) 10",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "밸브 규격이 100mm일 때 일반마감 밸브보온의 보온공 품은 보온두께 25mm 이하에서 0.342인, 보온두께 50mm 이하에서 0.531인이며, 플랜트 배관보온(pipe보온)의 밸브 보온공 품은 보온두께 30mm 이하에서 0.225인입니다.\n\n밸브 규격이 100mm인 경우에 대해 일반마감 밸브보온과 플랜트 배관보온(pipe보온) 기준의 보온공 품을 각각 확인할 수 있습니다. 일반마감 밸브보온은 보온두께 조건에 따라 두 가지 값이 적용되며, 플랜트 배관보온은 보온두께 30mm 이하 기준의 값이 적용됩니다.\n\n일반마감 밸브보온: 보온두께 25mm 이하일 때 고무발포보온재 보온공 0.342인, 보온두께 50mm 이하일 때 0.531인입니다.\n\npipe보온: 보온두께 30mm 이하에서 Valve및Flange(개당) 보온공 0.225인입니다.\n\n[p723-t0] 구분 규격\n(㎜) 100 | 구분 보온두께\n(㎜) 25이하 | 단위 인 | 고무발포보온재 보온공 0.342 | 고무발포보온재 보통인부 0.113 | 발포폴리에틸렌보온재 보온공 0.257 | 발포폴리에틸렌보온재 보통인부 0.085\n\n[p723-t0] 구분 규격\n(㎜) 100 | 구분 보온두께\n(㎜) 50이하 | 단위 인 | 고무발포보온재 보온공 0.531 | 고무발포보온재 보통인부 0.176 | 발포폴리에틸렌보온재 보온공 0.400 | 발포폴리에틸렌보온재 보통인부 0.132\n\n[p813-t0] Pipe Size\nmm 100 | 관(m당) 보온공 0.063 | 관(m당) 특별인부 0.093 | Fitting(개당) 보온공 0.088 | Fitting(개당) 특별인부 0.096 | Hanger(개당) 보온공 0.015 | Hanger(개당) 특별인부 0.015 | Valve및Flange(개당) 보온공 0.225 | Valve및Flange(개당) 특별인부 0.225 | 직관의물량 성형물(m) 1 | 직관의물량 철선(m) 4.360 | 직관의물량 Lagging\nSheet(㎡) 0.567 | 직관의물량 Sheet\nMetal\nScrew(개) 10",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 3141,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "3-2-1",
+          "section": "기계설비 3-2-1 일반마감 밸브보온('92, '14, '20년 보완)",
+          "score": 1.6,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-3-1",
+          "section": "기계설비 13-3-1 pipe보온('04년 보완)",
+          "score": 1.0749999999999997,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "3-1-2",
+          "section": "기계설비 3-1-2 칼라함석마감 배관보온('14, '20, '24년 보완)",
+          "score": 0.14285714285714285,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-0222",
+      "question": "D16mm 앵커를 설치하려고 하는데 이 품셈을 적용해도 되나요?",
+      "expected": [
+        "건축",
+        "4-3-2"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2109.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "D16mm 앵커는 기초앵커 설치 품셈의 적용 대상이 아닙니다.",
+        "explanation": "기초앵커 설치 품셈은 D13mm 이하의 앵커를 설치하는 기준을 담고 있으므로 D16mm 앵커에는 맞지 않습니다. 제시된 항목별로는 기초앵커 설치 기준이 D13mm 이하로 한정되어 있습니다.",
+        "comparisons": [
+          {
+            "section": "건축 4-3-2 기초앵커 설치('25년 신설)",
+            "summary": "목재데크 등 하부기초에 앵커(D13mm이하)를 설치하는 기준입니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p647-x16",
+            "quote": "설명 | [주] ① 본 품은 목재데크 등 하부기초(콘크리트)에 앵커(D13mm이하)를 설치하는 기준이다.",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "D16mm 앵커는 기초앵커 설치 품셈의 적용 대상이 아닙니다.\n\n기초앵커 설치 품셈은 D13mm 이하의 앵커를 설치하는 기준을 담고 있으므로 D16mm 앵커에는 맞지 않습니다. 제시된 항목별로는 기초앵커 설치 기준이 D13mm 이하로 한정되어 있습니다.\n\n건축 4-3-2 기초앵커 설치('25년 신설): 목재데크 등 하부기초에 앵커(D13mm이하)를 설치하는 기준입니다.\n\n[p647-x16] 설명 | [주] ① 본 품은 목재데크 등 하부기초(콘크리트)에 앵커(D13mm이하)를 설치하는 기준이다.",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1609,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "4-3-2",
+          "section": "건축 4-3-2 기초앵커 설치('25년 신설)",
+          "score": 1.2,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "7-4-2",
+          "section": "공통 7-4-2 앵커 긴결공법('19, '26년 보완)",
+          "score": 0.5,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "4-6-9",
+          "section": "토목 4-6-9 교량침목고정장치 설치",
+          "score": 0.3333333333333333,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-0455",
+      "question": "라스 붙임 작업 시 미장공의 단위당 품은 얼마인가요?",
+      "expected": [
+        "건축",
+        "9-1-5"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 1891.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": false,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "라스 붙임 작업 시 10㎡당 미장공의 품은 0.14인입니다.",
+        "explanation": "해당 작업은 미장면 보강을 위해 메탈라스나 유리섬유메쉬를 부착하는 공정입니다. 기준 단위인 10㎡당 미장공의 소요 인원이 명시되어 있습니다.",
+        "comparisons": [],
+        "citations": [
+          {
+            "chunk_id": "p681-t0",
+            "quote": "미 장 공 인 0.14",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "라스 붙임 작업 시 10㎡당 미장공의 품은 0.14인입니다.\n\n해당 작업은 미장면 보강을 위해 메탈라스나 유리섬유메쉬를 부착하는 공정입니다. 기준 단위인 10㎡당 미장공의 소요 인원이 명시되어 있습니다.\n\n[p681-t0] 미 장 공 인 0.14",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1344,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "9-1-5",
+          "section": "건축 9-1-5 라스 붙임('17년 신설)",
+          "score": 1.3333333333333333,
+          "has_spec": false
+        },
+        {
+          "division": "건축",
+          "section_no": "9-2-3",
+          "section": "건축 9-2-3 전면 마감('14, '19, '25년 보완)",
+          "score": 0.5,
+          "has_spec": false
+        },
+        {
+          "division": "건축",
+          "section_no": "9-2-2",
+          "section": "건축 9-2-2 부분 마감('19년 신설, '25년 보완)",
+          "score": 0.25,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-0178",
+      "question": "타일줄눈 설치 물량이 100㎡일 때 줄눈 모르타르 소요량은 얼마인가요?",
+      "expected": [
+        "건축",
+        "3-1-2"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2156.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 1,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "품셈에서 관련 기준을 찾았습니다.",
+        "explanation": "",
+        "comparisons": [
+          {
+            "section": "건축 3-1-2 타일줄눈 설치",
+            "summary": "줄눈 모르타르량(㎥) | 떠붙이기 0.005 | 압착붙이기 0.001\n설명 | [주] ① 본 품은 배합이 완료된 상태의 줄눈재로 타일의 줄눈을 설치(도포)하는 기준이다.",
+            "citation_ids": [
+              "p641-t2",
+              "p641-x7"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p641-t2",
+            "quote": "줄눈 모르타르량(㎥) | 떠붙이기 0.005 | 압착붙이기 0.001"
+          },
+          {
+            "chunk_id": "p641-x7",
+            "quote": "설명 | [주] ① 본 품은 배합이 완료된 상태의 줄눈재로 타일의 줄눈을 설치(도포)하는 기준이다."
+          }
+        ]
+      },
+      "answer": "품셈에서 관련 기준을 찾았습니다.\n\n건축 3-1-2 타일줄눈 설치\n\n[p641-t2] 줄눈 모르타르량(㎥) | 떠붙이기 0.005 | 압착붙이기 0.001\n\n[p641-x7] 설명 | [주] ① 본 품은 배합이 완료된 상태의 줄눈재로 타일의 줄눈을 설치(도포)하는 기준이다.",
+      "answer_source": "template",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1687,
+        "attempts": 1,
+        "error": "instruction_leak",
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "3-1-2",
+          "section": "건축 3-1-2 타일줄눈 설치",
+          "score": 2.083333333333333,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-1692",
+      "question": "소모자재 중 산소의 규격 기준은 무엇인가요?",
+      "expected": [
+        "기계설비",
+        "13-6-12"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 2797.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "품셈에서 관련 기준을 찾았습니다.",
+        "explanation": "문맥 길이 제한으로 일부 원문이 생략되었습니다. 원문을 확인해 주세요.",
+        "comparisons": [
+          {
+            "section": "기계설비 13-11-5 공사별 설치 소모자재[참고]",
+            "summary": "설명 | ※ 산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을\n설명 | 기준한다.",
+            "citation_ids": [
+              "p910-x14"
+            ]
+          },
+          {
+            "section": "기계설비 13-6-16 Trash Rack 설치",
+            "summary": "2. 소모자재 (톤당) 공 정 별 품 명 규 격 수 량\n수정･절단 용접 도장 동력 | 품명 산소 | 규격 6,000ℓ입 | 수량 0.029병",
+            "citation_ids": [
+              "p877-t1"
+            ]
+          },
+          {
+            "section": "토목 4-5-1 가스압접('19년 보완)",
+            "summary": "설명 | ② 산소량은 대기압상태의 기준량이며, 압축산소는 35℃에서 150기압으로 압축용기에 넣어 사용하는\n설명 | [주] ① 기타 소모품비는 주재료비의 10% 범위 내에서 계상한다.",
+            "citation_ids": [
+              "p405-x21"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p910-x14",
+            "quote": "설명 | ※ 산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을"
+          },
+          {
+            "chunk_id": "p910-x14",
+            "quote": "설명 | 기준한다."
+          },
+          {
+            "chunk_id": "p877-t1",
+            "quote": "2. 소모자재 (톤당) 공 정 별 품 명 규 격 수 량"
+          },
+          {
+            "chunk_id": "p877-t1",
+            "quote": "수정･절단 용접 도장 동력 | 품명 산소 | 규격 6,000ℓ입 | 수량 0.029병"
+          },
+          {
+            "chunk_id": "p405-x21",
+            "quote": "설명 | ② 산소량은 대기압상태의 기준량이며, 압축산소는 35℃에서 150기압으로 압축용기에 넣어 사용하는"
+          },
+          {
+            "chunk_id": "p405-x21",
+            "quote": "설명 | [주] ① 기타 소모품비는 주재료비의 10% 범위 내에서 계상한다."
+          }
+        ]
+      },
+      "answer": "품셈에서 관련 기준을 찾았습니다.\n\n문맥 길이 제한으로 일부 원문이 생략되었습니다. 원문을 확인해 주세요.\n\n기계설비 13-11-5 공사별 설치 소모자재[참고]\n\n[p910-x14] 설명 | ※ 산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을\n\n[p910-x14] 설명 | 기준한다.\n\n기계설비 13-6-16 Trash Rack 설치\n\n[p877-t1] 2. 소모자재 (톤당) 공 정 별 품 명 규 격 수 량\n\n[p877-t1] 수정･절단 용접 도장 동력 | 품명 산소 | 규격 6,000ℓ입 | 수량 0.029병\n\n토목 4-5-1 가스압접('19년 보완)\n\n[p405-x21] 설명 | ② 산소량은 대기압상태의 기준량이며, 압축산소는 35℃에서 150기압으로 압축용기에 넣어 사용하는\n\n[p405-x21] 설명 | [주] ① 기타 소모품비는 주재료비의 10% 범위 내에서 계상한다.",
+      "answer_source": "template",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2172,
+        "attempts": 1,
+        "error": "chunk_id",
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "13-11-5",
+          "section": "기계설비 13-11-5 공사별 설치 소모자재[참고]",
+          "score": 1.1,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-6-16",
+          "section": "기계설비 13-6-16 Trash Rack 설치",
+          "score": 0.8333333333333333,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "4-5-1",
+          "section": "토목 4-5-1 가스압접('19년 보완)",
+          "score": 0.25,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-1886",
+      "question": "강제전선관 배관이나 통신/전기배선 인입 작업이 포함되어 있습니까?",
+      "expected": [
+        "기계설비",
+        "3-4-2"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2328.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "강제전선관 배관 및 전기배선 인입 작업은 포함되어 있지 않으며 별도 계상합니다.",
+        "explanation": "제공된 자료에 따르면 발열선 설치와 분전함 설치 작업 모두 강제전선관 배관이나 통신 및 전기배선 인입 작업이 포함되지 않고 별도로 계상하도록 규정되어 있습니다.",
+        "comparisons": [
+          {
+            "section": "발열선 설치",
+            "summary": "발열선 설치 공종에서는 강제전선관 배관, 전기배선 인입작업을 별도로 계상하도록 명시되어 있습니다."
+          },
+          {
+            "section": "분전함 설치",
+            "summary": "분전함 설치 공종에서는 강제전선관 배관, 통신·전기배선 인입 및 결선작업을 별도로 계상하도록 명시되어 있습니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p725-x8",
+            "quote": "설명 | ③ 강제전선관 배관, 전기배선 인입작업은 별도 계상한다.",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p725-x11",
+            "quote": "설명 | 포함한다. ③ 강제전선관 배관, 통신･전기배선 인입 및 결선작업은 별도 계상한다.",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "강제전선관 배관 및 전기배선 인입 작업은 포함되어 있지 않으며 별도 계상합니다.\n\n제공된 자료에 따르면 발열선 설치와 분전함 설치 작업 모두 강제전선관 배관이나 통신 및 전기배선 인입 작업이 포함되지 않고 별도로 계상하도록 규정되어 있습니다.\n\n발열선 설치: 발열선 설치 공종에서는 강제전선관 배관, 전기배선 인입작업을 별도로 계상하도록 명시되어 있습니다.\n\n분전함 설치: 분전함 설치 공종에서는 강제전선관 배관, 통신·전기배선 인입 및 결선작업을 별도로 계상하도록 명시되어 있습니다.\n\n[p725-x8] 설명 | ③ 강제전선관 배관, 전기배선 인입작업은 별도 계상한다.\n\n[p725-x11] 설명 | 포함한다. ③ 강제전선관 배관, 통신･전기배선 인입 및 결선작업은 별도 계상한다.",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1719,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "3-4-1",
+          "section": "기계설비 3-4-1 발열선 설치('06년 신설, '14, '20년 보완)",
+          "score": 1.0,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "3-4-2",
+          "section": "기계설비 3-4-2 분전함 설치('06년 신설, '14, '20년 보완)",
+          "score": 0.5,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "2-2-6",
+          "section": "기계설비 2-2-6 제연댐퍼 설치('21년 보완)",
+          "score": 0.3333333333333333,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-1497",
+      "question": "용접 방법이 알곤용접입니까, 아니면 아크용접입니까?",
+      "expected": [
+        "기계설비",
+        "11-1-1"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2562.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "가스용 강관을 접합하는 기준은 알곤용접이 적용되며, 탄소강관의 현장 전기아크 용접 기준도 있습니다.",
+        "explanation": "관련 기준에 따라 가스용 강관 접합은 알곤용접 기준이 적용되며, 탄소강관 등의 현장 용접에는 전기아크용접 기준도 함께 제시되어 있습니다.",
+        "comparisons": [
+          {
+            "section": "기계설비 11-1-1 용접접합('15년 보완)",
+            "summary": "본 품은 알곤용접으로 가스용 강관을 접합하는 기준입니다."
+          },
+          {
+            "section": "기계설비 13-2-3 강관용접('18년 보완)",
+            "summary": "본 품은 탄소강관의 현장 전기아크 용접을 기준한 것입니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p769-x9",
+            "quote": "설명 | [주] ① 본 품은 알곤용접으로 가스용 강관을 접합하는 기준이다.",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p802-x4",
+            "quote": "설명 | [주] ① 본 품은 탄소강관의 현장 전기아크 용접을 기준한 것이다.",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "가스용 강관을 접합하는 기준은 알곤용접이 적용되며, 탄소강관의 현장 전기아크 용접 기준도 있습니다.\n\n관련 기준에 따라 가스용 강관 접합은 알곤용접 기준이 적용되며, 탄소강관 등의 현장 용접에는 전기아크용접 기준도 함께 제시되어 있습니다.\n\n기계설비 11-1-1 용접접합('15년 보완): 본 품은 알곤용접으로 가스용 강관을 접합하는 기준입니다.\n\n기계설비 13-2-3 강관용접('18년 보완): 본 품은 탄소강관의 현장 전기아크 용접을 기준한 것입니다.\n\n[p769-x9] 설명 | [주] ① 본 품은 알곤용접으로 가스용 강관을 접합하는 기준이다.\n\n[p802-x4] 설명 | [주] ① 본 품은 탄소강관의 현장 전기아크 용접을 기준한 것이다.",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1922,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "11-1-1",
+          "section": "기계설비 11-1-1 용접접합('15년 보완)",
+          "score": 1.0,
+          "has_spec": true
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-2-4",
+          "section": "기계설비 13-2-4 강판 전기아크용접",
+          "score": 0.976190476190476,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-2-3",
+          "section": "기계설비 13-2-3 강관용접('18년 보완)",
+          "score": 0.5416666666666666,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-1746",
+      "question": "비계 높이가 10m일 때 할증률은 15%인가요, 아니면 15%+5%=20%인가요?",
+      "expected": [
+        "기계설비",
+        "13-7-13"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 2672.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "비계 높이가 10m일 때 비계사용 할증은 5%가 적용되며, 15%나 20%는 적용되지 않습니다.",
+        "explanation": "비계사용 고소작업 위험 할증은 10m 이상 ~ 20m 미만 구간에서 할증 5%를 적용하도록 규정되어 있습니다.",
+        "comparisons": [
+          {
+            "section": "공통 1-4-5 위험('23년 보완)",
+            "summary": "비계사용 높이가 10m 이상 ~ 20m 미만일 때의 할증률은 5%입니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p84-t0",
+            "quote": "비계사용 | 적용조건 - 10m 이상 ~ 20m 미만 | 할증 5%",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "비계 높이가 10m일 때 비계사용 할증은 5%가 적용되며, 15%나 20%는 적용되지 않습니다.\n\n비계사용 고소작업 위험 할증은 10m 이상 ~ 20m 미만 구간에서 할증 5%를 적용하도록 규정되어 있습니다.\n\n공통 1-4-5 위험('23년 보완): 비계사용 높이가 10m 이상 ~ 20m 미만일 때의 할증률은 5%입니다.\n\n[p84-t0] 비계사용 | 적용조건 - 10m 이상 ~ 20m 미만 | 할증 5%",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1734,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "1-4-5",
+          "section": "공통 1-4-5 위험('23년 보완)",
+          "score": 1.1666666666666667,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "1-3-1",
+          "section": "공통 1-3-1 재료의 할증('06, '11, '12, '19, '22, '23년 보완)",
+          "score": 1.0333333333333332,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "2-12-2",
+          "section": "공통 2-12-2 마스트 설치 및 해체('23년 신설)",
+          "score": 0.25,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-1508",
+      "question": "분기공의 구경은 몇 ㎜입니까?",
+      "expected": [
+        "기계설비",
+        "11-3-1"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 5031.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "품셈에서 관련 기준을 찾았습니다.",
+        "explanation": "",
+        "comparisons": [
+          {
+            "section": "기계설비 11-3-1 분기공 설치('15년 보완)",
+            "summary": "구경(㎜) 65 | 배관공(인) 0.317 | 보통인부(인) 0.219 | 플랜트용접공(인) 0.476\n구경(㎜) 80 | 배관공(인) 0.363 | 보통인부(인) 0.252 | 플랜트용접공(인) 0.546",
+            "citation_ids": [
+              "p771-t1"
+            ]
+          },
+          {
+            "section": "토목 6-8-5 부단수 천공 분기점 분기('00, '11, '21년 보완)",
+            "summary": "설명 | ② 본 품의 관경은 지관을 기준한 것이다. ③ 터파기, 되메우기, 잔토처리, 물푸기 작업은 제외되어 있다. ④ 물이 흐르지 않는 단수상태에서는 본 품을 20%까지 감하여 적용한다. ⑤ 본 품의 크레인 규격은 다음을 참고하여 적용한다.\n(㎜) 80 | 배관공(수도)",
+            "citation_ids": [
+              "p439-x29",
+              "p439-t1"
+            ]
+          },
+          {
+            "section": "토목 6-5-5 분기관 천공 및 접합",
+            "summary": "분기관 관경\n(㎜) 75 | 배관공(수도)",
+            "citation_ids": [
+              "p427-t2"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p771-t1",
+            "quote": "구경(㎜) 65 | 배관공(인) 0.317 | 보통인부(인) 0.219 | 플랜트용접공(인) 0.476"
+          },
+          {
+            "chunk_id": "p771-t1",
+            "quote": "구경(㎜) 80 | 배관공(인) 0.363 | 보통인부(인) 0.252 | 플랜트용접공(인) 0.546"
+          },
+          {
+            "chunk_id": "p439-x29",
+            "quote": "설명 | ② 본 품의 관경은 지관을 기준한 것이다. ③ 터파기, 되메우기, 잔토처리, 물푸기 작업은 제외되어 있다. ④ 물이 흐르지 않는 단수상태에서는 본 품을 20%까지 감하여 적용한다. ⑤ 본 품의 크레인 규격은 다음을 참고하여 적용한다."
+          },
+          {
+            "chunk_id": "p439-t1",
+            "quote": "(㎜) 80 | 배관공(수도)"
+          },
+          {
+            "chunk_id": "p427-t2",
+            "quote": "분기관 관경"
+          },
+          {
+            "chunk_id": "p427-t2",
+            "quote": "(㎜) 75 | 배관공(수도)"
+          }
+        ]
+      },
+      "answer": "품셈에서 관련 기준을 찾았습니다.\n\n기계설비 11-3-1 분기공 설치('15년 보완)\n\n[p771-t1] 구경(㎜) 65 | 배관공(인) 0.317 | 보통인부(인) 0.219 | 플랜트용접공(인) 0.476\n\n[p771-t1] 구경(㎜) 80 | 배관공(인) 0.363 | 보통인부(인) 0.252 | 플랜트용접공(인) 0.546\n\n토목 6-8-5 부단수 천공 분기점 분기('00, '11, '21년 보완)\n\n[p439-x29] 설명 | ② 본 품의 관경은 지관을 기준한 것이다. ③ 터파기, 되메우기, 잔토처리, 물푸기 작업은 제외되어 있다. ④ 물이 흐르지 않는 단수상태에서는 본 품을 20%까지 감하여 적용한다. ⑤ 본 품의 크레인 규격은 다음을 참고하여 적용한다.\n\n[p439-t1] (㎜) 80 | 배관공(수도)\n\n토목 6-5-5 분기관 천공 및 접합\n\n[p427-t2] 분기관 관경\n\n[p427-t2] (㎜) 75 | 배관공(수도)",
+      "answer_source": "template",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 4453,
+        "attempts": 1,
+        "error": "numbers",
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "11-3-1",
+          "section": "기계설비 11-3-1 분기공 설치('15년 보완)",
+          "score": 1.3333333333333333,
+          "has_spec": true
+        },
+        {
+          "division": "토목",
+          "section_no": "6-8-5",
+          "section": "토목 6-8-5 부단수 천공 분기점 분기('00, '11, '21년 보완)",
+          "score": 0.6749999999999999,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "6-5-5",
+          "section": "토목 6-5-5 분기관 천공 및 접합",
+          "score": 0.5,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-0214",
+      "question": "접착제 외에 수장합판 자재 물량은 어떻게 산출하나요?",
+      "expected": [
+        "건축",
+        "4-2-4"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2016.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 1,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": true,
+        "conclusion": "관련 기준은 건축 4-2-4 수장합판 설치('24년 보완)입니다. 질문하신 조건의 값은 원문에서 확인하지 못했습니다.",
+        "explanation": "",
+        "comparisons": [
+          {
+            "section": "건축 4-2-4 수장합판 설치('24년 보완)",
+            "summary": "접착제 | 단위 ㎏ | 수량 0.27\n설명 | [주] ① 본 품은 바탕합판 위에 수장합판을 설치하는 기준이다.",
+            "citation_ids": [
+              "p647-t0",
+              "p646-x18"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p647-t0",
+            "quote": "접착제 | 단위 ㎏ | 수량 0.27"
+          },
+          {
+            "chunk_id": "p646-x18",
+            "quote": "설명 | [주] ① 본 품은 바탕합판 위에 수장합판을 설치하는 기준이다."
+          }
+        ],
+        "not_found_kind": "section_found_value_missing"
+      },
+      "answer": "관련 기준은 건축 4-2-4 수장합판 설치('24년 보완)입니다. 질문하신 조건의 값은 원문에서 확인하지 못했습니다.\n\n건축 4-2-4 수장합판 설치('24년 보완)\n\n[p647-t0] 접착제 | 단위 ㎏ | 수량 0.27\n\n[p646-x18] 설명 | [주] ① 본 품은 바탕합판 위에 수장합판을 설치하는 기준이다.",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1421,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "4-2-4",
+          "section": "건축 4-2-4 수장합판 설치('24년 보완)",
+          "score": 2.033333333333333,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-0299",
+      "question": "필름 폭이 1.2m인 자재를 사용할 경우 재료량 할증이나 품을 어떻게 조정해야 하나요?",
+      "expected": [
+        "건축",
+        "5-4-8"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 1766.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": false,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": true,
+        "not_found_kind": "section_not_found",
+        "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
+        "explanation": "가장 가까운 절: 건축 5-4-8 방습필름설치",
+        "comparisons": [],
+        "citations": []
+      },
+      "answer": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.\n\n가장 가까운 절: 건축 5-4-8 방습필름설치",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1235,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "5-4-8",
+          "section": "건축 5-4-8 방습필름설치",
+          "score": 1.0,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "1-3-1",
+          "section": "공통 1-3-1 재료의 할증('06, '11, '12, '19, '22, '23년 보완)",
+          "score": 0.8428571428571427,
+          "has_spec": false
+        },
+        {
+          "division": "건축",
+          "section_no": "5-4-4",
+          "section": "건축 5-4-4 단열재 핀사용 붙이기('22, '24년 보완)",
+          "score": 0.3333333333333333,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-0879",
+      "question": "프리캐스트 콘크리트 블록설치 시 인력과 기계 시공의 기준은 무엇인가요?",
+      "expected": [
+        "공통",
+        "3-7-1"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2437.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "인력은 블록중량이 50㎏/개 미만으로서 평균 비탈길이가 15m이하인 경우에 적용하며, 기계는 블록중량이 50㎏/개 이상인 경우 또는 50㎏/개 미만에도 평균 비탈길이가 15m를 초과하는 경우에 적용합니다.",
+        "explanation": "프리캐스트 콘크리트 블록설치 공종에서 인력 시공과 기계 시공의 적용 기준은 블록의 중량과 평균 비탈길이에 따라 구분됩니다.",
+        "comparisons": [
+          {
+            "section": "인력 시공 기준",
+            "summary": "블록중량이 50㎏/개 미만이고 평균 비탈길이가 15m이하인 경우에 적용합니다."
+          },
+          {
+            "section": "기계 시공 기준",
+            "summary": "블록중량이 50㎏/개 이상이거나, 50㎏/개 미만이라도 평균 비탈길이가 15m를 초과하는 경우에 적용합니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p134-x18",
+            "quote": "설명 | 시공범위는 수직고 20m이하 기준이다. ② 인력은 블록중량이 50㎏/개 미만으로서 평균 비탈길이가 15m이하인 경우에 적용한다. ③ 기계는 블록중량이 50㎏/개 이상인 경우 또는 50㎏/개 미만에도 평균 비탈길이가 15m를 초과하는",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "인력은 블록중량이 50㎏/개 미만으로서 평균 비탈길이가 15m이하인 경우에 적용하며, 기계는 블록중량이 50㎏/개 이상인 경우 또는 50㎏/개 미만에도 평균 비탈길이가 15m를 초과하는 경우에 적용합니다.\n\n프리캐스트 콘크리트 블록설치 공종에서 인력 시공과 기계 시공의 적용 기준은 블록의 중량과 평균 비탈길이에 따라 구분됩니다.\n\n인력 시공 기준: 블록중량이 50㎏/개 미만이고 평균 비탈길이가 15m이하인 경우에 적용합니다.\n\n기계 시공 기준: 블록중량이 50㎏/개 이상이거나, 50㎏/개 미만이라도 평균 비탈길이가 15m를 초과하는 경우에 적용합니다.\n\n[p134-x18] 설명 | 시공범위는 수직고 20m이하 기준이다. ② 인력은 블록중량이 50㎏/개 미만으로서 평균 비탈길이가 15m이하인 경우에 적용한다. ③ 기계는 블록중량이 50㎏/개 이상인 경우 또는 50㎏/개 미만에도 평균 비탈길이가 15m를 초과하는",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1859,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "3-7-1",
+          "section": "공통 3-7-1 프리캐스트 콘크리트 블록설치('25년 보완)",
+          "score": 1.8333333333333333,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "6-6-7",
+          "section": "공통 6-6-7 프리캐스트 콘크리트 패널 설치('08년 신설, '21, '24년 보완)",
+          "score": 0.7956349206349207,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "3-7-2",
+          "section": "공통 3-7-2 지압판블록 설치('20년 신설, '25년 보완)",
+          "score": 0.2,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-1204",
+      "question": "자주식 건설기계가 포장도로를 이동할 때 덤프트럭의 이동속도 기준은 어떻게 되나요?",
+      "expected": [
+        "공통",
+        "8-1-3"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 3328.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "자주식 건설기계로서 자주로 이동할 경우의 수송비 산정을 위한 덤프트럭의 이동속도는 포장도로(고속 4차선) 60km/hr, 포장도로(고속 2차선) 50km/hr, 포장도로 40km/hr입니다.",
+        "explanation": "덤프트럭이 포장도로를 이동할 때의 이동속도는 도로의 구분에 따라 다르게 적용됩니다. 고속 4차선은 60km/hr, 고속 2차선은 50km/hr, 일반 포장도로는 40km/hr의 기준 속도를 따릅니다.",
+        "comparisons": [
+          {
+            "section": "포장도로 (고속4차선)",
+            "summary": "덤프트럭 이동속도는 60km/hr입니다."
+          },
+          {
+            "section": "포장도로 (고속2차선)",
+            "summary": "덤프트럭 이동속도는 50km/hr입니다."
+          },
+          {
+            "section": "포장도로",
+            "summary": "덤프트럭 이동속도는 40km/hr입니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p220-t0",
+            "quote": "포장도로 ( 고속4 차선) 포장도로 ( 고속2 차선) 포장도로 사리도로 (양호) 사리도로 (불량) | 덤프\n트럭 60",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p220-t0",
+            "quote": "포장도로 ( 고속4 차선) 포장도로 ( 고속2 차선) 포장도로 사리도로 (양호) 사리도로 (불량) | 덤프\n트럭 50 | 아스팔트",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p220-t0",
+            "quote": "포장도로 ( 고속4 차선) 포장도로 ( 고속2 차선) 포장도로 사리도로 (양호) 사리도로 (불량) | 덤프\n트럭 40 | 로더",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "자주식 건설기계로서 자주로 이동할 경우의 수송비 산정을 위한 덤프트럭의 이동속도는 포장도로(고속 4차선) 60km/hr, 포장도로(고속 2차선) 50km/hr, 포장도로 40km/hr입니다.\n\n덤프트럭이 포장도로를 이동할 때의 이동속도는 도로의 구분에 따라 다르게 적용됩니다. 고속 4차선은 60km/hr, 고속 2차선은 50km/hr, 일반 포장도로는 40km/hr의 기준 속도를 따릅니다.\n\n포장도로 (고속4차선): 덤프트럭 이동속도는 60km/hr입니다.\n\n포장도로 (고속2차선): 덤프트럭 이동속도는 50km/hr입니다.\n\n포장도로: 덤프트럭 이동속도는 40km/hr입니다.\n\n[p220-t0] 포장도로 ( 고속4 차선) 포장도로 ( 고속2 차선) 포장도로 사리도로 (양호) 사리도로 (불량) | 덤프\n트럭 60\n\n[p220-t0] 포장도로 ( 고속4 차선) 포장도로 ( 고속2 차선) 포장도로 사리도로 (양호) 사리도로 (불량) | 덤프\n트럭 50 | 아스팔트\n\n[p220-t0] 포장도로 ( 고속4 차선) 포장도로 ( 고속2 차선) 포장도로 사리도로 (양호) 사리도로 (불량) | 덤프\n트럭 40 | 로더",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2484,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "8-1-3",
+          "section": "공통 8-1-3 운반 및 수송('10, '17년 보완)",
+          "score": 1.3333333333333333,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "8-2-8",
+          "section": "공통 8-2-8 덤프트럭('17년 보완)",
+          "score": 0.9428571428571427,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "8-5-1",
+          "section": "공통 8-5-1 [00]토공기계",
+          "score": 0.25,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-0099",
+      "question": "작업 부위가 천장인지 벽면인지 알려주세요.",
+      "expected": [
+        "건축",
+        "11-1-2"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 2047.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": false,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": true,
+        "not_found_kind": "section_not_found",
+        "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
+        "explanation": "가장 가까운 절: 건축 5-2-2 열경화성수지천장판 설치",
+        "comparisons": [],
+        "citations": []
+      },
+      "answer": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.\n\n가장 가까운 절: 건축 5-2-2 열경화성수지천장판 설치",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1422,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "5-2-2",
+          "section": "건축 5-2-2 열경화성수지천장판 설치",
+          "score": 1.2,
+          "has_spec": true
+        },
+        {
+          "division": "건축",
+          "section_no": "8-2-4",
+          "section": "건축 8-2-4 경량천장철골틀 설치('02, '07, '16, '22, '24년 보완)",
+          "score": 0.5,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "4-2-5",
+          "section": "기계설비 4-2-5 레인지후드 설치",
+          "score": 0.41666666666666663,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-2600",
+      "question": "관경 200mm 주철관을 장비로 50본 부설할 때 품이 어떻게 되나요?",
+      "expected": [
+        "토목",
+        "6-2-1"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 3172.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "관경 200mm 주철관 50본을 장비로 부설할 때의 품은 접합 방식에 따라 타이튼 접합은 시공량 12본, K.P 메커니컬 접합은 시공량 11본입니다.",
+        "explanation": "주철관 부설 공종은 접합 방식(타이튼 접합 또는 K.P 메커니컬 접합)에 따라 각각 다른 일당 기준과 시공량이 적용됩니다. 두 공종 모두 배관공(수도)과 보통인부가 각각 2인, 양중장비가 1대 투입되는 동일한 인력 구성을 가집니다.",
+        "comparisons": [
+          {
+            "section": "토목 6-2-1 타이튼 접합 및 부설('23, '25년 보완)",
+            "summary": "관경 200mm, 일당 기준 배관공(수도) 2인, 보통인부 2인, 양중장비 1대, 시공량 12본이 적용됩니다."
+          },
+          {
+            "section": "토목 6-2-2 K.P 메커니컬 접합 및 부설('23, '25년 보완)",
+            "summary": "관경 200mm, 일당 기준 배관공(수도) 2인, 보통인부 2인, 양중장비 1대, 시공량 11본이 적용됩니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p420-t0",
+            "quote": "배관공(수도) 보통인부 양중장비 | 단위 인 | 수량 2 | 관경(㎜) 200 | 시공량(본) 12",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p420-t2",
+            "quote": "배관공(수도) 보통인부 양중장비 | 단위 인 | 수량 2 | 관경(㎜) 200 | 시공량(본) 11",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "관경 200mm 주철관 50본을 장비로 부설할 때의 품은 접합 방식에 따라 타이튼 접합은 시공량 12본, K.P 메커니컬 접합은 시공량 11본입니다.\n\n주철관 부설 공종은 접합 방식(타이튼 접합 또는 K.P 메커니컬 접합)에 따라 각각 다른 일당 기준과 시공량이 적용됩니다. 두 공종 모두 배관공(수도)과 보통인부가 각각 2인, 양중장비가 1대 투입되는 동일한 인력 구성을 가집니다.\n\n토목 6-2-1 타이튼 접합 및 부설('23, '25년 보완): 관경 200mm, 일당 기준 배관공(수도) 2인, 보통인부 2인, 양중장비 1대, 시공량 12본이 적용됩니다.\n\n토목 6-2-2 K.P 메커니컬 접합 및 부설('23, '25년 보완): 관경 200mm, 일당 기준 배관공(수도) 2인, 보통인부 2인, 양중장비 1대, 시공량 11본이 적용됩니다.\n\n[p420-t0] 배관공(수도) 보통인부 양중장비 | 단위 인 | 수량 2 | 관경(㎜) 200 | 시공량(본) 12\n\n[p420-t2] 배관공(수도) 보통인부 양중장비 | 단위 인 | 수량 2 | 관경(㎜) 200 | 시공량(본) 11",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2406,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "토목",
+          "section_no": "6-8-1",
+          "section": "토목 6-8-1 주철제 게이트 제수밸브 부설 및 접합('23년 보완)",
+          "score": 1.0,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "6-2-2",
+          "section": "토목 6-2-2 K.P 메커니컬 접합 및 부설('23, '25년 보완)",
+          "score": 0.6666666666666666,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "6-2-1",
+          "section": "토목 6-2-1 타이튼 접합 및 부설('23, '25년 보완)",
+          "score": 0.35,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-1463",
+      "question": "일반송수구의 규격(단구형, 쌍구형 등)은 무엇입니까?",
+      "expected": [
+        "기계설비",
+        "10-4-1"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2281.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "일반송수구의 규격은 단구형, 쌍구형, 단구스탠드형, 쌍구스탠드형이 있습니다.",
+        "explanation": "기계설비 10-4-1 일반송수구 설치 기준에 따르면 일반송수구의 규격은 단구형, 쌍구형, 단구스탠드형, 쌍구스탠드형으로 구분됩니다. 각 규격별로 배관공 품이 다르게 적용되며 소운반과 설비 설치품이 포함됩니다.",
+        "comparisons": [
+          {
+            "section": "일반송수구 설치",
+            "summary": "단구형, 쌍구형, 단구스탠드형, 쌍구스탠드형의 네 가지 규격에 따른 배관공 품을 각각 제시합니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p765-t1",
+            "quote": "일반송수구 | 규격 단구형 | 배 관 공(인) 0.400\n일반송수구 | 규격 쌍구형 | 배 관 공(인) 0.600\n일반송수구 | 규격 단구스탠드형 | 배 관 공(인) 0.800\n일반송수구 | 규격 쌍구스탠드형 | 배 관 공(인) 1.200",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "일반송수구의 규격은 단구형, 쌍구형, 단구스탠드형, 쌍구스탠드형이 있습니다.\n\n기계설비 10-4-1 일반송수구 설치 기준에 따르면 일반송수구의 규격은 단구형, 쌍구형, 단구스탠드형, 쌍구스탠드형으로 구분됩니다. 각 규격별로 배관공 품이 다르게 적용되며 소운반과 설비 설치품이 포함됩니다.\n\n일반송수구 설치: 단구형, 쌍구형, 단구스탠드형, 쌍구스탠드형의 네 가지 규격에 따른 배관공 품을 각각 제시합니다.\n\n[p765-t1] 일반송수구 | 규격 단구형 | 배 관 공(인) 0.400\n일반송수구 | 규격 쌍구형 | 배 관 공(인) 0.600\n일반송수구 | 규격 단구스탠드형 | 배 관 공(인) 0.800\n일반송수구 | 규격 쌍구스탠드형 | 배 관 공(인) 1.200",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1750,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "10-4-1",
+          "section": "기계설비 10-4-1 일반송수구 설치",
+          "score": 1.1666666666666667,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "10-3-2",
+          "section": "기계설비 10-3-2 지상식 설치",
+          "score": 0.5,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "10-4-3",
+          "section": "기계설비 10-4-3 연결송수구설치",
+          "score": 0.39285714285714285,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-0069",
+      "question": "창호 설치 개소 수는 몇 개입니까?",
+      "expected": [
+        "건축",
+        "10-1-5"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 2235.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": false,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": true,
+        "not_found_kind": "section_not_found",
+        "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
+        "explanation": "가장 가까운 절: 건축 10-1-3 알루미늄창호 설치",
+        "comparisons": [],
+        "citations": []
+      },
+      "answer": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.\n\n가장 가까운 절: 건축 10-1-3 알루미늄창호 설치",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1656,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "10-1-3",
+          "section": "건축 10-1-3 알루미늄창호 설치",
+          "score": 1.1,
+          "has_spec": true
+        },
+        {
+          "division": "건축",
+          "section_no": "10-1-2",
+          "section": "건축 10-1-2 강재창호 설치",
+          "score": 0.625,
+          "has_spec": true
+        },
+        {
+          "division": "건축",
+          "section_no": "10-1-1",
+          "section": "건축 10-1-1 목재창호 설치('14, '20년 보완)",
+          "score": 0.3611111111111111,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-1206",
+      "question": "운반기계로 기자재 운반 시 적재 시간이 15분 걸렸다면 유류산정은 어떻게 하나요?",
+      "expected": [
+        "공통",
+        "8-1-3"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2703.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "트럭 또는 기타 운반기계로 기자재를 운반할 경우 적재 또는 적하에 소요되는 시간이 10분을 초과할 때는 적재 또는 적하를 제외한 시간의 유류만을 계상합니다.",
+        "explanation": "적재 또는 적하 시간이 기준인 10분을 초과하므로 적재 및 적하에 쓰인 유류는 제외하고 나머지 운반 이동 시간 등에 해당하는 유류만 계산합니다.",
+        "comparisons": [
+          {
+            "section": "공통 8-1-3 운반 및 수송('10, '17년 보완)",
+            "summary": "적재 또는 적하 시간이 10분을 초과하는 경우 해당 시간을 제외한 운반 시간의 유류만 산정합니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p221-x25",
+            "quote": "설명 | 트럭 또는 기타 운반기계로 기자재를 운반할 경우 적재 또는 적하에 소요되는 시간이 10분을 초과할 때는 적재 또는 적하를 제외한 시간의 유류만을 계상한다.",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "트럭 또는 기타 운반기계로 기자재를 운반할 경우 적재 또는 적하에 소요되는 시간이 10분을 초과할 때는 적재 또는 적하를 제외한 시간의 유류만을 계상합니다.\n\n적재 또는 적하 시간이 기준인 10분을 초과하므로 적재 및 적하에 쓰인 유류는 제외하고 나머지 운반 이동 시간 등에 해당하는 유류만 계산합니다.\n\n공통 8-1-3 운반 및 수송('10, '17년 보완): 적재 또는 적하 시간이 10분을 초과하는 경우 해당 시간을 제외한 운반 시간의 유류만 산정합니다.\n\n[p221-x25] 설명 | 트럭 또는 기타 운반기계로 기자재를 운반할 경우 적재 또는 적하에 소요되는 시간이 10분을 초과할 때는 적재 또는 적하를 제외한 시간의 유류만을 계상한다.",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2110,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "8-1-3",
+          "section": "공통 8-1-3 운반 및 수송('10, '17년 보완)",
+          "score": 1.1666666666666667,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "7-2-1",
+          "section": "토목 7-2-1 적재 및 운반",
+          "score": 0.6111111111111112,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "1-2-7",
+          "section": "공통 1-2-7 운반('08, '10, '16, '22, '23년 보완)",
+          "score": 0.4583333333333333,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-1107",
+      "question": "단면 크기에 변화가 있는 층의 알루미늄폼 설치 품은 어떻게 계산하나요?",
+      "expected": [
+        "공통",
+        "6-3-7"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2187.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "단면 크기에 변화가 발생되는 경우 현장 여건에 따라 셋팅층 및 마감층의 설치 및 해체를 조정하여 별도 계상합니다.",
+        "explanation": "알루미늄폼 설치 및 해체 품은 단면에 변화가 없는 것을 기준으로 삼습니다. 단면의 형태 및 크기에 변화가 발생되면 현장 여건에 맞춰 셋팅층 및 마감층의 설치 및 해체 작업을 조정해 별도로 계산합니다.",
+        "comparisons": [
+          {
+            "section": "공통 6-3-7 알루미늄폼 설치 및 해체",
+            "summary": "단면 크기 변화 시 현장 여건에 따라 셋팅층 및 마감층의 설치 및 해체를 조정하여 별도 계상"
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p197-x4",
+            "quote": "설명 | - 본 품은 단면에 변화가 없는 기준이며, 단면의 형태 및 크기에 변화가 발생되는 경우 현장 여건에\n설명 | 따라 ‘셋팅층 및 마감층의 설치 및 해체’를 조정하여 별도 계상한다.",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "단면 크기에 변화가 발생되는 경우 현장 여건에 따라 셋팅층 및 마감층의 설치 및 해체를 조정하여 별도 계상합니다.\n\n알루미늄폼 설치 및 해체 품은 단면에 변화가 없는 것을 기준으로 삼습니다. 단면의 형태 및 크기에 변화가 발생되면 현장 여건에 맞춰 셋팅층 및 마감층의 설치 및 해체 작업을 조정해 별도로 계산합니다.\n\n공통 6-3-7 알루미늄폼 설치 및 해체: 단면 크기 변화 시 현장 여건에 따라 셋팅층 및 마감층의 설치 및 해체를 조정하여 별도 계상\n\n[p197-x4] 설명 | - 본 품은 단면에 변화가 없는 기준이며, 단면의 형태 및 크기에 변화가 발생되는 경우 현장 여건에\n설명 | 따라 ‘셋팅층 및 마감층의 설치 및 해체’를 조정하여 별도 계상한다.",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1625,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "6-3-7",
+          "section": "공통 6-3-7 알루미늄폼 설치 및 해체('08년 신설, '17, '24년 보완)",
+          "score": 2.283333333333333,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "2-6-4",
+          "section": "공통 2-6-4 알루미늄 폼 동바리 설치 및 해체",
+          "score": 0.26785714285714285,
+          "has_spec": true
+        },
+        {
+          "division": "건축",
+          "section_no": "10-1-4",
+          "section": "건축 10-1-4 조립식 알루미늄창호 설치('26년 신설)",
+          "score": 0.2111111111111111,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-0905",
+      "question": "지지력 시험 비용은 이 품에 포함되어 있나요?",
+      "expected": [
+        "공통",
+        "3-8-4"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2141.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "뒤채움 및 다짐 품에서 지지력 시험은 별도 계상합니다.",
+        "explanation": "보강토 옹벽의 뒤채움 및 다짐 작업 기준에는 지지력 시험 비용이 포함되지 않으며 별도로 계상하도록 규정되어 있습니다. 평판재하시험과 정재하시험 항목에서는 지지력 시험 비용 포함 여부에 대한 직접적인 언급이 없습니다.",
+        "comparisons": [
+          {
+            "section": "공통 3-8-4 뒤채움 및 다짐",
+            "summary": "뒤채움 및 다짐 작업에서 지지력 시험은 별도 계상하도록 명시되어 있습니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p139-x21",
+            "quote": "설명 | ② 본 품은 블록 속채움 및 뒤채움, 다짐 작업을 포함한다. ③ 지지력 시험은 별도 계상한다. ④ 투입장비는 작업여건에 따라 장비조합을 변경하여 적용할 수 있다.",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "뒤채움 및 다짐 품에서 지지력 시험은 별도 계상합니다.\n\n보강토 옹벽의 뒤채움 및 다짐 작업 기준에는 지지력 시험 비용이 포함되지 않으며 별도로 계상하도록 규정되어 있습니다. 평판재하시험과 정재하시험 항목에서는 지지력 시험 비용 포함 여부에 대한 직접적인 언급이 없습니다.\n\n공통 3-8-4 뒤채움 및 다짐: 뒤채움 및 다짐 작업에서 지지력 시험은 별도 계상하도록 명시되어 있습니다.\n\n[p139-x21] 설명 | ② 본 품은 블록 속채움 및 뒤채움, 다짐 작업을 포함한다. ③ 지지력 시험은 별도 계상한다. ④ 투입장비는 작업여건에 따라 장비조합을 변경하여 적용할 수 있다.",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1484,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "토목",
+          "section_no": "8-2-4",
+          "section": "토목 8-2-4 평판재하시험('08년 신설)",
+          "score": 1.0,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "8-2-6",
+          "section": "토목 8-2-6 정재하시험('08년 신설)",
+          "score": 0.5,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "3-8-4",
+          "section": "공통 3-8-4 뒤채움 및 다짐",
+          "score": 0.3333333333333333,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-0105",
+      "question": "목재면 바탕만들기 100㎡를 작업하려고 합니다. 품을 계산해주세요.",
+      "expected": [
+        "건축",
+        "11-1-4"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2391.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "목재면 바탕만들기의 ㎡당 품은 도장공의 경우 불순물 제거 0.006인, 퍼티 및 연마 0.009인이며, 보통인부는 불순물 제거 0.001인, 퍼티 및 연마 0.001인입니다.",
+        "explanation": "목재면 바탕만들기는 불순물 제거와 퍼티 및 연마 공종으로 나누어져 있으며 각각에 필요한 도장공과 보통인부의 단위 기준이 제시되어 있습니다. 공구손료 및 잡재료비는 인력품의 3%로 계상하며 재료량은 시방서 및 제조사 수량을 적용합니다.",
+        "comparisons": [
+          {
+            "section": "불순물 제거",
+            "summary": "도장공 0.006인, 보통인부 0.001인이 소요됩니다."
+          },
+          {
+            "section": "퍼티 및 연마",
+            "summary": "도장공 0.009인, 보통인부 0.001인이 소요됩니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p692-t1",
+            "quote": "도장공 | 단위 인 | 불순물 제거 0.006 | 퍼티 및 연마 0.009",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p692-t1",
+            "quote": "보통인부 | 단위 인 | 불순물 제거 0.001 | 퍼티 및 연마 0.001",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "목재면 바탕만들기의 ㎡당 품은 도장공의 경우 불순물 제거 0.006인, 퍼티 및 연마 0.009인이며, 보통인부는 불순물 제거 0.001인, 퍼티 및 연마 0.001인입니다.\n\n목재면 바탕만들기는 불순물 제거와 퍼티 및 연마 공종으로 나누어져 있으며 각각에 필요한 도장공과 보통인부의 단위 기준이 제시되어 있습니다. 공구손료 및 잡재료비는 인력품의 3%로 계상하며 재료량은 시방서 및 제조사 수량을 적용합니다.\n\n불순물 제거: 도장공 0.006인, 보통인부 0.001인이 소요됩니다.\n\n퍼티 및 연마: 도장공 0.009인, 보통인부 0.001인이 소요됩니다.\n\n[p692-t1] 도장공 | 단위 인 | 불순물 제거 0.006 | 퍼티 및 연마 0.009\n\n[p692-t1] 보통인부 | 단위 인 | 불순물 제거 0.001 | 퍼티 및 연마 0.001",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1844,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "11-1-4",
+          "section": "건축 11-1-4 목재면 바탕만들기",
+          "score": 1.5,
+          "has_spec": true
+        },
+        {
+          "division": "건축",
+          "section_no": "11-1-1",
+          "section": "건축 11-1-1 콘크리트･모르타르면 바탕만들기('15년 보완)",
+          "score": 0.5928571428571429,
+          "has_spec": false
+        },
+        {
+          "division": "건축",
+          "section_no": "11-1-3",
+          "section": "건축 11-1-3 철재면 바탕만들기('21년 신설)",
+          "score": 0.3333333333333333,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-1461",
+      "question": "소운반 비용은 따로 계산해야 하나요?",
+      "expected": [
+        "기계설비",
+        "10-3-2"
+      ],
+      "correct_section_cited": false,
+      "latency_ms": 2421.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": false,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "품에서 자재의 소운반은 20m 이내의 거리를 포함하며, 거리가 범위를 초과하거나 별도의 2차 운반이 발생될 경우 별도 계상합니다.",
+        "explanation": "품에 포함된 소운반 거리는 20m 이내로 규정되어 있습니다. 현장 내 운반거리가 이 범위를 넘거나 별도의 2차 운반이 필요한 경우에는 따로 계산합니다.",
+        "comparisons": [],
+        "citations": [
+          {
+            "chunk_id": "p71-x1",
+            "quote": "설명 | 가. 품에서 자재의 소운반은 포함하며, 품에서 포함된 것으로 규정된 소운반 거리는 20m 이내의 거리를\n설명 | 의미한다.",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p71-x1",
+            "quote": "설명 | 나. 경사면의 소운반 거리는 직고 1m를 수평거리 6m의 비율로 본다. 다. 현장 내 운반거리가 소운반 범위를 초과하거나, 별도의 2차 운반이 발생될 경우 별도 계상한다.",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "품에서 자재의 소운반은 20m 이내의 거리를 포함하며, 거리가 범위를 초과하거나 별도의 2차 운반이 발생될 경우 별도 계상합니다.\n\n품에 포함된 소운반 거리는 20m 이내로 규정되어 있습니다. 현장 내 운반거리가 이 범위를 넘거나 별도의 2차 운반이 필요한 경우에는 따로 계산합니다.\n\n[p71-x1] 설명 | 가. 품에서 자재의 소운반은 포함하며, 품에서 포함된 것으로 규정된 소운반 거리는 20m 이내의 거리를\n설명 | 의미한다.\n\n[p71-x1] 설명 | 나. 경사면의 소운반 거리는 직고 1m를 수평거리 6m의 비율로 본다. 다. 현장 내 운반거리가 소운반 범위를 초과하거나, 별도의 2차 운반이 발생될 경우 별도 계상한다.",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1719,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "1-2-7",
+          "section": "공통 1-2-7 운반('08, '10, '16, '22, '23년 보완)",
+          "score": 1.3428571428571427,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-3-2",
+          "section": "기계설비 13-3-2 기기보온",
+          "score": 0.6,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-6-9",
+          "section": "기계설비 13-6-9 Steel Penstock 제작",
+          "score": 0.375,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "draft-0641",
+      "question": "철재 수평규준틀 높이가 5m 이하일 때 건축목공 품은 얼마인가요?",
+      "expected": [
+        "공통",
+        "2-5-3"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 2157.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "철재 수평규준틀 높이가 5m 이하일 때 건축목공 품은 0.14인입니다.",
+        "explanation": "철재 수평규준틀 설치 및 철거 공종에서 높이 5m 이하 조건의 건축목공 품 기준을 나타냅니다. 5m 이하와 10m 이하 조건에 따라 품의 차이가 있습니다.",
+        "comparisons": [
+          {
+            "section": "규준틀 높이 5m이하",
+            "summary": "건축목공 0.14인이 소요됩니다."
+          },
+          {
+            "section": "규준틀 높이 10m이하",
+            "summary": "건축목공 0.17인이 소요됩니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p100-t2",
+            "quote": "건축목공 | 단위 인 | 규준틀 높이 5m이하 0.14 | 규준틀 높이 10m이하 0.17",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "철재 수평규준틀 높이가 5m 이하일 때 건축목공 품은 0.14인입니다.\n\n철재 수평규준틀 설치 및 철거 공종에서 높이 5m 이하 조건의 건축목공 품 기준을 나타냅니다. 5m 이하와 10m 이하 조건에 따라 품의 차이가 있습니다.\n\n규준틀 높이 5m이하: 건축목공 0.14인이 소요됩니다.\n\n규준틀 높이 10m이하: 건축목공 0.17인이 소요됩니다.\n\n[p100-t2] 건축목공 | 단위 인 | 규준틀 높이 5m이하 0.14 | 규준틀 높이 10m이하 0.17",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1625,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "2-5-3",
+          "section": "공통 2-5-3 철재 수평규준틀 설치 및 철거",
+          "score": 1.3333333333333333,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "2-5-2",
+          "section": "공통 2-5-2 목재 수평규준틀 설치 및 철거",
+          "score": 0.9166666666666666,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "2-5-4",
+          "section": "공통 2-5-4 목재 평･귀규준틀 설치 및 철거('26년 보완)",
+          "score": 0.2,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "draft-2030",
+      "question": "방열기 설치 수량은 몇 조입니까?",
+      "expected": [
+        "기계설비",
+        "8-3-6"
+      ],
+      "correct_section_cited": true,
+      "latency_ms": 1672.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": true,
+        "conclusion": "관련 기준은 기계설비 8-3-6 방열기('07년 보완)입니다. 질문하신 조건의 값은 원문에서 확인하지 못했습니다.",
+        "explanation": "",
+        "comparisons": [
+          {
+            "section": "기계설비 8-3-6 방열기('07년 보완)",
+            "summary": "설명 | [주] ①본체, 밸브, 트랩류(강판제 및 알루미뉴제 방열기 제외) 등 지지철물 설치, 소운반, 기밀시험 및 공기빼기\n강판제 및 알루미늄제 방열기 1m 미만 | 단위 인/조 | 배관공 0.44 | 보통인부 0.06",
+            "citation_ids": [
+              "p754-x11",
+              "p754-t0"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p754-x11",
+            "quote": "설명 | [주] ①본체, 밸브, 트랩류(강판제 및 알루미뉴제 방열기 제외) 등 지지철물 설치, 소운반, 기밀시험 및 공기빼기"
+          },
+          {
+            "chunk_id": "p754-t0",
+            "quote": "강판제 및 알루미늄제 방열기 1m 미만 | 단위 인/조 | 배관공 0.44 | 보통인부 0.06"
+          }
+        ],
+        "not_found_kind": "section_found_value_missing"
+      },
+      "answer": "관련 기준은 기계설비 8-3-6 방열기('07년 보완)입니다. 질문하신 조건의 값은 원문에서 확인하지 못했습니다.\n\n기계설비 8-3-6 방열기('07년 보완)\n\n[p754-x11] 설명 | [주] ①본체, 밸브, 트랩류(강판제 및 알루미뉴제 방열기 제외) 등 지지철물 설치, 소운반, 기밀시험 및 공기빼기\n\n[p754-t0] 강판제 및 알루미늄제 방열기 1m 미만 | 단위 인/조 | 배관공 0.44 | 보통인부 0.06",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 1188,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "기계설비",
+          "section_no": "8-3-6",
+          "section": "기계설비 8-3-6 방열기('07년 보완)",
+          "score": 1.5,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-5-5",
+          "section": "기계설비 13-5-5 공기예열기(Preheater) 설치",
+          "score": 0.3333333333333333,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "8-2-1",
+          "section": "기계설비 8-2-1 공기가열기, 공기냉각기, 공기여과기 설치",
+          "score": 0.25,
+          "has_spec": false
+        }
+      ]
+    }
+  ],
+  "ambiguous": [
+    {
+      "id": "ambiguous-1",
+      "question": "콘크리트 타설할 때 콘크리트공 품이 얼마야?",
+      "expected": [
+        null,
+        null
+      ],
+      "correct_section_cited": null,
+      "latency_ms": 3281.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "콘크리트 타설 시 콘크리트공 품은 콘크리트 펌프차 타설의 경우 작업조 무근콘크리트 3인, 철근콘크리트 4인이며, 레디믹스트콘크리트 인력운반 타설은 3인, 장비사용 타설은 3인이고, 슬립폼 공법은 0.125인/㎥입니다.",
+        "explanation": "콘크리트 타설 공종은 펌프차 타설, 레디믹스트콘크리트 타설, 슬립폼 공법 등 작업 방식에 따라 콘크리트공의 편성이 다릅니다. 각 공법별 작업 조건에 맞춰 인력 편성과 단위 기준을 확인해야 합니다.",
+        "comparisons": [
+          {
+            "section": "콘크리트 펌프차 타설",
+            "summary": "작업조 무근콘크리트 3인, 철근콘크리트 4인이 편성됩니다."
+          },
+          {
+            "section": "레디믹스트콘크리트 타설",
+            "summary": "인력운반 타설 및 장비사용 타설 모두 3인이 편성됩니다."
+          },
+          {
+            "section": "슬립폼 공법",
+            "summary": "콘크리트타설 시 0.125인/㎥가 적용됩니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p186-t1",
+            "quote": "콘크리트공 | 단위 인 | 작업조 무근콘크리트 3 | 작업조 철근콘크리트 4 | 비고 타설/진동기/면정리",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p185-t0",
+            "quote": "인력운반 타설 | 콘크리트공 | 단위 인 | 수량 3 | 시공량(㎥) 무근구조물 23 | 시공량(㎥) 철근구조물 20",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p185-t0",
+            "quote": "장비사용 타설 | 콘크리트공 | 단위 인 | 수량 3 | 시공량(㎥) 무근구조물 63 | 시공량(㎥) 철근구조물 55",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p196-t2",
+            "quote": "콘크리트공 | 단위 인/㎥ | 수량 0.125",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "콘크리트 타설 시 콘크리트공 품은 콘크리트 펌프차 타설의 경우 작업조 무근콘크리트 3인, 철근콘크리트 4인이며, 레디믹스트콘크리트 인력운반 타설은 3인, 장비사용 타설은 3인이고, 슬립폼 공법은 0.125인/㎥입니다.\n\n콘크리트 타설 공종은 펌프차 타설, 레디믹스트콘크리트 타설, 슬립폼 공법 등 작업 방식에 따라 콘크리트공의 편성이 다릅니다. 각 공법별 작업 조건에 맞춰 인력 편성과 단위 기준을 확인해야 합니다.\n\n콘크리트 펌프차 타설: 작업조 무근콘크리트 3인, 철근콘크리트 4인이 편성됩니다.\n\n레디믹스트콘크리트 타설: 인력운반 타설 및 장비사용 타설 모두 3인이 편성됩니다.\n\n슬립폼 공법: 콘크리트타설 시 0.125인/㎥가 적용됩니다.\n\n[p186-t1] 콘크리트공 | 단위 인 | 작업조 무근콘크리트 3 | 작업조 철근콘크리트 4 | 비고 타설/진동기/면정리\n\n[p185-t0] 인력운반 타설 | 콘크리트공 | 단위 인 | 수량 3 | 시공량(㎥) 무근구조물 23 | 시공량(㎥) 철근구조물 20\n\n[p185-t0] 장비사용 타설 | 콘크리트공 | 단위 인 | 수량 3 | 시공량(㎥) 무근구조물 63 | 시공량(㎥) 철근구조물 55\n\n[p196-t2] 콘크리트공 | 단위 인/㎥ | 수량 0.125",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2735,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "6-1-4",
+          "section": "공통 6-1-4 콘크리트 펌프차 타설",
+          "score": 1.2,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "6-1-1",
+          "section": "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)",
+          "score": 0.5,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "6-3-6",
+          "section": "공통 6-3-6 슬립폼 공법",
+          "score": 0.3333333333333333,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-2",
+      "question": "거푸집 설치 해체 품 알려줘",
+      "expected": [
+        null,
+        null
+      ],
+      "correct_section_cited": null,
+      "latency_ms": 3344.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "합판거푸집, 강재거푸집, 문양거푸집 등 거푸집 종류와 설치 방식에 따라 품이 다릅니다.",
+        "explanation": "거푸집 설치 및 해체 공종은 합판거푸집, 강재거푸집, 문양거푸집에 따라 각각의 가공, 조립, 해체 기준과 인력 및 장비 조합이 구분되어 적용됩니다.",
+        "comparisons": [
+          {
+            "section": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)",
+            "summary": "형틀목공 5인, 보통인부 2인 기준으로 구조물 유형별 일당 시공량에 따라 적용합니다."
+          },
+          {
+            "section": "공통 6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완)",
+            "summary": "인력 설치 및 해체의 경우 100㎡당 형틀목공 계 6.2인, 비계공 계 9.0인, 보통인부 계 12.0인이며 장비조합 설치 및 해체도 별도 적용합니다."
+          },
+          {
+            "section": "공통 6-3-4 문양거푸집(판넬) 설치 및 해체('16년 신설)",
+            "summary": "형틀목공 0.07인, 보통인부 0.03인의 수량이 적용됩니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p193-t0",
+            "quote": "형틀목공 | 단위 인 | 수량 5 | 시공량(㎡) 제물치장 20 | 시공량(㎡) 매우복잡 25 | 시공량(㎡) 복잡 30 | 시공량(㎡) 보통 45 | 시공량(㎡) 간단 50",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p193-t2",
+            "quote": "형틀목공 | 단위 인 | 설치 4.5 | 해체 1.7 | 계 6.2",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p195-t2",
+            "quote": "형틀목공 | 단위 인 | 수량 0.07",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "합판거푸집, 강재거푸집, 문양거푸집 등 거푸집 종류와 설치 방식에 따라 품이 다릅니다.\n\n거푸집 설치 및 해체 공종은 합판거푸집, 강재거푸집, 문양거푸집에 따라 각각의 가공, 조립, 해체 기준과 인력 및 장비 조합이 구분되어 적용됩니다.\n\n공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완): 형틀목공 5인, 보통인부 2인 기준으로 구조물 유형별 일당 시공량에 따라 적용합니다.\n\n공통 6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완): 인력 설치 및 해체의 경우 100㎡당 형틀목공 계 6.2인, 비계공 계 9.0인, 보통인부 계 12.0인이며 장비조합 설치 및 해체도 별도 적용합니다.\n\n공통 6-3-4 문양거푸집(판넬) 설치 및 해체('16년 신설): 형틀목공 0.07인, 보통인부 0.03인의 수량이 적용됩니다.\n\n[p193-t0] 형틀목공 | 단위 인 | 수량 5 | 시공량(㎡) 제물치장 20 | 시공량(㎡) 매우복잡 25 | 시공량(㎡) 복잡 30 | 시공량(㎡) 보통 45 | 시공량(㎡) 간단 50\n\n[p193-t2] 형틀목공 | 단위 인 | 설치 4.5 | 해체 1.7 | 계 6.2\n\n[p195-t2] 형틀목공 | 단위 인 | 수량 0.07",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2766,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "6-3-4",
+          "section": "공통 6-3-4 문양거푸집(판넬) 설치 및 해체('16년 신설)",
+          "score": 1.1666666666666667,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "6-3-1",
+          "section": "공통 6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)",
+          "score": 0.9583333333333333,
+          "has_spec": true
+        },
+        {
+          "division": "공통",
+          "section_no": "6-3-2",
+          "section": "공통 6-3-2 강재거푸집 설치 및 해체('04, '07, '08, '17, '22, '24년 보완)",
+          "score": 0.39285714285714285,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-3",
+      "question": "철근 가공 조립 품은 어떻게 돼?",
+      "expected": [
+        null,
+        null
+      ],
+      "correct_section_cited": null,
+      "latency_ms": 3187.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "현장가공 시공량 기준은 Type-Ⅰ 4.5톤, Type-Ⅱ 4.0톤, Type-Ⅲ 3.5톤이며, 공장가공 품은 Type-Ⅰ 철근공 0.23인·보통인부 0.03인, Type-Ⅱ 철근공 0.30인·보통인부 0.04인, Type-Ⅲ 철근공 0.38인·보통인부 0.06인입니다.",
+        "explanation": "철근 가공 및 조립 품은 현장가공과 공장가공으로 구분되며 각각의 시공량과 투입 인원이 다릅니다. 현장가공은 철근공과 보통인부 수량에 따른 시공량 기준으로 제시되어 있고, 공장가공은 톤당 철근공과 보통인부의 인원이 유형별로 제시되어 있습니다.",
+        "comparisons": [
+          {
+            "section": "공통 6-2-2 현장가공('08, '14, '22, '24년 보완)",
+            "summary": "철근공 3인, 보통인부 1인 기준으로 시공량이 Type-Ⅰ 4.5톤, Type-Ⅱ 4.0톤, Type-Ⅲ 3.5톤입니다."
+          },
+          {
+            "section": "공통 6-2-4 공장가공",
+            "summary": "톤당 투입 인원으로 Type-Ⅰ은 철근공 0.23인과 보통인부 0.03인, Type-Ⅱ는 철근공 0.30인과 보통인부 0.04인, Type-Ⅲ는 철근공 0.38인과 보통인부 0.06인입니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p189-t2",
+            "quote": "철근공 보통인부 | 단위 인 | 수량 3 | 시공량(ton) Type-Ⅰ 4.5 | 시공량(ton) Type-Ⅱ 4.0 | 시공량(ton) Type-Ⅲ 3.5",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p190-t2",
+            "quote": "철근공 | 단위 인 | Type-Ⅰ 0.23 | Type-Ⅱ 0.30 | Type-Ⅲ 0.38",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p190-t2",
+            "quote": "보통인부 | 단위 인 | Type-Ⅰ 0.03 | Type-Ⅱ 0.04 | Type-Ⅲ 0.06",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "현장가공 시공량 기준은 Type-Ⅰ 4.5톤, Type-Ⅱ 4.0톤, Type-Ⅲ 3.5톤이며, 공장가공 품은 Type-Ⅰ 철근공 0.23인·보통인부 0.03인, Type-Ⅱ 철근공 0.30인·보통인부 0.04인, Type-Ⅲ 철근공 0.38인·보통인부 0.06인입니다.\n\n철근 가공 및 조립 품은 현장가공과 공장가공으로 구분되며 각각의 시공량과 투입 인원이 다릅니다. 현장가공은 철근공과 보통인부 수량에 따른 시공량 기준으로 제시되어 있고, 공장가공은 톤당 철근공과 보통인부의 인원이 유형별로 제시되어 있습니다.\n\n공통 6-2-2 현장가공('08, '14, '22, '24년 보완): 철근공 3인, 보통인부 1인 기준으로 시공량이 Type-Ⅰ 4.5톤, Type-Ⅱ 4.0톤, Type-Ⅲ 3.5톤입니다.\n\n공통 6-2-4 공장가공: 톤당 투입 인원으로 Type-Ⅰ은 철근공 0.23인과 보통인부 0.03인, Type-Ⅱ는 철근공 0.30인과 보통인부 0.04인, Type-Ⅲ는 철근공 0.38인과 보통인부 0.06인입니다.\n\n[p189-t2] 철근공 보통인부 | 단위 인 | 수량 3 | 시공량(ton) Type-Ⅰ 4.5 | 시공량(ton) Type-Ⅱ 4.0 | 시공량(ton) Type-Ⅲ 3.5\n\n[p190-t2] 철근공 | 단위 인 | Type-Ⅰ 0.23 | Type-Ⅱ 0.30 | Type-Ⅲ 0.38\n\n[p190-t2] 보통인부 | 단위 인 | Type-Ⅰ 0.03 | Type-Ⅱ 0.04 | Type-Ⅲ 0.06",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2656,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "공통",
+          "section_no": "6-2-2",
+          "section": "공통 6-2-2 현장가공('08, '14, '22, '24년 보완)",
+          "score": 1.1428571428571428,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "6-2-1",
+          "section": "공통 6-2-1 적용범위('22년 신설, '24년 보완)",
+          "score": 1.0333333333333332,
+          "has_spec": false
+        },
+        {
+          "division": "공통",
+          "section_no": "6-2-4",
+          "section": "공통 6-2-4 공장가공",
+          "score": 0.25,
+          "has_spec": true
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-4",
+      "question": "보도블록 깔 때 품이 어떻게 돼?",
+      "expected": [
+        null,
+        null
+      ],
+      "correct_section_cited": null,
+      "latency_ms": 3813.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "보도용 블록 설치 품은 소형과 대형으로 구분되며, 소형은 A-Type 포장공 3인·특별인부 2인·보통인부 2인(시공량 300㎡) 및 B-Type 포장공 2인·특별인부 2인·보통인부 1인(시공량 190㎡) 등이 적용됩니다.",
+        "explanation": "보도용 블록 설치 공종은 블록의 규격에 따라 소형(0.1㎡ 이하)과 대형(0.10㎡ 초과 0.25㎡ 이하)으로 나뉩니다. 장비 이동 및 적재 용이성에 따라 A-Type과 B-Type으로 구분되며 각각의 인원과 시공량 기준이 다릅니다.",
+        "comparisons": [
+          {
+            "section": "토목 1-7-1 보도용 블록 설치(소형)",
+            "summary": "규격 0.1㎡ 이하, 두께 8cm 이하 보도용 블록 설치 기준으로 A-Type은 시공량 300㎡당 포장공 3인, 특별인부 2인, 보통인부 2인이며, B-Type은 시공량 190㎡당 포장공 2인, 특별인부 2인, 보통인부 1인입니다."
+          },
+          {
+            "section": "토목 1-7-2 보도용 블록 설치(대형)",
+            "summary": "규격 0.10㎡ 초과 0.25㎡ 이하, 두께 8cm 이하 보도용 블록 설치 기준으로 A-Type은 시공량 190㎡당 포장공 3인, 특별인부 2인, 보통인부 2인이며, B-Type은 시공량 120㎡당 포장공 2인, 특별인부 2인, 보통인부 1인입니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p374-t0",
+            "quote": "포장공 특별인부 보통인부 | 단위 인 | A-Type 수량 3 | A-Type 시공량(㎡) 300 | B-Type 수량 2 | B-Type 시공량(㎡) 190",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p374-t2",
+            "quote": "포장공 특별인부 보통인부 | 단위 인 | A-Type 수량 3 | A-Type 시공량(㎡) 190 | B-Type 수량 2 | B-Type 시공량(㎡) 120",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "보도용 블록 설치 품은 소형과 대형으로 구분되며, 소형은 A-Type 포장공 3인·특별인부 2인·보통인부 2인(시공량 300㎡) 및 B-Type 포장공 2인·특별인부 2인·보통인부 1인(시공량 190㎡) 등이 적용됩니다.\n\n보도용 블록 설치 공종은 블록의 규격에 따라 소형(0.1㎡ 이하)과 대형(0.10㎡ 초과 0.25㎡ 이하)으로 나뉩니다. 장비 이동 및 적재 용이성에 따라 A-Type과 B-Type으로 구분되며 각각의 인원과 시공량 기준이 다릅니다.\n\n토목 1-7-1 보도용 블록 설치(소형): 규격 0.1㎡ 이하, 두께 8cm 이하 보도용 블록 설치 기준으로 A-Type은 시공량 300㎡당 포장공 3인, 특별인부 2인, 보통인부 2인이며, B-Type은 시공량 190㎡당 포장공 2인, 특별인부 2인, 보통인부 1인입니다.\n\n토목 1-7-2 보도용 블록 설치(대형): 규격 0.10㎡ 초과 0.25㎡ 이하, 두께 8cm 이하 보도용 블록 설치 기준으로 A-Type은 시공량 190㎡당 포장공 3인, 특별인부 2인, 보통인부 2인이며, B-Type은 시공량 120㎡당 포장공 2인, 특별인부 2인, 보통인부 1인입니다.\n\n[p374-t0] 포장공 특별인부 보통인부 | 단위 인 | A-Type 수량 3 | A-Type 시공량(㎡) 300 | B-Type 수량 2 | B-Type 시공량(㎡) 190\n\n[p374-t2] 포장공 특별인부 보통인부 | 단위 인 | A-Type 수량 3 | A-Type 시공량(㎡) 190 | B-Type 수량 2 | B-Type 시공량(㎡) 120",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 3016,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "토목",
+          "section_no": "1-7-1",
+          "section": "토목 1-7-1 보도용 블록 설치(소형)('08, '12, '21, '24년 보완)",
+          "score": 1.5928571428571427,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "1-7-2",
+          "section": "토목 1-7-2 보도용 블록 설치(대형)('24년 신설)",
+          "score": 1.225,
+          "has_spec": false
+        },
+        {
+          "division": "토목",
+          "section_no": "1-9-2",
+          "section": "토목 1-9-2 보차도 및 도로경계블록 설치('21, '24년 보완)",
+          "score": 0.1111111111111111,
+          "has_spec": false
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-5",
+      "question": "도장 공사 품은 어떻게 잡아?",
+      "expected": [
+        null,
+        null
+      ],
+      "correct_section_cited": null,
+      "latency_ms": 2937.0,
+      "search": {
+        "method": "hybrid",
+        "api_calls": 1,
+        "warnings": [],
+        "fallback_reason": null
+      },
+      "candidate_count": 3,
+      "comparison_filled": true,
+      "status": "ANSWERED",
+      "reason": "",
+      "qa": {
+        "not_found": false,
+        "conclusion": "건축부문 수성페인트 뿜칠은 도장공 0.027인, 보통인부 0.013인(10㎡당)이며, 토목부문 도장은 공장도장 도장면적 100㎡당 도장공 1인, 특별인부 1인, 현장도장 도장면적 60㎡당 도장공 1인, 특별인부 1인입니다.",
+        "explanation": "질문에 공종이나 부문 조건이 누락되어 있어 건축과 토목의 도장 공사 품을 각각 구분하여 확인해야 합니다. 건축부문은 수성페인트 뿜칠 기준으로 10㎡당 품이 제시되어 있으며, 토목부문은 신설교량 도장을 기준으로 공장도장 및 현장도장의 면적별 품이 제시되어 있습니다.",
+        "comparisons": [
+          {
+            "section": "건축 11-2-3 수성페인트 뿜칠",
+            "summary": "10㎡당 도장공 0.027인과 보통인부 0.013인이 적용됩니다."
+          },
+          {
+            "section": "토목 5-2-4 도장('24년 보완)",
+            "summary": "공장도장은 도장면적 100㎡당 도장공 1인과 특별인부 1인이 적용되고, 현장도장은 도장면적 60㎡당 도장공 1인과 특별인부 1인이 적용됩니다."
+          }
+        ],
+        "citations": [
+          {
+            "chunk_id": "p693-t2",
+            "quote": "도장공 | 단위 인 | 수량 0.027\n보통인부 | 단위 인 | 수량 0.013",
+            "quote_match": "normalized"
+          },
+          {
+            "chunk_id": "p416-t0",
+            "quote": "도장공 | 단위 인 | 공장도장 수량 1 | 공장도장 도장면적(㎡) 100 | 현장도장 수량 1 | 현장도장 도장면적(㎡) 60\n특별인부 | 단위 인 | 공장도장 수량 1 | 현장도장 수량 1",
+            "quote_match": "normalized"
+          }
+        ]
+      },
+      "answer": "건축부문 수성페인트 뿜칠은 도장공 0.027인, 보통인부 0.013인(10㎡당)이며, 토목부문 도장은 공장도장 도장면적 100㎡당 도장공 1인, 특별인부 1인, 현장도장 도장면적 60㎡당 도장공 1인, 특별인부 1인입니다.\n\n질문에 공종이나 부문 조건이 누락되어 있어 건축과 토목의 도장 공사 품을 각각 구분하여 확인해야 합니다. 건축부문은 수성페인트 뿜칠 기준으로 10㎡당 품이 제시되어 있으며, 토목부문은 신설교량 도장을 기준으로 공장도장 및 현장도장의 면적별 품이 제시되어 있습니다.\n\n건축 11-2-3 수성페인트 뿜칠: 10㎡당 도장공 0.027인과 보통인부 0.013인이 적용됩니다.\n\n토목 5-2-4 도장('24년 보완): 공장도장은 도장면적 100㎡당 도장공 1인과 특별인부 1인이 적용되고, 현장도장은 도장면적 60㎡당 도장공 1인과 특별인부 1인이 적용됩니다.\n\n[p693-t2] 도장공 | 단위 인 | 수량 0.027\n보통인부 | 단위 인 | 수량 0.013\n\n[p416-t0] 도장공 | 단위 인 | 공장도장 수량 1 | 공장도장 도장면적(㎡) 100 | 현장도장 수량 1 | 현장도장 도장면적(㎡) 60\n특별인부 | 단위 인 | 공장도장 수량 1 | 현장도장 수량 1",
+      "answer_source": "llm",
+      "llm_info": {
+        "model": "gemini-3.5-flash-lite",
+        "elapsed_ms": 2437,
+        "attempts": 1,
+        "error": null,
+        "provider": "vertex"
+      },
+      "candidates": [
+        {
+          "division": "건축",
+          "section_no": "11-2-3",
+          "section": "건축 11-2-3 수성페인트 뿜칠",
+          "score": 1.1,
+          "has_spec": true
+        },
+        {
+          "division": "토목",
+          "section_no": "5-2-4",
+          "section": "토목 5-2-4 도장('24년 보완)",
+          "score": 0.75,
+          "has_spec": false
+        },
+        {
+          "division": "기계설비",
+          "section_no": "13-4-5",
+          "section": "기계설비 13-4-5 도장 및 방청공사",
+          "score": 0.3333333333333333,
+          "has_spec": false
+        }
+      ]
+    }
+  ]
+}

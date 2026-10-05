@@ -1,0 +1,182 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/5-4-8/방습필름설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "5-4-8",
+    "title": "방습필름설치",
+    "work": "방습필름설치 품 및 재료량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      601
+    ],
+    "inputs": [
+      {
+        "name": "surface_type",
+        "type": "enum",
+        "allowed_values": [
+          "바닥",
+          "벽"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "방습필름을 설치할 부위는 바닥입니까, 벽입니까?",
+        "source": "PDF 601쪽 5-4-8 표의 열 구분",
+        "synonyms": {
+          "바닥": [
+            "바닥면"
+          ],
+          "벽": [
+            "벽면",
+            "벽체"
+          ]
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "방습필름 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 601쪽 5-4-8 기준 단위 (㎡당)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p657-t3",
+        "role": "방습필름설치 직종별 단위당 품",
+        "source": "PDF 601쪽 5-4-8 첫 번째 표",
+        "unit": "인/㎡",
+        "values": {
+          "내장공": {
+            "바닥": "0.005",
+            "벽": "0.007"
+          },
+          "보통인부": {
+            "바닥": "0.001",
+            "벽": "0.001"
+          }
+        },
+        "cite": {
+          "table_id": "p657-t3"
+        }
+      },
+      {
+        "id": "p657-t4",
+        "role": "방습필름설치 단위당 재료량",
+        "source": "PDF 601쪽 5-4-8 두 번째 표",
+        "unit": "㎡/㎡",
+        "values": {
+          "방습필름": {
+            "바닥": "1.15",
+            "벽": "1.15"
+          }
+        },
+        "cite": {
+          "table_id": "p657-t4"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p657-t3",
+          "column_input": "surface_type",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p657-t3에서 바닥/벽 구분에 따른 직종별 단위당 품을 찾는다.",
+        "p657-t4에서 바닥/벽 구분에 따른 방습필름 단위당 재료량을 찾는다.",
+        "각 단위당 값에 물량을 곱하여 총 투입 인력과 재료량을 구한다."
+      ],
+      "source": "PDF 601쪽 5-4-8",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위 ㎡당 직종별 인원과 재료량이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p657-t3",
+      "row": "내장공",
+      "column": "바닥",
+      "value": "0.005"
+    },
+    {
+      "table_id": "p657-t3",
+      "row": "내장공",
+      "column": "벽",
+      "value": "0.007"
+    },
+    {
+      "table_id": "p657-t3",
+      "row": "보통인부",
+      "column": "바닥",
+      "value": "0.001"
+    },
+    {
+      "table_id": "p657-t3",
+      "row": "보통인부",
+      "column": "벽",
+      "value": "0.001"
+    },
+    {
+      "table_id": "p657-t4",
+      "row": "방습필름",
+      "column": "바닥",
+      "value": "1.15"
+    },
+    {
+      "table_id": "p657-t4",
+      "row": "방습필름",
+      "column": "벽",
+      "value": "1.15"
+    },
+    {
+      "chunk_id": "p657-x16",
+      "quote": "본 품은 필름 절단 및 설치 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p657-x19",
+      "quote": "위 재료량은 할증이 포함되어 있으며, 필름 폭 0.9m를 기준한 것이다."
+    }
+  ],
+  "open_questions": [
+    "필름 폭이 0.9m가 아닌 자재를 사용할 경우 재료량 환산이나 품 조정 기준이 원문에 명시되어 있지 않습니다."
+  ],
+  "questions": [
+    "바닥에 방습필름 100㎡를 설치할 때 내장공 품은 얼마인가요?",
+    "필름 폭이 1.2m인 자재를 사용할 경우 재료량 할증이나 품을 어떻게 조정해야 하나요?",
+    "방습필름을 설치할 부위가 바닥인지 벽인지 알려주세요."
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:02:37.364640+00:00",
+    "input_tokens": 11622,
+    "output_tokens": 1657,
+    "source_pages": [
+      657,
+      658
+    ],
+    "prompt_sha256": "35f6eac65c94b4309dce497d09601610eca7a82c31c85ffefc766ece8f5aba5d",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

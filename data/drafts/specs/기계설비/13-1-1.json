@@ -1,0 +1,419 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-1-1/플랜트배관설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-1-1",
+    "title": "플랜트 배관 설치('92, '03년 보완)",
+    "work": "플랜트 배관 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      723,
+      724,
+      725,
+      726,
+      727,
+      728,
+      729,
+      730,
+      731
+    ],
+    "inputs": [
+      {
+        "name": "pipe_type",
+        "type": "enum",
+        "allowed_values": [
+          "배관용 탄소강관 KSD3507",
+          "압력배관용 탄소강관 KSD3562 SCH#40"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배관의 종류는 무엇입니까?",
+        "source": "PDF 723~729쪽 표 좌측 구분"
+      },
+      {
+        "name": "diameter",
+        "type": "enum",
+        "allowed_values": [
+          "6",
+          "8",
+          "10",
+          "15",
+          "20",
+          "25",
+          "32",
+          "40",
+          "50",
+          "65",
+          "80",
+          "90",
+          "100",
+          "125",
+          "150",
+          "175",
+          "200",
+          "225",
+          "250",
+          "300",
+          "350",
+          "400",
+          "450",
+          "500",
+          "550",
+          "600",
+          "650",
+          "700",
+          "750",
+          "800",
+          "850",
+          "900",
+          "1000",
+          "1100",
+          "1200",
+          "1350",
+          "1500"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "배관의 규격(구경)은 몇 ㎜입니까?",
+        "source": "PDF 723~729쪽 표 규격 ㎜"
+      },
+      {
+        "name": "location",
+        "type": "enum",
+        "allowed_values": [
+          "옥내배관",
+          "옥외배관"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배관 설치 장소는 옥내입니까, 옥외입니까?",
+        "source": "PDF 723쪽 표 배관구분"
+      },
+      {
+        "name": "joint_type",
+        "type": "enum",
+        "allowed_values": [
+          "용접식",
+          "나사식"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "접합 방식은 용접식입니까, 나사식입니까?",
+        "source": "PDF 723쪽 표 배관구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "ton",
+        "required": true,
+        "ask": "배관 설치 물량은 몇 ton입니까?",
+        "source": "단위당 품(인/ton)에 곱할 물량"
+      },
+      {
+        "name": "material",
+        "type": "enum",
+        "allowed_values": [
+          "탄소강관",
+          "M0합금강(A335-P1) Cr합금강(A335-P2,P3, P11,P12)",
+          "Cr합금강(A335-P3b,P21, 22,P5bc)",
+          "Cr합금강(A335-P7,P9), Ni합금강(A333-Gr3)",
+          "스텐레스강(Type304,309, 310,316) (L&H Grade포함)",
+          "동, 황동, Everdur",
+          "저온용합금강(A333-Gr 1, Gr4, Gr9)",
+          "Hastelloy,Titanium,Ni (99%)",
+          "스텐레스강(Type321&347 ) Cu-Ni,Monel Inconel,Incoloy,Alloy20",
+          "알루미늄"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배관의 재질은 무엇입니까?",
+        "decision_table": "p787-t0",
+        "source": "PDF 731쪽 [별 표] 재질에 따른 배관용접품 할증률"
+      },
+      {
+        "name": "height",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 이상의 정수",
+        "unit": "m",
+        "required": true,
+        "ask": "배관 설치 높이는 지상 몇 m입니까?",
+        "source": "PDF 730쪽 [주] ③"
+      },
+      {
+        "name": "is_machine_room",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기계실 배관입니까?",
+        "source": "PDF 730쪽 [주] ⑤"
+      },
+      {
+        "name": "is_underground",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "옥외매설관입니까?",
+        "source": "PDF 730쪽 [주] ⑤"
+      },
+      {
+        "name": "pressure_under_5",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "유해가스가 없는 설계압력 5㎏/㎠ 미만의 배관공사입니까?",
+        "source": "PDF 730쪽 [주] ⑬"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p779-t0",
+        "role": "배관용 탄소강관 옥내배관 단위당 품 (일부 발췌)",
+        "source": "PDF 723쪽 표",
+        "unit": "인/ton",
+        "values": {
+          "6": {
+            "플랜트 용접공": "92.0",
+            "플랜트 배관공": "46.0",
+            "특별 인부": "46.0"
+          }
+        },
+        "cite": {
+          "table_id": "p779-t0"
+        }
+      },
+      {
+        "id": "p787-t0",
+        "role": "재질에 따른 배관용접품 할증률",
+        "source": "PDF 731쪽 [별 표]",
+        "unit": "%",
+        "values": {
+          "M0합금강(A335-P1) Cr합금강(A335-P2,P3, P11,P12)": {
+            "50 이하": "25.0",
+            "80": "27.5",
+            "100": "30.0"
+          }
+        },
+        "cite": {
+          "table_id": "p787-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p779-t0",
+          "row_input": "diameter",
+          "column_input": "joint_type",
+          "trades": [
+            "플랜트 용접공",
+            "플랜트 배관공",
+            "특별인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [
+          {
+            "when": {
+              "is_machine_room": true
+            },
+            "rate": "0.5",
+            "applies_to": [
+              "플랜트 용접공",
+              "플랜트 배관공",
+              "특별인부"
+            ],
+            "source": "PDF 730쪽 [주] ⑤ 기계실배관은 옥내배관의 50% 가산"
+          },
+          {
+            "when": {
+              "is_underground": true
+            },
+            "rate": "-0.3",
+            "applies_to": [
+              "플랜트 용접공",
+              "플랜트 배관공",
+              "특별인부"
+            ],
+            "source": "PDF 730쪽 [주] ⑤ 옥외매설관은 옥외배관의 30% 감"
+          }
+        ],
+        "note_adjustments": [
+          {
+            "when": {
+              "height": ">4"
+            },
+            "change": "지상 4m 초과하는 경우 매 4m 증가마다 3%씩 가산",
+            "source": "PDF 730쪽 [주] ③"
+          },
+          {
+            "when": {
+              "material": "!=탄소강관"
+            },
+            "change": "Alloy Steel(합금강)인 경우 용접식은 용접공, 나사식은 배관공 량에 별표의 할증률을 적용 가산",
+            "source": "PDF 730쪽 [주] ⑧"
+          },
+          {
+            "when": {
+              "pressure_under_5": true
+            },
+            "change": "플랜트 용접공을 용접공으로, 플랜트 배관공을 배관공으로 적용",
+            "source": "PDF 730쪽 [주] ⑬"
+          }
+        ]
+      },
+      "steps": [
+        "배관 규격, 장소, 접합 방식에 따라 표에서 단위당 품(인/ton)을 찾는다.",
+        "물량(ton)을 곱하여 기본 품을 계산한다.",
+        "기계실, 옥외매설, 고소작업, 재질 할증 등 조건에 맞는 할증률을 적용한다.",
+        "설계압력 조건에 따라 직종 단가를 변경 적용한다."
+      ],
+      "source": "PDF 723~731쪽",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "규격이 같고 두께가 다른 경우",
+        "reason": "단위 중량에 비례 계상해야 하며, 참고 수식(CD = BD + ...)을 적용해야 하므로 자동 계산 보류",
+        "source": "PDF 730쪽 [주] ⑨ 및 731쪽 [참 고]",
+        "cite": [
+          {
+            "chunk_id": "p786-x8",
+            "quote": "⑨ 규격이 같고 두께가 다를 경우 단위 중량에 비례 계상한다."
+          },
+          {
+            "chunk_id": "p787-x0",
+            "quote": "규격이 같고 두께가 다른 경우 비례 계산 방법"
+          }
+        ]
+      },
+      {
+        "condition": "Fitting류, Bracket류 등 중량 증감 및 공장 제작 조립",
+        "reason": "전체배관 설치중량의 30% 간주 기준에서 10% 증감 시 가감, 공장 제작 시 30% 범위 내 감산 등 현장 판단에 따른 비율 입력이 필요함",
+        "source": "PDF 730쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p786-x8",
+          "quote": "②본 품은 Fitting류, Bracket류, Support류(hanger, shoe, Guide, Clamp, U-Bolt 등) 및 Valve류\n설명 | 등의 중량을 전체배관 설치중량의 30%로 간주하여 배관하는 품으로 10% 증감할 때마다 본 품에 10%씩 가감하고(단, 매설배관은 제외), Fitting류, Bracket류, Support 및 밸브류 등이 공장에서 제작조립된 경우에는 본 품에 30% 범위 내에서 감하여 적용한다."
+        }
+      },
+      {
+        "condition": "비파괴검사 KS 1급 기준 적용",
+        "reason": "본 품에 100% 범위 내에서 가산하여 적용하므로 정확한 가산율 결정 필요",
+        "source": "PDF 730쪽 [주] ⑫",
+        "cite": {
+          "chunk_id": "p786-x8",
+          "quote": "⑫ 비파괴검사시 KS 1급 기준인 경우는 본 품에 100% 범위 내에서 가산하여 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "공구손료, 소모자재작업 및 정밀배관의 Oil Flushing",
+        "source": "PDF 730쪽 [주] ⑥",
+        "cite": {
+          "chunk_id": "p786-x8",
+          "quote": "⑥ 공구손료, 소모자재작업 및 정밀배관의 Oil Flushing의 품은 별도 계상한다."
+        }
+      },
+      {
+        "item": "예열 및 응력제거",
+        "source": "PDF 730쪽 [주] ⑦",
+        "cite": {
+          "chunk_id": "p786-x8",
+          "quote": "⑦ 예열 및 응력제거가 필요한 경우는 별도 계상한다."
+        }
+      },
+      {
+        "item": "고소배관 작업시 특수 비계공",
+        "source": "PDF 730쪽 [주] ⑪",
+        "cite": {
+          "chunk_id": "p786-x8",
+          "quote": "⑪ 고소배관 작업시 중량물 상량을 위한 조치가 필요한 경우에는 특수 비계공을 별도 계상할 수 있다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위당 품(인/ton)이 표에 직접 제시되어 있고, 물량(ton)을 곱하여 계산하는 방식이므로 per_unit으로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p779-t0",
+      "row": "6",
+      "column": "플랜트\n용접공",
+      "value": "92.0"
+    },
+    {
+      "table_id": "p787-t0",
+      "row": "M0합금강(A335-P1) Cr합금강(A335-P2,P3, P11,P12)",
+      "column": "50",
+      "value": "25.0"
+    },
+    {
+      "chunk_id": "p786-x8",
+      "quote": "③ 배관설치 높이가 지상 4m 초과하는 경우 매 4m 증가마다 3%씩 가산한다."
+    },
+    {
+      "chunk_id": "p786-x8",
+      "quote": "⑤ 기계실배관은 옥내배관의 50%가산, 옥외매설관은 옥외배관의 30% 감한다."
+    },
+    {
+      "chunk_id": "p786-x8",
+      "quote": "⑧ Alloy Steel(합금강)인 경우 용접식은 용접공(플랜트 용접공) 나사식은 배관공(플랜트 배관공)량에\n설명 | 별표의 할증률을 적용 가산한다."
+    },
+    {
+      "chunk_id": "p786-x8",
+      "quote": "⑬유해가스가 없는 설계압력 5㎏/㎠미만의 배관공사에는 플랜트 용접공을 용접공으로, 플랜트 배관공을\n설명 | 배관공으로 적용한다."
+    }
+  ],
+  "open_questions": [
+    "원문 표가 규격별로 여러 페이지에 걸쳐 파편화되어 있어 하나의 표로 통합하기 어렵습니다. 전체 표 데이터를 어떻게 구성할지 확인이 필요합니다.",
+    "규격이 같고 두께가 다른 경우의 비례 계산 수식(CD = BD + ...)을 자동화 로직에 어떻게 반영할지 결정이 필요합니다.",
+    "Fitting류 중량 증감(10% 단위) 및 공장 제작 조립 시 감산(30% 범위 내) 비율을 사용자가 직접 입력하도록 할지 확인이 필요합니다."
+  ],
+  "questions": [
+    "배관 규격 100mm, 옥내배관 용접식으로 10ton 설치 시 기본 품은 어떻게 되나요?",
+    "기계실 배관이면서 지상 10m 높이에 설치하는 경우 할증률은 어떻게 중복 적용되나요?",
+    "배관 두께가 표에 명시된 기준 두께와 다를 경우 비례 계산을 위한 단위 중량 값은 어디서 확인하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:42:07.625197+00:00",
+    "input_tokens": 49059,
+    "output_tokens": 4487,
+    "source_pages": [
+      779,
+      780,
+      781,
+      782,
+      783,
+      784,
+      785,
+      786,
+      787,
+      788
+    ],
+    "prompt_sha256": "ca7c2a34dfa9d766f54824c2b943425f40f22fbb2ea29d7c1ac5b6b9383d7be6",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

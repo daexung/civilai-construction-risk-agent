@@ -1,0 +1,235 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/유지관리/4-3-1/유량계교체",
+    "edition": "2026-정오표1차",
+    "division": "유지관리",
+    "section_no": "4-3-1",
+    "title": "유량계 교체('22년 보완)",
+    "work": "유량계 및 보호통 교체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      925
+    ],
+    "inputs": [
+      {
+        "name": "diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø13~15",
+          "ø20~32",
+          "ø40~50",
+          "ø65~80",
+          "ø100~150",
+          "ø200~300"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "유량계의 규격은 무엇입니까?",
+        "source": "PDF 925쪽 4-3-1 표 규격(mm)"
+      },
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "보호통",
+          "유량계"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류는 보호통 교체입니까, 유량계 교체입니까?",
+        "source": "PDF 925쪽 4-3-1 표 시공량(개) 구분 및 [주] ②"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "교체 수량은 몇 개입니까?",
+        "source": "PDF 925쪽 4-3-1 표 시공량(개)"
+      },
+      {
+        "name": "parallel_replacement",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "동일장소에서 수도미터, 온수미터를 병행 교체(해체 후 재부착)합니까?",
+        "source": "PDF 925쪽 4-3-1 표 비고"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p981-t0",
+        "role": "규격 및 작업종류별 일당 시공량 및 작업조",
+        "source": "PDF 925쪽 4-3-1 표",
+        "unit": "개/일, 인/일",
+        "values": {
+          "보호통": {
+            "ø13~15": "6.0",
+            "ø20~32": "5.0",
+            "ø40~50": "4.0",
+            "ø65~80": "-",
+            "ø100~150": "-",
+            "ø200~300": "-"
+          },
+          "유량계": {
+            "ø13~15": "8.0",
+            "ø20~32": "7.0",
+            "ø40~50": "6.0",
+            "ø65~80": "2.0",
+            "ø100~150": "1.5",
+            "ø200~300": "1.0"
+          },
+          "배관공": {
+            "ø13~15": "1",
+            "ø20~32": "1",
+            "ø40~50": "1",
+            "ø65~80": "1",
+            "ø100~150": "1",
+            "ø200~300": "1"
+          },
+          "보통인부": {
+            "ø13~15": "1",
+            "ø20~32": "1",
+            "ø40~50": "1",
+            "ø65~80": "1",
+            "ø100~150": "1",
+            "ø200~300": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p981-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p981-t0",
+          "row_input": "work_type",
+          "column_input": "diameter"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p981-t0",
+          "column_input": "diameter",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공": "1016",
+            "보통인부": "1002"
+          }
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p981-t0에서 작업종류와 규격별 기준시공량을 고른다.",
+        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 직종별 인원(배관공 1, 보통인부 1)으로 구한다."
+      ],
+      "source": "PDF 925쪽 4-3-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "parallel_replacement == true",
+        "blocked_if": {
+          "input": "parallel_replacement",
+          "op": "==",
+          "value": true
+        },
+        "reason": "동일장소에서 수도미터, 온수미터를 병행 교체 시 유량계 교체 시공량에 30%를 감산해야 하나, 현재 계수 표 기반 모델에서는 줄글 조건에 의한 시공량 직접 감산(0.7 곱하기)을 지원하지 않아 보류함",
+        "source": "PDF 925쪽 4-3-1 비고",
+        "cite": {
+          "table_id": "p981-t0"
+        }
+      },
+      {
+        "condition": "work_type == '보호통' 이고 diameter가 ø65~80, ø100~150, ø200~300 중 하나인 경우",
+        "reason": "해당 규격의 보호통 시공량은 표에 '-'로 표시되어 산정 불가",
+        "source": "PDF 925쪽 4-3-1 표",
+        "cite": {
+          "table_id": "p981-t0"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.01",
+        "cite": {
+          "section_no": "4-3-1",
+          "marker": "④"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조(배관공 1, 보통인부 1)가 규격별로 하루에 시공할 수 있는 개수가 표로 제시되어 있으므로 일당 작업조형 계산이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p981-t0",
+      "row": "비고",
+      "column": "비고",
+      "value": "- 동일장소에서 수도미터, 온수미터를 병행 교체 시(해체 후 재부착)에는 유량계 교체 시공량에 30%를 감한다."
+    },
+    {
+      "table_id": "p981-t0",
+      "row": "배관공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "chunk_id": "p981-x8",
+      "quote": "① 본 품은 수도미터(급수용), 온수미터(급탕용, 난방용)의 옥내배관 교체(해체 후 재부착) 기준이다."
+    },
+    {
+      "chunk_id": "p981-x8",
+      "quote": "② 보호통･뚜껑철거 및 재설치가 요구되는 경우에 보호통을 적용한다."
+    },
+    {
+      "chunk_id": "p981-x8",
+      "quote": "③ 본 품은 유량계 해체 및 재부착, 작동시험 및 마무리 작업을 포함한다."
+    },
+    {
+      "chunk_id": "p981-x8",
+      "quote": "④ 공구손료 및 경장비의 기계경비는 인력품의 1%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "동일장소 병행 교체 시 30% 감산(시공량 * 0.7)을 `adjusted_daily_crew` 모델에서 어떻게 처리할지 명확하지 않아 blocked로 처리함."
+  ],
+  "questions": [
+    "유량계 교체 시 공구손료는 어떻게 계산하나요?",
+    "동일장소에서 수도미터와 온수미터를 같이 교체하면 품이 어떻게 달라지나요?",
+    "교체하려는 유량계의 규격(mm)은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:38:44.602885+00:00",
+    "input_tokens": 11841,
+    "output_tokens": 2493,
+    "source_pages": [
+      981,
+      982
+    ],
+    "prompt_sha256": "04cce219b5b93bde821aa3e9374df8499b68bbf04d9972602f72dea9db9a8c16",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

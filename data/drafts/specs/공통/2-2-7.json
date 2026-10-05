@@ -1,0 +1,117 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-2-7/규준틀",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-2-7",
+    "title": "규준틀",
+    "work": "규준틀 손율",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      40
+    ],
+    "inputs": [
+      {
+        "name": "material_type",
+        "type": "enum",
+        "allowed_values": [
+          "목재규준틀",
+          "철재규준틀"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "규준틀의 재료는 무엇입니까?",
+        "source": "PDF 40쪽 2-2-7 규준틀"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p96-t3",
+        "role": "규준틀 재료별 손율",
+        "source": "PDF 40쪽 2-2-7 규준틀",
+        "unit": "%",
+        "values": {
+          "손율(%)": {
+            "목재규준틀": "100%",
+            "철재규준틀": "‘[공통부문] 2-2-2 주요자재’의"
+          }
+        },
+        "cite": {
+          "table_id": "p96-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 재료(목재규준틀, 철재규준틀)에 따라 p96-t3에서 손율(%)을 찾는다.",
+        "철재규준틀의 경우 2-2-2 주요자재의 철물 손율을 따른다."
+      ],
+      "source": "PDF 40쪽 2-2-7 규준틀",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "material_type == 철재규준틀",
+        "blocked_if": {
+          "input": "material_type",
+          "op": "==",
+          "value": "철재규준틀"
+        },
+        "reason": "철재규준틀은 '[공통부문] 2-2-2 주요자재'의 철물을 따르므로 별도 참조 필요",
+        "source": "PDF 40쪽 2-2-7 규준틀",
+        "cite": {
+          "table_id": "p96-t3",
+          "row": "손율(%)",
+          "column": "철재규준틀",
+          "value": "‘[공통부문] 2-2-2 주요자재’의"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "규준틀의 재료에 따른 손율(%)을 표에서 찾아 보여주기만 하면 되기 때문입니다.",
+  "citations": [
+    {
+      "table_id": "p96-t3",
+      "row": "손율(%)",
+      "column": "목재규준틀",
+      "value": "100%"
+    },
+    {
+      "table_id": "p96-t3",
+      "row": "손율(%)",
+      "column": "철재규준틀",
+      "value": "‘[공통부문] 2-2-2 주요자재’의"
+    }
+  ],
+  "open_questions": [
+    "철재규준틀의 손율 값이 파싱 결과에서 두 줄로 나뉘어 있어, '‘[공통부문] 2-2-2 주요자재’의'까지만 value로 추출했습니다."
+  ],
+  "questions": [
+    "목재규준틀의 손율은 얼마인가요?",
+    "철재규준틀의 손율은 어떻게 적용하나요?",
+    "규준틀 재료를 입력하지 않으면 어떻게 되나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:47.228671+00:00",
+    "input_tokens": 23016,
+    "output_tokens": 2149,
+    "source_pages": [
+      96,
+      97
+    ],
+    "prompt_sha256": "ee7cda3688ec8cd597e12e4a4cfdc1c784c38b8dc8b70b1ff76dabe992aed235",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": []
+  }
+}

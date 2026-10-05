@@ -1,0 +1,284 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/6-6-8/교량배수시설설치",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "6-6-8",
+    "title": "교량배수시설 설치",
+    "work": "교량의 노출 배수관 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      155
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "배수관 설치 물량은 몇 m입니까?",
+        "source": "PDF 155쪽 6-6-8 표 시공량 단위(m)"
+      },
+      {
+        "name": "pipe_type",
+        "type": "enum",
+        "allowed_values": [
+          "노출 배수관",
+          "매립 배수관",
+          "배수구"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치하는 배수시설의 종류는 무엇입니까?",
+        "source": "PDF 155쪽 6-6-8 [주] ①, ③"
+      },
+      {
+        "name": "pipe_size",
+        "type": "enum",
+        "allowed_values": [
+          "∅150~250㎜이하",
+          "기타 규격"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배수관의 규격은 어떻게 됩니까?",
+        "source": "PDF 155쪽 6-6-8 [주] ②"
+      },
+      {
+        "name": "pipe_material",
+        "type": "enum",
+        "allowed_values": [
+          "알루미늄관",
+          "FRP관",
+          "기타 재질"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "배수관의 재질은 무엇입니까?",
+        "source": "PDF 155쪽 6-6-8 [주] ②"
+      },
+      {
+        "name": "aerial_lift_spec",
+        "type": "enum",
+        "allowed_values": [
+          "현장 적합 규격"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업여건(시공높이, 시공위치 등) 및 안전율을 고려한 고소작업차의 규격을 선택해주세요.",
+        "source": "PDF 155쪽 6-6-8 [주] ⑤"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p211-t1",
+        "role": "교량배수시설 설치 일당 작업조 및 시공량",
+        "source": "PDF 155쪽 6-6-8 표",
+        "unit": "인, 대, m",
+        "values": {
+          "배관공": {
+            "수량": "3",
+            "시공량(m)": "14"
+          },
+          "보통인부": {
+            "수량": "1",
+            "시공량(m)": "14"
+          },
+          "고소작업차": {
+            "수량": "1",
+            "시공량(m)": "14"
+          }
+        },
+        "cite": {
+          "table_id": "p211-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p211-t1",
+          "row": "배관공",
+          "column": "시공량(m)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p211-t1",
+          "column": "수량",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공": "1016",
+            "보통인부": "1002"
+          }
+        },
+        "equipment": {
+          "name": "고소작업차",
+          "table": "p211-t1",
+          "unit": "대·일",
+          "machine_code_input": "aerial_lift_spec",
+          "column": "수량",
+          "operator_rate_code": "1048"
+        },
+        "quantity_input": "quantity"
+      },
+      "steps": [
+        "p211-t1에서 일당 시공량(14m)을 가져온다.",
+        "작업일수 = quantity ÷ 일당 시공량으로 구한다.",
+        "직종별 인·일 = 작업일수 × 표의 수량, 고소작업차 대·일 = 작업일수 × 표의 수량으로 구한다."
+      ],
+      "source": "PDF 155쪽 6-6-8 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "배수구 및 매립 배수관 설치인 경우",
+        "blocked_if": {
+          "input": "pipe_type",
+          "op": "!=",
+          "value": "노출 배수관"
+        },
+        "reason": "본 품은 교량의 노출 배수관 설치 기준이며, 배수구 및 매립 배수관 설치는 제외되어 있음",
+        "source": "PDF 155쪽 6-6-8 [주] ①, ③",
+        "cite": [
+          {
+            "section_no": "6-6-8",
+            "marker": "①"
+          },
+          {
+            "section_no": "6-6-8",
+            "marker": "③"
+          }
+        ]
+      },
+      {
+        "condition": "배수관 규격이 ∅150~250㎜ 범위를 벗어나는 경우",
+        "blocked_if": {
+          "input": "pipe_size",
+          "op": "==",
+          "value": "기타 규격"
+        },
+        "reason": "본 품은 배수관 규격 ∅150~250㎜이하 기준임",
+        "source": "PDF 155쪽 6-6-8 [주] ②",
+        "cite": {
+          "section_no": "6-6-8",
+          "marker": "②"
+        }
+      },
+      {
+        "condition": "배수관 재질이 알루미늄관, FRP관이 아닌 경우",
+        "blocked_if": {
+          "input": "pipe_material",
+          "op": "==",
+          "value": "기타 재질"
+        },
+        "reason": "본 품은 재질이 알루미늄관, FRP관 기준임",
+        "source": "PDF 155쪽 6-6-8 [주] ②",
+        "cite": {
+          "section_no": "6-6-8",
+          "marker": "②"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "배수구 및 매립 배수관 설치",
+        "source": "PDF 155쪽 6-6-8 [주] ③",
+        "cite": {
+          "section_no": "6-6-8",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "cite": {
+          "section_no": "6-6-8",
+          "marker": "④"
+        }
+      }
+    ]
+  },
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "일당 작업조 인원과 장비 대수, 그리고 일당 시공량이 표에 명시되어 있어 작업일수를 구한 뒤 인·일을 산출하는 방식이 적합합니다.",
+  "citations": [
+    {
+      "table_id": "p211-t1",
+      "row": "배관공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p211-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p211-t1",
+      "row": "고소작업차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p211-t1",
+      "row": "배관공",
+      "column": "시공량(m)",
+      "value": "14"
+    },
+    {
+      "chunk_id": "p211-x10",
+      "quote": "본 품은 교량의 노출 배수관 설치 기준이다."
+    },
+    {
+      "chunk_id": "p211-x10",
+      "quote": "배수관 규격은 ∅150~250㎜이하이며, 재질은 알루미늄관, FRP관 기준이다."
+    },
+    {
+      "chunk_id": "p211-x10",
+      "quote": "배수구 및\n설명 | 매립 배수관 설치는 제외되어 있다."
+    },
+    {
+      "chunk_id": "p211-x10",
+      "quote": "공구손료 및 경장비(전동드릴, 절단기 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "chunk_id": "p211-x10",
+      "quote": "고소작업차의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율(적정하중, 작업반경 등)을 고려하여\n설명 | 적합한 규격을 적용한다."
+    }
+  ],
+  "open_questions": [
+    "고소작업차의 구체적인 규격 목록이 원문에 명시되어 있지 않아, 사용자가 임의로 선택하거나 기계경비표와 연동할 수 있는 추가 정보가 필요합니다."
+  ],
+  "questions": [
+    "배수관 설치 물량이 100m일 때 배관공은 몇 인·일이 필요한가요?",
+    "배수관 규격이 300mm인 경우 이 품을 적용할 수 있나요?",
+    "노출 배수관 설치 물량은 얼마인가요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:40:47.414171+00:00",
+    "input_tokens": 11673,
+    "output_tokens": 2788,
+    "source_pages": [
+      211,
+      212
+    ],
+    "prompt_sha256": "3caff9f75078039f868e6cc16727689742060d3d10fd00e2e5af951439eca618",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
+    "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

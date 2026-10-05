@@ -22,7 +22,13 @@
 
 ## 질문 하나의 처리 순서
 
-`python -m agent` → `graph.answer` → `nodes.route` → `nodes.extract` → `nodes.retrieve` → `nodes.quantity` → `nodes.price` → `nodes.respond` 순서다. 범위 밖이거나 조건이 부족하면 검색·계산 전에 멈춘다. 품량 계산기가 거부하거나 계산에 쓴 원문 표가 검색 근거에 없으면 `ERROR`로 답한다. 검색은 하이브리드를 우선 시도하고 실패하면 BM25로 대체한다. `--offline`은 BM25만 사용한다.
+`agent/graph.py`는 `route → retrieve → select → fill ⇄ ask → gate → compute → price → statement → compose` 순으로 연결한다. `route`가 `OUT_OF_SCOPE`를 반환하면 바로 `compose`로 간다. 검색 결과는 `hits`와 `search_info`에, 후보와 선택 결과는 `candidates`, `spec_id`, `selection`에 저장된다. `select`가 계산할 명세를 고르지 못하면 `EVIDENCE_ONLY`로 설명을 만든다.
+
+`fill`은 질문과 답변에서 조건을 모아 `inputs`, `input_sources`, `questions`, `reason`을 갱신한다. 부족한 조건이 있으면 `MISSING_INFO`에서 `ask`를 거쳐 다시 `fill`로 돌아온다. 조건이 모이면 `gate`가 보류 조건을 검사하며, 차단 시 `BLOCKED`로 종료한다. 통과하면 `compute`가 정확한 계산 결과를 `result`에 저장하고 `COMPUTED`가 된다. 이어 `price`가 단가 적용 결과를 `priced`에, `statement`가 원가계산서를 `statement`에 저장하며 최종 상태를 `OK` 또는 `PARTIAL`로 정한다. `compose`는 최종 `answer`와 답변 출처·LLM 정보를 채운다. 상태와 이유는 `status`, `reason`에 유지된다.
+
+주요 상태는 `RUNNING`(입력 대기·진행 중), `OUT_OF_SCOPE`(계산 질문 범위 밖), `MISSING_INFO`(필수 조건 확인 필요), `EVIDENCE_ONLY`(계산 명세 없음), `BLOCKED`(보류 조건에 걸림), `COMPUTED`(품량 계산 완료), `ERROR`(지원하지 않는 계산 방식 또는 예상 밖 결과), `OK`(정상 원가계산서), `PARTIAL`(미산정 항목이 있는 원가계산서)다. `COMPUTED`는 최종 상태가 아니라 가격·원가계산서 작성 전 단계다.
+
+검색은 하이브리드를 우선 시도하고 실패하면 BM25로 대체한다. `--offline`은 BM25만 사용한다.
 
 `legacy_labor.estimate_labor`는 과거 계산과 비교하는 검사에만 사용하며 에이전트 경로에서는 호출하지 않는다.
 

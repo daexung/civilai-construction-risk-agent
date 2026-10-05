@@ -1,0 +1,284 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/3-11-1/머신가이던스_굴착기",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "3-11-1",
+    "title": "머신 가이던스(MG) 굴착기('23년 신설, '24, '26년 보완)",
+    "work": "장비조립·해체 및 작업능력",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      85,
+      86
+    ],
+    "inputs": [
+      {
+        "name": "total_volume",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "전체 토공량은 몇 ㎥입니까?",
+        "source": "2. 작업능력 [주] ⑦"
+      },
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "터파기",
+          "성토면고르기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "공종은 터파기와 성토면고르기 중 무엇입니까?",
+        "source": "p141-t2"
+      },
+      {
+        "name": "bucket_capacity",
+        "type": "enum",
+        "allowed_values": [
+          "1.0㎥",
+          "0.6㎥"
+        ],
+        "unit": "㎥",
+        "required": true,
+        "ask": "굴착기 버킷 규격은 1.0㎥와 0.6㎥ 중 무엇입니까?",
+        "source": "p141-t2"
+      },
+      {
+        "name": "condition",
+        "type": "enum",
+        "allowed_values": [
+          "양호",
+          "보통"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 조건은 양호와 보통 중 무엇입니까?",
+        "source": "p141-t2 및 2. 작업능력 [주] ⑧"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p141-t1",
+        "role": "3D GNSS 머신 가이던스 장비조립･해체 품",
+        "source": "3-11-1 1. 장비조립･해체 표",
+        "unit": "인/회, 일/회",
+        "values": {
+          "고급기술자": {
+            "수량": "1"
+          },
+          "중급기술자": {
+            "수량": "1"
+          },
+          "용접공": {
+            "수량": "1"
+          },
+          "조립": {
+            "수량": "1"
+          },
+          "해체": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p141-t1"
+        }
+      },
+      {
+        "id": "p141-t2",
+        "role": "3D GNSS 머신 가이던스 굴착기 작업능력",
+        "source": "3-11-1 2. 작업능력 표",
+        "unit": "㎥/일 또는 ㎡/일",
+        "values": {
+          "터파기 1.0㎥": {
+            "일당시공량 양호": "850",
+            "일당시공량 보통": "680"
+          },
+          "터파기 0.6㎥": {
+            "일당시공량 양호": "500",
+            "일당시공량 보통": "400"
+          },
+          "성토면고르기 1.0㎥": {
+            "일당시공량 양호": "1,200"
+          }
+        },
+        "cite": {
+          "table_id": "p141-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "전체 토공량이 10,000㎥ 이상인지 확인한다.",
+        "장비조립·해체는 회당 인원 및 장비 투입량을 산정한다.",
+        "작업능력은 물량을 일당시공량으로 나누어 굴착기 투입 일수를 산정한다.",
+        "주연료 15% 할증을 적용한다."
+      ],
+      "source": "3-11-1 전체",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "전체 토공량이 10,000㎥ 미만인 경우",
+        "blocked_if": {
+          "input": "total_volume",
+          "op": "<",
+          "value": 10000
+        },
+        "reason": "전체 토공량이 중규모(10,000㎥) 이상의 공사 규모에 대한 품으로 중규모 미만의 공사에 적용할 수 없음",
+        "source": "2. 작업능력 [주] ⑦",
+        "cite": {
+          "chunk_id": "p142-x0",
+          "quote": "본 품은 전체 토공량이 중규모(10,000㎥) (8-1-2 공사규모별 표준건설기계) 이상의 공사 규모에 대한 품으로 중규모 미만의 공사에 적용할 수 없다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "GNSS 기준국 설치 및 해체품",
+        "source": "1. 장비조립･해체 [주] ①",
+        "cite": {
+          "chunk_id": "p141-x13",
+          "quote": "GNSS(Global Navigation Satellite System)기준국(Base station) 설치 및 해체품은 별도 계상한다."
+        }
+      },
+      {
+        "item": "공구손료 및 경장비 기계경비",
+        "source": "1. 장비조립･해체 [주] ②",
+        "cite": {
+          "chunk_id": "p141-x13",
+          "quote": "공구손료 및 경장비의 기계경비(측량기기, 용접기 등)는 별도 계상한다."
+        }
+      },
+      {
+        "item": "3D 도면 제작·변환 작업",
+        "source": "2. 작업능력 [주] ⑤",
+        "cite": {
+          "chunk_id": "p142-x0",
+          "quote": "3D GNSS 머신 가이던스 굴착기의 운용에 3D 도면 제작·변환 작업이 필요한 경우 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "장비조립·해체 품과 굴착기 작업능력(일당시공량)이 별도로 제시되어 있으나, 작업능력에 따른 직종별 인원 편성표가 없어 완전한 일당 작업조 계산이 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p141-t1",
+      "row": "고급기술자",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p141-t1",
+      "row": "중급기술자",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p141-t1",
+      "row": "용접공",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p141-t1",
+      "row": "조립",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p141-t1",
+      "row": "해체",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p141-t2",
+      "row": "터파기 1.0㎥",
+      "column": "일당시공량 양호",
+      "value": "850"
+    },
+    {
+      "table_id": "p141-t2",
+      "row": "터파기 1.0㎥",
+      "column": "일당시공량 보통",
+      "value": "680"
+    },
+    {
+      "table_id": "p141-t2",
+      "row": "터파기 0.6㎥",
+      "column": "일당시공량 양호",
+      "value": "500"
+    },
+    {
+      "table_id": "p141-t2",
+      "row": "터파기 0.6㎥",
+      "column": "일당시공량 보통",
+      "value": "400"
+    },
+    {
+      "table_id": "p141-t2",
+      "row": "성토면고르기 1.0㎥",
+      "column": "일당시공량 양호",
+      "value": "1,200"
+    },
+    {
+      "chunk_id": "p142-x0",
+      "quote": "본 품은 전체 토공량이 중규모(10,000㎥) (8-1-2 공사규모별 표준건설기계) 이상의 공사 규모에 대한 품으로 중규모 미만의 공사에 적용할 수 없다."
+    },
+    {
+      "chunk_id": "p141-x13",
+      "quote": "GNSS(Global Navigation Satellite System)기준국(Base station) 설치 및 해체품은 별도 계상한다."
+    },
+    {
+      "chunk_id": "p141-x13",
+      "quote": "공구손료 및 경장비의 기계경비(측량기기, 용접기 등)는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p142-x0",
+      "quote": "3D GNSS 머신 가이던스 굴착기의 운용에 3D 도면 제작·변환 작업이 필요한 경우 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "터파기 0.6㎥의 단위가 ㎡로 표기되어 있는데, ㎥의 오타인지 확인이 필요합니다.",
+    "작업능력(일당시공량)만 제시되어 있고 직종별 인원 편성표가 없어, 굴착기 조종사 등의 인건비를 어떻게 산정해야 하는지 명확하지 않습니다.",
+    "주연료 15% 할증을 기계경비 산출 시 어떻게 적용할지 구체적인 수식이 필요합니다."
+  ],
+  "questions": [
+    "머신 가이던스 굴착기로 터파기(1.0㎥, 양호) 작업을 할 때 일당시공량은 얼마인가요?",
+    "전체 토공량이 5,000㎥인 현장에서도 이 품을 적용할 수 있나요?",
+    "장비조립 및 해체 시 GNSS 기준국 설치 비용은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:18:52.604630+00:00",
+    "input_tokens": 13041,
+    "output_tokens": 2944,
+    "source_pages": [
+      141,
+      142,
+      143
+    ],
+    "prompt_sha256": "3ad50a0a3eccd669b04cbadbb19ab63ace4445bdc24ecdba6e6d60c21df4b6f1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "row '터파기 1.0㎥'이 p141-t2 조각 텍스트에 없음",
+      "row '터파기 1.0㎥'이 p141-t2 조각 텍스트에 없음",
+      "row '터파기 0.6㎥'이 p141-t2 조각 텍스트에 없음",
+      "row '터파기 0.6㎥'이 p141-t2 조각 텍스트에 없음",
+      "row '성토면고르기 1.0㎥'이 p141-t2 조각 텍스트에 없음",
+      "quote가 p142-x0 조각 텍스트에 없음",
+      "quote가 p141-x13 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-5-9/발전기설치",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-5-9",
+    "title": "발전기 설치",
+    "work": "발전기 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      781,
+      782,
+      783
+    ],
+    "inputs": [
+      {
+        "name": "capacity",
+        "type": "enum",
+        "allowed_values": [
+          "50이하",
+          "100",
+          "150",
+          "200",
+          "250",
+          "300",
+          "350",
+          "500"
+        ],
+        "unit": "MW",
+        "required": true,
+        "ask": "발전기 용량은 얼마입니까?",
+        "source": "PDF 781쪽 13-5-9 발전기 설치 표 용량별"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p837-t1",
+        "role": "발전기 설치 품 (1)",
+        "source": "PDF 781쪽 13-5-9 발전기 설치 표",
+        "values": {},
+        "cite": {
+          "table_id": "p837-t1"
+        }
+      },
+      {
+        "id": "p838-t0",
+        "role": "발전기 설치 품 (2)",
+        "source": "PDF 782쪽 13-5-9 발전기 설치 표",
+        "values": {},
+        "cite": {
+          "table_id": "p838-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "발전기 용량에 따라 각 세부 작업(기술관리, 포장해체 등)의 단위당 품을 표에서 찾는다.",
+        "각 세부 작업별로 해당하는 물량(일, ㎥, 대 등)을 곱하여 품을 산출한다.",
+        "검사 및 교정 품은 기술관리, 포장해체를 제외한 나머지 작업 품 합계의 10%로 계산하여 합산한다.",
+        "부대기기 및 부대배관 작업 품은 별도로 계상하여 합산한다."
+      ],
+      "source": "PDF 781~782쪽 13-5-9 발전기 설치 표 및 [주]",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "부대기기 및 부대배관 작업의 품",
+        "source": "PDF 782쪽 [주]",
+        "cite": {
+          "chunk_id": "p838-x37",
+          "quote": "[주] 부대기기 및 부대배관 작업의 품은 별도 계상한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "작업구분별로 적용 단위(인/일, 인/㎥, 인/대 등)가 다르고, 각 세부 작업의 물량을 개별적으로 입력받아 합산해야 하며, '검사 및 교정'과 같은 특수 계산 규칙이 포함되어 있어 단순 단위당 품 계산으로 자동화하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p837-t1"
+    },
+    {
+      "table_id": "p838-t0"
+    },
+    {
+      "chunk_id": "p838-x37",
+      "quote": "[주] 부대기기 및 부대배관 작업의 품은 별도 계상한다."
+    }
+  ],
+  "open_questions": [
+    "표 p837-t1, p838-t0는 행이 '작업구분'과 '직종'의 2계층으로 구성되어 있어, 2D JSON 구조({행:{열:값}})로 원문 표기를 훼손하지 않고 옮기기 어려워 tables의 values를 비워두었습니다.",
+    "원문 이미지 781쪽 상단에 있는 [주] ①, ②의 내용(Turbine 부대기기 및 부대배관 별도 계상)이 파싱 결과 텍스트 청크에 누락되어 있어 인용하지 못했습니다."
+  ],
+  "questions": [
+    "발전기 용량이 200MW일 때 기술관리 품은 얼마인가요?",
+    "검사 및 교정 품을 계산할 때 '포장해체를 제외한 품'의 기준은 무엇인가요?",
+    "발전기 설치 시 각 세부 작업(포장해체, 표면손질 등)의 물량은 어떻게 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:34:04.127414+00:00",
+    "input_tokens": 17623,
+    "output_tokens": 1309,
+    "source_pages": [
+      837,
+      838,
+      839,
+      840
+    ],
+    "prompt_sha256": "33072cea4e3b5985f4ad26e410ec0ea89f0f3fbf5f1cbcf0142e55c5e7b999ed",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/1-8-11/중앙분리대설치_가드레일식",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "1-8-11",
+    "title": "중앙분리대 설치(가드레일식)",
+    "work": "지주 및 판 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      325,
+      326
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "지주 설치",
+          "판 설치"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 종류는 지주 설치와 판 설치 중 무엇입니까?",
+        "source": "1. 지주 설치, 2. 판 설치"
+      },
+      {
+        "name": "post_spacing",
+        "type": "enum",
+        "allowed_values": [
+          "2m",
+          "4m"
+        ],
+        "unit": "m",
+        "required": true,
+        "ask": "지주간격은 2m와 4m 중 무엇입니까?",
+        "source": "표의 시공량 구분 (지주간격 2m, 지주간격 4m)"
+      },
+      {
+        "name": "plate_type",
+        "type": "enum",
+        "allowed_values": [
+          "2W",
+          "3W"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "판 설치의 경우 2W와 3W 중 무엇입니까?",
+        "source": "2. 판 설치 표의 시공량 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "설치 물량은 몇 m입니까?",
+        "source": "시공량 단위(m)"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p381-t2",
+        "role": "지주 설치 일당 시공량 및 투입 인원/장비",
+        "source": "1. 지주 설치 표",
+        "unit": "인, 대, m/일",
+        "values": {
+          "특별인부": {
+            "수량": "3",
+            "지주간격 2m": "260",
+            "지주간격 4m": "520"
+          },
+          "보통인부": {
+            "수량": "1",
+            "지주간격 2m": "260",
+            "지주간격 4m": "520"
+          },
+          "굴착기+ 대형브레이커": {
+            "수량": "1"
+          },
+          "크롤러드릴(공기식)": {
+            "수량": "1"
+          },
+          "공기압축기": {
+            "수량": "1"
+          },
+          "트럭": {
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p381-t2"
+        }
+      },
+      {
+        "id": "p382-t0",
+        "role": "판 설치 일당 시공량 및 투입 인원",
+        "source": "2. 판 설치 표",
+        "unit": "인, m/일",
+        "values": {
+          "특별인부": {
+            "수량": "4",
+            "지주간격 2m 2W": "260",
+            "지주간격 2m 3W": "220",
+            "지주간격 4m 2W": "340",
+            "지주간격 4m 3W": "280"
+          },
+          "보통인부": {
+            "수량": "2",
+            "지주간격 2m 2W": "260",
+            "지주간격 2m 3W": "220",
+            "지주간격 4m 2W": "340",
+            "지주간격 4m 3W": "280"
+          }
+        },
+        "cite": {
+          "table_id": "p382-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "작업 종류(지주 설치, 판 설치)에 따라 해당 표를 선택한다.",
+        "지주간격 및 판 종류(2W, 3W)에 따른 일당 시공량을 확인한다.",
+        "물량을 일당 시공량으로 나누어 작업일수를 구한다.",
+        "작업일수에 표의 인원 및 장비 수량을 곱하여 총 투입량을 산출한다."
+      ],
+      "source": "1. 지주 설치 표, 2. 판 설치 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "cite": [
+          {
+            "chunk_id": "p382-x3",
+            "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 5%로 계상한다."
+          }
+        ]
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "지주 설치와 판 설치가 별도의 표로 구성되어 있고, 인원/장비 수량과 시공량이 하나의 표에 통합되어 있어 현재의 adjusted_daily_crew 모델 구조(base_output과 crew 분리)에 맞지 않아 자동 계산 명세로 작성하기 어렵습니다.",
+  "citations": [
+    {
+      "table_id": "p381-t2",
+      "row": "특별인부 보통인부",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p382-t0",
+      "row": "특별인부 보통인부",
+      "column": "수량",
+      "value": "4"
+    },
+    {
+      "chunk_id": "p382-x3",
+      "quote": "공구손료 및 경장비(전동드릴 등)의 기계경비는 인력품의 5%로 계상한다."
+    }
+  ],
+  "open_questions": [
+    "파싱 결과 p382-t0에 원문 표에 있는 '트럭 2.5ton' 행이 누락되어 있어 보완이 필요합니다.",
+    "파싱 결과 p381-t2와 p382-t0의 텍스트 구조가 '특별인부 보통인부'로 묶여 있어 행을 정확히 분리하기 어렵습니다."
+  ],
+  "questions": [
+    "지주간격이 3m인 경우 시공량은 어떻게 적용하나요?",
+    "판 설치 시 2W와 3W의 차이는 무엇인가요?",
+    "지주 설치와 판 설치 물량이 다를 경우 어떻게 입력하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T01:55:33.716764+00:00",
+    "input_tokens": 12727,
+    "output_tokens": 1954,
+    "source_pages": [
+      381,
+      382,
+      383
+    ],
+    "prompt_sha256": "43dce1ae3114ef2e697d460f59891be10bff0ef1c7ee41c8e2d47c55750d54e2",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

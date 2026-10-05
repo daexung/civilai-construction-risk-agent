@@ -1,0 +1,299 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-4-2/철골가공조립",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-4-2",
+    "title": "철골 가공조립('18년 보완)",
+    "work": "강판 구멍뚫기 및 앵커 볼트 설치",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      765
+    ],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "강판 구멍뚫기",
+          "앵커 볼트 설치"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "어떤 작업을 수행합니까?",
+        "source": "PDF 765쪽 1. 강판 구멍뚫기, 2. 앵커 볼트 설치"
+      },
+      {
+        "name": "punch_method",
+        "type": "enum",
+        "allowed_values": [
+          "펀치뚫기",
+          "송곳뚫기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "강판 구멍뚫기 방법은 무엇입니까?",
+        "source": "PDF 765쪽 p821-t0"
+      },
+      {
+        "name": "hole_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "21㎜이하",
+          "22㎜이상"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "송곳뚫기 시 구멍지름은 얼마입니까?",
+        "source": "PDF 765쪽 1. 강판 구멍뚫기 [주] ②"
+      },
+      {
+        "name": "anchor_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "ø16이하",
+          "ø20이하",
+          "ø24이하",
+          "ø28이하",
+          "ø32이하",
+          "ø40이하"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "앵커 볼트의 규격은 무엇입니까?",
+        "source": "PDF 765쪽 p821-t1"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개소 또는 개",
+        "required": true,
+        "ask": "작업 수량은 몇 개소(또는 개)입니까?",
+        "source": "PDF 765쪽 표 단위"
+      },
+      {
+        "name": "poor_scaffolding",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "콘크리트 독립주 위에서나 기타 비계가 양호치 못한 장소입니까?",
+        "source": "PDF 765쪽 2. 앵커 볼트 설치 [주] ⑥"
+      },
+      {
+        "name": "is_machine_installation",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "기계설치 공사입니까? (일반철골공사에만 적용)",
+        "source": "PDF 765쪽 2. 앵커 볼트 설치 [주] ④"
+      },
+      {
+        "name": "needs_steel_frame",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "별도의 철제틀이 필요합니까?",
+        "source": "PDF 765쪽 2. 앵커 볼트 설치 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p821-t0",
+        "role": "강판 구멍뚫기 1일작업량",
+        "source": "PDF 765쪽 1. 강판 구멍뚫기 표",
+        "unit": "인, 개소",
+        "values": {
+          "펀치뚫기": {
+            "강판두께 (㎜)": "9",
+            "구멍지름 (㎜)": "21",
+            "철골공 (인)": "2",
+            "1일작업량 (개소)": "250"
+          },
+          "송곳뚫기": {
+            "강판두께 (㎜)": "9",
+            "구멍지름 (㎜)": "21",
+            "철골공 (인)": "1~2",
+            "1일작업량 (개소)": "100"
+          }
+        },
+        "cite": {
+          "table_id": "p821-t0"
+        }
+      },
+      {
+        "id": "p821-t1",
+        "role": "앵커 볼트 설치 개당 품",
+        "source": "PDF 765쪽 2. 앵커 볼트 설치 표",
+        "unit": "인/개",
+        "values": {
+          "철골공": {
+            "수량 ø16이하": "0.05",
+            "수량 ø20이하": "0.08",
+            "수량 ø24이하": "0.12",
+            "수량 ø28이하": "0.16",
+            "수량 ø32이하": "0.20",
+            "수량 ø40이하": "0.23"
+          },
+          "특별인부": {
+            "수량 ø16이하": "0.02",
+            "수량 ø20이하": "0.03",
+            "수량 ø24이하": "0.05",
+            "수량 ø28이하": "0.06",
+            "수량 ø32이하": "0.07",
+            "수량 ø40이하": "0.09"
+          }
+        },
+        "cite": {
+          "table_id": "p821-t1"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "not_calculable",
+      "params": {},
+      "steps": [
+        "작업 종류(강판 구멍뚫기, 앵커 볼트 설치)에 따라 계산 방식이 다름.",
+        "강판 구멍뚫기는 1일작업량 기준(인원/1일작업량으로 단위당 품 산출 필요), 앵커 볼트 설치는 개당 품 기준임.",
+        "하나의 명세로 통합하기 복잡하여 자동 계산에서 제외함."
+      ],
+      "source": "PDF 765쪽 1. 강판 구멍뚫기, 2. 앵커 볼트 설치",
+      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "기계설치 공사인 경우",
+        "blocked_if": {
+          "input": "is_machine_installation",
+          "op": "==",
+          "value": true
+        },
+        "reason": "일반철골공사에 적용하고 기계설치에는 적용하지 않음",
+        "source": "PDF 765쪽 2. 앵커 볼트 설치 [주] ④",
+        "cite": {
+          "chunk_id": "p821-x11",
+          "quote": "일반철골공사에 적용하고 기계설치에는 적용하지 않는다."
+        }
+      },
+      {
+        "condition": "별도의 철제틀이 필요한 경우",
+        "blocked_if": {
+          "input": "needs_steel_frame",
+          "op": "==",
+          "value": true
+        },
+        "reason": "철물 제작품을 별도로 적용해야 함",
+        "source": "PDF 765쪽 2. 앵커 볼트 설치 [주] ③",
+        "cite": {
+          "chunk_id": "p821-x11",
+          "quote": "별도의 철제틀이 필요한 경우에는 철물 제작품을 적용한다."
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "기계손료, 운전경비 및 소모재료",
+        "source": "PDF 765쪽 1. 강판 구멍뚫기 [주] ④",
+        "cite": {
+          "chunk_id": "p821-x4",
+          "quote": "기계손료, 운전경비 및 소모재료는 별도 계상한다."
+        }
+      },
+      {
+        "item": "기름소모량 (100개소당 0.05ℓ)",
+        "source": "PDF 765쪽 1. 강판 구멍뚫기 [주] ③",
+        "cite": {
+          "chunk_id": "p821-x4",
+          "quote": "기름소모량은 100개소당 0.05ℓ이다."
+        }
+      },
+      {
+        "item": "비계가 양호치 못한 장소 20% 가산",
+        "source": "PDF 765쪽 2. 앵커 볼트 설치 [주] ⑥",
+        "cite": {
+          "chunk_id": "p821-x11",
+          "quote": "콘크리트 독립주 위에서나 기타 비계가 양호치 못한 장소에서는 본 품의 20%까지 가산한다."
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "cite": {
+          "chunk_id": "p821-x11",
+          "quote": "공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 2%로 계상한다."
+        }
+      }
+    ]
+  },
+  "calc_type": "not_calculable",
+  "calc_type_raw": "not_calculable",
+  "calc_type_reason": "강판 구멍뚫기는 1일작업량 기준이고 앵커 볼트 설치는 개당 품 기준으로 계산 구조가 다르며, 하나의 명세로 통합하기 복잡하여 자동 계산에서 제외합니다.",
+  "citations": [
+    {
+      "table_id": "p821-t0",
+      "row": "펀치뚫기",
+      "column": "1일작업량 (개소)",
+      "value": "250"
+    },
+    {
+      "table_id": "p821-t1",
+      "row": "철골공",
+      "column": "수량 ø16이하",
+      "value": "0.05"
+    },
+    {
+      "chunk_id": "p821-x4",
+      "quote": "송곳뚫기에서 인력인 경우 구멍지름이 21㎜이하일 때는 철골공 1인, 22㎜ 이상일 때는 2인(1조)을"
+    },
+    {
+      "chunk_id": "p821-x11",
+      "quote": "공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "chunk_id": "p821-x11",
+      "quote": "콘크리트 독립주 위에서나 기타 비계가 양호치 못한 장소에서는 본 품의 20%까지 가산한다."
+    }
+  ],
+  "open_questions": [
+    "송곳뚫기 철골공 인원이 표에는 '1~2'로 표기되어 있고 주석에 따라 1인 또는 2인으로 결정되는데, 현재 crew_rules는 가감(+1, -1)만 지원하여 특정 값으로 덮어쓰는 표현이 어렵습니다.",
+    "비계가 양호치 못한 장소에서 '20%까지 가산한다'고 되어 있어 정확한 가산율이 명시되지 않았습니다."
+  ],
+  "questions": [
+    "앵커 볼트 ø20이하를 50개 설치할 때 철골공과 특별인부의 품은 어떻게 되나요?",
+    "송곳뚫기로 구멍지름 22mm를 작업할 때 철골공 인원은 몇 명으로 계산해야 하나요?",
+    "앵커 볼트 설치 시 비계가 양호하지 못한 장소인데, 가산율은 정확히 몇 %를 적용해야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:20.001783+00:00",
+    "input_tokens": 12187,
+    "output_tokens": 3245,
+    "source_pages": [
+      821,
+      822
+    ],
+    "prompt_sha256": "ceee7fcc17687eb58cdcec24a4080ef43ec97e1b44436cdcd9696b95116f93b1",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

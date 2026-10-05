@@ -1,0 +1,247 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/건축/10-3-1/창호유리설치",
+    "edition": "2026-정오표1차",
+    "division": "건축",
+    "section_no": "10-3-1",
+    "title": "창호유리 설치",
+    "work": "기본 설치 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      632
+    ],
+    "inputs": [
+      {
+        "name": "glass_type",
+        "type": "enum",
+        "allowed_values": [
+          "판유리",
+          "복층유리"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치할 유리의 종류는 무엇입니까?",
+        "source": "PDF 632쪽 10-3-1 표의 구분"
+      },
+      {
+        "name": "thickness",
+        "type": "enum",
+        "allowed_values": [
+          "3mm이하",
+          "5mm이하",
+          "9mm이하",
+          "12mm이하",
+          "16mm이하",
+          "18mm이하",
+          "22mm이하",
+          "24mm이하",
+          "28mm이하",
+          "30mm이하",
+          "36mm이하",
+          "40mm이하",
+          "44mm이하",
+          "52mm이하"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "유리의 두께는 얼마입니까? (복층유리 두께 28mm초과는 3중유리 기준입니다)",
+        "source": "PDF 632쪽 10-3-1 표의 두께 구분 및 [주] ②"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "창호유리 설치 물량은 몇 ㎡입니까?",
+        "source": "PDF 632쪽 10-3-1 표 단위 (㎡당)"
+      },
+      {
+        "name": "is_special_glass",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "특수창호 및 특수유리(접합유리 등)입니까?",
+        "source": "PDF 632쪽 10-3-1 [주] ④"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p688-t2",
+        "role": "창호유리 설치 단위당 품",
+        "source": "PDF 632쪽 10-3-1 창호유리 설치 표",
+        "unit": "인/㎡",
+        "values": {
+          "3mm이하": {
+            "판유리 유리공(인)": "0.072",
+            "판유리 보통인부(인)": "0.011"
+          },
+          "5mm이하": {
+            "판유리 유리공(인)": "0.083",
+            "판유리 보통인부(인)": "0.013"
+          },
+          "9mm이하": {
+            "판유리 유리공(인)": "0.095",
+            "판유리 보통인부(인)": "0.015"
+          },
+          "12mm이하": {
+            "판유리 유리공(인)": "0.124",
+            "판유리 보통인부(인)": "0.017",
+            "복층유리 유리공(인)": "0.103",
+            "복층유리 보통인부(인)": "0.016"
+          },
+          "16mm이하": {
+            "복층유리 유리공(인)": "0.113",
+            "복층유리 보통인부(인)": "0.017"
+          },
+          "18mm이하": {
+            "복층유리 유리공(인)": "0.118",
+            "복층유리 보통인부(인)": "0.018"
+          },
+          "22mm이하": {
+            "복층유리 유리공(인)": "0.120",
+            "복층유리 보통인부(인)": "0.019"
+          },
+          "24mm이하": {
+            "복층유리 유리공(인)": "0.124",
+            "복층유리 보통인부(인)": "0.020"
+          },
+          "28mm이하": {
+            "복층유리 유리공(인)": "0.133",
+            "복층유리 보통인부(인)": "0.021"
+          },
+          "30mm이하": {
+            "복층유리 유리공(인)": "0.135",
+            "복층유리 보통인부(인)": "0.023"
+          },
+          "36mm이하": {
+            "복층유리 유리공(인)": "0.141",
+            "복층유리 보통인부(인)": "0.024"
+          },
+          "40mm이하": {
+            "복층유리 유리공(인)": "0.145",
+            "복층유리 보통인부(인)": "0.025"
+          },
+          "44mm이하": {
+            "복층유리 유리공(인)": "0.148",
+            "복층유리 보통인부(인)": "0.026"
+          },
+          "52mm이하": {
+            "복층유리 유리공(인)": "0.154",
+            "복층유리 보통인부(인)": "0.026"
+          }
+        },
+        "cite": {
+          "table_id": "p688-t2"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p688-t2",
+          "row_input": "thickness",
+          "column_input": "glass_type",
+          "trades": [
+            "유리공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "p688-t2 표에서 thickness(두께)와 glass_type(유리종류)에 해당하는 유리공과 보통인부의 단위당 품을 찾는다.",
+        "단위당 품에 quantity(물량)를 곱하여 총 투입 인·일을 구한다."
+      ],
+      "source": "PDF 632쪽 10-3-1 표",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "특수창호 및 특수유리(접합유리 등)인 경우",
+        "blocked_if": {
+          "input": "is_special_glass",
+          "op": "==",
+          "value": true
+        },
+        "reason": "특수창호 및 특수유리(접합유리 등)인 경우에는 별도 계상함",
+        "source": "PDF 632쪽 10-3-1 [주] ④",
+        "cite": {
+          "chunk_id": "p688-x22",
+          "quote": "특수창호 및 특수유리(접합유리 등)인 경우에는 별도 계상한다."
+        }
+      },
+      {
+        "condition": "판유리이면서 두께가 16mm이하 이상인 경우",
+        "reason": "표에 해당 규격의 품이 없음",
+        "source": "PDF 632쪽 10-3-1 표",
+        "cite": {
+          "table_id": "p688-t2"
+        }
+      },
+      {
+        "condition": "복층유리이면서 두께가 9mm이하 이하인 경우",
+        "reason": "표에 해당 규격의 품이 없음",
+        "source": "PDF 632쪽 10-3-1 표",
+        "cite": {
+          "table_id": "p688-t2"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(㎡)당 직종별 인·일 품이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p688-t2",
+      "row": "3mm이하",
+      "column": "판유리 유리공(인)",
+      "value": "0.072"
+    },
+    {
+      "chunk_id": "p688-x22",
+      "quote": "본 품은 일반창호를 유리끼우기 실내공사 기준이다."
+    },
+    {
+      "chunk_id": "p688-x22",
+      "quote": "복층유리 두께 28mm초과는 3중유리 기준이다."
+    },
+    {
+      "chunk_id": "p688-x22",
+      "quote": "특수창호 및 특수유리(접합유리 등)인 경우에는 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "복층유리 24mm 두께를 100㎡ 설치할 때 품이 어떻게 되나요?",
+    "복층유리 두께가 30mm인 경우 3중유리로 보아야 하나요?",
+    "접합유리를 설치하는 경우 이 품셈을 적용할 수 있나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T17:51:16.929553+00:00",
+    "input_tokens": 12089,
+    "output_tokens": 2626,
+    "source_pages": [
+      688,
+      689
+    ],
+    "prompt_sha256": "fe0374081e7ac0e01415d3fd1ad702b1aaa6f8ddf300998d76d9bcb620336344",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}

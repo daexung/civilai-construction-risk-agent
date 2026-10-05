@@ -1,0 +1,196 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/기계설비/13-11-4/가설자재손료율",
+    "edition": "2026-정오표1차",
+    "division": "기계설비",
+    "section_no": "13-11-4",
+    "title": "가설자재 손료율",
+    "work": "가설자재 월별 손료율 산정",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      853
+    ],
+    "inputs": [
+      {
+        "name": "material_type",
+        "type": "enum",
+        "allowed_values": [
+          "IRON WIRE ROPE",
+          "MANILA ROPE",
+          "RUBBER HOSE",
+          "침목(육송)",
+          "천막",
+          "가. 1차측(변압기 포함)",
+          "나. 2차측"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "손료율을 산정할 가설자재의 구분은 무엇입니까?",
+        "source": "PDF 853쪽 13-11-4 표의 구분 열"
+      },
+      {
+        "name": "is_expired",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "동일 공사장에서 해당 자재의 내용년수가 경과하였습니까?",
+        "source": "PDF 853쪽 13-11-4 [주]"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p909-t0",
+        "role": "가설자재별 손료율 및 내용년수",
+        "source": "PDF 853쪽 13-11-4 가설자재 손료율 표",
+        "unit": "%/월",
+        "values": {
+          "IRON WIRE ROPE": {
+            "손료율(%/월)": "4.2",
+            "비고": "내용년수 2년"
+          },
+          "MANILA ROPE": {
+            "손료율(%/월)": "5.6",
+            "비고": "1.5년"
+          },
+          "RUBBER HOSE": {
+            "손료율(%/월)": "8.3",
+            "비고": "1년"
+          },
+          "침목(육송)": {
+            "손료율(%/월)": "3.0",
+            "비고": "2.7년"
+          },
+          "천막": {
+            "손료율(%/월)": "5.6",
+            "비고": "1.5년"
+          },
+          "가. 1차측(변압기 포함)": {
+            "손료율(%/월)": "3.0",
+            "비고": "2.7년"
+          },
+          "나. 2차측": {
+            "손료율(%/월)": "5.6",
+            "비고": "1.5년"
+          }
+        },
+        "cite": {
+          "table_id": "p909-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "lookup_only",
+      "params": {},
+      "steps": [
+        "입력된 가설자재 구분에 따라 표에서 월별 손료율(%)을 찾는다.",
+        "내용년수 경과 여부를 확인하여, 경과 시 손료를 계상하지 않음을 안내한다."
+      ],
+      "source": "PDF 853쪽 13-11-4",
+      "rounding": "해당 없음"
+    },
+    "blocked": [
+      {
+        "condition": "동일 공사장에서 내용년수 경과",
+        "blocked_if": {
+          "input": "is_expired",
+          "op": "==",
+          "value": true
+        },
+        "reason": "동일 공사장에서 내용년수 경과후는 손료를 계상하지 않는다.",
+        "source": "PDF 853쪽 13-11-4 [주]",
+        "cite": {
+          "chunk_id": "p909-x8"
+        }
+      }
+    ],
+    "not_calculated": [],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "lookup_only",
+  "calc_type_raw": "lookup_only",
+  "calc_type_reason": "물량이나 가액에 대한 계산식 없이, 자재별 월 손료율(%)을 표에서 찾아 제시하는 것이 주 목적이므로 lookup_only로 분류합니다.",
+  "citations": [
+    {
+      "table_id": "p909-t0",
+      "row": "IRON WIRE ROPE",
+      "column": "손료율(%/월)",
+      "value": "4.2"
+    },
+    {
+      "table_id": "p909-t0",
+      "row": "MANILA ROPE",
+      "column": "손료율(%/월)",
+      "value": "5.6"
+    },
+    {
+      "table_id": "p909-t0",
+      "row": "RUBBER HOSE",
+      "column": "손료율(%/월)",
+      "value": "8.3"
+    },
+    {
+      "table_id": "p909-t0",
+      "row": "침목(육송)",
+      "column": "손료율(%/월)",
+      "value": "3.0"
+    },
+    {
+      "table_id": "p909-t0",
+      "row": "천막",
+      "column": "손료율(%/월)",
+      "value": "5.6"
+    },
+    {
+      "table_id": "p909-t0",
+      "row": "가. 1차측(변압기 포함)",
+      "column": "손료율(%/월)",
+      "value": "3.0"
+    },
+    {
+      "table_id": "p909-t0",
+      "row": "나. 2차측",
+      "column": "손료율(%/월)",
+      "value": "5.6"
+    },
+    {
+      "chunk_id": "p909-x8",
+      "quote": "[주] 동일 공사장에서 내용년수 경과후는 손료를 계상하지 않는다."
+    }
+  ],
+  "open_questions": [
+    "손료율을 적용할 대상 금액(자재 가액 등)이나 물량에 대한 명시적인 계산식이 원문에 없어, 단순히 요율만 반환하도록 구성함."
+  ],
+  "questions": [
+    "IRON WIRE ROPE의 월 손료율은 얼마인가요?",
+    "동일 공사장에서 2년 넘게 사용한 IRON WIRE ROPE의 손료는 어떻게 되나요?",
+    "손료율을 곱할 기준 금액(자재비)은 어디서 가져와야 하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:46:15.155854+00:00",
+    "input_tokens": 11731,
+    "output_tokens": 1782,
+    "source_pages": [
+      909,
+      910
+    ],
+    "prompt_sha256": "d89fe220defdeb932eace14a0ee862538952266c40a6ceda8d1c27f4cf35bcdd",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "value '5.6'이 p909-t0 조각 텍스트에 없음",
+      "value '8.3'이 p909-t0 조각 텍스트에 없음",
+      "value '3.0'이 p909-t0 조각 텍스트에 없음",
+      "value '5.6'이 p909-t0 조각 텍스트에 없음",
+      "value '3.0'이 p909-t0 조각 텍스트에 없음",
+      "value '5.6'이 p909-t0 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/토목/9-5-5/판독작업",
+    "edition": "2026-정오표1차",
+    "division": "토목",
+    "section_no": "9-5-5",
+    "title": "건물 및 지상물체 항공사진 ｢판독작업｣",
+    "work": "건물 및 지상물체 항공사진 판독작업",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      512,
+      513
+    ],
+    "inputs": [
+      {
+        "name": "area_type",
+        "type": "enum",
+        "allowed_values": [
+          "시가지(갑)",
+          "시가지(을)",
+          "교외지",
+          "촌락지",
+          "무가옥지"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업지구분은 무엇입니까?",
+        "source": "PDF 512쪽 9-5-5 표 및 [주] ④"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "도엽",
+        "required": true,
+        "ask": "판독보조도(1:1,200, 40cm×50cm 기준) 물량은 몇 도엽입니까?",
+        "source": "PDF 512쪽 9-5-5 [주] ②"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p568-t3",
+        "role": "작업지구분별 중급기능사(지도제작) 품",
+        "source": "PDF 512쪽 9-5-5 표",
+        "unit": "인/도엽",
+        "values": {
+          "중급기능사(지도제작)": {
+            "시가지(갑)": "4",
+            "시가지(을)": "2.7",
+            "교외지": "1.5",
+            "촌락지": "0.5",
+            "무가옥지": "0.2"
+          }
+        },
+        "cite": {
+          "table_id": "p568-t3"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p568-t3",
+          "row_input": "중급기능사(지도제작)",
+          "column_input": "area_type",
+          "trades": [
+            "중급기능사(지도제작)"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "작업지구분에 따라 p568-t3에서 중급기능사(지도제작)의 단위당 품을 찾는다.",
+        "단위당 품에 물량(도엽 수)을 곱하여 총 품을 구한다."
+      ],
+      "source": "PDF 512쪽 9-5-5 표 및 [주] ②",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [],
+    "not_calculated": [
+      {
+        "item": "재료비 및 소모품비",
+        "source": "PDF 512쪽 9-5-5 [주] ①",
+        "cite": {
+          "table_id": "p568-t3"
+        }
+      },
+      {
+        "item": "외업 동원 기술인원 여비",
+        "source": "PDF 513쪽 9-5-5 [주] ⑦",
+        "cite": {
+          "table_id": "p568-t3"
+        }
+      },
+      {
+        "item": "성과심사 소요 비용",
+        "source": "PDF 513쪽 9-5-5 [주] ⑧",
+        "cite": {
+          "table_id": "p568-t3"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(도엽)당 중급기능사(지도제작)의 품이 표에 직접 제시되어 있으므로 per_unit 방식을 사용합니다.",
+  "citations": [
+    {
+      "table_id": "p568-t3",
+      "row": "중급기능사(지도제작)",
+      "column": "시가지(갑)",
+      "value": "4"
+    },
+    {
+      "table_id": "p568-t3",
+      "row": "중급기능사(지도제작)",
+      "column": "시가지(을)",
+      "value": "2.7"
+    },
+    {
+      "table_id": "p568-t3",
+      "row": "중급기능사(지도제작)",
+      "column": "교외지",
+      "value": "1.5"
+    },
+    {
+      "table_id": "p568-t3",
+      "row": "중급기능사(지도제작)",
+      "column": "촌락지",
+      "value": "0.5"
+    },
+    {
+      "table_id": "p568-t3",
+      "row": "중급기능사(지도제작)",
+      "column": "무가옥지",
+      "value": "0.2"
+    },
+    {
+      "chunk_id": "p568-x13",
+      "quote": "② 본 품은 판독보조도(약식현황도) 1 : 1,200 지도규격 40㎝×50㎝를 기준으로 산정한다."
+    },
+    {
+      "chunk_id": "p568-x13",
+      "quote": "④ 작업지 구분은 건물 및 지상물체의 분포상태에 따라 분류한 것이다."
+    },
+    {
+      "chunk_id": "p569-x0",
+      "quote": "㉲ 무가옥지 : 건물은 없으나 판독 자체는 필요한 경우 건물 및 지상물체의 분포상태가 위 지정 등급에 미달되어도 판독이 특히 어렵다고 인정되는 지역은 상위 등급으로 할 수 있다."
+    }
+  ],
+  "open_questions": [
+    "무가옥지에서 판독이 특히 어렵다고 인정되는 지역을 상위 등급으로 할 수 있다고 되어 있는데, 이를 시스템에서 어떻게 판정하고 입력받을지 명확하지 않음."
+  ],
+  "questions": [
+    "작업지구분은 어떻게 선택하나요?",
+    "무가옥지인데 판독이 특히 어려운 경우 상위 등급으로 적용하려면 어떻게 해야 하나요?",
+    "도엽 수는 어떻게 산정하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-29T02:20:16.558706+00:00",
+    "input_tokens": 25187,
+    "output_tokens": 4511,
+    "source_pages": [
+      568,
+      569,
+      570
+    ],
+    "prompt_sha256": "1df1492c49c3e1a5a4b73479363613226cb8c877f89cb531c2c69946a9e82eb4",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": true,
+    "citation_issues_after_retry": [
+      "quote가 p569-x0 조각 텍스트에 없음"
+    ]
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "draft": {
+    "id": "2026-정오표1차/공통/2-6-5/잭서포트설치및해체",
+    "edition": "2026-정오표1차",
+    "division": "공통",
+    "section_no": "2-6-5",
+    "title": "잭서포트 설치 및 해체",
+    "work": "잭서포트 설치 및 해체 품량",
+    "review": "AI 초안 · 검토 전",
+    "source_pages": [
+      103
+    ],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "잭서포트 설치 수량은 몇 개입니까?",
+        "source": "p103-t0 기준 (개당)"
+      },
+      {
+        "name": "is_height_under_5m",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "설치높이가 5m 이하입니까?",
+        "source": "p103-x3 [주] ①"
+      },
+      {
+        "name": "is_ground_installation",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지반에 설치합니까?",
+        "source": "p103-x3 [주] ③"
+      }
+    ],
+    "tables": [
+      {
+        "id": "p103-t0",
+        "role": "잭서포트 설치 및 해체 단위당 품",
+        "source": "2-6-5 잭서포트 설치 및 해체 표",
+        "unit": "인/개",
+        "values": {
+          "형틀목공": {
+            "수량": "0.06"
+          },
+          "보통인부": {
+            "수량": "0.02"
+          }
+        },
+        "cite": {
+          "table_id": "p103-t0"
+        }
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p103-t0",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "형틀목공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "단위당 품을 표에서 고른다.",
+        "물량을 곱해 총 품을 구한다."
+      ],
+      "source": "p103-t0",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+    },
+    "blocked": [
+      {
+        "condition": "설치높이 5m 초과",
+        "blocked_if": {
+          "input": "is_height_under_5m",
+          "op": "==",
+          "value": false
+        },
+        "reason": "본 품은 설치높이 5m 이하 기준이므로 5m 초과 시 적용 불가",
+        "source": "p103-x3 [주] ①",
+        "cite": {
+          "section_no": "2-6-5",
+          "marker": "①"
+        }
+      }
+    ],
+    "not_calculated": [
+      {
+        "item": "지반고르기 및 콘크리트 타설 (지반 설치 시)",
+        "source": "p103-x3 [주] ③",
+        "cite": {
+          "section_no": "2-6-5",
+          "marker": "③"
+        }
+      }
+    ],
+    "supply_rules": [],
+    "cost_rules": []
+  },
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "단위(개당) 품이 표에 직접 제시되어 있어 물량을 곱하여 계산하는 방식이므로 per_unit으로 분류함.",
+  "citations": [
+    {
+      "table_id": "p103-t0",
+      "row": "형틀목공",
+      "column": "수량",
+      "value": "0.06"
+    },
+    {
+      "table_id": "p103-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.02"
+    },
+    {
+      "chunk_id": "p103-x3",
+      "quote": "본 품은 중하중 골조용 동바리(설치높이 5m이하)를 설치 및 해체하는 기준이다."
+    },
+    {
+      "chunk_id": "p103-x3",
+      "quote": "지반에 설치할 경우에 지반고르기 및 콘크리트 타설 등은 별도 계상한다."
+    }
+  ],
+  "open_questions": [],
+  "questions": [
+    "잭서포트 100개를 설치할 때 필요한 형틀목공과 보통인부의 품은 얼마인가요?",
+    "설치 높이가 6m인 경우 이 품셈을 적용할 수 있나요?",
+    "지반에 잭서포트를 설치할 때 지반고르기 비용은 어떻게 계산하나요?"
+  ],
+  "meta": {
+    "model": "gemini-3.1-pro-preview",
+    "created_at": "2026-09-28T18:13:48.771592+00:00",
+    "input_tokens": 11506,
+    "output_tokens": 1460,
+    "source_pages": [
+      103,
+      104
+    ],
+    "prompt_sha256": "1f92ec864620c6a74aff9b726290da9a49d0468012c9e02b56212990d4d5c0c0",
+    "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
+    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "citation_retry_used": false,
+    "citation_issues_after_retry": []
+  }
+}
