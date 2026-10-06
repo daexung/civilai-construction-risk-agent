@@ -7,6 +7,10 @@ import logging
 import os
 import threading
 import re
+import copy
+import hashlib
+from contextlib import ExitStack
+from collections import defaultdict
 from contextlib import asynccontextmanager
 from datetime import date
 from time import perf_counter
@@ -118,6 +122,11 @@ class ChatRequest(BaseModel):
     conversation_id: Optional[UUID] = None
     request_id: Optional[UUID] = None
     user_label: Optional[str] = None
+
+
+class GuestImportRequest(BaseModel):
+    thread_id: str
+    conversation_id: UUID
 
 
 _FIELD_LABELS = {
@@ -504,6 +513,7 @@ def chat(payload: ChatRequest, authorization: str | None = Header(default=None),
                 with guest["lock"]:
                     _guest(payload.thread_id, x_guest_session)
                     response = _chat_response(payload)
+                    guest["turns"].append((_guest_label(payload), copy.deepcopy(response)))
             else:
                 _prune_guests()
                 secret = x_guest_session or token_urlsafe(32)
@@ -511,7 +521,8 @@ def chat(payload: ChatRequest, authorization: str | None = Header(default=None),
                     raise HTTPException(422, "유효하지 않은 임시 세션입니다.")
                 response = _chat_response(payload)
                 with _GUEST_LOCK:
-                    _GUESTS[response["thread_id"]] = {"secret": secret, "used": monotonic(), "lock": threading.Lock()}
+                    _GUESTS[response["thread_id"]] = {"secret": secret, "used": monotonic(), "lock": threading.Lock(),
+                        "turns": [(_guest_label(payload), copy.deepcopy(response))]}
                 response["guest_session"] = secret
     response["timing"] = {
         **{name: round(value, 1) for name, value in node_timings.items()},
@@ -529,6 +540,11 @@ def _prune_guests():
                     del _GUESTS[expired]
                 finally:
                     entry["lock"].release()
+
+
+def _guest_label(payload: ChatRequest) -> str:
+    return payload.user_label or payload.message or ("공사 조건 변경" if payload.conditions else
+                                                    ", ".join(str(value) for value in (payload.answers or {}).values()))
 
 
 def _guest(thread_id: str, secret: str | None) -> dict:
@@ -549,6 +565,58 @@ def conversations(authorization: str | None = Header(default=None)):
 @app.get("/api/conversations/{conversation_id}")
 def conversation(conversation_id: UUID, authorization: str | None = Header(default=None)):
     return chat_storage.read_conversation(str(conversation_id), chat_storage.require_member(authorization))
+
+
+@app.post("/api/conversations/import-guest")
+def import_guest(payload: GuestImportRequest, authorization: str | None = Header(default=None),
+                 x_guest_session: str | None = Header(default=None)):
+    user_id = chat_storage.require_member(authorization)
+    if not re.fullmatch(r"[a-f0-9]{32}", payload.thread_id) or not x_guest_session or not 32 <= len(x_guest_session) <= 128:
+        raise HTTPException(404, "임시 대화를 찾을 수 없습니다.")
+    secret_hash = hashlib.sha256(x_guest_session.encode()).hexdigest()
+    target = str(payload.conversation_id)
+    with ExitStack() as stack:
+        conn = stack.enter_context(chat_storage.connection())
+        with conn.transaction():
+            conn.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s,0))", ('guest-import:' + payload.thread_id,))
+            receipt = conn.execute("SELECT user_id::text, conversation_id::text, secret_hash FROM agent_state.guest_imports WHERE source_id=%s",
+                                   (payload.thread_id,)).fetchone()
+            if receipt:
+                if receipt['user_id'] != user_id or not compare_digest(receipt['secret_hash'], secret_hash):
+                    raise HTTPException(404, "임시 대화를 찾을 수 없습니다.")
+                chat_storage.owned(conn, receipt['conversation_id'], user_id)
+                return {"id": receipt['conversation_id']}
+            guest = _guest(payload.thread_id, x_guest_session)
+            stack.enter_context(guest['lock'])
+            _guest(payload.thread_id, x_guest_session)
+            conn.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s,0))", (target,))
+            if conn.execute("SELECT id FROM public.conversations WHERE id=%s", (target,)).fetchone():
+                raise HTTPException(409, "이미 사용 중인 대화 ID입니다.")
+            title = " ".join(guest['turns'][0][0].split())[:200] or '새 대화'
+            conn.execute("INSERT INTO public.conversations(id,user_id,title) VALUES (%s,%s,%s)", (target, user_id, title))
+            saver = PostgresSaver(conn)
+            # Copy complete checkpoints, including pending interrupt writes. Replaying
+            # user prompts would rerun paid calls and could produce different estimates.
+            for checkpoint in reversed(list(GRAPH.checkpointer.list({"configurable": {"thread_id": payload.thread_id}}))):
+                config = {"configurable": {"thread_id": target, "checkpoint_ns": checkpoint.config['configurable'].get('checkpoint_ns', '')}}
+                if checkpoint.parent_config:
+                    config['configurable']['checkpoint_id'] = checkpoint.parent_config['configurable']['checkpoint_id']
+                saved_config = saver.put(config, checkpoint.checkpoint, checkpoint.metadata, checkpoint.checkpoint['channel_versions'])
+                writes = defaultdict(list)
+                for task_id, channel, value in checkpoint.pending_writes or []:
+                    writes[task_id].append((channel, value))
+                for task_id, values in writes.items():
+                    saver.put_writes(saved_config, values, task_id)
+            for label, guest_response in guest['turns']:
+                response = {**guest_response, "thread_id": target}
+                chat_storage.append_pair(conn, target, str(uuid4()), label, response)
+            conn.execute("INSERT INTO agent_state.guest_imports(source_id,secret_hash,user_id,conversation_id) VALUES (%s,%s,%s,%s)",
+                         (payload.thread_id, secret_hash, user_id, target))
+        # Commit the complete transcript and state before disposing of guest memory.
+        with _GUEST_LOCK:
+            _GUESTS.pop(payload.thread_id, None)
+        GRAPH.checkpointer.delete_thread(payload.thread_id)
+    return {"id": target}
 
 
 @app.delete("/api/conversations/{conversation_id}", status_code=204)

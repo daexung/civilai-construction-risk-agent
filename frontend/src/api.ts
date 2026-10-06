@@ -18,12 +18,13 @@ export interface ChatRequestBody {
 
 export const exportUrl = (threadId: string) => `${API_BASE}/api/export/${threadId}.xlsx`;
 
-async function request(path: string, init: RequestInit = {}, member = true): Promise<Response> {
+async function request(path: string, init: RequestInit = {}, member = true, expectedUserId?: string): Promise<Response> {
   const headers = new Headers(init.headers);
   headers.set('X-Guest-Session', guestSession);
   if (member) {
     const session = await authClient?.auth.getSession();
     if (!session?.data.session?.access_token) throw new Error('AUTH_REQUIRED');
+    if (expectedUserId && session.data.session.user.id !== expectedUserId) throw new Error('AUTH_REQUIRED');
     headers.set('Authorization', `Bearer ${session.data.session.access_token}`);
   }
   let res: Response;
@@ -68,4 +69,10 @@ export async function deleteConversation(id: string, saved: boolean, threadId: s
   if (!saved && !threadId) return;
   await request(saved ? `/api/conversations/${id}` : `/api/guest/conversations/${threadId}`,
     { method: 'DELETE' }, saved);
+}
+
+export async function importGuestConversation(threadId: string, conversationId: string, expectedUserId?: string): Promise<string> {
+  const result = await (await request('/api/conversations/import-guest', { method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ thread_id: threadId, conversation_id: conversationId }) }, true, expectedUserId)).json();
+  return result.id;
 }

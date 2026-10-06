@@ -2,10 +2,10 @@ import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Simulate } from 'react-dom/test-utils';
 import App from './App';
-import { sendChat, listConversations, readConversation, deleteConversation } from './api';
+import { sendChat, listConversations, readConversation, deleteConversation, importGuestConversation } from './api';
 import { loginWithGoogle } from './auth';
 
-jest.mock('./api', () => ({ sendChat: jest.fn(), downloadEstimate: jest.fn(), listConversations: jest.fn(), readConversation: jest.fn(), deleteConversation: jest.fn() }));
+jest.mock('./api', () => ({ sendChat: jest.fn(), downloadEstimate: jest.fn(), listConversations: jest.fn(), readConversation: jest.fn(), deleteConversation: jest.fn(), importGuestConversation: jest.fn() }));
 let mockAuthClient = null;
 jest.mock('./auth', () => ({ get authClient() { return mockAuthClient; }, AuthCallback: () => null, loginWithGoogle: jest.fn() }));
 jest.mock('react-markdown', () => ({ __esModule: true, default: ({ children }) => <div>{children}</div> }));
@@ -19,6 +19,7 @@ beforeEach(() => {
   listConversations.mockReset().mockResolvedValue([]);
   readConversation.mockReset().mockResolvedValue([]);
   deleteConversation.mockReset().mockResolvedValue(undefined);
+  importGuestConversation.mockReset().mockImplementation(async (_thread, id) => id);
   global.IS_REACT_ACT_ENVIRONMENT = true;
   Element.prototype.scrollIntoView = jest.fn();
   localStorage.clear();
@@ -42,6 +43,11 @@ test('popup login preserves guest turns and logout clears the account view', asy
   expect(container.querySelector('.chat-sidebar-login')).toBeNull();
   expect(container.querySelector('.chat-sidebar').textContent).not.toContain('로그아웃');
   expect(localStorage.getItem('poomsemi-chat-history-v1')).toBeNull();
+  expect(importGuestConversation).toHaveBeenCalledWith('thread-진행 중인 견적', expect.any(String), 'A');
+  const migratedId = importGuestConversation.mock.calls[0][1];
+  await sendQuestion('로그인 후 이어가기');
+  expect(sendChat.mock.calls[1][0].conversation_id).toBe(migratedId);
+  expect(sendChat.mock.calls[1][0].thread_id).toBe(migratedId);
   act(() => Simulate.click(container.querySelector('[aria-label="계정 설정"]')));
   expect(document.querySelector('.settings-identity').textContent).toContain('a@example.com');
   await act(async () => Simulate.click(document.querySelector('.settings-logout')));
@@ -180,4 +186,29 @@ test('conversation menu confirms deletion, preserves other chats, and keeps fail
   act(() => Simulate.click(document.querySelector('[role="menuitem"]')));
   await act(async () => Simulate.click(document.querySelector('.delete-dialog-confirm')));
   expect(container.querySelector('.welcome-header h2').textContent).toBe('무엇을 도와드릴까요?');
+});
+
+test('failed guest import preserves both conversations and retries only the remaining temporary chat', async () => {
+  await sendQuestion('첫 임시 견적');
+  act(() => Simulate.click(container.querySelector('[aria-label="새 대화 시작"]')));
+  await sendQuestion('둘째 임시 견적');
+  importGuestConversation.mockImplementationOnce(async () => { throw new Error('NETWORK_ERROR'); });
+  loginWithGoogle.mockResolvedValue({ id: 'A', email: 'a@example.com' });
+  act(() => Simulate.click(container.querySelector('.chat-sidebar-login button')));
+  await act(async () => Simulate.click(document.querySelector('.login-dialog-google')));
+  expect(importGuestConversation).toHaveBeenCalledTimes(2);
+  expect(container.querySelectorAll('.chat-history-select')).toHaveLength(2);
+  expect(container.querySelector('.messages').textContent).toContain('둘째 임시 견적');
+  expect(container.querySelector('.chat-history-select[title="둘째 임시 견적 · 임시"]')).not.toBeNull();
+  expect(container.querySelector('textarea').disabled).toBe(true);
+  expect(container.querySelector('[role="alert"]').textContent).toContain('새로고침 전에 다시 시도');
+  await act(async () => Simulate.click(container.querySelector('.chat-migration-notice button')));
+  expect(importGuestConversation).toHaveBeenCalledTimes(3);
+  expect(importGuestConversation.mock.calls[2]).toEqual(importGuestConversation.mock.calls[0]);
+  expect(container.querySelector('.chat-migration-notice')).toBeNull();
+  expect(container.querySelector('textarea').disabled).toBe(false);
+  expect(container.querySelectorAll('.chat-history-select')).toHaveLength(2);
+  expect(container.querySelector('.chat-history-select[title="둘째 임시 견적"]')).not.toBeNull();
+  await sendQuestion('이어서 질문');
+  expect(sendChat.mock.calls[2][0].conversation_id).toBe(importGuestConversation.mock.calls[0][1]);
 });

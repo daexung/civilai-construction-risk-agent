@@ -12,6 +12,7 @@ import './ChatWorkspace.css';
 import ChatHistoryItem from './ChatHistoryItem';
 
 interface Props {
+  inputDisabled?: boolean;
   accountLabel?: string | null;
   authLoading?: boolean;
   onLogin?: () => void;
@@ -559,7 +560,8 @@ function AssistantCard({
   );
 }
 
-function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeConditions, onSendExample }: Props) {
+function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnswers, onChangeConditions, onSendExample }: Props) {
+  const blocked = loading || !!inputDisabled;
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
   const [showExampleMenu, setShowExampleMenu] = useState(false);
@@ -638,7 +640,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
 
   const handleSubmitMessage = () => {
     const text = input.trim();
-    if (!text || loading) return;
+    if (!text || blocked) return;
     setInput('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
     onSendMessage(text);
@@ -662,7 +664,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
             className="example-menu-btn"
             aria-label="예시 질문 보기"
             aria-expanded={showExampleMenu}
-            disabled={loading}
+            disabled={blocked}
             onClick={() => setShowExampleMenu((prev) => !prev)}
           >
             <ChatIcon name="plus" />
@@ -694,9 +696,9 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
         placeholder="무엇이든 물어보세요"
         aria-label="질문 입력"
         rows={1}
-        disabled={loading}
+        disabled={blocked}
       />
-      <button className="send-btn" aria-label="질문 보내기" onClick={handleSubmitMessage} disabled={!input.trim() || loading}>
+      <button className="send-btn" aria-label="질문 보내기" onClick={handleSubmitMessage} disabled={!input.trim() || blocked}>
         <ChatIcon name="arrow" />
       </button>
     </div>
@@ -712,7 +714,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
           <div className="centered-input-area">{renderInputBox(true)}</div>
           <div className="example-prompts">
             {EXAMPLE_QUESTIONS.map((ex, index) => (
-              <button key={ex.text} className="example-btn" disabled={loading} onClick={() => onSendExample(ex.text)} title={ex.text}>
+              <button key={ex.text} className="example-btn" disabled={blocked} onClick={() => onSendExample(ex.text)} title={ex.text}>
                 <span>{['자동문 설치 견적', '콘크리트 타설 견적', '진동기 적용 기준', '기초앵커 품셈 상담'][index] ?? ex.text}</span>
               </button>
             ))}
@@ -743,7 +745,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
                       draft={draft}
                       onSelect={handleSelect}
                       onSubmit={handleSubmitAnswers}
-                      loading={loading}
+                      loading={blocked}
                       onChangeConditions={(conditions) => onChangeConditions(turn.id, conditions)}
                     />
                   )}

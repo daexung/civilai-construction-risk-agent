@@ -1,6 +1,6 @@
 const mockSession = jest.fn();
 jest.mock('./auth', () => ({ authClient: { auth: { getSession: mockSession } } }));
-const { sendChat, listConversations, downloadEstimate } = require('./api');
+const { sendChat, listConversations, downloadEstimate, importGuestConversation } = require('./api');
 
 beforeEach(() => {
   mockSession.mockReset().mockResolvedValue({ data: { session: { access_token: 'member-token' } } });
@@ -34,4 +34,20 @@ test('member export authenticates through headers and keeps tokens out of URLs',
   await downloadEstimate('saved-conversation-id');
   expect(fetch.mock.calls[0][0]).toBe('/api/export/saved-conversation-id.xlsx');
   expect(fetch.mock.calls[0][1].headers.get('Authorization')).toBe('Bearer member-token');
+});
+
+test('guest import sends both credentials and does not accept browser transcripts', async () => {
+  fetch.mockResolvedValue({ ok: true, json: async () => ({ id: 'member-conversation' }) });
+  expect(await importGuestConversation('guest-thread', 'member-conversation')).toBe('member-conversation');
+  const [url, options] = fetch.mock.calls[0];
+  expect(url).toBe('/api/conversations/import-guest');
+  expect(options.headers.get('Authorization')).toBe('Bearer member-token');
+  expect(options.headers.get('X-Guest-Session').length).toBeGreaterThan(32);
+  expect(JSON.parse(options.body)).toEqual({ thread_id: 'guest-thread', conversation_id: 'member-conversation' });
+});
+
+test('guest import stops before sending if the signed-in account changes', async () => {
+  mockSession.mockResolvedValue({ data: { session: { access_token: 'b-token', user: { id: 'B' } } } });
+  await expect(importGuestConversation('guest-thread', 'member-conversation', 'A')).rejects.toThrow('AUTH_REQUIRED');
+  expect(fetch).not.toHaveBeenCalled();
 });

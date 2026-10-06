@@ -5,7 +5,7 @@ import Landing from './landing/Landing';
 import Terms from './landing/Terms';
 import ToastContainer from './components/ToastContainer';
 import { ChatTurn, ChoiceValue } from './types';
-import { sendChat, listConversations, readConversation, deleteConversation } from './api';
+import { sendChat, listConversations, readConversation, deleteConversation, importGuestConversation } from './api';
 import { showToast } from './toast';
 import './App.css';
 import { authClient, AuthCallback, loginWithGoogle } from './auth';
@@ -49,6 +49,11 @@ export default function App() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState('');
+  const [migrating, setMigrating] = useState(false);
+  const [migrationError, setMigrationError] = useState('');
+  const [migrationRetry, setMigrationRetry] = useState(0);
+  const storeRef = useRef(store);
+  storeRef.current = store;
   const accountRef = useRef<string | null>(null);
   const accountId = user?.id ?? null;
   accountRef.current = accountId;
@@ -90,6 +95,32 @@ export default function App() {
     return () => { active = false; setHistoryLoading(false); };
   }, [accountId]);
 
+  useEffect(() => {
+    if (!accountId || loading || authLoading || deleting) return;
+    const temporary = storeRef.current.conversations.filter(chat => !chat.saved && chat.threadId);
+    if (!temporary.length) { setMigrationError(''); return; }
+    const userId = accountId;
+    let active = true;
+    setMigrating(true);
+    setMigrationError('');
+    (async () => {
+      let failed = false;
+      for (const chat of temporary) {
+        if (!active || accountRef.current !== userId) break;
+        try {
+          const savedId = await importGuestConversation(chat.threadId!, chat.id, userId);
+          if (!active || accountRef.current !== userId) break;
+          setStore(prev => ({ activeId: prev.activeId === chat.id ? savedId : prev.activeId,
+            conversations: prev.conversations.filter(item => item.id !== savedId || item.id === chat.id).map(item => item.id === chat.id
+              ? { ...item, id: savedId, threadId: savedId, saved: true, loaded: true,
+                  turns: item.turns.map(turn => turn.response ? { ...turn, response: { ...turn.response, thread_id: savedId } } : turn) } : item) }));
+        } catch { failed = true; }
+      }
+      if (active) { setMigrating(false); if (failed) setMigrationError('임시 대화를 저장하지 못했습니다. 새로고침 전에 다시 시도해 주세요.'); }
+    })();
+    return () => { active = false; setMigrating(false); };
+  }, [accountId, loading, authLoading, deleting, migrationRetry]);
+
   const handleLogin = async () => {
     setAuthLoading(true);
     setLoginError('');
@@ -130,7 +161,7 @@ export default function App() {
     const startedAt = performance.now();
     const requestUserId = user?.id ?? null;
     const existingChat = store.conversations.find(chat => chat.id === conversationId);
-    // A guest conversation remains temporary until the explicit migration feature.
+    // Guest threads become member threads only after the server confirms the import.
     const saved = existingChat ? !!existingChat.saved : !!user;
     const userTurn: ChatTurn = { id: uuidv4(), role: 'user', text: userLabel, sentAtMs: Date.now() };
     setStore(prev => {
@@ -144,7 +175,7 @@ export default function App() {
     try {
       const response = await sendChat({ thread_id: thread, ...body,
         ...(saved ? { conversation_id: conversationId, request_id: uuidv4(), user_label: userLabel } : {}) });
-      if (accountRef.current !== requestUserId) return;
+      if (requestUserId && accountRef.current !== requestUserId) return;
       const assistantTurn: ChatTurn = { id: uuidv4(), role: 'assistant', response,
         elapsedMs: performance.now() - startedAt, receivedAtMs: Date.now() };
       setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => chat.id === conversationId
@@ -260,6 +291,7 @@ export default function App() {
   return (
     <div className="app">
       <ToastContainer />
+      {user && migrationError && <div className="chat-migration-notice" role="alert"><span>{migrationError}</span><button onClick={() => setMigrationRetry(value => value + 1)}>다시 시도</button></div>}
       <ChatArea
         accountLabel={accountName}
         authLoading={authLoading}
@@ -270,7 +302,8 @@ export default function App() {
         onSelectConversation={handleSelectConversation}
         onDeleteConversation={id => { setDeleteError(''); setDeleteTarget(id); }}
         turns={turns}
-        loading={loading || historyLoading || authInitializing || deleting}
+        loading={loading || historyLoading || authInitializing || deleting || migrating || authLoading}
+        inputDisabled={!!(user && current && !current.saved && migrationError)}
         onSendMessage={handleSendMessage}
         onSendAnswers={handleSendAnswers}
         onChangeConditions={handleChangeConditions}
@@ -278,7 +311,7 @@ export default function App() {
         onSendExample={handleSendExample}
       />
       {loginOpen && <LoginDialog busy={authLoading} error={loginError} onClose={() => setLoginOpen(false)} onGoogleLogin={handleLogin} />}
-      {settingsOpen && <SettingsDialog accountName={accountName} accountEmail={user?.email ?? null} busy={logoutLoading || loading} error={logoutError} onClose={() => setSettingsOpen(false)} onLogout={handleLogout} onLogin={() => { setSettingsOpen(false); setLoginError(''); setLoginOpen(true); }} />}
+      {settingsOpen && <SettingsDialog accountName={accountName} accountEmail={user?.email ?? null} busy={logoutLoading || loading || migrating} error={logoutError} onClose={() => setSettingsOpen(false)} onLogout={handleLogout} onLogin={() => { setSettingsOpen(false); setLoginError(''); setLoginOpen(true); }} />}
       {deleteTarget && <DeleteConversationDialog title={store.conversations.find(chat => chat.id === deleteTarget)?.title ?? '대화'} busy={deleting} error={deleteError} onClose={() => setDeleteTarget(null)} onDelete={handleDeleteConversation} />}
     </div>
   );
