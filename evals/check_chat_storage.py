@@ -145,6 +145,32 @@ def main():
             with chat_storage.connection() as conn:
                 assert not conn.execute('SELECT id FROM public.conversations WHERE id=%s', (thread,)).fetchone()
             print("PASS guest capability isolation and no database transcript")
+            assert client.delete(f'/api/conversations/{ids[2]}').status_code == 401
+            assert client.delete(f'/api/conversations/{ids[2]}', headers={"Authorization": "Bearer fixture-b"}).status_code == 404
+            original_delete = PostgresSaver.delete_thread
+            def fail_delete(saver, cid):
+                original_delete(saver, cid)
+                raise RuntimeError('fixture deletion failure')
+            with patch.object(PostgresSaver, 'delete_thread', fail_delete):
+                try: client.delete(f'/api/conversations/{ids[2]}', headers=headers)
+                except RuntimeError: pass
+                else: raise AssertionError('expected deletion rollback')
+            with chat_storage.connection() as conn:
+                assert build_graph(PostgresSaver(conn)).get_state({"configurable": {"thread_id": ids[2]}}).values
+            assert client.get(f'/api/conversations/{ids[2]}', headers=headers).status_code == 200
+            assert client.delete(f'/api/conversations/{ids[2]}', headers=headers).status_code == 204
+            assert client.get(f'/api/conversations/{ids[2]}', headers=headers).status_code == 404
+            assert client.get(f'/api/conversations/{ids[3]}', headers=headers).status_code == 200
+            with chat_storage.connection() as conn:
+                assert not conn.execute('SELECT id FROM public.messages WHERE conversation_id=%s', (ids[2],)).fetchone()
+                for table in ['checkpoints', 'checkpoint_blobs', 'checkpoint_writes']:
+                    assert not conn.execute(f'SELECT thread_id FROM agent_state.{table} WHERE thread_id=%s', (ids[2],)).fetchone()
+            print('PASS owner-only hard deletion, checkpoint cleanup and atomic rollback')
+            assert client.delete(f'/api/guest/conversations/{thread}').status_code == 404
+            assert client.delete(f'/api/guest/conversations/{thread}', headers=guest_headers).status_code == 204
+            assert client.post('/api/chat', headers=guest_headers, json={"thread_id": thread, "message": "이어가기"}).status_code == 404
+            assert not api.GRAPH.get_state({"configurable": {"thread_id": thread}}).values
+            print('PASS guest deletion clears memory and cannot resume deleted thread')
         if os.environ.get('SUPABASE_JWT_SECRET'):
             real_headers = {"Authorization": 'Bearer ' + fixture_token}
             real = client.post('/api/chat', headers=real_headers,

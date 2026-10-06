@@ -476,6 +476,7 @@ def export_xlsx(thread_id: str, authorization: str | None = Header(default=None)
     else:
         guest = _guest(thread_id, x_guest_session)
         with guest["lock"]:
+            _guest(thread_id, x_guest_session)
             response = _build_response(thread_id, _finished_state(thread_id))
     filename = quote(estimate_filename(response), safe="")
     return Response(build_xlsx(response),
@@ -501,6 +502,7 @@ def chat(payload: ChatRequest, authorization: str | None = Header(default=None),
             if payload.thread_id:
                 guest = _guest(payload.thread_id, x_guest_session)
                 with guest["lock"]:
+                    _guest(payload.thread_id, x_guest_session)
                     response = _chat_response(payload)
             else:
                 _prune_guests()
@@ -547,6 +549,23 @@ def conversations(authorization: str | None = Header(default=None)):
 @app.get("/api/conversations/{conversation_id}")
 def conversation(conversation_id: UUID, authorization: str | None = Header(default=None)):
     return chat_storage.read_conversation(str(conversation_id), chat_storage.require_member(authorization))
+
+
+@app.delete("/api/conversations/{conversation_id}", status_code=204)
+def delete_conversation(conversation_id: UUID, authorization: str | None = Header(default=None)):
+    chat_storage.delete_conversation(str(conversation_id), chat_storage.require_member(authorization))
+    return Response(status_code=204)
+
+
+@app.delete("/api/guest/conversations/{thread_id}", status_code=204)
+def delete_guest_conversation(thread_id: str, x_guest_session: str | None = Header(default=None)):
+    guest = _guest(thread_id, x_guest_session)
+    with guest["lock"]:
+        _guest(thread_id, x_guest_session)
+        GRAPH.checkpointer.delete_thread(thread_id)
+        with _GUEST_LOCK:
+            _GUESTS.pop(thread_id, None)
+    return Response(status_code=204)
 
 
 def _member_chat(payload: ChatRequest, user_id: str) -> dict:

@@ -63,3 +63,9 @@ export async function readConversation(id: string): Promise<ChatTurn[]> {
     ? { id: row.id, role: 'user', text: row.content, sentAtMs: Date.parse(row.created_at) }
     : { id: row.id, role: 'assistant', response: row.payload, receivedAtMs: Date.parse(row.created_at) });
 }
+
+export async function deleteConversation(id: string, saved: boolean, threadId: string | null): Promise<void> {
+  if (!saved && !threadId) return;
+  await request(saved ? `/api/conversations/${id}` : `/api/guest/conversations/${threadId}`,
+    { method: 'DELETE' }, saved);
+}

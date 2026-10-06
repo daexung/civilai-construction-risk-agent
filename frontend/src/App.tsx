@@ -5,13 +5,14 @@ import Landing from './landing/Landing';
 import Terms from './landing/Terms';
 import ToastContainer from './components/ToastContainer';
 import { ChatTurn, ChoiceValue } from './types';
-import { sendChat, listConversations, readConversation } from './api';
+import { sendChat, listConversations, readConversation, deleteConversation } from './api';
 import { showToast } from './toast';
 import './App.css';
 import { authClient, AuthCallback, loginWithGoogle } from './auth';
 import type { User } from '@supabase/supabase-js';
 import LoginDialog from './components/LoginDialog';
 import SettingsDialog from './components/SettingsDialog';
+import DeleteConversationDialog from './components/DeleteConversationDialog';
 
 interface Conversation {
   id: string;
@@ -45,9 +46,13 @@ export default function App() {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [logoutError, setLogoutError] = useState('');
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
   const accountRef = useRef<string | null>(null);
   const accountId = user?.id ?? null;
   accountRef.current = accountId;
+  useEffect(() => { setDeleteTarget(null); }, [accountId]);
   const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0];
   const accountName = user ? (typeof displayName === 'string' && displayName.trim() ? displayName.trim() : '내 계정') : null;
 
@@ -208,6 +213,24 @@ export default function App() {
     setStore(prev => ({ ...prev, activeId: id }));
   };
 
+  const handleDeleteConversation = async () => {
+    const chat = store.conversations.find(item => item.id === deleteTarget);
+    if (!chat || deleting || loading || historyLoading) return;
+    const userId = accountId;
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      try { await deleteConversation(chat.id, !!chat.saved, chat.threadId); }
+      catch (error) { if (!(error instanceof Error) || error.message !== 'NOT_FOUND') throw error; }
+      if (accountRef.current !== userId) return;
+      setStore(prev => ({ activeId: prev.activeId === chat.id ? null : prev.activeId,
+        conversations: prev.conversations.filter(item => item.id !== chat.id) }));
+      setDeleteTarget(null);
+      showToast('대화를 삭제했습니다.');
+    } catch { setDeleteError('대화를 삭제하지 못했습니다. 다시 시도해 주세요.'); }
+    finally { setDeleting(false); }
+  };
+
   const navigate = useCallback((path: string) => {
     window.history.pushState({}, '', path);
     setPathname(window.location.pathname);
@@ -245,8 +268,9 @@ export default function App() {
         conversations={store.conversations.map(chat => ({ id: chat.id, title: chat.title + (user && !chat.saved ? ' · 임시' : '') }))}
         activeConversationId={store.activeId}
         onSelectConversation={handleSelectConversation}
+        onDeleteConversation={id => { setDeleteError(''); setDeleteTarget(id); }}
         turns={turns}
-        loading={loading || historyLoading || authInitializing}
+        loading={loading || historyLoading || authInitializing || deleting}
         onSendMessage={handleSendMessage}
         onSendAnswers={handleSendAnswers}
         onChangeConditions={handleChangeConditions}
@@ -255,6 +279,7 @@ export default function App() {
       />
       {loginOpen && <LoginDialog busy={authLoading} error={loginError} onClose={() => setLoginOpen(false)} onGoogleLogin={handleLogin} />}
       {settingsOpen && <SettingsDialog accountName={accountName} accountEmail={user?.email ?? null} busy={logoutLoading || loading} error={logoutError} onClose={() => setSettingsOpen(false)} onLogout={handleLogout} onLogin={() => { setSettingsOpen(false); setLoginError(''); setLoginOpen(true); }} />}
+      {deleteTarget && <DeleteConversationDialog title={store.conversations.find(chat => chat.id === deleteTarget)?.title ?? '대화'} busy={deleting} error={deleteError} onClose={() => setDeleteTarget(null)} onDelete={handleDeleteConversation} />}
     </div>
   );
 }

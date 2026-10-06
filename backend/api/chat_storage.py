@@ -88,6 +88,16 @@ def read_conversation(conversation_id: str, user_id: str) -> dict:
         return {"id": conversation_id, "title": row["title"], "messages": messages}
 
 
+def delete_conversation(conversation_id: str, user_id: str):
+    # Use the same lock as writes so a pending estimate cannot recreate checkpoints
+    # after deletion. Cascade removes messages; checkpoint tables have no FK.
+    with connection() as conn, conn.transaction():
+        conn.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (conversation_id,))
+        owned(conn, conversation_id, user_id)
+        PostgresSaver(conn).delete_thread(conversation_id)
+        conn.execute("DELETE FROM public.conversations WHERE id=%s AND user_id=%s", (conversation_id, user_id))
+
+
 def append_pair(conn, conversation_id: str, request_id: str, label: str, response: dict):
     sequence = conn.execute("SELECT COALESCE(MAX(sequence),0) AS n FROM public.messages "
                             "WHERE conversation_id=%s", (conversation_id,)).fetchone()["n"]

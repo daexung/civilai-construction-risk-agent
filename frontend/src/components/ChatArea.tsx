@@ -9,6 +9,7 @@ import { showToast } from '../toast';
 import { BillTable, ConditionsBar, RateTable, StatementTable } from './StatementView';
 import './ChatArea.css';
 import './ChatWorkspace.css';
+import ChatHistoryItem from './ChatHistoryItem';
 
 interface Props {
   accountLabel?: string | null;
@@ -18,6 +19,7 @@ interface Props {
   conversations?: { id: string; title: string }[];
   activeConversationId?: string | null;
   onSelectConversation?: (id: string) => void;
+  onDeleteConversation?: (id: string) => void;
   turns: ChatTurn[];
   loading: boolean;
   onSendMessage: (text: string) => void;
@@ -818,7 +820,9 @@ export default function ChatArea(props: Props) {
             <nav className="chat-nav">
               <button className={!props.activeConversationId ? 'chat-nav-active' : undefined} aria-current={!props.activeConversationId ? 'page' : undefined} disabled={props.loading} onClick={newChat}><ChatIcon name="plus" />새 대화</button>
             </nav>
-            {!!props.conversations?.length && <nav className="chat-history" aria-label="이전 대화"><h2>대화</h2>{props.conversations.map(chat => <button key={chat.id} title={chat.title} aria-current={chat.id === props.activeConversationId ? 'page' : undefined} className={chat.id === props.activeConversationId ? 'chat-history-active' : undefined} disabled={props.loading} onClick={() => { setOpenSource(null); props.onSelectConversation?.(chat.id); if (window.innerWidth < 900) setSidebarOpen(false); }}><span>{chat.title}</span></button>)}</nav>}
+            {!!props.conversations?.length && <nav className="chat-history" aria-label="이전 대화"><h2>대화</h2>{props.conversations.map(chat => <ChatHistoryItem key={chat.id} id={chat.id} title={chat.title} active={chat.id === props.activeConversationId} disabled={props.loading}
+              onSelect={() => { setOpenSource(null); props.onSelectConversation?.(chat.id); if (window.innerWidth < 900) setSidebarOpen(false); }}
+              onDelete={() => props.onDeleteConversation?.(chat.id)} />)}</nav>}
             <div className="chat-sidebar-bottom">
               <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={() => showToast('피드백 기능은 준비 중입니다.')}><ChatIcon name="feedback" />피드백 남기기</button>
