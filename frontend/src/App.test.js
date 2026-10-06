@@ -2,10 +2,10 @@ import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Simulate } from 'react-dom/test-utils';
 import App from './App';
-import { sendChat, listConversations, readConversation, deleteConversation, importGuestConversation } from './api';
+import { sendChat, listConversations, readConversation, deleteConversation, importGuestConversation, getUsage, UsageError } from './api';
 import { loginWithGoogle } from './auth';
 
-jest.mock('./api', () => ({ sendChat: jest.fn(), downloadEstimate: jest.fn(), listConversations: jest.fn(), readConversation: jest.fn(), deleteConversation: jest.fn(), importGuestConversation: jest.fn() }));
+jest.mock('./api', () => ({ sendChat: jest.fn(), downloadEstimate: jest.fn(), listConversations: jest.fn(), readConversation: jest.fn(), deleteConversation: jest.fn(), importGuestConversation: jest.fn(), getUsage: jest.fn(), UsageError: class extends Error { constructor(message, usage) { super(message); this.usage = usage; } } }));
 let mockAuthClient = null;
 jest.mock('./auth', () => ({ get authClient() { return mockAuthClient; }, AuthCallback: () => null, loginWithGoogle: jest.fn() }));
 jest.mock('react-markdown', () => ({ __esModule: true, default: ({ children }) => <div>{children}</div> }));
@@ -13,8 +13,9 @@ jest.mock('remark-gfm', () => ({ __esModule: true, default: () => {} }));
 
 let root, container;
 const response = (thread_id, message) => ({ thread_id, message, status: 'OUT_OF_SCOPE', work: null, tables: { bill: null, statement_rows: [] }, search: { warnings: [], raw_warnings: [] } });
-beforeEach(() => {
+beforeEach(async () => {
   mockAuthClient = null;
+  getUsage.mockReset().mockResolvedValue({ limit: 5, used: 0, remaining: 5, service_limit: 500, service_remaining: 500, resets_at: new Date(Date.now() + 3600000).toISOString(), timezone: 'Asia/Seoul' });
   loginWithGoogle.mockReset();
   listConversations.mockReset().mockResolvedValue([]);
   readConversation.mockReset().mockResolvedValue([]);
@@ -28,7 +29,33 @@ beforeEach(() => {
   sendChat.mockImplementation(async body => response(body.thread_id ?? `thread-${body.message}`, `답변: ${body.message}`));
   container = document.createElement('div'); document.body.appendChild(container);
   root = createRoot(container);
-  act(() => root.render(<App />));
+  await act(async () => root.render(<App />));
+});
+
+test('shows remaining usage and disables sending when the server reports a daily limit', async () => {
+  await act(async () => {});
+  expect(container.querySelector('.centered-input-area .account-usage')).toBeNull();
+  const exhausted = { limit: 5, used: 5, remaining: 0, service_limit: 500, service_remaining: 400, resets_at: new Date(Date.now() + 3600000).toISOString(), timezone: 'Asia/Seoul' };
+  sendChat.mockRejectedValueOnce(new UsageError('오늘 5회를 모두 사용했습니다.', exhausted));
+  await sendQuestion('마지막 질문');
+  expect(container.querySelector('textarea').disabled).toBe(true);
+  act(() => Simulate.click(container.querySelector('.chat-sidebar-action')));
+  act(() => Simulate.click(document.querySelectorAll('.settings-body nav button')[1]));
+  expect(document.querySelector('.settings-body .account-usage').textContent).toContain('0 / 5회');
+});
+
+test('refreshes exhausted usage at midnight and enables sending again', async () => {
+  jest.useFakeTimers();
+  try {
+    const exhausted = { limit: 5, used: 5, remaining: 0, service_limit: 500, service_remaining: 400,
+      resets_at: new Date(Date.now() + 1000).toISOString(), timezone: 'Asia/Seoul' };
+    sendChat.mockRejectedValueOnce(new UsageError('오늘 한도 도달', exhausted));
+    await sendQuestion('질문');
+    expect(container.querySelector('textarea').disabled).toBe(true);
+    await act(async () => { jest.advanceTimersByTime(1101); });
+    expect(container.querySelector('textarea').disabled).toBe(false);
+    expect(getUsage).toHaveBeenCalledTimes(2);
+  } finally { jest.useRealTimers(); }
 });
 
 test('popup login preserves guest turns and logout clears the account view', async () => {
@@ -48,7 +75,14 @@ test('popup login preserves guest turns and logout clears the account view', asy
   await sendQuestion('로그인 후 이어가기');
   expect(sendChat.mock.calls[1][0].conversation_id).toBe(migratedId);
   expect(sendChat.mock.calls[1][0].thread_id).toBe(migratedId);
-  act(() => Simulate.click(container.querySelector('[aria-label="계정 설정"]')));
+  act(() => Simulate.click(container.querySelector('[aria-label="계정 메뉴 열기"]')));
+  expect(document.querySelector('.settings-dialog')).toBeNull();
+  expect(container.querySelector('.chat-account-menu').textContent).toContain('남은 사용량');
+  expect(container.querySelector('.chat-account').getAttribute('aria-expanded')).toBe('true');
+  expect(container.querySelector('.chat-account-chevron').classList.contains('is-open')).toBe(true);
+  act(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })));
+  expect(container.querySelector('.chat-account-menu')).toBeNull();
+  act(() => Simulate.click(container.querySelector('.chat-sidebar-action')));
   expect(document.querySelector('.settings-identity').textContent).toContain('a@example.com');
   await act(async () => Simulate.click(document.querySelector('.settings-logout')));
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(0);
@@ -156,8 +190,8 @@ test('member history is restored after reload and replies keep the saved convers
   await act(async () => Simulate.click(document.querySelector('.delete-dialog-confirm')));
   expect(deleteConversation).toHaveBeenCalledWith(selectedId, true, 'thread-새로운 회원 대화');
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(1);
-  act(() => Simulate.click(container.querySelector('[aria-label="계정 설정"]')));
-  await act(async () => Simulate.click(document.querySelector('.settings-logout')));
+  act(() => Simulate.click(container.querySelector('[aria-label="계정 메뉴 열기"]')));
+  await act(async () => Simulate.click(container.querySelector('.chat-account-logout')));
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(0);
 });
 

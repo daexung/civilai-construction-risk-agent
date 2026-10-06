@@ -22,7 +22,7 @@ from time import monotonic
 from pathlib import Path
 from urllib.parse import quote
 
-from fastapi import FastAPI, Header
+from fastapi import FastAPI, Header, Request
 from fastapi import HTTPException
 from fastapi.responses import FileResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -39,6 +39,7 @@ from backend.api.tables import add_tables, build_xlsx, estimate_filename
 from backend.agent.tools.source.citation import prepare_citations, resolve_cites
 from backend.agent.tools.llm.client import LLMUnavailable, warmup_client
 from backend.api import chat_storage
+from backend.api import usage_limits
 from langgraph.checkpoint.postgres import PostgresSaver
 
 GRAPH = build_graph()
@@ -493,8 +494,13 @@ def export_xlsx(thread_id: str, authorization: str | None = Header(default=None)
                     headers={"Content-Disposition": f'attachment; filename="estimate.xlsx"; filename*=UTF-8\'\'{filename}'})
 
 
+@app.get("/api/usage")
+def usage(request: Request, authorization: str | None = Header(default=None)):
+    return usage_limits.read(chat_storage.identity(authorization), request.client.host if request.client else None)
+
+
 @app.post("/api/chat")
-def chat(payload: ChatRequest, authorization: str | None = Header(default=None),
+def chat(payload: ChatRequest, request: Request, authorization: str | None = Header(default=None),
          x_guest_session: str | None = Header(default=None)) -> dict:
     user_id = chat_storage.identity(authorization)
     if _LIFESPAN_ACTIVE:
@@ -502,9 +508,14 @@ def chat(payload: ChatRequest, authorization: str | None = Header(default=None),
         if _READY_ERROR:
             raise HTTPException(status_code=503, detail="Service preparation failed")
     started = perf_counter()
-    with capture_node_timings() as node_timings:
+    if payload.message is not None and not 1 <= len(payload.message.strip()) <= 10000:
+        raise HTTPException(422, "질문은 1~10,000자로 입력해 주세요.")
+    if payload.message is None and not payload.answers and payload.conditions is None:
+        raise HTTPException(422, "질문 또는 조건을 입력해 주세요.")
+    with usage_limits.processing(user_id, request.client.host if request.client else None) as quota, \
+            capture_node_timings() as node_timings:
         if user_id:
-            response = _member_chat(payload, user_id)
+            response = _member_chat(payload, user_id, quota)
         else:
             if payload.conversation_id:
                 raise HTTPException(401, "회원 대화에는 로그인이 필요합니다.")
@@ -512,14 +523,20 @@ def chat(payload: ChatRequest, authorization: str | None = Header(default=None),
                 guest = _guest(payload.thread_id, x_guest_session)
                 with guest["lock"]:
                     _guest(payload.thread_id, x_guest_session)
+                    used = usage_limits.consume(quota)
                     response = _chat_response(payload)
+                    response["usage"] = used
                     guest["turns"].append((_guest_label(payload), copy.deepcopy(response)))
             else:
                 _prune_guests()
                 secret = x_guest_session or token_urlsafe(32)
                 if len(secret) < 32 or len(secret) > 128:
                     raise HTTPException(422, "유효하지 않은 임시 세션입니다.")
+                if not payload.message or payload.answers or payload.conditions is not None:
+                    raise HTTPException(422, "새 대화에는 질문이 필요합니다.")
+                used = usage_limits.consume(quota)
                 response = _chat_response(payload)
+                response["usage"] = used
                 with _GUEST_LOCK:
                     _GUESTS[response["thread_id"]] = {"secret": secret, "used": monotonic(), "lock": threading.Lock(),
                         "turns": [(_guest_label(payload), copy.deepcopy(response))]}
@@ -636,7 +653,7 @@ def delete_guest_conversation(thread_id: str, x_guest_session: str | None = Head
     return Response(status_code=204)
 
 
-def _member_chat(payload: ChatRequest, user_id: str) -> dict:
+def _member_chat(payload: ChatRequest, user_id: str, quota) -> dict:
     if not payload.conversation_id or not payload.request_id:
         raise HTTPException(422, "대화 ID와 요청 ID가 필요합니다.")
     conversation_id, request_id = str(payload.conversation_id), str(payload.request_id)
@@ -660,10 +677,12 @@ def _member_chat(payload: ChatRequest, user_id: str) -> dict:
         duplicate = conn.execute("SELECT payload FROM public.messages WHERE conversation_id=%s "
                                  "AND request_id=%s AND role='assistant'", (conversation_id, request_id)).fetchone()
         if duplicate:
-            return duplicate["payload"]
+            return {**duplicate["payload"], "usage": usage_limits.status(*quota)}
+        used = usage_limits.consume(quota)
         graph = build_graph(PostgresSaver(conn))
         member_payload = payload.model_copy(update={"thread_id": conversation_id})
         response = _chat_response(member_payload, graph, keep_thread=True)
+        response["usage"] = used
         chat_storage.append_pair(conn, conversation_id, request_id, label, response)
         return response
 

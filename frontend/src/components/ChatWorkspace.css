@@ -119,3 +119,16 @@
   .chat-shell .input-area { padding: 10px 12px max(12px, env(safe-area-inset-bottom)); }
   .composer-note { font-size: 10px; }
 }
+.chat-account-wrapper { position: relative; }
+.chat-account-chevron { transition: transform 160ms ease; flex-shrink: 0; }
+.chat-account-chevron.is-open { transform: rotate(180deg); }
+.chat-account-menu { position: absolute; bottom: calc(100% + 8px); left: 0; right: 0; z-index: 20; padding: 16px 14px 8px; background: #fff; border: 1px solid #e2e8df; border-radius: 14px; box-shadow: 0 8px 28px #172b171a; }
+.account-usage { width: 100%; font-size: 13px; }
+.account-usage > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.account-usage strong { color: var(--brand-strong); font-size: 14px; font-weight: 550; white-space: nowrap; }
+.account-usage p { margin: 8px 0 0; color: #888; font-size: 11px; line-height: 1.7; }
+.chat-account-logout { display: flex; align-items: center; gap: 9px; width: 100%; margin-top: 12px; padding: 11px 8px; border: 0; border-top: 1px solid #eef0ec; border-radius: 7px; background: transparent; color: #444; font: inherit; font-size: 13px; cursor: pointer; }
+.chat-account-logout:hover { background: #f3f6f1; }
+.chat-account-logout:disabled { opacity: .5; cursor: wait; }
+.settings-guest .account-usage { margin-bottom: 20px; }
+@media (prefers-reduced-motion: reduce) { .chat-account-chevron { transition: none; } }

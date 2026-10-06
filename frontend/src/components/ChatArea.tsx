@@ -1,8 +1,8 @@
 import React, { useId, createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ArrowUp, Check, ChevronDown, Copy, Download, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
-import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
+import { ArrowUp, Check, Copy, Download, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
+import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult, UsageStatus } from '../types';
 import { downloadEstimate } from '../api';
 import { EXAMPLE_QUESTIONS } from '../examples';
 import { showToast } from '../toast';
@@ -10,13 +10,18 @@ import { BillTable, ConditionsBar, RateTable, StatementTable } from './Statement
 import './ChatArea.css';
 import './ChatWorkspace.css';
 import ChatHistoryItem from './ChatHistoryItem';
+import AccountMenu from './AccountMenu';
 
 interface Props {
+  usage?: UsageStatus | null;
   inputDisabled?: boolean;
   accountLabel?: string | null;
   authLoading?: boolean;
   onLogin?: () => void;
   onSettings?: () => void;
+  onLogout?: () => void;
+  logoutBusy?: boolean;
+  logoutError?: string;
   conversations?: { id: string; title: string }[];
   activeConversationId?: string | null;
   onSelectConversation?: (id: string) => void;
@@ -828,7 +833,7 @@ export default function ChatArea(props: Props) {
             <div className="chat-sidebar-bottom">
               <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={() => showToast('피드백 기능은 준비 중입니다.')}><ChatIcon name="feedback" />피드백 남기기</button>
-              {props.accountLabel ? <button className="chat-account" onClick={props.onSettings} aria-label="계정 설정"><span className="chat-account-avatar" aria-hidden="true">{props.accountLabel.slice(0, 1).toUpperCase()}</span><span className="chat-account-name">{props.accountLabel}</span><ChevronDown size={16} strokeWidth={1.75} /></button> : <div className="chat-sidebar-login"><strong>품셈이와 함께 시작하세요</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button disabled={props.authLoading || props.loading} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button></div>}
+              {props.accountLabel ? <AccountMenu name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login"><strong>품셈이와 함께 시작하세요</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button disabled={props.authLoading || props.loading} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button></div>}
             </div>
           </aside>
         </>}

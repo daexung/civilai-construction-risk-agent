@@ -46,6 +46,12 @@ test('guest import sends both credentials and does not accept browser transcript
   expect(JSON.parse(options.body)).toEqual({ thread_id: 'guest-thread', conversation_id: 'member-conversation' });
 });
 
+test('daily limit errors preserve the server message and remaining usage', async () => {
+  const usage = { limit: 5, used: 5, remaining: 0 };
+  fetch.mockResolvedValue({ ok: false, status: 429, json: async () => ({ detail: { code: 'PERSONAL_DAILY_LIMIT', message: '오늘 5회를 모두 사용했습니다.', usage } }) });
+  await expect(sendChat({ message: '질문' })).rejects.toMatchObject({ message: '오늘 5회를 모두 사용했습니다.', usage });
+});
+
 test('guest import stops before sending if the signed-in account changes', async () => {
   mockSession.mockResolvedValue({ data: { session: { access_token: 'b-token', user: { id: 'B' } } } });
   await expect(importGuestConversation('guest-thread', 'member-conversation', 'A')).rejects.toThrow('AUTH_REQUIRED');

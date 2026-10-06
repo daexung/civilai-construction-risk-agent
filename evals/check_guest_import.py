@@ -98,4 +98,7 @@ def main():
     print('All guest migration checks passed')
 
 
-if __name__ == '__main__': main()
+if __name__ == '__main__':
+    from evals.quota_fixture import unrestricted_quota
+    with unrestricted_quota():
+        main()

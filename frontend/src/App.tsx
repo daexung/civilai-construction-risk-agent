@@ -4,8 +4,8 @@ import ChatArea from './components/ChatArea';
 import Landing from './landing/Landing';
 import Terms from './landing/Terms';
 import ToastContainer from './components/ToastContainer';
-import { ChatTurn, ChoiceValue } from './types';
-import { sendChat, listConversations, readConversation, deleteConversation, importGuestConversation } from './api';
+import { ChatTurn, ChoiceValue, UsageStatus } from './types';
+import { sendChat, listConversations, readConversation, deleteConversation, importGuestConversation, getUsage, UsageError } from './api';
 import { showToast } from './toast';
 import './App.css';
 import { authClient, AuthCallback, loginWithGoogle } from './auth';
@@ -37,6 +37,8 @@ export default function App() {
   const turns = current?.turns ?? EMPTY_TURNS;
   const threadId = current?.threadId ?? null;
   const [loading, setLoading] = useState(false);
+  const pendingRequest = useRef(false);
+  const [usage, setUsage] = useState<UsageStatus | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
   const [authInitializing, setAuthInitializing] = useState(!!authClient);
@@ -58,6 +60,24 @@ export default function App() {
   const accountId = user?.id ?? null;
   accountRef.current = accountId;
   useEffect(() => { setDeleteTarget(null); }, [accountId]);
+  useEffect(() => {
+    if (pathname !== '/chat' || authInitializing) return;
+    let active = true;
+    setUsage(null);
+    const refresh = () => { getUsage(!!accountId).then(value => { if (active) setUsage(value); }).catch(() => {}); };
+    refresh();
+    window.addEventListener('focus', refresh);
+    return () => { active = false; window.removeEventListener('focus', refresh); };
+  }, [accountId, authInitializing, pathname]);
+  useEffect(() => {
+    if (!usage) return;
+    let active = true;
+    const timer = window.setTimeout(() => {
+      getUsage(!!accountId).then(value => { if (active) setUsage(value); })
+        .catch(() => { if (active) setUsage(null); });
+    }, Math.max(100, Date.parse(usage.resets_at) - Date.now() + 100));
+    return () => { active = false; window.clearTimeout(timer); };
+  }, [usage, accountId]);
   const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0];
   const accountName = user ? (typeof displayName === 'string' && displayName.trim() ? displayName.trim() : '내 계정') : null;
 
@@ -142,6 +162,11 @@ export default function App() {
   };
 
   const handleError = useCallback((err: unknown) => {
+    if (err instanceof UsageError) {
+      if (err.usage) setUsage(err.usage);
+      showToast(err.message, 'error');
+      return;
+    }
     const msg = err instanceof Error ? err.message : '';
     const text =
       msg === 'NETWORK_ERROR' ? '네트워크 연결을 확인해주세요.' :
@@ -158,6 +183,8 @@ export default function App() {
     thread: string | null,
     conversationId = store.activeId ?? uuidv4(),
   ) => {
+    if (pendingRequest.current) return;
+    pendingRequest.current = true;
     const startedAt = performance.now();
     const requestUserId = user?.id ?? null;
     const existingChat = store.conversations.find(chat => chat.id === conversationId);
@@ -176,6 +203,7 @@ export default function App() {
       const response = await sendChat({ thread_id: thread, ...body,
         ...(saved ? { conversation_id: conversationId, request_id: uuidv4(), user_label: userLabel } : {}) });
       if (requestUserId && accountRef.current !== requestUserId) return;
+      if (response.usage) setUsage(response.usage);
       const assistantTurn: ChatTurn = { id: uuidv4(), role: 'assistant', response,
         elapsedMs: performance.now() - startedAt, receivedAtMs: Date.now() };
       setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => chat.id === conversationId
@@ -183,6 +211,7 @@ export default function App() {
     } catch (err) {
       handleError(err);
     } finally {
+      pendingRequest.current = false;
       setLoading(false);
     }
   }, [handleError, store.activeId, store.conversations, user]);
@@ -195,7 +224,8 @@ export default function App() {
 
   // 결과 카드의 조건만 바꿔 같은 카드를 새 계산으로 교체한다(공종 입력은 서버가 그대로 둔다).
   const handleChangeConditions = useCallback(async (turnId: string, conditions: Record<string, string>) => {
-    if (!threadId || !store.activeId) return;
+    if (!threadId || !store.activeId || pendingRequest.current) return;
+    pendingRequest.current = true;
     const conversationId = store.activeId;
     const startedAt = performance.now();
     setLoading(true);
@@ -204,6 +234,7 @@ export default function App() {
       const response = await sendChat({ thread_id: threadId, conditions,
         ...(current?.saved ? { conversation_id: conversationId, request_id: uuidv4(), user_label: '공사 조건 변경' } : {}) });
       if (accountRef.current !== requestUserId) return;
+      if (response.usage) setUsage(response.usage);
       const elapsedMs = performance.now() - startedAt;
       const receivedAtMs = Date.now();
       setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => chat.id === conversationId
@@ -214,6 +245,7 @@ export default function App() {
     } catch (err) {
       handleError(err);
     } finally {
+      pendingRequest.current = false;
       setLoading(false);
     }
   }, [threadId, handleError, store.activeId, current, user]);
@@ -293,6 +325,10 @@ export default function App() {
       <ToastContainer />
       {user && migrationError && <div className="chat-migration-notice" role="alert"><span>{migrationError}</span><button onClick={() => setMigrationRetry(value => value + 1)}>다시 시도</button></div>}
       <ChatArea
+        usage={usage}
+        onLogout={handleLogout}
+        logoutBusy={logoutLoading || loading || migrating || authLoading}
+        logoutError={logoutError}
         accountLabel={accountName}
         authLoading={authLoading}
         onLogin={() => { setLoginError(''); setLoginOpen(true); }}
@@ -303,7 +339,7 @@ export default function App() {
         onDeleteConversation={id => { setDeleteError(''); setDeleteTarget(id); }}
         turns={turns}
         loading={loading || historyLoading || authInitializing || deleting || migrating || authLoading}
-        inputDisabled={!!(user && current && !current.saved && migrationError)}
+        inputDisabled={!!(user && current && !current.saved && migrationError) || !!(usage && (usage.remaining === 0 || usage.service_remaining === 0))}
         onSendMessage={handleSendMessage}
         onSendAnswers={handleSendAnswers}
         onChangeConditions={handleChangeConditions}
@@ -311,7 +347,7 @@ export default function App() {
         onSendExample={handleSendExample}
       />
       {loginOpen && <LoginDialog busy={authLoading} error={loginError} onClose={() => setLoginOpen(false)} onGoogleLogin={handleLogin} />}
-      {settingsOpen && <SettingsDialog accountName={accountName} accountEmail={user?.email ?? null} busy={logoutLoading || loading || migrating} error={logoutError} onClose={() => setSettingsOpen(false)} onLogout={handleLogout} onLogin={() => { setSettingsOpen(false); setLoginError(''); setLoginOpen(true); }} />}
+      {settingsOpen && <SettingsDialog usage={usage} accountName={accountName} accountEmail={user?.email ?? null} busy={logoutLoading || loading || migrating} error={logoutError} onClose={() => setSettingsOpen(false)} onLogout={handleLogout} onLogin={() => { setSettingsOpen(false); setLoginError(''); setLoginOpen(true); }} />}
       {deleteTarget && <DeleteConversationDialog title={store.conversations.find(chat => chat.id === deleteTarget)?.title ?? '대화'} busy={deleting} error={deleteError} onClose={() => setDeleteTarget(null)} onDelete={handleDeleteConversation} />}
     </div>
   );

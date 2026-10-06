@@ -1,9 +1,13 @@
-import { ChatResponse, ChatTurn, ChoiceValue } from './types';
+import { ChatResponse, ChatTurn, ChoiceValue, UsageStatus } from './types';
 import { authClient } from './auth';
 import { v4 as uuidv4 } from 'uuid';
 
 const API_BASE = process.env.REACT_APP_API_URL ?? '';
 const guestSession = uuidv4() + uuidv4();
+
+export class UsageError extends Error {
+  constructor(message: string, public usage?: UsageStatus) { super(message); }
+}
 
 export interface ChatRequestBody {
   thread_id?: string | null;
@@ -34,6 +38,10 @@ async function request(path: string, init: RequestInit = {}, member = true, expe
     throw new Error('NETWORK_ERROR');
   }
   if (!res.ok) {
+    if (res.status === 429) {
+      const detail = (await res.json().catch(() => ({}))).detail;
+      throw new UsageError(detail?.message ?? '요청이 많습니다. 잠시 후 다시 시도해 주세요.', detail?.usage);
+    }
     throw new Error(res.status === 401 ? 'AUTH_REQUIRED' : res.status === 404 ? 'NOT_FOUND' : res.status >= 500 ? 'SERVER_ERROR' : 'REQUEST_ERROR');
   }
   return res;
@@ -42,6 +50,10 @@ async function request(path: string, init: RequestInit = {}, member = true, expe
 export async function sendChat(body: ChatRequestBody): Promise<ChatResponse> {
   return (await request('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body) }, !!body.conversation_id)).json();
+}
+
+export async function getUsage(member: boolean): Promise<UsageStatus> {
+  return (await request('/api/usage', {}, member)).json();
 }
 
 export async function downloadEstimate(threadId: string): Promise<void> {

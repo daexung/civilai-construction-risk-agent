@@ -234,7 +234,18 @@ export interface StatementResult {
 
 export type ChatStatus = 'ANSWERED' | 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR' | 'OK' | 'PARTIAL';
 
+export interface UsageStatus {
+  limit: number;
+  used: number;
+  remaining: number;
+  service_limit: number;
+  service_remaining: number;
+  resets_at: string;
+  timezone: string;
+}
+
 export interface ChatResponse {
+  usage?: UsageStatus;
   thread_id: string;
   route?: 'estimate' | 'qa' | 'out_of_scope' | null;
   status: ChatStatus;

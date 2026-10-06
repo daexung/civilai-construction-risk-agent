@@ -1,17 +1,21 @@
 # 품셈이 로컬 Supabase
 
-Docker Desktop의 Linux 컨테이너에서 PostgreSQL, Auth, API, Studio를 실행한다.
+Docker Desktop의 Linux 컨테이너에서 PostgreSQL, Auth, API만 실행한다.
+메모리 사용을 줄이기 위해 현재 사용하지 않는 Studio, 실시간 구독, Storage, 메일 테스트,
+Edge Functions, 로그 분석은 `config.toml`에서 비활성화했다.
 운영 프로젝트 연결과 데이터 반영은 별도 작업이며 아래 명령은 로컬 환경만 사용한다.
 
 저장소 루트에서 실행한다. 초기 설정은 Supabase CLI 2.119.0으로 생성했다.
 
 ```powershell
-npx --yes supabase@2.119.0 start
+npx --yes supabase@2.119.0 start --exclude postgres-meta
 npx --yes supabase@2.119.0 status
 npx --yes supabase@2.119.0 stop
 ```
 
-- 관리 화면: http://127.0.0.1:54323
+- 관리 화면은 기본적으로 꺼져 있다. 필요하면 `[studio].enabled = true`로 변경하고
+  `stop` 후 `start`를 실행한다. 이때 `--exclude postgres-meta`는 빼야 한다.
+  관리 화면 주소는 http://127.0.0.1:54323 이다.
 - API: http://127.0.0.1:54321
 - PostgreSQL 포트: 54322
 - `stop`은 로컬 데이터를 보존한다. `db reset`은 로컬 데이터를 삭제하므로 초기화할 때만 사용한다.
@@ -65,7 +69,7 @@ Get-Content supabase/tests/chat_access.sql -Raw | docker exec -i supabase_db_civ
 서버 전용 `CHAT_DATABASE_URL`을 사용한다. Google 설정은 그대로 둔다.
 
 ```powershell
-.venv\Scripts\python.exe -m uvicorn backend.api.main:app --env-file .env --host 127.0.0.1 --port 8000
+.venv\Scripts\python.exe -m uvicorn backend.api.main:app --env-file .env --host 127.0.0.1 --port 8000 --no-proxy-headers
 
 # 실제 PostgreSQL 저장·격리·롤백·재시도·계산 복원 검증(로컬만 허용)
 $env:CHAT_DATABASE_URL = 'postgresql://postgres:postgres@127.0.0.1:54322/postgres'
@@ -93,4 +97,32 @@ $env:CHAT_DATABASE_URL = 'postgresql://postgres:postgres@127.0.0.1:54322/postgre
 대화 목록의 점 세 개 메뉴 → 삭제 → 확인은 하드 삭제다. 회원 대화·메시지·체크포인트를 같은
 트랜잭션에 삭제하며 실패 시 전부 롤백한다. 삭제는 대화 쓰기와 같은 잠금으로 직렬화한다.
 비회원 대화도 임시 소유권을 확인한 뒤 서버 메모리와 화면에서 제거한다. 복원 기능은 제공하지 않는다.
-운영 Supabase 연결, API 횟수·비용 제한, 탈퇴 시 체크포인트 정리도 공개 전 후속 작업이다.
+운영 Supabase 연결, 클라우드 비용 상한, 탈퇴 시 체크포인트 정리도 공개 전 후속 작업이다.
+
+## 일일 사용량 제한
+
+`20261006000300_daily_chat_usage.sql`을 적용하면 채팅 전송을 한국 시간 자정 기준으로
+비회원(IP별) 5회, 회원(검증된 계정별) 20회, 모든 비회원·회원 합산 500회로 제한한다.
+질문, 추가 조건 답변, 조건 변경은 각각 1회다. 목록 조회, 대화 이전·삭제, 엑셀 다운로드는 차감하지 않는다.
+처리가 시작된 요청은 실패하더라도 차감한다. 외부 API 호출 뒤 실패한 요청을 반복해서 비용을 발생시키는 것을 막는다.
+완료된 회원 요청의 동일 `request_id` 재전송은 저장된 응답을 반환하고 추가 차감하지 않는다.
+
+사용량은 비공개 `agent_state.daily_chat_usage`에 저장하고, 7일보다 오래된 집계는 새 요청 때 정리한다.
+원본 IP나 대화는 집계 테이블에 넣지 않는다. 식별자는 HMAC 해시로 저장한다.
+운영 환경에는 독립된 긴 랜덤 `QUOTA_HASH_SECRET`을 설정하고 유지한다.
+로컬에서는 설정하지 않으면 `CHAT_DATABASE_URL`을 해시 키로 사용하므로 DB 연결 문자열을 변경하면
+비회원 식별자가 바뀐다. 동일 네트워크의 비회원은 IP 한도를 공유하고, 회원은 각 계정 한도를 사용한다.
+
+전체 한도는 DB 트랜잭션으로 원자적으로 차감하고, 사용자별 PostgreSQL advisory lock으로
+동시 처리를 차단한다. 서버 재시작과 대화 삭제로 한도가 초기화되지 않는다.
+DB에 연결할 수 없으면 유료 처리를 허용하지 않는다. DB 연결은 직접 연결 또는 세션 풀러를 사용해야 한다.
+트랜잭션 풀러는 세션 advisory lock을 지원하지 않으므로 사용하지 않는다.
+
+비회원 IP는 ASGI `request.client`에서 가져오며 임의의 `X-Forwarded-For`를 직접 읽지 않는다.
+배포 시 외부에서 백엔드로 직접 접근하지 못하게 하고, Uvicorn `--forwarded-allow-ips`에는
+실제 신뢰하는 리버스 프록시 주소만 지정해야 한다(`*` 사용 금지).
+로컬 서버 실행 명령에는 `--no-proxy-headers`를 사용해 임의 전달 헤더를 무시한다.
+
+```powershell
+.venv\Scripts\python.exe evals/check_usage_limits.py
+```

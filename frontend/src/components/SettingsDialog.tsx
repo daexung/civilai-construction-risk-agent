@@ -3,8 +3,11 @@ import { createPortal } from 'react-dom';
 import { LogOut, Settings, UserRound, X } from 'lucide-react';
 import useDialogFocus from './useDialogFocus';
 import './SettingsDialog.css';
+import { UsageStatus } from '../types';
+import UsageSummary from './UsageSummary';
 
 interface Props {
+  usage?: UsageStatus | null;
   accountName: string | null;
   accountEmail: string | null;
   busy: boolean;
@@ -14,7 +17,7 @@ interface Props {
   onLogout: () => void;
 }
 
-export default function SettingsDialog({ accountName, accountEmail, busy, error, onClose, onLogin, onLogout }: Props) {
+export default function SettingsDialog({ usage, accountName, accountEmail, busy, error, onClose, onLogin, onLogout }: Props) {
   const [tab, setTab] = useState<'general' | 'account'>(accountName ? 'account' : 'general');
   const id = useId();
   const dialog = useRef<HTMLDivElement>(null);
@@ -36,8 +39,9 @@ export default function SettingsDialog({ accountName, accountEmail, busy, error,
             </> : accountName ? <>
               <div className="settings-identity"><span className="chat-account-avatar" aria-hidden="true">{accountName.slice(0, 1).toUpperCase()}</span><div><strong>{accountName}</strong><span>{accountEmail}</span></div></div>
               <div className="settings-row"><span>로그인 방식</span><span className="settings-value">Google</span></div>
+              <div className="settings-row settings-usage"><UsageSummary usage={usage} /></div>
               <div className="settings-row"><div><span>로그아웃</span><p>이 기기에서 로그아웃합니다.</p></div><button className="settings-logout" disabled={busy} onClick={onLogout}><LogOut size={16} strokeWidth={1.75} />{busy ? '로그아웃 중…' : '로그아웃'}</button></div>
-            </> : <div className="settings-guest"><p>로그인하지 않은 상태입니다.</p><button onClick={onLogin}>로그인</button></div>}
+            </> : <div className="settings-guest"><p>로그인하지 않은 상태입니다.</p><UsageSummary usage={usage} /><button onClick={onLogin}>로그인</button></div>}
             {error && <p className="settings-error" role="alert">{error}</p>}
           </section>
         </div>
