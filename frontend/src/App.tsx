@@ -242,7 +242,7 @@ export default function App() {
 
   const send = useCallback(async (
     userLabel: string,
-    body: { message?: string; answers?: Record<string, ChoiceValue> },
+    body: { message?: string; answers?: Record<string, ChoiceValue>; restart?: boolean },
     thread: string | null,
     conversationId = store.activeId ?? uuidv4(),
   ) => {
@@ -281,6 +281,7 @@ export default function App() {
   }, [handleError, store.activeId, store.conversations, user]);
 
   const handleSendMessage = useCallback((text: string) => send(text, { message: text }, threadId), [send, threadId]);
+  const handleResendMessage = useCallback((text: string) => send(text, { message: text, restart: true }, threadId), [send, threadId]);
 
   const handleSendAnswers = useCallback((answers: Record<string, ChoiceValue>, summary: string) => {
     return send(summary, { answers }, threadId);
@@ -434,6 +435,7 @@ export default function App() {
         generating={loading}
         inputDisabled={!!(user && current && !current.saved && migrationError) || !!(usage && (usage.remaining === 0 || usage.service_remaining === 0))}
         onSendMessage={handleSendMessage}
+        onResendMessage={handleResendMessage}
         onSendAnswers={handleSendAnswers}
         onChangeConditions={handleChangeConditions}
         onNewChat={handleNewChat}

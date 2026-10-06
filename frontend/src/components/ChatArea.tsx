@@ -13,6 +13,7 @@ import ChatHistoryItem from './ChatHistoryItem';
 import AccountMenu from './AccountMenu';
 import AnswerFeedback from './AnswerFeedback';
 import EstimateGuidance from './EstimateGuidance';
+import UserQuestion from './UserQuestion';
 
 interface Props {
   restoring?: boolean;
@@ -37,6 +38,7 @@ interface Props {
   loading: boolean;
   generating?: boolean;
   onSendMessage: (text: string) => void;
+  onResendMessage?: (text: string) => void;
   onSendAnswers: (answers: Record<string, ChoiceValue>, summary: string) => void;
   onChangeConditions: (turnId: string, conditions: Record<string, string>) => void;
   onNewChat: () => void;
@@ -551,7 +553,7 @@ function AssistantCard({
   );
 }
 
-function ChatAreaView({ turns, loading, restoring, generating = loading, inputDisabled, onSendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved }: Props) {
+function ChatAreaView({ turns, loading, restoring, generating = loading, inputDisabled, onSendMessage, onResendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved }: Props) {
   const blocked = loading || !!inputDisabled;
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
@@ -678,9 +680,7 @@ function ChatAreaView({ turns, loading, restoring, generating = loading, inputDi
           {turns.map((turn, i) => (
             <div key={turn.id} className={`message ${turn.role}`}>
               {turn.role === 'user' ? (
-                <div className="user-msg-wrap">
-                  <div className="user-bubble">{turn.text}</div>
-                </div>
+                <UserQuestion text={turn.text ?? ''} disabled={blocked} onResend={onResendMessage} />
               ) : (
                 <div className="assistant-body">
                   {turn.response && (

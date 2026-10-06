@@ -22,6 +22,7 @@ export class UsageError extends Error {
 export interface ChatRequestBody {
   thread_id?: string | null;
   message?: string;
+  restart?: boolean;
   answers?: Record<string, ChoiceValue>;
   basis_date?: string;
   conditions?: Record<string, string>;

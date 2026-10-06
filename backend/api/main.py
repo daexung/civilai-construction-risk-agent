@@ -134,6 +134,7 @@ SOURCES = ROOT / "data/processed/sources"
 class ChatRequest(BaseModel):
     thread_id: Optional[str] = None
     message: Optional[str] = None
+    restart: bool = False
     answers: Optional[dict] = None
     basis_date: Optional[date] = None
     conditions: Optional[dict] = None
@@ -586,6 +587,8 @@ def chat(payload: ChatRequest, request: Request, authorization: str | None = Hea
         raise HTTPException(422, "질문은 1~10,000자로 입력해 주세요.")
     if payload.message is None and not payload.answers and payload.conditions is None:
         raise HTTPException(422, "질문 또는 조건을 입력해 주세요.")
+    if payload.restart and (not payload.message or payload.answers is not None or payload.conditions is not None):
+        raise HTTPException(422, "다시 보내기에는 질문만 입력해 주세요.")
     with accounts.guard(user_id), usage_limits.processing(user_id, client_ip(request)) as quota, \
             capture_node_timings() as node_timings:
         if user_id:
@@ -798,7 +801,7 @@ def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
     if payload.thread_id:
         candidate_config = {"configurable": {"thread_id": payload.thread_id}}
         snapshot = graph.get_state(candidate_config)
-        if snapshot.next:
+        if snapshot.next and not payload.restart:
             config = candidate_config
         elif snapshot.values:
             previous = snapshot.values
