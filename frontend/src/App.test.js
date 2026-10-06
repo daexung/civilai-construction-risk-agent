@@ -29,12 +29,28 @@ test('popup login preserves guest turns and logout clears the account view', asy
   await sendQuestion('진행 중인 견적');
   loginWithGoogle.mockResolvedValue({ id: 'A', email: 'a@example.com' });
   await act(async () => Simulate.click(container.querySelector('.chat-sidebar-login button')));
+  expect(loginWithGoogle).not.toHaveBeenCalled();
+  expect(document.querySelector('[role="dialog"]')).not.toBeNull();
+  await act(async () => Simulate.click(document.querySelector('.login-dialog-google')));
   expect(container.querySelector('.messages').textContent).toContain('진행 중인 견적');
   expect(container.querySelector('.chat-sidebar-login strong').textContent).toBe('a@example.com');
   expect(localStorage.getItem('poomsemi-chat-history-v1')).toBeNull();
   await act(async () => Simulate.click(container.querySelector('.chat-sidebar-login button')));
   expect(container.querySelectorAll('.chat-history button')).toHaveLength(0);
-  expect(container.querySelector('.chat-sidebar-login button').textContent).toBe('Google로 로그인');
+  expect(container.querySelector('.chat-sidebar-login button').textContent).toBe('로그인');
+});
+
+test('login dialog closes with Escape without closing the sidebar or starting OAuth', () => {
+  const button = container.querySelector('.chat-sidebar-login button');
+  button.focus();
+  act(() => Simulate.click(button));
+  expect(container.querySelector('.app').hasAttribute('inert')).toBe(true);
+  act(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })));
+  expect(document.querySelector('[role="dialog"]')).toBeNull();
+  expect(container.querySelector('.chat-sidebar')).not.toBeNull();
+  expect(container.querySelector('.app').hasAttribute('inert')).toBe(false);
+  expect(document.activeElement).toBe(button);
+  expect(loginWithGoogle).not.toHaveBeenCalled();
 });
 afterEach(() => { act(() => root.unmount()); container.remove(); localStorage.clear(); });
 

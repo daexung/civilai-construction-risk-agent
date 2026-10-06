@@ -47,7 +47,7 @@ test('sidebar can close and reopen with settings, feedback and login controls', 
   expect(container.querySelector('.chat-sidebar-brand a').getAttribute('href')).toBe('/');
   expect(container.querySelector('.chat-sidebar').textContent).toContain('설정');
   expect(container.querySelector('.chat-sidebar').textContent).toContain('피드백 남기기');
-  expect(container.querySelector('.chat-sidebar-login button').textContent).toBe('Google로 로그인');
+  expect(container.querySelector('.chat-sidebar-login button').textContent).toBe('로그인');
   act(() => Simulate.click(container.querySelector('[aria-label="사이드바 닫기"]')));
   expect(container.querySelector('.chat-sidebar')).toBeNull();
   act(() => Simulate.click(container.querySelector('[aria-label="사이드바 열기"]')));

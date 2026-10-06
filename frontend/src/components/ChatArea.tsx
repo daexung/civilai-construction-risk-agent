@@ -822,7 +822,7 @@ export default function ChatArea(props: Props) {
             <div className="chat-sidebar-bottom">
               <button className="chat-sidebar-action" onClick={() => showToast('설정 기능은 준비 중입니다.')}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={() => showToast('피드백 기능은 준비 중입니다.')}><ChatIcon name="feedback" />피드백 남기기</button>
-              <div className="chat-sidebar-login"><strong>{props.accountLabel ?? '품셈이와 함께 시작하세요'}</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button disabled={props.authLoading || props.loading} onClick={props.accountLabel ? props.onLogout : props.onLogin}>{props.authLoading ? '로그인 확인 중…' : props.accountLabel ? '로그아웃' : 'Google로 로그인'}</button></div>
+              <div className="chat-sidebar-login"><strong>{props.accountLabel ?? '품셈이와 함께 시작하세요'}</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button disabled={props.authLoading || props.loading} onClick={props.accountLabel ? props.onLogout : props.onLogin}>{props.authLoading ? '로그인 확인 중…' : props.accountLabel ? '로그아웃' : '로그인'}</button></div>
             </div>
           </aside>
         </>}

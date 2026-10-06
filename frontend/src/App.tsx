@@ -10,6 +10,7 @@ import { showToast } from './toast';
 import './App.css';
 import { authClient, AuthCallback, loginWithGoogle } from './auth';
 import type { User } from '@supabase/supabase-js';
+import LoginDialog from './components/LoginDialog';
 
 interface Conversation {
   id: string;
@@ -34,6 +35,8 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   useEffect(() => {
     try { localStorage.removeItem(HISTORY_KEY); } catch { /* Storage may be blocked. */ }
@@ -53,8 +56,9 @@ export default function App() {
 
   const handleLogin = async () => {
     setAuthLoading(true);
-    try { setUser(await loginWithGoogle()); showToast('Google 계정으로 로그인했습니다.'); }
-    catch (error) { showToast(error instanceof Error ? error.message : '로그인에 실패했습니다.', 'error'); }
+    setLoginError('');
+    try { setUser(await loginWithGoogle()); setLoginOpen(false); showToast('Google 계정으로 로그인했습니다.'); }
+    catch (error) { setLoginError(error instanceof Error ? error.message : '로그인에 실패했습니다.'); }
     finally { setAuthLoading(false); }
   };
   const handleLogout = async () => {
@@ -172,7 +176,7 @@ export default function App() {
       <ChatArea
         accountLabel={user?.email ?? null}
         authLoading={authLoading}
-        onLogin={handleLogin}
+        onLogin={() => { setLoginError(''); setLoginOpen(true); }}
         onLogout={handleLogout}
         conversations={store.conversations.map(chat => ({ id: chat.id, title: chat.title }))}
         activeConversationId={store.activeId}
@@ -185,6 +189,7 @@ export default function App() {
         onNewChat={handleNewChat}
         onSendExample={handleSendExample}
       />
+      {loginOpen && <LoginDialog busy={authLoading} error={loginError} onClose={() => setLoginOpen(false)} onGoogleLogin={handleLogin} />}
     </div>
   );
 }
