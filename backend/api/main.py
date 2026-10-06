@@ -12,10 +12,13 @@ from datetime import date
 from time import perf_counter
 from typing import Optional
 from uuid import uuid4
+from uuid import UUID
+from secrets import token_urlsafe, compare_digest
+from time import monotonic
 from pathlib import Path
 from urllib.parse import quote
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from fastapi import HTTPException
 from fastapi.responses import FileResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,8 +34,13 @@ from backend.agent.nodes.fill import _common_fields, _valid_for_field
 from backend.api.tables import add_tables, build_xlsx, estimate_filename
 from backend.agent.tools.source.citation import prepare_citations, resolve_cites
 from backend.agent.tools.llm.client import LLMUnavailable, warmup_client
+from backend.api import chat_storage
+from langgraph.checkpoint.postgres import PostgresSaver
 
 GRAPH = build_graph()
+_GUESTS: dict[str, dict] = {}
+_GUEST_LOCK = threading.Lock()
+_GUEST_TTL = 24 * 60 * 60
 
 DEV_ORIGINS = [
     "http://localhost:5173",
@@ -50,6 +58,7 @@ def _prepare_service() -> None:
     global _READY_ERROR
     started = perf_counter()
     try:
+        chat_storage.setup()
         prepare_citations()
         get_search()
         load_specs()
@@ -106,6 +115,9 @@ class ChatRequest(BaseModel):
     answers: Optional[dict] = None
     basis_date: Optional[date] = None
     conditions: Optional[dict] = None
+    conversation_id: Optional[UUID] = None
+    request_id: Optional[UUID] = None
+    user_label: Optional[str] = None
 
 
 _FIELD_LABELS = {
@@ -415,19 +427,20 @@ def source_image(table_id: str) -> FileResponse:
     return FileResponse(path, media_type="image/png")
 
 
-def _finished_state(thread_id: str | None) -> dict:
+def _finished_state(thread_id: str | None, graph=None) -> dict:
     """계산이 끝난 thread의 그래프 state. 계산 결과가 없으면 404."""
     if not thread_id:
         raise HTTPException(status_code=404, detail="계산 결과가 없는 대화입니다")
-    snapshot = GRAPH.get_state({"configurable": {"thread_id": thread_id}})
+    snapshot = (graph or GRAPH).get_state({"configurable": {"thread_id": thread_id}})
     if snapshot.next or not snapshot.values.get("statement"):
         raise HTTPException(status_code=404, detail="계산 결과가 없는 대화입니다")
     return snapshot.values
 
 
-def _change_conditions(payload: ChatRequest) -> dict:
+def _change_conditions(payload: ChatRequest, graph=None) -> dict:
     """공종 입력은 두고 공사 조건만 바꿔 원가계산서와 설명 문장을 다시 만든다."""
-    values = _finished_state(payload.thread_id)
+    graph = graph or GRAPH
+    values = _finished_state(payload.thread_id, graph)
     fields = {field["name"]: field for field in _common_fields()}
     changes = dict(payload.conditions)
     group = changes.pop("group", None)
@@ -444,13 +457,26 @@ def _change_conditions(payload: ChatRequest) -> dict:
     sources = {**values.get("input_sources", {}), **{name: "선택" for name in changes}}
     config = {"configurable": {"thread_id": payload.thread_id}}
     # price 다음 노드(statement)부터 다시 돌려 원가계산서와 설명 문장만 새로 만든다.
-    GRAPH.update_state(config, {"inputs": inputs, "input_sources": sources}, as_node="price")
-    return _build_response(payload.thread_id, GRAPH.invoke(None, config))
+    graph.update_state(config, {"inputs": inputs, "input_sources": sources}, as_node="price")
+    return _build_response(payload.thread_id, graph.invoke(None, config))
 
 
 @app.get("/api/export/{thread_id}.xlsx")
-def export_xlsx(thread_id: str) -> Response:
-    response = _build_response(thread_id, _finished_state(thread_id))
+def export_xlsx(thread_id: str, authorization: str | None = Header(default=None),
+                x_guest_session: str | None = Header(default=None)) -> Response:
+    user_id = chat_storage.identity(authorization)
+    if user_id:
+        try:
+            conversation_id = str(UUID(thread_id))
+        except ValueError:
+            raise HTTPException(404, "대화를 찾을 수 없습니다.") from None
+        with chat_storage.connection() as conn:
+            chat_storage.owned(conn, conversation_id, user_id)
+            response = _build_response(conversation_id, _finished_state(conversation_id, build_graph(PostgresSaver(conn))))
+    else:
+        guest = _guest(thread_id, x_guest_session)
+        with guest["lock"]:
+            response = _build_response(thread_id, _finished_state(thread_id))
     filename = quote(estimate_filename(response), safe="")
     return Response(build_xlsx(response),
                     media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -458,14 +484,33 @@ def export_xlsx(thread_id: str) -> Response:
 
 
 @app.post("/api/chat")
-def chat(payload: ChatRequest) -> dict:
+def chat(payload: ChatRequest, authorization: str | None = Header(default=None),
+         x_guest_session: str | None = Header(default=None)) -> dict:
+    user_id = chat_storage.identity(authorization)
     if _LIFESPAN_ACTIVE:
         _READY_EVENT.wait()
         if _READY_ERROR:
             raise HTTPException(status_code=503, detail="Service preparation failed")
     started = perf_counter()
     with capture_node_timings() as node_timings:
-        response = _chat_response(payload)
+        if user_id:
+            response = _member_chat(payload, user_id)
+        else:
+            if payload.conversation_id:
+                raise HTTPException(401, "회원 대화에는 로그인이 필요합니다.")
+            if payload.thread_id:
+                guest = _guest(payload.thread_id, x_guest_session)
+                with guest["lock"]:
+                    response = _chat_response(payload)
+            else:
+                _prune_guests()
+                secret = x_guest_session or token_urlsafe(32)
+                if len(secret) < 32 or len(secret) > 128:
+                    raise HTTPException(422, "유효하지 않은 임시 세션입니다.")
+                response = _chat_response(payload)
+                with _GUEST_LOCK:
+                    _GUESTS[response["thread_id"]] = {"secret": secret, "used": monotonic(), "lock": threading.Lock()}
+                response["guest_session"] = secret
     response["timing"] = {
         **{name: round(value, 1) for name, value in node_timings.items()},
         "total_ms": round((perf_counter() - started) * 1000, 1),
@@ -473,14 +518,78 @@ def chat(payload: ChatRequest) -> dict:
     return response
 
 
-def _chat_response(payload: ChatRequest) -> dict:
+def _prune_guests():
+    with _GUEST_LOCK:
+        for expired, entry in list(_GUESTS.items()):
+            if monotonic() - entry["used"] > _GUEST_TTL and entry["lock"].acquire(blocking=False):
+                try:
+                    GRAPH.checkpointer.delete_thread(expired)
+                    del _GUESTS[expired]
+                finally:
+                    entry["lock"].release()
+
+
+def _guest(thread_id: str, secret: str | None) -> dict:
+    _prune_guests()
+    with _GUEST_LOCK:
+        guest = _GUESTS.get(thread_id)
+        if not guest or not secret or not compare_digest(guest["secret"], secret):
+            raise HTTPException(404, "대화를 찾을 수 없거나 임시 대화가 만료되었습니다.")
+        guest["used"] = monotonic()
+        return guest
+
+
+@app.get("/api/conversations")
+def conversations(authorization: str | None = Header(default=None)):
+    return chat_storage.list_conversations(chat_storage.require_member(authorization))
+
+
+@app.get("/api/conversations/{conversation_id}")
+def conversation(conversation_id: UUID, authorization: str | None = Header(default=None)):
+    return chat_storage.read_conversation(str(conversation_id), chat_storage.require_member(authorization))
+
+
+def _member_chat(payload: ChatRequest, user_id: str) -> dict:
+    if not payload.conversation_id or not payload.request_id:
+        raise HTTPException(422, "대화 ID와 요청 ID가 필요합니다.")
+    conversation_id, request_id = str(payload.conversation_id), str(payload.request_id)
+    if payload.thread_id and payload.thread_id != conversation_id:
+        raise HTTPException(422, "대화 ID가 일치하지 않습니다.")
+    label = payload.user_label or payload.message or ("공사 조건 변경" if payload.conditions else "조건 선택")
+    if not label.strip() or len(label) > 10000:
+        raise HTTPException(422, "질문은 1~10,000자로 입력해 주세요.")
+    # Checkpoints and transcript use ONE transaction/connection. Failed turns roll back
+    # both; a repeated request returns its committed result without invoking the agent.
+    with chat_storage.connection() as conn, conn.transaction():
+        conn.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (conversation_id,))
+        row = conn.execute("SELECT user_id::text FROM public.conversations WHERE id=%s", (conversation_id,)).fetchone()
+        if row:
+            chat_storage.owned(conn, conversation_id, user_id)
+        else:
+            if payload.thread_id or not payload.message or payload.conditions or payload.answers:
+                raise HTTPException(404, "대화를 찾을 수 없습니다.")
+            conn.execute("INSERT INTO public.conversations(id,user_id,title) VALUES (%s,%s,%s)",
+                         (conversation_id, user_id, " ".join(label.split())[:200]))
+        duplicate = conn.execute("SELECT payload FROM public.messages WHERE conversation_id=%s "
+                                 "AND request_id=%s AND role='assistant'", (conversation_id, request_id)).fetchone()
+        if duplicate:
+            return duplicate["payload"]
+        graph = build_graph(PostgresSaver(conn))
+        member_payload = payload.model_copy(update={"thread_id": conversation_id})
+        response = _chat_response(member_payload, graph, keep_thread=True)
+        chat_storage.append_pair(conn, conversation_id, request_id, label, response)
+        return response
+
+
+def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
+    graph = graph or GRAPH
     if payload.conditions is not None:
-        return _change_conditions(payload)
+        return _change_conditions(payload, graph)
     config = None
     previous = None
     if payload.thread_id:
         candidate_config = {"configurable": {"thread_id": payload.thread_id}}
-        snapshot = GRAPH.get_state(candidate_config)
+        snapshot = graph.get_state(candidate_config)
         if snapshot.next:
             config = candidate_config
         elif snapshot.values:
@@ -488,11 +597,11 @@ def _chat_response(payload: ChatRequest) -> dict:
     if config is not None:
         thread_id = payload.thread_id
         resume = payload.answers if payload.answers else (payload.message or "")
-        state = GRAPH.invoke(Command(resume=resume,
+        state = graph.invoke(Command(resume=resume,
                                      update={"basis_date": payload.basis_date.isoformat()}
                                      if payload.basis_date else None), config)
     else:
-        thread_id = payload.thread_id if previous is not None else uuid4().hex
+        thread_id = payload.thread_id if previous is not None or keep_thread else uuid4().hex
         config = {"configurable": {"thread_id": thread_id}}
         initial = new_state(payload.message or "", payload.basis_date.isoformat()
                             if payload.basis_date else None)
@@ -511,5 +620,5 @@ def _chat_response(payload: ChatRequest) -> dict:
             initial.update(inputs={}, input_sources={}, questions=[], reply="", result={},
                            priced=None, statement=None, answer_source="", llm_info={},
                            route_confidence=None, route_reason="", route_source="rule")
-        state = GRAPH.invoke(initial, config)
+        state = graph.invoke(initial, config)
     return _build_response(thread_id, state)

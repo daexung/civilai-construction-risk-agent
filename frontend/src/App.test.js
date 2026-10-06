@@ -2,18 +2,22 @@ import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Simulate } from 'react-dom/test-utils';
 import App from './App';
-import { sendChat } from './api';
+import { sendChat, listConversations, readConversation } from './api';
 import { loginWithGoogle } from './auth';
 
-jest.mock('./api', () => ({ sendChat: jest.fn(), exportUrl: jest.fn() }));
-jest.mock('./auth', () => ({ authClient: null, AuthCallback: () => null, loginWithGoogle: jest.fn() }));
+jest.mock('./api', () => ({ sendChat: jest.fn(), downloadEstimate: jest.fn(), listConversations: jest.fn(), readConversation: jest.fn() }));
+let mockAuthClient = null;
+jest.mock('./auth', () => ({ get authClient() { return mockAuthClient; }, AuthCallback: () => null, loginWithGoogle: jest.fn() }));
 jest.mock('react-markdown', () => ({ __esModule: true, default: ({ children }) => <div>{children}</div> }));
 jest.mock('remark-gfm', () => ({ __esModule: true, default: () => {} }));
 
 let root, container;
 const response = (thread_id, message) => ({ thread_id, message, status: 'OUT_OF_SCOPE', work: null, tables: { bill: null, statement_rows: [] }, search: { warnings: [], raw_warnings: [] } });
 beforeEach(() => {
+  mockAuthClient = null;
   loginWithGoogle.mockReset();
+  listConversations.mockReset().mockResolvedValue([]);
+  readConversation.mockReset().mockResolvedValue([]);
   global.IS_REACT_ACT_ENVIRONMENT = true;
   Element.prototype.scrollIntoView = jest.fn();
   localStorage.clear();
@@ -111,4 +115,35 @@ test('history switching and new chat are disabled while a response is pending', 
   expect(container.querySelector('[aria-label="새 대화 시작"]').disabled).toBe(true);
   await act(async () => resolveResponse(response('second', '응답')));
   expect(container.querySelector('.chat-history button').disabled).toBe(false);
+});
+
+test('member history is restored after reload and replies keep the saved conversation ID', async () => {
+  act(() => root.unmount());
+  mockAuthClient = { auth: {
+    getSession: jest.fn().mockResolvedValue({ data: { session: { user: { id: 'A', email: 'a@example.com' } } } }),
+    onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
+    signOut: jest.fn().mockResolvedValue({ error: null }),
+  } };
+  listConversations.mockResolvedValue([{ id: 'saved-id', title: '저장된 견적' }]);
+  readConversation.mockResolvedValue([
+    { id: 'u1', role: 'user', text: '지난 질문' },
+    { id: 'a1', role: 'assistant', response: response('saved-id', '지난 답변') },
+  ]);
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(container.querySelector('.chat-history button').textContent).toBe('저장된 견적');
+  await act(async () => Simulate.click(container.querySelector('.chat-history button')));
+  expect(readConversation).toHaveBeenCalledWith('saved-id');
+  expect(container.querySelector('.messages').textContent).toContain('지난 답변');
+  await sendQuestion('이어서 질문');
+  expect(sendChat.mock.calls[0][0]).toEqual(expect.objectContaining({
+    thread_id: 'saved-id', conversation_id: 'saved-id', request_id: expect.any(String), user_label: '이어서 질문',
+  }));
+  act(() => Simulate.click(container.querySelector('[aria-label="새 대화 시작"]')));
+  await sendQuestion('새로운 회원 대화');
+  expect(sendChat.mock.calls[1][0].conversation_id).not.toBe('saved-id');
+  expect(sendChat.mock.calls[1][0].thread_id).toBeNull();
+  act(() => Simulate.click(container.querySelector('[aria-label="계정 설정"]')));
+  await act(async () => Simulate.click(document.querySelector('.settings-logout')));
+  expect(container.querySelectorAll('.chat-history button')).toHaveLength(0);
 });

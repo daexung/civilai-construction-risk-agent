@@ -19,7 +19,7 @@ from backend.api.main import app  # noqa: E402
 import backend.api.main as api_main  # noqa: E402
 from backend.agent.tools.llm.client import LLMUnavailable  # noqa: E402
 
-CLIENT = TestClient(app)
+CLIENT = TestClient(app, headers={"X-Guest-Session": "offline-test-session-" + "x" * 32})
 
 PUMP_ANSWERS = {"work": "6-1-4", "pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
                 "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",

@@ -10,6 +10,7 @@ import json
 import re
 from datetime import date
 from decimal import Decimal
+from fractions import Fraction
 from functools import lru_cache
 from pathlib import Path
 
@@ -45,7 +46,13 @@ def _korean_date(value: str | None) -> str:
 def _num(value) -> int | float | None:
     if value is None or value == "":
         return None
-    number = Decimal(str(value))
+    # Exact calculation outputs can be rational strings (e.g. 100/65).
+    # Excel cells need a numeric approximation; the adjacent formula retains basis.
+    if isinstance(value, str) and re.fullmatch(r"-?\d+/\d+", value):
+        fraction = Fraction(value)
+        number = Decimal(fraction.numerator) / Decimal(fraction.denominator)
+    else:
+        number = Decimal(str(value))
     return int(number) if number == number.to_integral_value() else float(number)
 
 

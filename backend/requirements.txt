@@ -5,3 +5,6 @@ langgraph-checkpoint==4.2.0
 openpyxl==3.1.5
 tzdata
 uvicorn==0.54.0
+psycopg[binary,pool]==3.3.6
+langgraph-checkpoint-postgres==3.1.2
+python-dotenv==1.2.2

@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ArrowUp, Check, ChevronDown, Copy, Download, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
-import { exportUrl } from '../api';
+import { downloadEstimate } from '../api';
 import { EXAMPLE_QUESTIONS } from '../examples';
 import { showToast } from '../toast';
 import { BillTable, ConditionsBar, RateTable, StatementTable } from './StatementView';
@@ -253,9 +253,9 @@ function AssistantActionBar({ response, receivedAtMs }: { response: ChatResponse
         {copied ? <Check size={16} strokeWidth={1.75} aria-hidden="true" /> : <Copy size={16} strokeWidth={1.75} aria-hidden="true" />}
       </button>
       {['OK', 'PARTIAL'].includes(response.status) &&
-        <a className="action-btn export-link" href={exportUrl(response.thread_id)} title="Excel 다운로드">
+        <button className="action-btn export-link" onClick={() => downloadEstimate(response.thread_id).catch(() => showToast('견적서 다운로드에 실패했습니다. 다시 시도해 주세요.', 'error'))} title="Excel 다운로드">
           <Download size={16} strokeWidth={1.75} aria-hidden="true" /><span>Excel</span>
-        </a>}
+        </button>}
       {time && <time className="msg-time">{time}</time>}
     </div>
   );
