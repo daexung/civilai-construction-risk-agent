@@ -27,17 +27,33 @@ beforeEach(() => {
 
 test('popup login preserves guest turns and logout clears the account view', async () => {
   await sendQuestion('진행 중인 견적');
-  loginWithGoogle.mockResolvedValue({ id: 'A', email: 'a@example.com' });
+  loginWithGoogle.mockResolvedValue({ id: 'A', email: 'a@example.com', user_metadata: { full_name: '홍길동' } });
   await act(async () => Simulate.click(container.querySelector('.chat-sidebar-login button')));
   expect(loginWithGoogle).not.toHaveBeenCalled();
   expect(document.querySelector('[role="dialog"]')).not.toBeNull();
   await act(async () => Simulate.click(document.querySelector('.login-dialog-google')));
   expect(container.querySelector('.messages').textContent).toContain('진행 중인 견적');
-  expect(container.querySelector('.chat-sidebar-login strong').textContent).toBe('a@example.com');
+  expect(container.querySelector('.chat-account-name').textContent).toBe('홍길동');
+  expect(container.querySelector('.chat-sidebar-login')).toBeNull();
+  expect(container.querySelector('.chat-sidebar').textContent).not.toContain('로그아웃');
   expect(localStorage.getItem('poomsemi-chat-history-v1')).toBeNull();
-  await act(async () => Simulate.click(container.querySelector('.chat-sidebar-login button')));
+  act(() => Simulate.click(container.querySelector('[aria-label="계정 설정"]')));
+  expect(document.querySelector('.settings-identity').textContent).toContain('a@example.com');
+  await act(async () => Simulate.click(document.querySelector('.settings-logout')));
   expect(container.querySelectorAll('.chat-history button')).toHaveLength(0);
   expect(container.querySelector('.chat-sidebar-login button').textContent).toBe('로그인');
+});
+
+test('guest settings switches sections and opens the login dialog from account', () => {
+  act(() => Simulate.click(container.querySelector('.chat-sidebar-action')));
+  expect(document.querySelector('.settings-body section').getAttribute('aria-label')).toBe('일반 설정');
+  expect(document.querySelector('.settings-body section').textContent).toContain('한국어');
+  act(() => Simulate.click(document.querySelectorAll('.settings-body nav button')[1]));
+  expect(document.querySelector('.settings-body section').textContent).toContain('로그인하지 않은 상태');
+  act(() => Simulate.click(document.querySelector('.settings-guest button')));
+  expect(document.querySelector('.settings-dialog')).toBeNull();
+  expect(document.querySelector('.login-dialog')).not.toBeNull();
+  expect(loginWithGoogle).not.toHaveBeenCalled();
 });
 
 test('login dialog closes with Escape without closing the sidebar or starting OAuth', () => {

@@ -1,7 +1,8 @@
-import React, { useEffect, useId, useRef } from 'react';
+import React, { useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import './LoginDialog.css';
+import useDialogFocus from './useDialogFocus';
 
 interface Props { busy: boolean; error: string; onClose: () => void; onGoogleLogin: () => void; }
 
@@ -9,35 +10,7 @@ export default function LoginDialog({ busy, error, onClose, onGoogleLogin }: Pro
   const titleId = useId();
   const descriptionId = useId();
   const dialog = useRef<HTMLDivElement>(null);
-  const closeAction = useRef(onClose);
-  const isBusy = useRef(busy);
-  closeAction.current = onClose;
-  isBusy.current = busy;
-  useEffect(() => {
-    const previousFocus = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    const app = document.querySelector('.app');
-    const previousInert = app?.hasAttribute('inert');
-    app?.setAttribute('inert', '');
-    document.body.style.overflow = 'hidden';
-    dialog.current?.querySelector<HTMLButtonElement>('.login-dialog-google')?.focus();
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); if (!isBusy.current) closeAction.current(); }
-      if (event.key !== 'Tab') return;
-      const focusable = Array.from(dialog.current?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href]') ?? []);
-      const first = focusable[0], last = focusable[focusable.length - 1];
-      if (!first) { event.preventDefault(); dialog.current?.focus(); return; }
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    };
-    document.addEventListener('keydown', handleKey, true);
-    return () => {
-      document.removeEventListener('keydown', handleKey, true);
-      document.body.style.overflow = previousOverflow;
-      if (!previousInert) app?.removeAttribute('inert');
-      previousFocus?.focus();
-    };
-  }, []);
+  useDialogFocus(dialog, onClose, busy, '.login-dialog-google');
 
   return createPortal(
     <div className="login-dialog-backdrop" onMouseDown={event => { if (event.target === event.currentTarget && !busy) onClose(); }}>

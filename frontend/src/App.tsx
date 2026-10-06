@@ -11,6 +11,7 @@ import './App.css';
 import { authClient, AuthCallback, loginWithGoogle } from './auth';
 import type { User } from '@supabase/supabase-js';
 import LoginDialog from './components/LoginDialog';
+import SettingsDialog from './components/SettingsDialog';
 
 interface Conversation {
   id: string;
@@ -37,6 +38,11 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [logoutError, setLogoutError] = useState('');
+  const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0];
+  const accountName = user ? (typeof displayName === 'string' && displayName.trim() ? displayName.trim() : '내 계정') : null;
 
   useEffect(() => {
     try { localStorage.removeItem(HISTORY_KEY); } catch { /* Storage may be blocked. */ }
@@ -62,10 +68,16 @@ export default function App() {
     finally { setAuthLoading(false); }
   };
   const handleLogout = async () => {
-    const result = await authClient?.auth.signOut();
-    if (result?.error) { showToast('로그아웃에 실패했습니다. 다시 시도해 주세요.', 'error'); return; }
-    setUser(null);
-    setStore(readConversations());
+    setLogoutLoading(true);
+    setLogoutError('');
+    try {
+      const result = await authClient?.auth.signOut({ scope: 'local' });
+      if (result?.error) throw result.error;
+      setUser(null);
+      setStore(readConversations());
+      setSettingsOpen(false);
+    } catch { setLogoutError('로그아웃에 실패했습니다. 다시 시도해 주세요.'); }
+    finally { setLogoutLoading(false); }
   };
 
   const handleError = useCallback((err: unknown) => {
@@ -174,10 +186,10 @@ export default function App() {
     <div className="app">
       <ToastContainer />
       <ChatArea
-        accountLabel={user?.email ?? null}
+        accountLabel={accountName}
         authLoading={authLoading}
         onLogin={() => { setLoginError(''); setLoginOpen(true); }}
-        onLogout={handleLogout}
+        onSettings={() => { setLogoutError(''); setSettingsOpen(true); }}
         conversations={store.conversations.map(chat => ({ id: chat.id, title: chat.title }))}
         activeConversationId={store.activeId}
         onSelectConversation={handleSelectConversation}
@@ -190,6 +202,7 @@ export default function App() {
         onSendExample={handleSendExample}
       />
       {loginOpen && <LoginDialog busy={authLoading} error={loginError} onClose={() => setLoginOpen(false)} onGoogleLogin={handleLogin} />}
+      {settingsOpen && <SettingsDialog accountName={accountName} accountEmail={user?.email ?? null} busy={logoutLoading || loading} error={logoutError} onClose={() => setSettingsOpen(false)} onLogout={handleLogout} onLogin={() => { setSettingsOpen(false); setLoginError(''); setLoginOpen(true); }} />}
     </div>
   );
 }
