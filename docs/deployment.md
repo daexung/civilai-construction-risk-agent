@@ -7,7 +7,9 @@ GCP 프로젝트는 `civil-ai-jds`, Cloud Run 리전 후보는 서울 `asia-nort
 
 - Dockerfile: Python 3.14, 한 API worker, 일반 사용자 실행, 플랫폼 PORT 사용.
 - 임베딩 Parquet, 청크, 페이지 맵, 품셈 PDF, 규칙·단가 JSON을 백엔드 이미지에 포함.
-- .dockerignore와 배포 번들은 환경변수 파일·프론트·개발 환경을 제외.
+- .dockerignore와 .gcloudignore 및 배포 번들은 환경변수 파일·프론트·개발 환경을 제외.
+- 배포 번들의 PDF 파일명은 영문 `standard-estimation-2026.pdf`로 고정한다. Docker COPY가 런타임에서 사용하는 원래 한글 이름으로 배치한다. 이미지 빌드 중 PDF 열기와 검색 데이터 존재 여부를 검사하여 누락이면 빌드 단계에서 실패시킨다.
+- Docker 빌드 컨텍스트는 `deploy/prepare_backend_bundle.py`로 만든 ZIP의 압축 해제 폴더를 사용한다.
 - `deploy/prepare_backend_bundle.py`로 서버 소스 번들을 생성.
 - `deploy/cloud-shell-build.sh`는 API 활성화·이미지 저장소 생성·빌드만 수행하며 서비스를 공개하지 않음.
 
@@ -49,3 +51,19 @@ GCP 프로젝트는 `civil-ai-jds`, Cloud Run 리전 후보는 서울 `asia-nort
 - 배포 확인: Cloud Run 직접 호출은 IAM 거부, Vercel `/api/health` 및 `/api/ready` 확인, 로그인/비회원 견적·엑셀·사용량 확인. Preview 환경은 의도적으로 GCP 권한이 없다.
 
 공식 문서: https://vercel.com/docs/oidc/gcp, https://vercel.com/docs/headers/request-headers, https://docs.cloud.google.com/run/docs/authenticating/service-to-service
+
+## main 머지 후 백엔드 자동 배포
+
+- `.github/workflows/deploy-backend.yml`은 main의 백엔드·규칙·배포 설정 변경 또는 main에서의 수동 실행으로 동작한다. 프론트만 수정하면 백엔드 빌드를 실행하지 않는다. PR/fork와 다른 브랜치에는 배포 권한이 없다.
+- 초기 설정은 Cloud Shell에서 `deploy/setup_github_deploy.py`를 한 번 실행한다. 같은 폴더의 `serving_assets.py`, `serving-assets.json`도 필요하다. 기본 소스는 기존 `~/poomsemi-deploy`이며, PDF 이름이 깨져도 원본 SHA-256이 일치하는 파일만 선택한다. 5개 원본을 검증한 다음 클라우드 설정을 시작한다.
+- 서버 데이터 5개는 서울의 비공개 GCS bucket `civil-ai-jds-poomsemi-assets`의 `serving/20261006`에 저장한다. uniform bucket-level access와 public access prevention을 설정한다. 원문 PDF나 임베딩을 GitHub 공개 저장소에 추가하지 않는다.
+- GitHub Actions는 저장소에 커밋한 `deploy/serving-assets.json`의 크기 및 SHA-256을 검증한 뒤 기존 임베딩을 이미지에 포함한다. 임베딩을 다시 생성하지 않는다. 검색 데이터가 업데이트되면 새 GCS version 경로와 manifest를 함께 변경한다.
+- WIF pool `poomsemi-github`, provider `github`, issuer `https://token.actions.githubusercontent.com`. 숫자 repository ID `1277805743`, owner ID `164707261` 및 main ref를 모두 조건으로 제한하고, 서비스 계정 impersonation principal도 정확한 main subject 하나만 허용한다.
+- 전용 배포 계정 `poomsemi-github-deploy`는 해당 bucket의 Object Viewer, `poomsemi` Artifact Registry의 Writer, 기존 `poomsemi-api`의 Cloud Run Developer, `poomsemi-api-runtime`의 Service Account User 권한만 사용한다. 프로젝트 Owner/Editor, Secret Manager 직접 조회, API invoker, 서비스 계정 키는 부여하지 않는다. 런타임, Vercel caller, CI deployer는 서로 다른 계정이다.
+- GitHub 공식 Actions는 commit SHA로 고정한다. 인증 credential 파일은 `.gitignore`와 Docker 허용 목록에서 제외된다. Docker 빌드 후 인증을 갱신하고 이미지를 push한다.
+- 저장소가 공개이므로 PDF·임베딩이 포함된 Docker layer를 GitHub Actions cache/artifact에 저장하지 않는다. 이미지는 비공개 GCP Artifact Registry에만 push한다.
+- 빌드 이미지 태그는 Git commit SHA. 서비스 업데이트는 이미지 및 `CLIENT_IP_SOURCE=vercel`만 변경하며 기존 IAM, 비밀 값, CPU/메모리/스케일링 설정을 유지한다. 자동 배포는 같은 서비스에 동시에 실행되지 않는다.
+- 마지막에 Vercel `/api/ready`를 통해 실제 IAM 프록시 및 서버 준비 상태를 확인한다. 실패하면 Actions가 실패로 표시된다. 배포 후 readiness 실패 시 자동 rollback은 하지 않으므로 로그 확인 또는 기존 정상 revision으로 복구해야 한다.
+- 운영 상태는 GitHub → Actions → Deploy backend에서 확인한다. GitHub Actions/OIDC와 GCP 실제 권한 적용은 초기 설정 및 첫 머지 배포 후 검증한다.
+
+GitHub 인증 공식 문서: https://github.com/google-github-actions/auth
