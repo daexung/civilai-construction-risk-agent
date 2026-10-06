@@ -92,15 +92,23 @@ async def lifespan(_app: FastAPI):
         while True:
             await asyncio.to_thread(accounts.recover)
             await asyncio.sleep(60)
-    maintenance_task = asyncio.create_task(account_maintenance())
+    maintenance_task = None
     try:
+        if runtime.production():
+            # Request-based Cloud Run may throttle background CPU after startup.
+            # Keep ASGI startup open until the index and citations are ready.
+            await prepare_task
+            if _READY_ERROR is not None:
+                raise RuntimeError('Service preparation failed during startup') from _READY_ERROR
+        maintenance_task = asyncio.create_task(account_maintenance())
         yield
     finally:
-        maintenance_task.cancel()
-        try:
-            await maintenance_task
-        except asyncio.CancelledError:
-            pass
+        if maintenance_task is not None:
+            maintenance_task.cancel()
+            try:
+                await maintenance_task
+            except asyncio.CancelledError:
+                pass
         await prepare_task
         _LIFESPAN_ACTIVE = False
 
