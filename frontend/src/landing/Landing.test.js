@@ -45,5 +45,5 @@ test('start and example actions use the current chat integration', () => {
   act(() => startLink.dispatchEvent(new MouseEvent('click', { bubbles: true, button: 0 })));
   expect(onStart).toHaveBeenCalledTimes(1);
   act(() => Simulate.click(container.querySelector('.lp-example-button')));
-  expect(onExample).toHaveBeenCalledWith('철근콘크리트 벽체 260㎥ 펌프차 32m 붐타설 비용');
+  expect(onExample).toHaveBeenCalledWith('철근콘크리트 벽체 260㎥를 32m 붐 펌프차로 타설하면 비용이 얼마나 드나요?');
 });

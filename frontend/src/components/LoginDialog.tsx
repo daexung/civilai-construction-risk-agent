@@ -28,7 +28,7 @@ export default function LoginDialog({ busy, error, onClose, onGoogleLogin }: Pro
           <span>{busy ? '로그인 확인 중…' : 'Google로 로그인'}</span>
         </button>
         {error && <p className="login-dialog-error" role="alert">{error}</p>}
-        <p className="login-dialog-terms">로그인하면 <a href="/terms" target="_blank" rel="noopener noreferrer">이용약관</a>이 적용됩니다.</p>
+        <p className="login-dialog-terms">로그인하면 <a href="/terms" target="_blank" rel="noopener noreferrer">이용약관</a>이 적용됩니다.<br />계정과 대화 정보의 처리 내용은 <a href="/privacy" target="_blank" rel="noopener noreferrer">개인정보 처리방침</a>에서 확인하세요.</p>
       </div>
     </div>, document.body,
   );

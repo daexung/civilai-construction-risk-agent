@@ -1,0 +1,4 @@
+-r ../backend/api/requirements.txt
+-r ../backend/agent/requirements.txt
+-r ../pipeline/requirements-rag.txt
+PyMuPDF==1.28.2

@@ -132,6 +132,12 @@
 .lp-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
 .lp-footer-links a { text-decoration: none; }
 .lp-footer-links a:hover { color: var(--lp-brand); }
+.lp-footer.lp-landing-footer { display: block; }
+.lp-footer-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; }
+.lp-footer-brand { color: var(--lp-brand); font-size: 18px; font-weight: 700; letter-spacing: -.025em; }
+.lp-footer-contact { margin: 24px 0 0; font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
+.lp-footer-contact a { color: inherit; text-decoration: none; }
+.lp-footer-contact a:hover { color: var(--lp-brand); }
 .lp-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .lp-skip { position: absolute; top: 8px; left: 20px; z-index: 30; padding: 12px; background: #fff; transform: translateY(-200%); }
 .lp-skip:focus { transform: translateY(0); }

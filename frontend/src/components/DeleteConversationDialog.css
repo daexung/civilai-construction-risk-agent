@@ -9,3 +9,7 @@
 .delete-dialog-actions .delete-dialog-confirm { border-color: #c63737; background: #c63737; color: #fff; }
 .delete-dialog-actions button:disabled { opacity: .6; cursor: default; }
 .delete-dialog-actions button:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 3px; }
+.rename-dialog-label { display: block; margin-bottom: 8px; font-size: 13px; color: #666; }
+.rename-dialog-input { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; color: #222; background: #fff; font: inherit; font-size: 14px; }
+.rename-dialog-input:focus { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+.delete-dialog-actions .rename-dialog-save { border-color: var(--brand-primary); background: var(--brand-primary); color: #fff; }

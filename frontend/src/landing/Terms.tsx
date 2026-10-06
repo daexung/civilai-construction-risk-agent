@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { CONTACT_EMAIL } from '../contact';
 import './Landing.css';
 import './Terms.css';
 
@@ -59,6 +60,9 @@ export default function Terms() {
         <section><h2>제8조 약관 변경 및 분쟁 해결</h2>
           <p>운영자가 약관을 변경하는 경우 변경 내용, 사유와 적용일을 서비스 화면에 사전 안내하고, 이용자에게 불리한 변경은 충분한 검토 기간을 두고 관련 법령에 따른 절차를 진행합니다. 변경된 약관은 소급하여 이용자의 권리를 제한하지 않습니다.</p>
           <p>본 약관에 정하지 않은 사항과 개별 조항의 효력은 대한민국의 관련 법령에 따릅니다. 일부 조항이 무효인 경우에도 나머지 조항의 효력은 유지됩니다. 분쟁이 발생하면 당사자는 협의를 통해 해결하도록 노력하며, 해결되지 않은 분쟁의 관할은 민사소송법 등 관련 법령에 따릅니다.</p>
+        </section>
+        <section><h2>제9조 문의</h2>
+          <p>서비스 이용 문의는 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>로 보내 주세요.</p>
         </section>
       </article>
       <a className="lp-button terms-home" href="/">홈으로 돌아가기</a>

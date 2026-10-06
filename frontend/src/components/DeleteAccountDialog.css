@@ -1,0 +1,5 @@
+.account-delete-heading:focus { outline: none; }
+.account-delete-notice { padding-left: 20px; color: #60685f; font-size: 13px; line-height: 1.8; }
+.account-delete-notice li + li { margin-top: 8px; }
+.account-delete-input { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #d7ddd4; border-radius: 10px; font: inherit; }
+.account-delete-submit { margin-top: 20px; background: #a43131; }

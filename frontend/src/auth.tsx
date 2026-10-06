@@ -7,7 +7,7 @@ export const authClient = url && key ? createClient(url, key, {
   auth: { flowType: 'pkce', detectSessionInUrl: true, persistSession: true, autoRefreshToken: true },
 }) : null;
 
-export function loginWithGoogle(): Promise<User> {
+export function loginWithGoogle(reauthenticate = false): Promise<User> {
   if (!authClient) return Promise.reject(new Error('로그인 설정이 준비되지 않았습니다.'));
   const client = authClient;
   // Open before the async OAuth request so the browser recognizes the user gesture.
@@ -39,6 +39,7 @@ export function loginWithGoogle(): Promise<User> {
     }, 500);
     client.auth.signInWithOAuth({ provider: 'google', options: {
       redirectTo: `${window.location.origin}/auth/callback`, skipBrowserRedirect: true,
+      ...(reauthenticate ? { queryParams: { prompt: 'select_account' } } : {}),
     } }).then(({ data, error }) => {
       if (settled) return;
       if (error || !data.url) finish(undefined, '로그인을 시작하지 못했습니다. 다시 시도해 주세요.');

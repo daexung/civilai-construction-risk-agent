@@ -8,7 +8,7 @@ from __future__ import annotations
 import io
 import json
 import re
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 from fractions import Fraction
 from functools import lru_cache
@@ -321,7 +321,7 @@ _DOUBLE = Side(style="double", color="595959")
 _BORDER = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
 _MONEY = "#,##0"
 _DECIMAL = "#,##0.0###"
-_FOOTER = "표준품셈 기준 금액 · 검토 전 참고용 · 품셈AI"
+_FOOTER = "표준품셈 기준 금액 · 검토 전 참고용 · 품셈이"
 
 
 def _work_name(response: dict) -> str:
@@ -336,9 +336,12 @@ def _work_name(response: dict) -> str:
 
 
 def estimate_filename(response: dict) -> str:
-    """Build a filesystem-safe estimate filename from the displayed work title."""
-    name = re.sub(r'[\\/:*?"<>|]', "", _work_name(response)).strip()
-    return f"{name or '견적서'}_견적서.xlsx"
+    """Brand, work and Korean download date; price basis stays in the workbook."""
+    name = re.sub(r'[\\/:*?"<>|\x00-\x1f\x7f]', '', _work_name(response)).strip(' .')
+    name = re.sub(r'^(?:(?:토목|건축|기계설비)\s+)?\d+-\d+-\d+\s*', '', name)
+    name = re.sub(r'\s+', ' ', name)[:60].strip(' .') or '공사비'
+    downloaded = datetime.now(timezone(timedelta(hours=9))).strftime('%Y%m%d')
+    return f"품셈이_{name}_견적서_{downloaded}.xlsx"
 
 
 def _metadata(response: dict) -> tuple[str, str]:

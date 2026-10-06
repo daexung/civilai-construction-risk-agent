@@ -20,10 +20,10 @@ from backend.agent.tools.llm import client as llm_client
 COMPOSE_STATUSES = {"OK", "PARTIAL", "BLOCKED", "EVIDENCE_ONLY", "OUT_OF_SCOPE"}
 
 SYSTEM_PROMPT = (
-    "당신은 건설 표준품셈 기반 공사비 계산 결과의 설명 담당입니다. "
-    "facts(JSON)에 있는 숫자만 사용해 한국어로 최대 두 문장으로 답하세요. "
-    "첫 문장에는 공종, 물량, 전체 물량 기준 부가세 포함 도급액을 말하고 조건 요약은 반복하지 마세요. "
-    "미산정 항목이 있으면 두 번째 문장에는 항목 이름만 나열하세요. "
+    "당신은 표준품셈을 근거로 견적을 설명하는 차분한 실무 도우미입니다. "
+    "facts(JSON)에 있는 숫자만 사용하고, 과장 없이 부드러운 해요체로 답하세요. 결론, 계산 범위, 확인할 항목 순서로 짧은 문단을 구성하세요. "
+    "첫 문장에는 금액을 말하고 다음 문장에는 공종, 물량, 부가세 포함 여부를 밝혀 주세요. 조건 요약은 반복하지 마세요. "
+    "미산정 항목은 이름을 구분해 안내하고, 단가 확인 실패와 그 외 미반영 사유를 혼동하지 마세요. "
     "제외 항목이나 제외 사유, 시장 가격 차이는 설명하지 마세요. "
     "새로운 숫자나 금액을 만들거나 계산하지 말고, 금액에는 물량 기준을 함께 밝혀 주세요."
 )
@@ -241,23 +241,28 @@ def _template_priced(facts: dict) -> str:
     totals = statement.get("totals") or {}
     contract_amount = totals.get("전체 물량 기준 도급액(부가세 포함)")
     if contract_amount is not None:
-        sentences = [f"{label} {quantity_text}전체 물량 기준 부가세 포함 도급액은 {contract_amount}입니다."]
+        paragraphs = [f"입력하신 조건으로 계산한 견적은 **{contract_amount}**이에요.",
+                      f"{label} {quantity_text}전체 물량 기준이며, 부가세 포함 금액이에요."]
     else:
         unit = facts.get("unit", "㎥")
         total = priced.get(f"1{unit}당 합계(부분)") or priced.get(f"1{unit}당 합계")
-        sentences = [f"{label} {total}입니다."] if total is not None else [f"{label}은(는) 현재 적용 가능한 단가가 없어 금액을 계산하지 못했습니다."]
-    # Reasons identify price gaps; non-price omissions must not claim a missing price.
+        paragraphs = [f"{label} **1{unit}당 {'부분 합계' if f'1{unit}당 합계(부분)' in priced else '합계'}**는 **{total}**이에요."] if total is not None else [f"{label}에 적용할 단가를 확인하지 못해 금액을 계산하지 못했어요."]
+    # Preserve omission names and never label an unknown/non-price reason as a price gap.
     omissions = {}
     for item in [*(priced.get("unpriced") or []), *(statement.get("unpriced") or [])]:
         omissions.setdefault(item["name"], item.get("reason") or "")
-    for price_gap in (True, False):
-        names = [name for name, reason in omissions.items()
-                 if (not reason or "단가" in reason or "가격" in reason) == price_gap]
-        if names:
-            label = ", ".join(names)
-            ending = "단가가 없어 빠졌습니다." if price_gap else "이번 계산에서 빠졌습니다."
-            sentences.append(f"{label}{_josa(label, '은/는')} {ending}")
-    return " ".join(sentences)
+    if omissions:
+        lines = ["**금액에 포함되지 않은 항목**"]
+        for price_gap in (True, False):
+            names = [name for name, reason in omissions.items()
+                     if ("단가" in reason or "가격" in reason) == price_gap]
+            if names:
+                label = ", ".join(names)
+                ending = "단가를 확인하지 못해 이번 금액에는 포함하지 않았어요." if price_gap else "현재 계산에 반영하지 못했어요. 상세 사유는 아래 내역에서 확인해 주세요."
+                lines.append(f"- {label}: {ending}")
+        paragraphs.append("\n".join(lines))
+    paragraphs.append("아래 내역에서 산출근거와 적용 항목을 확인해 주세요.")
+    return "\n\n".join(paragraphs)
 
 
 
@@ -266,7 +271,7 @@ def _template_blocked(facts: dict) -> str:
     label = f"{work['title']}({work['section_no']})" if work else "이번 계산"
     blocked = facts.get("blocked") or {}
     reason = blocked.get("reason") or facts.get("reason") or "원문 근거가 불명확합니다"
-    return f"{label} 계산은 보류합니다. 사유: {reason}"
+    return f"현재 조건으로는 {label} 계산을 진행하기 어려워요.\n\n확인할 내용: {reason}\n\n아래 근거를 확인하고 해당 조건을 알려주세요."
 
 
 def _template_evidence(facts: dict) -> str:
@@ -279,8 +284,8 @@ def _template_evidence(facts: dict) -> str:
 
 
 def _template_out_of_scope(facts: dict) -> str:
-    reason = facts.get("reason") or "공사비·품셈 계산과 관련이 없는 질문입니다"
-    return f"{reason} 공사비 계산과 관련된 질문으로 다시 문의해 주세요."
+    return "공사비 견적이나 표준품셈에 대해 질문해 주세요.\n\n작업 종류와 물량을 알려주시면 견적 계산을 도와드릴게요."
+
 
 
 def build_template(facts: dict) -> str:

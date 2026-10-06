@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { BillRow, ConditionField, RateRow, StatementRow } from '../types';
 
 const HEADED = ['재료비', '노무비', '경비'];
@@ -33,6 +33,7 @@ export function ConditionsBar({ conditions, disabled, onApply }: {
   disabled: boolean;
   onApply: (conditions: Record<string, string>) => void;
 }) {
+  const panelId = useId();
   const c = byName(conditions);
   const [open, setOpen] = useState(false);
   const [group, setGroup] = useState(c.work_category?.group ?? '토목');
@@ -43,6 +44,7 @@ export function ConditionsBar({ conditions, disabled, onApply }: {
   if (!c.work_category) return null;
 
   const isDefault = conditions.every((field) => field.source === '기본값');
+  const hasDefaults = conditions.some((field) => field.source === '기본값');
   const groups = c.work_category.groups ?? {};
   const scaleValue = scale.trim() === '' ? '이 견적만' : String(Math.round(Number(scale) * 100_000_000));
   const scaleInvalid = scale.trim() !== '' && !(Number(scale) > 0);
@@ -52,18 +54,22 @@ export function ConditionsBar({ conditions, disabled, onApply }: {
   };
 
   return (
-    <div className="conditions-bar">
+    <div className={`conditions-bar${hasDefaults ? ' has-defaults' : ''}`}>
+      <div className="conditions-intro">
+        <strong>{hasDefaults ? '실제 현장 조건을 반영해 보세요' : '현장 조건에 맞춰 다시 계산할 수 있어요'}</strong>
+        <p>{hasDefaults ? `${isDefault ? '현재 견적에는' : '현재 견적의 일부 조건에는'} 기본 공사 조건이 적용되어 있어요. ` : ''}공사 종류·기간·시공사 업종·전체 공사 규모를 입력하면 해당 조건에 맞춰 다시 계산할 수 있어요.</p>
+      </div>
       <div className="conditions-line">
         <span className="conditions-current">
           {isDefault && <em className="default-tag">기본 조건</em>}
-          기준: {conditionSummary(conditions)}
+          현재 조건: {conditionSummary(conditions)}
         </span>
-        <button type="button" className="ghost-btn" disabled={disabled} onClick={() => setOpen((v) => !v)}>
-          조건 바꾸기
+        <button type="button" className="conditions-toggle" disabled={disabled} aria-expanded={open} aria-controls={panelId} onClick={() => setOpen((v) => !v)}>
+          {open ? '조건 입력 접기' : '현장 조건 반영하기'}
         </button>
       </div>
       {open && (
-        <div className="conditions-panel">
+        <fieldset id={panelId} className="conditions-panel" disabled={disabled} aria-label="현장 조건 입력">
           <div className="cond-row">
             <span className="cond-label">공사 종류</span>
             <div className="cond-options">
@@ -116,8 +122,9 @@ export function ConditionsBar({ conditions, disabled, onApply }: {
             onClick={() => {
               onApply({ work_category: detail, duration, contractor_type: contractor, project_scale: scaleValue });
               setOpen(false);
-            }}>적용</button>
-        </div>
+            }}>이 조건으로 다시 계산하기</button>
+          <small>다시 계산하면 오늘 사용량에서 1회가 차감돼요.</small>
+        </fieldset>
       )}
     </div>
   );

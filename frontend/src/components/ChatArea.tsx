@@ -1,7 +1,7 @@
 import React, { useId, createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ArrowUp, Check, Copy, Download, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
+import { ArrowUp, Check, Copy, Download, Info, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
 import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult, UsageStatus } from '../types';
 import { downloadEstimate } from '../api';
 import { EXAMPLE_QUESTIONS } from '../examples';
@@ -11,14 +11,19 @@ import './ChatArea.css';
 import './ChatWorkspace.css';
 import ChatHistoryItem from './ChatHistoryItem';
 import AccountMenu from './AccountMenu';
+import AnswerFeedback from './AnswerFeedback';
 
 interface Props {
+  restoring?: boolean;
+  ratingUserId?: string;
+  onRatingSaved?: (answerId: string, value: NonNullable<ChatResponse['answer_rating']>) => void;
   usage?: UsageStatus | null;
   inputDisabled?: boolean;
   accountLabel?: string | null;
   authLoading?: boolean;
   onLogin?: () => void;
   onSettings?: () => void;
+  onFeedback?: () => void;
   onLogout?: () => void;
   logoutBusy?: boolean;
   logoutError?: string;
@@ -26,26 +31,16 @@ interface Props {
   activeConversationId?: string | null;
   onSelectConversation?: (id: string) => void;
   onDeleteConversation?: (id: string) => void;
+  onRenameConversation?: (id: string) => void;
   turns: ChatTurn[];
   loading: boolean;
+  generating?: boolean;
   onSendMessage: (text: string) => void;
   onSendAnswers: (answers: Record<string, ChoiceValue>, summary: string) => void;
   onChangeConditions: (turnId: string, conditions: Record<string, string>) => void;
   onNewChat: () => void;
   onSendExample: (text: string) => void;
 }
-
-const STATUS_LABEL: Record<ChatResponse['status'], string> = {
-  ANSWERED: '품셈 상담',
-  OUT_OF_SCOPE: '범위 밖',
-  EVIDENCE_ONLY: '근거만 제공',
-  MISSING_INFO: '확인이 필요합니다',
-  COMPUTED: '계산 완료',
-  OK: '금액 계산 완료',
-  PARTIAL: '부분 금액 계산',
-  BLOCKED: '계산 보류',
-  ERROR: '오류',
-};
 
 const BLOCKED_HINTS: Record<string, string> = {
   reset_status: '재셋팅 여부를 "없음"으로 답하면 계산됩니다.',
@@ -204,7 +199,7 @@ function SourceViewer({ citation, onClose }: { citation: Citation; onClose: () =
       <section className="source-viewer" role="dialog" aria-modal="true" aria-label="표 원문"
         onClick={(event) => event.stopPropagation()}>
         <header className="source-viewer-header">
-          <strong>표 원문 · PDF {citation.pdf_page ?? '—'}쪽</strong>
+          <strong>품셈 원문 · PDF {citation.pdf_page ?? '—'}쪽</strong>
           <button type="button" onClick={onClose} aria-label="원문 패널 닫기">×</button>
         </header>
         <div className="source-viewer-image">
@@ -231,20 +226,9 @@ function MarkdownAnswer({ children }: { children: string }) {
 }
 
 function AssistantTiming({ response, elapsedMs }: { response: ChatResponse; elapsedMs?: number }) {
-  const [showTiming, setShowTiming] = useState(false);
-  const timing = response.timing;
-  const total = timing?.total_ms ?? 0;
-  const detail = timing ? Math.max(0, total - timing.route_ms - timing.retrieve_ms - timing.compute_ms - timing.llm_ms) : 0;
-  if (elapsedMs == null) return null;
-  return (
-    <div className="assistant-timing">
-      <span className="think-label">{`${(elapsedMs / 1000).toFixed(1)}\uCD08 \uB3D9\uC548 \uC0DD\uAC01\uD568`}</span>
-      {timing && <button type="button" className="timing-toggle" onClick={() => setShowTiming((open) => !open)}>
-        {showTiming ? '\uC811\uAE30' : '\uC790\uC138\uD788'}
-      </button>}
-      {showTiming && timing && <div className="timing-details">{`\uC9C8\uBB38 \uBD84\uB958 ${(timing.route_ms / 1000).toFixed(1)}\uCD08 ? \uAC80\uC0C9 ${(timing.retrieve_ms / 1000).toFixed(1)}\uCD08 ? \uACC4\uC0B0 ${(timing.compute_ms / 1000).toFixed(1)}\uCD08 ? \uB2F5\uBCC0 \uC791\uC131 ${(timing.llm_ms / 1000).toFixed(1)}\uCD08 ? \uAE30\uD0C0 ${(detail / 1000).toFixed(1)}\uCD08`}</div>}
-    </div>
-  );
+  const duration = elapsedMs ?? response.timing?.total_ms;
+  if (duration == null) return null;
+  return <div className="assistant-timing"><span className="think-label">{(duration / 1000).toFixed(1)}초 동안 생각함</span></div>;
 }
 
 function AssistantActionBar({ response, receivedAtMs }: { response: ChatResponse; receivedAtMs?: number }) {
@@ -257,13 +241,13 @@ function AssistantActionBar({ response, receivedAtMs }: { response: ChatResponse
   };
   return (
     <div className="action-bar">
+      {['OK', 'PARTIAL'].includes(response.status) &&
+        <button type="button" className="action-btn export-link" onClick={() => downloadEstimate(response.thread_id).catch(() => showToast('견적서 다운로드에 실패했습니다. 다시 시도해 주세요.', 'error'))}>
+          <Download size={19} strokeWidth={1.75} aria-hidden="true" /><span>엑셀 견적서 다운로드</span>
+        </button>}
       <button type="button" className="action-btn" onClick={copy} title="복사" aria-label="복사">
         {copied ? <Check size={16} strokeWidth={1.75} aria-hidden="true" /> : <Copy size={16} strokeWidth={1.75} aria-hidden="true" />}
       </button>
-      {['OK', 'PARTIAL'].includes(response.status) &&
-        <button className="action-btn export-link" onClick={() => downloadEstimate(response.thread_id).catch(() => showToast('견적서 다운로드에 실패했습니다. 다시 시도해 주세요.', 'error'))} title="Excel 다운로드">
-          <Download size={16} strokeWidth={1.75} aria-hidden="true" /><span>Excel</span>
-        </button>}
       {time && <time className="msg-time">{time}</time>}
     </div>
   );
@@ -400,13 +384,14 @@ function ComputedCard({ work, inputs, result, priced, tables, response }: {
       </tbody></table></div>}
       {priced?.reference_amounts?.total != null && <div className="unit-note">
         <strong>{priced.reference_amounts.volume}{result.unit_basis.per.slice(1)} 기준 참고 금액({priced.partial ? '부분' : '전체'}): {won(priced.reference_amounts.total)}</strong>
-        {priced.partial && <div>빠진 항목: {[...(priced.unpriced ?? []), ...(priced.excluded ?? [])]
+        {priced.partial && <div>제외·미산정 항목: {[...(priced.unpriced ?? []), ...(priced.excluded ?? [])]
           .map((item) => item.name).filter((name, index, names) => names.indexOf(name) === index).join(', ') || '없음'}</div>}
         <div>내역서 작성 전 참고 금액이며, 제외·미산정 항목이 반영되지 않았습니다.</div>
       </div>}
       </div> }] : []),
         ...(tables.rate_rows.length ? [{ id: 'rates', label: '단가대비표', content: <RateTable rows={tables.rate_rows} /> }] : []),
         ...(result.lines.length || result.daily_volume ? [{ id: 'basis', label: '산출근거', content: <div className="calculation-details">
+        {work && <p className="unit-note">적용 품셈: {work.title}</p>}
         {result.daily_volume && result.work_days && <><div className="formula-row"><span className="formula-label">일당시공량</span>
           <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
           <span className="formula-text">{result.daily_volume.formula}</span></div>
@@ -424,14 +409,16 @@ function ComputedCard({ work, inputs, result, priced, tables, response }: {
         </table></div>
       </div> }] : []),
       ]} />
-        <div className="source-list"><strong>일당시공량 출처</strong>
+        <details className="source-list"><summary>품셈 근거와 원문 확인</summary>
+          {work && <p className="unit-note">적용 품셈: {work.title}</p>}
+          <strong>일당시공량 출처</strong>
           {result.daily_volume && <CitationList citations={result.daily_volume.citations} />}
           {result.lines.map((line) => <div key={line.name}><strong>{line.name} 작업조·조정 근거</strong>
             <CitationList citations={line.citations} /></div>)}
-        </div>
+        </details>
 
       <div className="not-calculated">
-        <h4>미산정 항목</h4>
+        <h4>아직 금액에 반영하지 못한 항목</h4>
         <ul>
           {(priced?.unpriced ?? result.not_calculated.map((item) => ({ name: item.item, reason: '미산정' })))
             .map((item, i) => <li key={i}>{item.name}: {item.reason}</li>)}
@@ -464,7 +451,7 @@ function WarningBanner({ warnings, raw }: { warnings: string[]; raw?: string[] }
 
 function AssistantCard({
   response, interactive, draft, onSelect, onSubmit, loading, onChangeConditions,
-  elapsedMs, receivedAtMs,
+  elapsedMs, receivedAtMs, ordinal, ratingUserId, onRatingSaved,
 }: {
   response: ChatResponse;
   onChangeConditions: (conditions: Record<string, string>) => void;
@@ -475,26 +462,16 @@ function AssistantCard({
   loading: boolean;
   elapsedMs?: number;
   receivedAtMs?: number;
+  ordinal: number;
+  ratingUserId?: string;
+  onRatingSaved?: Props['onRatingSaved'];
 }) {
-  const amountRow = response.route === 'estimate'
-    ? response.tables.statement_rows.find((row) => row.name === '도급액' && row.amount != null)
-    : undefined;
-  const bill = response.tables.bill;
   return (
     <div className={`assistant-card status-${response.status.toLowerCase()}`}>
       <WarningBanner warnings={response.search.warnings} raw={response.search.raw_warnings} />
       <div className="assistant-card-header">
-        <span className={`agent-badge route-${response.route ?? 'unknown'}`}><span className="agent-badge-dot" />
-          {response.route === 'estimate' ? '견적' : response.route === 'qa' ? '상담' : response.route === 'out_of_scope' ? '범위 밖' : STATUS_LABEL[response.status]}
-        </span>
-        {response.work && <span className="work-badge">{response.work.section_no ? `${response.work.section_no} ` : ''}{response.work.title}</span>}
-        {response.answer_source === 'template' && <span className="simple-answer-badge">간단 응답</span>}
         <AssistantTiming response={response} elapsedMs={elapsedMs} />
       </div>
-      {amountRow && <div className="estimate-amount-block">
-        <strong>도급액 {won(String(amountRow.amount))} (부가세 포함{bill ? ` · ${bill.quantity}${bill.unit}` : ''})</strong>
-        <span>표준품셈 기준 참고 금액</span>
-      </div>}
       {response.status === 'ANSWERED' && response.qa ? (
         <div className="qa-card">
           <MarkdownAnswer>{`**${response.qa.conclusion}**${response.qa.explanation ? `\n\n${response.qa.explanation}` : ''}`}</MarkdownAnswer>
@@ -535,7 +512,7 @@ function AssistantCard({
               disabled={loading || Object.keys(draft).length === 0}
               onClick={onSubmit}
             >
-              보내기
+              이 조건으로 견적 계산하기
             </button>
           )}
         </div>
@@ -560,21 +537,25 @@ function AssistantCard({
       {response.status === 'BLOCKED' && response.result && (
         <BlockedCard result={response.result as BlockedResult} />
       )}
+      {['OK', 'PARTIAL', 'COMPUTED'].includes(response.status) && <aside className="estimate-review-notice" aria-label="견적 이용 시 주의사항">
+        <div className="estimate-review-heading"><Info size={17} strokeWidth={1.75} aria-hidden="true" /><strong>참고용 초안이에요. 사용 전 검토가 필요해요.</strong></div>
+        <p>AI 계산에는 오류나 누락이 있을 수 있어요. 입찰·계약·발주 등에 사용하기 전에 품셈 원문, 물량·단가, 현장 조건과 미산정 항목을 담당자 또는 전문가와 확인해 주세요.</p>
+        <p className="estimate-review-liability">검토 없이 사용해 발생한 경제적 손실에 대해서는 관련 법령이 허용하는 범위에서 책임을 지지 않습니다. <a href="/terms" target="_blank" rel="noopener noreferrer">이용약관 확인</a></p>
+      </aside>}
       <AssistantActionBar response={response} receivedAtMs={receivedAtMs} />
+      <AnswerFeedback key={response.answer_id} response={response} ordinal={ordinal} userId={ratingUserId} disabled={loading} onSaved={onRatingSaved} />
     </div>
   );
 }
 
-function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnswers, onChangeConditions, onSendExample }: Props) {
+function ChatAreaView({ turns, loading, restoring, generating = loading, inputDisabled, onSendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved }: Props) {
   const blocked = loading || !!inputDisabled;
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
-  const [showExampleMenu, setShowExampleMenu] = useState(false);
   const [thinkNow, setThinkNow] = useState(Date.now());
   const [loadingSince, setLoadingSince] = useState<number | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const exampleMenuRef = useRef<HTMLDivElement>(null);
 
   const lastTurn = turns[turns.length - 1];
   const lastResponse = lastTurn?.role === 'assistant' ? lastTurn.response : undefined;
@@ -582,11 +563,11 @@ function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnsw
   const thinkingSeconds = Math.max(0, (thinkNow - (activeUserTurn?.sentAtMs ?? loadingSince ?? thinkNow)) / 1000);
 
   useEffect(() => {
-    if (!loading) return;
+    if (!generating) return;
     setLoadingSince(Date.now());
     const timer = window.setInterval(() => setThinkNow(Date.now()), 1000);
     return () => { window.clearInterval(timer); setLoadingSince(null); };
-  }, [loading]);
+  }, [generating]);
 
   useEffect(() => {
     if (lastResponse?.status === 'MISSING_INFO') {
@@ -609,25 +590,7 @@ function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnsw
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [turns.length, loading]);
-
-  useEffect(() => {
-    if (!showExampleMenu) return;
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (exampleMenuRef.current && !exampleMenuRef.current.contains(e.target as Node)) {
-        setShowExampleMenu(false);
-      }
-    };
-    const handleEscape = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowExampleMenu(false); };
-    document.addEventListener('mousedown', handleOutsideClick);
-    document.addEventListener('keydown', handleEscape);
-    return () => { document.removeEventListener('mousedown', handleOutsideClick); document.removeEventListener('keydown', handleEscape); };
-  }, [showExampleMenu]);
-
-  const handleExampleClick = useCallback((text: string) => {
-    setShowExampleMenu(false);
-    onSendExample(text);
-  }, [onSendExample]);
+  }, [turns.length, generating]);
 
   const handleSelect = useCallback((name: string, value: ChoiceValue, label: string) => {
     setDraft((prev) => ({ ...prev, [name]: { value, label } }));
@@ -660,39 +623,10 @@ function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnsw
     if (el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 160) + 'px'; }
   };
 
-  const renderInputBox = (withExampleMenu: boolean) => (
+  const renderInputBox = () => (
     <div className="input-box">
-      {withExampleMenu && (
-        <div className="example-menu-wrap" ref={exampleMenuRef}>
-          <button
-            type="button"
-            className="example-menu-btn"
-            aria-label="예시 질문 보기"
-            aria-expanded={showExampleMenu}
-            disabled={blocked}
-            onClick={() => setShowExampleMenu((prev) => !prev)}
-          >
-            <ChatIcon name="plus" />
-          </button>
-          {showExampleMenu && (
-            <div className="example-menu">
-              {EXAMPLE_QUESTIONS.map((ex) => (
-                <button
-                  key={ex.text}
-                  type="button"
-                  className="example-menu-item"
-                  onClick={() => handleExampleClick(ex.text)}
-                  title={ex.text}
-                >
-                  <span className={`example-kind ${ex.kind === '견적' ? 'estimate' : 'qa'}`}>{ex.kind}</span>
-                  <span>{ex.text}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
       <textarea
+        maxLength={10000}
         ref={textareaRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -709,6 +643,10 @@ function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnsw
     </div>
   );
 
+  if (restoring) return <main className="chat-area" aria-busy="true"><div className="chat-restore-status" role="status">
+    <span className="chat-restore-spinner" aria-hidden="true" /><span>대화를 불러오고 있어요</span>
+  </div></main>;
+
   if (turns.length === 0) {
     return (
       <main className="chat-area">
@@ -716,11 +654,12 @@ function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnsw
           <div className="welcome-header">
             <h2>무엇을 도와드릴까요?</h2>
           </div>
-          <div className="centered-input-area">{renderInputBox(true)}</div>
-          <div className="example-prompts">
-            {EXAMPLE_QUESTIONS.map((ex, index) => (
+          <div className="centered-input-area">{renderInputBox()}</div>
+          <div className="example-prompts" role="group" aria-label="예시 질문">
+            {EXAMPLE_QUESTIONS.map((ex) => (
               <button key={ex.text} className="example-btn" disabled={blocked} onClick={() => onSendExample(ex.text)} title={ex.text}>
-                <span>{['자동문 설치 견적', '콘크리트 타설 견적', '진동기 적용 기준', '기초앵커 품셈 상담'][index] ?? ex.text}</span>
+                <span className="example-category">{ex.kind === '견적' ? '견적 예시' : '품셈 상담'}</span>
+                <span className="example-question">{ex.text}</span>
               </button>
             ))}
           </div>
@@ -743,6 +682,9 @@ function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnsw
                 <div className="assistant-body">
                   {turn.response && (
                     <AssistantCard
+                      ordinal={turns.slice(0, i + 1).filter(item => item.role === 'assistant').length}
+                      ratingUserId={ratingUserId}
+                      onRatingSaved={onRatingSaved}
                       response={turn.response}
                       elapsedMs={turn.elapsedMs}
                       receivedAtMs={turn.receivedAtMs}
@@ -758,7 +700,7 @@ function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnsw
               )}
             </div>
           ))}
-          {loading && (
+          {generating && (
             <div className="message assistant">
               <div className="loading-indicator">
                 <svg width="26" height="20" viewBox="0 0 40 30" fill="none">
@@ -776,7 +718,7 @@ function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnsw
           <div ref={bottomRef} />
         </div>
       </div>
-      <div className="input-area">{renderInputBox(true)}<p className="composer-note">견적은 참고용 초안입니다. 사용 전 산출근거를 확인해 주세요.</p></div>
+      <div className="input-area">{renderInputBox()}<p className="composer-note">견적은 참고용 초안입니다. 사용 전 산출근거를 확인해 주세요.</p></div>
     </main>
   );
 }
@@ -825,14 +767,14 @@ export default function ChatArea(props: Props) {
           <aside id="chat-sidebar" className="chat-sidebar" aria-label="채팅 메뉴">
             <div className="chat-sidebar-brand"><a href="/" aria-label="품셈이 홈">품셈이</a><button className="chat-icon-button" aria-label="사이드바 닫기" onClick={() => setSidebarOpen(false)}><ChatIcon name="panel" /></button></div>
             <nav className="chat-nav">
-              <button className={!props.activeConversationId ? 'chat-nav-active' : undefined} aria-current={!props.activeConversationId ? 'page' : undefined} disabled={props.loading} onClick={newChat}><ChatIcon name="plus" />새 대화</button>
+              <button className={!props.activeConversationId && !props.restoring ? 'chat-nav-active' : undefined} aria-current={!props.activeConversationId && !props.restoring ? 'page' : undefined} disabled={props.loading} onClick={newChat}><ChatIcon name="plus" />새 대화</button>
             </nav>
             {!!props.conversations?.length && <nav className="chat-history" aria-label="이전 대화"><h2>대화</h2>{props.conversations.map(chat => <ChatHistoryItem key={chat.id} id={chat.id} title={chat.title} active={chat.id === props.activeConversationId} disabled={props.loading}
               onSelect={() => { setOpenSource(null); props.onSelectConversation?.(chat.id); if (window.innerWidth < 900) setSidebarOpen(false); }}
-              onDelete={() => props.onDeleteConversation?.(chat.id)} />)}</nav>}
+              onDelete={() => props.onDeleteConversation?.(chat.id)} onRename={props.onRenameConversation ? () => props.onRenameConversation?.(chat.id) : undefined} />)}</nav>}
             <div className="chat-sidebar-bottom">
               <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
-              <button className="chat-sidebar-action" onClick={() => showToast('피드백 기능은 준비 중입니다.')}><ChatIcon name="feedback" />피드백 남기기</button>
+              <button className="chat-sidebar-action" onClick={props.onFeedback}><ChatIcon name="feedback" />피드백 남기기</button>
               {props.accountLabel ? <AccountMenu name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login"><strong>품셈이와 함께 시작하세요</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button disabled={props.authLoading || props.loading} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button></div>}
             </div>
           </aside>

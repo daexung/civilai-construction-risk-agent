@@ -245,6 +245,8 @@ export interface UsageStatus {
 }
 
 export interface ChatResponse {
+  answer_id?: string;
+  answer_rating?: { rating: 'good' | 'bad'; reason: string | null; comment: string } | null;
   usage?: UsageStatus;
   thread_id: string;
   route?: 'estimate' | 'qa' | 'out_of_scope' | null;
