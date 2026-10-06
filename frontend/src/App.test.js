@@ -3,14 +3,17 @@ import { createRoot } from 'react-dom/client';
 import { Simulate } from 'react-dom/test-utils';
 import App from './App';
 import { sendChat } from './api';
+import { loginWithGoogle } from './auth';
 
 jest.mock('./api', () => ({ sendChat: jest.fn(), exportUrl: jest.fn() }));
+jest.mock('./auth', () => ({ authClient: null, AuthCallback: () => null, loginWithGoogle: jest.fn() }));
 jest.mock('react-markdown', () => ({ __esModule: true, default: ({ children }) => <div>{children}</div> }));
 jest.mock('remark-gfm', () => ({ __esModule: true, default: () => {} }));
 
 let root, container;
 const response = (thread_id, message) => ({ thread_id, message, status: 'OUT_OF_SCOPE', work: null, tables: { bill: null, statement_rows: [] }, search: { warnings: [], raw_warnings: [] } });
 beforeEach(() => {
+  loginWithGoogle.mockReset();
   global.IS_REACT_ACT_ENVIRONMENT = true;
   Element.prototype.scrollIntoView = jest.fn();
   localStorage.clear();
@@ -21,6 +24,18 @@ beforeEach(() => {
   root = createRoot(container);
   act(() => root.render(<App />));
 });
+
+test('popup login preserves guest turns and logout clears the account view', async () => {
+  await sendQuestion('진행 중인 견적');
+  loginWithGoogle.mockResolvedValue({ id: 'A', email: 'a@example.com' });
+  await act(async () => Simulate.click(container.querySelector('.chat-sidebar-login button')));
+  expect(container.querySelector('.messages').textContent).toContain('진행 중인 견적');
+  expect(container.querySelector('.chat-sidebar-login strong').textContent).toBe('a@example.com');
+  expect(localStorage.getItem('poomsemi-chat-history-v1')).toBeNull();
+  await act(async () => Simulate.click(container.querySelector('.chat-sidebar-login button')));
+  expect(container.querySelectorAll('.chat-history button')).toHaveLength(0);
+  expect(container.querySelector('.chat-sidebar-login button').textContent).toBe('Google로 로그인');
+});
 afterEach(() => { act(() => root.unmount()); container.remove(); localStorage.clear(); });
 
 async function sendQuestion(text) {
@@ -28,7 +43,7 @@ async function sendQuestion(text) {
   await act(async () => Simulate.click(container.querySelector('[aria-label="질문 보내기"]')));
 }
 
-test('new conversations get first-question titles, switch with their original thread and survive reload', async () => {
+test('guest conversations keep their original thread within the tab and disappear on reload', async () => {
   expect(container.querySelector('.chat-nav button').getAttribute('aria-current')).toBe('page');
   await sendQuestion('자동문 설치 비용');
   expect(container.querySelector('.chat-history button').textContent).toBe('자동문 설치 비용');
@@ -48,8 +63,9 @@ test('new conversations get first-question titles, switch with their original th
   act(() => root.unmount());
   root = createRoot(container);
   act(() => root.render(<App />));
-  expect(container.querySelectorAll('.chat-history button')).toHaveLength(2);
-  expect(container.querySelector('.messages').textContent).toContain('조건 추가');
+  expect(container.querySelectorAll('.chat-history button')).toHaveLength(0);
+  expect(container.querySelector('.welcome-header h2').textContent).toBe('무엇을 도와드릴까요?');
+  expect(localStorage.getItem('poomsemi-chat-history-v1')).toBeNull();
 });
 
 test('history switching and new chat are disabled while a response is pending', async () => {

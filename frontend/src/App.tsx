@@ -8,6 +8,8 @@ import { ChatTurn, ChoiceValue } from './types';
 import { sendChat } from './api';
 import { showToast } from './toast';
 import './App.css';
+import { authClient, AuthCallback, loginWithGoogle } from './auth';
+import type { User } from '@supabase/supabase-js';
 
 interface Conversation {
   id: string;
@@ -19,13 +21,7 @@ interface ConversationStore { activeId: string | null; conversations: Conversati
 const HISTORY_KEY = 'poomsemi-chat-history-v1';
 const EMPTY_TURNS: ChatTurn[] = [];
 function readConversations(): ConversationStore {
-  try {
-    const saved = JSON.parse(localStorage.getItem(HISTORY_KEY) ?? 'null');
-    if (saved && Array.isArray(saved.conversations)) {
-      const conversations = saved.conversations.filter((chat: Conversation) => chat && typeof chat.id === 'string' && typeof chat.title === 'string' && Array.isArray(chat.turns));
-      return { conversations, activeId: conversations.some((chat: Conversation) => chat.id === saved.activeId) ? saved.activeId : null };
-    }
-  } catch { /* Storage may be unavailable; the current browser session still works. */ }
+  // Guest transcripts stay in this tab's memory; Auth sessions have separate storage.
   return { activeId: null, conversations: [] };
 }
 
@@ -36,10 +32,37 @@ export default function App() {
   const turns = current?.turns ?? EMPTY_TURNS;
   const threadId = current?.threadId ?? null;
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(false);
 
   useEffect(() => {
-    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(store)); } catch { /* Keep chatting if storage is full or blocked. */ }
-  }, [store]);
+    try { localStorage.removeItem(HISTORY_KEY); } catch { /* Storage may be blocked. */ }
+    if (!authClient) return;
+    let active = true;
+    let previousId: string | null = null;
+    authClient.auth.getSession().then(({ data }) => { if (active) { previousId = data.session?.user.id ?? null; setUser(data.session?.user ?? null); } });
+    const { data: { subscription } } = authClient.auth.onAuthStateChange((_event, session) => {
+      if (!active) return;
+      const nextId = session?.user.id ?? null;
+      if (previousId && previousId !== nextId) setStore(readConversations());
+      previousId = nextId;
+      setUser(session?.user ?? null);
+    });
+    return () => { active = false; subscription.unsubscribe(); };
+  }, []);
+
+  const handleLogin = async () => {
+    setAuthLoading(true);
+    try { setUser(await loginWithGoogle()); showToast('Google 계정으로 로그인했습니다.'); }
+    catch (error) { showToast(error instanceof Error ? error.message : '로그인에 실패했습니다.', 'error'); }
+    finally { setAuthLoading(false); }
+  };
+  const handleLogout = async () => {
+    const result = await authClient?.auth.signOut();
+    if (result?.error) { showToast('로그아웃에 실패했습니다. 다시 시도해 주세요.', 'error'); return; }
+    setUser(null);
+    setStore(readConversations());
+  };
 
   const handleError = useCallback((err: unknown) => {
     const msg = err instanceof Error ? err.message : '';
@@ -136,6 +159,7 @@ export default function App() {
     handleSendExample(query);
   }, [pathname, handleSendExample]);
 
+  if (pathname === '/auth/callback') return <AuthCallback />;
   if (pathname === '/terms' || pathname === '/terms/') return <Terms />;
 
   if (pathname !== '/chat') {
@@ -146,6 +170,10 @@ export default function App() {
     <div className="app">
       <ToastContainer />
       <ChatArea
+        accountLabel={user?.email ?? null}
+        authLoading={authLoading}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
         conversations={store.conversations.map(chat => ({ id: chat.id, title: chat.title }))}
         activeConversationId={store.activeId}
         onSelectConversation={handleSelectConversation}
