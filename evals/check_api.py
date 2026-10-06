@@ -103,6 +103,18 @@ def _check_workflow() -> int:
                    and required_pump_questions.issubset({item["name"] for item in missing["questions"]})
                    and missing["work"]["section_no"] == "6-1-4"))
 
+    pending_edit = CLIENT.post("/api/chat", json={"message": "철근콘크리트 260㎥ 펌프차 타설 비용"}).json()
+    edited = CLIENT.post("/api/chat", json={"thread_id": pending_edit["thread_id"],
+                                          "message": "자동문 3개소 설치 비용", "restart": True}).json()
+    checks.append(("A-edit1 대기 중 수정 질문은 새로운 공종으로 계산", edited.get("thread_id") == pending_edit["thread_id"]
+                   and (edited.get("work") or {}).get("section_no") == "10-1-7"
+                   and edited.get("status") in ("OK", "PARTIAL", "COMPUTED")
+                   and any(row["name"] == "quantity" and row["value"] == "3" for row in edited.get("inputs", []))))
+    repeated = CLIENT.post("/api/chat", json={"thread_id": pending_edit["thread_id"],
+                                            "message": "자동문 5개소 설치 비용", "restart": True}).json()
+    checks.append(("A-edit2 재전송은 이전 물량 대신 새 물량 사용", repeated.get("thread_id") == pending_edit["thread_id"]
+                   and any(row["name"] == "quantity" and row["value"] == "5" for row in repeated.get("inputs", []))))
+
     computed = CLIENT.post("/api/chat", json={"thread_id": thread_id, "answers": PUMP_ANSWERS}).json()
     computed_lines = {line["name"]: line for line in computed.get("result", {}).get("lines", [])}
     checks.append(("A4", computed["status"] == "PARTIAL" and len(computed["inputs"]) == 14

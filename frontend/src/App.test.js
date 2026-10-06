@@ -119,6 +119,34 @@ test('login dialog closes with Escape without closing the sidebar or starting OA
 });
 afterEach(() => { act(() => root.unmount()); container.remove(); localStorage.clear(); });
 
+test('resend and edit append requests in the same conversation without resuming pending conditions', async () => {
+  await sendQuestion('자동문 3개소 설치 비용');
+  const thread = sendChat.mock.results[0].value;
+  const original = await thread;
+  await act(async () => Simulate.click(container.querySelector('[aria-label="질문 다시 보내기"]')));
+  expect(sendChat).toHaveBeenLastCalledWith(expect.objectContaining({ thread_id: original.thread_id, message: '자동문 3개소 설치 비용', restart: true }));
+  expect(container.querySelectorAll('.user-bubble')).toHaveLength(2);
+  act(() => Simulate.click(container.querySelector('[aria-label="질문 편집하기"]')));
+  const editor = container.querySelector('[aria-label="질문 편집"]');
+  expect(editor.value).toBe('자동문 3개소 설치 비용');
+  act(() => Simulate.change(editor, { target: { value: '  자동문 5개소 설치 비용  ' } }));
+  await act(async () => Simulate.click(container.querySelector('.user-question-edit-actions button:last-child')));
+  expect(sendChat).toHaveBeenLastCalledWith(expect.objectContaining({ thread_id: original.thread_id, message: '자동문 5개소 설치 비용', restart: true }));
+  expect(container.querySelectorAll('.user-bubble')).toHaveLength(3);
+  expect(container.querySelector('.user-bubble').textContent).toBe('자동문 3개소 설치 비용');
+  expect(container.querySelectorAll('.chat-history-select')).toHaveLength(1);
+});
+
+test('editing can be cancelled without requests and cannot send an empty draft', async () => {
+  await sendQuestion('원래 질문');
+  act(() => Simulate.click(container.querySelector('[aria-label="질문 편집하기"]')));
+  act(() => Simulate.change(container.querySelector('[aria-label="질문 편집"]'), { target: { value: '   ' } }));
+  expect(container.querySelector('.user-question-edit-actions button:last-child').disabled).toBe(true);
+  act(() => Simulate.click(container.querySelector('.user-question-edit-actions button')));
+  expect(sendChat).toHaveBeenCalledTimes(1);
+  expect(container.querySelector('.user-bubble').textContent).toBe('원래 질문');
+});
+
 async function sendQuestion(text) {
   act(() => Simulate.change(container.querySelector('textarea'), { target: { value: text } }));
   await act(async () => Simulate.click(container.querySelector('[aria-label="질문 보내기"]')));

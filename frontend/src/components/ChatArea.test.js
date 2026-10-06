@@ -71,3 +71,35 @@ test('sidebar can close and reopen with settings, feedback and login controls', 
   act(() => Simulate.click(container.querySelector('[aria-label="사이드바 열기"]')));
   expect(container.querySelector('.chat-sidebar-login button')).not.toBeNull();
 });
+
+test('guest sidebar follows server usage, distinguishes shared limits and hides on login', () => {
+  expect(container.querySelector('.chat-guest-usage').textContent).toContain('확인 중');
+  const usage = { remaining: 3, limit: 5, service_remaining: 490 };
+  act(() => root.render(<ChatArea {...props} usage={usage} />));
+  expect(container.querySelector('.chat-guest-usage').textContent).toContain('3회');
+  act(() => root.render(<ChatArea {...props} usage={{ ...usage, remaining: 0 }} />));
+  expect(container.querySelector('.chat-guest-usage').textContent).toContain('모두 사용');
+  act(() => root.render(<ChatArea {...props} usage={{ ...usage, service_remaining: 0 }} />));
+  expect(container.querySelector('.chat-guest-usage').textContent).toContain('서비스 전체 한도');
+  act(() => root.render(<ChatArea {...props} accountLabel="테스트 회원" usage={usage} />));
+  expect(container.querySelector('.chat-guest-usage')).toBeNull();
+});
+
+test('missing pump conditions explain the request and preserve only server questions', () => {
+  const questions = [{ name: 'slump_band', ask: '슬럼프는?', choices: ['15㎝', '18㎝이상'] }];
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null, message: '조건을 확인해 주세요.', result: null, questions };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response }]} />));
+  expect(container.querySelector('[aria-label="추가 조건 안내"]').textContent).toContain('시공량과 비용이 달라져요');
+  expect(container.querySelectorAll('.question-card')).toHaveLength(1);
+  expect(container.querySelector('.question-list').textContent).not.toContain('물량은');
+});
+
+test('unit-based estimates state their scope and actual separately counted work', () => {
+  const response = { ...demo.response, work: { ...demo.response.work, title: '자동문 설치' },
+    result: { ...demo.response.result, daily_volume: null, not_calculated: [{ item: '유리공사, 전기 및 통신공사' }] } };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'a1', role: 'assistant', response }]} />));
+  const guidance = container.querySelector('[aria-label="계산 범위 안내"]');
+  expect(guidance.textContent).toContain('자동문 설치의 계산 범위');
+  expect(guidance.textContent).toContain('단위당 작업 품');
+  expect(guidance.textContent).toContain('유리공사, 전기 및 통신공사');
+});

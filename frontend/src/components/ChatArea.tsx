@@ -12,6 +12,8 @@ import './ChatWorkspace.css';
 import ChatHistoryItem from './ChatHistoryItem';
 import AccountMenu from './AccountMenu';
 import AnswerFeedback from './AnswerFeedback';
+import EstimateGuidance from './EstimateGuidance';
+import UserQuestion from './UserQuestion';
 
 interface Props {
   restoring?: boolean;
@@ -36,6 +38,7 @@ interface Props {
   loading: boolean;
   generating?: boolean;
   onSendMessage: (text: string) => void;
+  onResendMessage?: (text: string) => void;
   onSendAnswers: (answers: Record<string, ChoiceValue>, summary: string) => void;
   onChangeConditions: (turnId: string, conditions: Record<string, string>) => void;
   onNewChat: () => void;
@@ -494,6 +497,8 @@ function AssistantCard({
 
       {response.status === 'EVIDENCE_ONLY' && <EvidenceList items={response.evidence} />}
 
+      <EstimateGuidance response={response} />
+
       {response.status === 'MISSING_INFO' && (
         <div className="question-list">
           {response.questions.map((question) => (
@@ -548,7 +553,7 @@ function AssistantCard({
   );
 }
 
-function ChatAreaView({ turns, loading, restoring, generating = loading, inputDisabled, onSendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved }: Props) {
+function ChatAreaView({ turns, loading, restoring, generating = loading, inputDisabled, onSendMessage, onResendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved }: Props) {
   const blocked = loading || !!inputDisabled;
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
@@ -675,9 +680,7 @@ function ChatAreaView({ turns, loading, restoring, generating = loading, inputDi
           {turns.map((turn, i) => (
             <div key={turn.id} className={`message ${turn.role}`}>
               {turn.role === 'user' ? (
-                <div className="user-msg-wrap">
-                  <div className="user-bubble">{turn.text}</div>
-                </div>
+                <UserQuestion text={turn.text ?? ''} disabled={blocked} onResend={onResendMessage} />
               ) : (
                 <div className="assistant-body">
                   {turn.response && (
@@ -775,7 +778,17 @@ export default function ChatArea(props: Props) {
             <div className="chat-sidebar-bottom">
               <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={props.onFeedback}><ChatIcon name="feedback" />피드백 남기기</button>
-              {props.accountLabel ? <AccountMenu name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login"><strong>품셈이와 함께 시작하세요</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button disabled={props.authLoading || props.loading} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button></div>}
+              {props.accountLabel ? <AccountMenu name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login">
+                <strong>품셈이와 함께 시작하세요</strong>
+                <div className="chat-guest-usage" role="status" aria-live="polite">
+                  {props.authLoading ? '로그인 확인 중…' : !props.usage ? '남은 무료 이용 횟수 확인 중…'
+                    : props.usage.service_remaining === 0 ? '오늘 서비스 전체 한도에 도달했어요.'
+                    : props.usage.remaining === 0 ? '오늘 무료 이용을 모두 사용했어요.'
+                    : <>오늘 남은 무료 이용 · <strong>{props.usage.remaining}회</strong></>}
+                </div>
+                <p>로그인하면 하루 20회까지 이용할 수 있어요.</p>
+                <button disabled={props.authLoading || props.loading} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button>
+              </div>}
             </div>
           </aside>
         </>}
