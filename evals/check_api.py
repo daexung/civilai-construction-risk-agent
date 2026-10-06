@@ -8,6 +8,7 @@ import time
 import sys
 from pathlib import Path
 from unittest.mock import patch
+from contextlib import nullcontext
 
 os.environ["AGENT_OFFLINE"] = "1"
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,7 +20,7 @@ from backend.api.main import app  # noqa: E402
 import backend.api.main as api_main  # noqa: E402
 from backend.agent.tools.llm.client import LLMUnavailable  # noqa: E402
 
-CLIENT = TestClient(app)
+CLIENT = TestClient(app, headers={"X-Guest-Session": "offline-test-session-" + "x" * 32})
 
 PUMP_ANSWERS = {"work": "6-1-4", "pump_size": "32m", "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
                 "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",
@@ -27,7 +28,7 @@ PUMP_ANSWERS = {"work": "6-1-4", "pump_size": "32m", "slump_band": "15㎝", "fac
                 "project_scale": "이 견적만"}
 
 
-def main() -> int:
+def _check_workflow() -> int:
     checks = []
 
     started, release = threading.Event(), threading.Event()
@@ -532,6 +533,15 @@ def main() -> int:
         print("A4:", computed)
         print("A7:", blocked)
     return 0 if all(passed for _, passed in checks) else 1
+
+
+def main() -> int:
+    # Workflow tests remain offline; actual durable quota behavior is exercised
+    # separately by check_usage_limits.py against local PostgreSQL.
+    with patch('backend.api.usage_limits.processing', return_value=nullcontext((None, 'fixture', False))), \
+            patch('backend.api.usage_limits.consume', return_value={}), \
+            patch('backend.api.usage_limits.status', return_value={}):
+        return _check_workflow()
 
 
 if __name__ == "__main__":

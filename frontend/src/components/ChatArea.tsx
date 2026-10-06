@@ -2,18 +2,30 @@ import React, { useId, createContext, useContext, useEffect, useRef, useState, u
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ArrowUp, Check, Copy, Download, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
-import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult } from '../types';
-import { exportUrl } from '../api';
+import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult, UsageStatus } from '../types';
+import { downloadEstimate } from '../api';
 import { EXAMPLE_QUESTIONS } from '../examples';
 import { showToast } from '../toast';
 import { BillTable, ConditionsBar, RateTable, StatementTable } from './StatementView';
 import './ChatArea.css';
 import './ChatWorkspace.css';
+import ChatHistoryItem from './ChatHistoryItem';
+import AccountMenu from './AccountMenu';
 
 interface Props {
+  usage?: UsageStatus | null;
+  inputDisabled?: boolean;
+  accountLabel?: string | null;
+  authLoading?: boolean;
+  onLogin?: () => void;
+  onSettings?: () => void;
+  onLogout?: () => void;
+  logoutBusy?: boolean;
+  logoutError?: string;
   conversations?: { id: string; title: string }[];
   activeConversationId?: string | null;
   onSelectConversation?: (id: string) => void;
+  onDeleteConversation?: (id: string) => void;
   turns: ChatTurn[];
   loading: boolean;
   onSendMessage: (text: string) => void;
@@ -249,9 +261,9 @@ function AssistantActionBar({ response, receivedAtMs }: { response: ChatResponse
         {copied ? <Check size={16} strokeWidth={1.75} aria-hidden="true" /> : <Copy size={16} strokeWidth={1.75} aria-hidden="true" />}
       </button>
       {['OK', 'PARTIAL'].includes(response.status) &&
-        <a className="action-btn export-link" href={exportUrl(response.thread_id)} title="Excel 다운로드">
+        <button className="action-btn export-link" onClick={() => downloadEstimate(response.thread_id).catch(() => showToast('견적서 다운로드에 실패했습니다. 다시 시도해 주세요.', 'error'))} title="Excel 다운로드">
           <Download size={16} strokeWidth={1.75} aria-hidden="true" /><span>Excel</span>
-        </a>}
+        </button>}
       {time && <time className="msg-time">{time}</time>}
     </div>
   );
@@ -553,7 +565,8 @@ function AssistantCard({
   );
 }
 
-function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeConditions, onSendExample }: Props) {
+function ChatAreaView({ turns, loading, inputDisabled, onSendMessage, onSendAnswers, onChangeConditions, onSendExample }: Props) {
+  const blocked = loading || !!inputDisabled;
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
   const [showExampleMenu, setShowExampleMenu] = useState(false);
@@ -632,7 +645,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
 
   const handleSubmitMessage = () => {
     const text = input.trim();
-    if (!text || loading) return;
+    if (!text || blocked) return;
     setInput('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
     onSendMessage(text);
@@ -656,7 +669,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
             className="example-menu-btn"
             aria-label="예시 질문 보기"
             aria-expanded={showExampleMenu}
-            disabled={loading}
+            disabled={blocked}
             onClick={() => setShowExampleMenu((prev) => !prev)}
           >
             <ChatIcon name="plus" />
@@ -688,9 +701,9 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
         placeholder="무엇이든 물어보세요"
         aria-label="질문 입력"
         rows={1}
-        disabled={loading}
+        disabled={blocked}
       />
-      <button className="send-btn" aria-label="질문 보내기" onClick={handleSubmitMessage} disabled={!input.trim() || loading}>
+      <button className="send-btn" aria-label="질문 보내기" onClick={handleSubmitMessage} disabled={!input.trim() || blocked}>
         <ChatIcon name="arrow" />
       </button>
     </div>
@@ -706,7 +719,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
           <div className="centered-input-area">{renderInputBox(true)}</div>
           <div className="example-prompts">
             {EXAMPLE_QUESTIONS.map((ex, index) => (
-              <button key={ex.text} className="example-btn" disabled={loading} onClick={() => onSendExample(ex.text)} title={ex.text}>
+              <button key={ex.text} className="example-btn" disabled={blocked} onClick={() => onSendExample(ex.text)} title={ex.text}>
                 <span>{['자동문 설치 견적', '콘크리트 타설 견적', '진동기 적용 기준', '기초앵커 품셈 상담'][index] ?? ex.text}</span>
               </button>
             ))}
@@ -737,7 +750,7 @@ function ChatAreaView({ turns, loading, onSendMessage, onSendAnswers, onChangeCo
                       draft={draft}
                       onSelect={handleSelect}
                       onSubmit={handleSubmitAnswers}
-                      loading={loading}
+                      loading={blocked}
                       onChangeConditions={(conditions) => onChangeConditions(turn.id, conditions)}
                     />
                   )}
@@ -814,11 +827,13 @@ export default function ChatArea(props: Props) {
             <nav className="chat-nav">
               <button className={!props.activeConversationId ? 'chat-nav-active' : undefined} aria-current={!props.activeConversationId ? 'page' : undefined} disabled={props.loading} onClick={newChat}><ChatIcon name="plus" />새 대화</button>
             </nav>
-            {!!props.conversations?.length && <nav className="chat-history" aria-label="이전 대화"><h2>대화</h2>{props.conversations.map(chat => <button key={chat.id} title={chat.title} aria-current={chat.id === props.activeConversationId ? 'page' : undefined} className={chat.id === props.activeConversationId ? 'chat-history-active' : undefined} disabled={props.loading} onClick={() => { setOpenSource(null); props.onSelectConversation?.(chat.id); if (window.innerWidth < 900) setSidebarOpen(false); }}><span>{chat.title}</span></button>)}</nav>}
+            {!!props.conversations?.length && <nav className="chat-history" aria-label="이전 대화"><h2>대화</h2>{props.conversations.map(chat => <ChatHistoryItem key={chat.id} id={chat.id} title={chat.title} active={chat.id === props.activeConversationId} disabled={props.loading}
+              onSelect={() => { setOpenSource(null); props.onSelectConversation?.(chat.id); if (window.innerWidth < 900) setSidebarOpen(false); }}
+              onDelete={() => props.onDeleteConversation?.(chat.id)} />)}</nav>}
             <div className="chat-sidebar-bottom">
-              <button className="chat-sidebar-action" onClick={() => showToast('설정 기능은 준비 중입니다.')}><ChatIcon name="settings" />설정</button>
+              <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={() => showToast('피드백 기능은 준비 중입니다.')}><ChatIcon name="feedback" />피드백 남기기</button>
-              <div className="chat-sidebar-login"><strong>품셈이와 함께 시작하세요</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button onClick={() => showToast('로그인 기능은 준비 중입니다.')}>로그인</button></div>
+              {props.accountLabel ? <AccountMenu name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login"><strong>품셈이와 함께 시작하세요</strong><p>공사비 견적부터 품셈 상담까지,<br />한곳에서 쉽고 간편하게.</p><button disabled={props.authLoading || props.loading} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button></div>}
             </div>
           </aside>
         </>}

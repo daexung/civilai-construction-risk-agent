@@ -1,0 +1,11 @@
+.delete-dialog-backdrop { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; padding: 20px; background: #0005; }
+.delete-dialog { width: min(100%, 420px); box-sizing: border-box; padding: 26px; border-radius: 20px; background: #fff; color: #222; box-shadow: 0 20px 70px #0002; }
+.delete-dialog h2 { margin: 0 0 18px; font-size: 20px; font-weight: 600; letter-spacing: -.5px; }
+.delete-dialog p { margin: 12px 0; font-size: 14px; line-height: 1.65; color: #777; }
+.delete-dialog p.delete-dialog-title { color: #333; overflow-wrap: anywhere; max-height: 100px; overflow: auto; }
+.delete-dialog p.delete-dialog-error { color: #b42318; }
+.delete-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
+.delete-dialog-actions button { padding: 10px 18px; border: 1px solid #ddd; border-radius: 10px; background: #fff; color: #333; font: inherit; font-size: 14px; cursor: pointer; }
+.delete-dialog-actions .delete-dialog-confirm { border-color: #c63737; background: #c63737; color: #fff; }
+.delete-dialog-actions button:disabled { opacity: .6; cursor: default; }
+.delete-dialog-actions button:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 3px; }
