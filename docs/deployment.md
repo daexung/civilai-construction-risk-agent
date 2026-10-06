@@ -7,7 +7,9 @@ GCP 프로젝트는 `civil-ai-jds`, Cloud Run 리전 후보는 서울 `asia-nort
 
 - Dockerfile: Python 3.14, 한 API worker, 일반 사용자 실행, 플랫폼 PORT 사용.
 - 임베딩 Parquet, 청크, 페이지 맵, 품셈 PDF, 규칙·단가 JSON을 백엔드 이미지에 포함.
-- .dockerignore와 배포 번들은 환경변수 파일·프론트·개발 환경을 제외.
+- .dockerignore와 .gcloudignore 및 배포 번들은 환경변수 파일·프론트·개발 환경을 제외.
+- 배포 번들의 PDF 파일명은 영문 `standard-estimation-2026.pdf`로 고정한다. Docker COPY가 런타임에서 사용하는 원래 한글 이름으로 배치한다. 이미지 빌드 중 PDF 열기와 검색 데이터 존재 여부를 검사하여 누락이면 빌드 단계에서 실패시킨다.
+- Docker 빌드 컨텍스트는 `deploy/prepare_backend_bundle.py`로 만든 ZIP의 압축 해제 폴더를 사용한다.
 - `deploy/prepare_backend_bundle.py`로 서버 소스 번들을 생성.
 - `deploy/cloud-shell-build.sh`는 API 활성화·이미지 저장소 생성·빌드만 수행하며 서비스를 공개하지 않음.
 
