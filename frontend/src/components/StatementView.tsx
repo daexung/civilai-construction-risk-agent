@@ -163,8 +163,8 @@ export function StatementTable({ rows, notes }: { rows: StatementRow[]; notes: s
   );
 }
 
-export function BillTable({ bill }: { bill: BillRow | null }) {
-  if (!bill) return <div className="unit-note">내역서로 만들 금액이 없습니다.</div>;
+export function BillTable({ bills }: { bills: BillRow[] }) {
+  if (!bills.length) return <div className="unit-note">내역서로 만들 금액이 없습니다.</div>;
   return (
     <div className="table-scroll">
       <table className="inputs-table bill-table">
@@ -174,15 +174,19 @@ export function BillTable({ bill }: { bill: BillRow | null }) {
           <tr><th>재료비</th><th>노무비</th><th>경비</th><th>재료비</th><th>노무비</th><th>경비</th></tr>
         </thead>
         <tbody>
-          <tr>
+          {bills.map((bill, index) => <tr key={index}>
             <td>{bill.name}</td><td>{bill.spec}</td><td>{bill.unit}</td><td className="num">{amount(bill.quantity)}</td>
             {(['재료비', '노무비', '경비'] as const).map((k) => <td className="num" key={`u${k}`}>{amount(bill.unit_price[k])}</td>)}
             {(['재료비', '노무비', '경비'] as const).map((k) => <td className="num" key={`a${k}`}>{amount(bill.amount[k])}</td>)}
             <td className="num"><strong>{amount(bill.total)}</strong></td>
-          </tr>
+          </tr>)}
+          {bills.length > 1 && <tr>
+            <td colSpan={10}><strong>합계</strong></td>
+            <td className="num"><strong>{amount(bills.reduce((sum, bill) => sum + Number(bill.total ?? 0), 0))}</strong></td>
+          </tr>}
         </tbody>
       </table>
-      {bill.partial && <div className="unit-note">미산정 항목을 뺀 부분 합계입니다.</div>}
+      {bills.some(bill => bill.partial) && <div className="unit-note">미산정 항목을 뺀 부분 합계입니다.</div>}
     </div>
   );
 }

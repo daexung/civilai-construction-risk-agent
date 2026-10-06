@@ -296,7 +296,7 @@ function ComputedCard({ work, inputs, result, priced, tables, response }: {
       <EstimateTabs resetToken={response} tabs={[
         ...(tables.statement_rows.length ? [{ id: 'statement', label: '원가계산서', content:
           <StatementTable rows={tables.statement_rows} notes={response.statement?.basis_notes ?? []} /> }] : []),
-        ...(tables.bill ? [{ id: 'bill', label: '내역서', content: <BillTable bill={tables.bill} /> }] : []),
+        ...(tables.bill ? [{ id: 'bill', label: '내역서', content: <BillTable bills={[tables.bill]} /> }] : []),
         ...(result.unit_lines.length ? [{ id: 'unit', label: `일위대가표 (${result.unit_basis.per}당)`, content: <div>
       <div className="unit-summary">{work?.title}{conditions && ` · ${conditions}`}</div>
       <div className="unit-note">{priced?.rate_version
@@ -499,6 +499,18 @@ function AssistantCard({
 
       <EstimateGuidance response={response} />
 
+      {!!response.items?.length && (
+        <ol className="bundle-items" aria-label="공종별 계산 상태">
+          {response.items.map((item, index) => {
+            const total = item.priced?.reference_amounts?.total;
+            return <li key={index}>
+              <strong>{item.work?.title ?? item.query}</strong> <small>{item.query}</small>
+              <div>{total != null ? `직접비 ${won(total)}` : `금액 미반영 — ${item.reason || '계산하지 못한 공종'}`}</div>
+            </li>;
+          })}
+        </ol>
+      )}
+
       {response.status === 'MISSING_INFO' && (
         <div className="question-list">
           {response.questions.map((question) => (
@@ -530,6 +542,8 @@ function AssistantCard({
             onApply={onChangeConditions} />
           {!response.result && <EstimateTabs resetToken={response} tabs={[
             { id: 'statement', label: '원가계산서', content: <StatementTable rows={response.tables.statement_rows} notes={response.statement?.basis_notes ?? []} /> },
+            ...(response.tables.bills?.length ? [{ id: 'bill', label: '내역서', content: <BillTable bills={response.tables.bills} /> }] : []),
+            ...(response.tables.rate_rows.length ? [{ id: 'rates', label: '단가대비표', content: <RateTable rows={response.tables.rate_rows} /> }] : []),
           ]} />}
         </>
       )}

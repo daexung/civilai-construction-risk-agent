@@ -36,11 +36,15 @@ class AgentState(TypedDict, total=False):
     priced: dict  # 일위대가 노무비·요율 비용
     statement: dict  # 물량 기준 원가계산서 최종 견적
     rate_version: dict | None  # 적용한 공표 버전 메타데이터
+    bundle_query: str  # 여러 공종 질문 원문
+    items: list[dict]  # 여러 공종일 때 항목별 질문과 계산 결과; 단일 공종이면 빈 목록
+    item_index: int  # 지금 계산 중인 항목 순번
 
 
 def new_state(query: str, basis_date: str | None = None) -> AgentState:
     state: AgentState = {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [],
-                         "qa": None, "search_info": {}, "candidates": [], "spec_id": "", "selection": {}}
+                         "qa": None, "search_info": {}, "candidates": [], "spec_id": "", "selection": {},
+                         "items": [], "item_index": 0, "bundle_query": ""}
     if basis_date is not None:
         state["basis_date"] = basis_date
     return state

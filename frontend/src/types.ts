@@ -225,6 +225,7 @@ export interface RateRow {
 export interface ResultTables {
   statement_rows: StatementRow[];
   bill: BillRow | null;
+  bills?: BillRow[];
   rate_rows: RateRow[];
 }
 
@@ -244,6 +245,14 @@ export interface UsageStatus {
   timezone: string;
 }
 
+export interface EstimateItem {
+  query: string;
+  status: ChatStatus;
+  reason: string;
+  work: WorkInfo | null;
+  priced: PricedResult | null;
+}
+
 export interface ChatResponse {
   answer_id?: string;
   answer_rating?: { rating: 'good' | 'bad'; reason: string | null; comment: string } | null;
@@ -261,6 +270,7 @@ export interface ChatResponse {
   statement: StatementResult | null;
   conditions: ConditionField[];
   tables: ResultTables;
+  items?: EstimateItem[];
   qa?: { not_found: boolean; not_found_kind?: 'section_not_found' | 'section_found_value_missing'; conclusion: string; explanation: string;
     comparisons: { section: string; summary: string; citation_ids?: string[] }[];
     citations: (Citation & { chunk_id: string; quote_match?: 'normalized' | 'fuzzy' })[] } | null;

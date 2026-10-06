@@ -305,6 +305,9 @@
 .estimate-guidance strong { color: var(--text-primary); font-weight: 550; }
 .estimate-guidance p { margin: 5px 0 0; color: var(--text-secondary); }
 .estimate-guidance .estimate-guidance-separate { font-size: 12px; }
+.bundle-items { margin: 14px 0; padding-left: 20px; font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+.bundle-items li + li { margin-top: 6px; }
+.bundle-items strong { color: var(--text-primary); font-weight: 550; }
 
 .question-reason {
   font-size: 12px;

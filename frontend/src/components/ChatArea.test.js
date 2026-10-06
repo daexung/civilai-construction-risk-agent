@@ -103,3 +103,23 @@ test('unit-based estimates state their scope and actual separately counted work'
   expect(guidance.textContent).toContain('단위당 작업 품');
   expect(guidance.textContent).toContain('유리공사, 전기 및 통신공사');
 });
+
+test('bundle estimate lists each work item and a multi-row bill', () => {
+  const bill = (name, total) => ({ name, spec: '', unit: '㎥', quantity: '10', partial: false, total,
+    unit_price: { 재료비: null, 노무비: '1000', 경비: '0' }, amount: { 재료비: null, 노무비: total, 경비: '0' } });
+  const response = { ...demo.response, result: null, priced: null, work: null,
+    items: [
+      { query: '레미콘 150㎥', status: 'PARTIAL', reason: '', work: { title: '6-1-1 레미콘 타설' }, priced: { reference_amounts: { total: '1000' } } },
+      { query: '거푸집 20㎡', status: 'EVIDENCE_ONLY', reason: '계산 명세가 없습니다', work: null, priced: null },
+    ],
+    tables: { ...demo.response.tables, bills: [bill('레미콘', '1000'), bill('철근', '2000')] } };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'a1', role: 'assistant', response }]} />));
+  const items = container.querySelectorAll('.bundle-items li');
+  expect(items).toHaveLength(2);
+  expect(items[0].textContent).toContain('직접비 1,000원');
+  expect(items[1].textContent).toContain('금액 미반영 — 계산 명세가 없습니다');
+  act(() => Simulate.click([...container.querySelectorAll('[role="tab"]')].find(tab => tab.textContent === '내역서')));
+  const rows = container.querySelectorAll('.bill-table tbody tr');
+  expect(rows).toHaveLength(3);
+  expect(rows[2].textContent).toContain('3,000');
+});

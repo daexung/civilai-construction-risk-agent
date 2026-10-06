@@ -23,7 +23,7 @@ function NoticeDialog({ onClose, onStart, variant = 'landing', onFeedback }: Not
       <span className="beta-notice-badge">OPEN BETA</span>
       <h2 id={titleId} className="beta-notice-title" tabIndex={-1}>{isChat ? <>함께 만드는<br />품셈이 베타 테스트</> : <>품셈이, 지금 무료로<br />경험해 보세요.</>}</h2>
       <p className="beta-notice-description" id={descriptionId}>현재 베타 테스트 기간으로,<br />공사비 견적과 품셈 상담을 무료로 이용할 수 있어요.</p>
-      <p className="beta-notice-scope"><strong>현재는 단일 공종 견적을 지원해요</strong><br />한 번에 한 공종의 견적을 계산할 수 있어요. 여러 공종을 함께 계산하는 기능과 지원 범위는 추후 업데이트할 예정이에요.</p>
+      <p className="beta-notice-scope"><strong>최대 3개 공종을 한 견적서로 묶을 수 있어요</strong><br />공종과 물량을 쉼표로 나눠 적으면 공종별로 계산한 뒤 간접비는 한 번만 넣어 견적서를 만들어요. 지원 공종과 범위는 추후 업데이트할 예정이에요.</p>
       <p className="beta-notice-feedback">아직 베타 테스트 중이라 답변이나 견적 결과가 부족하거나 정확하지 않을 수 있어요. 이용해 보시고 불편한 점이나 개선 의견을 남겨 주세요.</p>
       {isChat && <p className="beta-notice-feedback-guide">왼쪽 메뉴의 ‘피드백 남기기’로 의견을 보내주시면 서비스 개선에 큰 도움이 됩니다.</p>}
       {!isChat && <><div className="beta-notice-limits">

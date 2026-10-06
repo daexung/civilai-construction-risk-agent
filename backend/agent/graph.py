@@ -10,6 +10,7 @@ from langgraph.graph import END, START, StateGraph
 
 from backend.agent.nodes.answer import answer
 from backend.agent.nodes.ask import ask
+from backend.agent.nodes.bundle import bundle, collect, item_label, split
 from backend.agent.nodes.compose import compose
 from backend.agent.nodes.compute import compute
 from backend.agent.nodes.price import price
@@ -31,6 +32,9 @@ _TIMING_BUCKETS = {
     "compute": "compute_ms",
     "price": "compute_ms",
     "statement": "compute_ms",
+    "split": "compute_ms",
+    "collect": "compute_ms",
+    "bundle": "compute_ms",
     "answer": "llm_ms",
     "compose": "llm_ms",
 }
@@ -63,7 +67,16 @@ def _timed_node(name: str, node):
 
 
 def _after_route(state: AgentState) -> str:
-    return "compose" if state.get("route") == "out_of_scope" else "retrieve"
+    return "compose" if state.get("route") == "out_of_scope" else "split"
+
+
+def _after_split(state: AgentState) -> str:
+    return "compose" if state.get("status") == "BLOCKED" else "retrieve"
+
+
+def _end(state: AgentState) -> str:
+    """여러 공종이면 항목을 끝내고 다음 항목으로, 아니면 설명 문장으로 간다."""
+    return "collect" if state.get("items") else "compose"
 
 
 def _after_retrieve(state: AgentState) -> str:
@@ -72,7 +85,7 @@ def _after_retrieve(state: AgentState) -> str:
 
 def _after_select(state: AgentState) -> str:
     # 계산 명세가 없으면 근거만 남기고 마친다.
-    return "compose" if state.get("status") == "EVIDENCE_ONLY" else "fill"
+    return _end(state) if state.get("status") == "EVIDENCE_ONLY" else "fill"
 
 
 def _after_fill(state: AgentState) -> str:
@@ -81,19 +94,34 @@ def _after_fill(state: AgentState) -> str:
     if status == "MISSING_INFO":
         return "ask"
     if status == "EVIDENCE_ONLY":
-        return "compose"
+        return _end(state)
     return "gate"
 
 
 def _after_gate(state: AgentState) -> str:
     # 보류 조건에 걸리면 계산하지 않고 끝낸다.
-    return "compose" if state.get("status") == "BLOCKED" else "compute"
+    return _end(state) if state.get("status") == "BLOCKED" else "compute"
 
 
 def _after_compute(state: AgentState) -> str:
     if state.get("status") == "MISSING_INFO":
         return "ask"
-    return "compose" if state.get("status") != "COMPUTED" else "price"
+    return _end(state) if state.get("status") != "COMPUTED" else "price"
+
+
+def _after_price(state: AgentState) -> str:
+    return "collect" if state.get("items") else "statement"
+
+
+def _after_collect(state: AgentState) -> str:
+    return "retrieve" if state["item_index"] < len(state["items"]) else "bundle"
+
+
+def _fill_item(state: AgentState) -> dict:
+    update = fill(state)
+    if state.get("items") and update.get("status") == "MISSING_INFO":
+        update["reason"] = f"{item_label(state)} 견적을 계산하려면 아래 조건을 확인해 주세요."
+    return update
 
 
 def build_graph(checkpointer=None):
@@ -102,23 +130,29 @@ def build_graph(checkpointer=None):
     graph.add_node("retrieve", _timed_node("retrieve", retrieve))
     graph.add_node("answer", _timed_node("answer", answer))
     graph.add_node("select", _timed_node("select", select))
-    graph.add_node("fill", _timed_node("fill", fill))
+    graph.add_node("fill", _timed_node("fill", _fill_item))
     graph.add_node("ask", ask)
     graph.add_node("gate", _timed_node("gate", gate))
     graph.add_node("compute", _timed_node("compute", compute))
     graph.add_node("price", _timed_node("price", price))
     graph.add_node("statement", _timed_node("statement", statement))
     graph.add_node("compose", _timed_node("compose", compose))
+    graph.add_node("split", _timed_node("split", split))
+    graph.add_node("collect", _timed_node("collect", collect))
+    graph.add_node("bundle", _timed_node("bundle", bundle))
     graph.add_edge(START, "route")
-    graph.add_conditional_edges("route", _after_route, {"compose": "compose", "retrieve": "retrieve"})
+    graph.add_conditional_edges("route", _after_route, {"compose": "compose", "split": "split"})
+    graph.add_conditional_edges("split", _after_split, {"compose": "compose", "retrieve": "retrieve"})
     graph.add_conditional_edges("retrieve", _after_retrieve, {"answer": "answer", "select": "select"})
     graph.add_edge("answer", END)
-    graph.add_conditional_edges("select", _after_select, {"compose": "compose", "fill": "fill"})
-    graph.add_conditional_edges("fill", _after_fill, {"ask": "ask", "compose": "compose", "gate": "gate"})
+    graph.add_conditional_edges("select", _after_select, {"compose": "compose", "collect": "collect", "fill": "fill"})
+    graph.add_conditional_edges("fill", _after_fill, {"ask": "ask", "compose": "compose", "collect": "collect", "gate": "gate"})
     graph.add_edge("ask", "fill")
-    graph.add_conditional_edges("gate", _after_gate, {"compose": "compose", "compute": "compute"})
-    graph.add_conditional_edges("compute", _after_compute, {"compose": "compose", "price": "price", "ask": "ask"})
-    graph.add_edge("price", "statement")
+    graph.add_conditional_edges("gate", _after_gate, {"compose": "compose", "collect": "collect", "compute": "compute"})
+    graph.add_conditional_edges("compute", _after_compute, {"compose": "compose", "collect": "collect", "price": "price", "ask": "ask"})
+    graph.add_conditional_edges("price", _after_price, {"collect": "collect", "statement": "statement"})
+    graph.add_conditional_edges("collect", _after_collect, {"retrieve": "retrieve", "bundle": "bundle"})
+    graph.add_edge("bundle", "compose")
     graph.add_edge("statement", "compose")
     graph.add_edge("compose", END)
     return graph.compile(checkpointer=checkpointer if checkpointer is not None else MemorySaver())

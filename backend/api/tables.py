@@ -206,10 +206,19 @@ def rate_rows(priced: dict | None, statement: dict | None,
     return rows
 
 
+def _parts(response: dict) -> list[dict]:
+    """공종별 응답. 여러 공종이면 항목들, 아니면 응답 자신."""
+    return response.get("items") or [response]
+
+
 def add_tables(response: dict) -> dict:
+    rates = []
+    for part in _parts(response):
+        rates += [row for row in rate_rows(part.get("priced"), response.get("statement"), response.get("conditions"))
+                  if row not in rates]
     return {"statement_rows": statement_rows(response.get("statement")), "bill": bill_row(response),
-            "unit_rows": unit_price_rows(response.get("priced")),
-            "rate_rows": rate_rows(response.get("priced"), response.get("statement"), response.get("conditions"))}
+            "bills": [row for row in map(bill_row, _parts(response)) if row],
+            "unit_rows": unit_price_rows(response.get("priced")), "rate_rows": rates}
 
 
 def _cost_statement_rows(tables: dict, statement: dict) -> list[list]:
@@ -304,9 +313,9 @@ def _missing_cost_rows(response: dict, cost_rows: list[list]) -> list[list[str]]
         status = line.get("status", "산정")
         if status in ("제외", "미산정"):
             add(line.get("name", ""), status, line.get("reason") or "")
-    result = response.get("result") or {}
-    for item in result.get("not_calculated", []):
-        add(item.get("item", ""), "미산정", item.get("source") or "이번 계산에서 미산정")
+    for part in _parts(response):
+        for item in (part.get("result") or {}).get("not_calculated", []):
+            add(item.get("item", ""), "미산정", item.get("source") or "이번 계산에서 미산정")
     return rows
 
 
@@ -325,6 +334,10 @@ _FOOTER = "표준품셈 기준 금액 · 검토 전 참고용 · 품셈이"
 
 
 def _work_name(response: dict) -> str:
+    items = [item for item in response.get("items") or [] if item.get("work")]
+    if items:
+        others = len(response["items"]) - 1
+        return _work_name(items[0]) + (f" 외 {others}건" if others else "")
     work = response.get("work") or {}
     title = work.get("title") or "공사비"
     if work.get("spec_id"):
@@ -664,7 +677,7 @@ def _applied_rate_range(entry: dict, line: dict, work_category: str) -> str:
 
 def _append_cost_rate_sources(sheet, response: dict) -> tuple[int, int]:
     statement = response.get("statement") or {}
-    priced = response.get("priced") or {}
+    priced = next((part["priced"] for part in _parts(response) if part.get("priced")), {})
     overhead = statement.get("overhead_version") or {}
     labor = priced.get("rate_version") or {}
     equipment = priced.get("equipment_rate_version") or {}
@@ -734,13 +747,13 @@ def _unit_citation_source(citations: list[dict] | None) -> str:
     return "; ".join(labels)
 
 
-def _unit_export_rows(response: dict, unit_rows: list[dict]) -> tuple[list[list], int]:
+def _unit_export_rows(response: dict, unit_rows: list[dict], number: int = 1) -> tuple[list[list], int]:
     priced = response.get("priced") or {}
     subtotals = priced.get("subtotals") or {}
     unit_prices = priced.get("unit_prices") or {}
     work_title = _work_name(response)
     basis_unit = ((response.get("result") or {}).get("unit_basis") or {}).get("per", "1㎥")[1:]
-    header = [f"제 1호표 {work_title} ({basis_unit} 당)", None, None, None,
+    header = [f"제 {number}호표 {work_title} ({basis_unit} 당)", None, None, None,
               None, _num(priced.get("total")), None, _num(unit_prices.get("노무비")),
               None, _num(unit_prices.get("재료비")), None, _num(unit_prices.get("경비")), None]
     rows = [header]
@@ -902,27 +915,30 @@ def build_xlsx(response: dict) -> bytes:
     _grouped_header(bill_sheet, len(bill_widths),
                     [("재료비", 5, 6), ("노무비", 7, 8), ("경비", 9, 10), ("합계", 11, 12)],
                     [("품 명", 1), ("규 격", 2), ("단위", 3), ("수량", 4), ("비고", 13)])
-    bill = tables.get("bill") or {}
     bill_rows = []
-    if bill:
+    sums = {name: Decimal(0) for name in ("재료비", "노무비", "경비", "total")}
+    priced_parts = [part for part in _parts(response) if bill_row(part)]
+    for number, part in enumerate(priced_parts, 1):
+        bill = bill_row(part)
         prices = bill.get("unit_price") or {}
         amounts = bill.get("amount") or {}
-        total_unit = (response.get("priced") or {}).get("total")
-        note = "제1호표"
-        bill_rows.append([_work_name(response), bill.get("spec", ""), bill.get("unit", ""),
+        for name in sums:
+            sums[name] += Decimal(str((bill if name == "total" else amounts).get(name) or 0))
+        bill_rows.append([_work_name(part), bill.get("spec", ""), bill.get("unit", ""),
                           _num(bill.get("quantity")), _num(prices.get("재료비")), _num(amounts.get("재료비")),
                           _num(prices.get("노무비")), _num(amounts.get("노무비")),
                           _num(prices.get("경비")), _num(amounts.get("경비")),
-                          _num(total_unit), _num(bill.get("total")), note])
-        bill_rows.append(["합계", "", "", None, None, _num(amounts.get("재료비")),
-                          None, _num(amounts.get("노무비")),
-                          None, _num(amounts.get("경비")),
-                          None, _num(bill.get("total")), ""])
+                          _num((part.get("priced") or {}).get("total")), _num(bill.get("total")), f"제{number}호표"])
+    if bill_rows:
+        bill_rows.append(["합계", "", "", None, None, _num(sums["재료비"]) or None,
+                          None, _num(sums["노무비"]) or None,
+                          None, _num(sums["경비"]) or None,
+                          None, _num(sums["total"]), ""])
     for values in bill_rows:
         bill_sheet.append(values)
     bill_start, bill_end = 6, bill_sheet.max_row
     bill_note_row = None
-    if bill and bill.get("partial"):
+    if any(bill_row(part)["partial"] for part in priced_parts):
         bill_note_row = bill_sheet.max_row + 1
         bill_sheet.merge_cells(start_row=bill_note_row, start_column=1,
                                end_row=bill_note_row, end_column=len(bill_widths))
@@ -943,11 +959,15 @@ def build_xlsx(response: dict) -> bytes:
     _grouped_header(unit_sheet, len(unit_widths),
                     [("계", 5, 6), ("노무비", 7, 8), ("재료비", 9, 10), ("경 비", 11, 12)],
                     [("공 종", 1), ("규 격", 2), ("수 량", 3), ("단 위", 4), ("비 고", 13)])
-    unit_rows, unit_data_start = _unit_export_rows(response, tables.get("unit_rows", []))
-    for values in unit_rows:
-        unit_sheet.append(values)
+    unit_data_start, unit_total_rows = 6, []
+    for number, part in enumerate(_parts(response), 1):
+        if not part.get("priced"):
+            continue
+        unit_total_rows.append(unit_sheet.max_row + 1)
+        for values in _unit_export_rows(part, unit_price_rows(part["priced"]), number)[0]:
+            unit_sheet.append(values)
     unit_end = unit_sheet.max_row
-    unit_total_rows = (unit_data_start,)
+    unit_total_rows = tuple(unit_total_rows)
     unit_muted = tuple(row for row in range(unit_data_start + 1, unit_end + 1)
                         if str(unit_sheet.cell(row, 13).value or "").startswith(("제외", "미산정")))
     unit_note_row = unit_end + 1
@@ -989,7 +1009,15 @@ def build_xlsx(response: dict) -> bytes:
     basis_sheet = _new_sheet(book, "산출근거", "산출근거", metadata, basis_widths)
     for column, value in enumerate(("항목", "값", "계산", "근거(품셈 절·표·쪽)"), 1):
         basis_sheet.cell(4, column, value)
-    basis = _basis_rows(response)
+    if response.get("items"):
+        basis = []
+        for number, part in enumerate(response["items"], 1):
+            basis.append([f"[{number}] {_work_name(part) if part.get('work') else part['query']}", "",
+                          part["query"], part.get("reason") or ""])
+            basis += _basis_rows(part)
+        basis += _basis_rows({"statement": response.get("statement")})
+    else:
+        basis = _basis_rows(response)
     for values in basis:
         basis_sheet.append(values)
     basis_start, basis_end = 5, basis_sheet.max_row

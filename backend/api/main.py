@@ -409,6 +409,14 @@ def _qa_out(state: dict) -> dict | None:
     return {**qa, "citations": [{**raw, **cite} for raw, cite in zip(qa["citations"], resolved)]}
 
 
+def _item_out(item: dict) -> dict:
+    """여러 공종 중 한 항목. 단일 공종 응답과 같은 모양이라 표 함수를 그대로 쓴다."""
+    spec = load_specs().get(item.get("spec_id") or "")
+    return {"query": item["query"], "status": item.get("status"), "reason": item.get("reason") or "",
+            "work": _work_out(item, spec), "inputs": _inputs_out(item, spec),
+            "result": _result_out(item, spec), "priced": _priced_out(item.get("priced"))}
+
+
 def _build_response(thread_id: str, state: dict) -> dict:
     status = _status_out(state)
     spec_id = state.get("spec_id", "")
@@ -436,6 +444,7 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "basis_date": state.get("basis_date") or date.today().isoformat(),
         "search": _search_out(state),
         "conditions": _conditions_out(state),
+        "items": [_item_out(item) for item in state.get("items") or [] if "status" in item],
     }
     response["tables"] = add_tables(response)
     return response
@@ -497,7 +506,9 @@ def _change_conditions(payload: ChatRequest, graph=None) -> dict:
     sources = {**values.get("input_sources", {}), **{name: "선택" for name in changes}}
     config = {"configurable": {"thread_id": payload.thread_id}}
     # price 다음 노드(statement)부터 다시 돌려 원가계산서와 설명 문장만 새로 만든다.
-    graph.update_state(config, {"inputs": inputs, "input_sources": sources}, as_node="price")
+    # 여러 공종이면 collect 다음 노드(bundle)부터 다시 돌린다.
+    graph.update_state(config, {"inputs": inputs, "input_sources": sources},
+                       as_node="collect" if values.get("items") else "price")
     return _build_response(payload.thread_id, graph.invoke(None, config))
 
 
@@ -819,7 +830,8 @@ def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
         if previous is not None:
             spec_id = previous.get("spec_id")
             spec = load_specs().get(spec_id) if spec_id else None
-            work = _work_out(previous, spec)
+            work = _work_out(previous, spec) or ({"title": f"{len(previous['items'])}개 공종 묶음"}
+                                                 if previous.get("items") else None)
             amount = (previous.get("statement") or {}).get("totals", {}).get("contract_amount")
             if amount is None:
                 amount = (previous.get("statement") or {}).get("totals", {}).get("전체 물량 기준 도급액(부가세 포함)")

@@ -200,12 +200,27 @@ def _evidence_facts(state: AgentState) -> list[dict]:
              "snippet": hit["text"]} for hit in state.get("hits", [])[:3]]
 
 
+def _items_facts(state: AgentState) -> list[dict]:
+    out = []
+    for number, item in enumerate(state.get("items") or [], 1):
+        spec = _spec(item)
+        reference = (item.get("priced") or {}).get("reference_amounts") or {}
+        out.append({"number": number, "query": item["query"],
+                    "title": _work_facts(item, spec)["title"] if spec else None,
+                    "direct_amount": _won(reference.get("total")),
+                    "reason": None if reference.get("total") is not None else item.get("reason")})
+    return out
+
+
 def build_facts(state: AgentState) -> dict:
     """숫자 잠금 검사와 LLM·기본 문장이 함께 쓰는 사실 모음을 만든다."""
     status = state.get("status")
     spec = _spec(state)
     facts: dict = {"status": status, "work": _work_facts(state, spec), "reason": state.get("reason")}
-    if status in ("OK", "PARTIAL"):
+    if status in ("OK", "PARTIAL") and state.get("items"):
+        facts["items"] = _items_facts(state)
+        facts["statement"] = _statement_facts(state.get("statement"))
+    elif status in ("OK", "PARTIAL"):
         priced = state.get("priced") or {}
         facts["inputs"] = _inputs_facts(state, spec)
         inputs = state.get("inputs", {})
@@ -231,7 +246,30 @@ def build_facts(state: AgentState) -> dict:
     return facts
 
 
+def _template_bundle(facts: dict) -> str:
+    statement = facts.get("statement") or {}
+    contract_amount = (statement.get("totals") or {}).get("전체 물량 기준 도급액(부가세 포함)")
+    items = facts["items"]
+    paragraphs = [f"{len(items)}개 공종을 한 견적서로 묶은 금액은 **{contract_amount}**이에요.",
+                  "공종별 직접비를 더한 뒤 간접비·일반관리비·이윤·부가세는 한 번만 계산했어요. 부가세 포함 금액이에요."]
+    lines = ["**공종별 직접비**"]
+    for item in items:
+        if item["direct_amount"] is not None:
+            lines.append(f"- {item['number']}. {item['query']} · {item['title']}: {item['direct_amount']}")
+        else:
+            lines.append(f"- {item['number']}. {item['query']}: 금액에 넣지 못했어요({item['reason'] or '계산하지 못한 공종'})")
+    paragraphs.append("\n".join(lines))
+    names = [entry["name"] for entry in statement.get("unpriced") or []
+             if not re.match(r"\d+번 항목", entry["name"])]
+    if names:
+        paragraphs.append(f"**금액에 포함되지 않은 항목**\n- {', '.join(names)}: 상세 사유는 아래 내역에서 확인해 주세요.")
+    paragraphs.append("아래 원가계산서와 내역서를 확인하고 Excel로 내려받아 검토해 주세요.")
+    return "\n\n".join(paragraphs)
+
+
 def _template_priced(facts: dict) -> str:
+    if facts.get("items"):
+        return _template_bundle(facts)
     work = facts.get("work")
     label = work["title"] if work else "공사"
     priced = facts.get("priced") or {}
