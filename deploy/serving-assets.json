@@ -1,0 +1,7 @@
+{
+  "data/processed/chunks.all.jsonl": {"sha256": "0ec24a40650b1ceb4ef0e5fc82973aff07bfd35add8f0e31698bc267d39a4529", "bytes": 5791124},
+  "data/processed/chunks.jsonl": {"sha256": "c8f77bd560437f3a65a9e9541da067547003b1096086d4684848e5618a570ece", "bytes": 182707},
+  "data/processed/page_map.json": {"sha256": "a5c799b50b153179b49f30ef6df30415880313f4e868c148c3f437f45b7feba0", "bytes": 244575},
+  "data/processed/embeddings.all.gemini-embedding-2.parquet": {"sha256": "2be2a0dce84dbab9850a28eea97962779a717cd64d0d29e71f0fc2077b8f81d6", "bytes": 60184376},
+  "data/raw/standard_estimation/standard-estimation-2026.pdf": {"sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b", "bytes": 6990459}
+}

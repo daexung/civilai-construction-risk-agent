@@ -28,3 +28,6 @@ graphify-out/
 evals/results/embedding_query_cache.jsonl
 
 tmp/
+
+# Temporary credentials produced by GitHub's GCP OIDC action.
+gha-creds-*.json
