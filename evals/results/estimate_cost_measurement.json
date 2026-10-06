@@ -1,0 +1,147 @@
+{
+  "measured_at": "2026-10-06T05:02:16.724104+00:00",
+  "question": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
+  "basis_date": "2026-10-01",
+  "answers": {
+    "work": "6-1-4",
+    "pump_size": "32m",
+    "slump_band": "15㎝",
+    "facility_type": "Type-Ⅱ",
+    "site_type": "Type-Ⅱ",
+    "placement": "붐",
+    "vibrator_used": true,
+    "reset_status": "없음",
+    "concrete_supply": "관급",
+    "work_category": "기타 토목공사",
+    "duration": "1~6개월",
+    "contractor_type": "종합건설업",
+    "project_scale": "이 견적만"
+  },
+  "calls": [
+    {
+      "turn": 1,
+      "kind": "llm",
+      "model": "gemini-3.5-flash-lite",
+      "provider": "vertex",
+      "usage": {
+        "candidates_token_count": 82,
+        "candidates_tokens_details": [
+          {
+            "modality": "TEXT",
+            "token_count": 82
+          }
+        ],
+        "prompt_token_count": 823,
+        "prompt_tokens_details": [
+          {
+            "modality": "TEXT",
+            "token_count": 823
+          }
+        ],
+        "total_token_count": 905,
+        "traffic_type": "ON_DEMAND"
+      },
+      "model_version": "gemini-3.5-flash-lite",
+      "success": true,
+      "elapsed_ms": 1310.97
+    },
+    {
+      "turn": 1,
+      "kind": "embedding",
+      "model": "gemini-embedding-2",
+      "provider": "studio",
+      "raw_usage": {
+        "usageMetadata": {
+          "promptTokenCount": 57,
+          "promptTokenDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 57
+            }
+          ]
+        }
+      },
+      "usage": null,
+      "statistics": [
+        null,
+        null
+      ],
+      "metadata": null,
+      "model_version": null,
+      "success": true,
+      "elapsed_ms": 604.49
+    }
+  ],
+  "turns": [
+    {
+      "turn": 1,
+      "status": "MISSING_INFO",
+      "timings": {
+        "route_ms": 1418.3932000014465,
+        "retrieve_ms": 5285.474800002703,
+        "compute_ms": 307.88680000114255,
+        "llm_ms": 0.0
+      }
+    },
+    {
+      "turn": 2,
+      "status": "PARTIAL",
+      "timings": {
+        "route_ms": 0.0,
+        "retrieve_ms": 0.0,
+        "compute_ms": 289.06609999830835,
+        "llm_ms": 1.0810000021592714
+      }
+    }
+  ],
+  "status": "PARTIAL",
+  "route": "estimate",
+  "route_source": "llm",
+  "search": {
+    "method": "hybrid",
+    "queries": [
+      "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용",
+      "철근콘크리트 벽체 260㎥ 펌프차 타설 비용"
+    ],
+    "api_calls": 1,
+    "warnings": [],
+    "fallback_reason": null
+  },
+  "contract_amount": {
+    "materials": 178360,
+    "labor": 4922974,
+    "expenses": 2263523,
+    "net_cost": 7364857,
+    "management": 589188,
+    "profit": 1166352,
+    "total_cost": 9120397,
+    "vat": 912039,
+    "contract_amount": 10032436
+  },
+  "complete": true,
+  "elapsed_seconds": 7.332,
+  "list_cost": {
+    "price_checked_at": "2026-10-06",
+    "basis": "standard global list price before credits and tax",
+    "usd_per_call": [
+      0.0004519,
+      1.1400000000000001e-05
+    ],
+    "complete_usage": true,
+    "usd_total": 0.0004633,
+    "assumed_krw_per_usd": 1400,
+    "krw_total_at_assumed_rate": 0.64862,
+    "sources": [
+      "https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing",
+      "https://ai.google.dev/gemini-api/docs/pricing#gemini-embedding-2"
+    ],
+    "excludes": [
+      "hosting",
+      "database",
+      "initial corpus embedding",
+      "credits",
+      "tax"
+    ]
+  },
+  "measurement_note": "Second of two real runs of the same estimate; first run had LLM input 823/output 76 and no SDK embedding usage. Second run captures raw embedding usage. AGENT_LLM explicitly enabled in measurement process only."
+}
