@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Simulate } from 'react-dom/test-utils';
 import ChatArea from './ChatArea';
 import { EXAMPLE_QUESTIONS } from '../examples';
+import demo from '../landing/demo.json';
 
 jest.mock('react-markdown', () => ({ __esModule: true, default: ({ children }) => <div>{children}</div> }));
 jest.mock('remark-gfm', () => ({ __esModule: true, default: () => {} }));
@@ -17,6 +18,23 @@ beforeEach(() => {
   act(() => root.render(<ChatArea {...props} />));
 });
 afterEach(() => { act(() => root.unmount()); container.remove(); });
+
+test('estimate header only shows elapsed time and conditions still submit the same values', () => {
+  const response = demo.response;
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'a1', role: 'assistant', response, elapsedMs: 2300 }]} />));
+  const header = container.querySelector('.assistant-card-header');
+  expect(header.textContent).toBe('2.3초 동안 생각함');
+  expect(header.querySelector('button')).toBeNull();
+  expect(container.querySelector('.source-list summary').textContent).toContain('품셈 근거와 원문');
+  expect(container.querySelector('.source-list').textContent).toContain(response.work.title);
+  const toggle = container.querySelector('.conditions-toggle');
+  expect(toggle.textContent).toBe('현장 조건 반영하기');
+  act(() => Simulate.click(toggle));
+  expect(toggle.getAttribute('aria-expanded')).toBe('true');
+  expect(container.querySelector('.conditions-panel').textContent).toContain('1회가 차감');
+  act(() => Simulate.click(container.querySelector('.conditions-panel .submit-answers-btn')));
+  expect(props.onChangeConditions).toHaveBeenCalledWith('a1', Object.fromEntries(response.conditions.map(field => [field.name, field.value])));
+});
 
 test('composer sends trimmed text, preserves Shift+Enter and Korean IME composition', () => {
   const input = container.querySelector('textarea');

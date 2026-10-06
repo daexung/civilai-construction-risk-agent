@@ -1,0 +1,18 @@
+.feedback-backdrop { position: fixed; inset: 0; z-index: 1100; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgb(0 0 0 / 30%); }
+.feedback-dialog { position: relative; width: 460px; max-width: 100%; max-height: calc(100dvh - 40px); overflow-y: auto; box-sizing: border-box; padding: 32px; border: 1px solid #e5e7e3; border-radius: 22px; background: #fff; color: #242a24; box-shadow: 0 22px 50px rgb(0 0 0 / 17%); }
+.feedback-dialog h2 { margin: 0 28px 10px 0; font-size: 23px; letter-spacing: -.6px; }
+.feedback-dialog p { font-size: 14px; line-height: 1.7; color: #60685f; }
+.feedback-close { position: absolute; right: 16px; top: 16px; display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #555; cursor: pointer; }
+.feedback-close:hover { background: #f1f4ef; }
+.feedback-dialog label { display: block; margin: 20px 0 8px; font-size: 13px; font-weight: 500; }
+.feedback-dialog select, .feedback-dialog textarea { box-sizing: border-box; width: 100%; border: 1px solid #d7ddd4; border-radius: 10px; padding: 12px; color: #242a24; background: #fff; font: inherit; font-size: 14px; }
+.feedback-dialog textarea { resize: vertical; min-height: 140px; line-height: 1.6; }
+.feedback-count { margin-top: 4px; text-align: right; font-size: 12px; color: #737b70; }
+.feedback-dialog .feedback-notice { font-size: 12px; line-height: 1.7; }
+.feedback-notice a { color: var(--brand-strong); text-underline-offset: 3px; }
+.feedback-submit { width: 100%; min-height: 44px; margin-top: 8px; padding: 12px; border: 0; border-radius: 10px; background: var(--brand-strong); color: #fff; font: inherit; font-size: 14px; cursor: pointer; }
+.feedback-submit:disabled { opacity: .5; cursor: not-allowed; }
+.feedback-dialog .feedback-error { color: #a43131; font-size: 13px; }
+.feedback-dialog :focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 3px; }
+.feedback-check { display: grid; place-items: center; width: 46px; height: 46px; margin-bottom: 18px; border-radius: 50%; background: #ecf3e8; color: var(--brand-strong); }
+@media(max-width: 480px) { .feedback-dialog { padding: 28px 22px; } }

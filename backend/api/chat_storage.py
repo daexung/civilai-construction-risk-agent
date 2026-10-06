@@ -13,7 +13,7 @@ from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
 
-def identity(authorization: str | None) -> str | None:
+def verified_user(authorization: str | None) -> dict | None:
     if authorization is None:
         return None
     scheme, _, token = authorization.partition(" ")
@@ -31,9 +31,20 @@ def identity(authorization: str | None) -> str | None:
         user = result.json()
         if user.get("is_anonymous") or user.get("role") != "authenticated":
             raise HTTPException(401, "회원 로그인이 필요합니다.")
-        return str(UUID(user["id"]))
+        user['id'] = str(UUID(user['id']))
+        return user
     except (httpx.HTTPError, KeyError, ValueError):
         raise HTTPException(503, "로그인 확인에 실패했습니다. 잠시 후 다시 시도해 주세요.") from None
+
+
+def identity(authorization: str | None) -> str | None:
+    user = verified_user(authorization)
+    if not user:
+        return None
+    with connection() as conn:
+        if conn.execute('SELECT 1 FROM agent_state.account_deletions WHERE user_id=%s', (user['id'],)).fetchone():
+            raise HTTPException(403, '회원탈퇴 처리 중인 계정입니다.')
+    return user['id']
 
 
 def require_member(authorization: str | None) -> str:
@@ -85,7 +96,23 @@ def read_conversation(conversation_id: str, user_id: str) -> dict:
         row = owned(conn, conversation_id, user_id)
         messages = conn.execute("SELECT id::text, role, content, payload, created_at FROM public.messages "
                                 "WHERE conversation_id=%s ORDER BY sequence", (conversation_id,)).fetchall()
+        ratings = {str(item['answer_id']): {key: item[key] for key in ('rating', 'reason', 'comment')}
+                   for item in conn.execute('SELECT answer_id,rating,reason,comment FROM public.answer_feedback WHERE conversation_id=%s AND user_id=%s',
+                                            (conversation_id, user_id)).fetchall()}
+        for message in messages:
+            if message['role'] == 'assistant':
+                answer_id = message['payload'].get('answer_id') or message['id']
+                message['payload'] = {**message['payload'], 'answer_id': answer_id,
+                                      'answer_rating': ratings.get(answer_id)}
         return {"id": conversation_id, "title": row["title"], "messages": messages}
+
+
+def rename_conversation(conversation_id: str, user_id: str, title: str):
+    with connection() as conn, conn.transaction():
+        conn.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (conversation_id,))
+        owned(conn, conversation_id, user_id)
+        conn.execute("UPDATE public.conversations SET title=%s WHERE id=%s AND user_id=%s",
+                     (title, conversation_id, user_id))
 
 
 def delete_conversation(conversation_id: str, user_id: str):
@@ -99,6 +126,8 @@ def delete_conversation(conversation_id: str, user_id: str):
 
 
 def append_pair(conn, conversation_id: str, request_id: str, label: str, response: dict):
+    from uuid import uuid4
+    response.setdefault('answer_id', str(uuid4()))
     sequence = conn.execute("SELECT COALESCE(MAX(sequence),0) AS n FROM public.messages "
                             "WHERE conversation_id=%s", (conversation_id,)).fetchone()["n"]
     for offset, role, content, payload in [(1, "user", label, {}),

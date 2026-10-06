@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import threading
 import time
 import sys
@@ -206,7 +207,7 @@ def _check_workflow() -> int:
     encoded_name = disposition.partition("filename*=UTF-8''")[2]
     decoded_name = unquote(encoded_name)
     checks.append(("A17 공종명 파일명 헤더", 'filename="estimate.xlsx"; filename*=UTF-8\'\'' in disposition
-                   and decoded_name.endswith("_견적서.xlsx")
+                   and decoded_name.startswith("품셈이_") and re.search(r"_견적서_\d{8}\.xlsx$", decoded_name)
                    and "/" not in decoded_name and "\\" not in decoded_name))
 
     bill_sheet = book["내역서"]

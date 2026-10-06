@@ -1,9 +1,19 @@
 import { ChatResponse, ChatTurn, ChoiceValue, UsageStatus } from './types';
 import { authClient } from './auth';
 import { v4 as uuidv4 } from 'uuid';
+import { trackEvent } from './analytics';
 
 const API_BASE = process.env.REACT_APP_API_URL ?? '';
-const guestSession = uuidv4() + uuidv4();
+const guestSession = (() => {
+  const key = 'poomsemi-guest-session-v1';
+  try {
+    const existing = sessionStorage.getItem(key);
+    if (existing && /^[a-f0-9-]{72}$/i.test(existing)) return existing;
+    const value = uuidv4() + uuidv4();
+    sessionStorage.setItem(key, value);
+    return value;
+  } catch { return uuidv4() + uuidv4(); }
+})();
 
 export class UsageError extends Error {
   constructor(message: string, public usage?: UsageStatus) { super(message); }
@@ -56,17 +66,47 @@ export async function getUsage(member: boolean): Promise<UsageStatus> {
   return (await request('/api/usage', {}, member)).json();
 }
 
+export async function sendFeedback(body: { request_id: string; category: 'bug' | 'suggestion' | 'other'; message: string }, expectedUserId?: string): Promise<{ id: string }> {
+  return (await request('/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body) }, !!expectedUserId, expectedUserId)).json();
+}
+
+export async function sendAnswerFeedback(body: { thread_id: string; answer_id: string; rating: 'good' | 'bad'; reason?: string; comment?: string }, expectedUserId?: string): Promise<{ rating: 'good' | 'bad' }> {
+  return (await request('/api/answer-feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body) }, !!expectedUserId, expectedUserId)).json();
+}
+
 export async function downloadEstimate(threadId: string): Promise<void> {
   const session = await authClient?.auth.getSession();
   const member = !!session?.data.session && threadId.includes('-');
   const res = await request(`/api/export/${threadId}.xlsx`, {}, member);
   const href = URL.createObjectURL(await res.blob());
   const anchor = document.createElement('a');
-  anchor.href = href; anchor.download = '품셈이_견적서.xlsx'; anchor.click();
+  let filename = '품셈이_견적서.xlsx';
+  const disposition = res.headers?.get('Content-Disposition') ?? '';
+  const encoded = /filename\*\s*=\s*UTF-8''([^;]+)/i.exec(disposition);
+  const quoted = /filename\s*=\s*"([^"]+)"/i.exec(disposition);
+  try {
+    const proposed = encoded ? decodeURIComponent(encoded[1].trim()) : quoted?.[1];
+    if (proposed?.toLowerCase().endsWith('.xlsx')) {
+      filename = Array.from(proposed.replace(/[\\/:*?"<>|]/g, '_'))
+        .map(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127 ? '_' : character)
+        .join('').slice(0, 180);
+    }
+  } catch { /* Keep the fallback if the server filename is malformed. */ }
+  anchor.href = href; anchor.download = filename; anchor.click();
+  trackEvent('estimate_downloaded', { member });
   setTimeout(() => URL.revokeObjectURL(href), 1000);
 }
 
 export interface SavedConversation { id: string; title: string; }
+export async function beginAccountDeletion(expectedUserId: string): Promise<{ challenge_id: string }> {
+  return (await request('/api/account/deletion-challenge', { method: 'POST' }, true, expectedUserId)).json();
+}
+export async function deleteAccount(challengeId: string, expectedUserId: string): Promise<void> {
+  await request('/api/account', { method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ challenge_id: challengeId, confirmation: '탈퇴' }) }, true, expectedUserId);
+}
 export async function listConversations(): Promise<SavedConversation[]> {
   return (await request('/api/conversations')).json();
 }
@@ -81,6 +121,11 @@ export async function deleteConversation(id: string, saved: boolean, threadId: s
   if (!saved && !threadId) return;
   await request(saved ? `/api/conversations/${id}` : `/api/guest/conversations/${threadId}`,
     { method: 'DELETE' }, saved);
+}
+
+export async function renameConversation(id: string, title: string, expectedUserId: string): Promise<void> {
+  await request(`/api/conversations/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title }) }, true, expectedUserId);
 }
 
 export async function importGuestConversation(threadId: string, conversationId: string, expectedUserId?: string): Promise<string> {

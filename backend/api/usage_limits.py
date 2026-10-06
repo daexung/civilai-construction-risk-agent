@@ -25,8 +25,29 @@ def subject(user_id: str | None, ip: str | None) -> str:
     secret = os.getenv("QUOTA_HASH_SECRET") or os.getenv("CHAT_DATABASE_URL")
     if not secret or (not user_id and not ip):
         raise HTTPException(503, "사용량 확인이 준비되지 않았습니다.")
-    kind, value = ("member", user_id) if user_id else ("guest", ip)
-    return kind + ":" + hmac.new(secret.encode(), value.encode(), hashlib.sha256).hexdigest()
+    def hashed(value):
+        return hmac.new(secret.encode(), value.encode(), hashlib.sha256).hexdigest()
+    if not user_id:
+        return 'guest:' + hashed(ip)
+    legacy = 'member:' + hashed(user_id)
+    try:
+        with chat_storage.connection() as conn, conn.transaction():
+            # Google provider IDs survive deleting and recreating a Supabase user.
+            row = conn.execute("SELECT provider_id FROM auth.identities WHERE user_id=%s AND provider='google'", (user_id,)).fetchone()
+            if not row:
+                return legacy
+            stable = 'member:' + hashed('google:' + row['provider_id'])
+            conn.execute('SELECT pg_advisory_xact_lock(hashtextextended(%s,0))', ('quota-upgrade:' + legacy,))
+            for table, prefix in [('daily_chat_usage', ''), ('daily_feedback_usage', 'feedback:'), ('daily_answer_feedback_usage', '')]:
+                # Table names and prefixes are fixed constants, never request input.
+                rows = conn.execute(f'DELETE FROM agent_state.{table} WHERE subject=%s RETURNING usage_day,used', (prefix + legacy,)).fetchall()
+                for item in rows:
+                    conn.execute(f'INSERT INTO agent_state.{table}(usage_day,subject,used) VALUES (%s,%s,%s) '
+                                 f'ON CONFLICT (usage_day,subject) DO UPDATE SET used={table}.used+EXCLUDED.used',
+                                 (item['usage_day'], prefix + stable, item['used']))
+            return stable
+    except psycopg.Error:
+        raise HTTPException(503, '사용량 확인에 실패했습니다. 잠시 후 다시 시도해 주세요.') from None
 
 
 def _summary(current, personal: int, total: int, member: bool):

@@ -98,11 +98,13 @@ def main() -> int:
                    and facts["statement"]["totals"]["전체 물량 기준 순공사원가"] == "7,364,857원"))
 
     template = build_template(facts)
-    first_sentence = template.split("입니다.", 1)[0]
-    checks.append(("C0d template 첫 문장 전체 물량 도급액",
-                   facts["work"]["title"] in first_sentence and "260㎥" in first_sentence
-                   and "전체 물량 기준 부가세 포함 도급액은" in first_sentence
-                   and "10,032,436원" in first_sentence))
+    first_paragraph, scope_paragraph = template.split("\n\n")[:2]
+    checks.append(("C0d 금액 결론, 계산 범위, 다음 행동 순서",
+                   "10,032,436원" in first_paragraph
+                   and facts["work"]["title"] in scope_paragraph and "260㎥" in scope_paragraph
+                   and "전체 물량 기준" in scope_paragraph and "부가세 포함" in scope_paragraph
+                   and template.endswith("아래 내역에서 산출근거와 적용 항목을 확인해 주세요.")
+                   and validate_numbers(template, facts)[0] and validate_amount_basis(template, facts)))
     duplicate_facts = json.loads(json.dumps(facts, ensure_ascii=False))
     for field in ("excluded", "unpriced"):
         if duplicate_facts["priced"][field]:
@@ -111,7 +113,7 @@ def main() -> int:
     duplicate_text = build_template(duplicate_facts)
     duplicate_names = unpriced_names(facts)
     checks.append(("C0e 빠진 항목 이름 중복 제거",
-                   "미산정 항목:" not in duplicate_text and "빠졌습니다." in duplicate_text
+                   "금액에 포함되지 않은 항목" in duplicate_text and "빠졌습니다." not in duplicate_text
                    and all(duplicate_text.count(name) == 1 for name in duplicate_names)))
     checks.append(("C0f 숫자·괄호 뒤 조사 선택",
                    f"912,039원{_josa('912,039원', '을/를')}" == "912,039원을"
@@ -140,7 +142,12 @@ def main() -> int:
     with patch("backend.agent.nodes.compose.build_facts", return_value=estimate_facts):
         estimate_llm = compose({"status": "PARTIAL", "priced": {"unpriced": []}}, generate_fn=lambda *_: estimate_answer)
     checks.append(("C1b VAT-inclusive contract amount with unpriced item accepted",
-                   estimate_llm["answer_source"] == "fixed" and estimate_llm["answer"] == estimate_answer))
+                   estimate_llm["answer_source"] == "fixed"
+                   and "2,727,421원" in estimate_llm["answer"] and "3개소" in estimate_llm["answer"]
+                   and "유리공사: 현재 계산에 반영하지 못했어요." in estimate_llm["answer"]
+                   and "단가를 확인하지 못해" not in estimate_llm["answer"]
+                   and validate_amount_basis(estimate_llm["answer"], estimate_facts)
+                   and validate_numbers(estimate_llm["answer"], estimate_facts)[0]))
 
     def legacy_compose(st, generate_fn=None):
         # No calculated tables: exercise the unchanged LLM validation/client path.
@@ -330,7 +337,8 @@ def main() -> int:
     scope = compose(out_of_scope_state(), generate_fn=counted_generate)
     checks.append(("C-fixed OUT_OF_SCOPE LLM 호출 유지", len(calls) == 1 and scope["answer_source"] == "llm"))
     checks.append(("C-fixed 미산정 사유 구분",
-                   "건설기계대여대금 지급보증 수수료는 이번 계산에서 빠졌습니다." in template))
+                   "건설기계대여대금 지급보증 수수료: 현재 계산에 반영하지 못했어요." in template
+                   and "단가를 확인하지 못해 이번 금액에는 포함하지 않았어요." in template))
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")

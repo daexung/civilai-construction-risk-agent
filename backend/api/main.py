@@ -24,10 +24,10 @@ from urllib.parse import quote
 
 from fastapi import FastAPI, Header, Request
 from fastapi import HTTPException
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, Response, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from langgraph.types import Command
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
 from backend.agent.graph import build_graph, capture_node_timings
 from backend.agent.rules.specs import load_specs
@@ -40,6 +40,11 @@ from backend.agent.tools.source.citation import prepare_citations, resolve_cites
 from backend.agent.tools.llm.client import LLMUnavailable, warmup_client
 from backend.api import chat_storage
 from backend.api import usage_limits
+from backend.api import runtime
+from backend.api import feedback
+from backend.api import answer_feedback
+from backend.api import accounts
+from backend.api.client_ip import client_ip
 from langgraph.checkpoint.postgres import PostgresSaver
 
 GRAPH = build_graph()
@@ -47,12 +52,7 @@ _GUESTS: dict[str, dict] = {}
 _GUEST_LOCK = threading.Lock()
 _GUEST_TTL = 24 * 60 * 60
 
-DEV_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+DEV_ORIGINS = runtime.allowed_origins()
 
 _READY_EVENT = threading.Event()
 _LIFESPAN_ACTIVE = False
@@ -83,35 +83,44 @@ def _prepare_service() -> None:
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     global _LIFESPAN_ACTIVE, _READY_ERROR
+    runtime.validate_production()
     _LIFESPAN_ACTIVE = True
     _READY_ERROR = None
     _READY_EVENT.clear()
     prepare_task = asyncio.create_task(asyncio.to_thread(_prepare_service))
+    async def account_maintenance():
+        while True:
+            await asyncio.to_thread(accounts.recover)
+            await asyncio.sleep(60)
+    maintenance_task = asyncio.create_task(account_maintenance())
     try:
         yield
     finally:
+        maintenance_task.cancel()
+        try:
+            await maintenance_task
+        except asyncio.CancelledError:
+            pass
         await prepare_task
         _LIFESPAN_ACTIVE = False
 
 
-app = FastAPI(title="civilai-construction-risk-agent chat api", lifespan=lifespan)
+app = FastAPI(title="civilai-construction-risk-agent chat api", lifespan=lifespan,
+              docs_url=None if runtime.production() else '/docs',
+              redoc_url=None if runtime.production() else '/redoc',
+              openapi_url=None if runtime.production() else '/openapi.json')
 app.add_middleware(
     CORSMiddleware,
     allow_origins=DEV_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
 )
 
 
 from backend.paths import ROOT
 
 SOURCES = ROOT / "data/processed/sources"
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=DEV_ORIGINS,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 class ChatRequest(BaseModel):
@@ -128,6 +137,11 @@ class ChatRequest(BaseModel):
 class GuestImportRequest(BaseModel):
     thread_id: str
     conversation_id: UUID
+
+
+class AccountDeletionRequest(BaseModel):
+    challenge_id: UUID
+    confirmation: str
 
 
 _FIELD_LABELS = {
@@ -227,17 +241,17 @@ def _status_out(state: dict) -> str:
 
 def _message_out(status: str, state: dict) -> str:
     if status == "PARTIAL":
-        return state.get("reason") or "일위대가의 산정 가능한 금액을 계산했습니다. 미산정 항목은 부분 합계에서 제외했습니다."
+        return state.get("reason") or "확인 가능한 단가로 부분 금액을 계산했어요. 미산정 항목은 금액에 포함하지 않았어요."
     if status == "OK":
-        return "일위대가 금액 계산이 끝났습니다."
+        return "입력하신 조건으로 견적을 계산했어요."
     if status == "COMPUTED":
-        return "계산이 끝났습니다. 금액은 다음 단계에서 계산됩니다."
+        return "품셈에 따른 투입량을 계산했어요. 금액은 다음 단계에서 계산해요."
     if status == "BLOCKED":
-        return state.get("reason") or "원문 근거가 불명확해 계산을 보류합니다."
+        return state.get("reason") or "현재 조건에 맞는 원문 근거를 확인하지 못해 계산을 보류했어요."
     if status == "EVIDENCE_ONLY":
-        return state.get("reason") or "아직 계산을 지원하지 않는 공종입니다. 근거만 안내합니다."
+        return state.get("reason") or "아직 견적 계산을 지원하지 않는 공종이에요. 확인한 품셈 근거를 안내해 드릴게요."
     if status == "ERROR":
-        return state.get("reason") or "처리 중 오류가 발생했습니다."
+        return state.get("reason") or "처리 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요."
     return state.get("reason") or ""
 
 
@@ -391,6 +405,7 @@ def _build_response(thread_id: str, state: dict) -> dict:
     spec_id = state.get("spec_id", "")
     spec = load_specs().get(spec_id) if spec_id else None
     response = {
+        "answer_id": str(uuid4()),
         "thread_id": thread_id,
         "status": status,
         "route": state.get("route"),
@@ -422,6 +437,12 @@ def health() -> dict:
     if _LIFESPAN_ACTIVE and not _READY_EVENT.is_set():
         return {"status": "warming"}
     return {"status": "error" if _READY_ERROR else "ok"}
+
+
+@app.get('/api/ready')
+def ready() -> JSONResponse:
+    status = health()
+    return JSONResponse(status, status_code=200 if status['status'] == 'ok' else 503)
 
 
 @app.get("/api/source/{table_id}.png")
@@ -494,9 +515,54 @@ def export_xlsx(thread_id: str, authorization: str | None = Header(default=None)
                     headers={"Content-Disposition": f'attachment; filename="estimate.xlsx"; filename*=UTF-8\'\'{filename}'})
 
 
+@app.post("/api/feedback")
+def receive_feedback(payload: feedback.FeedbackRequest, request: Request,
+                     authorization: str | None = Header(default=None)):
+    user_id = chat_storage.identity(authorization)
+    with accounts.guard(user_id):
+        return feedback.submit(payload, user_id, client_ip(request))
+
+
+@app.post('/api/answer-feedback')
+def receive_answer_feedback(payload: answer_feedback.RatingRequest, request: Request,
+                            authorization: str | None = Header(default=None),
+                            x_guest_session: str | None = Header(default=None)):
+    user_id = chat_storage.identity(authorization)
+    quota_subject = usage_limits.subject(user_id, client_ip(request))
+    try:
+        with accounts.guard(user_id), chat_storage.connection() as conn:
+            if user_id:
+                with conn.transaction():
+                    conn.execute('SELECT pg_advisory_xact_lock(hashtextextended(%s,0))', (payload.thread_id,))
+                    question, response = answer_feedback.member_target(conn, payload, user_id)
+                    return answer_feedback.submit(conn, payload, user_id, quota_subject, question, response)
+            guest = _guest(payload.thread_id, x_guest_session)
+            with guest['lock']:
+                _guest(payload.thread_id, x_guest_session)
+                target = next(((label, result) for label, result in guest['turns']
+                               if result.get('answer_id') == str(payload.answer_id)), None)
+                if not target:
+                    raise HTTPException(404, '평가할 답변을 찾을 수 없습니다.')
+                return answer_feedback.submit(conn, payload, None, quota_subject, *target)
+    except answer_feedback.psycopg.Error:
+        raise answer_feedback.unavailable() from None
+
+
+@app.post('/api/account/deletion-challenge')
+def account_deletion_challenge(authorization: str | None = Header(default=None)):
+    return accounts.begin(authorization)
+
+
+@app.delete('/api/account')
+def delete_account(payload: AccountDeletionRequest, authorization: str | None = Header(default=None)):
+    if payload.confirmation != '탈퇴':
+        raise HTTPException(422, '확인 문구를 입력해 주세요.')
+    return accounts.remove(authorization, str(payload.challenge_id))
+
+
 @app.get("/api/usage")
 def usage(request: Request, authorization: str | None = Header(default=None)):
-    return usage_limits.read(chat_storage.identity(authorization), request.client.host if request.client else None)
+    return usage_limits.read(chat_storage.identity(authorization), client_ip(request))
 
 
 @app.post("/api/chat")
@@ -512,7 +578,7 @@ def chat(payload: ChatRequest, request: Request, authorization: str | None = Hea
         raise HTTPException(422, "질문은 1~10,000자로 입력해 주세요.")
     if payload.message is None and not payload.answers and payload.conditions is None:
         raise HTTPException(422, "질문 또는 조건을 입력해 주세요.")
-    with usage_limits.processing(user_id, request.client.host if request.client else None) as quota, \
+    with accounts.guard(user_id), usage_limits.processing(user_id, client_ip(request)) as quota, \
             capture_node_timings() as node_timings:
         if user_id:
             response = _member_chat(payload, user_id, quota)
@@ -584,6 +650,29 @@ def conversation(conversation_id: UUID, authorization: str | None = Header(defau
     return chat_storage.read_conversation(str(conversation_id), chat_storage.require_member(authorization))
 
 
+class RenameConversationRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+
+    @field_validator('title')
+    @classmethod
+    def clean_title(cls, value: str) -> str:
+        if any(ord(character) < 32 or ord(character) == 127 for character in value):
+            raise ValueError('대화 이름에 제어 문자를 사용할 수 없습니다.')
+        title = ' '.join(value.split())
+        if not title:
+            raise ValueError('대화 이름을 입력해 주세요.')
+        return title
+
+
+@app.patch("/api/conversations/{conversation_id}")
+def rename_conversation(conversation_id: UUID, payload: RenameConversationRequest,
+                        authorization: str | None = Header(default=None)):
+    user_id = chat_storage.require_member(authorization)
+    with accounts.guard(user_id):
+        chat_storage.rename_conversation(str(conversation_id), user_id, payload.title)
+    return {"id": str(conversation_id), "title": payload.title}
+
+
 @app.post("/api/conversations/import-guest")
 def import_guest(payload: GuestImportRequest, authorization: str | None = Header(default=None),
                  x_guest_session: str | None = Header(default=None)):
@@ -593,6 +682,7 @@ def import_guest(payload: GuestImportRequest, authorization: str | None = Header
     secret_hash = hashlib.sha256(x_guest_session.encode()).hexdigest()
     target = str(payload.conversation_id)
     with ExitStack() as stack:
+        stack.enter_context(accounts.guard(user_id))
         conn = stack.enter_context(chat_storage.connection())
         with conn.transaction():
             conn.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s,0))", ('guest-import:' + payload.thread_id,))
@@ -627,6 +717,8 @@ def import_guest(payload: GuestImportRequest, authorization: str | None = Header
             for label, guest_response in guest['turns']:
                 response = {**guest_response, "thread_id": target}
                 chat_storage.append_pair(conn, target, str(uuid4()), label, response)
+            conn.execute('UPDATE public.answer_feedback SET user_id=%s,conversation_id=%s,thread_id=%s WHERE thread_id=%s AND user_id IS NULL',
+                         (user_id, target, target, payload.thread_id))
             conn.execute("INSERT INTO agent_state.guest_imports(source_id,secret_hash,user_id,conversation_id) VALUES (%s,%s,%s,%s)",
                          (payload.thread_id, secret_hash, user_id, target))
         # Commit the complete transcript and state before disposing of guest memory.
@@ -638,7 +730,9 @@ def import_guest(payload: GuestImportRequest, authorization: str | None = Header
 
 @app.delete("/api/conversations/{conversation_id}", status_code=204)
 def delete_conversation(conversation_id: UUID, authorization: str | None = Header(default=None)):
-    chat_storage.delete_conversation(str(conversation_id), chat_storage.require_member(authorization))
+    user_id = chat_storage.require_member(authorization)
+    with accounts.guard(user_id):
+        chat_storage.delete_conversation(str(conversation_id), user_id)
     return Response(status_code=204)
 
 

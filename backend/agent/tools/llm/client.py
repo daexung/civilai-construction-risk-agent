@@ -178,7 +178,11 @@ def generate(
             raise LLMUnavailable(_safe_error(exc, secrets), attempts=0, provider=provider) from exc
 
         def request_fn(model_name: str, prompt_text: str, system_text: str, timeout_ms: int) -> str:
+            max_output_tokens = int(os.environ.get('LLM_MAX_OUTPUT_TOKENS', '4096'))
+            if not 128 <= max_output_tokens <= 8192:
+                raise ValueError('LLM_MAX_OUTPUT_TOKENS must be between 128 and 8192')
             options = {"system_instruction": system_text, "temperature": 0,
+                       "max_output_tokens": max_output_tokens,
                        "http_options": types.HttpOptions(timeout=timeout_ms)}
             if response_schema is not None:
                 options.update(response_mime_type="application/json", response_schema=response_schema)

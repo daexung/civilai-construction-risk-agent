@@ -498,5 +498,5 @@ def fill(state: AgentState) -> dict:
                               "reason": dict_errors[name]})
     update.update(inputs=inputs, input_sources=sources, questions=questions)
     if questions:
-        update.update(status="MISSING_INFO", reason="계산에 필요한 조건을 확인해 주세요")
+        update.update(status="MISSING_INFO", reason="견적을 계산하려면 아래 조건을 확인해 주세요.")
     return update

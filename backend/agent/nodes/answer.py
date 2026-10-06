@@ -98,10 +98,10 @@ def not_found(contexts, *, value_missing=False, hits=None, query=""):
     if value_missing and contexts:
         qa = template(contexts[:1], hits or [], query)
         qa.update(not_found=True, not_found_kind="section_found_value_missing",
-                  conclusion=f"관련 기준은 {contexts[0]['section']}입니다. 질문하신 조건의 값은 원문에서 확인하지 못했습니다.")
+                  conclusion=f"관련 기준은 {contexts[0]['section']}이에요. 질문하신 조건의 값은 원문에서 확인하지 못했어요.")
         return qa
     return {"not_found": True, "not_found_kind": "section_not_found",
-            "conclusion": "품셈에서 이 질문에 맞는 기준을 찾지 못했습니다.",
+            "conclusion": "품셈 원문에서 이 질문에 맞는 기준을 찾지 못했어요.",
             "explanation": "가장 가까운 절: " + contexts[0]["section"] if contexts else "",
             "comparisons": [], "citations": []}
 
@@ -123,7 +123,7 @@ def content_lines(chunk):
         yield line
 
 def template(contexts, hits, query=""):
-    qa = {"not_found": False, "conclusion": "품셈에서 관련 기준을 찾았습니다.", "explanation": "",
+    qa = {"not_found": False, "conclusion": "품셈 원문에서 관련 기준을 확인했어요.", "explanation": "",
           "comparisons": [], "citations": []}
     ranks = {h["chunk_id"]: h["rank"] for h in hits}
     words = set(tokens(query))
@@ -151,7 +151,7 @@ def template(contexts, hits, query=""):
             "citation_ids": list(dict.fromkeys(c["chunk_id"] for c in selected))})
         qa["citations"].extend(selected)
     if any(ctx["truncated"] for ctx in contexts):
-        qa["explanation"] = "문맥 길이 제한으로 일부 원문이 생략되었습니다. 원문을 확인해 주세요."
+        qa["explanation"] = "답변에 참고한 원문은 일부 범위예요. 아래 원문에서 전체 적용 조건을 함께 확인해 주세요."
     return qa
 
 def answer(state, *, generate_fn=None, model=None, contexts=None):

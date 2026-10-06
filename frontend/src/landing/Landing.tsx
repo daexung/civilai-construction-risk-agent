@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import LandingPreview from './LandingPreview';
+import BetaNotice from './BetaNotice';
+import { CONTACT_EMAIL } from '../contact';
 import demo from './demo.json';
 import './Landing.css';
 
@@ -41,6 +43,7 @@ export default function Landing({ onStart, onExample }: Props) {
     onStart();
   };
   return <div className="civil-landing">
+    <BetaNotice onStart={onStart} />
     <div id="top" />
     <a className="lp-skip" href="#landing-main">본문으로 건너뛰기</a>
     <header className="lp-header">
@@ -105,12 +108,15 @@ export default function Landing({ onStart, onExample }: Props) {
           <h2 id="landing-basis-title">금액과 함께,<br />품셈의 근거도.</h2>
           <p className="lp-basis-description">적용 조건과 단가, 산출 과정, 품셈 원문을 함께 확인하세요.</p>
           <div className="lp-final-cta">
-            <p>품셈AI에 지금 바로 물어보세요.</p>
+            <p>품셈이에 지금 바로 물어보세요.</p>
             <a className="lp-button lp-button-white" href="/chat" onClick={start}>견적·상담 시작하기</a>
           </div>
         </Reveal></div>
       </section>
     </main>
-    <footer className="lp-container lp-footer"><span>품셈이</span><div className="lp-footer-links"><a href="/terms">이용약관</a></div></footer>
+    <footer className="lp-container lp-footer lp-landing-footer">
+      <div className="lp-footer-top"><span className="lp-footer-brand">품셈이</span><div className="lp-footer-links"><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></div></div>
+      <p className="lp-footer-contact">문의: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+    </footer>
   </div>;
 }

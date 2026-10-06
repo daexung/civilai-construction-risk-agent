@@ -2,10 +2,10 @@ import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Simulate } from 'react-dom/test-utils';
 import App from './App';
-import { sendChat, listConversations, readConversation, deleteConversation, importGuestConversation, getUsage, UsageError } from './api';
+import { sendChat, listConversations, readConversation, deleteConversation, renameConversation, importGuestConversation, getUsage, UsageError } from './api';
 import { loginWithGoogle } from './auth';
 
-jest.mock('./api', () => ({ sendChat: jest.fn(), downloadEstimate: jest.fn(), listConversations: jest.fn(), readConversation: jest.fn(), deleteConversation: jest.fn(), importGuestConversation: jest.fn(), getUsage: jest.fn(), UsageError: class extends Error { constructor(message, usage) { super(message); this.usage = usage; } } }));
+jest.mock('./api', () => ({ sendChat: jest.fn(), downloadEstimate: jest.fn(), listConversations: jest.fn(), readConversation: jest.fn(), deleteConversation: jest.fn(), renameConversation: jest.fn(), importGuestConversation: jest.fn(), getUsage: jest.fn(), UsageError: class extends Error { constructor(message, usage) { super(message); this.usage = usage; } } }));
 let mockAuthClient = null;
 jest.mock('./auth', () => ({ get authClient() { return mockAuthClient; }, AuthCallback: () => null, loginWithGoogle: jest.fn() }));
 jest.mock('react-markdown', () => ({ __esModule: true, default: ({ children }) => <div>{children}</div> }));
@@ -20,16 +20,20 @@ beforeEach(async () => {
   listConversations.mockReset().mockResolvedValue([]);
   readConversation.mockReset().mockResolvedValue([]);
   deleteConversation.mockReset().mockResolvedValue(undefined);
+  renameConversation.mockReset().mockResolvedValue(undefined);
   importGuestConversation.mockReset().mockImplementation(async (_thread, id) => id);
   global.IS_REACT_ACT_ENVIRONMENT = true;
   Element.prototype.scrollIntoView = jest.fn();
   localStorage.clear();
+  sessionStorage.clear();
   window.history.replaceState({}, '', '/chat');
   sendChat.mockReset();
   sendChat.mockImplementation(async body => response(body.thread_id ?? `thread-${body.message}`, `답변: ${body.message}`));
   container = document.createElement('div'); document.body.appendChild(container);
   root = createRoot(container);
   await act(async () => root.render(<App />));
+  const betaClose = document.querySelector('.beta-notice-close');
+  if (betaClose) act(() => Simulate.click(betaClose));
 });
 
 test('shows remaining usage and disables sending when the server reports a daily limit', async () => {
@@ -120,7 +124,7 @@ async function sendQuestion(text) {
   await act(async () => Simulate.click(container.querySelector('[aria-label="질문 보내기"]')));
 }
 
-test('guest conversations keep their original thread within the tab and disappear on reload', async () => {
+test('guest conversations restore the selected thread on reload without sending another request', async () => {
   expect(container.querySelector('.chat-nav button').getAttribute('aria-current')).toBe('page');
   await sendQuestion('자동문 설치 비용');
   expect(container.querySelector('.chat-history-select').textContent).toBe('자동문 설치 비용');
@@ -139,10 +143,86 @@ test('guest conversations keep their original thread within the tab and disappea
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(2);
   act(() => root.unmount());
   root = createRoot(container);
-  act(() => root.render(<App />));
-  expect(container.querySelectorAll('.chat-history-select')).toHaveLength(0);
-  expect(container.querySelector('.welcome-header h2').textContent).toBe('무엇을 도와드릴까요?');
+  await act(async () => root.render(<App />));
+  expect(container.querySelectorAll('.chat-history-select')).toHaveLength(2);
+  expect(container.querySelector('.messages').textContent).toContain('답변: 자동문 설치 비용');
+  expect(sendChat).toHaveBeenCalledTimes(3);
+  await sendQuestion('새로고침 후 이어가기');
+  expect(sendChat.mock.calls[3][0].thread_id).toBe('thread-자동문 설치 비용');
   expect(localStorage.getItem('poomsemi-chat-history-v1')).toBeNull();
+});
+
+test('guest rename preserves the thread and survives refresh without writing to the member API', async () => {
+  await sendQuestion('처음 질문');
+  act(() => Simulate.click(container.querySelector('.chat-history-more')));
+  act(() => Simulate.click(document.querySelector('[aria-label="대화 이름 바꾸기"]')));
+  const input = document.querySelector('.rename-dialog-input');
+  expect(input.value).toBe('처음 질문');
+  act(() => Simulate.change(input, { target: { value: '   벽체   견적  ' } }));
+  await act(async () => Simulate.submit(document.querySelector('[role="dialog"] form')));
+  expect(container.querySelector('.chat-history-select').textContent).toBe('벽체 견적');
+  expect(renameConversation).not.toHaveBeenCalled();
+  act(() => root.unmount());
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(container.querySelector('.chat-history-select').textContent).toBe('벽체 견적');
+  await sendQuestion('이어서 질문');
+  expect(sendChat.mock.calls[1][0].thread_id).toBe('thread-처음 질문');
+});
+
+test('expired guest cache is not restored', async () => {
+  await sendQuestion('만료된 질문');
+  const cached = JSON.parse(sessionStorage.getItem('poomsemi-chat-tab-v1'));
+  cached.updatedAt = Date.now() - 86400001;
+  act(() => root.unmount());
+  sessionStorage.setItem('poomsemi-chat-tab-v1', JSON.stringify(cached));
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(container.querySelector('.welcome-header')).not.toBeNull();
+  expect(container.querySelectorAll('.chat-history-select')).toHaveLength(0);
+});
+
+test('restore hides the new-chat screen and fetches transcript before the list finishes', async () => {
+  act(() => root.unmount());
+  sessionStorage.setItem('poomsemi-chat-tab-v1', JSON.stringify({ owner: 'A', updatedAt: Date.now(),
+    store: { activeId: 'saved-id', conversations: [] } }));
+  let finishAuth, finishList, finishTranscript;
+  mockAuthClient = { auth: {
+    getSession: jest.fn(() => new Promise(resolve => { finishAuth = resolve; })),
+    onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
+  } };
+  listConversations.mockImplementation(() => new Promise(resolve => { finishList = resolve; }));
+  readConversation.mockImplementation(() => new Promise(resolve => { finishTranscript = resolve; }));
+  root = createRoot(container);
+  await act(async () => root.render(<React.StrictMode><App /></React.StrictMode>));
+  expect(container.querySelector('.welcome-header')).toBeNull();
+  expect(container.querySelector('.chat-restore-status').textContent).toContain('대화를 불러오고 있어요');
+  expect(container.querySelector('.chat-nav button').hasAttribute('aria-current')).toBe(false);
+  await act(async () => finishAuth({ data: { session: { user: { id: 'A' } } } }));
+  expect(readConversation).toHaveBeenCalledWith('saved-id');
+  expect(container.querySelector('.welcome-header')).toBeNull();
+  await act(async () => finishTranscript([{ id: 'a1', role: 'assistant', response: response('saved-id', '복원된 답변') }]));
+  expect(container.querySelector('.chat-restore-status')).not.toBeNull();
+  await act(async () => finishList([{ id: 'saved-id', title: '이전 견적' }]));
+  expect(container.querySelector('.chat-restore-status')).toBeNull();
+  expect(container.querySelector('.messages').textContent).toContain('복원된 답변');
+  expect(sendChat).not.toHaveBeenCalled();
+});
+
+test('another account selection is not restored or requested', async () => {
+  act(() => root.unmount());
+  sessionStorage.setItem('poomsemi-chat-tab-v1', JSON.stringify({ owner: 'A', updatedAt: Date.now(),
+    store: { activeId: 'account-A-chat', conversations: [] } }));
+  mockAuthClient = { auth: {
+    getSession: jest.fn().mockResolvedValue({ data: { session: { user: { id: 'B' } } } }),
+    onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
+  } };
+  listConversations.mockResolvedValue([{ id: 'account-B-chat', title: 'B의 대화' }]);
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(readConversation).not.toHaveBeenCalled();
+  expect(container.querySelector('.welcome-header')).not.toBeNull();
+  expect(container.querySelector('.chat-history-select').textContent).toBe('B의 대화');
 });
 
 test('history switching and new chat are disabled while a response is pending', async () => {
@@ -154,8 +234,27 @@ test('history switching and new chat are disabled while a response is pending', 
   act(() => Simulate.click(container.querySelector('[aria-label="질문 보내기"]')));
   expect(Array.from(container.querySelectorAll('.chat-history-select')).every(button => button.disabled)).toBe(true);
   expect(container.querySelector('[aria-label="새 대화 시작"]').disabled).toBe(true);
+  expect(container.querySelector('.loading-indicator')).not.toBeNull();
   await act(async () => resolveResponse(response('second', '응답')));
   expect(container.querySelector('.chat-history-select').disabled).toBe(false);
+  expect(container.querySelector('.loading-indicator')).toBeNull();
+});
+
+test('pending conversation deletion disables actions without showing AI thinking', async () => {
+  await sendQuestion('삭제할 대화');
+  let resolveDelete;
+  deleteConversation.mockImplementationOnce(() => new Promise(resolve => { resolveDelete = resolve; }));
+  act(() => Simulate.click(container.querySelector('.chat-history-more')));
+  act(() => Simulate.click(document.querySelector('.chat-history-delete')));
+  act(() => Simulate.click(document.querySelector('.delete-dialog-confirm')));
+  expect(document.querySelector('.delete-dialog-confirm').textContent).toBe('삭제 중…');
+  expect(container.querySelector('textarea').disabled).toBe(true);
+  expect(container.querySelector('[aria-label="새 대화 시작"]').disabled).toBe(true);
+  expect(container.querySelector('.loading-indicator')).toBeNull();
+  await act(async () => resolveDelete());
+  expect(container.querySelector('.loading-indicator')).toBeNull();
+  expect(container.querySelector('.welcome-header')).not.toBeNull();
+  expect(container.querySelector('textarea').disabled).toBe(false);
 });
 
 test('member history is restored after reload and replies keep the saved conversation ID', async () => {
@@ -176,17 +275,40 @@ test('member history is restored after reload and replies keep the saved convers
   await act(async () => Simulate.click(container.querySelector('.chat-history-select')));
   expect(readConversation).toHaveBeenCalledWith('saved-id');
   expect(container.querySelector('.messages').textContent).toContain('지난 답변');
+  act(() => Simulate.click(container.querySelector('.chat-history-more')));
+  act(() => Simulate.click(document.querySelector('[aria-label="대화 이름 바꾸기"]')));
+  act(() => Simulate.change(document.querySelector('.rename-dialog-input'), { target: { value: '현장 A 견적' } }));
+  renameConversation.mockRejectedValueOnce(new Error('SERVER_ERROR'));
+  await act(async () => Simulate.submit(document.querySelector('[role="dialog"] form')));
+  expect(document.querySelector('[role="alert"]').textContent).toContain('변경하지 못했습니다');
+  expect(document.querySelector('.rename-dialog-input').value).toBe('현장 A 견적');
+  expect(container.querySelector('.chat-history-select').textContent).toBe('저장된 견적');
+  await act(async () => Simulate.submit(document.querySelector('[role="dialog"] form')));
+  expect(renameConversation).toHaveBeenLastCalledWith('saved-id', '현장 A 견적', 'A');
+  expect(container.querySelector('.chat-history-select').textContent).toBe('현장 A 견적');
+  listConversations.mockResolvedValue([{ id: 'saved-id', title: '현장 A 견적' }]);
+  act(() => root.unmount());
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(container.querySelector('.messages').textContent).toContain('지난 답변');
+  expect(container.querySelector('.chat-history-select').textContent).toBe('현장 A 견적');
+  expect(sendChat).not.toHaveBeenCalled();
+  expect(JSON.parse(sessionStorage.getItem('poomsemi-chat-tab-v1')).store.conversations).toEqual([]);
   await sendQuestion('이어서 질문');
   expect(sendChat.mock.calls[0][0]).toEqual(expect.objectContaining({
     thread_id: 'saved-id', conversation_id: 'saved-id', request_id: expect.any(String), user_label: '이어서 질문',
   }));
   act(() => Simulate.click(container.querySelector('[aria-label="새 대화 시작"]')));
+  act(() => root.unmount());
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(container.querySelector('.welcome-header')).not.toBeNull();
   await sendQuestion('새로운 회원 대화');
   expect(sendChat.mock.calls[1][0].conversation_id).not.toBe('saved-id');
   expect(sendChat.mock.calls[1][0].thread_id).toBeNull();
   const selectedId = sendChat.mock.calls[1][0].conversation_id;
   act(() => Simulate.click(container.querySelector('[aria-label="새로운 회원 대화 대화 메뉴"]')));
-  act(() => Simulate.click(document.querySelector('[role="menuitem"]')));
+  act(() => Simulate.click(document.querySelector('.chat-history-delete')));
   await act(async () => Simulate.click(document.querySelector('.delete-dialog-confirm')));
   expect(deleteConversation).toHaveBeenCalledWith(selectedId, true, 'thread-새로운 회원 대화');
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(1);
@@ -202,12 +324,12 @@ test('conversation menu confirms deletion, preserves other chats, and keeps fail
   const firstId = container.querySelector('.chat-history-select[title="첫 번째"]').parentElement;
   act(() => Simulate.click(firstId.querySelector('.chat-history-more')));
   expect(container.querySelector('.messages').textContent).toContain('두 번째');
-  act(() => Simulate.click(document.querySelector('[role="menuitem"]')));
+  act(() => Simulate.click(document.querySelector('.chat-history-delete')));
   act(() => Simulate.click(document.querySelector('.delete-dialog-cancel')));
   expect(deleteConversation).not.toHaveBeenCalled();
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(2);
   act(() => Simulate.click(firstId.querySelector('.chat-history-more')));
-  act(() => Simulate.click(document.querySelector('[role="menuitem"]')));
+  act(() => Simulate.click(document.querySelector('.chat-history-delete')));
   deleteConversation.mockRejectedValueOnce(new Error('NETWORK_ERROR'));
   await act(async () => Simulate.click(document.querySelector('.delete-dialog-confirm')));
   expect(document.querySelector('[role="alert"]').textContent).toContain('삭제하지 못했습니다');
@@ -217,7 +339,7 @@ test('conversation menu confirms deletion, preserves other chats, and keeps fail
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(1);
   expect(container.querySelector('.messages').textContent).toContain('두 번째');
   act(() => Simulate.click(container.querySelector('.chat-history-more')));
-  act(() => Simulate.click(document.querySelector('[role="menuitem"]')));
+  act(() => Simulate.click(document.querySelector('.chat-history-delete')));
   await act(async () => Simulate.click(document.querySelector('.delete-dialog-confirm')));
   expect(container.querySelector('.welcome-header h2').textContent).toBe('무엇을 도와드릴까요?');
 });
