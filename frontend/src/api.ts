@@ -29,6 +29,7 @@ export interface ChatRequestBody {
   conversation_id?: string;
   request_id?: string;
   user_label?: string;
+  refs?: Record<string, string>;
 }
 
 export const exportUrl = (threadId: string) => `${API_BASE}/api/export/${threadId}.xlsx`;

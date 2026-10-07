@@ -215,15 +215,20 @@ def set_request_text(item: EstimateItem, text: str, quantity: dict | None = None
 
 
 def set_quantity(item: EstimateItem, value, unit: str, source: str) -> None:
-    """물량이 바뀌면 계산 결과만 버린다(검색·선택은 유지)."""
+    """물량이 바뀌면 계산 결과만 버린다(검색·선택은 유지). 같은 물량을 다시 넣으면 결과를 그대로 둔다."""
+    current = item.get("quantity") or {}
+    if current.get("value") == _rational(value) and unit_key(current.get("unit")) == unit_key(unit):
+        return
     item["quantity"] = {"value": _rational(value), "unit": unit, "source": source}
     _bump(item)
 
 
 def set_explicit(item: EstimateItem, field: str, value, source: str) -> None:
-    """조건 값이 바뀌면 계산 결과만 버린다."""
-    item["explicit"][field] = {"value": value, "source": source}
+    """조건 값이 바뀌면 계산 결과만 버린다. 이미 같은 값을 받았으면 결과를 그대로 둔다."""
     item["question_reasons"].pop(field, None)
+    if field in item["explicit"] and item["explicit"][field]["value"] == value:
+        return
+    item["explicit"][field] = {"value": value, "source": source}
     _bump(item)
 
 
@@ -259,5 +264,8 @@ def set_common(session: EstimateSession, field: str, value) -> None:
     definition = next((item for item in _common_fields() if item["name"] == field), None)
     if definition is None or not _valid_for_field(value, definition):
         raise PlanError(f"공통 조건 값이 올바르지 않습니다: {field}")
+    current = session["common_conditions"].get(field) or {}
+    if current.get("explicit") and current.get("value") == value:
+        return
     session["common_conditions"][field] = {"value": value, "source": "answer", "explicit": True}
     session["revision"] += 1

@@ -20,6 +20,7 @@ export interface AgentQuestion {
   decision_table?: Record<string, DecisionRow> | null;
   reason?: string | null;
   citations?: Citation[];
+  ref?: string | null;  // AGENT_MODE=tools: 답과 함께 돌려보내 현재 질문인지 서버가 확인한다
 }
 
 export interface WorkInfo {
@@ -98,7 +99,7 @@ export interface UnitLine {
 
 export interface ComputedResult {
   daily_volume: { value: string; unit: string; formula: string; sources: string[]; citations: Citation[] } | null;
-  work_days: { value: string; formula: string } | null;
+  work_days: { value: string; formula: string; display?: string } | null;
   lines: ResultLine[];
   unit_lines: UnitLine[];
   unit_basis: { per: string; daily_output: string; places: number; adjustable_note: string };

@@ -81,6 +81,7 @@ def _finish(conn, job):
         saver = PostgresSaver(conn)
         for conversation_id in job['conversation_ids']:
             saver.delete_thread(str(conversation_id))
+            saver.delete_thread(f"dlg:{conversation_id}")  # AGENT_MODE=tools 대화 상태
         conn.execute('DELETE FROM public.feedback WHERE id=ANY(%s)', (job['feedback_ids'],))
         conn.execute('DELETE FROM agent_state.account_deletions WHERE user_id=%s', (job['user_id'],))
 

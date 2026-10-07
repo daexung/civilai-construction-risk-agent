@@ -61,6 +61,8 @@ export default function App() {
   const threadId = current?.threadId ?? null;
   const [loading, setLoading] = useState(false);
   const pendingRequest = useRef(false);
+  // 실패한 요청을 같은 내용으로 다시 보내면 같은 request_id를 써서 서버가 한 번만 실행·차감한다.
+  const failedRequest = useRef<{ key: string; id: string } | null>(null);
   const [usage, setUsage] = useState<UsageStatus | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
@@ -242,7 +244,7 @@ export default function App() {
 
   const send = useCallback(async (
     userLabel: string,
-    body: { message?: string; answers?: Record<string, ChoiceValue>; restart?: boolean },
+    body: { message?: string; answers?: Record<string, ChoiceValue>; restart?: boolean; refs?: Record<string, string> },
     thread: string | null,
     conversationId = store.activeId ?? uuidv4(),
   ) => {
@@ -263,9 +265,12 @@ export default function App() {
     });
     setLoading(true);
     trackEvent('question_submitted', { member: saved });
+    const requestKey = JSON.stringify([conversationId, thread, body]);
+    const requestId = failedRequest.current?.key === requestKey ? failedRequest.current.id : uuidv4();
     try {
-      const response = await sendChat({ thread_id: thread, ...body,
-        ...(saved ? { conversation_id: conversationId, request_id: uuidv4(), user_label: userLabel } : {}) });
+      const response = await sendChat({ thread_id: thread, ...body, request_id: requestId,
+        ...(saved ? { conversation_id: conversationId, user_label: userLabel } : {}) });
+      failedRequest.current = null;
       if (requestUserId && accountRef.current !== requestUserId) return;
       if (response.usage) setUsage(response.usage);
       const assistantTurn: ChatTurn = { id: uuidv4(), role: 'assistant', response,
@@ -273,6 +278,7 @@ export default function App() {
       setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => chat.id === conversationId
         ? { ...chat, threadId: response.thread_id, turns: [...chat.turns, assistantTurn] } : chat) }));
     } catch (err) {
+      failedRequest.current = { key: requestKey, id: requestId };
       handleError(err);
     } finally {
       pendingRequest.current = false;
@@ -283,8 +289,8 @@ export default function App() {
   const handleSendMessage = useCallback((text: string) => send(text, { message: text }, threadId), [send, threadId]);
   const handleResendMessage = useCallback((text: string) => send(text, { message: text, restart: true }, threadId), [send, threadId]);
 
-  const handleSendAnswers = useCallback((answers: Record<string, ChoiceValue>, summary: string) => {
-    return send(summary, { answers }, threadId);
+  const handleSendAnswers = useCallback((answers: Record<string, ChoiceValue>, summary: string, refs?: Record<string, string>) => {
+    return send(summary, refs ? { answers, refs } : { answers }, threadId);
   }, [send, threadId]);
 
   // 결과 카드의 조건만 바꿔 같은 카드를 새 계산으로 교체한다(공종 입력은 서버가 그대로 둔다).
@@ -296,8 +302,8 @@ export default function App() {
     setLoading(true);
     try {
       const requestUserId = user?.id ?? null;
-      const response = await sendChat({ thread_id: threadId, conditions,
-        ...(current?.saved ? { conversation_id: conversationId, request_id: uuidv4(), user_label: '현장 조건 반영' } : {}) });
+      const response = await sendChat({ thread_id: threadId, conditions, request_id: uuidv4(),
+        ...(current?.saved ? { conversation_id: conversationId, user_label: '현장 조건 반영' } : {}) });
       if (accountRef.current !== requestUserId) return;
       if (response.usage) setUsage(response.usage);
       const elapsedMs = performance.now() - startedAt;
