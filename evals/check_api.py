@@ -102,6 +102,13 @@ def _check_workflow() -> int:
     checks.append(("A3", missing["status"] == "MISSING_INFO"
                    and required_pump_questions.issubset({item["name"] for item in missing["questions"]})
                    and missing["work"]["section_no"] == "6-1-4"))
+    # 수치 칸의 "0보다 큰 수" 설명 문자열이 choices로 나가면 화면이 choices.map에서 멈춘다.
+    unit_word = CLIENT.post("/api/chat", json={"message": "콘크리트 타설 1세제곱미터 품셈 알려줘"}).json()
+    volume_question = next((item for item in unit_word["questions"] if item["name"] == "volume"), None)
+    checks.append(("A3-choices 선택지는 목록 또는 null", unit_word["status"] == "MISSING_INFO"
+                   and volume_question is not None and volume_question["choices"] is None
+                   and all(item["choices"] is None or isinstance(item["choices"], list)
+                           for response in (evidence, missing, unit_word) for item in response["questions"])))
 
     pending_edit = CLIENT.post("/api/chat", json={"message": "철근콘크리트 260㎥ 펌프차 타설 비용"}).json()
     edited = CLIENT.post("/api/chat", json={"thread_id": pending_edit["thread_id"],
