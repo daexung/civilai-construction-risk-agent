@@ -76,7 +76,7 @@ START → load_session → agent ⇄ tools → reply → commit → END
 | 도구 | 입력 | `ok`일 때 `data` | 조건 부족·검증 |
 |---|---|---|---|
 | `find_work` | `query` | `decision`, 후보 `[{spec_id, section, has_spec}]` | 미확정이면 `needs_input`(`work`만). 명세 없음이면 `not_found` |
-| `set_conditions` | `values{필드: {value, evidence}}`, `quantity{value, unit, evidence}?`, `work_choice?` | 반영된 값, 버려진 값(`dropped_conditions`), 무효화된 단계 | ① `evidence`가 이번 사용자 문장에 실제로 있어야 함 ② 명세 허용값·단위 검증(`_valid_for_field`, `unit_key`) ③ 공종이 바뀌면 호환 값만 유지(`choose_work`) ④ 무효화 규칙(§5) |
+| `set_conditions` | `values{필드: {value, evidence}}`, `quantity{value, unit, evidence}?`, `work_choice?` | 반영된 값, 버려진 값(`dropped_conditions`), 무효화된 단계 | ① `evidence`가 이번 사용자 문장에 실제로 있어야 함 ①-2 근거 구절을 서버 파서로 다시 읽은 값·단위가 보낸 값과 같아야 함(㎥·m3·루베, 9만원→90000 같은 표기 정규화는 허용) ② 명세 허용값·단위 검증(`_valid_for_field`, `unit_key`) ③ 공종이 바뀌면 호환 값만 유지(`choose_work`) ④ 무효화 규칙(§5) |
 | `compute_labor` | 없음(세션의 확정 공종·조건) | `unit_lines`(1단위당 품), `daily_volume`, `work_days`, `person_days`, `equipment_days`, `equipment_units`, 근거, `review_status` | 품 산출 조건이 부족하면 `needs_input`(stage=labor), 보류 조건이면 `blocked` |
 | `estimate_cost` | `basis_date?` | 일위대가(`priced`), 원가계산서(`statement`), 공통 조건과 출처 | `compute_labor` 결과가 최신이 아니면 먼저 다시 계산한다. 가격 조건이 부족하면 `needs_input`(stage=price) |
 | `explain_basis` | `topic?` | 최신 계산 결과에 붙은 표·주석 원문 인용(`resolve_cites`) | 계산 결과가 없으면 `needs_input` |
@@ -127,7 +127,7 @@ START → load_session → agent ⇄ tools → reply → commit → END
 | 공통 조건 | 원가계산서만 (`set_common`) |
 | 기준일 | 가격 → 원가계산서 |
 
-품 결과가 최신인지는 **품 입력 키**(`labor_key` = 명세 id + 품 조건 + 물량의 해시)로 판정한다. 키가 같으면 품을 다시 계산하지 않는다. 그래서 가격 조건·공통 조건만 바뀌면 품은 그대로 두고 가격·원가만 다시 만든다. 이를 위해 체크포인트 `_bump`는 품 결과를 지우지 않고 가격 결과만 지우도록 바꾼다. 가격 결과가 최신인지는 기존 `result_revision == input_revision`으로 판정한다. 결과를 보여주거나 내려받을 때는 최신 결과만 쓴다.
+품 결과가 최신인지는 **품 입력 키**(`labor_key` = 명세 id + 품 조건 + 물량의 해시)로 판정한다. 키가 같으면 품을 다시 계산하지 않는다. 그래서 가격 조건·공통 조건만 바뀌면 품은 그대로 두고 가격·원가만 다시 만든다. 이를 위해 체크포인트 `_bump`는 품 결과를 지우지 않고 가격 결과만 지우도록 바꾼다. 가격 결과는 **가격 키**(`price_key` = 품 키 + 가격 조건 + 기준일)와 `result_revision == input_revision`으로 판정해 재사용한다. 원가계산서는 **원가계산서 키**(`statement_key` = 기준일 + 공통 조건 + 항목별 입력·결과 버전·품 키·가격 키)가 현재 상태와 같을 때만 최신이다. `set_conditions`로 무엇이든 반영되면 이전 원가계산서를 지우고, 도구를 거치지 않은 변경(예: `set_common`, 기준일)도 키 불일치로 최신이 아니게 된다. 결과를 보여주거나 내려받을 때는 `current_estimate(session)`이 돌려주는 최신 결과만 쓴다.
 
 ## 6. 호출 예산
 

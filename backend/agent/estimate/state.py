@@ -61,6 +61,7 @@ class EstimateItem(TypedDict, total=False):
     computed_result: dict | None
     labor_key: str | None     # computed_result를 만든 명세·품 조건·물량의 해시
     priced_result: dict | None
+    price_key: str | None     # priced_result를 만든 품 키·가격 조건·기준일의 해시
     input_revision: int
     result_revision: int | None
 

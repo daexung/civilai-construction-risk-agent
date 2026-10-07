@@ -14,6 +14,8 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import re
+import unicodedata
 from datetime import date
 from fractions import Fraction
 
@@ -22,7 +24,8 @@ from backend.agent.estimate.state import (COMMON_FIELDS, EstimateItem, EstimateS
                                           new_session, question_version, set_common, set_explicit, set_quantity,
                                           unit_key)
 from backend.agent.nodes.compute import CALCULATORS
-from backend.agent.nodes.fill import _format_rational, _norm, _valid_for_field, extract_inputs
+from backend.agent.nodes.fill import (_UNIT_ALIASES, _extract_common_inputs, _format_rational, _norm,
+                                      _valid_for_field, extract_inputs)
 from backend.agent.nodes.qa_context import build_context
 from backend.agent.nodes.retrieve import retrieve
 from backend.agent.nodes.select import select
@@ -127,12 +130,57 @@ def _missing_fields(spec: dict, values: dict, names) -> list[dict]:
             and (not field.get("when") or values.get(field["when"]["input"]) == field["when"]["equals"])]
 
 
+_NUMERIC = {"positive_rational", "positive_currency", "nonnegative_integer"}
+_MISSING = object()
+_MULTIPLIER = {"억": 100_000_000, "만": 10_000}
+_UNIT_WORDS = sorted({alias for aliases in _UNIT_ALIASES.values() for alias in aliases}, key=len, reverse=True)
+_QUANTITY = re.compile(r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*(" + "|".join(map(re.escape, _UNIT_WORDS)) + r")(?![a-z0-9])")
+_NUMBER = re.compile(r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*(억|만)?")
+
+
+def _fraction(value) -> Fraction | None:
+    try:
+        return Fraction(str(value).replace(",", ""))
+    except (ValueError, ZeroDivisionError):
+        return None
+
+
+def _numbers(evidence: str) -> set[Fraction]:
+    """근거 구절의 숫자. '9만원'처럼 만·억 단위는 원 단위로 바꾼다."""
+    text = unicodedata.normalize("NFKC", evidence)
+    return {Fraction(raw.replace(",", "")) * _MULTIPLIER.get(scale, 1) for raw, scale in _NUMBER.findall(text)}
+
+
+def _quantities(evidence: str) -> set[tuple[Fraction, str | None]]:
+    """근거 구절의 (숫자, 단위 종류). ㎥·m3·루베·세제곱미터는 같은 단위다."""
+    text = unicodedata.normalize("NFKC", evidence).casefold()
+    return {(Fraction(raw.replace(",", "")), unit_key(unit)) for raw, unit in _QUANTITY.findall(text)}
+
+
+def _digest(*parts) -> str:
+    return hashlib.sha1(json.dumps(parts, ensure_ascii=False, sort_keys=True, default=str).encode()).hexdigest()
+
+
 def _labor_key(spec: dict, values: dict) -> str:
     excluded = price_fields(spec)
-    labor = {name: value for name, value in values.items()
-             if name not in excluded and name not in COMMON_FIELDS}
-    return hashlib.sha1(json.dumps([spec["id"], labor], ensure_ascii=False, sort_keys=True,
-                                   default=str).encode()).hexdigest()
+    return _digest(spec["id"], {name: value for name, value in values.items()
+                                if name not in excluded and name not in COMMON_FIELDS})
+
+
+def _statement_key(session: EstimateSession) -> str:
+    """원가계산서에 영향을 주는 입력: 기준일·공통 조건·항목별 입력/결과 버전과 품·가격 키."""
+    return _digest(session.get("basis_date"),
+                   {name: entry["value"] for name, entry in session["common_conditions"].items()},
+                   [(item_id, item["input_revision"], item.get("result_revision"), item.get("labor_key"),
+                     item.get("price_key")) for item_id, item in
+                    ((item_id, session["items"][item_id]) for item_id in session["item_order"])])
+
+
+def current_estimate(session: EstimateSession) -> dict | None:
+    """최신 확정 원가계산서. 입력이 바뀐 뒤 다시 계산하지 않았으면 None(화면·내려받기는 이것만 쓴다)."""
+    if session.get("statement") and session.get("statement_key") == _statement_key(session):
+        return {"statement": session["statement"], "aggregate_result": session["aggregate_result"]}
+    return None
 
 
 # ---- 도구 ----
@@ -177,6 +225,22 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
         evidence = entry.get("evidence")
         return source == "answer" or (isinstance(evidence, str) and bool(_norm(evidence)) and _norm(evidence) in said)
 
+    def consistent(name: str, value, evidence: str, field: dict | None) -> bool:
+        """근거 구절을 서버 파서로 다시 읽어 보낸 값과 같은지 본다(단위·금액 표기 차이는 허용)."""
+        if source == "answer":
+            return True
+        if name in COMMON_FIELDS:
+            return str(_extract_common_inputs(evidence).get(name)) == str(value)
+        if field is None:  # 공종 확정 전: 값이 근거 구절에 그대로 있어야 한다
+            return bool(_norm(str(value))) and _norm(str(value)) in _norm(evidence)
+        if quantity_field and name == quantity_field["name"]:
+            return (_fraction(value), unit_key(field.get("unit"))) in _quantities(evidence)
+        if field["type"] in _NUMERIC:
+            if value == "모름":
+                return "모름" in _norm(evidence)
+            return _fraction(value) in _numbers(evidence)
+        return extract_inputs(evidence, {**spec, "inputs": [field]})[0].get(name, _MISSING) == value
+
     if work is not None:
         chosen = [c for c in item.get("candidates", []) if work in (c["section"], c["section_no"], (_spec_for(c) or {}).get("id"))]
         spec = _spec_for(chosen[0]) if len(chosen) == 1 else None
@@ -192,6 +256,9 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
     if quantity is not None:
         if not grounded(quantity):
             rejected["quantity"] = "원문에 근거가 없습니다"
+        elif source != "answer" and (_fraction(quantity.get("value")), unit_key(quantity.get("unit"))) \
+                not in _quantities(quantity["evidence"]):
+            rejected["quantity"] = "물량 값·단위가 근거와 다릅니다"
         elif unit_key(quantity.get("unit")) is None or (
                 quantity_field and unit_key(quantity["unit"]) != unit_key(quantity_field.get("unit"))):
             rejected["quantity"] = f"물량 단위가 맞지 않습니다: {quantity.get('unit')}"
@@ -203,8 +270,16 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
                 rejected["quantity"] = "물량은 0보다 큰 수여야 합니다"
     for name, entry in (values or {}).items():
         value = entry.get("value") if isinstance(entry, dict) else None
+        field = fields.get(name)
+        if field and field.get("labels") and value not in field["allowed_values"]:
+            raw = [key for key, label in field["labels"].items() if label == value]
+            value = raw[0] if len(raw) == 1 else value
         if not isinstance(entry, dict) or not grounded(entry):
             rejected[name] = "원문에 근거가 없습니다"
+        elif spec and name not in fields and name not in COMMON_FIELDS:
+            rejected[name] = "이 공종에 없는 조건입니다"
+        elif not consistent(name, value, entry.get("evidence") or "", field):
+            rejected[name] = "값이 근거와 다릅니다"
         elif name in COMMON_FIELDS:
             try:
                 set_common(session, name, value)
@@ -214,13 +289,7 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
         elif spec is None:
             set_explicit(item, name, value, source)  # 공종이 정해지면 choose_work가 호환 값만 남긴다
             applied[name] = value
-        elif name not in fields:
-            rejected[name] = "이 공종에 없는 조건입니다"
         else:
-            field = fields[name]
-            if field.get("labels") and value not in field["allowed_values"]:
-                raw = [key for key, label in field["labels"].items() if label == value]
-                value = raw[0] if len(raw) == 1 else value
             if not _valid_for_field(value, field):
                 rejected[name] = "허용값이 아닙니다"
             elif quantity_field and name == quantity_field["name"]:
@@ -231,6 +300,9 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
                     value = _format_rational(Fraction(str(value).replace(",", "")))
                 set_explicit(item, name, value, source)
                 applied[name] = value
+    if applied:
+        # 입력이 바뀌면 이전 원가계산서는 최신 결과가 아니다(다시 estimate_cost를 불러야 한다).
+        session.update(statement=None, aggregate_result=None, statement_key=None)
     return _result("ok", item, {"applied": applied, "dropped": item.get("dropped_conditions", [])}, rejected=rejected)
 
 
@@ -308,16 +380,23 @@ def estimate_cost(session: EstimateSession) -> dict:
         item.update(status="NEEDS_INPUT", questions=missing)
         return _result("needs_input", item, labor["data"], missing=missing)
     basis = session.get("basis_date") or date.today().isoformat()
-    common = {name: entry["value"] for name, entry in session["common_conditions"].items()}
-    priced = price_unit(spec, item["computed_result"]["unit_lines"], select_rate_version(basis),
-                        {**common, **conditions}, basis)
-    item.update(priced_result=priced, status="PRICED", result_revision=item["input_revision"], questions=[],
-                review_status=spec.get("review", ""))
+    # price_unit은 품 결과와 장비 규격(품 조건)·가격 조건·기준일만 읽는다. 공통 조건이 바뀌어도 다시 하지 않는다.
+    key = _digest(item["labor_key"], {name: conditions.get(name) for name in sorted(price_fields(spec))}, basis)
+    if not (item.get("priced_result") and item.get("price_key") == key
+            and item.get("result_revision") == item["input_revision"]):
+        common = {name: entry["value"] for name, entry in session["common_conditions"].items()}
+        priced = price_unit(spec, item["computed_result"]["unit_lines"], select_rate_version(basis),
+                            {**common, **conditions}, basis)
+        item.update(priced_result=priced, price_key=key, result_revision=item["input_revision"])
+    item.update(status="PRICED", questions=[], review_status=spec.get("review", ""))
+    priced = item["priced_result"]
     session.update(aggregate(session))
     outcome = session["aggregate_result"]
     if outcome["status"] in ("PENDING", "NEEDS_COMMON", "NO_RESULT"):
+        session.update(statement=None, statement_key=None)
         return _result("error", item, {"reason": f"원가계산서를 만들 수 없습니다({outcome['status']})",
                                        "priced": priced})
+    session["statement_key"] = _statement_key(session)
     return _result("ok", item, {**labor["data"], "priced": priced, "statement": session["statement"],
                                 "common": copy.deepcopy(session["common_conditions"]),
                                 "price_conditions": {name: conditions[name] for name in price_fields(spec)
@@ -332,15 +411,25 @@ def explain_basis(session: EstimateSession) -> dict:
     item = _item(session)
     result = item["computed_result"]
     seen, citations = set(), []
-    sources = [*result["provenance"]["daily_volume_m3"]["citations"],
-               *(citation for line in result["unit_lines"] for citation in line.get("citations", []))]
-    for citation in sources:
+    # 계산 방식마다 근거 구조가 다르다(daily_crew: daily_volume_m3·person_days…, per_unit: unit_rates).
+    # 방식별 키를 가정하지 않고 provenance 전체와 품 줄에서 citations를 모은다.
+    for citation in [*_citations_in(result.get("provenance", {})),
+                     *(citation for line in result["unit_lines"] for citation in line.get("citations", []))]:
         key = json.dumps(citation, ensure_ascii=False, sort_keys=True, default=str)
         if key not in seen:
             seen.add(key)
             citations.append(citation)
     return _result("ok", item, {"spec_id": item["selected_spec_id"], "citations": citations,
                                 "memos": result.get("adjustment_memos", [])})
+
+
+def _citations_in(node) -> list[dict]:
+    if isinstance(node, dict):
+        found = list(node.get("citations") or [])
+        return found + [c for key, value in node.items() if key != "citations" for c in _citations_in(value)]
+    if isinstance(node, list):
+        return [c for value in node for c in _citations_in(value)]
+    return []
 
 
 def search_standard(query: str, hits: list[dict] | None = None) -> dict:

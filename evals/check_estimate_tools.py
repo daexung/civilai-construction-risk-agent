@@ -63,6 +63,112 @@ def started(text: str):
     return session
 
 
+def guarded(checks: list, name: str, check) -> None:
+    """한 검사의 예외가 나머지 검사를 막지 않게 하고, 예외는 실패로 기록한다."""
+    try:
+        passed = bool(check())
+    except Exception as exc:  # noqa: BLE001 - 회귀 재현(KeyError 등)을 실패로 남긴다
+        print(f"  {name}: {type(exc).__name__}: {exc}")
+        passed = False
+    checks.append((name, passed))
+
+
+def check_per_unit_basis() -> bool:
+    door = [{"section_no": "10-1-7", "division": "건축", "rank": 1, "section": "10-1-7 자동문 설치"}]
+    session = tools.new_estimate("자동문 3개소 설치", "2026-10-01")
+    found = tools.find_work(session, hits=door)
+    labor = tools.compute_labor(session)
+    basis = tools.explain_basis(session)
+    return (found["status"] == "ok" and load_specs()[found["data"]["spec_id"]]["quantity_model"]["name"] == "per_unit"
+            and labor["status"] == "ok" and labor["data"]["quantity"] == "3"
+            and basis["status"] == "ok" and len(basis["data"]["citations"]) > 0)
+
+
+def check_evidence_values() -> bool:
+    session = started("콘크리트 1m3 품셈")
+    tools.set_conditions(session, "", work="6-1-4", source="answer")
+    item = session["items"][session["item_order"][0]]
+    say = lambda text, **kwargs: tools.set_conditions(session, text, **kwargs)  # noqa: E731
+    wrong_number = say("1m3", quantity={"value": "999", "unit": "m3", "evidence": "1m3"})
+    kept = item["quantity"] is None
+    unit_alias = say("1m3", quantity={"value": "1", "unit": "㎥", "evidence": "1m3"})
+    rube = say("2루베로 바꿔", quantity={"value": "2", "unit": "m3", "evidence": "2루베"})
+    wrong_unit = say("2㎡", quantity={"value": "2", "unit": "m3", "evidence": "2㎡"})
+    volume_field = say("1m3", values={"volume": {"value": "5", "evidence": "1m3"}})
+    pump_wrong = say("펌프차 32m", values={"pump_size": {"value": "36m", "evidence": "32m"}})
+    pump_right = say("펌프차 32m", values={"pump_size": {"value": "32m", "evidence": "32m"}})
+    structure_wrong = say("철근콘크리트", values={"structure": {"value": "무근", "evidence": "철근콘크리트"}})
+    structure_right = say("철근콘크리트", values={"structure": {"value": "철근", "evidence": "철근콘크리트"}})
+    price_right = say("레미콘 단가 9만원", values={"ready_mix_price": {"value": "90000", "evidence": "9만원"}})
+    price_wrong = say("레미콘 단가 9만원", values={"ready_mix_price": {"value": "80000", "evidence": "9만원"}})
+    duration_right = say("공사기간 8개월", values={"duration": {"value": "7~12개월", "evidence": "8개월"}})
+    duration_wrong = say("공사기간 8개월", values={"duration": {"value": "13~36개월", "evidence": "8개월"}})
+    return ("quantity" in wrong_number["rejected"] and kept
+            and unit_alias["data"]["applied"] == {"quantity": "1"} and rube["data"]["applied"] == {"quantity": "2"}
+            and "quantity" in wrong_unit["rejected"] and "volume" in volume_field["rejected"]
+            and "pump_size" in pump_wrong["rejected"] and pump_right["data"]["applied"] == {"pump_size": "32m"}
+            and "structure" in structure_wrong["rejected"] and structure_right["data"]["applied"] == {"structure": "철근"}
+            and price_right["data"]["applied"] == {"ready_mix_price": "90000"} and "ready_mix_price" in price_wrong["rejected"]
+            and duration_right["data"]["applied"] == {"duration": "7~12개월"} and "duration" in duration_wrong["rejected"]
+            and item["quantity"]["value"] == "2")
+
+
+def stale_checks():
+    """각 변경 직후에는 이전 원가계산서가 최신이 아니고, 재계산 후에는 필요한 단계만 다시 한다."""
+    session = started("철근콘크리트 벽체 260㎥ 펌프차로 타설 비용")
+    tools.set_conditions(session, "", work="6-1-4", source="answer")
+    answer(session, **PUMP, concrete_supply="관급")
+    tools.estimate_cost(session)
+    item = session["items"][session["item_order"][0]]
+    original_labor, original_price = CALCULATORS["adjusted_daily_crew"], tools.price_unit
+    counts = {"labor": 0, "price": 0}
+
+    def labor(*args, **kwargs):
+        counts["labor"] += 1
+        return original_labor(*args, **kwargs)
+
+    def price(*args, **kwargs):
+        counts["price"] += 1
+        return original_price(*args, **kwargs)
+
+    def change_then_recalculate(change, labor_runs: int, price_runs: int, after=lambda result: True):
+        def check():
+            before_amount = tools.current_estimate(session)
+            change()
+            stale = tools.current_estimate(session) is None
+            counts.update(labor=0, price=0)
+            with patch.dict(CALCULATORS, {"adjusted_daily_crew": labor}), patch.object(tools, "price_unit", price):
+                result = tools.estimate_cost(session)
+            fresh = tools.current_estimate(session)
+            if not stale or before_amount is None:
+                print(f"    재계산 전 판정: 이전 결과 있음={before_amount is not None}, 무효화={stale}")
+            return (stale and result["status"] == "ok" and fresh is not None
+                    and fresh["statement"] is session["statement"]
+                    and counts == {"labor": labor_runs, "price": price_runs} and after(result))
+        return check
+
+    from backend.agent.estimate.state import set_common  # 도구를 거치지 않은 변경도 판정해야 한다
+    return [
+        ("C13 처음 계산 직후 원가계산서는 최신", lambda: tools.current_estimate(session) is not None),
+        ("C13 공통 조건 변경: 재계산 전 무효, 후 품·가격 재사용하고 원가만 갱신",
+         change_then_recalculate(lambda: answer(session, duration="7~12개월"), 0, 0,
+                                 lambda r: r["data"]["statement"]["conditions"]["duration"] == "7~12개월")),
+        ("C13 도구 밖 공통 조건 변경도 무효로 판정",
+         change_then_recalculate(lambda: set_common(session, "contractor_type", "전문건설업"), 0, 0)),
+        ("C13 가격 조건 변경: 재계산 전 무효, 후 가격만 다시",
+         change_then_recalculate(lambda: answer(session, concrete_supply="사급", ready_mix_price="90000"), 0, 1)),
+        ("C13 물량 변경: 재계산 전 무효, 후 품·가격 다시",
+         change_then_recalculate(lambda: tools.set_conditions(
+             session, "300㎥", quantity={"value": "300", "unit": "㎥", "evidence": "300㎥"}), 1, 1,
+             lambda r: r["data"]["quantity"] == "300")),
+        ("C13 품 조건 변경: 재계산 전 무효, 후 품·가격 다시",
+         change_then_recalculate(lambda: answer(session, slump_band="18㎝이상"), 1, 1)),
+        ("C13 기준일 변경: 재계산 전 무효, 후 가격만 다시",
+         change_then_recalculate(lambda: session.update(basis_date="2026-12-01"), 0, 1,
+                                 lambda r: item["result_revision"] == item["input_revision"])),
+    ]
+
+
 def main() -> int:
     checks = []
     pump, manual = spec_of("6-1-4"), spec_of("6-1-1")
@@ -208,10 +314,19 @@ def main() -> int:
                    and legacy_item["result_revision"] == legacy_item["input_revision"]))
     basis = tools.explain_basis(session)
     standard = tools.search_standard("콘크리트 펌프차 타설 인력편성")
-    checks.append(("C10 근거: 계산 결과의 원문 인용", basis["status"] == "ok" and len(basis["data"]["citations"]) > 0))
+    checks.append(("C10 근거(daily_crew 6-1-4): 계산 결과의 원문 인용",
+                   basis["status"] == "ok" and len(basis["data"]["citations"]) > 0))
     checks.append(("C10 search_standard는 원문 자료만", standard["status"] == "ok"
                    and set(standard["data"]) == {"sections"}
                    and all(set(s) == {"section", "truncated", "text", "chunk_ids"} for s in standard["data"]["sections"])))
+    guarded(checks, "C11 근거(per_unit 10-1-7 자동문): 품 계산 후 원문 인용", check_per_unit_basis)
+
+    # 9. 근거 구절과 값·단위 대조
+    guarded(checks, "C12 근거와 다른 값·단위는 거부, 표기 정규화는 허용", check_evidence_values)
+
+    # 10. 원가계산서 최신 판정: 변경 직후(재계산 전)와 재계산 후
+    for name, check in stale_checks():
+        guarded(checks, name, check)
 
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
