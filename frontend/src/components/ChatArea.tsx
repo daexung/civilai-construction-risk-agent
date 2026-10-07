@@ -15,6 +15,9 @@ import AnswerFeedback from './AnswerFeedback';
 import EstimateGuidance from './EstimateGuidance';
 import UserQuestion from './UserQuestion';
 
+// 지난 카드에는 선택 상태를 주지 않는다. 같은 이름의 질문(scope 등)이 다시 나와도 지금 ref의 카드만 선택된다.
+const NO_DRAFT: Record<string, { value: ChoiceValue; label: string }> = {};
+
 interface Props {
   restoring?: boolean;
   ratingUserId?: string;
@@ -696,7 +699,7 @@ function ChatAreaView({ turns, loading, restoring, generating = loading, inputDi
                       elapsedMs={turn.elapsedMs}
                       receivedAtMs={turn.receivedAtMs}
                       interactive={i === turns.length - 1}
-                      draft={draft}
+                      draft={i === turns.length - 1 ? draft : NO_DRAFT}
                       onSelect={handleSelect}
                       onSubmit={handleSubmitAnswers}
                       loading={blocked}

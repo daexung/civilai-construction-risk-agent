@@ -79,7 +79,7 @@ def _question(item: EstimateItem, field: str, ask: str, choices, stage: str, **e
 
 
 def _work_question(item: EstimateItem) -> dict:
-    return _question(item, "work", "어느 공종(타설 방식)으로 계산할까요?",
+    return _question(item, "work", "어느 공종으로 계산할까요?",
                      [candidate["section"] for candidate in item["candidates"]], "work")
 
 

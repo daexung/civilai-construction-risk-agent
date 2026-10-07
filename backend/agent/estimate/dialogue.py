@@ -281,9 +281,18 @@ def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget:
                 return {"status": "rejected", "missing": [], "rejected": {}, "data": {
                     "reason": "지금 견적이 있어 새 견적을 시작하지 않았어요. 지금 견적으로 계산하려면 estimate_cost를 부르세요."}}
         state["session"] = session = tools.new_estimate(message, state["request"].get("basis_date"))
-        state["goal"] = None
+        # 계산 목표는 사용자 요청으로 정한다. 비용 요청이면 LLM이 compute_labor를 골라도 비용 목표를 유지한다.
+        state["goal"] = "cost" if _rule_route(message, None) == "estimate" else "labor"
         state["fresh_session"] = True  # 첫 문장의 물량·조건은 변경이 아니라 시작 값이다
-        return tools.find_work(session)
+        result = tools.find_work(session)
+        # 원래 요청의 물량은 LLM이 set_conditions를 생략해도 서버가 보존한다(서버 파서로 읽은 값·단위·근거).
+        # 공종이 정해지면 명세 단위와 다시 대조한다. 물량이 여러 개면 고르지 않고 명세의 물량 질문으로 묻는다.
+        quantity = _request_quantity(session, message)
+        if quantity:
+            kept = tools.set_conditions(session, message, quantity=quantity, source="text")
+            result = {**result, "data": {**(result.get("data") or {}), "request_quantity": quantity,
+                                         "request_quantity_rejected": kept["rejected"].get("quantity")}}
+        return result
     if name == "search_standard":
         query = args.get("query") if isinstance(args.get("query"), str) and args["query"].strip() else message
         return tools.search_standard(query)
@@ -391,6 +400,21 @@ def _start_actions(state: DialogueState, message: str, route: str) -> list[tuple
     return actions + [("estimate_cost", {}) if state["goal"] == "cost" else ("compute_labor", {})]
 
 
+def _request_quantity(session: dict, message: str) -> dict | None:
+    """새 견적 요청의 물량. 공종이 이미 정해졌으면 명세 물량 단위와 같은 물량이 하나일 때만(32m·15cm 같은 조건 값 제외),
+    아니면 문장 속 물량이 하나일 때만 고른다. 여럿이면 고르지 않는다(명세의 물량 질문으로 묻는다)."""
+    spec = tools._spec(tools._item(session))
+    field = tools._quantity_field(spec) if spec else None
+    if not field:
+        return _rule_quantity(message)
+    text = unicodedata.normalize("NFKC", message).casefold()
+    found = [match for match in tools._QUANTITY.finditer(text) if not text[match.end():].lstrip().startswith("당")
+             and tools.unit_key(match.group(2)) == tools.unit_key(field.get("unit"))]
+    if len(found) != 1:
+        return None
+    return {"value": found[0].group(1).replace(",", ""), "unit": found[0].group(2), "evidence": found[0].group(0)}
+
+
 def _rule_quantity(message: str, per_unit: bool = True) -> dict | None:
     """문장 속 물량이 하나면 그 물량. per_unit=False면 '1㎥당'처럼 단위당 기준은 물량으로 보지 않는다."""
     text = unicodedata.normalize("NFKC", message).casefold()
@@ -477,7 +501,7 @@ def _template(state: DialogueState, log: list, facts: list[dict], notices: list)
         if state.get("pending_kept") and answer:
             parts.append(answer)
         stage = state["pending"][0].get("stage")
-        parts.append({"work": "먼저 공종(타설 방식)을 골라 주세요.",
+        parts.append({"work": "먼저 공종을 골라 주세요.",
                       "price": "비용을 계산하려면 가격 조건이 필요해요. 아래에서 골라 주세요.",
                       "scope": "지금 견적은 그대로예요. 어느 견적으로 계산할지 골라 주세요."}.get(
             stage, "품을 계산하려면 아래 조건을 확인해 주세요."))
@@ -603,6 +627,18 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
                 if _stops(name, result):
                     break
         use_llm = use_llm and policy == "llm"
+        # 입력을 바꾸거나(카드 답·조건·새 견적) 새 견적을 시작했는데 계산으로 끝나지 않았으면(LLM이 바로 답한 경우)
+        # 목표에 맞는 계산을 한다. 그래야 남은 질문이 나오고, 바뀐 입력으로 결과가 최신이 된다.
+        changed = _inputs_key(working) != before or any(entry["tool"] == "answers" for entry in log)
+        last = log[-1] if log else None
+        if working["session"] and changed and last and last["tool"] not in ("compute_labor", "estimate_cost")                 and last["result"]["status"] in ("ok", "needs_input") and not last["result"].get("confirm_scope"):
+            finish = "estimate_cost" if working["goal"] == "cost" else "compute_labor"
+            log.append({"tool": finish, "args": {}, "result": _run_tool(working, finish, {}, message, budget)})
+        # 비용 목표인데 이번 턴이 품 계산에서 끝났으면(LLM이 compute_labor만 고른 경우 등) 비용 계산까지 잇는다.
+        # 가격 조건이 없으면 estimate_cost가 질문을 낸다. 이미 최신 견적이면(조회 턴) 다시 계산하지 않는다.
+        labor = [entry for entry in log if entry["tool"] == "compute_labor"]
+        if working["goal"] == "cost" and working["session"] and labor and labor[-1]["result"]["status"] == "ok"                 and not any(entry["tool"] == "estimate_cost" for entry in log)                 and tools.current_estimate(working["session"]) is None:
+            log.append({"tool": "estimate_cost", "args": {}, "result": _run_tool(working, "estimate_cost", {}, message, budget)})
     # 반영하지 못한 값은 답변 첫머리에 알린다(이전 결과를 새 결과처럼 보이지 않게).
     notices += [f"반영하지 못했어요 - {_label(working, name)}: {reason}" for entry in log if entry["tool"] == "set_conditions"
                 for name, reason in (entry["result"].get("rejected") or {}).items()]

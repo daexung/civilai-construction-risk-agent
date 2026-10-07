@@ -419,3 +419,18 @@ test('answers to server questions are sent with the question refs', async () => 
   expect(body.answers).toEqual({ concrete_supply: '관급' });
   expect(body.refs).toEqual({ concrete_supply: 'i1:concrete_supply@v1@3' });
 });
+
+test('a repeated question name keeps the selection on the current card only', async () => {
+  const scope = (ref) => ({ ...response('thread-s', '어느 견적인지 골라 주세요.'), status: 'MISSING_INFO', inputs: [], conditions: [], evidence: [],
+    questions: [{ name: 'scope', ask: '지금 견적으로 계산할까요?', choices: ['지금 견적으로 계산', '새 견적 시작'], ref }] });
+  sendChat.mockResolvedValueOnce(scope('scope@1@1')).mockResolvedValueOnce(scope('scope@1@2'));
+  await sendQuestion('콘크리트 거푸집 비용');
+  await sendQuestion('콘크리트 거푸집 비용');
+  const latest = () => [...container.querySelectorAll('.question-list')].at(-1);
+  act(() => Simulate.click([...latest().querySelectorAll('.choice-btn')].find(button => button.textContent === '새 견적 시작')));
+  const selected = [...container.querySelectorAll('.choice-btn.selected')];
+  expect(selected).toHaveLength(1);
+  expect(latest().contains(selected[0])).toBe(true);
+  await act(async () => Simulate.click(latest().querySelector('.submit-answers-btn')));
+  expect(sendChat.mock.calls[2][0].refs).toEqual({ scope: 'scope@1@2' });
+});

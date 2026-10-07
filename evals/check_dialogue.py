@@ -37,6 +37,11 @@ HITS = [{"rank": rank, "section_no": no, "division": division, "section": f"{no}
         for rank, (no, division, title, page) in enumerate([("6-1-4", "공통", "콘크리트 펌프차 타설", 186),
                                                              ("6-1-1", "공통", "레디믹스트콘크리트 타설", 185),
                                                              ("1-6-2", "토목", "표층 인력포설", 120)], 1)]
+FORM_HITS = [{"rank": rank, "section_no": no, "division": "공통", "section": f"{no} {title}", "page": page,
+              "table_id": None, "text": title, "chunk_id": f"form-{rank}"}
+             for rank, (no, title, page) in enumerate([("6-3-1", "합판거푸집 설치 및 해체", 204),
+                                                       ("6-3-4", "문양거푸집(판넬) 설치 및 해체", 209),
+                                                       ("6-3-2", "강재거푸집 설치 및 해체", 206)], 1)]
 PUMP = {"pump_size": "32m", "structure": "철근", "slump_band": "15㎝", "facility_type": "Type-Ⅱ",
         "site_type": "Type-Ⅱ", "placement": "붐", "vibrator_used": True, "reset_status": "없음"}
 SECRET = "offline-dialogue-session-" + "x" * 32
@@ -238,9 +243,11 @@ def main() -> int:
         llm.actions = [{"action": "call_tool", "tool": "set_conditions", "reason": "대본",
                         "args": {"quantity": {"value": "300", "unit": "㎥", "evidence": "300세제곱미터"}}},
                        {"__raise__": True}]
-        post({"thread_id": thread, "message": "300세제곱미터로 바꿔줘"})
-        checks.append(("D16e 도구 실행 뒤 LLM 실패: 적용한 결과를 규칙 경로로 다시 바꾸지 않음",
-                       item()["quantity"]["value"] == "300" and stored(thread)["turn"]["tools"] == ["set_conditions"]))
+        after_failure = post({"thread_id": thread, "message": "300세제곱미터로 바꿔줘"})
+        # 규칙 경로로 다시 적용하지 않는다(set_conditions 1회). 바뀐 입력은 서버가 목표(비용)에 맞게 다시 계산한다.
+        checks.append(("D16e 도구 실행 뒤 LLM 실패: 적용한 결과를 규칙 경로로 다시 바꾸지 않음(set_conditions 1회), 바뀐 물량으로 재계산",
+                       item()["quantity"]["value"] == "300" and stored(thread)["turn"]["tools"] == ["set_conditions", "estimate_cost"]
+                       and after_failure["estimate_current"]))
         llm.plan(("estimate_cost", {}))
         post({"thread_id": thread, "message": "다시 계산해줘"})
         checks.append(("D16f 재계산 뒤 300㎥ 견적·Excel 금액 원래대로", snapshot() == kept))
@@ -525,6 +532,97 @@ def main() -> int:
         checks.append(("D27b LLM이 다른 공종 물량을 지금 견적에 넣으려 하면 거부, 콘크리트 견적 그대로",
                        session_of(guard_door) == guard_door_before and guarded["statement"] is None
                        and stored(guard_door)["turn"]["trace"][0]["status"] == "rejected"))
+
+        # 28. 새 견적의 물량은 LLM이 set_conditions를 생략해도 서버가 보존한다(공종 미확정 → 선택 → 조건 답 후에도 유지).
+        #     물량이 여러 개면 고르지 않고 묻는다. LLM 경로·LLM 실패→규칙·규칙 경로가 같은 상태.
+        form_answers = {"complexity": "보통", "height": "3", "is_roof_slab": False, "crane_used": False}
+
+        def fail_or_plan(mode: str) -> None:
+            """다음 턴의 LLM: llm=compute_labor만 고름, llm_failed=매 턴 실패, llm_reply=도구 없이 바로 답함."""
+            if mode == "llm":
+                llm.plan(("compute_labor", {}))
+            elif mode == "llm_failed":
+                llm.actions = [{"__raise__": True}]
+            elif mode == "llm_reply":
+                llm.actions = []
+
+        def form_flow(mode: str, message: str = "거푸집 100㎡ 비용") -> dict:
+            out = {}
+            with patch.object(tools, "retrieve", return_value={"hits": FORM_HITS}),                     patch.dict(os.environ, {"AGENT_LLM": "off"} if mode == "rule" else {}):
+                if mode in ("llm", "llm_reply"):
+                    llm.plan(("find_work", {}))  # set_conditions를 부르지 않는다
+                elif mode == "llm_failed":
+                    llm.actions = [{"__raise__": True}]
+                first = post({"message": message})
+                thread_id = first["thread_id"]
+                out["start"] = (tools._item(stored(thread_id)["session"]).get("quantity") or {})
+                fail_or_plan(mode)
+                chosen = answer(first, {"work": "6-3-1"})
+                out["asked"] = [q["name"] for q in chosen["questions"]]
+                out["selected"] = (tools._item(stored(thread_id)["session"]).get("quantity") or {})
+                fail_or_plan(mode)
+                values = {k: v for k, v in form_answers.items() if k in out["asked"]}
+                done = answer(chosen, values) if values else chosen
+                item_after = tools._item(stored(thread_id)["session"])
+                out["after"] = (item_after.get("quantity") or {})
+                out["volume"] = item_after["conditions"].get("volume")
+                out["goal"] = stored(thread_id)["goal"]
+                out["status"] = done["status"]
+            return out
+
+        flows = {mode: form_flow(mode) for mode in ("llm", "llm_reply", "llm_failed", "rule")}
+        hundred = lambda q: q.get("value") == "100" and tools.unit_key(q.get("unit")) == tools.unit_key("㎡")  # noqa: E731
+        checks.append(("D28 거푸집 100㎡: find_work만 불러도 물량 보존, 공종 선택·조건 답 후에도 100㎡ 유지(LLM·LLM 바로 답함·LLM 실패·규칙 동일)",
+                       all(hundred(f["start"]) and hundred(f["selected"]) and hundred(f["after"]) and f["volume"] == "100"
+                           and "volume" not in f["asked"] and f["goal"] == "cost" for f in flows.values())
+                       and len({(f["status"], tuple(f["asked"])) for f in flows.values()}) == 1))
+        if not checks[-1][1]:
+            print("  D28", flows)
+        two = form_flow("rule", "거푸집 100㎡ 200㎡ 비용")
+        checks.append(("D28b 물량이 여러 개면 고르지 않고 공종 선택 뒤 물량을 묻는다", two["start"] == {} and "volume" in two["asked"]))
+
+        # 29. 비용으로 시작한 요청은 LLM이 compute_labor만 골라도 비용 흐름을 이어 간다(가격 질문 → 견적).
+        def cost_flow(mode: str) -> tuple:
+            with patch.dict(os.environ, {"AGENT_LLM": "off"} if mode == "rule" else {}):
+                if mode in ("llm", "llm_reply"):
+                    llm.plan(("find_work", {}), ("compute_labor", {}))
+                elif mode == "llm_failed":
+                    llm.actions = [{"__raise__": True}]
+                first = post({"message": "콘크리트 타설 100세제곱미터 비용 알려줘"})
+                fail_or_plan(mode)
+                second = answer(first, {"work": "6-1-4"})
+                fail_or_plan(mode)
+                third = answer(second, PUMP)
+                fail_or_plan(mode)
+                fourth = answer(third, {"concrete_supply": "관급"})
+            return ([q["name"] for q in third["questions"]], fourth["estimate_current"],
+                    (fourth["statement"] or {}).get("totals", {}).get("contract_amount"), stored(first["thread_id"])["goal"])
+
+        costs = {mode: cost_flow(mode) for mode in ("llm", "llm_reply", "llm_failed", "rule")}
+        checks.append(("D29 비용 요청: 조건 카드 답 뒤 LLM이 compute_labor만 고르거나 바로 답해도 관급/사급 질문 → 견적까지(LLM 실패·규칙 동일)",
+                       all(c[0] == ["concrete_supply"] and c[1] and c[3] == "cost" for c in costs.values())
+                       and len({c[2] for c in costs.values()}) == 1))
+        if not checks[-1][1]:
+            print("  D29", costs)
+
+        # 30. 실제 LLM 평가(S5)에서 본 순서: 공종이 바로 정해진 비용 요청에 LLM이 set_conditions(work)만 부르고 답함.
+        #     서버가 명세 단위(㎥)의 물량 300을 보존하고(32m·15cm 제외), 계산으로 이어 남은 질문 → 견적까지 간다.
+        s5_message = "철근콘크리트 300세제곱미터를 32m 붐 펌프차로 타설 비용 알려줘. 슬럼프 15cm, 진동기 사용, 재셋팅 없음"
+        with patch.object(tools, "retrieve", return_value={"hits": HITS[:1]}):
+            llm.plan(("find_work", {}), ("set_conditions", {"work": "6-1-4"}))
+            p1 = post({"message": s5_message})
+        p_item = tools._item(stored(p1["thread_id"])["session"])
+        llm.actions = []  # 카드 답 뒤에도 LLM이 바로 답한다
+        p2 = answer(p1, {"facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ"})
+        llm.actions = []
+        p3 = answer(p2, {"concrete_supply": "관급"})
+        checks.append(("D30 공종 바로 확정 + LLM이 계산 없이 답해도: 물량 300㎥ 보존·남은 질문 → 관급 → 견적(목표 비용 유지)",
+                       p_item["quantity"]["value"] == "300" and p_item["conditions"].get("pump_size") == "32m"
+                       and {q["name"] for q in p1["questions"]} == {"facility_type", "site_type"}
+                       and [q["name"] for q in p2["questions"]] == ["concrete_supply"] and p3["estimate_current"]
+                       and stored(p1["thread_id"])["goal"] == "cost"))
+        if not checks[-1][1]:
+            print("  D30", p_item.get("quantity"), [q["name"] for q in p1["questions"]], p1["status"], [q["name"] for q in p2["questions"]], p3.get("estimate_current"))
 
         # 9. LLM이 근거 검증을 우회하지 못함: 근거와 다른 값, source 주입은 무시된다
         before = item()["quantity"]["value"]
