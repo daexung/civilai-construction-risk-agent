@@ -65,6 +65,8 @@ _BASIS_WORDS = re.compile(r"근거|출처|어디서|왜|기준")
 # '1세제곱미터당 몇 명'의 1㎥는 단위당 기준이지 물량이 아니다.
 _CHANGE_WORDS = re.compile(r"바꿔|바꾸|바꿀|변경|수정|고쳐|(?:으)?로\s*해|계산해|다시\s*계산|늘려|줄여|추가|빼\s*줘|적용해"
                            r"|(?:이|으)?면\s*(?:얼마|어때|어떻게)")
+# '같은 조건으로 비용도'처럼 지금 견적을 이어 가는 표현. 규칙 경로가 새 견적(find_work)으로 초기화하지 않게 한다.
+_CONTINUE_WORDS = re.compile(r"같은\s*조건|이\s*조건으로|그\s*조건으로|이대로|그대로|(?:비용|금액|견적|공사비)도")
 _LOOKUP_WORDS = re.compile(r"몇|얼마|무엇|뭐|어떻게|어디|왜|알려|궁금|\?")
 
 
@@ -270,6 +272,9 @@ def _rule_actions(state: DialogueState, message: str, answered: bool) -> list[tu
             state["goal"] = "cost"
         return [("set_conditions", changes),
                 ("estimate_cost", {}) if state["goal"] == "cost" else ("compute_labor", {})]
+    if session and (tools._item(session).get("selection") or {}).get("confirmed") and _CONTINUE_WORDS.search(message):
+        state["goal"] = "cost" if route == "estimate" or state["goal"] == "cost" else state["goal"] or "labor"
+        return [("estimate_cost", {}) if state["goal"] == "cost" else ("compute_labor", {})]
     if session and route == "qa" and not tools._quantities(message):
         return [("search_standard", {"query": message})]
     state["goal"] = "cost" if route == "estimate" else "labor"
@@ -480,8 +485,9 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
     notices += [f"반영하지 못했어요 - {_label(working, name)}: {reason}" for entry in log if entry["tool"] == "set_conditions"
                 for name, reason in (entry["result"].get("rejected") or {}).items()]
     refresh = bool(answers) or request.get("conditions") is not None or _inputs_key(working) != before
-    working["pending_kept"] = not refresh and bool(working["pending"])
+    previous = working["pending"]
     _update_pending(working, log, refresh)
+    working["pending_kept"] = bool(previous) and working["pending"] is previous  # 조회 턴: 답한 뒤 같은 질문을 다시 안내
     reply = _reply(working, log, notices, message, budget, generate, use_llm)
     trace = [{"tool": e["tool"], "args": e.get("args"), "status": e["result"].get("status"),
               "rejected": e["result"].get("rejected") or None,
@@ -565,10 +571,20 @@ def _inputs_key(state: DialogueState):
 def _update_pending(state: DialogueState, log: list, refresh: bool = True) -> None:
     """마지막 도구 결과로 대기 질문을 정한다. 새로 낼 때마다 revision을 올려 예전 질문의 답을 거른다.
 
-    refresh=False(조회만 한 턴: 단위당 인원·근거·원문 검색 등)면 대기 질문과 ref를 그대로 둔다.
-    조건·공종이 실제로 바뀌면 질문을 다시 정해 예전 ref의 답은 계속 거부한다.
+    refresh=False(입력 변경·카드 답이 없는 턴)면 대기 질문과 ref를 그대로 둔다(단위당 인원·근거·원문 검색 등 조회).
+    단, 계산 도구가 다른 필수 질문을 돌려주면(품 → 비용으로 목표가 바뀌어 관급/사급이 필요해진 경우) 새로 낸다.
+    같은 질문을 다시 보여줄 때는 ref를 바꾸지 않는다. 조건·공종이 실제로 바뀌면(refresh=True) 질문을 다시 정해
+    예전 ref의 답은 계속 거부한다.
     """
     if not refresh:
+        calc = [entry["result"] for entry in log if entry["tool"] in ("compute_labor", "estimate_cost")]
+        if not calc or calc[-1]["status"] != "needs_input":
+            return
+        asked = lambda questions: [(q["field"], q["question_id"], q["version"]) for q in questions]  # noqa: E731
+        if asked(calc[-1]["missing"]) != asked(state["pending"]):
+            state["pending_revision"] += 1
+            state["pending"] = [{**question, "ref": _ref(question, state["pending_revision"])}
+                                for question in calc[-1]["missing"]]
         return
     results = [entry["result"] for entry in log if entry["tool"] != "answers"]
     if not results and not log:

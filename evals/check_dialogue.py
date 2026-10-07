@@ -369,6 +369,47 @@ def main() -> int:
                        and "반영하지 않았어요" in old_card["answer"]
                        and tools._item(stored(w1["thread_id"])["session"])["conditions"].get("concrete_supply") != "관급"))
 
+        # 25. 품 계산 완료 → 같은 물량으로 비용 요청: 입력 변경이 없어도 새 필수 질문(관급/사급)을 낸다.
+        #     같은 질문을 다시 보여줄 때는 ref를 바꾸지 않고, 그 카드로 답하면 견적·Excel까지 완료된다.
+        llm.plan(("find_work", {}), ("set_conditions", {"quantity": {"value": "100", "unit": "㎥", "evidence": "100세제곱미터"}}),
+                 ("compute_labor", {}))
+        c1 = post({"message": "콘크리트 타설 100세제곱미터 품 알려줘"})
+        llm.plan(("compute_labor", {}))
+        c2 = answer(c1, {"work": "6-1-4"})
+        llm.plan(("compute_labor", {}))
+        c3 = answer(c2, PUMP)
+        llm.plan(("estimate_cost", {}))
+        c4 = post({"thread_id": c1["thread_id"], "message": "같은 조건으로 비용도 계산해줘"})
+        llm.plan(("estimate_cost", {}))
+        c5 = post({"thread_id": c1["thread_id"], "message": "비용 계산해줘"})  # 같은 질문을 다시 보여줌
+        llm.plan(("compute_labor", {}))
+        c6 = post({"thread_id": c1["thread_id"], "message": "콘크리트공은 1세제곱미터당 몇 명이야?"})  # 조회: 질문 유지
+        llm.plan(("estimate_cost", {}))
+        c7 = answer(c4, {"concrete_supply": "관급"})  # 처음 받은 카드로 답한다
+        cost_export = http.get(f"/api/export/{c1['thread_id']}.xlsx")
+        cost_cells = [c.value for s in load_workbook(io.BytesIO(cost_export.content), data_only=True)
+                      for r in s.iter_rows() for c in r] if cost_export.status_code == 200 else []
+        refs_of = lambda reply: [(q["name"], q["ref"]) for q in reply["questions"]]  # noqa: E731
+        checks.append(("D25 품 완료 → 같은 물량 비용 요청은 관급/사급 질문 생성, 같은 질문 재표시·조회는 ref 유지, 카드 답으로 견적·Excel 완료",
+                       c3["status"] == "COMPUTED" and [q["name"] for q in c4["questions"]] == ["concrete_supply"]
+                       and refs_of(c5) == refs_of(c4) == refs_of(c6)
+                       and c7["estimate_current"] and c7["statement"]["totals"]["contract_amount"] in cost_cells))
+
+        # 25b. 같은 흐름을 규칙 경로(LLM 끔·실패 대체)로: 새 견적으로 초기화하지 않고 같은 결과
+        with patch.dict(os.environ, {"AGENT_LLM": "off"}):
+            r1 = post({"message": "콘크리트 타설 100세제곱미터 품 알려줘"})
+            r2 = answer(r1, {"work": "6-1-4"})
+            r3 = answer(r2, PUMP)
+            r4 = post({"thread_id": r1["thread_id"], "message": "같은 조건으로 비용도 계산해줘"})
+            r5 = post({"thread_id": r1["thread_id"], "message": "콘크리트공은 1세제곱미터당 몇 명이야?"})
+            r7 = answer(r4, {"concrete_supply": "관급"})
+        rule_item = tools._item(stored(r1["thread_id"])["session"])
+        checks.append(("D25b 규칙 경로: 품 완료 → 같은 조건 비용 요청은 견적 유지(초기화 없음)·관급/사급 질문, 조회는 ref 유지, 카드 답으로 견적 완료",
+                       r3["status"] == "COMPUTED" and [q["name"] for q in r4["questions"]] == ["concrete_supply"]
+                       and refs_of(r5) == refs_of(r4) and rule_item["quantity"]["value"] == "100"
+                       and rule_item["conditions"].get("pump_size") == "32m" and r7["estimate_current"]
+                       and r7["statement"]["totals"]["contract_amount"] == c7["statement"]["totals"]["contract_amount"]))
+
         # 9. LLM이 근거 검증을 우회하지 못함: 근거와 다른 값, source 주입은 무시된다
         before = item()["quantity"]["value"]
         llm.plan(("set_conditions", {"quantity": {"value": "999", "unit": "㎥", "evidence": "500세제곱미터"},
