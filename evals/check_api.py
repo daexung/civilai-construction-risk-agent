@@ -99,16 +99,26 @@ def _check_workflow() -> int:
     thread_id = missing["thread_id"]
     required_pump_questions = {"work", "pump_size", "slump_band", "facility_type", "site_type",
                                "placement", "vibrator_used", "reset_status"}
+    # 공종이 잠정이면 공종만 먼저 묻고, 공종을 고른 뒤 그 공종의 조건을 묻는다.
     checks.append(("A3", missing["status"] == "MISSING_INFO"
-                   and required_pump_questions.issubset({item["name"] for item in missing["questions"]})
+                   and [item["name"] for item in missing["questions"]] == ["work"]
                    and missing["work"]["section_no"] == "6-1-4"))
+    pump_first = CLIENT.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"}).json()
+    pump_next = CLIENT.post("/api/chat", json={"thread_id": pump_first["thread_id"], "answers": {"work": "6-1-4"}}).json()
+    checks.append(("A3-pump 공종 선택 후 펌프차 조건", pump_next["status"] == "MISSING_INFO"
+                   and required_pump_questions - {"work"} == {item["name"] for item in pump_next["questions"]}
+                   - {"concrete_supply"}))
     # 수치 칸의 "0보다 큰 수" 설명 문자열이 choices로 나가면 화면이 choices.map에서 멈춘다.
-    unit_word = CLIENT.post("/api/chat", json={"message": "콘크리트 타설 1세제곱미터 품셈 알려줘"}).json()
+    unit_first = CLIENT.post("/api/chat", json={"message": "콘크리트 타설 1세제곱미터 비용 계산해줘"}).json()
+    unit_word = CLIENT.post("/api/chat", json={"thread_id": unit_first["thread_id"], "answers": {"work": "6-1-4"}}).json()
     volume_question = next((item for item in unit_word["questions"] if item["name"] == "volume"), None)
     checks.append(("A3-choices 선택지는 목록 또는 null", unit_word["status"] == "MISSING_INFO"
                    and volume_question is not None and volume_question["choices"] is None
                    and all(item["choices"] is None or isinstance(item["choices"], list)
-                           for response in (evidence, missing, unit_word) for item in response["questions"])))
+                           for response in (evidence, missing, pump_next, unit_word) for item in response["questions"])))
+    # 물량이 있어도 돈을 묻지 않는 품셈 질문은 상담이다.
+    unit_qa = CLIENT.post("/api/chat", json={"message": "콘크리트 타설 1세제곱미터 품셈 알려줘"}).json()
+    checks.append(("A3-qa 물량 있는 품셈 질문은 상담", unit_qa["route"] == "qa" and not unit_qa["questions"]))
 
     pending_edit = CLIENT.post("/api/chat", json={"message": "철근콘크리트 260㎥ 펌프차 타설 비용"}).json()
     edited = CLIENT.post("/api/chat", json={"thread_id": pending_edit["thread_id"],

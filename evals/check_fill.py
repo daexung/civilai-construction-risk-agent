@@ -123,6 +123,24 @@ def main() -> int:
                    and bad_work["questions"][0]["name"] == "work"
                    and bad_work["questions"][0].get("reason") == "선택한 공종을 후보에서 찾을 수 없습니다"))
 
+    # 공종(타설 방식)이 정해지기 전에는 그 선택만 묻고, 정한 뒤에는 그 공종의 조건만 묻는다.
+    pump_only = {"pump_size", "slump_band", "facility_type", "site_type", "placement", "vibrator_used", "reset_status"}
+    method_state = state("철근콘크리트 타설 1㎥ 펌프차 32m 비용 계산해줘", confirmed=False)
+    method_first = fill(method_state)
+    checks.append(("F17 공종 미확정이면 공종 질문만", [q["name"] for q in method_first["questions"]] == ["work"]))
+    resumed = {**method_state, "inputs": method_first["inputs"], "input_sources": method_first["input_sources"]}
+    manual = fill({**resumed, "reply": {"work": "6-1-1"}})
+    manual_names = {q["name"] for q in manual["questions"]}
+    checks.append(("F18 인력(6-1-1) 선택 후 펌프차 질문 없음·물량과 구조 유지",
+                   manual["spec_id"].endswith("6-1-1/레디믹스트콘크리트타설") and not manual_names & pump_only
+                   and "pump_size" not in manual["inputs"]
+                   and manual["inputs"].get("volume") == "1" and manual["inputs"].get("structure") == "철근구조물"
+                   and manual_names == {"placement_method", "scattered_small_volume", "concrete_supply"}))
+    pump = fill({**resumed, "reply": {"work": "6-1-4"}})
+    checks.append(("F19 펌프차 선택 후 남은 펌프차 조건만", {q["name"] for q in pump["questions"]}
+                   == pump_only - {"pump_size"} | {"concrete_supply"}
+                   and pump["inputs"].get("pump_size") == "32m" and pump["inputs"].get("volume") == "1"))
+
     apt = fill(state("아파트 철근콘크리트 벽체 260㎥ 펌프차로 타설 비용"))
     checks.append(("F14 아파트 → 건축", apt["inputs"]["work_category"] == "주택 외 건축"
                    and apt["input_sources"]["work_category"] == "질문"

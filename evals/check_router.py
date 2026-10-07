@@ -209,6 +209,31 @@ def main() -> int:
         with patch.object(client, "generate", side_effect=AssertionError("LLM called")):
             off = route(new_state("공사비 알려줘"))
         checks.append(("AGENT_LLM off uses rule", off["route"] == "estimate" and off["route_source"] == "rule"))
+        # 규칙 대체도 router.md 기준: 물량만으로 견적이 아니고, 직전 견적의 재계산은 견적이다.
+        # 46문항 밖 회귀 사례: 계산 대상, '다시'의 설명/재계산 구분, 업무 내 불명확 질문.
+        cases = [("콘크리트 100㎥", None, "qa"),
+                 ("레미콘 100㎥ 타설", None, "qa"),
+                 ("방금 견적에서 할증 기준 다시 설명해줘", "estimate", "qa"),
+                 ("콘크리트 타설 1㎥ 필요 인원 계산해줘", None, "qa"),
+                 ("콘크리트 타설 1세제곱미터 품셈 알려줘", None, "qa"),
+                 ("펌프차 붐 길이는 어떤 기준으로 골라?", "estimate", "qa"),
+                 ("콘크리트 타설 1㎥ 비용 계산해줘", None, "estimate"),
+                 ("옹벽 150㎥ 타설 공사비 계산해줘", None, "estimate"),
+                 ("물량 300㎥로 바꿔서 다시 계산해줘", "estimate", "estimate"),
+                 ("공사 기간 12개월로 해줘", "estimate", "estimate"),
+                 ("레미콘 단가 9만원으로 다시 계산해줘", "estimate", "estimate"),
+                 ("인력타설로 바꿔서 다시 해줘", "estimate", "estimate"),
+                 ("오늘 현장 날씨 어때?", None, "out_of_scope")]
+        for question, previous_route, label in cases:
+            case_state = new_state(question)
+            if previous_route:
+                case_state["previous_context"] = {"previous_route": previous_route}
+            checks.append((f"rule {label}: {question}", route(case_state)["route"] == label))
+        testset = [json.loads(line) for line in
+                   (ROOT / "evals/router_testset.jsonl").read_text(encoding="utf-8").splitlines() if line]
+        rule_correct = sum(route({**new_state(case["q"]), "previous_context": case.get("context") or {}})["route"]
+                           == case["label"] for case in testset)
+        checks.append(("rule testset accuracy >= 90%", rule_correct / len(testset) >= 0.9))
         with patch.object(client, "_create_client", side_effect=AssertionError("client created")):
             checks.append(("AGENT_LLM off skips warmup", client.warmup_client() is False))
 
