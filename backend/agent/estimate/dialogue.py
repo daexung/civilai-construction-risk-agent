@@ -129,7 +129,8 @@ def _current_vocabulary(session: dict) -> tuple[str, str]:
     item = tools._item(session)
     spec = tools._spec(item) or {}
     title = " ".join([str((item.get("selection") or {}).get("section") or ""), str(spec.get("section", ""))])
-    values = []
+    # 지금 견적의 품 항목(콘크리트공·콘크리트펌프차 등)도 지금 공종의 낱말이다.
+    values = [str(line.get("name") or "") for line in (item.get("computed_result") or {}).get("unit_lines") or []]
     for field in [*spec.get("inputs", []), *_common_fields()]:
         allowed = field.get("allowed_values") if isinstance(field.get("allowed_values"), list) else []
         values += [*map(str, allowed), *map(str, (field.get("labels") or {}).values()),
@@ -289,6 +290,11 @@ def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget:
     if session is None:
         return {"status": "error", "data": {"reason": "견적을 먼저 시작해야 합니다(find_work)"}}
     if name == "set_conditions":
+        if not state.get("fresh_session") and not args.get("work") and _confirmed(session)                 and not _answers_pending(state, message) and _cost_target(session, message) != "current":
+            # 다른 공종(또는 모호한) 요청의 물량·조건을 지금 견적에 넣지 않는다(LLM이 불러도 같다).
+            # 후보 공종으로 바꾸는 요청(args.work)은 set_conditions가 후보인지 검증한다.
+            return {"status": "rejected", "missing": [], "rejected": {}, "data": {
+                "reason": "다른 공종 요청이라 지금 견적의 조건을 바꾸지 않았어요. 새 견적은 find_work로 시작하세요."}}
         if not state.get("fresh_session") and _is_lookup(state, message):
             # 이번 턴에 시작한 견적이 아니면 조회 질문으로 저장된 조건을 바꾸지 않는다(LLM이 불러도 같다).
             return tools._result("ok", tools._item(session), {"applied": {}, "reason": "조회 질문이라 조건을 바꾸지 않았어요"})
@@ -349,24 +355,27 @@ def _rule_actions(state: DialogueState, message: str, answered: bool) -> list[tu
     # '32m야'처럼 대기 질문에 값만 답한 문장은 라우터가 범위 밖으로 봐도 답으로 반영한다.
     if route == "out_of_scope" and not _answers_pending(state, message):  # 진행 중인 견적을 범위 밖 질문으로 바꾸지 않는다
         return []
+    # 어느 견적인지 먼저 정한다. 새 공종 문장의 물량·조건('자동문 3개소')을 지금 견적에 반영하지 않기 위해서다.
+    target = _cost_target(session, message) if _confirmed(session) and not _answers_pending(state, message) else "current"
+    if route == "estimate" and target == "new":  # 새 세션을 만든 뒤 새 문장의 물량을 반영한다
+        return _start_actions(state, message, route)
+    if route == "estimate" and target == "ambiguous":  # 확인 전에는 물량·조건을 포함해 지금 상태를 바꾸지 않는다
+        return [("confirm_scope", {})]
     computed = bool(session and tools._item(session).get("computed_result"))
     if computed and _BASIS_WORDS.search(message) and not tools._quantities(message):
         return [("explain_basis", {})]
     if computed and _is_lookup(state, message) and _about_current(session, message):
         return [("compute_labor", {})]  # 지금 견적의 품을 다시 보여준다(조건·물량·원가계산서 그대로)
-    changes = _rule_changes(session, message) if session and not _is_lookup(state, message) else {}
+    # 다른 공종(또는 모호한) 문장의 물량·조건은 지금 견적에 넣지 않는다.
+    changes = _rule_changes(session, message) if session and target == "current" and not _is_lookup(state, message) else {}
     if session and changes:
         if route == "estimate":
             state["goal"] = "cost"
         return [("set_conditions", changes),
                 ("estimate_cost", {}) if state["goal"] == "cost" else ("compute_labor", {})]
-    if _confirmed(session) and route == "estimate":
-        target = _cost_target(session, message)
-        if target == "current":  # 새 공종을 말하지 않은 비용 요청: 지금 견적으로 계산
-            state["goal"] = "cost"
-            return [("estimate_cost", {})]
-        if target == "ambiguous":
-            return [("confirm_scope", {})]
+    if _confirmed(session) and route == "estimate":  # 새 공종을 말하지 않은 비용 요청: 지금 견적으로 계산
+        state["goal"] = "cost"
+        return [("estimate_cost", {})]
     if session and route == "qa" and not tools._quantities(message):
         return [("search_standard", {"query": message})]
     return _start_actions(state, message, route)

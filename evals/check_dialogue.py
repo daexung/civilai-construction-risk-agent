@@ -78,6 +78,15 @@ class ScriptedLLM:
         self.actions = [{"action": "call_tool", "tool": name, "args": args, "reason": "대본"} for name, args in tools_and_args]
 
 
+def vague_after_ok(reply: dict, thread_id: str, before: tuple) -> bool:
+    """모호한 요청 뒤: 확인 질문(scope)만 나오고 세션(물량·조건 포함)은 그대로."""
+    state = dialogue.load(dialogue.build_dialogue_graph(api_main.GRAPH.checkpointer), thread_id)
+    current = tools._item(state["session"])
+    after = (state["session"]["estimate_id"], current.get("request_text"), current.get("quantity"),
+             (current.get("selection") or {}).get("section_no"), current["conditions"].get("pump_size"))
+    return [q["name"] for q in reply["questions"]] == ["scope"] and after == before
+
+
 def main() -> int:
     checks = []
     llm = ScriptedLLM()
@@ -465,6 +474,57 @@ def main() -> int:
                        [q["name"] for q in vague["questions"]] == ["scope"] and kept(vague_thread) == vague_before
                        and [q["name"] for q in stay["questions"]] == ["concrete_supply"] and kept(vague_thread) == vague_before
                        and kept(vague_new)[0] != vague_new_before[0] and [q["name"] for q in restarted["questions"]] == ["work"]))
+
+        # 27. 공종 판정은 조건·물량 변경보다 먼저: 새 공종 문장의 물량을 지금 견적에 넣지 않는다(규칙, LLM 실패→규칙)
+        def via(mode: str, thread_id: str, message: str) -> dict:
+            if mode == "rule":
+                with patch.dict(os.environ, {"AGENT_LLM": "off"}):
+                    return post({"thread_id": thread_id, "message": message})
+            llm.actions = [{"__raise__": True}]
+            return post({"thread_id": thread_id, "message": message})
+
+        def session_of(thread_id: str) -> tuple:
+            state = stored(thread_id)
+            current = tools._item(state["session"])
+            return (state["session"]["estimate_id"], current.get("request_text"), current.get("quantity"),
+                    (current.get("selection") or {}).get("section_no"), current["conditions"].get("pump_size"))
+
+        order = {}
+        for mode in ("rule", "llm_failed"):
+            door_thread = labor_done(); door_before = session_of(door_thread)
+            door = via(mode, door_thread, "자동문 3개소 설치 비용")
+            door_after = session_of(door_thread)
+            form_thread = labor_done(); form_before = session_of(form_thread)
+            via(mode, form_thread, "거푸집 100㎡ 비용")
+            form_after = session_of(form_thread)
+            same_thread = labor_done(); same_before = session_of(same_thread)
+            same = via(mode, same_thread, "콘크리트 200세제곱미터 비용")
+            same_after = session_of(same_thread)
+            vague_thread = labor_done(); vague_before = session_of(vague_thread)
+            vague = via(mode, vague_thread, "콘크리트 거푸집 100㎡ 비용 알려줘")
+            order[mode] = {
+                "1 자동문: 새 세션·3개소, 콘크리트 계산 없음": door_after[0] != door_before[0] and "자동문" in door_after[1]
+                and (door_after[2] or {}).get("value") == "3" and door["statement"] is None
+                and stored(door_thread)["turn"]["tools"][:2] == ["find_work", "set_conditions"],
+                "2 거푸집: 새 세션·100㎡": form_after[0] != form_before[0] and "거푸집" in form_after[1]
+                and (form_after[2] or {}).get("value") == "100",
+                "3 콘크리트 200㎥: 같은 세션·물량 갱신·조건 유지": same_after[0] == same_before[0]
+                and same_after[2]["value"] == "200" and same_after[3:] == same_before[3:]
+                and [q["name"] for q in same["questions"]] == ["concrete_supply"],
+                "4 모호+물량: 확인 질문, 기존 상태 그대로": vague_after_ok(vague, vague_thread, vague_before)}
+        checks.append(("D27 공종 판정을 조건 변경보다 먼저(규칙·LLM 실패→규칙): 자동문 3개소·거푸집 100㎡는 새 흐름, "
+                       "콘크리트 200㎥는 물량 갱신, 모호하면 물량이 있어도 확인 전 상태 유지",
+                       all(all(result.values()) for result in order.values())))
+        if not all(all(result.values()) for result in order.values()):
+            print("  D27", order)
+
+        # 27b. LLM이 새 공종 문장의 물량을 지금 견적에 넣으려 해도(set_conditions → estimate_cost) 서버가 막는다
+        guard_door = labor_done(); guard_door_before = session_of(guard_door)
+        llm.plan(("set_conditions", {"quantity": {"value": "3", "unit": "개소", "evidence": "3개소"}}), ("estimate_cost", {}))
+        guarded = post({"thread_id": guard_door, "message": "자동문 3개소 설치 비용"})
+        checks.append(("D27b LLM이 다른 공종 물량을 지금 견적에 넣으려 하면 거부, 콘크리트 견적 그대로",
+                       session_of(guard_door) == guard_door_before and guarded["statement"] is None
+                       and stored(guard_door)["turn"]["trace"][0]["status"] == "rejected"))
 
         # 9. LLM이 근거 검증을 우회하지 못함: 근거와 다른 값, source 주입은 무시된다
         before = item()["quantity"]["value"]
