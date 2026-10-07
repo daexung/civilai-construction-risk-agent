@@ -17,6 +17,7 @@ import os
 import re
 import time
 import unicodedata
+from functools import cache
 from pathlib import Path
 from typing import Callable, TypedDict
 
@@ -25,7 +26,9 @@ from langgraph.graph import END, START, StateGraph
 
 from backend.agent.estimate import reply_check, tools
 from backend.agent.estimate.state import COMMON_FIELDS
+from backend.agent.rules.specs import load_specs
 from backend.agent.nodes.fill import _common_fields, extract_inputs
+from backend.agent.nodes.retrieve import get_search
 from backend.agent.nodes.route import _rule_route
 from backend.agent.tools.calc.format import approx, rounded
 from backend.agent.tools.llm import client
@@ -65,8 +68,14 @@ _BASIS_WORDS = re.compile(r"근거|출처|어디서|왜|기준")
 # '1세제곱미터당 몇 명'의 1㎥는 단위당 기준이지 물량이 아니다.
 _CHANGE_WORDS = re.compile(r"바꿔|바꾸|바꿀|변경|수정|고쳐|(?:으)?로\s*해|계산해|다시\s*계산|늘려|줄여|추가|빼\s*줘|적용해"
                            r"|(?:이|으)?면\s*(?:얼마|어때|어떻게)")
-# '같은 조건으로 비용도'처럼 지금 견적을 이어 가는 표현. 규칙 경로가 새 견적(find_work)으로 초기화하지 않게 한다.
-_CONTINUE_WORDS = re.compile(r"같은\s*조건|이\s*조건으로|그\s*조건으로|이대로|그대로|(?:비용|금액|견적|공사비)도")
+# 확정된 견적이 있을 때 새 공종을 말했는지 판단한다(특정 표현 목록이 아니라 지금 공종의 낱말과 비교).
+_JOSA = ("에서", "으로", "이야", "이요", "하고", "로", "은", "는", "이", "가", "을", "를", "도", "의", "에", "만", "야", "요",
+         "과", "와", "랑")
+_GENERIC_PREFIX = ("비용", "계산", "얼마", "견적", "공사비", "금액", "알려", "보여", "같은", "조건", "이대로", "그대로", "다시",
+                   "지금", "현재", "원가", "도급", "부가세", "포함", "기준", "품셈", "인원", "뽑아", "부탁", "그러면", "어떻게")
+_GENERIC = {"해", "해줘", "해주세요", "줘", "좀", "몇", "명", "총", "품", "그럼", "이제", "하면", "할래", "나와", "돼", "이거", "이걸",
+            "그거", "이걸로", "그걸로", "전체", "내줘", "주세요", "드나", "드나요", "들어", "드는", "그", "이", "저", "것", "거"}
+SCOPE_CURRENT, SCOPE_NEW = "지금 견적으로 계산", "새 견적 시작"
 _LOOKUP_WORDS = re.compile(r"몇|얼마|무엇|뭐|어떻게|어디|왜|알려|궁금|\?")
 
 
@@ -89,6 +98,70 @@ def _answers_pending(state: DialogueState, message: str) -> bool:
 
 def _is_lookup(state: DialogueState, message: str) -> bool:
     return _lookup_only(message) and not _answers_pending(state, message)
+
+
+def _words(text: str) -> list[str]:
+    words = []
+    for word in re.findall(r"[가-힣A-Za-z]+", unicodedata.normalize("NFKC", text or "")):
+        for josa in _JOSA:
+            if word.endswith(josa) and len(word) > len(josa) + 1:
+                word = word[: -len(josa)]
+                break
+        words.append(word)
+    return words
+
+
+def _generic(word: str) -> bool:
+    return word in _GENERIC or word.startswith(_GENERIC_PREFIX)
+
+
+@cache
+def _work_words() -> frozenset[str]:
+    """품셈 전체 공종 제목의 낱말. 지금 공종에 없는 이 낱말이 나오면 다른 공종을 말한 것으로 본다."""
+    index = get_search()[0]
+    chunks = getattr(index, "chunks", None) or getattr(getattr(index, "bm25", None), "chunks", None) or []
+    titles = {chunk.get("section") or "" for chunk in chunks} | {spec.get("section", "") for spec in load_specs().values()}
+    return frozenset(word for title in titles for word in _words(title) if len(word) >= 2 and not _generic(word))
+
+
+def _current_vocabulary(session: dict) -> tuple[str, str]:
+    """지금 공종의 낱말: (절 제목, 입력·공통 공사 조건의 선택지·동의어). 질문 문장은 넣지 않는다(설치 같은 일반 낱말이 섞임)."""
+    item = tools._item(session)
+    spec = tools._spec(item) or {}
+    title = " ".join([str((item.get("selection") or {}).get("section") or ""), str(spec.get("section", ""))])
+    values = []
+    for field in [*spec.get("inputs", []), *_common_fields()]:
+        allowed = field.get("allowed_values") if isinstance(field.get("allowed_values"), list) else []
+        values += [*map(str, allowed), *map(str, (field.get("labels") or {}).values()),
+                   *[str(word) for words in (field.get("synonyms") or {}).values() for word in words]]
+    return title, " ".join(values)
+
+
+def _cost_target(session: dict, message: str) -> str:
+    """확정된 견적이 있을 때 요청이 어느 견적을 가리키는지: 'current' | 'new' | 'ambiguous'.
+
+    공종을 말하지 않은 요청('비용 계산해줘')은 지금 견적이다. 지금 공종에 없는 공종 낱말만 있으면 새 견적,
+    지금 공종 제목의 낱말과 다른 공종 낱말이 섞여 있으면 모호하다(상태를 바꾸지 않고 확인 질문).
+    """
+    title, values = _current_vocabulary(session)
+    words = [word for word in _words(message) if not _generic(word)]
+    other = [word for word in words if word not in title and word not in values and word in _work_words()]
+    if not other:
+        return "current"
+    return "ambiguous" if any(word in title for word in words) else "new"
+
+
+def _confirm_scope(state: DialogueState, message: str) -> dict:
+    """모호한 요청: 지금 견적을 그대로 두고 어느 견적인지 묻는다. 고른 답은 run_turn이 처리한다."""
+    section = (tools._item(state["session"]).get("selection") or {}).get("section") or "지금 공종"
+    question = {"field": "scope", "question_id": "scope", "version": 1, "stage": "scope",
+                "choices": [SCOPE_CURRENT, SCOPE_NEW], "labels": None, "decision_table": None, "reason": None,
+                "ask": f"지금 견적({section})으로 계산할까요, 새 공종으로 견적을 시작할까요?", "request_text": message}
+    return {"status": "needs_input", "data": {}, "missing": [question], "rejected": {}, "confirm_scope": True}
+
+
+def _confirmed(session: dict | None) -> bool:
+    return bool(session and (tools._item(session).get("selection") or {}).get("confirmed"))
 
 
 def _about_current(session: dict, message: str) -> bool:
@@ -173,6 +246,12 @@ def _apply_answers(state: DialogueState, answers: dict, refs: dict, log: list, n
         if question is None or refs.get(name) != question["ref"]:
             notices.append(f"{name}: 지금 확인하는 질문의 답이 아니라 반영하지 않았어요.")
             continue
+        if name == "scope":
+            if value in (SCOPE_CURRENT, SCOPE_NEW):
+                state["scope_choice"] = (value, question.get("request_text") or "")
+            else:
+                notices.append("선택지에 없는 값이라 반영하지 않았어요.")
+            continue
         if name == "work":
             outcome = tools.set_conditions(session, "", work=str(value), source="answer")
         elif isinstance(question.get("choices"), list) and value not in question["choices"] and not (
@@ -193,6 +272,13 @@ def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget:
     if name == "find_work":
         if not message:
             return {"status": "error", "data": {"reason": "새 견적은 질문 문장이 필요합니다"}}
+        if _confirmed(session) and not state.get("scope_new"):
+            target = _cost_target(session, message)
+            if target == "ambiguous":
+                return _confirm_scope(state, message)
+            if target == "current":  # 새 공종을 말하지 않았다: 지금 견적을 초기화하지 않는다
+                return {"status": "rejected", "missing": [], "rejected": {}, "data": {
+                    "reason": "지금 견적이 있어 새 견적을 시작하지 않았어요. 지금 견적으로 계산하려면 estimate_cost를 부르세요."}}
         state["session"] = session = tools.new_estimate(message, state["request"].get("basis_date"))
         state["goal"] = None
         state["fresh_session"] = True  # 첫 문장의 물량·조건은 변경이 아니라 시작 값이다
@@ -227,6 +313,8 @@ def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget:
         return tools.estimate_cost(session)
     if name == "explain_basis":
         return tools.explain_basis(session)
+    if name == "confirm_scope":
+        return _confirm_scope(state, message)
     return {"status": "error", "data": {"reason": f"알 수 없는 도구: {name}"}}
 
 
@@ -272,11 +360,20 @@ def _rule_actions(state: DialogueState, message: str, answered: bool) -> list[tu
             state["goal"] = "cost"
         return [("set_conditions", changes),
                 ("estimate_cost", {}) if state["goal"] == "cost" else ("compute_labor", {})]
-    if session and (tools._item(session).get("selection") or {}).get("confirmed") and _CONTINUE_WORDS.search(message):
-        state["goal"] = "cost" if route == "estimate" or state["goal"] == "cost" else state["goal"] or "labor"
-        return [("estimate_cost", {}) if state["goal"] == "cost" else ("compute_labor", {})]
+    if _confirmed(session) and route == "estimate":
+        target = _cost_target(session, message)
+        if target == "current":  # 새 공종을 말하지 않은 비용 요청: 지금 견적으로 계산
+            state["goal"] = "cost"
+            return [("estimate_cost", {})]
+        if target == "ambiguous":
+            return [("confirm_scope", {})]
     if session and route == "qa" and not tools._quantities(message):
         return [("search_standard", {"query": message})]
+    return _start_actions(state, message, route)
+
+
+def _start_actions(state: DialogueState, message: str, route: str) -> list[tuple[str, dict]]:
+    """새 견적 시작: 공종 찾기 → 같은 문장의 물량 → 품 또는 비용."""
     state["goal"] = "cost" if route == "estimate" else "labor"
     actions = [("find_work", {})]
     quantity = _rule_quantity(message)
@@ -372,7 +469,8 @@ def _template(state: DialogueState, log: list, facts: list[dict], notices: list)
             parts.append(answer)
         stage = state["pending"][0].get("stage")
         parts.append({"work": "먼저 공종(타설 방식)을 골라 주세요.",
-                      "price": "비용을 계산하려면 가격 조건이 필요해요. 아래에서 골라 주세요."}.get(
+                      "price": "비용을 계산하려면 가격 조건이 필요해요. 아래에서 골라 주세요.",
+                      "scope": "지금 견적은 그대로예요. 어느 견적으로 계산할지 골라 주세요."}.get(
             stage, "품을 계산하려면 아래 조건을 확인해 주세요."))
     elif answer:
         parts.append(answer)
@@ -462,7 +560,22 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
     answers = request.get("answers") or {}
     if answers and working["session"]:
         _apply_answers(working, answers, request.get("refs") or {}, log, notices)
-    if request.get("conditions") is not None and working["session"]:
+    choice = working.pop("scope_choice", None)
+    if choice:
+        value, text = choice
+        if value == SCOPE_NEW:  # 사용자가 고른 경우에만 새 견적을 시작한다
+            working["scope_new"] = True
+            actions = _start_actions(working, text, _rule_route(text, working.get("route")))
+        else:
+            working["goal"] = "cost"
+            actions = [("estimate_cost", {})]
+        for name, args in actions:
+            result = _run_tool(working, name, args, text, budget)
+            log.append({"tool": name, "args": args, "result": result})
+            if _stops(name, result):
+                break
+        use_llm = False
+    elif request.get("conditions") is not None and working["session"]:
         values = {name: {"value": value} for name, value in request["conditions"].items() if name in COMMON_FIELDS}
         log.append({"tool": "answers", "result": tools.set_conditions(working["session"], "", values=values,
                                                                        source="answer")})
@@ -500,6 +613,7 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
     working.pop("request", None)
     working.pop("fresh_session", None)
     working.pop("pending_kept", None)
+    working.pop("scope_new", None)
     return working
 
 
@@ -535,7 +649,7 @@ def _agent_loop(state: DialogueState, message: str, answered: bool, log: list, b
 
 def _stops(tool: str, result: dict) -> bool:
     """이번 턴을 멈출 결과. 공종 미확정(find_work의 needs_input) 뒤에는 같은 문장의 물량·조건을 마저 반영한다."""
-    if result["status"] in ("not_found", "blocked", "error"):
+    if result["status"] in ("not_found", "blocked", "error") or result.get("confirm_scope"):
         return True
     return result["status"] == "needs_input" and tool != "find_work"
 
@@ -577,7 +691,8 @@ def _update_pending(state: DialogueState, log: list, refresh: bool = True) -> No
     예전 ref의 답은 계속 거부한다.
     """
     if not refresh:
-        calc = [entry["result"] for entry in log if entry["tool"] in ("compute_labor", "estimate_cost")]
+        calc = [entry["result"] for entry in log
+                if entry["tool"] in ("compute_labor", "estimate_cost") or entry["result"].get("confirm_scope")]
         if not calc or calc[-1]["status"] != "needs_input":
             return
         asked = lambda questions: [(q["field"], q["question_id"], q["version"]) for q in questions]  # noqa: E731

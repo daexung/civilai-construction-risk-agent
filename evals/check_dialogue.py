@@ -410,6 +410,62 @@ def main() -> int:
                        and rule_item["conditions"].get("pump_size") == "32m" and r7["estimate_current"]
                        and r7["statement"]["totals"]["contract_amount"] == c7["statement"]["totals"]["contract_amount"]))
 
+        # 26. 품 완료 → 공종을 말하지 않은 비용 요청('비용 계산해줘')은 지금 견적으로(특정 표현 없이도).
+        #     명확한 다른 공종은 새 견적, 모호하면 상태를 보존하고 확인 질문.
+        def labor_done() -> str:
+            llm.plan(("find_work", {}), ("set_conditions", {"quantity": {"value": "100", "unit": "㎥",
+                                                                         "evidence": "100세제곱미터"}}), ("compute_labor", {}))
+            first = post({"message": "콘크리트 타설 100세제곱미터 품 알려줘"})
+            llm.plan(("compute_labor", {}))
+            second = answer(first, {"work": "6-1-4"})
+            llm.plan(("compute_labor", {}))
+            answer(second, PUMP)
+            return first["thread_id"]
+
+        def kept(thread_id: str) -> tuple:
+            current = tools._item(stored(thread_id)["session"])
+            return (stored(thread_id)["session"]["estimate_id"], current["selection"].get("section_no"),
+                    (current.get("quantity") or {}).get("value"), current["conditions"].get("pump_size"))
+
+        def outcome(reply: dict, thread_id: str, before: tuple) -> tuple:
+            return [q["name"] for q in reply["questions"]], kept(thread_id) == before
+
+        llm_thread = labor_done(); llm_before = kept(llm_thread)
+        llm.plan(("estimate_cost", {}))
+        by_llm = outcome(post({"thread_id": llm_thread, "message": "비용 계산해줘"}), llm_thread, llm_before)
+        fail_thread = labor_done(); fail_before = kept(fail_thread)
+        llm.actions = [{"__raise__": True}]
+        by_rule = outcome(post({"thread_id": fail_thread, "message": "비용 계산해줘"}), fail_thread, fail_before)
+        guard_thread = labor_done(); guard_before = kept(guard_thread)
+        llm.plan(("find_work", {}), ("estimate_cost", {}))  # LLM이 새 견적을 시작하려 해도 서버가 막는다
+        by_guard = outcome(post({"thread_id": guard_thread, "message": "비용 계산해줘"}), guard_thread, guard_before)
+        checks.append(("D26a 품 완료 → '비용 계산해줘': 공종·조건·물량 유지, 가격 질문 생성(LLM·LLM 실패→규칙·LLM의 find_work 차단 모두 같음)",
+                       by_llm == by_rule == by_guard == (["concrete_supply"], True)))
+
+        new_thread = labor_done(); new_before = kept(new_thread)
+        with patch.dict(os.environ, {"AGENT_LLM": "off"}):
+            new_rule = post({"thread_id": new_thread, "message": "거푸집 설치 비용 알려줘"})
+        llm_new_thread = labor_done(); llm_new_before = kept(llm_new_thread)
+        llm.plan(("find_work", {}), ("estimate_cost", {}))
+        new_llm = post({"thread_id": llm_new_thread, "message": "거푸집 설치 비용 알려줘"})
+        checks.append(("D26b 명확한 다른 공종('거푸집 설치 비용')은 새 견적 흐름(규칙·LLM)",
+                       kept(new_thread)[0] != new_before[0] and [q["name"] for q in new_rule["questions"]] == ["work"]
+                       and kept(llm_new_thread)[0] != llm_new_before[0] and [q["name"] for q in new_llm["questions"]] == ["work"]))
+
+        vague_thread = labor_done(); vague_before = kept(vague_thread)
+        with patch.dict(os.environ, {"AGENT_LLM": "off"}):
+            vague = post({"thread_id": vague_thread, "message": "콘크리트 거푸집 비용 알려줘"})
+            stay = answer(vague, {"scope": dialogue.SCOPE_CURRENT})
+        vague_new = labor_done()
+        with patch.dict(os.environ, {"AGENT_LLM": "off"}):
+            asked_new = post({"thread_id": vague_new, "message": "콘크리트 거푸집 비용 알려줘"})
+            vague_new_before = kept(vague_new)
+            restarted = answer(asked_new, {"scope": dialogue.SCOPE_NEW})
+        checks.append(("D26c 모호한 요청('콘크리트 거푸집 비용')은 상태 보존·확인 질문 → '지금 견적'은 가격 질문, '새 견적'은 새 흐름",
+                       [q["name"] for q in vague["questions"]] == ["scope"] and kept(vague_thread) == vague_before
+                       and [q["name"] for q in stay["questions"]] == ["concrete_supply"] and kept(vague_thread) == vague_before
+                       and kept(vague_new)[0] != vague_new_before[0] and [q["name"] for q in restarted["questions"]] == ["work"]))
+
         # 9. LLM이 근거 검증을 우회하지 못함: 근거와 다른 값, source 주입은 무시된다
         before = item()["quantity"]["value"]
         llm.plan(("set_conditions", {"quantity": {"value": "999", "unit": "㎥", "evidence": "500세제곱미터"},
