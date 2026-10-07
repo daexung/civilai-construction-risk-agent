@@ -20,7 +20,7 @@ npm install
 npm start
 ```
 
-`npm start`는 `package.json`의 `proxy` 설정으로 `/api/*` 요청을 `http://localhost:8000`으로
+`npm start`는 `src/setupProxy.js`로 `/api/*` 요청을 `http://localhost:8000`(`CIVILAI_API_PROXY`로 변경)으로
 넘긴다. 브라우저에서 http://localhost:3000 을 연다.
 
 운영 빌드에서 API 서버 주소가 다르면 `frontend/.env`에 다음을 넣고 빌드한다.

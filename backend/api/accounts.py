@@ -80,7 +80,8 @@ def _finish(conn, job):
     with conn.transaction():
         saver = PostgresSaver(conn)
         for conversation_id in job['conversation_ids']:
-            saver.delete_thread(str(conversation_id))
+            for thread in chat_storage.checkpoint_threads(str(conversation_id)):
+                saver.delete_thread(thread)
         conn.execute('DELETE FROM public.feedback WHERE id=ANY(%s)', (job['feedback_ids'],))
         conn.execute('DELETE FROM agent_state.account_deletions WHERE user_id=%s', (job['user_id'],))
 

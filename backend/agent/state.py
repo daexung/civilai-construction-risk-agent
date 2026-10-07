@@ -39,12 +39,15 @@ class AgentState(TypedDict, total=False):
     bundle_query: str  # 여러 공종 질문 원문
     items: list[dict]  # 여러 공종일 때 항목별 질문과 계산 결과; 단일 공종이면 빈 목록
     item_index: int  # 지금 계산 중인 항목 순번
+    split_pending: list[str]  # 공종 나누기 확인 중인 질문 이름
+    split_decisions: dict  # 공종 나누기 확인에 받은 답
 
 
 def new_state(query: str, basis_date: str | None = None) -> AgentState:
     state: AgentState = {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [],
                          "qa": None, "search_info": {}, "candidates": [], "spec_id": "", "selection": {},
-                         "items": [], "item_index": 0, "bundle_query": ""}
+                         "items": [], "item_index": 0, "bundle_query": "",
+                         "split_pending": [], "split_decisions": {}}
     if basis_date is not None:
         state["basis_date"] = basis_date
     return state

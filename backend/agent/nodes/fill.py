@@ -398,6 +398,11 @@ def fill(state: AgentState) -> dict:
                 inputs, sources = _compatible_inputs(inputs, sources, available)
                 spec = available
                 update["spec_id"] = available["id"]
+                # 새로 고른 공종의 조건을 처음 질문에서 다시 읽는다(100㎥·철근구조물을 또 묻지 않게).
+                stated, _ = extract_inputs(state.get("query", ""), spec)
+                for name, value in stated.items():
+                    if name not in inputs:
+                        inputs[name], sources[name] = value, "질문"
     text = reply_text if (answers or reply_text) else state.get("query", "")
     values, ambiguities = extract_inputs(text, spec) if spec else ({}, {})
     common_values = _extract_common_inputs(text)

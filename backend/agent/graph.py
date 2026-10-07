@@ -71,7 +71,13 @@ def _after_route(state: AgentState) -> str:
 
 
 def _after_split(state: AgentState) -> str:
-    return "compose" if state.get("status") == "BLOCKED" else "retrieve"
+    status = state.get("status")
+    return "compose" if status == "BLOCKED" else "ask" if status == "MISSING_INFO" else "retrieve"
+
+
+def _after_ask(state: AgentState) -> str:
+    # 공종 나누기 확인에 답했으면 split으로, 그 외 조건 답변은 fill로 돌아간다.
+    return "split" if state.get("split_pending") else "fill"
 
 
 def _end(state: AgentState) -> str:
@@ -142,12 +148,12 @@ def build_graph(checkpointer=None):
     graph.add_node("bundle", _timed_node("bundle", bundle))
     graph.add_edge(START, "route")
     graph.add_conditional_edges("route", _after_route, {"compose": "compose", "split": "split"})
-    graph.add_conditional_edges("split", _after_split, {"compose": "compose", "retrieve": "retrieve"})
+    graph.add_conditional_edges("split", _after_split, {"compose": "compose", "ask": "ask", "retrieve": "retrieve"})
     graph.add_conditional_edges("retrieve", _after_retrieve, {"answer": "answer", "select": "select"})
     graph.add_edge("answer", END)
     graph.add_conditional_edges("select", _after_select, {"compose": "compose", "collect": "collect", "fill": "fill"})
     graph.add_conditional_edges("fill", _after_fill, {"ask": "ask", "compose": "compose", "collect": "collect", "gate": "gate"})
-    graph.add_edge("ask", "fill")
+    graph.add_conditional_edges("ask", _after_ask, {"split": "split", "fill": "fill"})
     graph.add_conditional_edges("gate", _after_gate, {"compose": "compose", "collect": "collect", "compute": "compute"})
     graph.add_conditional_edges("compute", _after_compute, {"compose": "compose", "collect": "collect", "price": "price", "ask": "ask"})
     graph.add_conditional_edges("price", _after_price, {"collect": "collect", "statement": "statement"})

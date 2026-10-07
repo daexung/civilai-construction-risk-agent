@@ -30,6 +30,7 @@ from langgraph.types import Command
 from pydantic import BaseModel, Field, field_validator
 
 from backend.agent.graph import build_graph, capture_node_timings
+from backend.agent.estimate.flow import build_estimate_graph
 from backend.agent.rules.specs import load_specs
 from backend.agent.nodes.retrieve import get_search
 from backend.render_sources import render_source
@@ -44,10 +45,13 @@ from backend.api import runtime
 from backend.api import feedback
 from backend.api import answer_feedback
 from backend.api import accounts
+from backend.api import estimate_service
 from backend.api.client_ip import client_ip
 from langgraph.checkpoint.postgres import PostgresSaver
 
 GRAPH = build_graph()
+# 새 공종별 견적 흐름. 비회원은 기존 대화와 같은 메모리 저장소를 쓰고 키(대화ID#estimate)로 구분한다.
+ESTIMATE_GRAPH = build_estimate_graph(GRAPH.checkpointer)
 _GUESTS: dict[str, dict] = {}
 _GUEST_LOCK = threading.Lock()
 _GUEST_TTL = 24 * 60 * 60
@@ -141,6 +145,8 @@ class ChatRequest(BaseModel):
     conversation_id: Optional[UUID] = None
     request_id: Optional[UUID] = None
     user_label: Optional[str] = None
+    # 구조화된 공종 계획. 서버의 로컬 검사 설정(ESTIMATE_PLAN_INPUT=local, 운영 아님)에서만 받는다.
+    estimate_plan: Optional[dict] = None
 
 
 class GuestImportRequest(BaseModel):
@@ -523,14 +529,24 @@ def export_xlsx(thread_id: str, authorization: str | None = Header(default=None)
             raise HTTPException(404, "대화를 찾을 수 없습니다.") from None
         with chat_storage.connection() as conn:
             chat_storage.owned(conn, conversation_id, user_id)
-            response = _build_response(conversation_id, _finished_state(conversation_id, build_graph(PostgresSaver(conn))))
+            saver = PostgresSaver(conn)
+            legacy, estimate = build_graph(saver), build_estimate_graph(saver)
+            if estimate_service.latest_flow(legacy, estimate, conversation_id) == "estimate":
+                data, name = estimate_service.export(estimate, conversation_id)
+            else:
+                response = _build_response(conversation_id, _finished_state(conversation_id, legacy))
+                data, name = build_xlsx(response), estimate_filename(response)
     else:
         guest = _guest(thread_id, x_guest_session)
         with guest["lock"]:
             _guest(thread_id, x_guest_session)
-            response = _build_response(thread_id, _finished_state(thread_id))
-    filename = quote(estimate_filename(response), safe="")
-    return Response(build_xlsx(response),
+            if estimate_service.latest_flow(GRAPH, ESTIMATE_GRAPH, thread_id) == "estimate":
+                data, name = estimate_service.export(ESTIMATE_GRAPH, thread_id)
+            else:
+                response = _build_response(thread_id, _finished_state(thread_id))
+                data, name = build_xlsx(response), estimate_filename(response)
+    filename = quote(name, safe="")
+    return Response(data,
                     media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     headers={"Content-Disposition": f'attachment; filename="estimate.xlsx"; filename*=UTF-8\'\'{filename}'})
 
@@ -596,7 +612,12 @@ def chat(payload: ChatRequest, request: Request, authorization: str | None = Hea
     started = perf_counter()
     if payload.message is not None and not 1 <= len(payload.message.strip()) <= 10000:
         raise HTTPException(422, "질문은 1~10,000자로 입력해 주세요.")
-    if payload.message is None and not payload.answers and payload.conditions is None:
+    if payload.estimate_plan is not None and not runtime.estimate_plan_input_enabled():
+        # 요청 값으로는 검사 모드를 켤 수 없다(사용량 차감 전에 거부).
+        raise HTTPException(422, "허용되지 않는 입력입니다.")
+    if payload.estimate_plan is not None and (payload.answers is not None or payload.conditions is not None or payload.restart):
+        raise HTTPException(422, "견적 계획은 단독으로 보내 주세요.")
+    if payload.message is None and not payload.answers and payload.conditions is None and payload.estimate_plan is None:
         raise HTTPException(422, "질문 또는 조건을 입력해 주세요.")
     if payload.restart and (not payload.message or payload.answers is not None or payload.conditions is not None):
         raise HTTPException(422, "다시 보내기에는 질문만 입력해 주세요.")
@@ -620,7 +641,7 @@ def chat(payload: ChatRequest, request: Request, authorization: str | None = Hea
                 secret = x_guest_session or token_urlsafe(32)
                 if len(secret) < 32 or len(secret) > 128:
                     raise HTTPException(422, "유효하지 않은 임시 세션입니다.")
-                if not payload.message or payload.answers or payload.conditions is not None:
+                if not (payload.message or payload.estimate_plan is not None) or payload.answers or payload.conditions is not None:
                     raise HTTPException(422, "새 대화에는 질문이 필요합니다.")
                 used = usage_limits.consume(quota)
                 response = _chat_response(payload)
@@ -641,14 +662,16 @@ def _prune_guests():
         for expired, entry in list(_GUESTS.items()):
             if monotonic() - entry["used"] > _GUEST_TTL and entry["lock"].acquire(blocking=False):
                 try:
-                    GRAPH.checkpointer.delete_thread(expired)
+                    for thread in chat_storage.checkpoint_threads(expired):
+                        GRAPH.checkpointer.delete_thread(thread)
                     del _GUESTS[expired]
                 finally:
                     entry["lock"].release()
 
 
 def _guest_label(payload: ChatRequest) -> str:
-    return payload.user_label or payload.message or ("공사 조건 변경" if payload.conditions else
+    return payload.user_label or payload.message or ("견적 계획" if payload.estimate_plan is not None else
+                                                    "공사 조건 변경" if payload.conditions else
                                                     ", ".join(str(value) for value in (payload.answers or {}).values()))
 
 
@@ -726,16 +749,18 @@ def import_guest(payload: GuestImportRequest, authorization: str | None = Header
             saver = PostgresSaver(conn)
             # Copy complete checkpoints, including pending interrupt writes. Replaying
             # user prompts would rerun paid calls and could produce different estimates.
-            for checkpoint in reversed(list(GRAPH.checkpointer.list({"configurable": {"thread_id": payload.thread_id}}))):
-                config = {"configurable": {"thread_id": target, "checkpoint_ns": checkpoint.config['configurable'].get('checkpoint_ns', '')}}
-                if checkpoint.parent_config:
-                    config['configurable']['checkpoint_id'] = checkpoint.parent_config['configurable']['checkpoint_id']
-                saved_config = saver.put(config, checkpoint.checkpoint, checkpoint.metadata, checkpoint.checkpoint['channel_versions'])
-                writes = defaultdict(list)
-                for task_id, channel, value in checkpoint.pending_writes or []:
-                    writes[task_id].append((channel, value))
-                for task_id, values in writes.items():
-                    saver.put_writes(saved_config, values, task_id)
+            for source_thread, target_thread in zip(chat_storage.checkpoint_threads(payload.thread_id),
+                                                    chat_storage.checkpoint_threads(target)):
+                for checkpoint in reversed(list(GRAPH.checkpointer.list({"configurable": {"thread_id": source_thread}}))):
+                    config = {"configurable": {"thread_id": target_thread, "checkpoint_ns": checkpoint.config['configurable'].get('checkpoint_ns', '')}}
+                    if checkpoint.parent_config:
+                        config['configurable']['checkpoint_id'] = checkpoint.parent_config['configurable']['checkpoint_id']
+                    saved_config = saver.put(config, checkpoint.checkpoint, checkpoint.metadata, checkpoint.checkpoint['channel_versions'])
+                    writes = defaultdict(list)
+                    for task_id, channel, value in checkpoint.pending_writes or []:
+                        writes[task_id].append((channel, value))
+                    for task_id, values in writes.items():
+                        saver.put_writes(saved_config, values, task_id)
             for label, guest_response in guest['turns']:
                 response = {**guest_response, "thread_id": target}
                 chat_storage.append_pair(conn, target, str(uuid4()), label, response)
@@ -746,7 +771,8 @@ def import_guest(payload: GuestImportRequest, authorization: str | None = Header
         # Commit the complete transcript and state before disposing of guest memory.
         with _GUEST_LOCK:
             _GUESTS.pop(payload.thread_id, None)
-        GRAPH.checkpointer.delete_thread(payload.thread_id)
+        for thread in chat_storage.checkpoint_threads(payload.thread_id):
+            GRAPH.checkpointer.delete_thread(thread)
     return {"id": target}
 
 
@@ -763,7 +789,8 @@ def delete_guest_conversation(thread_id: str, x_guest_session: str | None = Head
     guest = _guest(thread_id, x_guest_session)
     with guest["lock"]:
         _guest(thread_id, x_guest_session)
-        GRAPH.checkpointer.delete_thread(thread_id)
+        for thread in chat_storage.checkpoint_threads(thread_id):
+            GRAPH.checkpointer.delete_thread(thread)
         with _GUEST_LOCK:
             _GUESTS.pop(thread_id, None)
     return Response(status_code=204)
@@ -775,7 +802,8 @@ def _member_chat(payload: ChatRequest, user_id: str, quota) -> dict:
     conversation_id, request_id = str(payload.conversation_id), str(payload.request_id)
     if payload.thread_id and payload.thread_id != conversation_id:
         raise HTTPException(422, "대화 ID가 일치하지 않습니다.")
-    label = payload.user_label or payload.message or ("공사 조건 변경" if payload.conditions else "조건 선택")
+    label = payload.user_label or payload.message or ("견적 계획" if payload.estimate_plan is not None else
+                                                      "공사 조건 변경" if payload.conditions else "조건 선택")
     if not label.strip() or len(label) > 10000:
         raise HTTPException(422, "질문은 1~10,000자로 입력해 주세요.")
     # Checkpoints and transcript use ONE transaction/connection. Failed turns roll back
@@ -786,7 +814,8 @@ def _member_chat(payload: ChatRequest, user_id: str, quota) -> dict:
         if row:
             chat_storage.owned(conn, conversation_id, user_id)
         else:
-            if payload.thread_id or not payload.message or payload.conditions or payload.answers:
+            if payload.thread_id or not (payload.message or payload.estimate_plan is not None) \
+                    or payload.conditions or payload.answers:
                 raise HTTPException(404, "대화를 찾을 수 없습니다.")
             conn.execute("INSERT INTO public.conversations(id,user_id,title) VALUES (%s,%s,%s)",
                          (conversation_id, user_id, " ".join(label.split())[:200]))
@@ -795,16 +824,46 @@ def _member_chat(payload: ChatRequest, user_id: str, quota) -> dict:
         if duplicate:
             return {**duplicate["payload"], "usage": usage_limits.status(*quota)}
         used = usage_limits.consume(quota)
-        graph = build_graph(PostgresSaver(conn))
+        saver = PostgresSaver(conn)
+        graph = build_graph(saver)
         member_payload = payload.model_copy(update={"thread_id": conversation_id})
-        response = _chat_response(member_payload, graph, keep_thread=True)
+        response = _chat_response(member_payload, graph, keep_thread=True, estimate_graph=build_estimate_graph(saver))
         response["usage"] = used
         chat_storage.append_pair(conn, conversation_id, request_id, label, response)
         return response
 
 
-def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
+def _estimate_response(payload: ChatRequest, graph, estimate_graph, keep_thread: bool) -> dict | None:
+    """새 공종별 견적 흐름이 처리할 요청이면 응답, 아니면 None(기존 흐름).
+
+    - estimate_plan(로컬 검사 설정에서만 허용): 새 견적 시작
+    - 같은 대화의 마지막 흐름이 새 견적이면: 질문 답·공통 조건 변경을 그 견적에 적용
+    - 기존 흐름의 대화는 그대로 기존 흐름에서 재개된다
+    """
+    if payload.estimate_plan is not None:
+        thread_id = payload.thread_id if (payload.thread_id or keep_thread) else uuid4().hex
+        return estimate_service.start(estimate_graph, thread_id, payload.estimate_plan, runtime.estimate_max_items())
+    if not payload.thread_id:
+        return None
+    if estimate_service.latest_flow(graph, estimate_graph, payload.thread_id) != "estimate":
+        return None   # 기존 흐름의 대화(재전송 포함)는 기존 흐름 그대로
+    if payload.restart:
+        # 새 견적의 다시 보내기: 저장된 입력 계획으로 새 견적 흐름에서 다시 실행(자연어 해석 연결 전)
+        return estimate_service.restart(estimate_graph, payload.thread_id, runtime.estimate_max_items())
+    if payload.conditions is not None:
+        return estimate_service.change_common(estimate_graph, payload.thread_id, payload.conditions,
+                                              {field["name"]: field for field in _common_fields()})
+    waiting = estimate_service.snapshot(estimate_graph, payload.thread_id).next
+    if payload.answers is not None or (waiting and payload.message):
+        return estimate_service.answer(estimate_graph, payload.thread_id, payload.answers)
+    return None   # 끝난 견적 뒤의 새 질문은 기존 흐름(자연어 해석 연결 전)
+
+
+def _chat_response(payload: ChatRequest, graph=None, keep_thread=False, estimate_graph=None) -> dict:
     graph = graph or GRAPH
+    estimate = _estimate_response(payload, graph, estimate_graph or ESTIMATE_GRAPH, keep_thread)
+    if estimate is not None:
+        return estimate
     if payload.conditions is not None:
         return _change_conditions(payload, graph)
     config = None

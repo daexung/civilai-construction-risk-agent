@@ -1,0 +1,1014 @@
+{
+ "description": "main 9a2af9f 기준 고정 시나리오. expect: preserve(보존할 성공 사례) / main_bug(사례별 이유 필수) / unreviewed",
+ "scenarios": [
+  {
+   "id": "single-readymix-rebar",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근구조물 레미콘 인력운반 타설 150㎥"
+    },
+    {
+     "until_done": true
+    },
+    {
+     "export": true
+    }
+   ],
+   "answers": {
+    "work": "6-1-1",
+    "placement_method": "인력운반 타설",
+    "structure": "철근구조물",
+    "scattered_small_volume": false,
+    "concrete_supply": "관급"
+   },
+   "reason": "6-1-1 선택·조건·금액 완주"
+  },
+  {
+   "id": "single-readymix-plain",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "무근구조물 레미콘 인력운반 타설 50㎥"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "6-1-1",
+    "placement_method": "인력운반 타설",
+    "structure": "무근구조물",
+    "scattered_small_volume": false,
+    "concrete_supply": "관급"
+   },
+   "reason": "무근구조물 6-1-1 완주"
+  },
+  {
+   "id": "single-pump",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"
+    },
+    {
+     "until_done": true
+    },
+    {
+     "export": true
+    }
+   ],
+   "answers": {
+    "work": "6-1-4",
+    "pump_size": "32m",
+    "slump_band": "15㎝",
+    "facility_type": "Type-Ⅱ",
+    "site_type": "Type-Ⅱ",
+    "placement": "붐",
+    "vibrator_used": true,
+    "reset_status": "없음",
+    "concrete_supply": "관급"
+   },
+   "reason": "6-1-4 펌프차 완주(기존 골든 금액 10,032,436원)"
+  },
+  {
+   "id": "single-pump-private-mix",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "6-1-4",
+    "pump_size": "32m",
+    "slump_band": "15㎝",
+    "facility_type": "Type-Ⅱ",
+    "site_type": "Type-Ⅱ",
+    "placement": "붐",
+    "vibrator_used": true,
+    "reset_status": "없음",
+    "concrete_supply": "사급",
+    "ready_mix_price": "90000"
+   },
+   "reason": "사급 레미콘 단가 반영 완주"
+  },
+  {
+   "id": "single-pump-blocked",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "6-1-4",
+    "pump_size": "32m",
+    "slump_band": "15㎝",
+    "facility_type": "Type-Ⅱ",
+    "site_type": "Type-Ⅱ",
+    "placement": "붐",
+    "vibrator_used": true,
+    "reset_status": "있음",
+    "concrete_supply": "관급"
+   },
+   "note": "재셋팅 있음 → 보류(BLOCKED)가 main의 동작",
+   "reason": "재셋팅 '있음'은 원문 근거 불명확으로 보류하는 의도된 동작"
+  },
+  {
+   "id": "single-autodoor",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "자동문 3개소 설치하면 공사비 얼마 나와?"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "10-1-7"
+   },
+   "reason": "10-1-7 자동문 완주"
+  },
+  {
+   "id": "single-doorlock",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "도어록 50개소 설치 노무비가 얼마야"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {},
+   "reason": "10-2-3 도어록 완주"
+  },
+  {
+   "id": "single-plywood-form",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "합판거푸집 1,200㎡ 설치 해체 인건비 계산해줘"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "6-3-1"
+   },
+   "reason": "수직고 조건에 따른 의도된 보류(동적 감산 미지원 안내)"
+  },
+  {
+   "id": "single-slipform",
+   "category": "명확한 단일 공종",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "슬립폼 공법 1,000㎡ 노무비 견적 부탁해"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {},
+   "reason": "단가를 산정한 항목이 없는데(직접비 None) 도급액 0원 PARTIAL 견적으로 표시.",
+   "fix_check": {
+    "type": "no_zero_estimate",
+    "why": "단가 없는 0원 PARTIAL 견적이 사라져야 해결"
+   }
+  },
+  {
+   "id": "single-shutter",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "셔터 설치 5개소 비용 계산 부탁"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {},
+   "reason": "10-1-6 셔터 완주"
+  },
+  {
+   "id": "single-floorhinge",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "플로어힌지 20개 설치 공사비 산출해줘"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "10-2-2"
+   },
+   "reason": "10-2-2 플로어힌지 완주"
+  },
+  {
+   "id": "single-rebar-coupler",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근 기계적 이음 30개소 원가계산서 뽑아줘"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "rebar_diameter": 35
+   },
+   "reason": "6-2-5 철근 기계적 이음 완주"
+  },
+  {
+   "id": "single-deckplate",
+   "category": "명확한 단일 공종",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "데크플레이트 800㎡ 깔면 금액이 어느 정도야?"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "1-3-3"
+   },
+   "reason": "'데크플레이트 800㎡ 깔면'에 1-3-3 데크플레이트 설치 후보가 없고 절단·스터드볼트만 제시.",
+   "fix_check": {
+    "type": "work_choice",
+    "expect_any": [
+     "1-3-3"
+    ],
+    "why": "데크플레이트 설치(1-3-3)가 후보에 있어야 해결"
+   }
+  },
+  {
+   "id": "single-epoxy",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "에폭시 접착제 바르기 비용 얼마야?"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "area": "100",
+    "floor_level_19_plus": 19
+   },
+   "reason": "자동 계산하지 않는 할증 규칙에 대한 의도된 보류"
+  },
+  {
+   "id": "single-paint",
+   "category": "명확한 단일 공종",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "수성페인트 붓칠 500㎡ 견적 좀 뽑아줘"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {},
+   "reason": "11-2-1 수성페인트 완주"
+  },
+  {
+   "id": "vague-concrete",
+   "category": "모호한 공종",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "콘크리트 100㎥"
+    }
+   ],
+   "reason": "관련 없는 9-3-2 '배관을 위한 구멍뚫기'를 확정해 '명세 없음'으로 종료. 콘크리트 타설 후보를 보여주지 않음.",
+   "fix_check": {
+    "type": "work_choice",
+    "expect_any": [
+     "6-1-1",
+     "6-1-4"
+    ],
+    "forbid": [
+     "9-3-2"
+    ]
+   }
+  },
+  {
+   "id": "vague-concrete-quote",
+   "category": "말투 변형",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "콘크리트 100㎥ 견적"
+    }
+   ],
+   "reason": "말투만 다른 같은 요청인데 9-3-2로 확정해 '명세 없음'으로 종료.",
+   "fix_check": {
+    "type": "work_choice",
+    "expect_any": [
+     "6-1-1",
+     "6-1-4"
+    ],
+    "forbid": [
+     "9-3-2"
+    ]
+   }
+  },
+  {
+   "id": "vague-concrete-cost-q",
+   "category": "말투 변형",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "콘크리트 100㎥ 타설 비용이 얼마나 되나요?"
+    }
+   ],
+   "reason": "관련 없는 6-3-6 슬립폼을 잠정 선택하고 그 명세 조건(work_type·area)까지 함께 물음.",
+   "fix_check": {
+    "type": "work_choice",
+    "expect_any": [
+     "6-1-1",
+     "6-1-4"
+    ],
+    "forbid": [
+     "6-3-6",
+     "1-6-2"
+    ],
+    "work_only": true
+   }
+  },
+  {
+   "id": "vague-concrete-polite",
+   "category": "말투 변형",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "콘크리트 100㎥ 타설 견적 부탁드립니다"
+    }
+   ],
+   "reason": "후보에 표층 인력포설·배관 구멍뚫기가 섞이고 6-1-1 레디믹스트콘크리트 타설이 없음.",
+   "fix_check": {
+    "type": "work_choice",
+    "expect_any": [
+     "6-1-1",
+     "6-1-4"
+    ],
+    "forbid": [
+     "1-6-2",
+     "9-3-2"
+    ]
+   }
+  },
+  {
+   "id": "vague-readymix",
+   "category": "모호한 공종",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "레미콘 100㎥"
+    }
+   ],
+   "reason": "'레미콘 100㎥' 후보가 현장타설말뚝·주열식 현장벽뿐이고 6-1-1이 없음.",
+   "fix_check": {
+    "type": "work_choice",
+    "expect_any": [
+     "6-1-1"
+    ],
+    "forbid": [
+     "5-3-5",
+     "5-1-9"
+    ]
+   }
+  },
+  {
+   "id": "vague-site-mix",
+   "category": "모호한 공종",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "현장비빔 타설 노무비"
+    }
+   ],
+   "reason": "'현장비빔 타설 노무비' 후보에 6-1-2 현장비빔타설이 없음(수중펌프·흙깎기 등).",
+   "fix_check": {
+    "type": "work_choice",
+    "expect_any": [
+     "6-1-2"
+    ],
+    "forbid": [
+     "8-2-27",
+     "3-2-3"
+    ]
+   }
+  },
+  {
+   "id": "vague-recalc",
+   "category": "모호한 공종",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "아까 거 다시 계산해줘"
+    }
+   ],
+   "reason": "'아까 거 다시 계산해줘'를 범위 밖으로 처리. 라우터 정의(router.md)상 견적이며 공종을 물어야 함.",
+   "fix_check": {
+    "type": "recalc",
+    "why": "직전 견적이 없으면 관련 없는 후보 없이 공종을 확인해야 해결. 무관한 후보 제시는 악화"
+   }
+  },
+  {
+   "id": "follow-conditions",
+   "category": "후속 수정",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근구조물 레미콘 인력운반 타설 150㎥"
+    },
+    {
+     "until_done": true
+    },
+    {
+     "conditions": {
+      "contractor_type": "전문건설업",
+      "duration": "7~12개월"
+     }
+    },
+    {
+     "export": true
+    }
+   ],
+   "answers": {
+    "work": "6-1-1",
+    "placement_method": "인력운반 타설",
+    "structure": "철근구조물",
+    "scattered_small_volume": false,
+    "concrete_supply": "관급"
+   },
+   "reason": "공사 조건 변경 후 원가계산서 재계산"
+  },
+  {
+   "id": "follow-restart-new-quantity",
+   "category": "후속 수정",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근구조물 레미콘 인력운반 타설 150㎥"
+    },
+    {
+     "until_done": true
+    },
+    {
+     "restart": "철근구조물 레미콘 인력운반 타설 200㎥"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "6-1-1",
+    "placement_method": "인력운반 타설",
+    "structure": "철근구조물",
+    "scattered_small_volume": false,
+    "concrete_supply": "관급"
+   },
+   "reason": "재전송 시 새 물량 사용"
+  },
+  {
+   "id": "follow-text-resume",
+   "category": "후속 수정",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"
+    },
+    {
+     "text": "15cm 붐"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "6-1-4",
+    "pump_size": "32m",
+    "slump_band": "15㎝",
+    "facility_type": "Type-Ⅱ",
+    "site_type": "Type-Ⅱ",
+    "placement": "붐",
+    "vibrator_used": true,
+    "reset_status": "없음",
+    "concrete_supply": "관급"
+   },
+   "reason": "자유 입력 답변으로 재개"
+  },
+  {
+   "id": "follow-edit-while-pending",
+   "category": "후속 수정",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용"
+    },
+    {
+     "restart": "자동문 3개소 설치 공사비"
+    },
+    {
+     "until_done": true
+    }
+   ],
+   "answers": {
+    "work": "10-1-7"
+   },
+   "reason": "대기 중 수정 질문으로 새 공종 계산"
+  },
+  {
+   "id": "router-q01",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "펌프차 타설할 때 콘크리트공 품이 얼마야?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "6-1-4"
+    ]
+   }
+  },
+  {
+   "id": "router-q02",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "펌프차 재셋팅하면 품을 어떻게 적용해?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "6-1-4"
+    ]
+   }
+  },
+  {
+   "id": "router-q03",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "거푸집 높이 할증 기준이 뭐야?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 품셈 상담을 범위 밖으로 처리.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "6-3-1",
+     "6-3-2"
+    ]
+   }
+  },
+  {
+   "id": "router-q04",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "자동문 1개소 설치하는 데 창호공 몇 명 들어가?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "10-1-7"
+    ]
+   }
+  },
+  {
+   "id": "router-q05",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "진동기 안 쓰면 인원이 줄어?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "6-1-1",
+     "6-1-4"
+    ]
+   }
+  },
+  {
+   "id": "router-q06",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "일위대가 금액 끝자리는 어떻게 버려?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 '명세 없음'으로 종료.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "1-2-2"
+    ]
+   }
+  },
+  {
+   "id": "router-q07",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "기계경비 운전원 단가는 어떻게 산정해?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": null,
+    "why": "기계경비 운전원 단가 산정의 기대 절을 확정하지 못함"
+   }
+  },
+  {
+   "id": "router-q08",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "레미콘 할증률은 몇 %야?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 품셈 상담을 범위 밖으로 처리.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "1-3-1"
+    ]
+   }
+  },
+  {
+   "id": "router-q09",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "천장에 에폭시 바르면 품 가산돼?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "6-1-5"
+    ]
+   }
+  },
+  {
+   "id": "router-q10",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "벌목할 때 굴착기 시간은 얼마나 잡아?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "3-9-1"
+    ]
+   }
+  },
+  {
+   "id": "router-q11",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "공구손료는 보통 인력품의 몇 퍼센트로 잡아?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": null,
+    "why": "공구손료 비율의 기대 절(1-2-6 추정)을 확정하지 못함"
+   }
+  },
+  {
+   "id": "router-q12",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "간접노무비는 공사비에서 어떤 기준으로 계산해?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": null,
+    "why": "간접노무비 기준은 제비율 영역으로 품셈 상담 기대 절이 불명확"
+   }
+  },
+  {
+   "id": "router-q13",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "도어체크 설치 품에 브라켓 조립도 포함돼?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "10-2-1"
+    ]
+   }
+  },
+  {
+   "id": "router-q14",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "슬럼프 18cm면 펌프차 일일시공량이 어떻게 돼?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "6-1-4"
+    ]
+   }
+  },
+  {
+   "id": "router-q15",
+   "category": "상담",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "합판거푸집 300㎡ 설치에 형틀목공 품은?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: qa",
+   "reason": "LLM 꺼짐 규칙 분류의 한계: 상담을 견적 흐름으로 보내 계산 조건을 물음.",
+   "fix_check": {
+    "type": "consult",
+    "expect_sections": [
+     "6-3-1"
+    ]
+   }
+  },
+  {
+   "id": "router-o01",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "오늘 서울 날씨 어때?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o02",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "파이썬으로 리스트 정렬하는 코드 짜줘"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o03",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "점심 메뉴 추천해줘"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o04",
+   "category": "범위 밖",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "요즘 아파트 평당 공사비 얼마야?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문(router.md 정의)을 견적 흐름으로 보내 공종을 물음.",
+   "fix_check": {
+    "type": "out_of_scope"
+   }
+  },
+  {
+   "id": "router-o05",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "하도급 대금 안 주면 어디에 신고해?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o06",
+   "category": "범위 밖",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "이번 달 철근 시세 얼마야?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문(router.md 정의)을 견적 흐름으로 보내 공종을 물음.",
+   "fix_check": {
+    "type": "out_of_scope"
+   }
+  },
+  {
+   "id": "router-o07",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "너는 누가 만들었어?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o08",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "콘크리트 양생은 왜 해야 돼?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o09",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "주식 지금 사도 될까?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o10",
+   "category": "범위 밖",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "이 도면에서 콘크리트 물량 좀 뽑아줘"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문(router.md 정의)을 견적 흐름으로 보내 공종을 물음.",
+   "fix_check": {
+    "type": "out_of_scope"
+   }
+  },
+  {
+   "id": "router-o11",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "영어로 번역해줘: 안녕하세요"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o12",
+   "category": "범위 밖",
+   "expect": "main_bug",
+   "steps": [
+    {
+     "message": "시공능력평가 1위 건설사가 어디야?"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문(router.md 정의)을 견적 흐름으로 보내 공종을 물음.",
+   "fix_check": {
+    "type": "out_of_scope"
+   }
+  },
+  {
+   "id": "router-o13",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "ㅋㅋㅋㅋ"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o14",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "고소작업 안전대 착용 기준 알려줘"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  },
+  {
+   "id": "router-o15",
+   "category": "범위 밖",
+   "expect": "preserve",
+   "steps": [
+    {
+     "message": "비트코인 가격 알려줘"
+    }
+   ],
+   "note": "라우터 검사 세트 라벨: out_of_scope",
+   "reason": "범위 밖 질문을 범위 밖으로 안내"
+  }
+ ]
+}

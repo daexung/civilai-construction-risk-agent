@@ -4,20 +4,12 @@ from __future__ import annotations
 
 import json
 import os
-import re
-import unicodedata
 from pathlib import Path
 
+from backend.agent.rules.intent import COST_TERMS, QUANTITY_UNIT, classify  # noqa: F401  (COST_TERMS·QUANTITY_UNIT 재노출)
 from backend.agent.state import AgentState
 from backend.agent.tools.llm import client as llm_client
 
-
-COST_TERMS = (
-    "노무비", "인건비", "공사비", "견적", "예산", "일위대가", "단가", "물량", "대가",
-    "비용", "금액", "얼마", "인력", "인원", "공수", "품", "설치", "해체", "시공",
-    "개소", "㎡", "ton", "kg", "km", "루베",
-)
-QUANTITY_UNIT = re.compile(r"\d[\d,]*(?:\.\d+)?\s*(?:m3|m2|m|km|t|ton|kg|개소|개|평|㎡|㎥)(?![a-z])", re.I)
 SYSTEM_PROMPT = (Path(__file__).resolve().parents[1] / "tools/llm/prompts/router.md").read_text(encoding="utf-8")
 ROUTE_SCHEMA = {
     "type": "object",
@@ -32,8 +24,8 @@ ROUTE_SCHEMA = {
 
 
 def _rule_route(query: str) -> str:
-    normalized = unicodedata.normalize("NFKC", query)
-    return "estimate" if any(term in normalized for term in COST_TERMS) or QUANTITY_UNIT.search(normalized) else "out_of_scope"
+    """LLM을 쓰지 않을 때의 분류. 질문 의도 판단은 rules/intent.py 한곳에서 한다."""
+    return classify(query)
 
 
 def _previous_summary(state: AgentState) -> str:

@@ -1014,7 +1014,8 @@ def build_xlsx(response: dict) -> bytes:
         for number, part in enumerate(response["items"], 1):
             basis.append([f"[{number}] {_work_name(part) if part.get('work') else part['query']}", "",
                           part["query"], part.get("reason") or ""])
-            basis += _basis_rows(part)
+            if part.get("priced"):  # 계산하지 못한 공종은 사유 한 줄만 남긴다
+                basis += _basis_rows(part)
         basis += _basis_rows({"statement": response.get("statement")})
     else:
         basis = _basis_rows(response)

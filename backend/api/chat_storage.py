@@ -77,6 +77,19 @@ def setup():
             conn.execute("SELECT pg_advisory_unlock(78006100)")
 
 
+ESTIMATE_THREAD_SUFFIX = "#estimate"
+
+
+def estimate_thread_id(thread_id: str) -> str:
+    """새 공종별 견적 상태의 체크포인트 키. 기존 대화 상태(키 = 대화ID)와 분리한다."""
+    return f"{thread_id}{ESTIMATE_THREAD_SUFFIX}"
+
+
+def checkpoint_threads(thread_id: str) -> list[str]:
+    """한 대화의 모든 체크포인트 키. 삭제·탈퇴·만료·가져오기는 이 목록을 함께 처리한다."""
+    return [thread_id, estimate_thread_id(thread_id)]
+
+
 def owned(conn, conversation_id: str, user_id: str):
     row = conn.execute("SELECT id, title FROM public.conversations WHERE id=%s AND user_id=%s",
                        (conversation_id, user_id)).fetchone()
@@ -121,7 +134,9 @@ def delete_conversation(conversation_id: str, user_id: str):
     with connection() as conn, conn.transaction():
         conn.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (conversation_id,))
         owned(conn, conversation_id, user_id)
-        PostgresSaver(conn).delete_thread(conversation_id)
+        saver = PostgresSaver(conn)
+        for thread in checkpoint_threads(conversation_id):
+            saver.delete_thread(thread)
         conn.execute("DELETE FROM public.conversations WHERE id=%s AND user_id=%s", (conversation_id, user_id))
 
 

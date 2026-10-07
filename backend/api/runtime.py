@@ -26,10 +26,27 @@ def allowed_origins() -> list[str]:
     return origins
 
 
+def estimate_max_items() -> int:
+    """복수 공종 견적의 공종 수 상한. 기본값은 기존 코드 값(3)이며 ESTIMATE_MAX_ITEMS로만 바꾼다."""
+    from backend.agent.estimate.state import max_items_setting
+    return max_items_setting()
+
+
+def estimate_plan_input_enabled() -> bool:
+    """구조화 계획(estimate_plan) 입력은 서버의 명시적인 로컬 검사 설정에서만 받는다.
+
+    요청 값으로는 켤 수 없고, 운영(APP_ENV=production)에서는 설정이 있어도 꺼진다.
+    """
+    return not production() and os.getenv('ESTIMATE_PLAN_INPUT') == 'local'
+
+
 def validate_production() -> None:
     if not production():
         return
     allowed_origins()
+    if os.getenv('ESTIMATE_PLAN_INPUT'):
+        raise ValueError('ESTIMATE_PLAN_INPUT is a local test setting and must not be set in production')
+    estimate_max_items()
     if len(os.getenv('QUOTA_HASH_SECRET', '')) < 32:
         raise ValueError('Production requires an independent QUOTA_HASH_SECRET of at least 32 characters')
     if urlsplit(os.getenv('SUPABASE_URL', '')).scheme != 'https' or not os.getenv('SUPABASE_PUBLISHABLE_KEY'):

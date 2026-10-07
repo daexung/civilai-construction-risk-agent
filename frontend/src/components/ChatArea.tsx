@@ -2,7 +2,7 @@ import React, { useId, createContext, useContext, useEffect, useRef, useState, u
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ArrowUp, Check, Copy, Download, Info, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
-import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult, UsageStatus } from '../types';
+import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, EstimateItem, PricedResult, UsageStatus } from '../types';
 import { downloadEstimate } from '../api';
 import { EXAMPLE_QUESTIONS } from '../examples';
 import { showToast } from '../toast';
@@ -431,6 +431,41 @@ function ComputedCard({ work, inputs, result, priced, tables, response }: {
   );
 }
 
+const ITEM_FAILURE: Record<string, string> = {
+  BLOCKED: '계산 보류', EVIDENCE_ONLY: '계산하지 못한 공종', ERROR: '계산 오류', MISSING_INFO: '조건 확인 필요',
+};
+
+/** 금액과 계산 결과(일위대가 형태)가 모두 있는 항목만 계산된 공종으로 본다. */
+function computedItem(item: EstimateItem): boolean {
+  return ['OK', 'PARTIAL'].includes(item.status) && item.priced?.reference_amounts?.total != null
+    && !!item.result && 'unit_lines' in item.result;
+}
+
+function BundleItems({ response }: { response: ChatResponse }) {
+  return <div className="bundle-items">
+    <h4>공종별 내역</h4>
+    {response.items!.map((item, index) => {
+      const ok = computedItem(item);
+      const excluded = (item.priced?.excluded ?? []).map(entry => entry.name);
+      return <details className="bundle-item" key={index}>
+        <summary>
+          <span className="bundle-item-title">{index + 1}. {item.work?.title ?? item.query}</span>
+          <span className={ok ? 'bundle-item-amount' : 'bundle-item-failed'}>
+            {ok ? `직접비 ${won(item.priced!.reference_amounts!.total)}` : '금액 미포함'}</span>
+        </summary>
+        <p className="unit-note">요청 내용: {item.query}</p>
+        {ok ? <>
+          {excluded.length > 0 && <p className="unit-note">제외 항목: {excluded.join(', ')}</p>}
+          <ComputedCard work={item.work} inputs={item.inputs} result={item.result as ComputedResult} priced={item.priced}
+            tables={{ statement_rows: [], bill: null, rate_rows: [] }} response={response} />
+        </> : <p className="bundle-item-reason">
+          {ITEM_FAILURE[item.status] ?? '계산하지 못함'}: {item.reason || '이 공종은 계산하지 못해 견적 금액에 넣지 않았어요.'}
+        </p>}
+      </details>;
+    })}
+  </div>;
+}
+
 function BlockedCard({ result }: { result: BlockedResult }) {
   return (
     <div className="blocked-card">
@@ -499,18 +534,6 @@ function AssistantCard({
 
       <EstimateGuidance response={response} />
 
-      {!!response.items?.length && (
-        <ol className="bundle-items" aria-label="공종별 계산 상태">
-          {response.items.map((item, index) => {
-            const total = item.priced?.reference_amounts?.total;
-            return <li key={index}>
-              <strong>{item.work?.title ?? item.query}</strong> <small>{item.query}</small>
-              <div>{total != null ? `직접비 ${won(total)}` : `금액 미반영 — ${item.reason || '계산하지 못한 공종'}`}</div>
-            </li>;
-          })}
-        </ol>
-      )}
-
       {response.status === 'MISSING_INFO' && (
         <div className="question-list">
           {response.questions.map((question) => (
@@ -545,6 +568,7 @@ function AssistantCard({
             ...(response.tables.bills?.length ? [{ id: 'bill', label: '내역서', content: <BillTable bills={response.tables.bills} /> }] : []),
             ...(response.tables.rate_rows.length ? [{ id: 'rates', label: '단가대비표', content: <RateTable rows={response.tables.rate_rows} /> }] : []),
           ]} />}
+          {!!response.items?.length && <BundleItems response={response} />}
         </>
       )}
 

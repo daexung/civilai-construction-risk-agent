@@ -250,6 +250,8 @@ export interface EstimateItem {
   status: ChatStatus;
   reason: string;
   work: WorkInfo | null;
+  inputs: InputRow[];
+  result: ComputedResult | BlockedResult | null;
   priced: PricedResult | null;
 }
 

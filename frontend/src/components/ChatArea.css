@@ -305,9 +305,6 @@
 .estimate-guidance strong { color: var(--text-primary); font-weight: 550; }
 .estimate-guidance p { margin: 5px 0 0; color: var(--text-secondary); }
 .estimate-guidance .estimate-guidance-separate { font-size: 12px; }
-.bundle-items { margin: 14px 0; padding-left: 20px; font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
-.bundle-items li + li { margin-top: 6px; }
-.bundle-items strong { color: var(--text-primary); font-weight: 550; }
 
 .question-reason {
   font-size: 12px;
@@ -1108,3 +1105,10 @@ button.source-page-badge:hover { color: var(--point); background: var(--point-ti
 .estimate-tab-row button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 .estimate-tabs [role="tabpanel"] { min-width: 0; }
 .simple-answer-badge { font-size: 11px; color: var(--text-secondary); }
+.bundle-items { margin-top: 18px; }
+.bundle-items h4 { margin: 0 0 8px; font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.bundle-item { border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 14px; margin-bottom: 8px; }
+.bundle-item summary { display: flex; justify-content: space-between; gap: 12px; cursor: pointer; font-size: 13px; color: var(--text-primary); }
+.bundle-item-amount { font-weight: 600; white-space: nowrap; }
+.bundle-item-failed { color: var(--text-secondary); white-space: nowrap; }
+.bundle-item-reason { margin: 6px 0 0; font-size: 13px; color: var(--text-secondary); }

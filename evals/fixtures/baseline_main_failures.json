@@ -1,0 +1,55 @@
+{
+ "commit": "9a2af9f",
+ "note": "main 기준 환경(evals/check_baseline.py가 만든 tmp/main-baseline)에서 run_quick 대상 검사를 돌렸을 때의 기존 실패. 로컬 데이터·패키지 부재 원인 포함.",
+ "failures": {
+  "check_qa": {
+   "main_result": "오류",
+   "failed_cases": [],
+   "cause": "FileNotFoundError: <main-baseline>/data/processed/parsed.all.jsonl 없음"
+  },
+  "check_label_shift": {
+   "main_result": "오류",
+   "failed_cases": [],
+   "cause": "FileNotFoundError: <main-baseline>/data/processed/parsed.all.jsonl 없음"
+  },
+  "check_api": {
+   "main_result": "통과 49 / 전체 52",
+   "failed_cases": [
+    "FAIL A3",
+    "FAIL A-edit1 대기 중 수정 질문은 새로운 공종으로 계산",
+    "FAIL A-edit2 재전송은 이전 물량 대신 새 물량 사용"
+   ],
+   "cause": "FileNotFoundError: missing page map"
+  },
+  "check_price": {
+   "main_result": "오류",
+   "failed_cases": [],
+   "cause": "KeyError: 'thread_id'"
+  },
+  "check_equipment": {
+   "main_result": "오류",
+   "failed_cases": [],
+   "cause": "ModuleNotFoundError: No module named 'pdfplumber'"
+  },
+  "check_citation": {
+   "main_result": "오류",
+   "failed_cases": [],
+   "cause": "KeyError: 'thread_id'"
+  },
+  "check_embedding_config": {
+   "main_result": "오류",
+   "failed_cases": [],
+   "cause": "FileNotFoundError: <main-baseline>/data/processed/embeddings.6장.gemini-embedding-2.parquet 없음"
+  },
+  "check_chunk_ids": {
+   "main_result": "오류",
+   "failed_cases": [],
+   "cause": "FileNotFoundError: <main-baseline>/data/processed/parsed.jsonl 없음"
+  },
+  "check_scope_inputs": {
+   "main_result": "오류",
+   "failed_cases": [],
+   "cause": "KeyError: 'status'"
+  }
+ }
+}

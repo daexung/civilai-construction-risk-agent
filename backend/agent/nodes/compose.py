@@ -247,23 +247,22 @@ def build_facts(state: AgentState) -> dict:
 
 
 def _template_bundle(facts: dict) -> str:
+    """금액과 계산 범위만 말한다. 공종별 직접비는 화면의 공종 목록에서 한 번만 보여준다."""
     statement = facts.get("statement") or {}
     contract_amount = (statement.get("totals") or {}).get("전체 물량 기준 도급액(부가세 포함)")
     items = facts["items"]
-    paragraphs = [f"{len(items)}개 공종을 한 견적서로 묶은 금액은 **{contract_amount}**이에요.",
-                  "공종별 직접비를 더한 뒤 간접비·일반관리비·이윤·부가세는 한 번만 계산했어요. 부가세 포함 금액이에요."]
-    lines = ["**공종별 직접비**"]
-    for item in items:
-        if item["direct_amount"] is not None:
-            lines.append(f"- {item['number']}. {item['query']} · {item['title']}: {item['direct_amount']}")
-        else:
-            lines.append(f"- {item['number']}. {item['query']}: 금액에 넣지 못했어요({item['reason'] or '계산하지 못한 공종'})")
-    paragraphs.append("\n".join(lines))
+    priced = [item for item in items if item["direct_amount"] is not None]
+    failed = [item for item in items if item["direct_amount"] is None]
+    paragraphs = [f"계산한 공종 {len(priced)}개를 한 견적서로 묶은 금액은 **{contract_amount}**이에요. 부가세 포함 금액이에요."]
+    if failed:
+        names = ", ".join(f"{item['number']}번({item['query']})" for item in failed)
+        paragraphs.append(f"요청하신 {len(items)}개 공종 중 계산한 {len(priced)}개만 포함한 **부분 금액**이에요. "
+                          f"{names}은 계산하지 못해 금액에 넣지 않았어요.")
     names = [entry["name"] for entry in statement.get("unpriced") or []
              if not re.match(r"\d+번 항목", entry["name"])]
     if names:
-        paragraphs.append(f"**금액에 포함되지 않은 항목**\n- {', '.join(names)}: 상세 사유는 아래 내역에서 확인해 주세요.")
-    paragraphs.append("아래 원가계산서와 내역서를 확인하고 Excel로 내려받아 검토해 주세요.")
+        paragraphs.append(f"**금액에 포함되지 않은 항목**\n- {', '.join(names)}: 상세 사유는 아래 공종별 내역에서 확인해 주세요.")
+    paragraphs.append("아래 공종 이름을 누르면 공종별 일위대가와 산출근거를 볼 수 있어요.")
     return "\n\n".join(paragraphs)
 
 
