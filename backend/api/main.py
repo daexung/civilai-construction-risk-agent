@@ -174,7 +174,8 @@ def _questions_out(questions: list[dict]) -> list[dict]:
         {
             "name": question["name"],
             "ask": question["ask"],
-            "choices": question.get("choices"),
+            # 수치 입력 칸의 allowed_values는 "0보다 큰 수" 같은 설명 문자열이라 선택지가 아니다.
+            "choices": question.get("choices") if isinstance(question.get("choices"), list) else None,
             "labels": question.get("labels"),
             "hint": question.get("hint"),
             "default": question.get("default"),

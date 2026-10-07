@@ -94,6 +94,20 @@ test('missing pump conditions explain the request and preserve only server quest
   expect(container.querySelector('.question-list').textContent).not.toContain('물량은');
 });
 
+test('numeric question saved with a text choices description still renders instead of crashing', () => {
+  const questions = [
+    { name: 'volume', ask: '콘크리트 타설 물량은 몇 ㎥입니까?', choices: '0보다 큰 수' },
+    { name: 'structure', ask: '무근콘크리트와 철근콘크리트 중 어느 구조물입니까?', choices: ['무근', '철근'] },
+  ];
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null, message: '조건을 확인해 주세요.', result: null, questions };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response }]} />));
+  const cards = container.querySelectorAll('.question-card');
+  expect(cards).toHaveLength(2);
+  expect(cards[0].textContent).toContain('몇 ㎥입니까');
+  expect(cards[0].querySelector('.choice-btn')).toBeNull();
+  expect(cards[1].querySelectorAll('.choice-btn')).toHaveLength(2);
+});
+
 test('unit-based estimates state their scope and actual separately counted work', () => {
   const response = { ...demo.response, work: { ...demo.response.work, title: '자동문 설치' },
     result: { ...demo.response.result, daily_volume: null, not_calculated: [{ item: '유리공사, 전기 및 통신공사' }] } };

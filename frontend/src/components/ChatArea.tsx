@@ -112,7 +112,7 @@ function QuestionCard({
           힌트: {question.hint.matched} → {question.hint.value}일 수 있습니다 (자동 선택 아님, 확인 필요)
         </div>
       )}
-      {question.choices && (
+      {Array.isArray(question.choices) && (
         <div className="question-choices">
           {question.choices.map((choice) => {
             const label = typeof choice === 'string' ? (question.labels?.[choice] ?? choiceLabel(choice)) : choiceLabel(choice);
