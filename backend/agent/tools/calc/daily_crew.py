@@ -7,6 +7,7 @@ import re
 from fractions import Fraction
 from typing import Any
 
+from backend.agent.rules.conditions import price_fields
 from backend.agent.tools.calc.unit_rounding import round_quantity, unit_places
 from backend.agent.tools.calc.numbers import parse_fraction, parse_table_number
 from backend.agent.tools.source.citation import cite_table, resolve_cites
@@ -147,9 +148,13 @@ def check_blocked(spec: dict, inputs: dict) -> dict | None:
     return None
 
 
-def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
-    """검사 → 누락 질문 → 보류 판정 → 정확한 기본 품량 순으로 처리한다."""
+def adjusted_daily_crew(spec: dict, inputs: dict, *, labor_only: bool = False) -> dict:
+    """검사 → 누락 질문 → 보류 판정 → 정확한 기본 품량 순으로 처리한다.
+
+    labor_only=True(품 산출 모드)일 때만 가격 조건(관급/사급·자재 단가)이 없어도 품을 계산한다.
+    """
     fields = spec["inputs"]
+    optional = price_fields(spec) if labor_only else frozenset()
     by_name = {field["name"]: field for field in fields}
     tables = {table["id"]: table for table in spec["tables"]}
     validated: dict[str, Any] = {}
@@ -170,7 +175,7 @@ def adjusted_daily_crew(spec: dict, inputs: dict) -> dict:
         validated[name] = checked
 
     missing = [field["name"] for field in fields
-               if field["required"] and field["name"] not in validated
+               if field["required"] and field["name"] not in validated and field["name"] not in optional
                and (not field.get("when")
                     or validated.get(field["when"]["input"]) == field["when"]["equals"])]
     if missing:

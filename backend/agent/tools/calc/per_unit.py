@@ -6,6 +6,7 @@ import re
 import unicodedata
 from fractions import Fraction
 
+from backend.agent.rules.conditions import price_fields
 from backend.agent.tools.calc.daily_crew import _exact_text, _validate, check_blocked
 from backend.agent.tools.calc.adjustments import apply_adjustments
 from backend.agent.tools.calc.numbers import parse_fraction, parse_table_number
@@ -76,8 +77,10 @@ def _material_unit(table_id: str, row: str, name: str) -> str:
     return "단위 미확인"
 
 
-def per_unit(spec: dict, inputs: dict) -> dict:
+def per_unit(spec: dict, inputs: dict, *, labor_only: bool = False) -> dict:
+    """labor_only=True(품 산출 모드)일 때만 가격 조건이 없어도 품을 계산한다."""
     fields = {field["name"]: field for field in spec["inputs"]}
+    optional = price_fields(spec) if labor_only else frozenset()
     validated = {}
     for name, value in inputs.items():
         if re.fullmatch(r"apply_adj_\d+", name):
@@ -93,7 +96,8 @@ def per_unit(spec: dict, inputs: dict) -> dict:
         if error:
             return {"status": "rejected", "reason": error}
         validated[name] = checked
-    missing = [name for name, field in fields.items() if field["required"] and name not in validated]
+    missing = [name for name, field in fields.items()
+               if field["required"] and name not in validated and name not in optional]
     if missing:
         return {"status": "ask", "missing": missing}
     blocked = check_blocked(spec, validated)
