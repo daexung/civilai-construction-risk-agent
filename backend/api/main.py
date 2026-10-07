@@ -9,6 +9,7 @@ import threading
 import re
 import copy
 import hashlib
+import psycopg
 from contextlib import ExitStack
 from collections import defaultdict
 from contextlib import asynccontextmanager
@@ -44,11 +45,19 @@ from backend.api import runtime
 from backend.api import feedback
 from backend.api import answer_feedback
 from backend.api import accounts
+from backend.api import dialogue_service
+from backend.agent.estimate.dialogue import build_dialogue_graph, config as dialogue_config
 from backend.api.client_ip import client_ip
 from langgraph.checkpoint.postgres import PostgresSaver
 
 GRAPH = build_graph()
+# AGENT_MODE=tools 대화 상태도 비회원은 같은 메모리 체크포인터에 둔다(현재 비회원 저장 정책 유지).
+DIALOGUE = build_dialogue_graph(GRAPH.checkpointer)
 _GUESTS: dict[str, dict] = {}
+# 중복 요청: (회원/비회원, 소유자, 대화, request_id) → 요청 지문·완료 신호·응답·차감 여부.
+# 사용량 차감과 실행보다 먼저 판정한다. 실패한 요청은 같은 ID로 다시 실행하되 다시 차감하지 않는다.
+# 메모리 기록은 같은 인스턴스의 동시 요청 대기·응답 재사용용이다. AGENT_MODE=tools의 차감 중복은 DB(chat_request_charges)가 막는다.
+_REQUESTS: dict[tuple[str, str, str, str], dict] = {}
 _GUEST_LOCK = threading.Lock()
 _GUEST_TTL = 24 * 60 * 60
 
@@ -64,6 +73,8 @@ def _prepare_service() -> None:
     started = perf_counter()
     try:
         chat_storage.setup()
+        if dialogue_service.enabled():
+            usage_limits.require_request_charges()
         prepare_citations()
         get_search()
         load_specs()
@@ -141,6 +152,7 @@ class ChatRequest(BaseModel):
     conversation_id: Optional[UUID] = None
     request_id: Optional[UUID] = None
     user_label: Optional[str] = None
+    refs: Optional[dict] = None  # AGENT_MODE=tools: 답한 질문의 question_id@version@revision
 
 
 class GuestImportRequest(BaseModel):
@@ -468,6 +480,17 @@ def source_image(table_id: str) -> FileResponse:
     return FileResponse(path, media_type="image/png")
 
 
+def _uses_dialogue(checkpointer, thread_id: str | None) -> bool:
+    """처리 방식은 대화에 저장된 상태로 정한다. 새 흐름 상태(dlg:)가 있으면 tools, 기존 그래프 상태만 있으면 기존 방식.
+    둘 다 없는 새 대화만 설정(AGENT_MODE)을 따른다. 설정을 바꿔도 기존 견적을 초기화하거나 새 흐름으로 덮어쓰지 않는다."""
+    if thread_id:
+        if checkpointer.get_tuple(dialogue_config(thread_id)) is not None:
+            return True
+        if checkpointer.get_tuple({"configurable": {"thread_id": thread_id}}) is not None:
+            return False
+    return dialogue_service.enabled()
+
+
 def _finished_state(thread_id: str | None, graph=None) -> dict:
     """계산이 끝난 thread의 그래프 state. 계산 결과가 없으면 404."""
     if not thread_id:
@@ -513,12 +536,16 @@ def export_xlsx(thread_id: str, authorization: str | None = Header(default=None)
             raise HTTPException(404, "대화를 찾을 수 없습니다.") from None
         with chat_storage.connection() as conn:
             chat_storage.owned(conn, conversation_id, user_id)
-            response = _build_response(conversation_id, _finished_state(conversation_id, build_graph(PostgresSaver(conn))))
+            if _uses_dialogue(PostgresSaver(conn), conversation_id):
+                response = dialogue_service.export_response(build_dialogue_graph(PostgresSaver(conn)), conversation_id)
+            else:
+                response = _build_response(conversation_id, _finished_state(conversation_id, build_graph(PostgresSaver(conn))))
     else:
         guest = _guest(thread_id, x_guest_session)
         with guest["lock"]:
             _guest(thread_id, x_guest_session)
-            response = _build_response(thread_id, _finished_state(thread_id))
+            response = (dialogue_service.export_response(DIALOGUE, thread_id) if _uses_dialogue(GRAPH.checkpointer, thread_id)
+                        else _build_response(thread_id, _finished_state(thread_id)))
     filename = quote(estimate_filename(response), safe="")
     return Response(build_xlsx(response),
                     media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -590,10 +617,78 @@ def chat(payload: ChatRequest, request: Request, authorization: str | None = Hea
         raise HTTPException(422, "질문 또는 조건을 입력해 주세요.")
     if payload.restart and (not payload.message or payload.answers is not None or payload.conditions is not None):
         raise HTTPException(422, "다시 보내기에는 질문만 입력해 주세요.")
+    claim = None
+    owner_key = ("member", user_id) if user_id else ("guest", x_guest_session)
+    if payload.request_id and owner_key[1]:
+        claim = _claim_request(owner_key, payload)
+        if claim.get("replay") is not None:
+            return claim["replay"]
+    try:
+        response = _chat(payload, request, user_id, x_guest_session, started, claim)
+    except BaseException:
+        if claim:
+            _release_request(claim, None)
+        raise
+    if claim:
+        _release_request(claim, None if response.get("status") == "ERROR" else response)
+    return response
+
+
+def _request_fingerprint(payload: ChatRequest) -> str:
+    return hashlib.sha256(payload.model_dump_json(exclude={"request_id", "user_label"}).encode()).hexdigest()
+
+
+def _claim_request(owner_key: tuple[str, str], payload: ChatRequest) -> dict:
+    """같은 소유자·대화·request_id는 한 번만 실행한다. 진행 중이면 끝나기를 기다려 같은 응답을 돌려준다."""
+    conversation = str(payload.conversation_id or payload.thread_id or "new")
+    key = (*owner_key, conversation, str(payload.request_id))
+    fingerprint = _request_fingerprint(payload)
+    while True:
+        with _GUEST_LOCK:
+            entry = _REQUESTS.get(key)
+            if entry is not None and not compare_digest(entry["fingerprint"], fingerprint):
+                raise HTTPException(409, "같은 요청 ID로 다른 내용을 보낼 수 없습니다.")
+            if entry is None or (entry["done"].is_set() and entry["response"] is None):
+                # 처음 요청이거나 먼저 온 요청이 실패했다: 이 요청이 실행한다. 차감 기록은 이어받는다.
+                entry = _REQUESTS[key] = {"charged": False, "usage": None, **(entry or {}),
+                                          "fingerprint": fingerprint, "done": threading.Event(),
+                                          "response": None, "used": monotonic(), "key": key}
+                return entry
+            done = entry["done"]
+        if not done.wait(120):
+            raise HTTPException(409, "같은 요청을 아직 처리 중입니다. 잠시 후 다시 보내 주세요.")
+        with _GUEST_LOCK:
+            if entry["response"] is not None:
+                return {"replay": copy.deepcopy(entry["response"])}
+
+
+def _release_request(entry: dict, response: dict | None) -> None:
+    with _GUEST_LOCK:
+        entry["used"] = monotonic()
+        if response is not None:
+            entry["response"] = copy.deepcopy(response)
+    entry["done"].set()
+
+
+def _consume_once(quota, claim: dict | None):
+    """요청당 한 번만 차감한다. 같은 request_id 재시도는 처음 차감 결과를 쓴다."""
+    if claim and claim["charged"]:
+        return claim["usage"]
+    # AGENT_MODE=tools만 DB의 요청별 차감 기록(chat_request_charges)으로 재시작·다른 인스턴스 재시도도 한 번만 차감한다.
+    # 기존 모드는 이 테이블 없이 동작해야 한다(마이그레이션 전 배포 호환).
+    durable = claim and dialogue_service.enabled()
+    used = usage_limits.consume(quota, claim["key"]) if durable else usage_limits.consume(quota)
+    if claim:
+        claim.update(charged=True, usage=used)
+    return used
+
+
+def _chat(payload: ChatRequest, request: Request, user_id: str | None, x_guest_session: str | None,
+          started: float, claim: dict | None = None) -> dict:
     with accounts.guard(user_id), usage_limits.processing(user_id, client_ip(request)) as quota, \
             capture_node_timings() as node_timings:
         if user_id:
-            response = _member_chat(payload, user_id, quota)
+            response = _member_chat(payload, user_id, quota, claim)
         else:
             if payload.conversation_id:
                 raise HTTPException(401, "회원 대화에는 로그인이 필요합니다.")
@@ -601,7 +696,7 @@ def chat(payload: ChatRequest, request: Request, authorization: str | None = Hea
                 guest = _guest(payload.thread_id, x_guest_session)
                 with guest["lock"]:
                     _guest(payload.thread_id, x_guest_session)
-                    used = usage_limits.consume(quota)
+                    used = _consume_once(quota, claim)
                     response = _chat_response(payload)
                     response["usage"] = used
                     guest["turns"].append((_guest_label(payload), copy.deepcopy(response)))
@@ -612,7 +707,7 @@ def chat(payload: ChatRequest, request: Request, authorization: str | None = Hea
                     raise HTTPException(422, "유효하지 않은 임시 세션입니다.")
                 if not payload.message or payload.answers or payload.conditions is not None:
                     raise HTTPException(422, "새 대화에는 질문이 필요합니다.")
-                used = usage_limits.consume(quota)
+                used = _consume_once(quota, claim)
                 response = _chat_response(payload)
                 response["usage"] = used
                 with _GUEST_LOCK:
@@ -632,9 +727,15 @@ def _prune_guests():
             if monotonic() - entry["used"] > _GUEST_TTL and entry["lock"].acquire(blocking=False):
                 try:
                     GRAPH.checkpointer.delete_thread(expired)
+                    GRAPH.checkpointer.delete_thread(f"dlg:{expired}")
                     del _GUESTS[expired]
                 finally:
                     entry["lock"].release()
+
+
+        for key, entry in list(_REQUESTS.items()):
+            if entry["done"].is_set() and monotonic() - entry["used"] > _GUEST_TTL:
+                del _REQUESTS[key]
 
 
 def _guest_label(payload: ChatRequest) -> str:
@@ -716,8 +817,12 @@ def import_guest(payload: GuestImportRequest, authorization: str | None = Header
             saver = PostgresSaver(conn)
             # Copy complete checkpoints, including pending interrupt writes. Replaying
             # user prompts would rerun paid calls and could produce different estimates.
-            for checkpoint in reversed(list(GRAPH.checkpointer.list({"configurable": {"thread_id": payload.thread_id}}))):
-                config = {"configurable": {"thread_id": target, "checkpoint_ns": checkpoint.config['configurable'].get('checkpoint_ns', '')}}
+            # AGENT_MODE=tools 대화 상태(dlg: thread)도 같은 방식으로 옮긴다.
+            for source, destination, checkpoint in [
+                    (source, destination, checkpoint)
+                    for source, destination in ((payload.thread_id, target), (f"dlg:{payload.thread_id}", f"dlg:{target}"))
+                    for checkpoint in reversed(list(GRAPH.checkpointer.list({"configurable": {"thread_id": source}})))]:
+                config = {"configurable": {"thread_id": destination, "checkpoint_ns": checkpoint.config['configurable'].get('checkpoint_ns', '')}}
                 if checkpoint.parent_config:
                     config['configurable']['checkpoint_id'] = checkpoint.parent_config['configurable']['checkpoint_id']
                 saved_config = saver.put(config, checkpoint.checkpoint, checkpoint.metadata, checkpoint.checkpoint['channel_versions'])
@@ -737,6 +842,7 @@ def import_guest(payload: GuestImportRequest, authorization: str | None = Header
         with _GUEST_LOCK:
             _GUESTS.pop(payload.thread_id, None)
         GRAPH.checkpointer.delete_thread(payload.thread_id)
+        GRAPH.checkpointer.delete_thread(f"dlg:{payload.thread_id}")
     return {"id": target}
 
 
@@ -754,12 +860,13 @@ def delete_guest_conversation(thread_id: str, x_guest_session: str | None = Head
     with guest["lock"]:
         _guest(thread_id, x_guest_session)
         GRAPH.checkpointer.delete_thread(thread_id)
+        GRAPH.checkpointer.delete_thread(f"dlg:{thread_id}")
         with _GUEST_LOCK:
             _GUESTS.pop(thread_id, None)
     return Response(status_code=204)
 
 
-def _member_chat(payload: ChatRequest, user_id: str, quota) -> dict:
+def _member_chat(payload: ChatRequest, user_id: str, quota, claim: dict | None = None) -> dict:
     if not payload.conversation_id or not payload.request_id:
         raise HTTPException(422, "대화 ID와 요청 ID가 필요합니다.")
     conversation_id, request_id = str(payload.conversation_id), str(payload.request_id)
@@ -784,16 +891,19 @@ def _member_chat(payload: ChatRequest, user_id: str, quota) -> dict:
                                  "AND request_id=%s AND role='assistant'", (conversation_id, request_id)).fetchone()
         if duplicate:
             return {**duplicate["payload"], "usage": usage_limits.status(*quota)}
-        used = usage_limits.consume(quota)
+        used = _consume_once(quota, claim)
         graph = build_graph(PostgresSaver(conn))
         member_payload = payload.model_copy(update={"thread_id": conversation_id})
         response = _chat_response(member_payload, graph, keep_thread=True)
         response["usage"] = used
-        chat_storage.append_pair(conn, conversation_id, request_id, label, response)
+        if response.get("status") != "ERROR":  # 실패 응답은 기록하지 않아 같은 request_id로 다시 실행할 수 있다
+            chat_storage.append_pair(conn, conversation_id, request_id, label, response)
         return response
 
 
 def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
+    if _uses_dialogue((graph or GRAPH).checkpointer, payload.thread_id):
+        return _dialogue_chat(payload, graph)
     graph = graph or GRAPH
     if payload.conditions is not None:
         return _change_conditions(payload, graph)
@@ -834,3 +944,25 @@ def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
                            route_confidence=None, route_reason="", route_source="rule")
         state = graph.invoke(initial, config)
     return _build_response(thread_id, state)
+
+
+def _dialogue_chat(payload: ChatRequest, graph=None) -> dict:
+    """AGENT_MODE=tools 한 턴. 턴 중 예외는 저장하지 않고 직전 확정 상태로 안내한다(설계 §8)."""
+    dialogue_graph = DIALOGUE if graph is None else build_dialogue_graph(graph.checkpointer)
+    thread_id = payload.thread_id or uuid4().hex
+    request = {"message": payload.message, "answers": payload.answers, "refs": payload.refs,
+               "conditions": payload.conditions, "restart": payload.restart,
+               "basis_date": payload.basis_date.isoformat() if payload.basis_date else None}
+    try:
+        return dialogue_service.respond(dialogue_graph, thread_id, request)
+    except (HTTPException, psycopg.Error):
+        raise  # 회원 저장 실패는 트랜잭션(체크포인트·대화 기록)을 함께 되돌린다
+    except Exception:
+        logging.getLogger(__name__).exception("dialogue turn failed")
+        try:
+            response = dialogue_service.restore(dialogue_graph, thread_id)
+        except HTTPException:
+            response = _build_response(thread_id, {"status": "ERROR"})
+        response.update(status="ERROR", answer=None,
+                        message="처리 중 오류가 났어요. 저장된 조건은 유지됩니다. 다시 시도해 주세요.")
+        return response

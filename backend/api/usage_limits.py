@@ -85,8 +85,30 @@ def processing(user_id: str | None, ip: str | None):
         raise HTTPException(503, "사용량 확인에 실패했습니다. 잠시 후 다시 시도해 주세요.") from None
 
 
-def consume(context):
+def require_request_charges() -> None:
+    """AGENT_MODE=tools 준비 검사: 요청별 차감 기록 테이블(마이그레이션 20261008000100)이 없으면 시작 실패."""
+    if not os.getenv("CHAT_DATABASE_URL"):
+        return
+    with chat_storage.connection() as conn:
+        if conn.execute("SELECT to_regclass('agent_state.chat_request_charges') AS t").fetchone()["t"] is None:
+            raise RuntimeError("agent_state.chat_request_charges가 없습니다. 마이그레이션 20261008000100을 적용하세요.")
+
+
+def request_key(kind: str, owner: str, conversation: str, request_id: str) -> str:
+    """같은 요청을 가리키는 키. 원래 ID·식별자는 HMAC으로만 남긴다."""
+    secret = os.getenv("QUOTA_HASH_SECRET") or os.getenv("CHAT_DATABASE_URL")
+    if not secret:
+        raise HTTPException(503, "사용량 확인이 준비되지 않았습니다.")
+    return hmac.new(secret.encode(), "\x1f".join((kind, owner, conversation, request_id)).encode(),
+                    hashlib.sha256).hexdigest()
+
+
+def consume(context, request: tuple[str, str, str, str] | str | None = None):
+    """한 요청을 차감한다. request((회원/비회원, 소유자, 대화, request_id) 또는 request_key)를 주면
+    같은 요청은 재시작·다른 인스턴스에서도 한 번만 차감한다."""
     conn, key, member = context
+    if isinstance(request, tuple):
+        request = request_key(*request)
     current = now()
     day = current.date()
     with conn.transaction():
@@ -94,6 +116,11 @@ def consume(context):
         total = conn.execute("SELECT used FROM agent_state.daily_chat_usage WHERE usage_day=%s AND subject='service' FOR UPDATE", (day,)).fetchone()["used"]
         row = conn.execute("SELECT used FROM agent_state.daily_chat_usage WHERE usage_day=%s AND subject=%s", (day, key)).fetchone()
         personal = row["used"] if row else 0
+        if request is not None and not conn.execute(
+                "INSERT INTO agent_state.chat_request_charges(request_key,usage_day) VALUES (%s,%s) "
+                "ON CONFLICT DO NOTHING RETURNING request_key", (request, day)).fetchone():
+            # 이미 차감한 요청(실패 후 재시도 등): 한도 검사·차감 없이 현재 사용량만 돌려준다.
+            return _summary(current, personal, total, member)
         usage = _summary(current, personal, total, member)
         if usage["remaining"] == 0 or usage["service_remaining"] == 0:
             service = usage["service_remaining"] == 0
@@ -107,6 +134,9 @@ def consume(context):
                      "ON CONFLICT (usage_day,subject) DO UPDATE SET used=daily_chat_usage.used+1", (day, key))
         conn.execute("DELETE FROM agent_state.daily_chat_usage WHERE usage_day < "
                      "((now() AT TIME ZONE 'Asia/Seoul')::date - 7)")
+        if request is not None:  # 기존 모드는 이 테이블이 없는 DB에서도 동작한다
+            conn.execute("DELETE FROM agent_state.chat_request_charges WHERE usage_day < "
+                         "((now() AT TIME ZONE 'Asia/Seoul')::date - 7)")
     # This commits independently of transcript/checkpoints: failed paid work also counts.
     return _summary(current, personal + 1, total + 1, member)
 

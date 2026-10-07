@@ -1,8 +1,10 @@
 """Human and JSON output formatting for calculation results."""
 
 import json
+import math
 import sys
 from decimal import Decimal
+from fractions import Fraction
 
 UNCALCULATED = "미산정"
 
@@ -21,6 +23,18 @@ def won(value) -> str:
     text = format(value.normalize(), "f")
     whole, _, frac = text.partition(".")
     return f"{int(whole):,}" + (f".{frac}" if frac else "")
+
+
+def rounded(value, places: int = 2) -> Decimal:
+    """표시용 반올림(사사오입, 소수 places자리). 정확한 분수에서 바로 계산한다."""
+    exact = Fraction(str(value))
+    return Decimal(math.floor(exact * 10 ** places + Fraction(1, 2))).scaleb(-places)
+
+
+def approx(value, places: int = 2) -> str:
+    """사용자 표시용(작업일수 등): 소수 places자리 이내면 그대로, 아니면 '약 2.31'. 계산·저장·Excel 값은 그대로 둔다."""
+    shown = rounded(value, places)
+    return won(shown) if shown == Fraction(str(value)) else f"약 {won(shown)}"
 
 
 def report(result: dict) -> str:

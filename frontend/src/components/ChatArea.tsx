@@ -15,6 +15,9 @@ import AnswerFeedback from './AnswerFeedback';
 import EstimateGuidance from './EstimateGuidance';
 import UserQuestion from './UserQuestion';
 
+// 지난 카드에는 선택 상태를 주지 않는다. 같은 이름의 질문(scope 등)이 다시 나와도 지금 ref의 카드만 선택된다.
+const NO_DRAFT: Record<string, { value: ChoiceValue; label: string }> = {};
+
 interface Props {
   restoring?: boolean;
   ratingUserId?: string;
@@ -39,7 +42,7 @@ interface Props {
   generating?: boolean;
   onSendMessage: (text: string) => void;
   onResendMessage?: (text: string) => void;
-  onSendAnswers: (answers: Record<string, ChoiceValue>, summary: string) => void;
+  onSendAnswers: (answers: Record<string, ChoiceValue>, summary: string, refs?: Record<string, string>) => void;
   onChangeConditions: (turnId: string, conditions: Record<string, string>) => void;
   onNewChat: () => void;
   onSendExample: (text: string) => void;
@@ -399,7 +402,7 @@ function ComputedCard({ work, inputs, result, priced, tables, response }: {
           <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
           <span className="formula-text">{result.daily_volume.formula}</span></div>
         <div className="formula-row"><span className="formula-label">작업조 투입량</span>
-          <strong>{result.work_days.value} 작업조·일</strong>
+          <strong>{result.work_days.display ?? result.work_days.value} 작업조·일</strong>
           <span className="formula-text">{result.work_days.formula}</span></div>
         <p className="unit-note">작업조 투입량은 실제 공사 기간이 아닙니다.</p></>}
         <div className="table-scroll"><table className="inputs-table lines-table">
@@ -608,8 +611,12 @@ function ChatAreaView({ turns, loading, restoring, generating = loading, inputDi
       answers[name] = entry.value;
       parts.push(entry.label);
     }
-    onSendAnswers(answers, parts.join(', ') || '답변을 보냈습니다');
-  }, [draft, onSendAnswers]);
+    const refs: Record<string, string> = {};
+    for (const question of lastResponse?.questions ?? []) {
+      if (question.ref && question.name in answers) refs[question.name] = question.ref;
+    }
+    onSendAnswers(answers, parts.join(', ') || '답변을 보냈습니다', Object.keys(refs).length ? refs : undefined);
+  }, [draft, onSendAnswers, lastResponse]);
 
   const handleSubmitMessage = () => {
     const text = input.trim();
@@ -692,7 +699,7 @@ function ChatAreaView({ turns, loading, restoring, generating = loading, inputDi
                       elapsedMs={turn.elapsedMs}
                       receivedAtMs={turn.receivedAtMs}
                       interactive={i === turns.length - 1}
-                      draft={draft}
+                      draft={i === turns.length - 1 ? draft : NO_DRAFT}
                       onSelect={handleSelect}
                       onSubmit={handleSubmitAnswers}
                       loading={blocked}

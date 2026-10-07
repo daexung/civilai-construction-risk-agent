@@ -292,6 +292,12 @@ def main() -> int:
                    and "pump_size" in no_field["rejected"] and "slump_band" in invalid["rejected"]
                    and "wood_supply" in unknown["rejected"] and "quantity" in wrong_unit["rejected"]
                    and grounded["data"]["applied"] == {"pump_size": "32m"} and not grounded["rejected"]))
+    off_range = tools.set_conditions(guard, "펌프차 붐을 25m로 바꿔줘", values={"pump_size": {"value": "25m", "evidence": "25m"}})
+    excluded = tools.set_conditions(guard, "붐 21m", values={"pump_size": {"value": "21m", "evidence": "21m"}})
+    checks.append(("C8b 선택지 밖 값은 '근거와 다름'이 아니라 선택지·제외 사유로 안내",
+                   off_range["rejected"].get("pump_size", "").startswith("25m는 선택지에 없습니다. 가능한 값: 32m / 36m")
+                   and "적용 범위 밖" in excluded["rejected"].get("pump_size", "")
+                   and "65~75㎥/hr" in excluded["rejected"]["pump_size"]))
 
     # 7. 공종 변경: 맞지 않는 조건 버림, 물량 유지, 새 공종 조건만 물음
     switch = started("철근콘크리트 1㎥ 타설 품")

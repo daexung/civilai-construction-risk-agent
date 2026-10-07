@@ -396,3 +396,41 @@ test('failed guest import preserves both conversations and retries only the rema
   await sendQuestion('이어서 질문');
   expect(sendChat.mock.calls[2][0].conversation_id).toBe(importGuestConversation.mock.calls[0][1]);
 });
+
+test('guest requests carry a request_id that is reused only when the same failed request is sent again', async () => {
+  sendChat.mockRejectedValueOnce(new Error('NETWORK_ERROR'));
+  await sendQuestion('같은 질문');
+  await sendQuestion('같은 질문');
+  await sendQuestion('다른 질문');
+  const ids = sendChat.mock.calls.map(([body]) => body.request_id);
+  expect(ids.every(Boolean)).toBe(true);
+  expect(ids[1]).toBe(ids[0]);
+  expect(ids[2]).not.toBe(ids[1]);
+});
+
+test('answers to server questions are sent with the question refs', async () => {
+  const pending = { ...response('thread-q', '조건을 확인해 주세요.'), status: 'MISSING_INFO', inputs: [], conditions: [], evidence: [],
+    questions: [{ name: 'concrete_supply', ask: '관급입니까?', choices: ['관급', '사급'], ref: 'i1:concrete_supply@v1@3' }] };
+  sendChat.mockResolvedValueOnce(pending);
+  await sendQuestion('비용 계산해줘');
+  act(() => Simulate.click([...container.querySelectorAll('.choice-btn')].find(button => button.textContent === '관급')));
+  await act(async () => Simulate.click(container.querySelector('.submit-answers-btn')));
+  const body = sendChat.mock.calls[1][0];
+  expect(body.answers).toEqual({ concrete_supply: '관급' });
+  expect(body.refs).toEqual({ concrete_supply: 'i1:concrete_supply@v1@3' });
+});
+
+test('a repeated question name keeps the selection on the current card only', async () => {
+  const scope = (ref) => ({ ...response('thread-s', '어느 견적인지 골라 주세요.'), status: 'MISSING_INFO', inputs: [], conditions: [], evidence: [],
+    questions: [{ name: 'scope', ask: '지금 견적으로 계산할까요?', choices: ['지금 견적으로 계산', '새 견적 시작'], ref }] });
+  sendChat.mockResolvedValueOnce(scope('scope@1@1')).mockResolvedValueOnce(scope('scope@1@2'));
+  await sendQuestion('콘크리트 거푸집 비용');
+  await sendQuestion('콘크리트 거푸집 비용');
+  const latest = () => [...container.querySelectorAll('.question-list')].at(-1);
+  act(() => Simulate.click([...latest().querySelectorAll('.choice-btn')].find(button => button.textContent === '새 견적 시작')));
+  const selected = [...container.querySelectorAll('.choice-btn.selected')];
+  expect(selected).toHaveLength(1);
+  expect(latest().contains(selected[0])).toBe(true);
+  await act(async () => Simulate.click(latest().querySelector('.submit-answers-btn')));
+  expect(sendChat.mock.calls[2][0].refs).toEqual({ scope: 'scope@1@2' });
+});

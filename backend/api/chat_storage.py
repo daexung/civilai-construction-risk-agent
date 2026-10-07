@@ -122,6 +122,7 @@ def delete_conversation(conversation_id: str, user_id: str):
         conn.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (conversation_id,))
         owned(conn, conversation_id, user_id)
         PostgresSaver(conn).delete_thread(conversation_id)
+        PostgresSaver(conn).delete_thread(f"dlg:{conversation_id}")  # AGENT_MODE=tools 대화 상태
         conn.execute("DELETE FROM public.conversations WHERE id=%s AND user_id=%s", (conversation_id, user_id))
 
 

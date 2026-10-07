@@ -1,0 +1,674 @@
+{
+  "model": "gemini-3.5-flash-lite",
+  "price": {
+    "input": 0.3,
+    "output": 2.5,
+    "embedding": 0.2,
+    "checked": "2026-10-07",
+    "source": "https://ai.google.dev/gemini-api/docs/pricing"
+  },
+  "cap_usd": 0.1,
+  "focus": false,
+  "search": {
+    "method": "hybrid",
+    "warning": null,
+    "last_used": "hybrid",
+    "last_error": null
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "user": "콘크리트 타설 1세제곱미터 품셈 알려줘",
+      "http": 200,
+      "llm": "on",
+      "seconds": 9.1,
+      "status": "MISSING_INFO",
+      "answer": "어느 공종(타설 방식)으로 계산할까요?",
+      "answer_source": "llm",
+      "tools": [
+        "find_work"
+      ],
+      "trace": [
+        {
+          "tool": "find_work",
+          "args": {},
+          "status": "needs_input",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 3,
+        "tool_calls": 1,
+        "exhausted": null,
+        "elapsed_ms": 4029,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [
+        {
+          "name": "work",
+          "choices": [
+            "공통 6-1-4 콘크리트 펌프차 타설",
+            "공통 6-1-1 레디믹스트콘크리트 타설('24년 보완)",
+            "토목 1-6-2 표층 인력포설"
+          ]
+        }
+      ],
+      "work": null,
+      "quantity": null,
+      "pump_size": null,
+      "contract_amount": null,
+      "work_days": null,
+      "work_days_display": null,
+      "estimate_current": false,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.00133
+    },
+    {
+      "turn": 2,
+      "user": "(버튼) 공종: 6-1-4 펌프차 타설",
+      "http": 200,
+      "llm": "on",
+      "seconds": 2.6,
+      "status": "MISSING_INFO",
+      "answer": "펌프차 붐 길이는? (32m / 36m / 41m / 43m / 47m / 52m), 무근콘크리트와 철근콘크리트 중 어느 구조물입니까?, 슬럼프는 표의 8~12㎝, 15㎝, 18㎝이상 중 어디에 해당합니까?, 시설유형은 Type-Ⅰ~Ⅳ 중 무엇입니까? 시설물과 펌프차 작업 제약을 알려주시면 판정표를 함께 확인하겠습니다., 현장조건은 Type-Ⅰ~Ⅲ 중 무엇입니까? 믹서트럭의 대기공간과 진출입 조건을 알려주시면 판정표를 함께 확인하겠습니다., 붐 타설입니까, 배관 타설입니까?, 콘크리트 진동기를 사용합니까?, 펌프차 타설범위를 넘어 이동·재셋팅이 필요합니까? (없음 / 있음 / 모름)에 대한 질문에 답해 주세요.",
+      "answer_source": "llm",
+      "tools": [
+        "answers",
+        "compute_labor"
+      ],
+      "trace": [
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "compute_labor",
+          "args": {},
+          "status": "needs_input",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 2,
+        "tool_calls": 1,
+        "exhausted": null,
+        "elapsed_ms": 2460,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [
+        {
+          "name": "pump_size",
+          "choices": [
+            "32m",
+            "36m",
+            "41m",
+            "43m",
+            "47m",
+            "52m"
+          ]
+        },
+        {
+          "name": "structure",
+          "choices": [
+            "무근",
+            "철근"
+          ]
+        },
+        {
+          "name": "slump_band",
+          "choices": [
+            "8~12㎝",
+            "15㎝",
+            "18㎝이상"
+          ]
+        },
+        {
+          "name": "facility_type",
+          "choices": [
+            "Type-Ⅰ",
+            "Type-Ⅱ",
+            "Type-Ⅲ",
+            "Type-Ⅳ"
+          ]
+        },
+        {
+          "name": "site_type",
+          "choices": [
+            "Type-Ⅰ",
+            "Type-Ⅱ",
+            "Type-Ⅲ"
+          ]
+        },
+        {
+          "name": "placement",
+          "choices": [
+            "붐",
+            "배관"
+          ]
+        },
+        {
+          "name": "vibrator_used",
+          "choices": [
+            true,
+            false
+          ]
+        },
+        {
+          "name": "reset_status",
+          "choices": [
+            "없음",
+            "있음",
+            "모름"
+          ]
+        }
+      ],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": null,
+      "pump_size": null,
+      "contract_amount": null,
+      "work_days": null,
+      "work_days_display": null,
+      "estimate_current": false,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.00271
+    },
+    {
+      "turn": 3,
+      "user": "(버튼) 품 조건: 32m·철근·15㎝·Type-Ⅱ·Type-Ⅱ·붐·진동기 사용·재셋팅 없음",
+      "http": 200,
+      "llm": "on",
+      "seconds": 3.9,
+      "status": "COMPUTED",
+      "answer": "2026 건설공사 표준품셈 공통부문 6-1-4 콘크리트 펌프차 타설에 따른 품셈 결과입니다. 물량 1 ㎥ 기준 일당 시공량 130 ㎥/일, 작업일수 약 0.01 일입니다. 콘크리트공 0.0308 인/㎥, 특별인부 0.0077 인/㎥, 형틀목공 0.0077 인/㎥, 보통인부 0.0077 인/㎥, 콘크리트펌프차 0.0615 hr/㎥이 소요됩니다.",
+      "answer_source": "llm",
+      "tools": [
+        "answers",
+        "answers",
+        "answers",
+        "answers",
+        "answers",
+        "answers",
+        "answers",
+        "answers",
+        "compute_labor"
+      ],
+      "trace": [
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "compute_labor",
+          "args": {},
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 3,
+        "tool_calls": 1,
+        "exhausted": null,
+        "elapsed_ms": 3664,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": null,
+      "pump_size": "32m",
+      "contract_amount": null,
+      "work_days": "1/130",
+      "work_days_display": "약 0.01",
+      "estimate_current": false,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.00631
+    },
+    {
+      "turn": 4,
+      "user": "같은 조건으로 100세제곱미터 비용 계산해줘",
+      "http": 200,
+      "llm": "on",
+      "seconds": 4.2,
+      "status": "MISSING_INFO",
+      "answer": "물량 100 ㎥ 조건에서 일당 시공량 130 ㎥/일, 작업일수 약 0.77 일이며, 콘크리트공 0.0308 인/㎥, 특별인부 0.0077 인/㎥, 형틀목공 0.0077 인/㎥, 보통인부 0.0077 인/㎥, 콘크리트펌프차 0.0615 hr/㎥이 소요됩니다. 레미콘은 관급(발주처 지급)입니까, 사급(시공사 구매)입니까?",
+      "answer_source": "llm",
+      "tools": [
+        "set_conditions",
+        "estimate_cost"
+      ],
+      "trace": [
+        {
+          "tool": "set_conditions",
+          "args": {
+            "quantity": {
+              "value": "100",
+              "unit": "세제곱미터",
+              "evidence": "100세제곱미터"
+            }
+          },
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "estimate_cost",
+          "args": {},
+          "status": "needs_input",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 3,
+        "tool_calls": 2,
+        "exhausted": null,
+        "elapsed_ms": 4050,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [
+        {
+          "name": "concrete_supply",
+          "choices": [
+            "관급",
+            "사급"
+          ]
+        }
+      ],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": "100",
+      "pump_size": "32m",
+      "contract_amount": null,
+      "work_days": null,
+      "work_days_display": null,
+      "estimate_current": false,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.00911
+    },
+    {
+      "turn": 5,
+      "user": "(버튼) 관급",
+      "http": 200,
+      "llm": "on",
+      "seconds": 4.0,
+      "status": "PARTIAL",
+      "answer": "물량 100 ㎥에 대한 일당 시공량 130 ㎥/일 기준 콘크리트공 0.0308 인/㎥, 특별인부 0.0077 인/㎥, 형틀목공 0.0077 인/㎥, 보통인부 0.0077 인/㎥, 콘크리트펌프차 0.0615 hr/㎥이 적용되었습니다. 총원가는 3,507,839 원이며, 도급액은 3,858,622 원입니다.",
+      "answer_source": "llm",
+      "tools": [
+        "answers",
+        "estimate_cost"
+      ],
+      "trace": [
+        {
+          "tool": "answers",
+          "args": null,
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "estimate_cost",
+          "args": {},
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 3,
+        "tool_calls": 1,
+        "exhausted": null,
+        "elapsed_ms": 3784,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": "100",
+      "pump_size": "32m",
+      "contract_amount": 3858622,
+      "work_days": "10/13",
+      "work_days_display": "약 0.77",
+      "estimate_current": true,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.01261
+    },
+    {
+      "turn": 6,
+      "user": "할증 기준은 어디서 나와?",
+      "http": 200,
+      "llm": "on",
+      "seconds": 3.8,
+      "status": "PARTIAL",
+      "answer": "할증 기준에 대한 근거는 6-1-4 콘크리트 펌프차 타설('08, '09, '17, '22, '24, ‘25년 보완) 항목에서 확인할 수 있습니다. 해당 원문 범위 안에서 관련 내용을 참고하시기 바랍니다.",
+      "answer_source": "llm",
+      "tools": [
+        "explain_basis"
+      ],
+      "trace": [
+        {
+          "tool": "explain_basis",
+          "args": {},
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 3,
+        "tool_calls": 1,
+        "exhausted": null,
+        "elapsed_ms": 3485,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": "100",
+      "pump_size": "32m",
+      "contract_amount": 3858622,
+      "work_days": "10/13",
+      "work_days_display": "약 0.77",
+      "estimate_current": true,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.0145
+    },
+    {
+      "turn": 7,
+      "user": "300세제곱미터로 바꿔줘",
+      "http": 200,
+      "llm": "on",
+      "seconds": 4.9,
+      "status": "PARTIAL",
+      "answer": "물량 300 ㎥ 조건으로 변경하였습니다. 일당 시공량 130 ㎥/일이며, 작업일수 약 2.31 일입니다. 콘크리트공 0.0308 인/㎥, 특별인부 0.0077 인/㎥입니다.",
+      "answer_source": "llm",
+      "tools": [
+        "set_conditions",
+        "estimate_cost"
+      ],
+      "trace": [
+        {
+          "tool": "set_conditions",
+          "args": {
+            "quantity": {
+              "value": "300",
+              "unit": "세제곱미터",
+              "evidence": "300세제곱미터"
+            }
+          },
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "estimate_cost",
+          "args": {},
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 4,
+        "tool_calls": 2,
+        "exhausted": null,
+        "elapsed_ms": 4658,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": "300",
+      "pump_size": "32m",
+      "contract_amount": 11575888,
+      "work_days": "30/13",
+      "work_days_display": "약 2.31",
+      "estimate_current": true,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.01869
+    },
+    {
+      "turn": 8,
+      "user": "콘크리트공은 1세제곱미터당 몇 명이야?",
+      "http": 200,
+      "llm": "on",
+      "seconds": 4.0,
+      "status": "PARTIAL",
+      "answer": "콘크리트공은 콘크리트공 0.0308인/㎥입니다.",
+      "answer_source": "llm",
+      "tools": [
+        "compute_labor"
+      ],
+      "trace": [
+        {
+          "tool": "compute_labor",
+          "args": {},
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 3,
+        "tool_calls": 1,
+        "exhausted": null,
+        "elapsed_ms": 3729,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": "300",
+      "pump_size": "32m",
+      "contract_amount": 11575888,
+      "work_days": "30/13",
+      "work_days_display": "약 2.31",
+      "estimate_current": true,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.02179
+    },
+    {
+      "turn": 9,
+      "user": "레미콘을 사급으로 바꾸면 얼마야?",
+      "http": 200,
+      "llm": "on",
+      "seconds": 4.0,
+      "status": "MISSING_INFO",
+      "answer": "레미콘 ㎥당 가격은? (부가세 제외, 거래처 견적 기준 / 모르면 '모름')에 답해 주세요. 일당 시공량 130 ㎥/일, 작업일수 약 2.31 일입니다. 물량 300 ㎥ 기준으로 콘크리트공 0.0308 인/㎥, 특별인부 0.0077 인/㎥입니다.",
+      "answer_source": "llm",
+      "tools": [
+        "set_conditions",
+        "estimate_cost"
+      ],
+      "trace": [
+        {
+          "tool": "set_conditions",
+          "args": {
+            "values": [
+              {
+                "field": "concrete_supply",
+                "value": "사급",
+                "evidence": "사급으로"
+              }
+            ]
+          },
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "estimate_cost",
+          "args": {},
+          "status": "needs_input",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 3,
+        "tool_calls": 2,
+        "exhausted": null,
+        "elapsed_ms": 3826,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [
+        {
+          "name": "ready_mix_price",
+          "choices": [
+            "모름"
+          ]
+        }
+      ],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": "300",
+      "pump_size": "32m",
+      "contract_amount": null,
+      "work_days": null,
+      "work_days_display": null,
+      "estimate_current": false,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.02452
+    },
+    {
+      "turn": 10,
+      "user": "레미콘 단가는 세제곱미터당 9만원이야",
+      "http": 200,
+      "llm": "on",
+      "seconds": 5.4,
+      "status": "PARTIAL",
+      "answer": "공통 6-1-4 콘크리트 펌프차 타설에 따라 콘크리트공 0.0308인/㎥, 특별인부 0.0077인/㎥, 형틀목공 0.0077인/㎥, 보통인부 0.0077인/㎥, 콘크리트펌프차 0.0615hr/㎥이 적용됩니다. 일당 시공량 130㎥/일 기준으로 작업일수는 약 2.31일입니다. 총원가는 43,725,106원이며, 도급액은 48,097,616원입니다.",
+      "answer_source": "llm",
+      "tools": [
+        "set_conditions",
+        "estimate_cost"
+      ],
+      "trace": [
+        {
+          "tool": "set_conditions",
+          "args": {
+            "values": [
+              {
+                "field": "ready_mix_price",
+                "value": "90000",
+                "evidence": "세제곱미터당 9만원이야"
+              }
+            ]
+          },
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        },
+        {
+          "tool": "estimate_cost",
+          "args": {},
+          "status": "ok",
+          "rejected": null,
+          "reason": null
+        }
+      ],
+      "llm_info": {
+        "llm_attempts": 4,
+        "tool_calls": 2,
+        "exhausted": null,
+        "elapsed_ms": 5080,
+        "rejected": null,
+        "rejected_text": null
+      },
+      "questions": [],
+      "work": "공통 6-1-4 콘크리트 펌프차 타설",
+      "quantity": "300",
+      "pump_size": "32m",
+      "contract_amount": 48097616,
+      "work_days": "30/13",
+      "work_days_display": "약 2.31",
+      "estimate_current": true,
+      "embedding_calls_so_far": 1,
+      "search_fallback": null,
+      "usd_so_far": 0.02906
+    }
+  ],
+  "excel": {
+    "status": 200,
+    "contains_latest_amount": true,
+    "latest_amount": 48097616,
+    "matching_cells": 2
+  },
+  "cost": {
+    "usd_total": 0.029065,
+    "llm_calls": 31,
+    "input_tokens": 76215,
+    "output_tokens": 2476,
+    "embedding_calls": 1,
+    "blocked_by_cap": 0
+  }
+}

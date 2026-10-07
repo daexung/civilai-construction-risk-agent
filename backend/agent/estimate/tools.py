@@ -79,7 +79,7 @@ def _question(item: EstimateItem, field: str, ask: str, choices, stage: str, **e
 
 
 def _work_question(item: EstimateItem) -> dict:
-    return _question(item, "work", "어느 공종(타설 방식)으로 계산할까요?",
+    return _question(item, "work", "어느 공종으로 계산할까요?",
                      [candidate["section"] for candidate in item["candidates"]], "work")
 
 
@@ -107,6 +107,12 @@ def _build_conditions(item: EstimateItem, spec: dict) -> tuple[dict, str | None]
         quantity = item.get("quantity")
         if quantity is None and quantity_field["name"] in stated:
             quantity = {"value": stated[quantity_field["name"]], "unit": quantity_field.get("unit")}
+        if quantity is None:
+            # 기존 _volume은 '세제곱미터'를 읽지 못한다. 서버 단위 파서로 같은 단위의 물량이 하나일 때만 쓴다.
+            found = {value for value, unit in _quantities(item["request_text"])
+                     if unit and unit == unit_key(quantity_field.get("unit"))}
+            if len(found) == 1:
+                quantity = {"value": _format_rational(found.pop()), "unit": quantity_field.get("unit")}
         if quantity:
             if unit_key(quantity["unit"]) and unit_key(quantity["unit"]) == unit_key(quantity_field.get("unit")):
                 conditions[quantity_field["name"]] = quantity["value"]
@@ -210,6 +216,16 @@ def find_work(session: EstimateSession, hits: list[dict] | None = None) -> dict:
                                        "reason": decided["selection"]["reason"]})
 
 
+def _not_allowed(value, field: dict) -> str:
+    """선택지 밖 값의 안내 문구. 명세의 제외 사유(excluded)가 있으면 그대로 쓴다."""
+    labels = field.get("labels") or {}
+    choices = " / ".join(str(labels.get(v, v)) for v in field.get("allowed_values") or [])
+    excluded = (field.get("excluded") or {}).get(str(value))
+    if excluded:
+        return f"{value}는 이 공종의 적용 범위 밖입니다({excluded}). 가능한 값: {choices}"
+    return f"{value}는 선택지에 없습니다. 가능한 값: {choices}" if choices else f"{value}는 허용값이 아닙니다"
+
+
 def set_conditions(session: EstimateSession, user_text: str, *, values: dict | None = None,
                    quantity: dict | None = None, work: str | None = None, source: str = "text") -> dict:
     """조건·물량·공종 선택을 검증해 반영한다.
@@ -220,6 +236,7 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
     item = _item(session)
     said = _norm(user_text or "")
     rejected, applied = {}, {}
+    before = (item["input_revision"], session["revision"], item.get("selection"))
 
     def grounded(entry: dict) -> bool:
         evidence = entry.get("evidence")
@@ -278,6 +295,9 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
             rejected[name] = "원문에 근거가 없습니다"
         elif spec and name not in fields and name not in COMMON_FIELDS:
             rejected[name] = "이 공종에 없는 조건입니다"
+        elif field and not _valid_for_field(value, field):
+            # 근거 대조보다 먼저 본다: '25m'처럼 선택지 밖 값은 파서가 못 읽어 '근거와 다름'으로 잘못 안내된다.
+            rejected[name] = _not_allowed(value, field)
         elif not consistent(name, value, entry.get("evidence") or "", field):
             rejected[name] = "값이 근거와 다릅니다"
         elif name in COMMON_FIELDS:
@@ -290,9 +310,7 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
             set_explicit(item, name, value, source)  # 공종이 정해지면 choose_work가 호환 값만 남긴다
             applied[name] = value
         else:
-            if not _valid_for_field(value, field):
-                rejected[name] = "허용값이 아닙니다"
-            elif quantity_field and name == quantity_field["name"]:
+            if quantity_field and name == quantity_field["name"]:
                 set_quantity(item, value, quantity_field.get("unit"), source)
                 applied[name] = item["quantity"]["value"]
             else:
@@ -300,10 +318,17 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
                     value = _format_rational(Fraction(str(value).replace(",", "")))
                 set_explicit(item, name, value, source)
                 applied[name] = value
-    if applied:
-        # 입력이 바뀌면 이전 원가계산서는 최신 결과가 아니다(다시 estimate_cost를 불러야 한다).
+    if (item["input_revision"], session["revision"], item.get("selection")) != before:
+        # 입력이 실제로 바뀌면 이전 원가계산서는 최신 결과가 아니다(다시 estimate_cost를 불러야 한다).
+        # 같은 값을 다시 넣은 경우(LLM이 같은 물량을 한 번 더 보냄)는 최신 견적을 버리지 않는다.
         session.update(statement=None, aggregate_result=None, statement_key=None)
-    return _result("ok", item, {"applied": applied, "dropped": item.get("dropped_conditions", [])}, rejected=rejected)
+    # 요청했지만 적용하지 않은 값. 응답 문장이 '적용하지 않았다'고 설명할 때만 이 숫자를 허용한다(reply_check).
+    requested = {**{name: entry.get("value") for name, entry in (values or {}).items() if isinstance(entry, dict)},
+                 "quantity": f"{quantity.get('value')}{quantity.get('unit') or ''}" if isinstance(quantity, dict) else None,
+                 "work": work}
+    refused = {name: str(requested[name]) for name in rejected if requested.get(name) not in (None, "")}
+    return _result("ok", item, {"applied": applied, "dropped": item.get("dropped_conditions", []), "refused": refused},
+                   rejected=rejected)
 
 
 def compute_labor(session: EstimateSession) -> dict:
