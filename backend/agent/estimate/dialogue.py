@@ -346,25 +346,31 @@ def _template(state: DialogueState, log: list, facts: list[dict], notices: list)
     by_id = {fact["id"]: fact for fact in facts}
     parts = list(notices)
     last = log[-1]["result"] if log else None
+    answer = None
+    if "contract_amount" in by_id:
+        answer = f"도급액(부가세 포함) {reply_check.display(by_id['contract_amount']['value'])}원으로 계산했어요."
+    elif any(key.startswith("line") for key in by_id):
+        lines = ", ".join(f"{fact['item']} {reply_check.display(fact['value'])}{fact['unit']}" for key, fact in by_id.items()
+                          if key.startswith("line"))
+        answer = f"1단위당 품: {lines}"
+    elif last and last.get("status") == "ok" and "citations" in last.get("data", {}):
+        answer = f"계산에 쓴 품셈 원문 근거 {len(last['data']['citations'])}건을 확인했어요. 견적 조건은 그대로예요."
+    elif last and last.get("status") == "ok" and "sections" in last.get("data", {}):
+        answer = "관련 품셈 원문: " + ", ".join(section["section"] for section in last["data"]["sections"][:3])
+    elif last and last.get("data", {}).get("reason"):
+        answer = str(last["data"]["reason"])
+    elif not log:
+        answer = "공사비·품셈과 관련된 질문을 해 주세요."
     if state["pending"]:
+        # 조회만 한 턴(대기 질문 유지)이면 물은 내용을 먼저 답하고 대기 질문을 다시 안내한다.
+        if state.get("pending_kept") and answer:
+            parts.append(answer)
         stage = state["pending"][0].get("stage")
         parts.append({"work": "먼저 공종(타설 방식)을 골라 주세요.",
                       "price": "비용을 계산하려면 가격 조건이 필요해요. 아래에서 골라 주세요."}.get(
             stage, "품을 계산하려면 아래 조건을 확인해 주세요."))
-    elif "contract_amount" in by_id:
-        parts.append(f"도급액(부가세 포함) {reply_check.display(by_id['contract_amount']['value'])}원으로 계산했어요.")
-    elif any(key.startswith("line") for key in by_id):
-        lines = ", ".join(f"{fact['item']} {reply_check.display(fact['value'])}{fact['unit']}" for key, fact in by_id.items()
-                          if key.startswith("line"))
-        parts.append(f"1단위당 품: {lines}")
-    elif last and last.get("status") == "ok" and "citations" in last.get("data", {}):
-        parts.append(f"계산에 쓴 품셈 원문 근거 {len(last['data']['citations'])}건을 확인했어요. 견적 조건은 그대로예요.")
-    elif last and last.get("status") == "ok" and "sections" in last.get("data", {}):
-        parts.append("관련 품셈 원문: " + ", ".join(section["section"] for section in last["data"]["sections"][:3]))
-    elif last and last.get("data", {}).get("reason"):
-        parts.append(str(last["data"]["reason"]))
-    elif not log:
-        parts.append("공사비·품셈과 관련된 질문을 해 주세요.")
+    elif answer:
+        parts.append(answer)
     return "\n".join(part for part in parts if part)
 
 
@@ -443,6 +449,7 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
         working.setdefault(key, value)
     working["request"] = request
     budget, log, notices = Budget(clock), [], []
+    before = _inputs_key(working)
     message = (request.get("message") or "").strip()
     generate = generate or client.generate
     use_llm = os.environ.get("AGENT_LLM", "off") == "on" or generate is not client.generate
@@ -472,7 +479,9 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
     # 반영하지 못한 값은 답변 첫머리에 알린다(이전 결과를 새 결과처럼 보이지 않게).
     notices += [f"반영하지 못했어요 - {_label(working, name)}: {reason}" for entry in log if entry["tool"] == "set_conditions"
                 for name, reason in (entry["result"].get("rejected") or {}).items()]
-    _update_pending(working, log)
+    refresh = bool(answers) or request.get("conditions") is not None or _inputs_key(working) != before
+    working["pending_kept"] = not refresh and bool(working["pending"])
+    _update_pending(working, log, refresh)
     reply = _reply(working, log, notices, message, budget, generate, use_llm)
     trace = [{"tool": e["tool"], "args": e.get("args"), "status": e["result"].get("status"),
               "rejected": e["result"].get("rejected") or None,
@@ -484,6 +493,7 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
                        "last_status": log[-1]["result"]["status"] if log else None}
     working.pop("request", None)
     working.pop("fresh_session", None)
+    working.pop("pending_kept", None)
     return working
 
 
@@ -543,8 +553,23 @@ def _summary(state: DialogueState) -> dict:
             "pending_questions": [{"field": q["field"], "ask": q["ask"]} for q in state["pending"]]}
 
 
-def _update_pending(state: DialogueState, log: list) -> None:
-    """마지막 도구 결과로 대기 질문을 정한다. 새로 낼 때마다 revision을 올려 예전 질문의 답을 거른다."""
+def _inputs_key(state: DialogueState):
+    """견적 입력의 식별값. 이 값이 그대로면 이번 턴은 조건·물량·공종을 바꾸지 않은 것이다."""
+    session = state.get("session")
+    if not session:
+        return None
+    item = tools._item(session)
+    return session["estimate_id"], session["revision"], item["input_revision"], item.get("selection")
+
+
+def _update_pending(state: DialogueState, log: list, refresh: bool = True) -> None:
+    """마지막 도구 결과로 대기 질문을 정한다. 새로 낼 때마다 revision을 올려 예전 질문의 답을 거른다.
+
+    refresh=False(조회만 한 턴: 단위당 인원·근거·원문 검색 등)면 대기 질문과 ref를 그대로 둔다.
+    조건·공종이 실제로 바뀌면 질문을 다시 정해 예전 ref의 답은 계속 거부한다.
+    """
+    if not refresh:
+        return
     results = [entry["result"] for entry in log if entry["tool"] != "answers"]
     if not results and not log:
         return

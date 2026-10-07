@@ -46,7 +46,7 @@ from backend.api import feedback
 from backend.api import answer_feedback
 from backend.api import accounts
 from backend.api import dialogue_service
-from backend.agent.estimate.dialogue import build_dialogue_graph
+from backend.agent.estimate.dialogue import build_dialogue_graph, config as dialogue_config
 from backend.api.client_ip import client_ip
 from langgraph.checkpoint.postgres import PostgresSaver
 
@@ -480,6 +480,17 @@ def source_image(table_id: str) -> FileResponse:
     return FileResponse(path, media_type="image/png")
 
 
+def _uses_dialogue(checkpointer, thread_id: str | None) -> bool:
+    """처리 방식은 대화에 저장된 상태로 정한다. 새 흐름 상태(dlg:)가 있으면 tools, 기존 그래프 상태만 있으면 기존 방식.
+    둘 다 없는 새 대화만 설정(AGENT_MODE)을 따른다. 설정을 바꿔도 기존 견적을 초기화하거나 새 흐름으로 덮어쓰지 않는다."""
+    if thread_id:
+        if checkpointer.get_tuple(dialogue_config(thread_id)) is not None:
+            return True
+        if checkpointer.get_tuple({"configurable": {"thread_id": thread_id}}) is not None:
+            return False
+    return dialogue_service.enabled()
+
+
 def _finished_state(thread_id: str | None, graph=None) -> dict:
     """계산이 끝난 thread의 그래프 state. 계산 결과가 없으면 404."""
     if not thread_id:
@@ -525,7 +536,7 @@ def export_xlsx(thread_id: str, authorization: str | None = Header(default=None)
             raise HTTPException(404, "대화를 찾을 수 없습니다.") from None
         with chat_storage.connection() as conn:
             chat_storage.owned(conn, conversation_id, user_id)
-            if dialogue_service.enabled():
+            if _uses_dialogue(PostgresSaver(conn), conversation_id):
                 response = dialogue_service.export_response(build_dialogue_graph(PostgresSaver(conn)), conversation_id)
             else:
                 response = _build_response(conversation_id, _finished_state(conversation_id, build_graph(PostgresSaver(conn))))
@@ -533,7 +544,7 @@ def export_xlsx(thread_id: str, authorization: str | None = Header(default=None)
         guest = _guest(thread_id, x_guest_session)
         with guest["lock"]:
             _guest(thread_id, x_guest_session)
-            response = (dialogue_service.export_response(DIALOGUE, thread_id) if dialogue_service.enabled()
+            response = (dialogue_service.export_response(DIALOGUE, thread_id) if _uses_dialogue(GRAPH.checkpointer, thread_id)
                         else _build_response(thread_id, _finished_state(thread_id)))
     filename = quote(estimate_filename(response), safe="")
     return Response(build_xlsx(response),
@@ -891,7 +902,7 @@ def _member_chat(payload: ChatRequest, user_id: str, quota, claim: dict | None =
 
 
 def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
-    if dialogue_service.enabled():
+    if _uses_dialogue((graph or GRAPH).checkpointer, payload.thread_id):
         return _dialogue_chat(payload, graph)
     graph = graph or GRAPH
     if payload.conditions is not None:

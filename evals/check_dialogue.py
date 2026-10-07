@@ -132,6 +132,25 @@ def main() -> int:
                        and item()["quantity"]["value"] == "100"
                        and all(item()["conditions"].get(name) is not None for name in PUMP) and export_pending == 404))
 
+        # 23. 대기 질문 보존: 관급/사급 질문 대기 중 조회(단위당 인원·근거·원문 검색)는 질문과 ref를 그대로 둔다.
+        #     아래 D4가 t3 카드(원래 ref)로 답해 정상 반영되는지까지 본다.
+        card = [(q["name"], q["ref"]) for q in t3["questions"]]
+        kept_cards = []
+        llm.plan(("compute_labor", {}))
+        kept_cards.append(post({"thread_id": thread, "message": "콘크리트공은 1세제곱미터당 몇 명이야?"}))
+        llm.plan(("explain_basis", {}))
+        kept_cards.append(post({"thread_id": thread, "message": "할증 기준은 어디서 나와?"}))
+        llm.plan(("search_standard", {"query": "펌프차 타설 할증"}))
+        kept_cards.append(post({"thread_id": thread, "message": "펌프차 타설 할증 원문 찾아줘"}))
+        with patch.dict(os.environ, {"AGENT_LLM": "off"}):  # 규칙 경로도 같다
+            kept_cards.append(post({"thread_id": thread, "message": "콘크리트공은 1세제곱미터당 몇 명이야?"}))
+            kept_cards.append(post({"thread_id": thread, "message": "할증 기준은 어디서 나와?"}))
+        checks.append(("D23 대기 질문 중 조회(단위당 인원·근거·원문 검색, LLM·규칙)는 질문·ref 유지, 물량 그대로",
+                       all([(q["name"], q["ref"]) for q in reply["questions"]] == card and reply["status"] == "MISSING_INFO"
+                           for reply in kept_cards)
+                       and [(q["field"], q["ref"]) for q in stored(thread)["pending"]] == card
+                       and item()["quantity"]["value"] == "100"))
+
         # 4. 가격 조건 → 원가계산서(도구만으로 계산한 합계와 같음)
         llm.plan(("estimate_cost", {}))
         t4 = answer(t3, {"concrete_supply": "관급"})
@@ -144,8 +163,9 @@ def main() -> int:
         tools.set_conditions(reference, "100㎥", quantity={"value": "100", "unit": "㎥", "evidence": "100㎥"})
         expected = tools.estimate_cost(reference)["data"]["statement"]["totals"]
         work_days_100 = Fraction(item()["computed_result"]["work_days"])
-        checks.append(("D4 원가계산서 최신·합계가 서버 도구 계산과 같음",
+        checks.append(("D4 원가계산서 최신·합계가 서버 도구 계산과 같음(조회 뒤 원래 카드 ref로 답해도 반영)",
                        t4["status"] in ("OK", "PARTIAL") and t4["estimate_current"]
+                       and "반영하지 않았어요" not in (t4["answer"] or "")
                        and t4["statement"]["totals"] == expected))
 
         # 6. 근거 질문: 조건·견적 유지
@@ -332,6 +352,22 @@ def main() -> int:
                        and old_ref != new_ref and stale["status"] == "MISSING_INFO" and "반영하지 않았어요" in stale["answer"]
                        and stale["questions"][0]["ref"] not in (old_ref["concrete_supply"], new_ref["concrete_supply"])
                        and fresh["estimate_current"]))
+
+        # 24. 공종이 실제로 바뀌면 대기 질문을 다시 정하고, 예전 카드 ref의 답은 거부한다
+        llm.plan(("find_work", {}), ("set_conditions", {"work": "6-1-4"}), ("set_conditions", {
+            "quantity": {"value": "10", "unit": "㎥", "evidence": "10세제곱미터"}}), ("estimate_cost", {}))
+        w1 = post({"message": "펌프차 콘크리트 타설 10세제곱미터 비용"})
+        llm.plan(("estimate_cost", {}))
+        w2 = answer(w1, {name: value for name, value in PUMP.items() if name in {q["name"] for q in w1["questions"]}})
+        w2_ref = {q["name"]: q["ref"] for q in w2["questions"]}
+        llm.plan(("set_conditions", {"work": "6-1-1"}), ("estimate_cost", {}))
+        switched = post({"thread_id": w1["thread_id"], "message": "레디믹스트콘크리트 타설로 바꿔줘"})
+        llm.plan(("estimate_cost", {}))
+        old_card = answer(switched, {"concrete_supply": "관급"}, refs={"concrete_supply": w2_ref.get("concrete_supply")})
+        checks.append(("D24 공종이 바뀐 뒤 예전 카드(ref)의 답은 거부",
+                       "concrete_supply" in w2_ref and tools._item(stored(w1["thread_id"])["session"])["selection"]["section_no"] == "6-1-1"
+                       and "반영하지 않았어요" in old_card["answer"]
+                       and tools._item(stored(w1["thread_id"])["session"])["conditions"].get("concrete_supply") != "관급"))
 
         # 9. LLM이 근거 검증을 우회하지 못함: 근거와 다른 값, source 주입은 무시된다
         before = item()["quantity"]["value"]
