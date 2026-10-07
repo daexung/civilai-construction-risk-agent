@@ -396,6 +396,10 @@ def fill(state: AgentState) -> dict:
                         "reason": f"{chosen['section_no']} 절의 계산 명세가 없습니다"}
             if available["id"] != spec_id:
                 inputs, sources = _compatible_inputs(inputs, sources, available)
+                # 처음 질문에 적은 조건 중 새 공종에만 있는 값도 다시 읽는다.
+                for name, value in extract_inputs(state.get("query", ""), available)[0].items():
+                    if name not in inputs:
+                        inputs[name], sources[name] = value, "질문"
                 spec = available
                 update["spec_id"] = available["id"]
     text = reply_text if (answers or reply_text) else state.get("query", "")
@@ -454,7 +458,8 @@ def fill(state: AgentState) -> dict:
                 sources[field["name"]] = "기본값"
     ambiguities = {**ambiguities, **dict_errors}
     questions = []
-    if update.get("selection", state.get("selection", {})).get("confirmed") is False:
+    work_pending = update.get("selection", state.get("selection", {})).get("confirmed") is False
+    if work_pending:
         candidates = state.get("candidates", [])
         work_question = {"name": "work", "ask": "어느 공종으로 계산할까요?",
                           "choices": [item["section"] for item in candidates],
@@ -465,7 +470,8 @@ def fill(state: AgentState) -> dict:
         if work_error:
             work_question["reason"] = work_error
         questions.append(work_question)
-    if spec:
+    # 공종(타설 방식)이 정해지기 전에는 잠정 공종의 조건을 묻지 않는다.
+    if spec and not work_pending:
         tables = {table["id"]: table for table in spec["tables"]}
         for field in spec["inputs"]:
             name = field["name"]

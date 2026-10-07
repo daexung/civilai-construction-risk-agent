@@ -12,12 +12,25 @@ from backend.agent.state import AgentState
 from backend.agent.tools.llm import client as llm_client
 
 
-COST_TERMS = (
-    "노무비", "인건비", "공사비", "견적", "예산", "일위대가", "단가", "물량", "대가",
-    "비용", "금액", "얼마", "인력", "인원", "공수", "품", "설치", "해체", "시공",
-    "개소", "㎡", "ton", "kg", "km", "루베",
-)
-QUANTITY_UNIT = re.compile(r"\d[\d,]*(?:\.\d+)?\s*(?:m3|m2|m|km|t|ton|kg|개소|개|평|㎡|㎥)(?![a-z])", re.I)
+# 규칙 대체도 router.md와 같은 기준을 쓴다: 돈을 물으면 견적, 돈 없이 품셈을 물으면 상담.
+# 물량은 견적 근거가 아니다. ponytail: 낱말 규칙이라 경계 문항은 LLM보다 약하다.
+MONEY = re.compile(r"비용|금액|공사비|노무비|인건비|견적|예산|원가|도급액|단가|얼마")
+QA_TERMS = re.compile(r"품셈|(?<![제부상작])품(?!질)|인원|인력|몇\s*(?:명|인)|공수|할증|시공량|공구손료|"
+                      r"기계경비|작업조|시간")
+# 품셈 업무에 속하는 공종·장비 낱말. 돈도 품도 묻지 않을 때 범위 안인지 가린다.
+WORK = re.compile(r"타설|콘크리트|레미콘|펌프차|거푸집|철근|철골|비계|도장|타일|미장|방수|굴착|포장|공종")
+# 공사 물량 단위. NFKC는 ㎥·㎡를 m3·m2로 바꾼다.
+QUANTITY = re.compile(r"\d[\d,]*(?:\.\d+)?\s*(?:m3|m2|루베|개소|세제곱미터|제곱미터)", re.I)
+# 계산 동사는 돈 요청이 아니다. 대상이 돈이면 견적, 인원·품·시간이면 상담, 대상이 없으면 견적으로 둔다.
+COMPUTE = re.compile(r"계산|산출|산정")
+# 산정 방법·의미를 묻는 말. 계산을 직접 요청하면 견적으로 둔다.
+METHOD = re.compile(r"어떻게|어떤\s*(?:기준|방식|방법)|방법|방식|설명|의미|뜻")
+REQUEST = re.compile(r"(?:계산|산출|산정|뽑아|만들어|견적\s*내)\s*(?:해\s*)?(?:줘|주세요|봐)|"
+                     r"(?:계산|견적|비용|산출)\s*(?:좀\s*)?부탁|견적서|원가계산서")
+# router.md가 범위 밖으로 둔 질문: 평당 공사비, 자재 시세, 도면 물량 산출.
+OUTSIDE = re.compile(r"평당|시세|도면")
+# 직전 견적의 물량·조건 변경이나 금액 재계산. '다시'만으로는 재계산이 아니다(다시 설명해줘).
+RECALC = re.compile(r"바꿔|바꾸|변경|재계산|다시\s*(?:계산|해|뽑)|로\s*해\s*(?:줘|주세요)")
 SYSTEM_PROMPT = (Path(__file__).resolve().parents[1] / "tools/llm/prompts/router.md").read_text(encoding="utf-8")
 ROUTE_SCHEMA = {
     "type": "object",
@@ -31,9 +44,25 @@ ROUTE_SCHEMA = {
 }
 
 
-def _rule_route(query: str) -> str:
-    normalized = unicodedata.normalize("NFKC", query)
-    return "estimate" if any(term in normalized for term in COST_TERMS) or QUANTITY_UNIT.search(normalized) else "out_of_scope"
+def _rule_route(query: str, previous_route: str | None = None) -> str:
+    text = unicodedata.normalize("NFKC", query)
+    if OUTSIDE.search(text):
+        return "out_of_scope"
+    if previous_route == "estimate" and RECALC.search(text):
+        return "estimate"
+    money = MONEY.findall(text)
+    qa = QA_TERMS.search(text)
+    if (money or qa or WORK.search(text)) and METHOD.search(text) and not REQUEST.search(text):
+        return "qa"
+    # "품이 얼마야", "시간은 얼마나"처럼 '얼마'만 있고 품을 묻는 질문은 상담이다.
+    if money and not (qa and set(money) == {"얼마"}):
+        return "estimate"
+    if qa:
+        return "qa"
+    if COMPUTE.search(text):
+        return "estimate"
+    # 물량이 있는 공사 질문은 의도가 불명확해도 범위 밖이 아니라 상담으로 받는다.
+    return "qa" if QUANTITY.search(text) else "out_of_scope"
 
 
 def _previous_summary(state: AgentState) -> str:
@@ -44,7 +73,7 @@ def _previous_summary(state: AgentState) -> str:
 
 def route(state: AgentState, generate_fn=None) -> dict:
     query = state["query"]
-    rule = _rule_route(query)
+    rule = _rule_route(query, (state.get("previous_context") or {}).get("previous_route"))
     fallback = {"route": rule, "route_confidence": None,
                 "route_reason": "기존 단서 낱말 규칙으로 분류했습니다.", "route_source": "rule"}
     if rule == "out_of_scope":
