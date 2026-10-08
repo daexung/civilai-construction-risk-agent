@@ -98,6 +98,8 @@ export interface UnitLine {
 }
 
 export interface ComputedResult {
+  per_unit_only?: boolean;
+  assumptions?: string;
   daily_volume: { value: string; unit: string; formula: string; sources: string[]; citations: Citation[] } | null;
   work_days: { value: string; formula: string; display?: string } | null;
   lines: ResultLine[];

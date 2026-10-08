@@ -170,8 +170,62 @@ def stale_checks():
     ]
 
 
+def check_per_unit_without_quantity(checks):
+    import copy
+    specs = load_specs()
+    excluded = [spec for spec in specs.values() if tools._quantity_dependent(spec)]
+    checks.append(("U1 382개 명세 전수: 물량 의존 13-6-9 한 개 자동 제외",
+                   len(specs) == 382 and len(excluded) == 1 and excluded[0]["section_no"] == "13-6-9"))
+    for section in ("6-1-4", "6-1-1", "10-1-7"):
+        spec = next(s for s in specs.values() if s["section_no"] == section
+                    and (section != "6-1-1" or s["division"] == "공통"))
+        session = tools.new_estimate("품 알려줘", "2026-10-01")
+        item = tools._item(session)
+        tools.choose_work(item, {"confirmed": True, "section": spec["title"]}, spec)
+        values = sample_inputs(spec)
+        quantity = tools._quantity_field(spec)["name"]
+        values.pop(quantity)
+        if section == "6-1-4": values.update(PUMP)
+        if section == "6-1-1": values["scattered_small_volume"] = False
+        answer(session, **values)
+        result = tools.compute_labor(session, allow_per_unit=True)
+        raw = item["computed_result"] or {}
+        checks.append((f"U2 {section}: 물량 질문 없이 단위당 품·총량/기준값 노출 없음",
+                       result["status"] == "ok" and raw.get("per_unit_only") and result["data"]["unit_lines"]
+                       and quantity not in item["conditions"] and item["quantity"] is None
+                       and not set(raw) & {"work_days", "person_days", "equipment_days", "equipment_units"}
+                       and "quantity" not in raw["provenance"] and not tools.current_estimate(session)))
+        per_key = item.get("labor_key")
+        cost = tools.estimate_cost(session)
+        checks.append((f"U3 {section}: 비용 목표는 물량 필요·원가 없음",
+                       cost["status"] == "needs_input" and quantity in fields_of(cost) and not tools.current_estimate(session)))
+        answer(session, **{quantity: "1"})
+        full = tools.compute_labor(session)
+        checks.append((f"U4 {section}: 나중의 실제 물량 1은 별도 캐시로 전체 계산",
+                       full["status"] == "ok" and not item["computed_result"].get("per_unit_only")
+                       and item["labor_key"] != per_key and full["data"]["quantity"] == "1"))
+    spec = excluded[0]
+    session = tools.new_estimate("품 알려줘")
+    tools.choose_work(tools._item(session), {"confirmed": True}, spec)
+    values = sample_inputs(spec); quantity = tools._quantity_field(spec)["name"]; values.pop(quantity)
+    answer(session, **values)
+    result = tools.compute_labor(session, allow_per_unit=True)
+    checks.append(("U5 실제 물량 의존 명세는 물량 질문 유지", result["status"] == "needs_input" and quantity in fields_of(result)))
+    pump = spec_of("6-1-4")
+    session = started("콘크리트 타설 1m 품 알려줘")
+    tools.set_conditions(session, "콘크리트 타설 1m 품 알려줘", quantity=dialogue._rule_quantity("1m"))
+    tools.set_conditions(session, "", work="6-1-4", source="answer")
+    mismatch = tools.compute_labor(session, allow_per_unit=True)
+    checks.append(("U12 품 목표도 단위 불일치 물량을 맨 앞에 질문", mismatch["missing"][0]["field"] == "volume"
+                   and "맞지 않아요" in mismatch["missing"][0]["reason"]))
+    for key in ("crew_rules", "surcharges", "note_adjustments", "blocked", "tables"):
+        dependent = copy.deepcopy(pump); dependent.setdefault(key, []).append({"when": {"volume": "1"}})
+        checks.append((f"U6 {key} 물량 참조 감지", tools._quantity_dependent(dependent)))
+
+
 def main() -> int:
     checks = []
+    check_per_unit_without_quantity(checks)
     pump, manual = spec_of("6-1-4"), spec_of("6-1-1")
 
     # 단계 0: 공유 단위 표를 사용하는 물량·근거 파서, 실제 길이 조건의 회귀 방지.
@@ -204,7 +258,7 @@ def main() -> int:
     labor = tools.compute_labor(unit_session)
     checks.append(("U0 펌프차 선택 후 물량 1㎥ 보존·단위 불일치 안내 없음",
                    not kept["rejected"] and labor["status"] == "needs_input"
-                   and set(fields_of(labor)) == set(PUMP)
+                   and set(fields_of(labor)) == set(PUMP) - {"placement", "vibrator_used", "reset_status"}
                    and tools._item(unit_session)["conditions"].get("volume") == "1"
                    and tools.unit_key(dialogue._request_quantity(unit_session, query)["unit"]) == "m3"
                    and all("맞지 않아요" not in (q.get("reason") or "") for q in labor["missing"])))
@@ -246,7 +300,7 @@ def main() -> int:
     tools.set_conditions(session, "", work="6-1-4", source="answer")
     labor_questions = tools.compute_labor(session)
     checks.append(("C3 품 단계 질문에 가격 조건 없음", labor_questions["status"] == "needs_input"
-                   and set(fields_of(labor_questions)) == set(PUMP)
+                   and set(fields_of(labor_questions)) == set(PUMP) - {"placement", "vibrator_used", "reset_status"}
                    and all(question["stage"] == "labor" for question in labor_questions["missing"])))
     checks.append(("C3 질문 선택지는 목록 또는 null", all(q["choices"] is None or isinstance(q["choices"], list)
                                                   for q in labor_questions["missing"])))

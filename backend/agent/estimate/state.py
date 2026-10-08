@@ -50,6 +50,8 @@ class EstimateItem(TypedDict, total=False):
     quantity: dict | None     # {value, unit, source}
     explicit: dict            # 사용자가 준 값(계획·답변). {field: {value, source}} — 명세가 바뀌면 호환 값만 남긴다
     conditions: dict          # 확정 명세 기준으로 구성한 조건. {field: {value, source, explicit}}
+    defaulted_inputs: dict     # 사용자 입력이 없어 명세 default를 적용한 필드
+    assumptions: str          # 실제 사용한 기본값 안내
     selected_spec_id: str
     selection: dict | None    # {decision, confirmed, section_no, section}
     candidates: list

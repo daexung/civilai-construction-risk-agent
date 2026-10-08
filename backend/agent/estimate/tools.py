@@ -69,6 +69,21 @@ def _quantity_field(spec: dict) -> dict | None:
     return next((field for field in spec["inputs"] if field["name"] == name), None)
 
 
+def _quantity_dependent(spec: dict) -> bool:
+    """총량 산식의 quantity_input 선언을 제외하고 물량 참조가 있으면 단위당 계산을 보류한다."""
+    name = spec["quantity_model"]["params"].get("quantity_input")
+    def references(value):
+        if isinstance(value, dict):
+            return name in value or any(references(child) for child in value.values())
+        if isinstance(value, list):
+            return any(references(child) for child in value)
+        return isinstance(value, str) and bool(re.search(r"(?<![\w])" + re.escape(name) + r"(?![\w])", value))
+    params = {key: value for key, value in spec["quantity_model"]["params"].items() if key != "quantity_input"}
+    return not name or references([params, *[spec.get(key, []) for key in
+        ("crew_rules", "surcharges", "note_adjustments", "blocked", "tables")],
+        [field.get("when") for field in spec["inputs"]]])
+
+
 def _question(item: EstimateItem, field: str, ask: str, choices, stage: str, **extra) -> dict:
     choices = choices if isinstance(choices, list) else None  # PR #22: 목록 또는 null
     return {"question_id": f"{item['item_id']}:{field}",
@@ -97,7 +112,7 @@ def _build_conditions(item: EstimateItem, spec: dict) -> tuple[dict, str | None]
 
     체크포인트 ad38869의 estimate/flow.py와 같은 규칙이다.
     """
-    stated, _ = extract_inputs(item["request_text"], spec)
+    stated, ambiguities = extract_inputs(item["request_text"], spec)
     fields = {field["name"]: field for field in spec["inputs"]}
     conditions = {name: value for name, value in stated.items() if name in fields}
     quantity_field = _quantity_field(spec)
@@ -127,6 +142,15 @@ def _build_conditions(item: EstimateItem, spec: dict) -> tuple[dict, str | None]
         elif name in fields:
             conditions.pop(name, None)
             item["question_reasons"].setdefault(name, "받은 값이 이 공종의 선택지와 맞지 않아요. 다시 골라 주세요.")
+    defaulted = {}
+    for name, field in fields.items():
+        if ("default" in field and name not in conditions and name not in item["explicit"]
+                and name not in ambiguities and _valid_for_field(field["default"], field)):
+            conditions[name] = field["default"]
+            defaulted[name] = field["default"]
+    item["defaulted_inputs"] = defaulted
+    notes = [fields[name].get("default_note") or f"{name} {value}" for name, value in defaulted.items()]
+    item["assumptions"] = "가정: " + ", ".join(notes) + " — 다르면 말씀해 주세요." if notes else ""
     return conditions, mismatch
 
 
@@ -184,7 +208,8 @@ def _statement_key(session: EstimateSession) -> str:
 
 def current_estimate(session: EstimateSession) -> dict | None:
     """최신 확정 원가계산서. 입력이 바뀐 뒤 다시 계산하지 않았으면 None(화면·내려받기는 이것만 쓴다)."""
-    if session.get("statement") and session.get("statement_key") == _statement_key(session):
+    if (session.get("statement") and session.get("statement_key") == _statement_key(session)
+            and not any((item.get("computed_result") or {}).get("per_unit_only") for item in session["items"].values())):
         return {"statement": session["statement"], "aggregate_result": session["aggregate_result"]}
     return None
 
@@ -331,7 +356,7 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
                    rejected=rejected)
 
 
-def compute_labor(session: EstimateSession) -> dict:
+def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> dict:
     """품 산출 모드: 가격 조건 없이 1단위당 품과 물량 기준 작업일수·인일·장비를 계산한다."""
     item = _item(session)
     if not (item.get("selection") or {}).get("confirmed"):
@@ -346,6 +371,12 @@ def compute_labor(session: EstimateSession) -> dict:
     labor_names = {field["name"] for field in spec["inputs"]} - excluded
     missing = [_field_question(item, spec, field, "labor") for field in _missing_fields(spec, conditions, labor_names)]
     quantity_field = _quantity_field(spec)
+    per_unit_only = bool(allow_per_unit and quantity_field and not mismatch
+                         and quantity_field["name"] not in conditions and not _quantity_dependent(spec)
+                         and not any(unit == unit_key(quantity_field.get("unit"))
+                                     for _, unit in _quantities(item["request_text"])))
+    if per_unit_only:
+        missing = [question for question in missing if question["field"] != quantity_field["name"]]
     if mismatch and quantity_field:
         item["question_reasons"].setdefault(quantity_field["name"], mismatch)
         missing = [question for question in missing if question["field"] != quantity_field["name"]]
@@ -361,6 +392,8 @@ def compute_labor(session: EstimateSession) -> dict:
         item.update(status="NEEDS_INPUT", questions=missing)
         return _result("needs_input", item, missing=missing)
     key = _labor_key(spec, conditions)
+    if per_unit_only:
+        key = _digest(key, "per_unit_only")  # 기준 물량 1의 총량 계산과도 분리한다.
     if item.get("labor_key") != key or not item.get("computed_result"):
         blocked = check_blocked(spec, conditions)
         if blocked:
@@ -368,6 +401,8 @@ def compute_labor(session: EstimateSession) -> dict:
             return _result("blocked", item, {"reason": blocked["reason"], "citations": blocked.get("citations", [])})
         inputs = {name: value for name, value in conditions.items()
                   if name in {field["name"] for field in spec["inputs"]} or name.startswith("apply_adj_")}
+        if per_unit_only:
+            inputs[quantity_field["name"]] = "1"  # 계산기만 읽는 기준값. 사용자 조건에는 넣지 않는다.
         result = CALCULATORS[spec["quantity_model"]["name"]](spec, inputs, labor_only=True)
         if result.get("status") == "ask":
             missing = [_question(item, raw["name"], raw["ask"], raw.get("choices") or raw.get("allowed_values"), "labor")
@@ -380,15 +415,23 @@ def compute_labor(session: EstimateSession) -> dict:
         if result.get("status") != "computed":
             item.update(status="ERROR", reason=result.get("reason", ""), questions=[])
             return _result("error", item, {"reason": result.get("reason", "")})
+        if per_unit_only:
+            result["per_unit_only"] = True
+            for name in ("work_days", "person_days", "equipment_days", "equipment_units"):
+                result.pop(name, None)
+                result.get("provenance", {}).pop(name, None)
+            result.get("provenance", {}).pop("quantity", None)
         item.update(computed_result=result, labor_key=key)
     item.update(questions=[], reason="")
     # 최신 가격 결과가 있는 견적은 품 결과를 다시 읽어도(explain_basis 등) 완료 상태를 유지한다.
     if not (item["status"] == "PRICED" and item.get("result_revision") == item["input_revision"]):
         item["status"] = "READY"
     result = item["computed_result"]
+    result["assumptions"] = item.get("assumptions", "")
     return _result("ok", item, {
         "spec_id": spec["id"], "section": item["selection"].get("section"), "review_status": spec.get("review", ""),
-        "unit_basis": result.get("unit_basis"), "unit_lines": result["unit_lines"],
+        "unit_basis": result.get("unit_basis"), "unit_lines": result["unit_lines"], "per_unit_only": per_unit_only,
+        "assumptions": result["assumptions"],
         **{name: result.get(name) for name in ("daily_volume_m3", "work_days", "person_days",
                                                "equipment_days", "equipment_units")},
         "quantity": conditions.get(quantity_field["name"]) if quantity_field else None,
@@ -425,6 +468,8 @@ def estimate_cost(session: EstimateSession) -> dict:
         session.update(statement=None, statement_key=None)
         return _result("error", item, {"reason": f"원가계산서를 만들 수 없습니다({outcome['status']})",
                                        "priced": priced})
+    if item.get("assumptions"):
+        session["statement"].setdefault("basis_notes", []).append(item["assumptions"] + " (출처: 기본값)")
     session["statement_key"] = _statement_key(session)
     return _result("ok", item, {**labor["data"], "priced": priced, "statement": session["statement"],
                                 "common": copy.deepcopy(session["common_conditions"]),

@@ -188,6 +188,8 @@
     },
     {
       "name": "placement",
+      "default": "붐",
+      "default_note": "붐 타설",
       "type": "enum",
       "allowed_values": [
         "붐",
@@ -210,6 +212,8 @@
     },
     {
       "name": "vibrator_used",
+      "default": true,
+      "default_note": "진동기 사용",
       "type": "boolean",
       "allowed_values": [
         true,
@@ -222,6 +226,13 @@
     },
     {
       "name": "reset_status",
+      "default": "없음",
+      "default_note": "재셋팅 없음",
+      "synonyms": {
+        "있음": ["재셋팅 있어", "재세팅 있어"],
+        "없음": ["재셋팅 없어", "재세팅 없어"],
+        "모름": ["재셋팅 모름", "재세팅 모름"]
+      },
       "type": "enum",
       "allowed_values": [
         "없음",

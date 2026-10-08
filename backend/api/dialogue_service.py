@@ -84,7 +84,8 @@ def legacy_state(state: dict) -> dict:
                hits=item.get("hits") or [], basis_date=session.get("basis_date") or date.today().isoformat(),
                inputs={**common, **(item.get("conditions") or {})},
                input_sources={**{name: entry["source"] for name, entry in session["common_conditions"].items()},
-                              **{name: "답변" for name in item.get("conditions") or {}}},
+                              **{name: "기본값" if name in item.get("defaulted_inputs", {}) else "답변"
+                                 for name in item.get("conditions") or {}}},
                review_status=item.get("review_status") or (spec or {}).get("review", ""))
     pending = state.get("pending") or []
     current = tools.current_estimate(session)

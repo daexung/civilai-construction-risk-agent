@@ -266,7 +266,7 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
             elif matches:
                 values[name] = next(iter(matches))
         elif name == "vibrator_used":
-            negative = any(term in normalized for term in ("진동기없이", "진동기미사용", "진동기안씀"))
+            negative = any(term in normalized for term in ("진동기없이", "진동기미사용", "진동기안씀", "진동기안써"))
             positive = any(term in normalized for term in ("진동기사용", "진동기씀"))
             if negative and positive:
                 ambiguities[name] = "진동기 사용 여부가 서로 다르게 언급되었습니다"
