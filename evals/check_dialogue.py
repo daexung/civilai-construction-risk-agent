@@ -345,11 +345,11 @@ def check_one_question(checks: list) -> None:
                        and "pump_size" not in tools._item(state(stale)["session"])["conditions"]))
         door_hits = [{**HITS[0], "section_no":"10-1-7", "division":"건축", "section":"10-1-7 자동문 설치"}]
         with patch.object(tools, "retrieve", return_value={"hits":door_hits}):
-            door = post({"message":"자동문 설치 품 알려줘"})
+            door = post({"message":"자동문 설치 비용 알려줘"})
             done = answer(door,"3")
         checks.append(("O9 조건 1개 자동문: 질문 1개·remaining 1, 답 후 기존 품 결과",
                        [q["name"] for q in door["questions"]] == ["quantity"] and door["questions_remaining"] == 1
-                       and done["status"] == "COMPUTED" and done["questions_remaining"] == 0))
+                       and done["status"] in ("OK", "PARTIAL") and done["questions_remaining"] == 0))
         private = start("콘크리트 타설 1세제곱미터 비용 알려줘")
         while private["questions"][0]["name"] != "concrete_supply":
             private = answer(private,PUMP[private["questions"][0]["name"]])
@@ -359,8 +359,64 @@ def check_one_question(checks: list) -> None:
                        and child["questions_remaining"] == 1))
 
 
+def check_per_unit_dialogue(checks):
+    with patch.dict(os.environ, {"AGENT_MODE":"tools", "AGENT_LLM":"off"}), \
+            patch("backend.api.usage_limits.processing", return_value=nullcontext((None,"fixture",False))), \
+            patch("backend.api.usage_limits.consume", return_value={}), \
+            patch("backend.api.usage_limits.status", return_value={}), \
+            patch.object(tools,"retrieve", return_value={"hits":HITS}), \
+            patch.object(client,"generate", side_effect=AssertionError("real LLM forbidden")), \
+            patch.object(api_main,"warmup_client", return_value=True), \
+            TestClient(api_main.app, headers={"X-Guest-Session":SECRET}) as http:
+        def post(body):
+            r=http.post("/api/chat",json=body); assert r.status_code==200,r.text; return r.json()
+        def answer(previous,value):
+            q=previous["questions"][0]
+            return post({"thread_id":previous["thread_id"],"answers":{q["name"]:value},"refs":{q["name"]:q["ref"]}})
+        def pump(text):
+            current=post({"message":text}); current=answer(current,"6-1-4")
+            sequence=[]
+            while current["questions"]:
+                q=current["questions"][0]; sequence.append(q["name"])
+                assert q["name"] in PUMP,sequence
+                current=answer(current,PUMP[q["name"]])
+            print("PER_UNIT_SEQUENCE", sequence)
+            return current,sequence
+        current,sequence=pump("펌프차 타설 품 알려줘")
+        result=current.get("result") or {}
+        checks.append(("U7 API 물량 없는 작업조 품: 총량 없음·후속 안내·Excel 차단",
+                       current["status"]=="COMPUTED" and result.get("per_unit_only") and result["unit_lines"]
+                       and result["work_days"] is None and not result["lines"]
+                       and current["message"].endswith("총 인원·작업일수가 필요하면 물량을 알려 주세요.")
+                       and not current["estimate_current"]
+                       and http.get(f"/api/export/{current['thread_id']}.xlsx").status_code==404))
+        full=post({"thread_id":current["thread_id"],"message":"100㎥야"})
+        checks.append(("U8 API 나중의 100㎥: 작업일수·인일 계산", full["status"]=="COMPUTED"
+                       and full["result"]["work_days"] and full["result"]["lines"] and not full["result"].get("per_unit_only")))
+        empty,_=pump("펌프차 타설 품 알려줘")
+        cost=post({"thread_id":empty["thread_id"],"message":"비용 계산해줘"})
+        checks.append(("U9 API 품→비용: 물량 질문·원가/Excel 차단",
+                       cost["questions"][0]["name"]=="volume" and not cost["estimate_current"] and cost["statement"] is None))
+        with patch.object(tools,"retrieve",return_value={"hits":[{**HITS[0],"section_no":"10-1-7","division":"건축","section":"10-1-7 자동문 설치"}]}):
+            door=post({"message":"자동문 설치 품 알려줘"})
+        checks.append(("U10 조건은 물량뿐인 명세: 질문 0개 즉시 단위당 품", not door["questions"]
+                       and door["result"]["per_unit_only"] and not door["result"]["lines"]))
+        saved=dialogue.load(api_main.DIALOGUE,empty["thread_id"])
+        # 대본 답변이 후속 안내를 생략해도 서버가 붙이며, 입력에도 전달한다.
+        saved["pending"]=[]
+        item=tools._item(saved["session"])
+        log=[{"tool":"compute_labor","result":tools.compute_labor(saved["session"],allow_per_unit=True)}]
+        prompts=[]
+        def generate(prompt,*args,**kwargs):
+            prompts.append(json.loads(prompt)); return json.dumps({"text":"품을 계산했어요."})
+        reply=dialogue._reply(saved,log,[],"품 알려줘",dialogue.Budget(),generate,True)
+        checks.append(("U11 모의 LLM 입력·최종 답변에 단위당 후속 안내", prompts[0]["quantity_hint"]
+                       and reply["text"].endswith(prompts[0]["quantity_hint"])))
+
+
 def main() -> int:
     checks = []
+    check_per_unit_dialogue(checks)
     llm = ScriptedLLM()
     consumed = []
     with patch("backend.api.usage_limits.processing", return_value=nullcontext((None, "fixture", False))), \

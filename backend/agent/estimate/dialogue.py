@@ -93,7 +93,10 @@ def _answers_pending(state: DialogueState, message: str) -> bool:
     spec = tools._spec(tools._item(session))
     quantity_name = (tools._quantity_field(spec) or {}).get("name") if spec else None
     return bool(pending & set(changes.get("values") or {})) or (
-        "quantity" in changes and bool(pending & {"quantity", quantity_name}))
+        "quantity" in changes and (bool(pending & {"quantity", quantity_name})
+            # 단위당 답변에서 생략한 물량도 나중에 같은 단위로 말하면 조건 답으로 받는다.
+            or (state.get("goal") == "labor" and quantity_name not in tools._item(session).get("conditions", {})
+                and tools.unit_key(changes["quantity"].get("unit")) == tools.unit_key((tools._quantity_field(spec) or {}).get("unit")))))
 
 
 def _is_lookup(state: DialogueState, message: str) -> bool:
@@ -324,7 +327,7 @@ def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget:
         return tools.set_conditions(session, message, values=values or None, quantity=quantity, work=work, source="text")
     if name == "compute_labor":
         state["goal"] = state["goal"] or "labor"
-        return tools.compute_labor(session)
+        return tools.compute_labor(session, allow_per_unit=state["goal"] == "labor")
     if name == "estimate_cost":
         state["goal"] = "cost"
         return tools.estimate_cost(session)
@@ -514,12 +517,17 @@ def _template(state: DialogueState, log: list, facts: list[dict], notices: list)
 
 def _reply(state: DialogueState, log: list, notices: list, message: str, budget: Budget, generate, use_llm: bool) -> dict:
     facts, literals = _facts(state, log)
+    quantity_hint = ("총 인원·작업일수가 필요하면 물량을 알려 주세요."
+                     if not state["pending"] and any(entry["result"].get("data", {}).get("per_unit_only") for entry in log)
+                     else "")
     template = _template(state, log, facts, notices)
+    if quantity_hint:
+        template += "\n" + quantity_hint
     if not use_llm or not log:
         return {"text": template, "source": "template", "rejected": None}
     # 사용자에게 보일 값은 기존 표시 규칙(끝나는 소수 그대로, 순환소수 괄호 표기)으로 준다. 검증은 정확값으로 한다.
     shown = [{**fact, "value": fact.get("shown") or reply_check.display(fact["value"])} for fact in facts]
-    prompt = {"user_message": message, "notices": notices, "facts": shown,
+    prompt = {"user_message": message, "notices": notices, "facts": shown, "quantity_hint": quantity_hint,
               "pending_questions": [question["ask"] for question in state["pending"][:1]],
               "tool_results": [{"tool": entry["tool"], "status": entry["result"]["status"],
                                 "data": _compact(entry["result"].get("data", {}))} for entry in log]}
@@ -546,7 +554,10 @@ def _reply(state: DialogueState, log: list, notices: list, message: str, budget:
     problem = reply_check.verify(data.get("text"), facts, literals, quoted=quoted, refused=list(refused.values()))
     if problem:
         return {"text": template, "source": "template", "rejected": problem, "rejected_text": data.get("text")}
-    return {"text": "\n".join([*notices, data["text"]]) if notices else data["text"], "source": "llm", "rejected": None}
+    text = "\n".join([*notices, data["text"]])
+    if quantity_hint and quantity_hint not in text:
+        text += "\n" + quantity_hint
+    return {"text": text, "source": "llm", "rejected": None}
 
 
 def _citation_names(value) -> list[str]:

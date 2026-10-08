@@ -297,15 +297,15 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
         from fractions import Fraction
         from backend.agent.tools.calc.daily_crew import _exact_text
 
-        quantity = Fraction(raw["provenance"]["quantity"])
+        quantity = Fraction(raw["provenance"].get("quantity", "0"))
         lines = [{"kind": line["kind"], "name": line["name"],
                   "value": _exact_text(Fraction(line["exact"]) * quantity),
                   "unit": ("인·일" if line["kind"] == "labor" else
                            line["unit"].split("/", 1)[0] if line["kind"] == "material" else "대·일"),
                   "crew": None, "rules": [], "source": line["source"],
                   "citations": _citations_out(line["citations"])}
-                 for line in raw["unit_lines"]]
-        return {"daily_volume": None, "work_days": None, "lines": lines,
+                 for line in raw["unit_lines"] if not raw.get("per_unit_only")]
+        return {"per_unit_only": raw.get("per_unit_only", False), "daily_volume": None, "work_days": None, "lines": lines,
                 "unit_lines": [{**line, "citations": _citations_out(line["citations"])}
                                for line in raw["unit_lines"]],
                 "unit_basis": raw["unit_basis"],
@@ -323,10 +323,10 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
     sources = [f"{base_source['table']} {base_source['source']}"]
     sources += [f"{c['table']} {c['source']}" for c in coefficient_sources]
 
-    work_provenance = raw["provenance"]["work_days"]
+    work_provenance = raw["provenance"].get("work_days")
 
     lines = []
-    for trade, value in raw["person_days"].items():
+    for trade, value in raw.get("person_days", {}).items():
         source = raw["provenance"]["person_days"][trade]
         lines.append({
             "kind": "labor",
@@ -338,7 +338,7 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
             "source": _source_label(source["crew"]),
             "citations": _citations_out(source["citations"]),
         })
-    for equipment_name, equipment_unit in raw["equipment_units"].items():
+    for equipment_name, equipment_unit in raw.get("equipment_units", {}).items():
         equipment_source = raw["provenance"]["equipment_days"][equipment_name]
         lines.append({
             "kind": "equipment", "name": equipment_name,
@@ -349,6 +349,7 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
         })
 
     return {
+        "per_unit_only": raw.get("per_unit_only", False),
         "daily_volume": {
             "value": raw["daily_volume_m3"],
             "unit": tables[base_table].get("unit", ""),
@@ -359,7 +360,7 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
         "work_days": {
             "value": raw["work_days"],
             "formula": f"{work_provenance['quantity']} ÷ {raw['daily_volume_m3']}",
-        },
+        } if work_provenance else None,
         "lines": lines,
         "unit_lines": [{**line, "citations": _citations_out(line["citations"])}
                        for line in raw["unit_lines"]],
