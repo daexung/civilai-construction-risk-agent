@@ -90,7 +90,7 @@ def legacy_state(state: dict) -> dict:
     current = tools.current_estimate(session)
     labor_shown = item.get("computed_result") and all(q.get("stage") == "price" for q in pending)
     if pending:
-        out.update(status="MISSING_INFO", questions=[_question_out(q) for q in pending])
+        out.update(status="MISSING_INFO", questions=[_question_out(q) for q in pending[:1]])
     elif current:
         partial = current["statement"].get("status") in ("PARTIAL", "UNCALCULATED")
         out.update(status="PARTIAL" if partial else "OK", statement=current["statement"],
@@ -109,8 +109,9 @@ def response(thread_id: str, state: dict) -> dict:
 
     legacy = legacy_state(state)
     built = _build_response(thread_id, legacy)
-    for out, question in zip(built["questions"], state.get("pending") or []):
+    for out, question in zip(built["questions"], (state.get("pending") or [])[:1]):
         out["ref"] = question["ref"]
+    built["questions_remaining"] = len(state.get("pending") or [])
     session = state.get("session")
     built["estimate_current"] = bool(session and tools.current_estimate(session))
     work_days = (built.get("result") or {}).get("work_days")

@@ -508,6 +508,9 @@ function AssistantCard({
 
       {response.status === 'MISSING_INFO' && (
         <div className="question-list">
+          {(response.questions_remaining ?? 0) >= 2 && (
+            <p className="questions-remaining">남은 확인 {response.questions_remaining}개</p>
+          )}
           {response.questions.map((question) => (
             <QuestionCard
               key={question.name}

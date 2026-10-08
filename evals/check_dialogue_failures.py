@@ -118,7 +118,7 @@ def main() -> int:
 
         def answer(previous: dict, values: dict) -> dict:
             return post({"thread_id": previous["thread_id"], "answers": values,
-                         "refs": {q["name"]: q["ref"] for q in previous["questions"] if q["name"] in values}})
+                         "refs": {q["field"]: q["ref"] for q in dialogue.load(api_main.DIALOGUE, previous["thread_id"])["pending"] if q["field"] in values}})
 
         def priced() -> tuple[str, dict]:
             llm.plan(("find_work", {}), ("set_conditions", {"quantity": {"value": "100", "unit": "㎥",

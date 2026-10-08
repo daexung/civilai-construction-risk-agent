@@ -504,9 +504,9 @@ def _template(state: DialogueState, log: list, facts: list[dict], notices: list)
             parts.append(answer)
         stage = state["pending"][0].get("stage")
         parts.append({"work": "먼저 공종을 골라 주세요.",
-                      "price": "비용을 계산하려면 가격 조건이 필요해요. 아래에서 골라 주세요.",
+                      "price": "비용을 계산하려면 아래 가격 질문에 답해 주세요.",
                       "scope": "지금 견적은 그대로예요. 어느 견적으로 계산할지 골라 주세요."}.get(
-            stage, "품을 계산하려면 아래 조건을 확인해 주세요."))
+            stage, "품을 계산하려면 아래 질문에 답해 주세요."))
     elif answer:
         parts.append(answer)
     return "\n".join(part for part in parts if part)
@@ -520,7 +520,7 @@ def _reply(state: DialogueState, log: list, notices: list, message: str, budget:
     # 사용자에게 보일 값은 기존 표시 규칙(끝나는 소수 그대로, 순환소수 괄호 표기)으로 준다. 검증은 정확값으로 한다.
     shown = [{**fact, "value": fact.get("shown") or reply_check.display(fact["value"])} for fact in facts]
     prompt = {"user_message": message, "notices": notices, "facts": shown,
-              "pending_questions": [question["ask"] for question in state["pending"]],
+              "pending_questions": [question["ask"] for question in state["pending"][:1]],
               "tool_results": [{"tool": entry["tool"], "status": entry["result"]["status"],
                                 "data": _compact(entry["result"].get("data", {}))} for entry in log]}
     try:

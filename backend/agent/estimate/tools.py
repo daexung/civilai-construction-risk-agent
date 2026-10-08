@@ -348,10 +348,14 @@ def compute_labor(session: EstimateSession) -> dict:
     quantity_field = _quantity_field(spec)
     if mismatch and quantity_field:
         item["question_reasons"].setdefault(quantity_field["name"], mismatch)
-        if not any(question["field"] == quantity_field["name"] for question in missing):
-            missing.insert(0, _field_question(item, spec, quantity_field, "labor"))
+        missing = [question for question in missing if question["field"] != quantity_field["name"]]
+        missing.insert(0, _field_question(item, spec, quantity_field, "labor"))
     missing += [_question(item, raw["name"], raw["ask"], raw["choices"], "labor")
                 for raw in adjustment_questions(spec, conditions)]
+    if quantity_field and not mismatch:
+        # 아직 말하지 않은 물량만 품 조건·할증 뒤에 묻는다. 단위 불일치는 맨 앞에 둔다.
+        missing = ([question for question in missing if question["field"] != quantity_field["name"]]
+                   + [question for question in missing if question["field"] == quantity_field["name"]])
     item["conditions"] = conditions
     if missing:
         item.update(status="NEEDS_INPUT", questions=missing)
