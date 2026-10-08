@@ -11,6 +11,7 @@ MARGIN = 4.0
 def decide(hits: list[dict], specs: dict[tuple[str, str], list[dict]], margin: float = MARGIN) -> dict:
     """청크 순위와 명세 목록으로 결정·후보·이유를 돌려준다."""
     by_section: dict[tuple[str | None, str], dict] = {}
+    best_scores = {}
     for hit in hits:
         section_no = hit.get("section_no")
         if not section_no or section_no.count("-") != 2:
@@ -24,6 +25,7 @@ def decide(hits: list[dict], specs: dict[tuple[str, str], list[dict]], margin: f
             "score": 0.0, "has_spec": bool(specs.get(key)),
         })
         group["score"] += 1 / hit["rank"]
+        best_scores[key] = max(best_scores.get(key, 0.0), 1 / hit["rank"])
 
     candidates = sorted(by_section.values(), key=lambda group: (-group["score"],
                         group["division"] or "", group["section_no"]))[:3]
@@ -33,9 +35,13 @@ def decide(hits: list[dict], specs: dict[tuple[str, str], list[dict]], margin: f
     first = candidates[0]
     second = candidates[1] if len(candidates) > 1 else None
     if second and first["score"] < margin * second["score"]:
+        candidates = sorted(by_section.values(), key=lambda group: (
+            -best_scores[(group["division"], group["section_no"])],
+            group["division"] or "", group["section_no"]))[:3]
+        provisional_first = candidates[0]
         return {"decision": "provisional", "confirmed": False, "candidates": candidates,
                 "reason": f"상위 절 {first['section']}와 {second['section']}의 검색 점수가 비슷합니다",
-                "spec_id": specs[(first["division"], first["section_no"])][0]["id"] if first["has_spec"] else ""}
+                "spec_id": specs[(provisional_first["division"], provisional_first["section_no"])][0]["id"] if provisional_first["has_spec"] else ""}
     if not first["has_spec"]:
         return {"decision": "no_spec", "confirmed": True, "candidates": candidates,
                 "reason": f"{first['section']} 절의 계산 명세가 없습니다"}

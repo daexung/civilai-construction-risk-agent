@@ -166,12 +166,45 @@ def details(mode: str, rows: list[dict], specs: dict, margin: float) -> None:
         print(f"{label.upper()} {row['id']} | {row['query']} | 기대 {row['expect']} | {top or '-'}")
 
 
+def check_full_cache(specs: dict) -> None:
+    """전체 인덱스 캐시로 판단 유지와 되묻기 후보를 검사한다(API 호출 없음)."""
+    path = HYBRID_HITS.with_name("select_hybrid_hits_full.json")
+    if not path.exists():
+        print("FULL CACHE SKIPPED: 전체 인덱스 캐시 없음")
+        return
+    rows = json.loads(path.read_text(encoding="utf-8"))["questions"]
+    assert len(rows) == 40 and len({row["id"] for row in rows}) == 40
+    assert MARGIN == 4.0
+    counts = {label: 0 for label in ("correct", "wrong", "ask")}
+    results = {}
+    for row in rows:
+        totals = {}
+        for hit in row["hits"]:
+            section = hit.get("section_no")
+            if section and section.count("-") == 2:
+                key = (hit.get("division", "공통"), section)
+                totals[key] = totals.get(key, 0.0) + 1 / hit["rank"]
+        ranked = sorted(totals, key=lambda key: (-totals[key], key[0] or "", key[1]))
+        expected = ("ask" if not ranked else
+                    "provisional" if len(ranked) > 1 and totals[ranked[0]] < 4.0 * totals[ranked[1]] else
+                    "chosen" if specs.get(ranked[0]) else "no_spec")
+        result = decide(row["hits"], specs)
+        assert result["decision"] == expected, f"{row['id']}: 합계 점수 기준 decision 변경"
+        counts[classify(row["expect"], result)] += 1
+        results[row["id"]] = result
+    assert counts == {"correct": 14, "wrong": 0, "ask": 26}, counts
+    print("FULL CACHE PASS: decision 40/40 동일, correct 14 / wrong 0 / ask 26")
+    candidates = {(item["division"], item["section_no"]) for item in results["c01"]["candidates"]}
+    assert ("공통", "6-1-2") in candidates and ("토목", "1-6-2") not in candidates, candidates
+    print("FULL CACHE PASS: c01 공통 6-1-2 포함, 토목 1-6-2 제외")
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reuse", action="store_true", help="저장된 하이브리드 hits 재사용")
     args = parser.parse_args()
     cases = questions()
     specs = specs_by_section()
+    check_full_cache(specs)
     offline = collect(cases, offline=True)
     evaluate("BM25", offline, specs)
 
