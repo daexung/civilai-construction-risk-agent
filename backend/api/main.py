@@ -748,7 +748,9 @@ def _guest(thread_id: str, secret: str | None) -> dict:
     with _GUEST_LOCK:
         guest = _GUESTS.get(thread_id)
         if not guest or not secret or not compare_digest(guest["secret"], secret):
-            raise HTTPException(404, "대화를 찾을 수 없거나 임시 대화가 만료되었습니다.")
+            # 비회원 상태는 이 프로세스 메모리에만 있다: 24시간 경과·서버 재시작·다른 인스턴스면 여기로 온다.
+            # 회원 대화의 404와 구분하도록 code를 붙인다. 차감 전에 막으므로 사용량은 줄지 않는다.
+            raise HTTPException(404, {"code": "GUEST_EXPIRED", "message": "임시 대화가 만료되었습니다."})
         guest["used"] = monotonic()
         return guest
 

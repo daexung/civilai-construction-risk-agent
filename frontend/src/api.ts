@@ -54,6 +54,8 @@ async function request(path: string, init: RequestInit = {}, member = true, expe
       const detail = (await res.json().catch(() => ({}))).detail;
       throw new UsageError(detail?.message ?? '요청이 많습니다. 잠시 후 다시 시도해 주세요.', detail?.usage);
     }
+    // 비회원 서버 상태가 사라진 404는 회원 대화를 못 찾은 404와 구분한다.
+    if (res.status === 404 && (await res.json().catch(() => ({}))).detail?.code === 'GUEST_EXPIRED') throw new Error('GUEST_EXPIRED');
     throw new Error(res.status === 401 ? 'AUTH_REQUIRED' : res.status === 404 ? 'NOT_FOUND' : res.status >= 500 ? 'SERVER_ERROR' : 'REQUEST_ERROR');
   }
   return res;

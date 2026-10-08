@@ -46,6 +46,9 @@ interface Props {
   onChangeConditions: (turnId: string, conditions: Record<string, string>) => void;
   onNewChat: () => void;
   onSendExample: (text: string) => void;
+  expired?: boolean;
+  onRecover?: () => void;
+  onRetry?: (turn: ChatTurn) => void;
 }
 
 const BLOCKED_HINTS: Record<string, string> = {
@@ -248,7 +251,8 @@ function AssistantActionBar({ response, receivedAtMs }: { response: ChatResponse
   return (
     <div className="action-bar">
       {['OK', 'PARTIAL'].includes(response.status) &&
-        <button type="button" className="action-btn export-link" onClick={() => downloadEstimate(response.thread_id).catch(() => showToast('견적서 다운로드에 실패했습니다. 다시 시도해 주세요.', 'error'))}>
+        <button type="button" className="action-btn export-link" onClick={() => downloadEstimate(response.thread_id).catch(error => showToast(error?.message === 'GUEST_EXPIRED'
+          ? '임시 대화가 만료되어 이 견적서를 내려받을 수 없습니다.' : '견적서 다운로드에 실패했습니다. 다시 시도해 주세요.', 'error'))}>
           <Download size={19} strokeWidth={1.75} aria-hidden="true" /><span>엑셀 견적서 다운로드</span>
         </button>}
       <button type="button" className="action-btn" onClick={copy} title="복사" aria-label="복사">
@@ -556,7 +560,7 @@ function AssistantCard({
   );
 }
 
-function ChatAreaView({ turns, loading, restoring, generating = loading, inputDisabled, onSendMessage, onResendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved }: Props) {
+function ChatAreaView({ turns, loading, restoring, generating = loading, inputDisabled, onSendMessage, onResendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved, expired, onRecover, onRetry }: Props) {
   const blocked = loading || !!inputDisabled;
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
@@ -686,8 +690,11 @@ function ChatAreaView({ turns, loading, restoring, generating = loading, inputDi
         <div className="messages">
           {turns.map((turn, i) => (
             <div key={turn.id} className={`message ${turn.role}`}>
-              {turn.role === 'user' ? (
-                <UserQuestion text={turn.text ?? ''} disabled={blocked} onResend={onResendMessage} />
+              {turn.role === 'notice' ? (
+                <p className="chat-thread-notice" role="note">{turn.text}</p>
+              ) : turn.role === 'user' ? (
+                <UserQuestion text={turn.text ?? ''} disabled={blocked} onResend={onResendMessage}
+                  failed={!!turn.failed} onRetry={turn.failed && i === turns.length - 1 && onRetry ? () => onRetry(turn) : undefined} />
               ) : (
                 <div className="assistant-body">
                   {turn.response && (
@@ -724,6 +731,13 @@ function ChatAreaView({ turns, loading, restoring, generating = loading, inputDi
                 <span className="think-label animate">{thinkingSeconds.toFixed(0)}초 동안 생각 중...</span>
               </div>
             </div>
+          )}
+          {expired && (
+            <div className="message"><div className="chat-expired-notice" role="alert">
+              <strong>이 대화는 더 이어갈 수 없어요.</strong>
+              <p>서버에 보관하던 임시 대화가 만료되었어요(24시간 경과 또는 서버 재시작). 위의 기록은 이 화면에만 남아 있고, 이전 조건과 견적은 서버에 없어 이어서 계산할 수 없어요.</p>
+              <button type="button" disabled={loading} onClick={onRecover}>새 대화로 이어서 질문하기</button>
+            </div></div>
           )}
           <div ref={bottomRef} />
         </div>

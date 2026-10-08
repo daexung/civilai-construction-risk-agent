@@ -27,6 +27,8 @@ interface Conversation {
   turns: ChatTurn[];
   saved?: boolean;
   loaded?: boolean;
+  // 서버의 비회원 상태가 사라져(24시간·재시작) 이 thread로는 이어갈 수 없다. 복구 전까지 전송을 막는다.
+  expired?: boolean;
 }
 interface ConversationStore { activeId: string | null; conversations: Conversation[]; }
 const HISTORY_KEY = 'poomsemi-chat-history-v1';
@@ -61,8 +63,6 @@ export default function App() {
   const threadId = current?.threadId ?? null;
   const [loading, setLoading] = useState(false);
   const pendingRequest = useRef(false);
-  // 실패한 요청을 같은 내용으로 다시 보내면 같은 request_id를 써서 서버가 한 번만 실행·차감한다.
-  const failedRequest = useRef<{ key: string; id: string } | null>(null);
   const [usage, setUsage] = useState<UsageStatus | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
@@ -169,7 +169,7 @@ export default function App() {
 
   useEffect(() => {
     if (!accountId || loading || authLoading || deleting || renaming) return;
-    const temporary = storeRef.current.conversations.filter(chat => !chat.saved && chat.threadId);
+    const temporary = storeRef.current.conversations.filter(chat => !chat.saved && chat.threadId && !chat.expired);
     if (!temporary.length) { setMigrationError(''); return; }
     const userId = accountId;
     let active = true;
@@ -190,7 +190,12 @@ export default function App() {
             conversations: prev.conversations.filter(item => item.id !== savedId || item.id === chat.id).map(item => item.id === chat.id
               ? { ...item, id: savedId, threadId: savedId, saved: true, loaded: true,
                   turns: item.turns.map(turn => turn.response ? { ...turn, response: { ...turn.response, thread_id: savedId } } : turn) } : item) }));
-        } catch { failed = true; }
+        } catch (error) {
+          // 서버에서 사라진 임시 대화는 저장할 수 없다: 실패로 막지 않고 만료 안내로 넘긴다.
+          if (error instanceof Error && error.message === 'GUEST_EXPIRED') {
+            setStore(prev => ({ ...prev, conversations: prev.conversations.map(item => item.id === chat.id ? { ...item, expired: true } : item) }));
+          } else failed = true;
+        }
       }
       if (active) { setMigrating(false); if (failed) setMigrationError('임시 대화를 저장하지 못했습니다. 새로고침 전에 다시 시도해 주세요.'); }
     })();
@@ -237,7 +242,8 @@ export default function App() {
       msg === 'NETWORK_ERROR' ? '네트워크 연결을 확인해주세요.' :
       msg === 'SERVER_ERROR'  ? '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' :
       msg === 'AUTH_REQUIRED' ? '로그인을 확인할 수 없습니다. 다시 로그인해 주세요.' :
-      msg === 'NOT_FOUND' ? '대화를 찾을 수 없거나 임시 대화가 만료되었습니다.' :
+      msg === 'NOT_FOUND' ? '대화를 찾을 수 없습니다.' :
+      msg === 'GUEST_EXPIRED' ? '임시 대화가 만료되었습니다.' :
                                  'API 서버에 연결할 수 없습니다. 서버가 켜져 있는지 확인해주세요.';
     showToast(text, 'error');
   }, []);
@@ -253,24 +259,27 @@ export default function App() {
     const startedAt = performance.now();
     const requestUserId = user?.id ?? null;
     const existingChat = store.conversations.find(chat => chat.id === conversationId);
+    if (existingChat?.expired) { pendingRequest.current = false; return; }
     // Guest threads become member threads only after the server confirms the import.
     const saved = existingChat ? !!existingChat.saved : !!user;
-    const userTurn: ChatTurn = { id: uuidv4(), role: 'user', text: userLabel, sentAtMs: Date.now() };
+    // 답을 못 받은 마지막 질문을 같은 내용으로 다시 보내면 새 턴을 만들지 않고 그 턴을 다시 시도한다.
+    const last = existingChat?.turns[existingChat.turns.length - 1];
+    const retry = last?.role === 'user' && last.failed && JSON.stringify(last.failed.body) === JSON.stringify(body) ? last : undefined;
+    // 같은 서버 대화의 재시도는 같은 request_id(서버가 한 번만 실행·차감). 복구로 thread가 바뀌면 새 요청이다.
+    const requestId = retry?.failed?.thread === thread ? retry.failed.requestId : uuidv4();
+    const userTurn: ChatTurn = { id: retry?.id ?? uuidv4(), role: 'user', text: userLabel, sentAtMs: Date.now() };
     setStore(prev => {
       const existing = prev.conversations.find(chat => chat.id === conversationId);
       const chat: Conversation = existing
-        ? { ...existing, turns: [...existing.turns, userTurn] }
+        ? { ...existing, turns: retry ? existing.turns.map(turn => turn.id === retry.id ? userTurn : turn) : [...existing.turns, userTurn] }
         : { id: conversationId, title: userLabel.replace(/\s+/g, ' ').trim(), threadId: null, turns: [userTurn], saved, loaded: true };
       return { activeId: conversationId, conversations: [chat, ...prev.conversations.filter(item => item.id !== conversationId)] };
     });
     setLoading(true);
     trackEvent('question_submitted', { member: saved });
-    const requestKey = JSON.stringify([conversationId, thread, body]);
-    const requestId = failedRequest.current?.key === requestKey ? failedRequest.current.id : uuidv4();
     try {
       const response = await sendChat({ thread_id: thread, ...body, request_id: requestId,
         ...(saved ? { conversation_id: conversationId, user_label: userLabel } : {}) });
-      failedRequest.current = null;
       if (requestUserId && accountRef.current !== requestUserId) return;
       if (response.usage) setUsage(response.usage);
       const assistantTurn: ChatTurn = { id: uuidv4(), role: 'assistant', response,
@@ -278,8 +287,11 @@ export default function App() {
       setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => chat.id === conversationId
         ? { ...chat, threadId: response.thread_id, turns: [...chat.turns, assistantTurn] } : chat) }));
     } catch (err) {
-      failedRequest.current = { key: requestKey, id: requestId };
-      handleError(err);
+      const expired = !saved && err instanceof Error && err.message === 'GUEST_EXPIRED';
+      setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => chat.id === conversationId
+        ? { ...chat, expired: chat.expired || expired,
+            turns: chat.turns.map(turn => turn.id === userTurn.id ? { ...turn, failed: { body, thread, requestId } } : turn) } : chat) }));
+      if (!expired) handleError(err);  // 만료는 대화 안의 안내로 보여준다
     } finally {
       pendingRequest.current = false;
       setLoading(false);
@@ -288,6 +300,27 @@ export default function App() {
 
   const handleSendMessage = useCallback((text: string) => send(text, { message: text }, threadId), [send, threadId]);
   const handleResendMessage = useCallback((text: string) => send(text, { message: text, restart: true }, threadId), [send, threadId]);
+
+  const handleRetry = useCallback((turn: ChatTurn) => {
+    if (turn.failed) send(turn.text ?? '', turn.failed.body, threadId);
+  }, [send, threadId]);
+  // 새 서버 대화로 이어간다. 이전 조건·견적은 서버에 없으므로 복원하지 않고, 질문도 자동으로 보내지 않는다.
+  const handleRecover = useCallback(() => {
+    setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => {
+      if (chat.id !== prev.activeId || !chat.expired) return chat;
+      const last = chat.turns[chat.turns.length - 1];
+      const body = last?.failed?.body;
+      const cardAnswer = body && ('answers' in body || 'refs' in body);
+      const notice: ChatTurn = { id: uuidv4(), role: 'notice', text: cardAnswer
+        ? '여기부터 새 대화예요. 위의 이전 조건과 선택은 이어지지 않아요. 원하는 내용을 새로 입력해 주세요.'
+        : '여기부터 새 대화예요. 위의 이전 조건과 견적은 이어지지 않아요.' };
+      // 글 질문만 message로 다시 시도한다. 카드 답은 안내 위에 남겨 재전송을 막는다.
+      const turns = last?.failed && body?.message && !cardAnswer
+        ? [...chat.turns.slice(0, -1), notice, { ...last, failed: { ...last.failed, body: { message: body.message } } }]
+        : [...chat.turns, notice];
+      return { ...chat, expired: false, threadId: null, turns };
+    }) }));
+  }, []);
 
   const handleSendAnswers = useCallback((answers: Record<string, ChoiceValue>, summary: string, refs?: Record<string, string>) => {
     return send(summary, refs ? { answers, refs } : { answers }, threadId);
@@ -314,7 +347,9 @@ export default function App() {
             { id: uuidv4(), role: 'assistant', response, elapsedMs, receivedAtMs }] }
           : { ...chat, turns: chat.turns.map(turn => turn.id === turnId ? { ...turn, response, elapsedMs, receivedAtMs } : turn) } : chat) }));
     } catch (err) {
-      handleError(err);
+      if (!current?.saved && err instanceof Error && err.message === 'GUEST_EXPIRED') {
+        setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => chat.id === conversationId ? { ...chat, expired: true } : chat) }));
+      } else handleError(err);
     } finally {
       pendingRequest.current = false;
       setLoading(false);
@@ -375,7 +410,7 @@ export default function App() {
     setDeleteError('');
     try {
       try { await deleteConversation(chat.id, !!chat.saved, chat.threadId); }
-      catch (error) { if (!(error instanceof Error) || error.message !== 'NOT_FOUND') throw error; }
+      catch (error) { if (!(error instanceof Error) || !['NOT_FOUND', 'GUEST_EXPIRED'].includes(error.message)) throw error; }
       if (accountRef.current !== userId) return;
       setStore(prev => ({ activeId: prev.activeId === chat.id ? null : prev.activeId,
         conversations: prev.conversations.filter(item => item.id !== chat.id) }));
@@ -439,7 +474,10 @@ export default function App() {
         restoring={restoringConversation}
         loading={loading || restoringConversation || historyLoading || authInitializing || deleting || renaming || migrating || authLoading}
         generating={loading}
-        inputDisabled={!!(user && current && !current.saved && migrationError) || !!(usage && (usage.remaining === 0 || usage.service_remaining === 0))}
+        expired={!!current?.expired}
+        onRecover={handleRecover}
+        onRetry={handleRetry}
+        inputDisabled={!!current?.expired || !!(user && current && !current.saved && migrationError) || !!(usage && (usage.remaining === 0 || usage.service_remaining === 0))}
         onSendMessage={handleSendMessage}
         onResendMessage={handleResendMessage}
         onSendAnswers={handleSendAnswers}
