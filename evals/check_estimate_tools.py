@@ -17,7 +17,8 @@ os.environ.setdefault("AGENT_LLM", "off")
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from backend.agent.estimate import tools  # noqa: E402
+from backend.agent.estimate import dialogue, tools  # noqa: E402
+from backend.agent.nodes.fill import _norm, _quantity, extract_inputs  # noqa: E402
 from backend.agent.nodes.compute import CALCULATORS  # noqa: E402
 from backend.agent.rules.conditions import price_fields  # noqa: E402
 from backend.agent.rules.specs import load_specs  # noqa: E402
@@ -172,6 +173,41 @@ def stale_checks():
 def main() -> int:
     checks = []
     pump, manual = spec_of("6-1-4"), spec_of("6-1-1")
+
+    # 단계 0: 공유 단위 표를 사용하는 물량·근거 파서, 실제 길이 조건의 회귀 방지.
+    for query, value, unit in [
+        ("콘크리트 타설 1m^3일 때 품 알려줘", "1", "m3"), ("1 m^3", "1", "m3"),
+        ("10m^2", "10", "m2"), ("2입방미터", "2", "m3"), ("3 cbm", "3", "m3"),
+        ("5평방미터", "5", "m2"), ("1m3", "1", "m3"), ("1㎥", "1", "m3"),
+        ("1세제곱미터", "1", "m3"), ("1루베", "1", "m3"), ("1m²", "1", "m2"),
+        ("5M3", "5", "m3"), ("펌프차 32m 붐", "32", "m"), ("높이 1m", "1", "m"),
+    ]:
+        quantity = dialogue._rule_quantity(query)
+        checks.append((f"U0 {query} → {value} {unit}",
+                       tools._quantities(query) == {(Fraction(value), unit)}
+                       and quantity is not None and quantity["value"] == value
+                       and tools.unit_key(quantity["unit"]) == unit
+                       and _quantity(_norm(query), unit) == (value, None)))
+    checks.append(("U0 15cm는 물량이 아닌 기존 15㎝ 슬럼프 조건",
+                   tools._quantities("15cm") == set() and dialogue._rule_quantity("15cm") is None
+                   and extract_inputs("15cm", pump) == ({"slump_band": "15㎝"}, {})))
+    checks.append(("U0 NFKC·소문자·공백 정규화 후 ^ 보존", _norm("1 M^3") == "1m^3"))
+    checks.append(("U0 지수 표기의 m 부분만 길이로 읽지 않음",
+                   _quantity(_norm("1m^3"), "m") == (None, None)
+                   and tools._quantities("1m^4") == set()))
+    checks.append(("U0 단위당 기준은 변경 물량에서 제외",
+                   dialogue._rule_quantity("1m^3당", per_unit=False) is None))
+    query = "콘크리트 타설 1m^3일 때 품 알려줘"
+    unit_session = started(query)
+    kept = tools.set_conditions(unit_session, query, quantity=dialogue._rule_quantity(query))
+    tools.set_conditions(unit_session, "", work="6-1-4", source="answer")
+    labor = tools.compute_labor(unit_session)
+    checks.append(("U0 펌프차 선택 후 물량 1㎥ 보존·단위 불일치 안내 없음",
+                   not kept["rejected"] and labor["status"] == "needs_input"
+                   and set(fields_of(labor)) == set(PUMP)
+                   and tools._item(unit_session)["conditions"].get("volume") == "1"
+                   and tools.unit_key(dialogue._request_quantity(unit_session, query)["unit"]) == "m3"
+                   and all("맞지 않아요" not in (q.get("reason") or "") for q in labor["missing"])))
 
     # 1. 조건 분류
     checks.append(("C1 6-1-4 가격 조건", price_fields(pump) == {"concrete_supply", "ready_mix_price"}))
