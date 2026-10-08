@@ -84,3 +84,10 @@ test('feedback permits guests and verifies the expected member account without s
   await expect(sendFeedback(body, 'B')).rejects.toThrow('AUTH_REQUIRED');
   expect(fetch).toHaveBeenCalledTimes(2);
 });
+
+test('guest expiry 404 is distinguished from a member conversation 404', async () => {
+  fetch.mockResolvedValueOnce({ ok: false, status: 404, json: async () => ({ detail: { code: 'GUEST_EXPIRED', message: '만료' } }) });
+  await expect(sendChat({ thread_id: 'gone', message: '질문' })).rejects.toThrow('GUEST_EXPIRED');
+  fetch.mockResolvedValueOnce({ ok: false, status: 404, json: async () => ({ detail: '대화를 찾을 수 없습니다.' }) });
+  await expect(sendChat({ conversation_id: 'saved', request_id: 'r', message: '질문' })).rejects.toThrow('NOT_FOUND');
+});

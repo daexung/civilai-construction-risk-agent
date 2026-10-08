@@ -434,3 +434,111 @@ test('a repeated question name keeps the selection on the current card only', as
   await act(async () => Simulate.click(latest().querySelector('.submit-answers-btn')));
   expect(sendChat.mock.calls[2][0].refs).toEqual({ scope: 'scope@1@2' });
 });
+
+test('expired guest thread keeps history, stops repeat sends, and recovers into a new server thread on demand', async () => {
+  await sendQuestion('첫 질문');
+  sendChat.mockRejectedValueOnce(new Error('GUEST_EXPIRED'));
+  await sendQuestion('이어서 질문');
+  expect(sendChat).toHaveBeenCalledTimes(2);
+  expect(container.querySelector('[role="alert"]').textContent).toContain('더 이어갈 수 없어요');
+  expect(container.querySelector('textarea').disabled).toBe(true);
+  expect(container.textContent).toContain('답변: 첫 질문');
+  expect(container.querySelectorAll('.message.user')).toHaveLength(2);
+  // 만료 상태에서는 다시 시도도 막아 같은 요청을 반복해서 실패시키지 않는다.
+  expect([...container.querySelectorAll('.user-question-failed button')].every(button => button.disabled)).toBe(true);
+  const expiredId = sendChat.mock.calls[1][0].request_id;
+
+  await act(async () => Simulate.click([...container.querySelectorAll('button')].find(button => button.textContent === '새 대화로 이어서 질문하기')));
+  expect(sendChat).toHaveBeenCalledTimes(2);  // 복구만으로는 아무것도 보내지 않는다
+  expect(container.querySelector('.chat-thread-notice').textContent).toContain('이어지지 않아요');
+
+  await act(async () => Simulate.click(container.querySelector('.user-question-failed button')));
+  const retried = sendChat.mock.calls[2][0];
+  expect(retried.thread_id).toBeNull();
+  expect(retried.message).toBe('이어서 질문');
+  expect(retried.request_id).not.toBe(expiredId);
+  expect(container.querySelectorAll('.message.user')).toHaveLength(2);
+  expect(container.querySelector('.user-question-failed')).toBeNull();
+  expect(container.textContent).toContain('답변: 이어서 질문');
+});
+
+test('a failed question is retried in place with the same request_id instead of being appended again', async () => {
+  sendChat.mockRejectedValueOnce(new Error('NETWORK_ERROR'));
+  await sendQuestion('끊긴 질문');
+  expect(container.querySelector('.user-question-failed').textContent).toContain('답변을 받지 못했어요');
+  await act(async () => Simulate.click(container.querySelector('.user-question-failed button')));
+  expect(sendChat.mock.calls[1][0].request_id).toBe(sendChat.mock.calls[0][0].request_id);
+  expect(container.querySelectorAll('.message.user')).toHaveLength(1);
+  expect(container.querySelector('.user-question-failed')).toBeNull();
+});
+
+
+test.each([false, true])('expired card answers stay above recovery notice without retry (refs: %s)', async withRefs => {
+  const question = { name: 'concrete_supply', ask: '관급입니까?', choices: ['관급', '사급'],
+    ...(withRefs ? { ref: 'i1:concrete_supply@v1@3' } : {}) };
+  sendChat.mockResolvedValueOnce({ ...response('thread-card', '조건을 확인해 주세요.'), status: 'MISSING_INFO',
+    inputs: [], conditions: [], evidence: [], questions: [question] });
+  await sendQuestion('비용 계산해줘');
+  act(() => Simulate.click([...container.querySelectorAll('.choice-btn')].find(button => button.textContent === '관급')));
+  sendChat.mockRejectedValueOnce(new Error('GUEST_EXPIRED'));
+  await act(async () => Simulate.click(container.querySelector('.submit-answers-btn')));
+  expect(sendChat).toHaveBeenCalledTimes(2);
+  expect(sendChat.mock.calls[1][0].answers).toEqual({ concrete_supply: '관급' });
+  expect(sendChat.mock.calls[1][0].refs).toEqual(withRefs ? { concrete_supply: question.ref } : undefined);
+  const failedTurn = container.querySelector('.user-question-failed').closest('.message');
+  const originalTurns = [...container.querySelectorAll('.messages > .message.user, .messages > .message.assistant')];
+  expect(container.querySelector('textarea').disabled).toBe(true);
+
+  await act(async () => Simulate.click([...container.querySelectorAll('button')].find(button => button.textContent === '새 대화로 이어서 질문하기')));
+  expect(sendChat).toHaveBeenCalledTimes(2);
+  expect(container.querySelector('.user-question-failed').textContent).toContain('답변을 받지 못했어요');
+  expect(container.querySelector('.user-question-failed button')).toBeNull();
+  expect([...container.querySelectorAll('.messages > .message')].slice(0, -1)).toEqual(originalTurns);
+  expect(container.querySelector('.user-question-failed').closest('.message')).toBe(failedTurn);
+  expect([...container.querySelectorAll('.messages > .message')].at(-1).querySelector('.chat-thread-notice')).not.toBeNull();
+  expect(container.querySelector('.chat-thread-notice').textContent).toContain('원하는 내용을 새로 입력해 주세요');
+  expect(container.querySelector('textarea').disabled).toBe(false);
+
+  await sendQuestion('새로 입력한 질문');
+  expect(sendChat).toHaveBeenCalledTimes(3);
+  expect(sendChat.mock.calls[2][0]).toEqual({ thread_id: null, message: '새로 입력한 질문', request_id: expect.any(String) });
+  expect(container.querySelector('.user-question-failed button')).toBeNull();
+});
+
+test('expired resend recovers as message only with a new request_id', async () => {
+  await sendQuestion('다시 보낼 질문');
+  sendChat.mockRejectedValueOnce(new Error('GUEST_EXPIRED'));
+  await act(async () => Simulate.click(container.querySelector('[aria-label="질문 다시 보내기"]')));
+  const failed = sendChat.mock.calls[1][0];
+  expect(failed).toEqual({ thread_id: 'thread-다시 보낼 질문', message: '다시 보낼 질문', restart: true, request_id: expect.any(String) });
+
+  await act(async () => Simulate.click([...container.querySelectorAll('button')].find(button => button.textContent === '새 대화로 이어서 질문하기')));
+  expect(sendChat).toHaveBeenCalledTimes(2);
+  expect([...container.querySelectorAll('.messages > .message')].at(-1).querySelector('.user-question-failed button').disabled).toBe(false);
+  await act(async () => Simulate.click(container.querySelector('.user-question-failed button')));
+  expect(sendChat).toHaveBeenCalledTimes(3);
+  const retried = sendChat.mock.calls[2][0];
+  expect(retried).toEqual({ thread_id: null, message: '다시 보낼 질문', request_id: expect.any(String) });
+  expect(retried.request_id).not.toBe(failed.request_id);
+  expect(container.querySelectorAll('.message.user')).toHaveLength(2);
+  expect(container.querySelector('.user-question-failed')).toBeNull();
+});
+
+test('card answers after a network error retry with the same body and request_id in the same thread', async () => {
+  sendChat.mockResolvedValueOnce({ ...response('thread-network-card', '조건을 확인해 주세요.'), status: 'MISSING_INFO',
+    inputs: [], conditions: [], evidence: [],
+    questions: [{ name: 'concrete_supply', ask: '관급입니까?', choices: ['관급', '사급'], ref: 'i1:concrete_supply@v1@3' }] });
+  await sendQuestion('비용 계산해줘');
+  act(() => Simulate.click([...container.querySelectorAll('.choice-btn')].find(button => button.textContent === '관급')));
+  sendChat.mockRejectedValueOnce(new Error('NETWORK_ERROR'));
+  await act(async () => Simulate.click(container.querySelector('.submit-answers-btn')));
+  const failed = sendChat.mock.calls[1][0];
+  expect(failed.thread_id).toBe('thread-network-card');
+  expect(failed.answers).toEqual({ concrete_supply: '관급' });
+  expect(failed.refs).toEqual({ concrete_supply: 'i1:concrete_supply@v1@3' });
+  await act(async () => Simulate.click(container.querySelector('.user-question-failed button')));
+  expect(sendChat).toHaveBeenCalledTimes(3);
+  expect(sendChat.mock.calls[2][0]).toEqual(failed);
+  expect(container.querySelectorAll('.message.user')).toHaveLength(2);
+  expect(container.querySelector('.user-question-failed')).toBeNull();
+});

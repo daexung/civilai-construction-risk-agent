@@ -1105,3 +1105,13 @@ button.source-page-badge:hover { color: var(--point); background: var(--point-ti
 .estimate-tab-row button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 .estimate-tabs [role="tabpanel"] { min-width: 0; }
 .simple-answer-badge { font-size: 11px; color: var(--text-secondary); }
+
+.user-question-failed { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin: 6px 0 0; font-size: 13px; color: var(--text-muted); }
+.user-question-failed button { padding: 4px 10px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-primary); cursor: pointer; }
+.user-question-failed button:disabled { opacity: .4; cursor: default; }
+.chat-thread-notice { margin: 8px auto; padding: 6px 12px; border-top: 1px dashed var(--border-color); text-align: center; font-size: 13px; color: var(--text-muted); }
+.chat-expired-notice { margin: 0; padding: 14px 16px; border: 1px solid var(--status-warning); border-radius: 12px; background: var(--status-warning-tint); color: var(--text-primary); font-size: 14px; }
+[data-theme="dark"] .chat-expired-notice { background: #3a2f12; border-color: #78530f; }
+.chat-expired-notice p { margin: 6px 0 10px; line-height: 1.5; }
+.chat-expired-notice button { padding: 8px 14px; border: 0; border-radius: 8px; background: #3a7d44; color: #fff; cursor: pointer; }
+.chat-expired-notice button:disabled { opacity: .5; cursor: default; }
