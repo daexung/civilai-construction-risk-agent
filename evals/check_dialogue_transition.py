@@ -89,6 +89,7 @@ def flow(post, export, has_dialogue_state, label: str) -> list[tuple[str, bool]]
 def main() -> int:
     checks = []
     with patch("backend.api.usage_limits.processing", return_value=nullcontext((None, "fixture", False))), \
+            patch("backend.api.usage_limits.status", return_value={}), \
             patch("backend.api.usage_limits.consume", return_value={}), \
             patch.object(api_main, "warmup_client", return_value=True), \
             TestClient(api_main.app, headers={"X-Guest-Session": SECRET}) as http:

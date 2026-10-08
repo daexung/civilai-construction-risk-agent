@@ -86,12 +86,16 @@ test('guest sidebar follows server usage, distinguishes shared limits and hides 
 });
 
 test('missing pump conditions explain the request and preserve only server questions', () => {
-  const questions = [{ name: 'slump_band', ask: '슬럼프는?', choices: ['15㎝', '18㎝이상'] }];
+  const questions = [{ name: 'slump_band', ask: '슬럼프는?', choices: ['15㎝', '18㎝이상'], ref: 'slump@1@1' }];
   const response = { ...demo.response, status: 'MISSING_INFO', answer: null, message: '조건을 확인해 주세요.', result: null, questions };
   act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response }]} />));
   expect(container.querySelector('[aria-label="추가 조건 안내"]').textContent).toContain('시공량과 비용이 달라져요');
   expect(container.querySelectorAll('.question-card')).toHaveLength(1);
+  expect(container.querySelector('.submit-answers-btn').previousElementSibling.textContent).toBe('선택한 답은 이용 횟수에서 차감되지 않아요.');
   expect(container.querySelector('.question-list').textContent).not.toContain('물량은');
+  const legacy = { ...response, questions: questions.map(({ ref, ...question }) => question) };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response: legacy }]} />));
+  expect(container.querySelector('.question-list').textContent).not.toContain('차감되지 않아요');
 });
 
 test('numeric question saved with a text choices description still renders instead of crashing', () => {
