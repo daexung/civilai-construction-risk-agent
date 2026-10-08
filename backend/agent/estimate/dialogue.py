@@ -87,12 +87,13 @@ def _lookup_only(message: str) -> bool:
 def _answers_pending(state: DialogueState, message: str) -> bool:
     """대기 중인 서버 질문(붐 길이·물량 등)의 값을 문장으로 답했는지. 그런 답은 조회 질문이 아니다."""
     session, pending = state.get("session"), {question["field"] for question in state.get("pending") or []}
-    if not session or not pending:
+    if not session:
         return False
     changes = _rule_changes(session, message)
     spec = tools._spec(tools._item(session))
     quantity_name = (tools._quantity_field(spec) or {}).get("name") if spec else None
-    return bool(pending & set(changes.get("values") or {})) or (
+    return bool((pending | {field["name"] for field in (spec or {}).get("inputs", []) if "default" in field})
+                & set(changes.get("values") or {})) or (
         "quantity" in changes and (bool(pending & {"quantity", quantity_name})
             # 단위당 답변에서 생략한 물량도 나중에 같은 단위로 말하면 조건 답으로 받는다.
             or (state.get("goal") == "labor" and quantity_name not in tools._item(session).get("conditions", {})
@@ -520,7 +521,10 @@ def _reply(state: DialogueState, log: list, notices: list, message: str, budget:
     quantity_hint = ("총 인원·작업일수가 필요하면 물량을 알려 주세요."
                      if not state["pending"] and any(entry["result"].get("data", {}).get("per_unit_only") for entry in log)
                      else "")
+    assumptions = tools._item(state["session"]).get("assumptions", "") if state.get("session") else ""
     template = _template(state, log, facts, notices)
+    if assumptions:
+        template += "\n" + assumptions
     if quantity_hint:
         template += "\n" + quantity_hint
     if not use_llm or not log:
@@ -528,6 +532,7 @@ def _reply(state: DialogueState, log: list, notices: list, message: str, budget:
     # 사용자에게 보일 값은 기존 표시 규칙(끝나는 소수 그대로, 순환소수 괄호 표기)으로 준다. 검증은 정확값으로 한다.
     shown = [{**fact, "value": fact.get("shown") or reply_check.display(fact["value"])} for fact in facts]
     prompt = {"user_message": message, "notices": notices, "facts": shown, "quantity_hint": quantity_hint,
+              "assumptions": assumptions,
               "pending_questions": [question["ask"] for question in state["pending"][:1]],
               "tool_results": [{"tool": entry["tool"], "status": entry["result"]["status"],
                                 "data": _compact(entry["result"].get("data", {}))} for entry in log]}
@@ -555,6 +560,8 @@ def _reply(state: DialogueState, log: list, notices: list, message: str, budget:
     if problem:
         return {"text": template, "source": "template", "rejected": problem, "rejected_text": data.get("text")}
     text = "\n".join([*notices, data["text"]])
+    if assumptions and assumptions not in text:
+        text += "\n" + assumptions
     if quantity_hint and quantity_hint not in text:
         text += "\n" + quantity_hint
     return {"text": text, "source": "llm", "rejected": None}

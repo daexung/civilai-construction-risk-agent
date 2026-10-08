@@ -53,8 +53,8 @@ def run(http, label: str) -> list[tuple[str, bool]]:
               "| 검색 방식·경고:", t1.get("search"))
         return checks
     t2 = answer(t1, {"work": EXPECTED})
-    checks.append((f"{label} S2 품 조건만 질문", set(q["field"] for q in dialogue.load(api_main.DIALOGUE, thread)["pending"]) == set(PUMP)
-                   and [q["name"] for q in t2["questions"]] == ["pump_size"] and t2["questions_remaining"] == len(PUMP)))
+    checks.append((f"{label} S2 품 조건만 질문", set(q["field"] for q in dialogue.load(api_main.DIALOGUE, thread)["pending"]) == set(PUMP) - {"placement", "vibrator_used", "reset_status"}
+                   and [q["name"] for q in t2["questions"]] == ["pump_size"] and t2["questions_remaining"] == 5))
     t2b = answer(t2, PUMP)
     checks.append((f"{label} S2 1㎥ 품 결과(물량 1)", t2b["status"] == "COMPUTED"
                    and any(row["name"] == "volume" and row["value"] == "1" for row in t2b["inputs"])))

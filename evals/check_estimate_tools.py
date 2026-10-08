@@ -212,6 +212,12 @@ def check_per_unit_without_quantity(checks):
     result = tools.compute_labor(session, allow_per_unit=True)
     checks.append(("U5 실제 물량 의존 명세는 물량 질문 유지", result["status"] == "needs_input" and quantity in fields_of(result)))
     pump = spec_of("6-1-4")
+    session = started("콘크리트 타설 1m 품 알려줘")
+    tools.set_conditions(session, "콘크리트 타설 1m 품 알려줘", quantity=dialogue._rule_quantity("1m"))
+    tools.set_conditions(session, "", work="6-1-4", source="answer")
+    mismatch = tools.compute_labor(session, allow_per_unit=True)
+    checks.append(("U12 품 목표도 단위 불일치 물량을 맨 앞에 질문", mismatch["missing"][0]["field"] == "volume"
+                   and "맞지 않아요" in mismatch["missing"][0]["reason"]))
     for key in ("crew_rules", "surcharges", "note_adjustments", "blocked", "tables"):
         dependent = copy.deepcopy(pump); dependent.setdefault(key, []).append({"when": {"volume": "1"}})
         checks.append((f"U6 {key} 물량 참조 감지", tools._quantity_dependent(dependent)))
@@ -252,7 +258,7 @@ def main() -> int:
     labor = tools.compute_labor(unit_session)
     checks.append(("U0 펌프차 선택 후 물량 1㎥ 보존·단위 불일치 안내 없음",
                    not kept["rejected"] and labor["status"] == "needs_input"
-                   and set(fields_of(labor)) == set(PUMP)
+                   and set(fields_of(labor)) == set(PUMP) - {"placement", "vibrator_used", "reset_status"}
                    and tools._item(unit_session)["conditions"].get("volume") == "1"
                    and tools.unit_key(dialogue._request_quantity(unit_session, query)["unit"]) == "m3"
                    and all("맞지 않아요" not in (q.get("reason") or "") for q in labor["missing"])))
@@ -294,7 +300,7 @@ def main() -> int:
     tools.set_conditions(session, "", work="6-1-4", source="answer")
     labor_questions = tools.compute_labor(session)
     checks.append(("C3 품 단계 질문에 가격 조건 없음", labor_questions["status"] == "needs_input"
-                   and set(fields_of(labor_questions)) == set(PUMP)
+                   and set(fields_of(labor_questions)) == set(PUMP) - {"placement", "vibrator_used", "reset_status"}
                    and all(question["stage"] == "labor" for question in labor_questions["missing"])))
     checks.append(("C3 질문 선택지는 목록 또는 null", all(q["choices"] is None or isinstance(q["choices"], list)
                                                   for q in labor_questions["missing"])))

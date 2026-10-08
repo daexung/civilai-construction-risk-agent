@@ -112,7 +112,7 @@ def _build_conditions(item: EstimateItem, spec: dict) -> tuple[dict, str | None]
 
     체크포인트 ad38869의 estimate/flow.py와 같은 규칙이다.
     """
-    stated, _ = extract_inputs(item["request_text"], spec)
+    stated, ambiguities = extract_inputs(item["request_text"], spec)
     fields = {field["name"]: field for field in spec["inputs"]}
     conditions = {name: value for name, value in stated.items() if name in fields}
     quantity_field = _quantity_field(spec)
@@ -142,6 +142,15 @@ def _build_conditions(item: EstimateItem, spec: dict) -> tuple[dict, str | None]
         elif name in fields:
             conditions.pop(name, None)
             item["question_reasons"].setdefault(name, "받은 값이 이 공종의 선택지와 맞지 않아요. 다시 골라 주세요.")
+    defaulted = {}
+    for name, field in fields.items():
+        if ("default" in field and name not in conditions and name not in item["explicit"]
+                and name not in ambiguities and _valid_for_field(field["default"], field)):
+            conditions[name] = field["default"]
+            defaulted[name] = field["default"]
+    item["defaulted_inputs"] = defaulted
+    notes = [fields[name].get("default_note") or f"{name} {value}" for name, value in defaulted.items()]
+    item["assumptions"] = "가정: " + ", ".join(notes) + " — 다르면 말씀해 주세요." if notes else ""
     return conditions, mismatch
 
 
@@ -418,9 +427,11 @@ def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> 
     if not (item["status"] == "PRICED" and item.get("result_revision") == item["input_revision"]):
         item["status"] = "READY"
     result = item["computed_result"]
+    result["assumptions"] = item.get("assumptions", "")
     return _result("ok", item, {
         "spec_id": spec["id"], "section": item["selection"].get("section"), "review_status": spec.get("review", ""),
         "unit_basis": result.get("unit_basis"), "unit_lines": result["unit_lines"], "per_unit_only": per_unit_only,
+        "assumptions": result["assumptions"],
         **{name: result.get(name) for name in ("daily_volume_m3", "work_days", "person_days",
                                                "equipment_days", "equipment_units")},
         "quantity": conditions.get(quantity_field["name"]) if quantity_field else None,
@@ -457,6 +468,8 @@ def estimate_cost(session: EstimateSession) -> dict:
         session.update(statement=None, statement_key=None)
         return _result("error", item, {"reason": f"원가계산서를 만들 수 없습니다({outcome['status']})",
                                        "priced": priced})
+    if item.get("assumptions"):
+        session["statement"].setdefault("basis_notes", []).append(item["assumptions"] + " (출처: 기본값)")
     session["statement_key"] = _statement_key(session)
     return _result("ok", item, {**labor["data"], "priced": priced, "statement": session["statement"],
                                 "common": copy.deepcopy(session["common_conditions"]),

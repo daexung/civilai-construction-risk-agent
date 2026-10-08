@@ -300,6 +300,7 @@ function ComputedCard({ work, inputs, result, priced, tables, response }: {
     .map((item) => `${item.label} ${choiceLabel(item.value)}`).join(' · ');
   return (
     <div className="computed-card">
+      {result.assumptions && <p className="unit-note">{result.assumptions}</p>}
       {result.per_unit_only && <p className="unit-note">단위당 품 — 총 인원·작업일수가 필요하면 물량을 알려 주세요.</p>}
       <EstimateTabs resetToken={response} tabs={[
         ...(tables.statement_rows.length ? [{ id: 'statement', label: '원가계산서', content:

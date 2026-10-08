@@ -305,7 +305,8 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
                   "crew": None, "rules": [], "source": line["source"],
                   "citations": _citations_out(line["citations"])}
                  for line in raw["unit_lines"] if not raw.get("per_unit_only")]
-        return {"per_unit_only": raw.get("per_unit_only", False), "daily_volume": None, "work_days": None, "lines": lines,
+        return {"assumptions": raw.get("assumptions", ""), "per_unit_only": raw.get("per_unit_only", False),
+                "daily_volume": None, "work_days": None, "lines": lines,
                 "unit_lines": [{**line, "citations": _citations_out(line["citations"])}
                                for line in raw["unit_lines"]],
                 "unit_basis": raw["unit_basis"],
@@ -349,6 +350,7 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
         })
 
     return {
+        "assumptions": raw.get("assumptions", ""),
         "per_unit_only": raw.get("per_unit_only", False),
         "daily_volume": {
             "value": raw["daily_volume_m3"],

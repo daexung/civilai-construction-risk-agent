@@ -140,8 +140,9 @@ test('one server question shows the remaining count only when two or more remain
 test('per-unit result shows unit labor and daily output without totals', () => {
   const response = { ...demo.response, status: 'COMPUTED', priced: null, statement: null,
     tables: { ...demo.response.tables, statement_rows: [], bill: null, rate_rows: [] },
-    result: { ...demo.response.result, per_unit_only: true, work_days: null, lines: [] } };
+    result: { ...demo.response.result, per_unit_only: true, assumptions: "가정: 붐 타설, 진동기 사용, 재셋팅 없음 — 다르면 말씀해 주세요.", work_days: null, lines: [] } };
   act(() => root.render(<ChatArea {...props} turns={[{ id: 'unit', role: 'assistant', response }]} />));
+  expect(container.querySelector('.computed-card').textContent).toContain('가정: 붐 타설, 진동기 사용, 재셋팅 없음');
   expect(container.textContent).toContain('단위당 품');
   expect(container.textContent).toContain('총 인원·작업일수가 필요하면 물량을 알려 주세요.');
   const basis = Array.from(container.querySelectorAll('button')).find(button => button.textContent === '산출근거');

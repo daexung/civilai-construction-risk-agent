@@ -828,6 +828,11 @@ def _basis_rows(response: dict) -> list[list]:
         for index, note in enumerate(notes[:2]):
             label = "공사 규모 판정" if index == 0 else "안전관리비 기초액"
             basis.append([label, "", note, ""])
+    for entry in response.get("inputs", []):
+        if result.get("assumptions") and entry.get("source") == "기본값":
+            basis.append([entry["label"], None, f"명세 기본값 적용: {entry['value']}", entry["source"]])
+    if result.get("assumptions"):
+        basis.append(["가정", None, result["assumptions"], "기본값"])
     return basis
 
 

@@ -129,6 +129,8 @@ def check_free_card_answers(checks: list) -> None:
             return post({"message": "콘크리트 타설 1세제곱미터 품셈 알려줘"})
 
         def card(previous, values):
+            values = {name: value for name, value in values.items() if name not in {"placement", "vibrator_used", "reset_status"} or name in
+                      {q["field"] for q in dialogue.load(api_main.DIALOGUE, previous["thread_id"])["pending"]}}
             return {"thread_id": previous["thread_id"], "answers": values,
                     "refs": {q["field"]: q["ref"] for q in dialogue.load(api_main.DIALOGUE, previous["thread_id"])["pending"] if q["field"] in values}}
 
@@ -271,12 +273,11 @@ def check_one_question(checks: list) -> None:
         def state(reply):
             return dialogue.load(api_main.DIALOGUE, reply["thread_id"])
 
-        expected = ["pump_size", "structure", "slump_band", "facility_type", "site_type", "placement",
-                    "vibrator_used", "reset_status", "volume"]
+        expected = ["pump_size", "structure", "slump_band", "facility_type", "site_type", "volume"]
         current = start()
-        checks.append(("O1 공종 선택 후 화면 붐 길이 1개·remaining 9·전체 pending 보존·물량 맨 뒤",
+        checks.append(("O1 공종 선택 후 화면 붐 길이 1개·remaining 6·전체 pending 보존·물량 맨 뒤",
                        [q["name"] for q in current["questions"]] == ["pump_size"]
-                       and current["questions_remaining"] == 9
+                       and current["questions_remaining"] == 6
                        and [q["field"] for q in state(current)["pending"]] == expected
                        and current["questions"][0]["ref"] == state(current)["pending"][0]["ref"]))
         sequence, counts = [], []
@@ -290,7 +291,7 @@ def check_one_question(checks: list) -> None:
             current = answer(current, values[sequence[-1]])
         print("ONE_QUESTION_SEQUENCE", sequence, "remaining", counts, "final", current["status"])
         checks.append(("O2 화면 카드로 하나씩: 물량 → 가격 → 결과, 매번 무료·LLM/검색 0",
-                       sequence == [*expected, "concrete_supply"] and counts == [9,8,7,6,5,4,3,2,1,1]
+                       sequence == [*expected, "concrete_supply"] and counts == [6,5,4,3,2,1,1]
                        and current["estimate_current"] and current["questions_remaining"] == 0
                        and len(consumed) == before and generate.call_count == retrieval.call_count == 0))
         for mode in ("rule", "llm"):
@@ -309,13 +310,13 @@ def check_one_question(checks: list) -> None:
                            and all(item["conditions"].get(k) == v for k,v in {"pump_size":"41m", "structure":"철근", "slump_band":"15㎝"}.items())
                            and [q["field"] for q in saved["pending"]] == expected[3:]
                            and [q["name"] for q in changed["questions"]] == ["facility_type"]
-                           and changed["questions_remaining"] == 6))
+                           and changed["questions_remaining"] == 3))
             if mode == "llm":
                 prompts = [(json.loads(call.args[0]), call.kwargs.get("response_schema")) for call in generate.call_args_list]
                 agent = [data for data,schema in prompts if schema is dialogue.ACTION_SCHEMA]
                 reply = [data for data,schema in prompts if schema is dialogue.REPLY_SCHEMA]
-                checks.append(("O4 LLM 행동 입력은 전체 pending 9개, 답변 입력만 첫 질문 1개",
-                               len(agent[0]["session"]["pending_questions"]) == 9
+                checks.append(("O4 LLM 행동 입력은 전체 pending 6개, 답변 입력만 첫 질문 1개",
+                               len(agent[0]["session"]["pending_questions"]) == 6
                                and reply[-1]["pending_questions"] == [saved["pending"][0]["ask"]]))
         hidden_start = start(); estimate_id = state(hidden_start)["session"]["estimate_id"]
         hidden = post({"thread_id": hidden_start["thread_id"], "message": "철근이야"})
@@ -324,14 +325,14 @@ def check_one_question(checks: list) -> None:
                        tools._item(saved["session"])["conditions"].get("structure") == "철근"
                        and saved["session"]["estimate_id"] == estimate_id
                        and [q["name"] for q in hidden["questions"]] == ["pump_size"]
-                       and hidden["questions_remaining"] == 8))
+                       and hidden["questions_remaining"] == 5))
         both_start = start(); estimate_id = state(both_start)["session"]["estimate_id"]
         both = post({"thread_id": both_start["thread_id"], "message": "41m에 철근이야"})
         saved = state(both); item = tools._item(saved["session"])
         checks.append(("O6 '41m에 철근이야'는 대기 답으로 반영·새 견적/범위 질문 아님",
                        saved["session"]["estimate_id"] == estimate_id and item["conditions"].get("pump_size") == "41m"
                        and item["conditions"].get("structure") == "철근"
-                       and both["questions"][0]["name"] == "slump_band" and both["questions_remaining"] == 7))
+                       and both["questions"][0]["name"] == "slump_band" and both["questions_remaining"] == 4))
         mismatch = start("콘크리트 타설 1m 비용 알려줘")
         checks.append(("O7 단위 불일치 물량은 맨 앞·불일치 사유 포함",
                        mismatch["questions"][0]["name"] == "volume"
@@ -401,6 +402,53 @@ def check_per_unit_dialogue(checks):
             door=post({"message":"자동문 설치 품 알려줘"})
         checks.append(("U10 조건은 물량뿐인 명세: 질문 0개 즉시 단위당 품", not door["questions"]
                        and door["result"]["per_unit_only"] and not door["result"]["lines"]))
+        one,order=pump("콘크리트 타설 1m^3일 때 품 알려줘")
+        expected=["pump_size","structure","slump_band","facility_type","site_type"]
+        assumption="가정: 붐 타설, 진동기 사용, 재셋팅 없음 — 다르면 말씀해 주세요."
+        checks.append(("B1 물량 1m^3 총량·질문 5개 순서·가정 표시",
+                       order==sequence==expected and one["result"]["work_days"] and not one["result"]["per_unit_only"]
+                       and one["result"]["assumptions"]==result["assumptions"]==assumption
+                       and assumption in one["message"] and assumption in current["message"]))
+        defaults={e["name"]:e for e in current["inputs"] if e["source"]=="기본값"}
+        checks.append(("B2 기본값 입력 출처 3개·다른 명세 기본값 없음",
+                       {k:e["value"] for k,e in defaults.items()}=={"placement":"붐","vibrator_used":True,"reset_status":"없음"}
+                       and sum("default" in f for s in load_specs().values() for f in s["inputs"])==3))
+        changed=post({"thread_id":current["thread_id"],"message":"배관 타설에 진동기 안 써"})
+        values={e["name"]:e for e in changed["inputs"]}
+        checks.append(("B3 글 답 배관·진동기 미사용 우선·가정에서 해당 두 항목 제외",
+                       values["placement"]["value"]=="배관" and values["vibrator_used"]["value"] is False
+                       and values["placement"]["source"]==values["vibrator_used"]["source"]=="답변"
+                       and changed["result"]["assumptions"]=="가정: 재셋팅 없음 — 다르면 말씀해 주세요."
+                       and "가정: 재셋팅 없음" in changed["message"]))
+        same,_=pump("펌프차 타설 품 알려줘")
+        same_state=dialogue.load(api_main.DIALOGUE,same["thread_id"])
+        old_key=tools._item(same_state["session"])["labor_key"]
+        same=post({"thread_id":same["thread_id"],"message":"붐 타설이야"})
+        same_state=dialogue.load(api_main.DIALOGUE,same["thread_id"])
+        checks.append(("B7 기본값과 같은 값을 명시: 캐시는 유지·출처/가정 갱신",
+                       tools._item(same_state["session"])["labor_key"]==old_key
+                       and next(e for e in same["inputs"] if e["name"]=="placement")["source"]=="답변"
+                       and same["result"]["assumptions"]=="가정: 진동기 사용, 재셋팅 없음 — 다르면 말씀해 주세요."))
+        reset=post({"thread_id":changed["thread_id"],"message":"재셋팅 있어"})
+        checks.append(("B4 재셋팅 있음 글 답은 기본값 대신 반영·기존 보류 유지",
+                       reset["status"]=="BLOCKED" and next(e for e in reset["inputs"] if e["name"]=="reset_status")["value"]=="있음"
+                       and "가정:" not in reset["message"]))
+        priced=post({"thread_id":one["thread_id"],"message":"비용 계산해줘"})
+        priced=answer(priced,"관급")
+        book=load_workbook(io.BytesIO(http.get(f"/api/export/{priced['thread_id']}.xlsx").content),data_only=True)
+        basis=list(book["산출근거"].values)
+        checks.append(("B5 비용·원가·Excel 산출근거: 기본값 입력/출처·가정 포함",
+                       priced["estimate_current"] and assumption in priced["result"]["assumptions"]
+                       and assumption in priced["message"] and any(assumption in n for n in priced["statement"]["basis_notes"])
+                       and all(any(e["label"]==row[0] and str(e["value"]) in (row[2] or "") and row[3]=="기본값" for row in basis) for e in defaults.values())))
+        reference=tools.new_estimate("콘크리트 타설 1㎥",priced["basis_date"])
+        tools.find_work(reference,hits=HITS); tools.set_conditions(reference,"",work="6-1-4",source="answer")
+        tools.set_conditions(reference,"",values={k:{"value":v} for k,v in {**PUMP,"concrete_supply":"관급"}.items()},source="answer")
+        explicit=tools.estimate_cost(reference)
+        checks.append(("B6 기본값과 같은 조건을 명시한 경우 전체 금액 동일",
+                       explicit["data"]["statement"]["totals"]==priced["statement"]["totals"]
+                       and [(l["name"],l["exact"]) for l in explicit["data"]["unit_lines"]]==[(l["name"],l["exact"]) for l in one["result"]["unit_lines"]]
+                       and not tools._item(reference)["computed_result"]["assumptions"]))
         saved=dialogue.load(api_main.DIALOGUE,empty["thread_id"])
         # 대본 답변이 후속 안내를 생략해도 서버가 붙이며, 입력에도 전달한다.
         saved["pending"]=[]
@@ -411,7 +459,8 @@ def check_per_unit_dialogue(checks):
             prompts.append(json.loads(prompt)); return json.dumps({"text":"품을 계산했어요."})
         reply=dialogue._reply(saved,log,[],"품 알려줘",dialogue.Budget(),generate,True)
         checks.append(("U11 모의 LLM 입력·최종 답변에 단위당 후속 안내", prompts[0]["quantity_hint"]
-                       and reply["text"].endswith(prompts[0]["quantity_hint"])))
+                       and reply["text"].endswith(prompts[0]["quantity_hint"])
+                       and prompts[0]["assumptions"]==assumption and assumption in reply["text"]))
 
 
 def main() -> int:
@@ -431,7 +480,11 @@ def main() -> int:
             return result.json()
 
         def answer(previous: dict, values: dict, refs: dict | None = None) -> dict:
-            refs = refs or {q["field"]: q["ref"] for q in stored(previous["thread_id"])["pending"] if q["field"] in values}
+            if refs is None:
+                names = {q["field"] for q in stored(previous["thread_id"])["pending"]}
+                values = {name: value for name, value in values.items()
+                          if name not in {"placement", "vibrator_used", "reset_status"} or name in names}
+                refs = {q["field"]: q["ref"] for q in stored(previous["thread_id"])["pending"] if q["field"] in values}
             return post({"thread_id": previous["thread_id"], "answers": values, "refs": refs})
 
         def stored(thread_id: str) -> dict:
@@ -450,8 +503,8 @@ def main() -> int:
         # 2. 공종 → 품 조건만(가격 조건·물량 없음) → 품과 근거
         llm.plan(("compute_labor", {}))
         t2 = answer(t1, {"work": "6-1-4"})
-        checks.append(("D2 품 조건만 질문(관급/사급·물량 없음)", set(q["field"] for q in stored(thread)["pending"]) == set(PUMP)
-                       and [q["name"] for q in t2["questions"]] == ["pump_size"] and t2["questions_remaining"] == len(PUMP)))
+        checks.append(("D2 품 조건만 질문(관급/사급·물량 없음)", set(q["field"] for q in stored(thread)["pending"]) == set(PUMP) - {"placement", "vibrator_used", "reset_status"}
+                       and [q["name"] for q in t2["questions"]] == ["pump_size"] and t2["questions_remaining"] == 5))
         llm.plan(("compute_labor", {}))
         t2b = answer(t2, PUMP)
         direct = CALCULATORS["adjusted_daily_crew"](next(s for s in load_specs().values() if s["section_no"] == "6-1-4"),
