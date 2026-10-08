@@ -3,7 +3,7 @@ from functools import cache
 import json
 import re
 from pathlib import Path
-from backend.agent.nodes.select import decide, MARGIN
+from backend.agent.nodes.select import decide
 from backend.agent.rules.specs import specs_by_section
 from backend.agent.tools.search.bm25 import tokens
 from backend.paths import ROOT
@@ -77,9 +77,8 @@ def build_context(hits, *, query="", sections=None, specs=None, limit=None):
     remaining_total = TOTAL_LIMIT
     words = set(tokens(query))
     conditions = re.findall(r"\d+(?:\.\d+)?\s*[가-힣㎡㎥%]+", query)
-    second = decision["candidates"][1] if len(decision["candidates"]) > 1 else None
-    confident = bool(candidates) and (decision["decision"] == "chosen" or second is None or
-                                     candidates[0]["score"] >= MARGIN * second["score"])
+    # Confidence follows the sum-score decision, not the reordered provisional candidates.
+    confident = bool(candidates) and decision["decision"] in ("chosen", "no_spec")
     for candidate_index, candidate in enumerate(candidates):
         budget = min(FIRST_LIMIT if candidate_index == 0 else remaining_total // (len(candidates) - candidate_index), remaining_total)
         if limit is not None:  # Explicit budgets retain the earlier bounded-context contract.
