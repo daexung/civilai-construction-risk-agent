@@ -140,7 +140,7 @@ _NUMERIC = {"positive_rational", "positive_currency", "nonnegative_integer"}
 _MISSING = object()
 _MULTIPLIER = {"억": 100_000_000, "만": 10_000}
 _UNIT_WORDS = sorted({alias for aliases in _UNIT_ALIASES.values() for alias in aliases}, key=len, reverse=True)
-_QUANTITY = re.compile(r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*(" + "|".join(map(re.escape, _UNIT_WORDS)) + r")(?![a-z0-9])")
+_QUANTITY = re.compile(r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*(" + "|".join(map(re.escape, _UNIT_WORDS)) + r")(?![a-z0-9^])")
 _NUMBER = re.compile(r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*(억|만)?")
 
 

@@ -138,7 +138,7 @@ def _volume(query: str) -> tuple[str | None, str | None]:
         if found[0] <= 0:
             return None, "물량은 0보다 커야 합니다"
         return _format_rational(found[0]), None
-    wrong_unit = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?\s*(?:m2|m|톤)(?![a-z0-9])", query, re.I)
+    wrong_unit = re.search(r"(?<![0-9a-z.])-?\d[\d,]*(?:\.\d+)?\s*(?:m2|m|톤)(?![a-z0-9^])", query, re.I)
     if wrong_unit:
         return None, "물량 단위가 ㎥/m3/루베가 아닙니다"
     without_options = re.sub(
@@ -152,8 +152,8 @@ def _volume(query: str) -> tuple[str | None, str | None]:
 
 
 _UNIT_ALIASES = {
-    "m3": ("m3", "루베", "세제곱미터"),
-    "m2": ("m2", "제곱미터"),
+    "m3": ("m3", "m^3", "루베", "세제곱미터", "입방미터", "cbm"),
+    "m2": ("m2", "m^2", "제곱미터", "평방미터"),
     "ton": ("ton", "톤", "t"),
     "m": ("m", "미터"),
     "km": ("km", "킬로미터"),
@@ -170,7 +170,7 @@ def _quantity(query: str, unit: str) -> tuple[str | None, str | None]:
         return None, None
     aliases = sorted(_UNIT_ALIASES[key], key=len, reverse=True)
     pattern = re.compile(r"(?<![0-9a-z.])(-?\d[\d,]*(?:\.\d+)?(?:/\d+)?)"
-                         r"(?:" + "|".join(map(re.escape, aliases)) + r")(?![a-z0-9])", re.I)
+                         r"(?:" + "|".join(map(re.escape, aliases)) + r")(?![a-z0-9^])", re.I)
     found = []
     for match in pattern.finditer(query):
         try:
