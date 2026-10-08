@@ -76,6 +76,7 @@ def main() -> int:
     index, method, warning = get_search()
     print(f"색인: chunks {len(index.chunks)}개, 방식 {method}, 경고 {warning}")
     with patch("backend.api.usage_limits.processing", return_value=nullcontext((None, "fixture", False))), \
+            patch("backend.api.usage_limits.status", return_value={}), \
             patch("backend.api.usage_limits.consume", return_value={}), \
             TestClient(api_main.app, headers={"X-Guest-Session": SECRET}) as http:
         checks = run(http, "[실제 검색]")

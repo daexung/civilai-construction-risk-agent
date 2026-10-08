@@ -105,6 +105,7 @@ def main() -> int:
         return original_turn(*args, **kwargs)
 
     with patch("backend.api.usage_limits.processing", return_value=nullcontext((None, "fixture", False))), \
+            patch("backend.api.usage_limits.status", return_value={}), \
             patch("backend.api.usage_limits.consume", side_effect=lambda quota, *request: consumed.append(1) or {}), \
             patch.object(tools, "retrieve", return_value={"hits": HITS}), \
             patch.object(client, "generate", llm), patch.object(api_main, "warmup_client", return_value=True), \
@@ -225,6 +226,7 @@ def main() -> int:
             raise TimeoutError("timed out")
 
     with patch("backend.api.usage_limits.processing", return_value=nullcontext((None, "fixture", False))), \
+            patch("backend.api.usage_limits.status", return_value={}), \
             patch("backend.api.usage_limits.consume", return_value={}), \
             patch.object(tools, "retrieve", return_value={"hits": HITS}), \
             patch.object(api_main, "warmup_client", return_value=True), \

@@ -175,6 +175,7 @@ class DialogueState(TypedDict, total=False):
     request: dict
     session: dict | None       # EstimateSession(항목 하나)
     pending: list              # 현재 대기 질문(ref 포함)
+    free_card_answers: int     # 성공해 저장된 무료 카드 답 턴 수
     pending_revision: int      # 질문을 새로 낼 때마다 오른다. 같은 필드의 예전 질문 답을 거른다
     goal: str | None           # "labor" | "cost"
     route: str | None
@@ -182,7 +183,7 @@ class DialogueState(TypedDict, total=False):
 
 
 def new_dialogue() -> DialogueState:
-    return {"session": None, "pending": [], "pending_revision": 0, "goal": None, "route": None, "turn": {}}
+    return {"session": None, "pending": [], "pending_revision": 0, "free_card_answers": 0, "goal": None, "route": None, "turn": {}}
 
 
 class Budget:
@@ -281,6 +282,7 @@ def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget:
                 return {"status": "rejected", "missing": [], "rejected": {}, "data": {
                     "reason": "지금 견적이 있어 새 견적을 시작하지 않았어요. 지금 견적으로 계산하려면 estimate_cost를 부르세요."}}
         state["session"] = session = tools.new_estimate(message, state["request"].get("basis_date"))
+        state["free_card_answers"] = 0
         # 계산 목표는 사용자 요청으로 정한다. 비용 요청이면 LLM이 compute_labor를 골라도 비용 목표를 유지한다.
         state["goal"] = "cost" if _rule_route(message, None) == "estimate" else "labor"
         state["fresh_session"] = True  # 첫 문장의 물량·조건은 변경이 아니라 시작 값이다
@@ -591,6 +593,8 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
     use_llm = os.environ.get("AGENT_LLM", "off") == "on" or generate is not client.generate
 
     answers = request.get("answers") or {}
+    if answers and not message:
+        use_llm = False  # 카드 답은 같은 도구의 규칙 경로와 템플릿만 쓴다.
     if answers and working["session"]:
         _apply_answers(working, answers, request.get("refs") or {}, log, notices)
     choice = working.pop("scope_choice", None)
@@ -655,6 +659,8 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
                        "llm_info": {**budget.record(), "rejected": reply["rejected"],
                                     "rejected_text": reply.get("rejected_text")},
                        "last_status": log[-1]["result"]["status"] if log else None}
+    if request.get("free_card_answer") and not working.get("fresh_session"):
+        working["free_card_answers"] += 1
     working.pop("request", None)
     working.pop("fresh_session", None)
     working.pop("pending_kept", None)

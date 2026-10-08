@@ -16,7 +16,7 @@ import time
 from contextlib import nullcontext
 from fractions import Fraction
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 os.environ.update(AGENT_OFFLINE="1", AGENT_LLM="on", AGENT_MODE="tools")
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,7 +30,7 @@ from backend.agent.estimate import dialogue, reply_check, tools  # noqa: E402
 from backend.agent.nodes.compute import CALCULATORS  # noqa: E402
 from backend.agent.rules.specs import load_specs  # noqa: E402
 from backend.agent.tools.llm import client  # noqa: E402
-from backend.api import dialogue_service  # noqa: E402
+from backend.api import chat_storage, dialogue_service  # noqa: E402
 
 HITS = [{"rank": rank, "section_no": no, "division": division, "section": f"{no} {title}", "page": page,
          "table_id": None, "text": title, "chunk_id": f"fixed-{rank}"}
@@ -92,11 +92,163 @@ def vague_after_ok(reply: dict, thread_id: str, before: tuple) -> bool:
     return [q["name"] for q in reply["questions"]] == ["scope"] and after == before
 
 
+def check_free_card_answers(checks: list) -> None:
+    """실제 API·체크포인트, 사용량/LLM/회원 DB만 모의 처리한다."""
+    llm, usage = ScriptedLLM(), {"used": 0}
+    original_free = dialogue_service.free_card_answer
+    member_lock = [False]
+
+    def status(*args):
+        return {"used": usage["used"], "remaining": 5 - usage["used"],
+                "service_remaining": 500 - usage["used"]}
+
+    def consume(*args):
+        usage["used"] += 1
+        return status()
+
+    def locked_free(graph, thread, request):
+        assert api_main._GUESTS[thread]["lock"].locked() if thread in api_main._GUESTS else member_lock[0]
+        return original_free(graph, thread, request)
+
+    with patch.dict(os.environ, {"AGENT_MODE": "tools", "AGENT_LLM": "on"}), \
+            patch("backend.api.usage_limits.processing", return_value=nullcontext((None, "fixture", False))), \
+            patch("backend.api.usage_limits.consume", side_effect=consume), \
+            patch("backend.api.usage_limits.status", side_effect=status), \
+            patch.object(dialogue_service, "free_card_answer", side_effect=locked_free), \
+            patch.object(tools, "retrieve", return_value={"hits": HITS}) as retrieval, \
+            patch.object(client, "generate", side_effect=llm) as generate, \
+            patch.object(api_main, "warmup_client", return_value=True), \
+            TestClient(api_main.app, headers={"X-Guest-Session": SECRET}) as http:
+        def post(body):
+            result = http.post("/api/chat", json=body)
+            assert result.status_code == 200, result.text
+            return result.json()
+
+        def start():
+            llm.plan(("find_work", {}), ("compute_labor", {}))
+            return post({"message": "콘크리트 타설 1세제곱미터 품셈 알려줘"})
+
+        def card(previous, values):
+            return {"thread_id": previous["thread_id"], "answers": values,
+                    "refs": {q["name"]: q["ref"] for q in previous["questions"] if q["name"] in values}}
+
+        first = start()
+        before = status()
+        generate.reset_mock(); retrieval.reset_mock()
+        body = {**card(first, {"work": "6-1-4"}), "request_id": "41111111-1111-4111-8111-111111111111"}
+        second = post(body)
+        state = dialogue.load(api_main.DIALOGUE, first["thread_id"])
+        checks.append(("C1 비회원 질문 1회 → work 카드 무료, usage·서비스 잔여 유지, LLM·검색 0, template",
+                       before["used"] == 1 and second["usage"] == before and state["free_card_answers"] == 1
+                       and generate.call_count == retrieval.call_count == 0 and second["answer_source"] == "template"))
+        replay = post(body)
+        checks.append(("C2 같은 request_id 무료 카드 재전송: 같은 응답·무료 횟수 1 유지",
+                       replay == second and dialogue.load(api_main.DIALOGUE, first["thread_id"])["free_card_answers"] == 1))
+        stale = post(card(first, {"work": "6-1-4"}))
+        checks.append(("C3 옛 ref는 차감 1·기존 미반영 안내", stale["usage"]["used"] == before["used"] + 1
+                       and "지금 확인하는 질문" in stale["message"]))
+        generate.reset_mock(); retrieval.reset_mock()
+        full = post(card(stale, PUMP))
+        checks.append(("C4 조건 카드 무료·LLM·검색 0·품 계산 완료",
+                       full["status"] == "COMPUTED" and full["usage"] == stale["usage"]
+                       and generate.call_count == retrieval.call_count == 0))
+        fresh = start()
+        generate.reset_mock(); before = usage["used"]
+        mixed = post({**card(fresh, {"work": "6-1-4"}), "message": "이 조건으로 품 알려줘"})
+        checks.append(("C5 answers+message 차감 1·LLM 경로 유지", usage["used"] == before + 1 and generate.call_count > 0))
+        before = usage["used"]
+        post({"thread_id": full["thread_id"], "conditions": {"duration": "7~12개월"}})
+        checks.append(("C6 conditions 재계산은 차감 1 유지", usage["used"] == before + 1))
+        current = start()
+        current = post(card(current, {"work": "6-1-4"}))
+        before = usage["used"]
+        for _ in range(29):
+            current = post(card(current, {"pump_size": "잘못된 값"}))
+        saved = dialogue.load(api_main.DIALOGUE, current["thread_id"])
+        checks.append(("C7 현재 ref의 잘못된 값 반복도 무료 횟수에 포함: 30회까지 차감 0",
+                       saved["free_card_answers"] == 30 and usage["used"] == before))
+        current = post(card(current, {"pump_size": "잘못된 값"}))
+        checks.append(("C8 31번째 카드부터 차감 1", usage["used"] == before + 1
+                       and dialogue.load(api_main.DIALOGUE, current["thread_id"])["free_card_answers"] == 30))
+        llm.plan(("find_work", {}), ("compute_labor", {}))
+        restarted = post({"thread_id": current["thread_id"], "message": "콘크리트 타설 1세제곱미터 품셈", "restart": True})
+        checks.append(("C9 restart 새 견적은 무료 횟수 0", dialogue.load(api_main.DIALOGUE, restarted["thread_id"])["free_card_answers"] == 0))
+        retry_first = start()
+        retry_body = {**card(retry_first, {"work": "6-1-4"}), "request_id": "42222222-2222-4222-8222-222222222222"}
+        before = usage["used"]
+        with patch.object(tools, "compute_labor", side_effect=RuntimeError("free card failure")):
+            failed = post(retry_body)
+        failure_state = dialogue.load(api_main.DIALOGUE, retry_first["thread_id"])
+        recovered = post(retry_body)
+        checks.append(("C10 실패한 무료 턴은 횟수·상태 유지, 같은 ID 재시도도 무료",
+                       failed["status"] == "ERROR" and failure_state["free_card_answers"] == 0
+                       and usage["used"] == before and recovered["status"] == "MISSING_INFO"
+                       and dialogue.load(api_main.DIALOGUE, recovered["thread_id"])["free_card_answers"] == 1))
+        # 실제 현재 scope ref여도 새 견적 시작은 유료이며 횟수는 0으로 초기화한다.
+        scope_state = dialogue.load(api_main.DIALOGUE, recovered["thread_id"])
+        scope_state["pending_revision"] += 1
+        question = dialogue._confirm_scope(scope_state, "콘크리트 타설 2세제곱미터 품셈")["missing"][0]
+        question["ref"] = dialogue._ref(question, scope_state["pending_revision"])
+        scope_state["pending"] = [question]
+        api_main.DIALOGUE.update_state(dialogue.config(recovered["thread_id"]), scope_state)
+        scope_response = dialogue_service.restore(api_main.DIALOGUE, recovered["thread_id"])
+        before = usage["used"]
+        new_estimate = post(card(scope_response, {"scope": dialogue.SCOPE_NEW}))
+        checks.append(("C10b 현재 ref의 새 견적 시작 카드도 차감 1·무료 횟수 0 초기화",
+                       usage["used"] == before + 1
+                       and dialogue.load(api_main.DIALOGUE, new_estimate["thread_id"])["free_card_answers"] == 0))
+        recovered = post(card(new_estimate, {"work": "6-1-4"}))
+        # 무료 조건의 경계: 누락·추가·다른 ref, conditions/restart, 새 검색 카드, legacy.
+        valid = card(recovered, {"pump_size": "32m"})
+        for label, changed in [
+            ("refs 누락", {"refs": {}}), ("answer ref 누락", {"answers": {"pump_size": "32m", "structure": "철근"}}),
+            ("추가 ref", {"refs": {**valid["refs"], "unknown": "other"}}),
+            ("빈 conditions도 제외", {"conditions": {}}), ("restart 제외", {"restart": True}),
+            ("새 견적 시작 카드 제외", {"answers": {"scope": dialogue.SCOPE_NEW}, "refs": {"scope": "scope@1@1"}}),
+        ]:
+            checks.append((f"C11 {label}: 무료 판정 false",
+                           not original_free(api_main.DIALOGUE, valid["thread_id"], {**valid, **changed})))
+        # 회원은 같은 실행 경로·MemorySaver와 DB transaction/lock/append_pair를 모의 확인한다.
+        member, conversation = "43333333-3333-4333-8333-333333333333", "44444444-4444-4444-8444-444444444444"
+        api_main.DIALOGUE.update_state(dialogue.config(conversation), dialogue.load(api_main.DIALOGUE, recovered["thread_id"]))
+        conn = MagicMock(); conn.__enter__.return_value = conn
+        duplicate = [None]
+        def execute(sql, args):
+            if "pg_advisory_xact_lock" in sql:
+                member_lock[0] = True
+            result = MagicMock()
+            result.fetchone.return_value = duplicate[0] if "SELECT payload" in sql else {"user_id": member}
+            return result
+        conn.execute.side_effect = execute
+        payload = api_main.ChatRequest(conversation_id=conversation, thread_id=conversation,
+                                       request_id="45555555-5555-4555-8555-555555555555",
+                                       answers=valid["answers"], refs=valid["refs"])
+        before = usage["used"]; generate.reset_mock(); retrieval.reset_mock()
+        with patch.object(chat_storage, "connection", return_value=conn), \
+                patch.object(chat_storage, "owned"), patch.object(chat_storage, "append_pair") as append, \
+                patch.object(api_main, "PostgresSaver", return_value=api_main.GRAPH.checkpointer):
+            member_response = api_main._member_chat(payload, member, (None, "fixture", True))
+            member_count = dialogue.load(api_main.DIALOGUE, conversation)["free_card_answers"]
+            duplicate[0] = {"payload": member_response}
+            member_replay = api_main._member_chat(payload, member, (None, "fixture", True))
+        checks.append(("C12 회원 lock 안 무료 판정·메시지 저장 1회·중복 재전송·LLM/검색 0 (DB mock)",
+                       member_lock[0] and usage["used"] == before and append.call_count == 1
+                       and member_response["usage"]["used"] == before and member_replay == member_response
+                       and dialogue.load(api_main.DIALOGUE, conversation)["free_card_answers"] == member_count
+                       and generate.call_count == retrieval.call_count == 0))
+        with patch.object(api_main, "_uses_dialogue", return_value=False), \
+                patch.object(api_main, "_chat_response", return_value={"thread_id": valid["thread_id"], "status": "MISSING_INFO"}):
+            before = usage["used"]
+            post(valid)
+        checks.append(("C13 legacy 카드도 기존처럼 차감", usage["used"] == before + 1))
+
+
 def main() -> int:
     checks = []
     llm = ScriptedLLM()
     consumed = []
     with patch("backend.api.usage_limits.processing", return_value=nullcontext((None, "fixture", False))), \
+            patch("backend.api.usage_limits.status", return_value={}), \
             patch("backend.api.usage_limits.consume", side_effect=lambda quota, *request: consumed.append(1) or {}), \
             patch.object(tools, "retrieve", return_value={"hits": HITS}), \
             patch.object(client, "generate", llm), patch.object(api_main, "warmup_client", return_value=True), \
@@ -131,10 +283,10 @@ def main() -> int:
         t2b = answer(t2, PUMP)
         direct = CALCULATORS["adjusted_daily_crew"](next(s for s in load_specs().values() if s["section_no"] == "6-1-4"),
                                                     {**PUMP, "volume": "1"}, labor_only=True)
-        checks.append(("D2 1㎥ 품 결과(계산기와 같음)·원가 없음·LLM 설명 검증 통과",
+        checks.append(("D2 1㎥ 품 결과(계산기와 같음)·원가 없음·카드 답 템플릿",
                        t2b["status"] == "COMPUTED" and item()["computed_result"]["unit_lines"] == direct["unit_lines"]
                        and t2b["statement"] is None and not t2b["estimate_current"]
-                       and t2b["answer_source"] == "llm" and "콘크리트공" in t2b["answer"]))
+                       and t2b["answer_source"] == "template" and "콘크리트공" in t2b["answer"]))
 
         # 3. 같은 조건으로 100세제곱미터 비용: 가격 조건만 묻는다
         llm.plan(("set_conditions", {"quantity": {"value": "100", "unit": "㎥", "evidence": "100세제곱미터"}}),
@@ -693,9 +845,12 @@ def main() -> int:
         checks.append(("D14 비회원 대화 삭제 시 대화 상태도 삭제", deleted == 204 and stored(thread) is None
                        and http.get(f"/api/export/{thread}.xlsx").status_code == 404))
 
+    check_free_card_answers(checks)
+
     # 13. 설정 off: 기존 흐름
     os.environ["AGENT_MODE"] = ""
     with patch("backend.api.usage_limits.processing", return_value=nullcontext((None, "fixture", False))), \
+            patch("backend.api.usage_limits.status", return_value={}), \
             patch("backend.api.usage_limits.consume", return_value={}), \
             patch.object(client, "generate", side_effect=AssertionError("LLM called")), \
             patch.dict(os.environ, {"AGENT_LLM": "off"}), \

@@ -518,14 +518,19 @@ function AssistantCard({
             />
           ))}
           {interactive && (
-            <button
-              type="button"
-              className="submit-answers-btn"
-              disabled={loading || Object.keys(draft).length === 0}
-              onClick={onSubmit}
-            >
-              이 조건으로 견적 계산하기
-            </button>
+            <>
+              {response.questions.every(question => question.ref) && draft.scope?.value !== '새 견적 시작' && (
+                <p>선택한 답은 이용 횟수에서 차감되지 않아요.</p>
+              )}
+              <button
+                type="button"
+                className="submit-answers-btn"
+                disabled={loading || Object.keys(draft).length === 0}
+                onClick={onSubmit}
+              >
+                이 조건으로 견적 계산하기
+              </button>
+            </>
           )}
         </div>
       )}

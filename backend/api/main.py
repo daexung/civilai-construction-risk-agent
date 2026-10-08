@@ -696,8 +696,10 @@ def _chat(payload: ChatRequest, request: Request, user_id: str | None, x_guest_s
                 guest = _guest(payload.thread_id, x_guest_session)
                 with guest["lock"]:
                     _guest(payload.thread_id, x_guest_session)
-                    used = _consume_once(quota, claim)
-                    response = _chat_response(payload)
+                    free = (_uses_dialogue(GRAPH.checkpointer, payload.thread_id)
+                            and dialogue_service.free_card_answer(DIALOGUE, payload.thread_id, payload.model_dump()))
+                    used = usage_limits.status(*quota) if free else _consume_once(quota, claim)
+                    response = _chat_response(payload, free_card_answer=free)
                     response["usage"] = used
                     guest["turns"].append((_guest_label(payload), copy.deepcopy(response)))
             else:
@@ -893,19 +895,22 @@ def _member_chat(payload: ChatRequest, user_id: str, quota, claim: dict | None =
                                  "AND request_id=%s AND role='assistant'", (conversation_id, request_id)).fetchone()
         if duplicate:
             return {**duplicate["payload"], "usage": usage_limits.status(*quota)}
-        used = _consume_once(quota, claim)
         graph = build_graph(PostgresSaver(conn))
         member_payload = payload.model_copy(update={"thread_id": conversation_id})
-        response = _chat_response(member_payload, graph, keep_thread=True)
+        free = (_uses_dialogue(graph.checkpointer, conversation_id)
+                and dialogue_service.free_card_answer(build_dialogue_graph(graph.checkpointer),
+                                                       conversation_id, member_payload.model_dump()))
+        used = usage_limits.status(*quota) if free else _consume_once(quota, claim)
+        response = _chat_response(member_payload, graph, keep_thread=True, free_card_answer=free)
         response["usage"] = used
         if response.get("status") != "ERROR":  # 실패 응답은 기록하지 않아 같은 request_id로 다시 실행할 수 있다
             chat_storage.append_pair(conn, conversation_id, request_id, label, response)
         return response
 
 
-def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
+def _chat_response(payload: ChatRequest, graph=None, keep_thread=False, *, free_card_answer=False) -> dict:
     if _uses_dialogue((graph or GRAPH).checkpointer, payload.thread_id):
-        return _dialogue_chat(payload, graph)
+        return _dialogue_chat(payload, graph, free_card_answer=free_card_answer)
     graph = graph or GRAPH
     if payload.conditions is not None:
         return _change_conditions(payload, graph)
@@ -948,12 +953,12 @@ def _chat_response(payload: ChatRequest, graph=None, keep_thread=False) -> dict:
     return _build_response(thread_id, state)
 
 
-def _dialogue_chat(payload: ChatRequest, graph=None) -> dict:
+def _dialogue_chat(payload: ChatRequest, graph=None, *, free_card_answer=False) -> dict:
     """AGENT_MODE=tools 한 턴. 턴 중 예외는 저장하지 않고 직전 확정 상태로 안내한다(설계 §8)."""
     dialogue_graph = DIALOGUE if graph is None else build_dialogue_graph(graph.checkpointer)
     thread_id = payload.thread_id or uuid4().hex
     request = {"message": payload.message, "answers": payload.answers, "refs": payload.refs,
-               "conditions": payload.conditions, "restart": payload.restart,
+               "conditions": payload.conditions, "restart": payload.restart, "free_card_answer": free_card_answer,
                "basis_date": payload.basis_date.isoformat() if payload.basis_date else None}
     try:
         return dialogue_service.respond(dialogue_graph, thread_id, request)

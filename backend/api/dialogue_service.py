@@ -20,6 +20,23 @@ def enabled() -> bool:
     return os.environ.get("AGENT_MODE", "") == "tools"
 
 
+FREE_CARD_ANSWER_LIMIT = 30
+
+
+def free_card_answer(graph, thread_id: str | None, request: dict) -> bool:
+    """대화 lock 안에서 현재 질문과 무료 횟수를 확인한다. 판정만 하고 상태는 바꾸지 않는다."""
+    answers, refs = request.get("answers") or {}, request.get("refs") or {}
+    if (not thread_id or not answers or not refs or request.get("message")
+            or request.get("conditions") is not None or request.get("restart")
+            or set(answers) != set(refs) or answers.get("scope") == dialogue.SCOPE_NEW):
+        return False  # 새 견적 시작은 새 검색이 필요하므로 기존처럼 차감한다.
+    state = dialogue.load(graph, thread_id)
+    if not state or state.get("free_card_answers", 0) >= FREE_CARD_ANSWER_LIMIT:
+        return False
+    pending = {question["field"]: question["ref"] for question in state.get("pending") or []}
+    return all(name in pending and pending[name] == ref for name, ref in refs.items())
+
+
 def respond(graph, thread_id: str, request: dict) -> dict:
     """한 턴을 실행해 저장하고 응답을 만든다. 턴 중 예외가 나면 저장하지 않고 직전 상태를 유지한다."""
     state = graph.invoke({"request": request}, dialogue.config(thread_id))
