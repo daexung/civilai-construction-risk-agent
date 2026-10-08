@@ -24,7 +24,7 @@ from fastapi.testclient import TestClient  # noqa: E402
 from openpyxl import load_workbook  # noqa: E402
 
 import backend.api.main as api_main  # noqa: E402
-from backend.agent.estimate import tools  # noqa: E402
+from backend.agent.estimate import dialogue, tools  # noqa: E402
 from backend.agent.nodes.retrieve import get_search  # noqa: E402
 from evals.check_dialogue import HITS, PUMP, SECRET  # noqa: E402
 
@@ -41,7 +41,7 @@ def run(http, label: str) -> list[tuple[str, bool]]:
 
     def answer(previous: dict, values: dict) -> dict:
         return post({"thread_id": previous["thread_id"], "answers": values,
-                     "refs": {q["name"]: q["ref"] for q in previous["questions"] if q["name"] in values}})
+                     "refs": {q["field"]: q["ref"] for q in dialogue.load(api_main.DIALOGUE, previous["thread_id"])["pending"] if q["field"] in values}})
 
     t1 = post({"message": "콘크리트 타설 1세제곱미터 품셈 알려줘"})
     thread = t1["thread_id"]
@@ -53,7 +53,8 @@ def run(http, label: str) -> list[tuple[str, bool]]:
               "| 검색 방식·경고:", t1.get("search"))
         return checks
     t2 = answer(t1, {"work": EXPECTED})
-    checks.append((f"{label} S2 품 조건만 질문", set(q["name"] for q in t2["questions"]) == set(PUMP)))
+    checks.append((f"{label} S2 품 조건만 질문", set(q["field"] for q in dialogue.load(api_main.DIALOGUE, thread)["pending"]) == set(PUMP)
+                   and [q["name"] for q in t2["questions"]] == ["pump_size"] and t2["questions_remaining"] == len(PUMP)))
     t2b = answer(t2, PUMP)
     checks.append((f"{label} S2 1㎥ 품 결과(물량 1)", t2b["status"] == "COMPUTED"
                    and any(row["name"] == "volume" and row["value"] == "1" for row in t2b["inputs"])))

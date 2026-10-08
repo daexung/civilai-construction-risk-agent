@@ -121,3 +121,17 @@ test('unit-based estimates state their scope and actual separately counted work'
   expect(guidance.textContent).toContain('단위당 작업 품');
   expect(guidance.textContent).toContain('유리공사, 전기 및 통신공사');
 });
+
+
+test('one server question shows the remaining count only when two or more remain', () => {
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null, result: null,
+    questions: [{ name: 'pump_size', ask: '펌프차 붐 길이는?', choices: ['32m', '41m'], ref: 'pump@1@1' }],
+    questions_remaining: 4 };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'one', role: 'assistant', response }]} />));
+  expect(container.querySelectorAll('.question-card')).toHaveLength(1);
+  expect(container.querySelector('.questions-remaining').textContent).toBe('남은 확인 4개');
+  for (const count of [1, undefined]) {
+    act(() => root.render(<ChatArea {...props} turns={[{ id: 'one', role: 'assistant', response: { ...response, questions_remaining: count } }]} />));
+    expect(container.querySelector('.questions-remaining')).toBeNull();
+  }
+});

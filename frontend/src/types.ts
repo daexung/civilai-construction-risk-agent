@@ -255,6 +255,7 @@ export interface ChatResponse {
   message: string;
   work: WorkInfo | null;
   questions: AgentQuestion[];
+  questions_remaining?: number;
   inputs: InputRow[];
   evidence: EvidenceItem[];
   result: ComputedResult | BlockedResult | null;
