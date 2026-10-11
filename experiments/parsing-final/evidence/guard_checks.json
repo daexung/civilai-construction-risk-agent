@@ -1,0 +1,41 @@
+{
+ "checks": [
+  {
+   "name": "숫자 머리글이 계수에 연결됨",
+   "passed": true
+  },
+  {
+   "name": "일반 숫자 본문을 머리글로 올리지 않음",
+   "passed": true
+  },
+  {
+   "name": "명시적 음영 머리글 우선",
+   "passed": true
+  },
+  {
+   "name": "짧은 공동 조건은 열 이름 유지",
+   "passed": true
+  },
+  {
+   "name": "병합 설명을 수량으로 복제하지 않음",
+   "passed": true
+  },
+  {
+   "name": "기존 비고 문장 분리 유지",
+   "passed": true
+  },
+  {
+   "name": "한 행 목록 전체가 머리글로 사라지지 않음",
+   "passed": true
+  },
+  {
+   "name": "다른 문서 해시의 교정 거부",
+   "passed": true
+  },
+  {
+   "name": "원래 칸 내용이 다르면 교정 거부",
+   "passed": true
+  }
+ ],
+ "failed": 0
+}

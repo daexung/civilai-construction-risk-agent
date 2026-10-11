@@ -1,0 +1,4342 @@
+[
+ {
+  "table_id": "full-p60-o3365",
+  "page": 60,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "단위표준: 줄마다 한 종목 행. 규격 단위 열 줄이 행마다 나뉨",
+  "remaining": [],
+  "before_records": 18,
+  "after_records": 18
+ },
+ {
+  "table_id": "full-p61-o3419",
+  "page": 61,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "단위표준: 줄마다 한 종목 행. 말뚝·돌망태의 둘째·셋째 규격 줄은 같은 행의 이어진 줄",
+  "remaining": [],
+  "before_records": 38,
+  "after_records": 37
+ },
+ {
+  "table_id": "full-p62-o3503",
+  "page": 62,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "단위표준: 관류 규격 세 줄은 같은 행",
+  "remaining": [],
+  "before_records": 16,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p65-o3713",
+  "page": 65,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "체적환산계수: 두 줄이 두 행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p67-o4154",
+  "page": 67,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 세 줄이 세 행",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p68-ocorrection:p68-t0",
+  "page": 68,
+  "before_reasons": [
+   "행 이름 구분 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "묶음 이름(가. 냉온수배관 등) 줄은 값이 없는 제목 줄. 아래 기계실·옥내일반 행 이름 앞에 붙임",
+  "remaining": [],
+  "before_records": 12,
+  "after_records": 12
+ },
+ {
+  "table_id": "full-p71-o4391",
+  "page": 71,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "토사류·석재류 두 행, 평균왕복속도는 두 행 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p73-o4572",
+  "page": 73,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "비고(모자이크 포함)는 띠 공통. (8㎜)·(300) 줄은 위 행의 이어진 줄. 종별 〃는 위 이름",
+  "remaining": [],
+  "before_records": 35,
+  "after_records": 33
+ },
+ {
+  "table_id": "full-p77-o5248",
+  "page": 77,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "긴 이름 두 줄과 가운데 값 6~7은 한 행",
+  "remaining": [],
+  "before_records": 14,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p78-o5288",
+  "page": 78,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "괄호 왼쪽 묶음 이름(목재·합판·벽돌·석재판붙임용재·래디믹스트·현장혼합)을 괄호 안 항목 행 이름 앞에",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 36
+ },
+ {
+  "table_id": "full-p79-o5340",
+  "page": 79,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "타일 괄호 묶음",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p80-o5391",
+  "page": 80,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "네 줄 네 행",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p80-o5413",
+  "page": 80,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "구분(본선상작업, 열차운행선 인접작업)은 띠 공통, 조건 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p81-o5451",
+  "page": 81,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "지상층·지하층 띠 공통, 조건 줄마다 행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p81-o5544",
+  "page": 81,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "산지 등급 정의: 한 행. 칸 안 여러 줄은 해당 산지의 대상 목록",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p82-o5592",
+  "page": 82,
+  "before_reasons": [
+   "칸 경계 넘음",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "지세구분: 띠마다 첫 열 공통, 둘째 열 항목마다 행. 지형·지세 띠는 여러 줄 설명 한 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p83-o5701",
+  "page": 83,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "도심지 할증: 띠 공통 구분, 15%는 세 행 공통값, 지하매설물은 별도 15%",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p84-o5802",
+  "page": 84,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "고소작업: 조건 줄마다 행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p92-o6379",
+  "page": 92,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "가설물 면적 산식 정의표: 한 행. 시멘트 창고 분수식 N/n 읽기 별도",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p93-o6484",
+  "page": 93,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "철골공작업장 두 용도 행, 석공작업장 비고 두 줄은 한 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p95-o6844",
+  "page": 95,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "PANEL/JOINT(AL-BAR) 두 줄 이름 한 행, 천장판 규격 두 줄 한 행",
+  "remaining": [],
+  "before_records": 15,
+  "after_records": 15
+ },
+ {
+  "table_id": "full-p96-o6973",
+  "page": 96,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "공기별 손율 12행",
+  "remaining": [],
+  "before_records": 12,
+  "after_records": 12
+ },
+ {
+  "table_id": "full-p107-o8492",
+  "page": 107,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "재료 6행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p124-o10490",
+  "page": 124,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "공사규모 정의: 한 행, 칸마다 두 줄 설명",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p126-o10945",
+  "page": 126,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "장비 편성(굴착기·대형브레이커)은 암분류 행 전체 공통 칸, 암분류 줄마다 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p130-o11370",
+  "page": 130,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "재료·인력·장비 9행",
+  "remaining": [],
+  "before_records": 9,
+  "after_records": 9
+ },
+ {
+  "table_id": "full-p149-o13763",
+  "page": 149,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p149-o13802",
+  "page": 149,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p149-o13841",
+  "page": 149,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p158-o14940",
+  "page": 158,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "크롤러드릴(탑승유압식) 두 줄 이름 한 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p168-o16243",
+  "page": 168,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "지질특성 띠 공통, 시공유형(천공/분사+주입) 줄마다 행",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p197-o20489",
+  "page": 197,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "3행",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p198-o20567",
+  "page": 198,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "3행",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p198-o20657",
+  "page": 198,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "3행",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p219-o23186",
+  "page": 219,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "공사규모 정의: 한 행",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p221-o23362",
+  "page": 221,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "운전사 구분 정의: 띠마다 한 행(이름 두 줄, 설명 여러 줄)",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p240-o25234",
+  "page": 240,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "기층·보조기층, 노체·축제·노상은 띠 공통 이름. (자주식)은 양족식롤러의 이어진 줄",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p247-o26314",
+  "page": 247,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "계수 A~E 다섯 개 독립 목록, 머리글 3행. 계수E 값은 재료분석 번호 항목과 순서 대응",
+  "remaining": [],
+  "before_records": 20,
+  "after_records": 48
+ },
+ {
+  "table_id": "full-p253-o26906",
+  "page": 253,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "토사류·석재류 2행, 속도는 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p257-o27240",
+  "page": 257,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "용접기 조합: 띠마다 한 행(규격 두 항목, 대수 1대/2대는 원문 그대로)",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p262-o27736",
+  "page": 262,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "항타·항발 2행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p263-o27805",
+  "page": 263,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "보정계수 f1~f4: 띠마다 한 행",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p265-o28136",
+  "page": 265,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "보정계수 f1~f3: 띠마다 한 행",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p265-o28188",
+  "page": 265,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "장비 조합 3행, 병합 값은 공통",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p266-o28249",
+  "page": 266,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "토질 띠 공통, 규격마다 행, 항타 조건 두 줄은 가운데 맞춘 규격 행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p268-o28423",
+  "page": 268,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "보정계수 f1~f4: 띠마다 한 행",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p268-o28490",
+  "page": 268,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "토질 띠 공통, 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p269-o28565",
+  "page": 269,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "토질·비고 띠 공통, 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 13
+ },
+ {
+  "table_id": "full-p270-o28677",
+  "page": 270,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "96㎾ 공통, 대수마다 행, ø150은 3대·4대 공통",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p271-o28767",
+  "page": 271,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "보정계수 f1~f3 띠마다 한 행",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p278-o29404",
+  "page": 278,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "단거리 능력 산정 예: 한 행. q=(185+174)/2 분수식 읽기 별도",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p283-o30113",
+  "page": 283,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "비고 42개는 분쇄기날 행 값(공통 아님)",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p284-o30207",
+  "page": 284,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "3행",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p319-o38195",
+  "page": 319,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "기종(수동 싱글 드럼, 더블 드럼)은 다음 기종 전까지 행에 걸침. 규격 (kW) 둘째 줄은 같은 행",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p319-o38296",
+  "page": 319,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "기종 아래로 걸침",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p334-o41746",
+  "page": 334,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 26,
+  "after_records": 26
+ },
+ {
+  "table_id": "full-p341-o44571",
+  "page": 341,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "준설선 선장·기관사·운전사 두 줄 이름",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p393-o53170",
+  "page": 393,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "비고 두 줄은 띠 공통",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p394-o53256",
+  "page": 394,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "세로 묶음 이름(착암·버력처리·숏크리트·록볼트) 띠 공통, 작업 줄마다 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 22
+ },
+ {
+  "table_id": "full-p396-o53437",
+  "page": 396,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "암종·굴진장 띠 공통, 비고 띠 공통",
+  "remaining": [],
+  "before_records": 9,
+  "after_records": 9
+ },
+ {
+  "table_id": "full-p397-o53516",
+  "page": 397,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "장비 조합 띠마다 한 행",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p420-o56011",
+  "page": 420,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p420-o56098",
+  "page": 420,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p421-o56134",
+  "page": 421,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 11,
+  "after_records": 11
+ },
+ {
+  "table_id": "full-p425-o56653",
+  "page": 425,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p428-o57068",
+  "page": 428,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 17,
+  "after_records": 17
+ },
+ {
+  "table_id": "full-p429-o57142",
+  "page": 429,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 15,
+  "after_records": 15
+ },
+ {
+  "table_id": "full-p427-o56910",
+  "page": 427,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행. 마지막 띠의 원래 두 행은 한 띠로 묶음",
+  "remaining": [],
+  "before_records": 18,
+  "after_records": 16
+ },
+ {
+  "table_id": "full-p422-o56352",
+  "page": 422,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력(또는 장비) 편성은 띠의 모든 관경·높이 행에 공통으로 적용되는 공통 칸(줄 순서로 이름·단위·수량 대응), 관경·높이 줄마다 행",
+  "remaining": [],
+  "before_records": 22,
+  "after_records": 21
+ },
+ {
+  "table_id": "full-p397-o53585",
+  "page": 397,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "3행",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p431-o57530",
+  "page": 431,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "2행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p432-o57729",
+  "page": 432,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "4행",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p436-o58446",
+  "page": 436,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "3행",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p437-o58607",
+  "page": 437,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "4행",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p438-o58861",
+  "page": 438,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "5행",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p445-o59944",
+  "page": 445,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "5행, 〃는 위 값",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p449-o60600",
+  "page": 449,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "2행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p450-o60660",
+  "page": 450,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "2행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p451-o60751",
+  "page": 451,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "2행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p454-o61112",
+  "page": 454,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "8행, 단위 〃는 위 값",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p455-o61188",
+  "page": 455,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "7행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p465-o63273",
+  "page": 465,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 6행과 계",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p466-o63533",
+  "page": 466,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 6행과 계",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p468-o63796",
+  "page": 468,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 5행과 계",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p472-o64332",
+  "page": 472,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "관측(표준·산악지·시가지)·계획준비·선점 띠 공통, 직급마다 행, 두 줄 산식은 가운데 맞춘 직급 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 24
+ },
+ {
+  "table_id": "full-p475-o64771",
+  "page": 475,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "관측(표준·산악지·시가지)·계획준비·선점 띠 공통, 직급마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 23
+ },
+ {
+  "table_id": "full-p478-o65197",
+  "page": 478,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "관측(표준·산악지·시가지)·계획준비·선점 띠 공통, 직급마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 23
+ },
+ {
+  "table_id": "full-p481-o65624",
+  "page": 481,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "관측(표준·산악지·시가지)·계획준비·선점 띠 공통, 직급마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 23
+ },
+ {
+  "table_id": "full-p484-o66051",
+  "page": 484,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "관측(표준·산악지·시가지)·계획준비·선점 띠 공통, 직급마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 23
+ },
+ {
+  "table_id": "full-p486-o66381",
+  "page": 486,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 4행과 계",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p487-o66620",
+  "page": 487,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 4행과 계",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p497-o68858",
+  "page": 497,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 6행, 값 두 줄(인원/(괄호 값))은 같은 행",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p500-o69504",
+  "page": 500,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 5행과 계",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p489-o66853",
+  "page": 489,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "기준점 등급·지역·비고 띠 공통, 항목(신점간거리 등)마다 행. 1~3급은 원래 두 행을 한 띠로 묶음. 비고 \"는 위와 같음",
+  "remaining": [],
+  "before_records": 11,
+  "after_records": 21
+ },
+ {
+  "table_id": "full-p495-o68357",
+  "page": 495,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "폭원(세로 이름) 공통, 폭 띠마다 한 행(제내·제외 두 줄은 같은 행)",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p503-o69709",
+  "page": 503,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "머리글 3행(지구별·산정기준면적·직명). 두 줄 작업명은 한 행, 줄마다 값 있는 띠는 줄마다 행",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p503-o69940",
+  "page": 503,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "머리글 3행(지구별·산정기준면적·직명). 두 줄 작업명은 한 행, 줄마다 값 있는 띠는 줄마다 행",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p504-o70231",
+  "page": 504,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "머리글 3행. 두 줄 작업명 한 행, 줄마다 값 있는 띠는 줄마다 행",
+  "remaining": [],
+  "before_records": 9,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p504-o70450",
+  "page": 504,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "머리글 3행. 두 줄 작업명 한 행, 줄마다 값 있는 띠는 줄마다 행",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p509-o71605",
+  "page": 509,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "두 줄 지역 이름(보통/시가지 등) 한 행",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p511-o72431",
+  "page": 511,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "3행",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p526-o75322",
+  "page": 526,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "설계예: 단계 제목 (1)>㉮>㉠을 아래 항목 행 이름 앞에",
+  "remaining": [],
+  "before_records": 22,
+  "after_records": 23
+ },
+ {
+  "table_id": "full-p527-o75554",
+  "page": 527,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름, 비고 세 줄)",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p535-o76771",
+  "page": 535,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·세 줄 산식), 비고 산식은 두 행 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p535-o76837",
+  "page": 535,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·세 줄 산식), 비고 산식은 두 행 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p536-o77010",
+  "page": 536,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·세 줄 산식), 비고 산식은 두 행 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p538-o77301",
+  "page": 538,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·세 줄 산식), 비고 산식은 두 행 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p539-o77426",
+  "page": 539,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·세 줄 산식), 비고 산식은 두 행 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p540-o77575",
+  "page": 540,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "한 행",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p541-o77733",
+  "page": 541,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·세 줄 산식), 비고 산식은 두 행 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p542-o77843",
+  "page": 542,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·세 줄 산식), 비고 산식은 두 행 공통",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p545-o78252",
+  "page": 545,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 공정명, 비고 두 줄 산식)",
+  "remaining": [],
+  "before_records": 12,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p546-o78575",
+  "page": 546,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 공정명, 비고 두 줄 산식)",
+  "remaining": [],
+  "before_records": 12,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p548-o78958",
+  "page": 548,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업 3행. 비고 산식 줄은 바로 아래 행 값의 산식(9.07일 등). 고급·정보처리 인원은 1행(작업관리) 값",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p548-o79020",
+  "page": 548,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업 3행. 비고 산식 줄은 바로 아래 행 값의 산식(9.07일 등). 고급·정보처리 인원은 1행(작업관리) 값",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p549-o79088",
+  "page": 549,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업 3행. 비고 산식 줄은 바로 아래 행 값의 산식(9.07일 등). 고급·정보처리 인원은 1행(작업관리) 값",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p552-o79722",
+  "page": 552,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두세 줄 공정명, 여러 줄 산식)",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p554-o80257",
+  "page": 554,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두세 줄 공정명, 여러 줄 산식)",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p557-o81004",
+  "page": 557,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두세 줄 공정명, 여러 줄 산식)",
+  "remaining": [],
+  "before_records": 18,
+  "after_records": 12
+ },
+ {
+  "table_id": "full-p558-o81233",
+  "page": 558,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두세 줄 공정명, 여러 줄 산식)",
+  "remaining": [],
+  "before_records": 19,
+  "after_records": 12
+ },
+ {
+  "table_id": "full-p559-o81462",
+  "page": 559,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두세 줄 공정명, 여러 줄 산식)",
+  "remaining": [],
+  "before_records": 9,
+  "after_records": 9
+ },
+ {
+  "table_id": "full-p560-o81581",
+  "page": 560,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 묶음·비고 공통, 세부 작업마다 행, 여러 줄 작업명 한 행",
+  "remaining": [],
+  "before_records": 17,
+  "after_records": 16
+ },
+ {
+  "table_id": "full-p564-o82349",
+  "page": 564,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 묶음 공통, 세부 작업마다 행, 여러 줄 작업명 한 행",
+  "remaining": [],
+  "before_records": 11,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p565-o82596",
+  "page": 565,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 공통, 세부 작업마다 행, 산식 여러 줄은 가장 가까운 작업 행",
+  "remaining": [],
+  "before_records": 9,
+  "after_records": 9
+ },
+ {
+  "table_id": "full-p574-o84136",
+  "page": 574,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "구분 묶음·비고 공통, 세부작업마다 행, 인원 값 줄(외업 값과 (내업) 값)은 가운데 맞춘 작업 행",
+  "remaining": [],
+  "before_records": 23,
+  "after_records": 19
+ },
+ {
+  "table_id": "full-p579-o85706",
+  "page": 579,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p582-o86297",
+  "page": 582,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p588-o87237",
+  "page": 588,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p591-o87679",
+  "page": 591,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p593-o87917",
+  "page": 593,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p599-o88659",
+  "page": 599,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p599-o88693",
+  "page": 599,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p601-o88989",
+  "page": 601,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p601-o89025",
+  "page": 601,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p605-o89730",
+  "page": 605,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p607-o89965",
+  "page": 607,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p608-o90213",
+  "page": 608,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p610-o90449",
+  "page": 610,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p613-o90905",
+  "page": 613,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p614-o91135",
+  "page": 614,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직급 행과 계",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p630-o93874",
+  "page": 630,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "4행",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p639-o94767",
+  "page": 639,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "시공높이 띠 공통, 인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 14,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p640-o94865",
+  "page": 640,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p654-o96359",
+  "page": 654,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p655-o96413",
+  "page": 655,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p655-o96469",
+  "page": 655,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p656-o96536",
+  "page": 656,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p656-o96583",
+  "page": 656,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p656-o96623",
+  "page": 656,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p657-o96680",
+  "page": 657,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p701-o100615",
+  "page": 701,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 17,
+  "after_records": 16
+ },
+ {
+  "table_id": "full-p702-o100699",
+  "page": 702,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p703-o100767",
+  "page": 703,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 20,
+  "after_records": 20
+ },
+ {
+  "table_id": "full-p705-o101095",
+  "page": 705,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 17,
+  "after_records": 17
+ },
+ {
+  "table_id": "full-p657-o96712",
+  "page": 657,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "2행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p664-o97467",
+  "page": 664,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "8행, 방수재 규격 두 줄(매트·시트)은 같은 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p679-o98842",
+  "page": 679,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "3행",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p668-o97797",
+  "page": 668,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "잡재료 이름 둘째 줄 (…)은 같은 행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p669-o97849",
+  "page": 669,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "잡재료 이름 둘째 줄 (…)은 같은 행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p669-o97897",
+  "page": 669,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "잡재료 이름 둘째 줄 (…)은 같은 행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p680-o98911",
+  "page": 680,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "모르타르 타설장비 공통, 기계마다 행",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p707-o101339",
+  "page": 707,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 20,
+  "after_records": 20
+ },
+ {
+  "table_id": "full-p708-o101419",
+  "page": 708,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 17,
+  "after_records": 15
+ },
+ {
+  "table_id": "full-p709-o101501",
+  "page": 709,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 12,
+  "after_records": 12
+ },
+ {
+  "table_id": "full-p710-o101611",
+  "page": 710,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p710-o101651",
+  "page": 710,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p711-o101698",
+  "page": 711,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 11,
+  "after_records": 11
+ },
+ {
+  "table_id": "full-p711-o101738",
+  "page": 711,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 11,
+  "after_records": 11
+ },
+ {
+  "table_id": "full-p712-o101785",
+  "page": 712,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p715-o101923",
+  "page": 715,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p716-o102067",
+  "page": 716,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p721-o102601",
+  "page": 721,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 19,
+  "after_records": 19
+ },
+ {
+  "table_id": "full-p715-o101978",
+  "page": 715,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행. 두께는 띠 공통",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p722-o102680",
+  "page": 722,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성은 띠의 모든 규격 행에 공통인 칸(줄 순서로 이름·단위·수량 대응), 규격 줄마다 행. 두께는 띠 공통",
+  "remaining": [],
+  "before_records": 14,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p719-o102572",
+  "page": 719,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "4행",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p725-o103208",
+  "page": 725,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "한 행: 세대내·공용부위 작업 목록",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p751-o106300",
+  "page": 751,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "규격 줄마다 행, 기기 이름은 다음 이름 전까지 걸침, 번호 제목 줄은 첫 행 이름에 포함, 〃는 위 이름",
+  "remaining": [],
+  "before_records": 13,
+  "after_records": 13
+ },
+ {
+  "table_id": "full-p761-o107655",
+  "page": 761,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "덕트계통: 각형(㎡)·스파이럴(m) 두 행, 적용 설명 공통. 주기계: 연면적 구간마다 행, 비고 공통",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p772-o108828",
+  "page": 772,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "2행",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p776-o109530",
+  "page": 776,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "값이 있는 줄마다 행. 두 줄 이름·규격과 비고 두 줄은 같은 행",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p822-o117005",
+  "page": 822,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "계 1.916은 공량 행 값",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p829-o118119",
+  "page": 829,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 띠 공통, 직종 줄마다 행, 직종 두 줄 이름(플랜트 기계설비공, 일반기계운전사 (윈치운전))은 한 행",
+  "remaining": [],
+  "before_records": 23,
+  "after_records": 23
+ },
+ {
+  "table_id": "full-p830-o118320",
+  "page": 830,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 띠 공통, 직종 줄마다 행, 직종 두 줄 이름(플랜트 기계설비공, 일반기계운전사 (윈치운전))은 한 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p831-o118439",
+  "page": 831,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 띠 공통, 직종 줄마다 행, 직종 두 줄 이름(플랜트 기계설비공, 일반기계운전사 (윈치운전))은 한 행",
+  "remaining": [],
+  "before_records": 16,
+  "after_records": 16
+ },
+ {
+  "table_id": "full-p836-o119538",
+  "page": 836,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 띠 공통, 직종 줄마다 행. Bolt Beating 값 0.097/5는 줄 끝에서 나뉜 0.0975",
+  "remaining": [],
+  "before_records": 31,
+  "after_records": 29
+ },
+ {
+  "table_id": "full-p830-o118405",
+  "page": 830,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업마다 행, 직종은 다음 직종 전까지 걸침(본뜨기~구멍뚫기 플랜트제관공), 도장·운반조작은 직종 두 행",
+  "remaining": [],
+  "before_records": 11,
+  "after_records": 11
+ },
+ {
+  "table_id": "full-p856-o123851",
+  "page": 856,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p859-o124218",
+  "page": 859,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p861-o124522",
+  "page": 861,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p863-o125050",
+  "page": 863,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p867-o125912",
+  "page": 867,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행, 공정은 다음 공정 전까지 걸침",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p873-o127174",
+  "page": 873,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행, 공정은 다음 공정 전까지 걸침",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p874-o127370",
+  "page": 874,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행, 공정은 다음 공정 전까지 걸침",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p875-o127659",
+  "page": 875,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행, 공정은 다음 공정 전까지 걸침",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p876-o127796",
+  "page": 876,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행, 공정은 다음 공정 전까지 걸침",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 11
+ },
+ {
+  "table_id": "full-p877-o128121",
+  "page": 877,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행, 공정은 다음 공정 전까지 걸침",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p878-o128346",
+  "page": 878,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행, 공정은 다음 공정 전까지 걸침",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p879-o128373",
+  "page": 879,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행. 앞 네 행(중유~Tar Epoxy)은 공정 칸이 비어 있음(앞 쪽 표에서 이어짐, 공정 이름 원문 표기 없음)",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p886-o128914",
+  "page": 886,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "직종 줄마다 행, 작업구분은 다음 작업 전까지 걸침, 마지막 문장 띠는 한 행",
+  "remaining": [],
+  "before_records": 11,
+  "after_records": 11
+ },
+ {
+  "table_id": "full-p888-o129083",
+  "page": 888,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "직종 줄마다 행, 작업구분은 다음 작업 전까지 걸침, 마지막 문장 띠는 한 행",
+  "remaining": [],
+  "before_records": 9,
+  "after_records": 9
+ },
+ {
+  "table_id": "full-p889-o129181",
+  "page": 889,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리(◦·번호로 시작)는 범위 안 직종 행 전체 공통, 직종 줄마다 행, 단위 한 줄은 띠 공통",
+  "remaining": [],
+  "before_records": 19,
+  "after_records": 19
+ },
+ {
+  "table_id": "full-p891-o129360",
+  "page": 891,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리(◦·번호로 시작)는 범위 안 직종 행 전체 공통, 직종 줄마다 행, 단위 한 줄은 띠 공통",
+  "remaining": [],
+  "before_records": 24,
+  "after_records": 24
+ },
+ {
+  "table_id": "full-p891-o129438",
+  "page": 891,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리(◦·번호로 시작)는 범위 안 직종 행 전체 공통, 직종 줄마다 행, 단위 한 줄은 띠 공통",
+  "remaining": [],
+  "before_records": 9,
+  "after_records": 9
+ },
+ {
+  "table_id": "full-p893-o129574",
+  "page": 893,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리(◦·번호로 시작)는 범위 안 직종 행 전체 공통, 직종 줄마다 행, 단위 한 줄은 띠 공통",
+  "remaining": [],
+  "before_records": 29,
+  "after_records": 29
+ },
+ {
+  "table_id": "full-p894-o129778",
+  "page": 894,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리(◦·번호로 시작)는 범위 안 직종 행 전체 공통, 직종 줄마다 행, 단위 한 줄은 띠 공통",
+  "remaining": [],
+  "before_records": 14,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p895-o129864",
+  "page": 895,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리(◦·번호로 시작)는 범위 안 직종 행 전체 공통, 직종 줄마다 행, 단위 한 줄은 띠 공통",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p890-o129268",
+  "page": 890,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "처리공정 묶음 공통, 설비마다 행. 여과집진기 (백필터), 활성탄·반응조제 공급설비는 두 줄 이름",
+  "remaining": [],
+  "before_records": 14,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p895-o129932",
+  "page": 895,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리는 범위 안 직종 행 전체 공통, 직종 줄마다 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p896-o129998",
+  "page": 896,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리는 범위 안 직종 행 전체 공통, 직종 줄마다 행",
+  "remaining": [],
+  "before_records": 21,
+  "after_records": 21
+ },
+ {
+  "table_id": "full-p897-o130111",
+  "page": 897,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리는 범위 안 직종 행 전체 공통, 직종 줄마다 행",
+  "remaining": [],
+  "before_records": 20,
+  "after_records": 20
+ },
+ {
+  "table_id": "full-p898-o130223",
+  "page": 898,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업구분 설명 덩어리는 범위 안 직종 행 전체 공통, 직종 줄마다 행",
+  "remaining": [],
+  "before_records": 21,
+  "after_records": 21
+ },
+ {
+  "table_id": "full-p905-o131418",
+  "page": 905,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "품명 줄마다 행, 단위 〃는 위 값",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p905-o131441",
+  "page": 905,
+  "before_reasons": [
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "①·② 제목을 아래 행 이름 앞에. ': 목도'·': 보통인부' 행은 바로 위 '◦단계 : 궤도공' 행과 같은 단계라 단계 이름을 붙임(원문 위치 기록)",
+  "remaining": [],
+  "before_records": 11,
+  "after_records": 11
+ },
+ {
+  "table_id": "full-p906-o131484",
+  "page": 906,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직종 줄마다 행, 비고 문장 띠는 한 행",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p907-o131617",
+  "page": 907,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "직종 줄마다 행, 공정은 다음 공정 전까지 걸침",
+  "remaining": [],
+  "before_records": 16,
+  "after_records": 16
+ },
+ {
+  "table_id": "full-p918-o133658",
+  "page": 918,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "보통인부·물탱크 3규격 행, 장비 수량은 자기 규격 행 값, 시공량은 네 행 공통",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p933-o135652",
+  "page": 933,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·설명)",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p934-o135882",
+  "page": 934,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·설명)",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p963-o139845",
+  "page": 963,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "띠마다 한 행(두 줄 이름·설명)",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p942-o136967",
+  "page": 942,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "장비 7행, 시공량 2,800은 공통",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p960-o139446",
+  "page": 960,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력·장비·재료 묶음 공통, 항목마다 행. 6.7×10-4의 10-4는 원문 위첨자 지수(10⁻⁴) 표기",
+  "remaining": [],
+  "before_records": 14,
+  "after_records": 14
+ },
+ {
+  "table_id": "full-p981-o141461",
+  "page": 981,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "인력 편성 공통, 규격 줄마다 행",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p297-o32931",
+  "page": 297,
+  "before_reasons": [
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 2
+ },
+ {
+  "table_id": "full-p301-o33960",
+  "page": 301,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p303-o34432",
+  "page": 303,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p304-o34638",
+  "page": 304,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p307-o35278",
+  "page": 307,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p312-o36486",
+  "page": 312,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p320-o38445",
+  "page": 320,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p326-o39992",
+  "page": 326,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 4,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p327-o40062",
+  "page": 327,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p327-o40120",
+  "page": 327,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p328-o40184",
+  "page": 328,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 12,
+  "after_records": 12
+ },
+ {
+  "table_id": "full-p328-o40242",
+  "page": 328,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 6,
+  "after_records": 6
+ },
+ {
+  "table_id": "full-p329-o40317",
+  "page": 329,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p329-o40374",
+  "page": 329,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 3,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p330-o40449",
+  "page": 330,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 17,
+  "after_records": 17
+ },
+ {
+  "table_id": "full-p330-o40510",
+  "page": 330,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p331-o40574",
+  "page": 331,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 31,
+  "after_records": 31
+ },
+ {
+  "table_id": "full-p332-o40977",
+  "page": 332,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 27,
+  "after_records": 27
+ },
+ {
+  "table_id": "full-p333-o41328",
+  "page": 333,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 32,
+  "after_records": 32
+ },
+ {
+  "table_id": "full-p335-o42081",
+  "page": 335,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 39,
+  "after_records": 39
+ },
+ {
+  "table_id": "full-p336-o42582",
+  "page": 336,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 29,
+  "after_records": 29
+ },
+ {
+  "table_id": "full-p337-o42990",
+  "page": 337,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 21,
+  "after_records": 21
+ },
+ {
+  "table_id": "full-p337-o43263",
+  "page": 337,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 12,
+  "after_records": 12
+ },
+ {
+  "table_id": "full-p338-o43427",
+  "page": 338,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 9,
+  "after_records": 9
+ },
+ {
+  "table_id": "full-p338-o43556",
+  "page": 338,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 21,
+  "after_records": 21
+ },
+ {
+  "table_id": "full-p339-o43837",
+  "page": 339,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 38,
+  "after_records": 38
+ },
+ {
+  "table_id": "full-p340-o44317",
+  "page": 340,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 18,
+  "after_records": 18
+ },
+ {
+  "table_id": "full-p343-o45291",
+  "page": 343,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 15,
+  "after_records": 15
+ },
+ {
+  "table_id": "full-p344-o45402",
+  "page": 344,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 38,
+  "after_records": 39
+ },
+ {
+  "table_id": "full-p345-o45665",
+  "page": 345,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 27,
+  "after_records": 29
+ },
+ {
+  "table_id": "full-p346-o45861",
+  "page": 346,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 32,
+  "after_records": 33
+ },
+ {
+  "table_id": "full-p347-o46090",
+  "page": 347,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 40,
+  "after_records": 40
+ },
+ {
+  "table_id": "full-p348-o46351",
+  "page": 348,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 34,
+  "after_records": 35
+ },
+ {
+  "table_id": "full-p349-o46591",
+  "page": 349,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 27,
+  "after_records": 28
+ },
+ {
+  "table_id": "full-p350-o46791",
+  "page": 350,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 33,
+  "after_records": 33
+ },
+ {
+  "table_id": "full-p351-o47014",
+  "page": 351,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 37,
+  "after_records": 37
+ },
+ {
+  "table_id": "full-p352-o47259",
+  "page": 352,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 39,
+  "after_records": 39
+ },
+ {
+  "table_id": "full-p353-o47521",
+  "page": 353,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 23,
+  "after_records": 24
+ },
+ {
+  "table_id": "full-p353-o47686",
+  "page": 353,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 10,
+  "after_records": 10
+ },
+ {
+  "table_id": "full-p354-o47766",
+  "page": 354,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 39,
+  "after_records": 39
+ },
+ {
+  "table_id": "full-p355-o48025",
+  "page": 355,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 19,
+  "after_records": 19
+ },
+ {
+  "table_id": "full-p355-o48156",
+  "page": 355,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 14,
+  "after_records": 16
+ },
+ {
+  "table_id": "full-p356-o48274",
+  "page": 356,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 39,
+  "after_records": 39
+ },
+ {
+  "table_id": "full-p357-o48536",
+  "page": 357,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 39,
+  "after_records": 39
+ },
+ {
+  "table_id": "full-p358-o48797",
+  "page": 358,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 25,
+  "after_records": 25
+ },
+ {
+  "table_id": "full-p359-o49013",
+  "page": 359,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 39,
+  "after_records": 39
+ },
+ {
+  "table_id": "full-p360-o49265",
+  "page": 360,
+  "before_reasons": [
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정",
+   "코드 연결 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 번호 열의 줄 위치와 위쪽 완전한 번호·품목 제목·앞 쪽 이어짐 표시를 대조",
+  "remaining": [],
+  "before_records": 37,
+  "after_records": 37
+ },
+ {
+  "table_id": "full-p175-o17058",
+  "page": 175,
+  "before_reasons": [
+   "행 대응 확인 필요"
+  ],
+  "status": "교정 완료",
+  "evidence": "작업 T, t1~t5, f는 각각 한 행. 산출방법 줄바꿈은 같은 작업의 설명이며 그라우팅·용접 작은 표를 그대로 보존",
+  "remaining": [],
+  "before_records": 7,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p823-o117292",
+  "page": 823,
+  "before_reasons": [
+   "이름 적용 범위 미확정",
+   "이름 적용 범위 미확정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 단위 열 26줄을 행 기준으로 사용. Steel plate는 처음 10규격, Channel은 두 규격. 3,000 열은 pipe ø12 줄만 빈 칸이며 이후 값을 순서대로 대응. 다른 용량 열과 교차 대조",
+  "remaining": [],
+  "before_records": 26,
+  "after_records": 26
+ },
+ {
+  "table_id": "full-p758-o107176",
+  "page": 758,
+  "before_reasons": [
+   "행 대응 확인 필요",
+   "행 대응 확인 필요"
+  ],
+  "status": "미해결",
+  "evidence": "가로선으로 나뉜 네 공법을 각 한 행으로 보존. Shot Blast 수량 두 값의 개별 적용 조건은 원문에 없어 미해결",
+  "remaining": [
+   {
+    "cell_id": null,
+    "text": "",
+    "code": "원문 수량 조건 미확정",
+    "severity": "semantic",
+    "detail": "Shot Blast는 steel shot ø1㎜ 기준에 수량 0.215와 0.415가 두 줄로 적혀 있으나 어느 조건의 수량인지 원문 설명이 없음. 두 값을 함께 보존하고 선택하지 않음"
+   }
+  ],
+  "before_records": 6,
+  "after_records": 4
+ },
+ {
+  "table_id": "full-p397-o53561",
+  "page": 397,
+  "before_reasons": [
+   "머리글 가정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 정의·설명·괄호식 표에는 머리글이 없으며 첫 줄부터 본문",
+  "remaining": [],
+  "before_records": 2,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p443-o59652",
+  "page": 443,
+  "before_reasons": [
+   "머리글 가정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 정의·설명·괄호식 표에는 머리글이 없으며 첫 줄부터 본문",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 3
+ },
+ {
+  "table_id": "full-p523-o75093",
+  "page": 523,
+  "before_reasons": [
+   "머리글 가정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 정의·설명·괄호식 표에는 머리글이 없으며 첫 줄부터 본문",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 7
+ },
+ {
+  "table_id": "full-p778-o109797",
+  "page": 778,
+  "before_reasons": [
+   "머리글 가정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 첫 줄이 기간 또는 높이 범위, 둘째 줄이 가산율 또는 할증율",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p778-o109837",
+  "page": 778,
+  "before_reasons": [
+   "머리글 가정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 첫 줄이 기간 또는 높이 범위, 둘째 줄이 가산율 또는 할증율",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p936-o136313",
+  "page": 936,
+  "before_reasons": [
+   "머리글 가정"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 첫 줄이 기간 또는 높이 범위, 둘째 줄이 가산율 또는 할증율",
+  "remaining": [],
+  "before_records": 1,
+  "after_records": 1
+ },
+ {
+  "table_id": "full-p275-ocorrection:p275-t0",
+  "page": 275,
+  "before_reasons": [
+   "계제선 미반영"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 계단선 번호를 출력표와 잇고 각 숫자 칸의 N값·배사거리·선 위아래 위치를 보존. 작업능력 계산과 단거리 보정은 실행하지 않음",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p275-ocorrection:p275-t1",
+  "page": 275,
+  "before_reasons": [
+   "계제선 미반영"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 계단선 번호를 출력표와 잇고 각 숫자 칸의 N값·배사거리·선 위아래 위치를 보존. 작업능력 계산과 단거리 보정은 실행하지 않음",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p275-ocorrection:p275-t2",
+  "page": 275,
+  "before_reasons": [
+   "계제선 미반영"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 계단선 번호를 출력표와 잇고 각 숫자 칸의 N값·배사거리·선 위아래 위치를 보존. 작업능력 계산과 단거리 보정은 실행하지 않음",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p276-ocorrection:p276-t0",
+  "page": 276,
+  "before_reasons": [
+   "계제선 미반영"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 계단선 번호를 출력표와 잇고 각 숫자 칸의 N값·배사거리·선 위아래 위치를 보존. 작업능력 계산과 단거리 보정은 실행하지 않음",
+  "remaining": [],
+  "before_records": 8,
+  "after_records": 8
+ },
+ {
+  "table_id": "full-p276-ocorrection:p276-t1",
+  "page": 276,
+  "before_reasons": [
+   "계제선 미반영"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 계단선 번호를 출력표와 잇고 각 숫자 칸의 N값·배사거리·선 위아래 위치를 보존. 작업능력 계산과 단거리 보정은 실행하지 않음",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p276-ocorrection:p276-t3",
+  "page": 276,
+  "before_reasons": [
+   "계제선 미반영"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 계단선 번호를 출력표와 잇고 각 숫자 칸의 N값·배사거리·선 위아래 위치를 보존. 작업능력 계산과 단거리 보정은 실행하지 않음",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p276-ocorrection:p276-t4",
+  "page": 276,
+  "before_reasons": [
+   "계제선 미반영"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 계단선 번호를 출력표와 잇고 각 숫자 칸의 N값·배사거리·선 위아래 위치를 보존. 작업능력 계산과 단거리 보정은 실행하지 않음",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ },
+ {
+  "table_id": "full-p277-ocorrection:p277-t0",
+  "page": 277,
+  "before_reasons": [
+   "계제선 미반영"
+  ],
+  "status": "교정 완료",
+  "evidence": "원문 계단선 번호를 출력표와 잇고 각 숫자 칸의 N값·배사거리·선 위아래 위치를 보존. 작업능력 계산과 단거리 보정은 실행하지 않음",
+  "remaining": [],
+  "before_records": 5,
+  "after_records": 5
+ }
+]

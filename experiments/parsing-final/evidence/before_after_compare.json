@@ -1,0 +1,47 @@
+{
+ "before_generation": "complete-63b1a4b60d7e",
+ "after_generation": "complete-82c206c61e21",
+ "tables_before": 2328,
+ "tables_after": 2328,
+ "records_before": 22548,
+ "records_after": 23481,
+ "records_added": 933,
+ "added_records_are_new_body_text": true,
+ "existing_records_identical_except_uid": true,
+ "existing_record_links_identical_except_uid": true,
+ "record_uid_changes_beyond_generation_prefix": 0,
+ "tables_with_content_change": [],
+ "tables_with_order_number_change_only": 2328,
+ "existing_relations_identical": true,
+ "added_relations_for_new_body_text": {
+  "child_of_item": 857,
+  "reference": 20,
+  "follows_table_in_item": 142,
+  "note_of_unknown": 76
+ },
+ "shared_values_identical_except_uid_prefix": true,
+ "basis_same_except_order": true,
+ "headings_same_except_order": true,
+ "existing_notes_same_except_order": true,
+ "other_store_fields_same": {
+  "pages": true,
+  "page_height": true,
+  "printed_page": true,
+  "part_marks": true,
+  "logical_tables": true,
+  "boundaries": true,
+  "context_out": true
+ },
+ "open_items_same": true,
+ "held_tables_after": {
+  "full-p758-o107176": "보류(이름·코드 연결 미확정)"
+ },
+ "p758_values_kept": [
+  "9-2-1 바탕만들기 | Shot Blast | 자재 규격 steel shot ø1㎜ 기준 | 자재 단위 ㎏ | 자재 수량 0.215 0.415 | 인력 도장공 0.0375 | 인력 보통인부 0.0125"
+ ],
+ "code_changed": [
+  "structure_export.py",
+  "structure_store.py"
+ ],
+ "data_versions_same": true
+}

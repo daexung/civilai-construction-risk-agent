@@ -1,0 +1,15 @@
+[
+ {
+  "table_id": "full-p758-o107176",
+  "page": 758,
+  "flags": [
+   {
+    "cell_id": null,
+    "text": "",
+    "code": "원문 수량 조건 미확정",
+    "severity": "semantic",
+    "detail": "Shot Blast는 steel shot ø1㎜ 기준에 수량 0.215와 0.415가 두 줄로 적혀 있으나 어느 조건의 수량인지 원문 설명이 없음. 두 값을 함께 보존하고 선택하지 않음"
+   }
+  ]
+ }
+]

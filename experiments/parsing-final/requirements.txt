@@ -1,0 +1,2 @@
+# PDF glyph positions and raster hashes were verified with this version.
+pymupdf==1.28.2
