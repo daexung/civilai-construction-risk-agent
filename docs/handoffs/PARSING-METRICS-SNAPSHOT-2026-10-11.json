@@ -1,0 +1,263 @@
+{
+  "recorded_at": "2026-10-11T21:43:35.1685309+09:00",
+  "purpose": "중간 파일 정리 후에도 개발 순서와 최종 지표·버전·확인 범위를 보존",
+  "evidence": "기존 보고서와 저장된 출력. 기록 작성 중 파싱·검사 재실행 없음",
+  "history_document": "docs/handoffs/PARSING-DEVELOPMENT-HISTORY-2026-10-11.md",
+  "latest_work": "experiments/parsing-body-text-completeness-2026-10-11",
+  "generation": {
+    "id": "complete-82c206c61e21",
+    "code_sha256": {
+      "assemble.py": "518f454cd96be038e9bb79fc51c7057c52bdc5332e0075c2294745df4b76c365",
+      "chunk.py": "051b06e23d0801986792a20128aaf623b478268ac2531370fe8a3a7a6d6520b7",
+      "diagram_tables.py": "efb202b3797601e35fb618241b4ae8ee4a5c4317a5f87c336a810d1c195cb459",
+      "line_regrid.py": "cd6d5de8357815f761869681580cdbb163f2a7d832e248a274a7dae5a118462f",
+      "odl_tables.py": "2473559f0ad186849976c68e3830ef6ef1c4a1d8c78dff8bbf93e4ab71e532c0",
+      "parse.py": "a32abb665156be0918c8b98afa58dd9136f25aa36969d2a590bf9d56bb02b9cf",
+      "reviewed_tables.py": "d35a85bdd5093a9ff0d9942748b109842a71c78ebe6ed0dffe272dde9168ee78",
+      "source_corrections.py": "3c5ee327cfc3bc6ad992c308ac3b97455988ffa025fd23605f5e0ca2ec28ce39",
+      "structure_export.py": "46d4f26a49805e94895c9ab605003001b34f26f51756c435e7fd07d4ee287287",
+      "structure_rules.py": "a753a51fd5331456fc19b5990995645c62cc531a6f3ec2fd0f9eb4c264185c3d",
+      "structure_store.py": "153ed1287bc379ee7a09ff70dd92ec7bc2a1b5c5423fefe71777ac684d656c48",
+      "table_guard.py": "73730f7c8ab8f166fa90dfdfc067bd313aa62264b6291d469cc388d8d7c74072"
+    },
+    "raw_sha256": "b27019f04f8498bda4f4b81b2ceb6ab4f5c031c38d3224f2a636fdf12168ca71",
+    "pdf_sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+    "corrections_sha256": "1f8ed57c36f917fb9f7d39dadec23739a0d6707a22394e4696c6a287631075f7",
+    "row_mappings_sha256": "c280a33a0269161044920e9b7be084c8e0ee8258021e2988e97f87553767b592",
+    "completeness_sha256": "a85b0574d52b742d36e54d018c2edb47888869399afe42550cf17bfb2c60287a",
+    "reviewed_tables_sha256": "309431ee3d2e30dff635ef3060fc158051a806a330015017a81e22a0cf8efd3f",
+    "diagram_tables_sha256": "c7a826cf2d8362a35bc185091483d81fc710f140a3aa8b10f96b5706edd0048b"
+  },
+  "page_range": {
+    "count": 982,
+    "first": 1,
+    "last": 982
+  },
+  "whole_document_history": [
+    {
+      "stage": "전체 초기 점검",
+      "date": "2026-10-11",
+      "pages": 982,
+      "tables": 2304,
+      "records": 22421,
+      "held_tables": 281
+    },
+    {
+      "stage": "확인된 결함 교정",
+      "date": "2026-10-11",
+      "pages": 982,
+      "tables": 2328,
+      "records": 22324,
+      "held_tables": 283
+    },
+    {
+      "stage": "여섯 표 행 연결",
+      "date": "2026-10-11",
+      "pages": 982,
+      "tables": 2328,
+      "records": 22323,
+      "held_tables": 279
+    },
+    {
+      "stage": "복구 표 완전성",
+      "date": "2026-10-11",
+      "pages": 982,
+      "tables": 2328,
+      "records": 22323,
+      "held_tables": 286
+    },
+    {
+      "stage": "전체 보류 검토와 그림 글 보충",
+      "date": "2026-10-11",
+      "pages": 982,
+      "tables": 2328,
+      "records": 22548,
+      "held_tables": 1
+    },
+    {
+      "stage": "하위 본문 누락 수정",
+      "date": "2026-10-11",
+      "pages": 982,
+      "tables": 2328,
+      "records": 23481,
+      "held_tables": 1
+    }
+  ],
+  "body_text_summary": {
+    "raw_text_nodes_outside_tables": 12371,
+    "by_status": {
+      "제목 레코드로 전달": 360,
+      "본문 레코드로 전달": 9031,
+      "제목 문맥(절 경로·section)으로 전달": 1632,
+      "정상 제외": 368,
+      "기준 레코드로 전달": 980
+    },
+    "nested_text_nodes": 947,
+    "nested_by_status": {
+      "본문 레코드로 전달": 933,
+      "정상 제외": 14
+    },
+    "nested_excluded_reasons": {
+      "기존 누락 표 보충 교정이 표 영역 글을 표로 대체(줄마다 보충 표 칸 글에 있음)": 7,
+      "쪽 머리·바닥 띠의 부문 표기": 3,
+      "이미 표 칸으로 전달(표 영역 안이고 줄마다 그 표 칸 글에 있음)": 4
+    },
+    "nested_not_in_623_list": 324,
+    "unexplained": 0,
+    "listed_623": {
+      "total": 623,
+      "복구": 616,
+      "정상 제외": 7
+    },
+    "nested_in_table_region_unresolved": 0
+  },
+  "before_after_compare": {
+    "before_generation": "complete-63b1a4b60d7e",
+    "after_generation": "complete-82c206c61e21",
+    "tables_before": 2328,
+    "tables_after": 2328,
+    "records_before": 22548,
+    "records_after": 23481,
+    "records_added": 933,
+    "added_records_are_new_body_text": true,
+    "existing_records_identical_except_uid": true,
+    "existing_record_links_identical_except_uid": true,
+    "record_uid_changes_beyond_generation_prefix": 0,
+    "tables_with_content_change": [],
+    "tables_with_order_number_change_only": 2328,
+    "existing_relations_identical": true,
+    "added_relations_for_new_body_text": {
+      "child_of_item": 857,
+      "reference": 20,
+      "follows_table_in_item": 142,
+      "note_of_unknown": 76
+    },
+    "shared_values_identical_except_uid_prefix": true,
+    "basis_same_except_order": true,
+    "headings_same_except_order": true,
+    "existing_notes_same_except_order": true,
+    "other_store_fields_same": {
+      "pages": true,
+      "page_height": true,
+      "printed_page": true,
+      "part_marks": true,
+      "logical_tables": true,
+      "boundaries": true,
+      "context_out": true
+    },
+    "open_items_same": true,
+    "held_tables_after": {
+      "full-p758-o107176": "보류(이름·코드 연결 미확정)"
+    },
+    "p758_values_kept": [
+      "9-2-1 바탕만들기 | Shot Blast | 자재 규격 steel shot ø1㎜ 기준 | 자재 단위 ㎏ | 자재 수량 0.215 0.415 | 인력 도장공 0.0375 | 인력 보통인부 0.0125"
+    ],
+    "code_changed": [
+      "structure_export.py",
+      "structure_store.py"
+    ],
+    "data_versions_same": true
+  },
+  "existing_check_counts": {
+    "passed": 915,
+    "failed": 0,
+    "meaning": "확인 항목 수이며 정확도 아님"
+  },
+  "remaining": {
+    "formula_font_text_items_new": 129,
+    "formula_font_text_items_existing": 137,
+    "formula_count_known": false,
+    "unassigned_body_relations": 76,
+    "follows_table_candidate_relations": 142,
+    "relation_counts_are_not_additive_unique_items": true,
+    "toc_rows_added": 255,
+    "source_ambiguous_table_page": 758,
+    "source_ambiguous_values": [
+      "0.215",
+      "0.415"
+    ]
+  },
+  "limits": [
+    "설명 없는 누락 0은 기존 ODL 원시 출력에서 최종 출력까지의 전달 범위",
+    "전체 PDF 최초 추출 정확도·계산 의미·서비스 개선을 확정하지 않음",
+    "표 영역 확인 286표와 숫자 칸 위치 확인 7062칸은 해당 범위의 결과",
+    "기존 표 대체 원시 글 13개는 같은 쪽 칸의 낱말 단위 대조"
+  ],
+  "cleanup_dependencies": [
+    "experiments/parsing-full-review-2026-10-11/out/raw/",
+    "experiments/parsing-recovered-completeness-2026-10-11/out/",
+    "experiments/parsing-recovered-completeness-2026-10-11/row_mappings.json",
+    "experiments/parsing-recovered-completeness-2026-10-11/completeness.json",
+    "experiments/parsing-body-text-completeness-2026-10-11/baseline/before_fix/out/"
+  ],
+  "source_files": [
+    {
+      "path": "docs/reviews/remove-parse-run-header-filter-result.md",
+      "sha256": "980a650bf20c040ddfeadf091f2d959e8ef3c921ffa8ac91ba926902863237c7"
+    },
+    {
+      "path": "docs/reviews/table-structure-preservation-result-2026-10-10.md",
+      "sha256": "94b8258b30cec6788a3b0cfcf90bb21c4bff7536a61802ea602c4fae3c79a771"
+    },
+    {
+      "path": "docs/reviews/parsing-core-fixes-result-2026-10-11.md",
+      "sha256": "8f638faac653a9b3c8c215ff64d4a82cd4b95697384f8ec00a2341c0035035be"
+    },
+    {
+      "path": "docs/reviews/parsing-semantic-fix-result-2026-10-11.md",
+      "sha256": "16bf8adca1328968964613bb995b56d92a0228486dc948417738acdc1c7ad97b"
+    },
+    {
+      "path": "docs/reviews/parsing-full-review-result-2026-10-11.md",
+      "sha256": "a2d605e8226e5d3196c7b3eec7184d65970da52bfd80a911cb00a03186b50313"
+    },
+    {
+      "path": "docs/reviews/parsing-corrections-result-2026-10-11.md",
+      "sha256": "b6c1548846f3777badf424a5425e6e8cd7127e46236b47888d381fbc39105408"
+    },
+    {
+      "path": "docs/reviews/opus-six-table-row-mapping-result-2026-10-11.md",
+      "sha256": "f308b80e80e8b5c5b133fa62a3c00da11c1c77a33c7387c720e056d4ca4ea0a6"
+    },
+    {
+      "path": "docs/reviews/opus-recovered-table-completeness-result-2026-10-11.md",
+      "sha256": "bdd01f8793e1232311dbc22434bb439210f362f527948de3e25229809ab2da80"
+    },
+    {
+      "path": "docs/reviews/opus-all-held-tables-parsing-result-2026-10-11.md",
+      "sha256": "7c970577025499460a32513544abe81de3951130854e0b470f794bc07f165419"
+    },
+    {
+      "path": "docs/reviews/parsing-body-text-completeness-result-2026-10-11.md",
+      "sha256": "225f9a9810803a72a85c831967475bf0fb8eac53e2f27c553ead2c4283fd8737"
+    },
+    {
+      "path": "experiments/parsing-body-text-completeness-2026-10-11/out/generation.json",
+      "sha256": "3e285a6e430321fdf315e45dd2ae00003b46a12d9faed78b93615d07d7f0d8f9"
+    },
+    {
+      "path": "experiments/parsing-body-text-completeness-2026-10-11/out/body_text_trace.json",
+      "sha256": "94717e2d97ae3b0e8db26e59584d215e272c822f08de96d60a26e761cc240c46"
+    },
+    {
+      "path": "experiments/parsing-body-text-completeness-2026-10-11/out/before_after_compare.json",
+      "sha256": "57fb9f14eb28dff0c999bca0708f4084480f663c7287bbefc450516b345a7d31"
+    },
+    {
+      "path": "experiments/parsing-body-text-completeness-2026-10-11/out/resume_checks.json",
+      "sha256": "b7a62e653ee9729f856cd25c8621224cadd2cf9bf12c317428c96387ea7bd51d"
+    },
+    {
+      "path": "experiments/parsing-body-text-completeness-2026-10-11/out/dropped_623_ledger.json",
+      "sha256": "d58f8c525e37f78e462546123a83f75f178f2babd0c2a7f089d732b0b692b04d"
+    }
+  ],
+  "status": {
+    "files_deleted": false,
+    "parser_reexecuted": false,
+    "checks_reexecuted": false,
+    "commit_created": false,
+    "push_performed": false,
+    "latest_chunking_embedding_service_run": false
+  }
+}

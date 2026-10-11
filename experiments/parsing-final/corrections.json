@@ -1,0 +1,440 @@
+{
+ "created": "2026-10-11 03:29:23",
+ "pdf_sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+ "raw_sha256": "b27019f04f8498bda4f4b81b2ceb6ab4f5c031c38d3224f2a636fdf12168ca71",
+ "cells": [
+  {
+   "id": 80769,
+   "page": 555,
+   "bbox_pt": [
+    101.52,
+    560.64,
+    165.36,
+    583.35
+   ],
+   "expected_text": "영상지도 편집1",
+   "replacement": "영상지도 편집"
+  },
+  {
+   "id": 80771,
+   "page": 555,
+   "bbox_pt": [
+    165.36,
+    560.64,
+    187.44,
+    583.35
+   ],
+   "expected_text": ".00",
+   "replacement": "1.00"
+  },
+  {
+   "id": 119094,
+   "page": 834,
+   "bbox_pt": [
+    350.88,
+    254.03999999999996,
+    378.12,
+    320.64
+   ],
+   "expected_text": "0.3350",
+   "replacement": "0.335"
+  },
+  {
+   "id": 119096,
+   "page": 834,
+   "bbox_pt": [
+    378.12,
+    254.03999999999996,
+    405.36,
+    320.64
+   ],
+   "expected_text": ".3350",
+   "replacement": "0.335"
+  },
+  {
+   "id": 119098,
+   "page": 834,
+   "bbox_pt": [
+    405.36,
+    254.03999999999996,
+    432.6,
+    320.64
+   ],
+   "expected_text": ".3350",
+   "replacement": "0.335"
+  },
+  {
+   "id": 119100,
+   "page": 834,
+   "bbox_pt": [
+    432.6,
+    254.03999999999996,
+    459.96,
+    320.64
+   ],
+   "expected_text": ".3350",
+   "replacement": "0.335"
+  },
+  {
+   "id": 119102,
+   "page": 834,
+   "bbox_pt": [
+    459.96,
+    254.03999999999996,
+    487.2,
+    320.64
+   ],
+   "expected_text": ".3350",
+   "replacement": "0.335"
+  },
+  {
+   "id": 119104,
+   "page": 834,
+   "bbox_pt": [
+    487.2,
+    254.03999999999996,
+    514.44,
+    320.64
+   ],
+   "expected_text": ".335",
+   "replacement": "0.335"
+  }
+ ],
+ "formulas": [
+  {
+   "page": 224,
+   "ids": [
+    23484,
+    23483
+   ],
+   "expected_texts": [
+    "⋅q⋅f⋅E",
+    "Q = cm"
+   ],
+   "bbox_pt": [
+    79.56,
+    580.7909999999999,
+    179.52,
+    608.391
+   ],
+   "replacement": "Q = (60 * q * f * E) / cm",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\images\\p224.png",
+   "status": "분수식 표현만 교정. 계산 적용 조건은 승인하지 않음"
+  }
+ ],
+ "missing_tables": [
+  {
+   "page": 68,
+   "old_table_id": "p68-t0",
+   "bbox": [
+    68.7,
+    116.9,
+    544.2,
+    450.1
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_00_p68-t0.png"
+  },
+  {
+   "page": 275,
+   "old_table_id": "p275-t0",
+   "bbox": [
+    68.0,
+    102.7,
+    544.2,
+    269.3
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_02_p275-t0.png"
+  },
+  {
+   "page": 275,
+   "old_table_id": "p275-t1",
+   "bbox": [
+    68.0,
+    289.7,
+    544.2,
+    456.2
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_03_p275-t1.png"
+  },
+  {
+   "page": 275,
+   "old_table_id": "p275-t2",
+   "bbox": [
+    68.0,
+    476.5,
+    544.2,
+    643.2
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_04_p275-t2.png"
+  },
+  {
+   "page": 276,
+   "old_table_id": "p276-t0",
+   "bbox": [
+    68.3,
+    68.0,
+    544.4,
+    234.6
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_05_p276-t0.png"
+  },
+  {
+   "page": 276,
+   "old_table_id": "p276-t1",
+   "bbox": [
+    68.3,
+    269.3,
+    544.4,
+    385.9
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_06_p276-t1.png"
+  },
+  {
+   "page": 276,
+   "old_table_id": "p276-t3",
+   "bbox": [
+    68.3,
+    406.2,
+    544.4,
+    522.8
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_08_p276-t3.png"
+  },
+  {
+   "page": 276,
+   "old_table_id": "p276-t4",
+   "bbox": [
+    68.3,
+    543.2,
+    544.4,
+    659.8
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_09_p276-t4.png"
+  },
+  {
+   "page": 277,
+   "old_table_id": "p277-t0",
+   "bbox": [
+    68.0,
+    68.0,
+    543.9,
+    190.1
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_10_p277-t0.png"
+  },
+  {
+   "page": 308,
+   "old_table_id": "p308-t3",
+   "bbox": [
+    68.3,
+    560.8,
+    544.6,
+    740.8
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_11_p308-t3.png"
+  },
+  {
+   "page": 396,
+   "old_table_id": "p396-t1",
+   "bbox": [
+    89.0,
+    387.5,
+    539.8,
+    520.8
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_12_p396-t1.png"
+  },
+  {
+   "page": 500,
+   "old_table_id": "p500-t1",
+   "bbox": [
+    68.7,
+    472.1,
+    544.3,
+    690.4
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_13_p500-t1.png"
+  },
+  {
+   "page": 501,
+   "old_table_id": "p501-t0",
+   "bbox": [
+    68.0,
+    507.2,
+    543.4,
+    725.8
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_14_p501-t0.png"
+  },
+  {
+   "page": 502,
+   "old_table_id": "p502-t0",
+   "bbox": [
+    68.4,
+    68.0,
+    544.4,
+    297.5
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_15_p502-t0.png"
+  },
+  {
+   "page": 502,
+   "old_table_id": "p502-t1",
+   "bbox": [
+    68.4,
+    384.0,
+    544.4,
+    714.4
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_16_p502-t1.png"
+  },
+  {
+   "page": 537,
+   "old_table_id": "p537-t0",
+   "bbox": [
+    99.1,
+    97.7,
+    544.2,
+    224.8
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_18_p537-t0.png"
+  },
+  {
+   "page": 537,
+   "old_table_id": "p537-t1",
+   "bbox": [
+    99.1,
+    243.4,
+    544.2,
+    276.7
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_19_p537-t1.png"
+  },
+  {
+   "page": 538,
+   "old_table_id": "p538-t0",
+   "bbox": [
+    99.2,
+    97.7,
+    544.3,
+    224.8
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_20_p538-t0.png"
+  },
+  {
+   "page": 538,
+   "old_table_id": "p538-t1",
+   "bbox": [
+    99.2,
+    243.4,
+    544.3,
+    276.7
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_21_p538-t1.png"
+  },
+  {
+   "page": 745,
+   "old_table_id": "p745-t0",
+   "bbox": [
+    68.0,
+    189.2,
+    543.9,
+    469.1
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_22_p745-t0.png"
+  },
+  {
+   "page": 750,
+   "old_table_id": "p750-t0",
+   "bbox": [
+    68.5,
+    91.1,
+    544.8,
+    429.6
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_23_p750-t0.png"
+  },
+  {
+   "page": 791,
+   "old_table_id": "p791-t1",
+   "bbox": [
+    68.0,
+    546.5,
+    543.4,
+    733.9
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_25_p791-t1.png"
+  },
+  {
+   "page": 934,
+   "old_table_id": "p934-t0",
+   "bbox": [
+    89.4,
+    68.0,
+    539.2,
+    118.1
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_27_p934-t0.png"
+  },
+  {
+   "page": 935,
+   "old_table_id": "p935-t0",
+   "bbox": [
+    89.4,
+    68.0,
+    538.7,
+    118.1
+   ],
+   "reason": "원문 그림에 실제 자료 표가 있으나 해당 범위의 후보 표가 없다. 글로 일부 남았더라도 칸 관계는 복구 대상이다.",
+   "source_image": "C:\\Users\\user\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\experiments\\parsing-full-review-2026-10-11\\out\\review\\diagnostics\\missing_28_p935-t0.png"
+  }
+ ],
+ "holdout_pages": [
+  57,
+  116,
+  251,
+  338,
+  449,
+  503,
+  602,
+  641,
+  712,
+  815,
+  873,
+  961
+ ],
+ "baseline_code_sha256": {
+  "assemble.py": "ee7dfe3aa2a8e1d9c5a08297f7e988aabe4359249dd7eec15ea9235021e563f3",
+  "chunk.py": "051b06e23d0801986792a20128aaf623b478268ac2531370fe8a3a7a6d6520b7",
+  "odl_tables.py": "2473559f0ad186849976c68e3830ef6ef1c4a1d8c78dff8bbf93e4ab71e532c0",
+  "parse.py": "a32abb665156be0918c8b98afa58dd9136f25aa36969d2a590bf9d56bb02b9cf",
+  "structure_export.py": "b87c2a1baae485117e59840f6b5cef4791ac4dc77c47444bf524f267f00b5340",
+  "structure_rules.py": "a753a51fd5331456fc19b5990995645c62cc531a6f3ec2fd0f9eb4c264185c3d",
+  "structure_store.py": "f3849826213ca0fbfee42846a5a90cd05863d51a30f29d52b06c672cac87b04d",
+  "table_guard.py": "73730f7c8ab8f166fa90dfdfc067bd313aa62264b6291d469cc388d8d7c74072"
+ },
+ "note": "교정 전 내용과 원문 해시가 일치해야 적용. 새 확인 쪽은 수정 결과를 읽기 전에 고정."
+}

@@ -1,0 +1,45 @@
+{
+ "generation": "complete-82c206c61e21",
+ "pages": 982,
+ "tables": 2328,
+ "records": 23481,
+ "held_tables": 1,
+ "resume_checks_passed": 915,
+ "resume_checks_failed": 0,
+ "guard_checks_passed": 9,
+ "guard_checks_failed": 0,
+ "source_windows": 286,
+ "source_window_missing": 0,
+ "numeric_cells_checked": 7062,
+ "numeric_position_differences": 0,
+ "body_summary": {
+  "raw_text_nodes_outside_tables": 12371,
+  "by_status": {
+   "제목 레코드로 전달": 360,
+   "본문 레코드로 전달": 9031,
+   "제목 문맥(절 경로·section)으로 전달": 1632,
+   "정상 제외": 368,
+   "기준 레코드로 전달": 980
+  },
+  "nested_text_nodes": 947,
+  "nested_by_status": {
+   "본문 레코드로 전달": 933,
+   "정상 제외": 14
+  },
+  "nested_excluded_reasons": {
+   "기존 누락 표 보충 교정이 표 영역 글을 표로 대체(줄마다 보충 표 칸 글에 있음)": 7,
+   "쪽 머리·바닥 띠의 부문 표기": 3,
+   "이미 표 칸으로 전달(표 영역 안이고 줄마다 그 표 칸 글에 있음)": 4
+  },
+  "nested_not_in_623_list": 324,
+  "unexplained": 0,
+  "listed_623": {
+   "total": 623,
+   "복구": 616,
+   "정상 제외": 7
+  },
+  "nested_in_table_region_unresolved": 0
+ },
+ "full_output_byte_identical": true,
+ "core_code_byte_identical": true
+}

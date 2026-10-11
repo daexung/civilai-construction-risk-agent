@@ -1,0 +1,7 @@
+# Version-bound source files must retain the exact bytes on every platform.
+pipeline/*.py -text whitespace=cr-at-eol,-blank-at-eof
+*.json -text whitespace=cr-at-eol
+evidence/*.json -text whitespace=cr-at-eol
+# This generated, hash-bound manifest contains about 500,000 coordinate lines.
+# Keep it readable as a file without expanding it into the pull request diff.
+reviewed_tables.json -diff

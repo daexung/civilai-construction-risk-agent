@@ -29,5 +29,9 @@ evals/results/embedding_query_cache.jsonl
 
 tmp/
 
+# 최종 파싱의 로컬 입력·검증 기준·대용량 출력은 별도 보존한다.
+experiments/parsing-final/local/
+experiments/parsing-final/out/
+
 # Temporary credentials produced by GitHub's GCP OIDC action.
 gha-creds-*.json
