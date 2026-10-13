@@ -1,0 +1,214 @@
+{
+ "total_attempts": 199,
+ "total_cost_usd": 1.739,
+ "by_run": {
+  "dev12-a": {
+   "attempts": 18,
+   "cost": 0.1532,
+   "calls": 18
+  },
+  "dev12-b": {
+   "attempts": 15,
+   "cost": 0.1302,
+   "calls": 15
+  },
+  "reg60-a": {
+   "attempts": 59,
+   "cost": 0.5195,
+   "calls": 59
+  },
+  "dev12-d": {
+   "attempts": 15,
+   "cost": 0.1357,
+   "calls": 15
+  },
+  "reg60-b": {
+   "attempts": 59,
+   "cost": 0.5239,
+   "calls": 59
+  },
+  "reg60-c": {
+   "attempts": 10,
+   "cost": 0.0282,
+   "calls": 10
+  },
+  "rep-2": {
+   "attempts": 12,
+   "cost": 0.1326,
+   "calls": 12
+  },
+  "rep-3": {
+   "attempts": 11,
+   "cost": 0.1157,
+   "calls": 11
+  }
+ },
+ "by_role": {
+  "select": {
+   "calls": 154,
+   "attempts": 154,
+   "cost": 1.5046,
+   "latency_median_sec": 2.34,
+   "latency_max_sec": 4.13
+  },
+  "list": {
+   "calls": 33,
+   "attempts": 33,
+   "cost": 0.0882,
+   "latency_median_sec": 2.16,
+   "latency_max_sec": 6.02
+  },
+  "select_supplement": {
+   "calls": 9,
+   "attempts": 9,
+   "cost": 0.1462,
+   "latency_median_sec": 2.17,
+   "latency_max_sec": 2.31
+  },
+  "query_embedding": {
+   "calls": 3,
+   "attempts": 3,
+   "cost": 0.0,
+   "latency_median_sec": null,
+   "latency_max_sec": null
+  }
+ },
+ "run_versions": {
+  "dev12-a": {
+   "select_verified_code_sha256": "04a4dddaa3",
+   "select_verified_config_sha256": "fe4f7378ce",
+   "system_select_sha256": "7b4d0c0f64",
+   "schema_select_sha256": "d1db63c03a",
+   "system_list_sha256": "abf6708a36",
+   "schema_list_sha256": "ff8f276467"
+  },
+  "dev12-b": {
+   "select_verified_code_sha256": "5b2321adf8",
+   "select_verified_config_sha256": "fe4f7378ce",
+   "system_select_sha256": "57caf04c46",
+   "schema_select_sha256": "210290a558",
+   "system_list_sha256": "81ca01f7e7",
+   "schema_list_sha256": "ff8f276467"
+  },
+  "dev12-c": {
+   "select_verified_code_sha256": "db715ed659",
+   "select_verified_config_sha256": "fe4f7378ce",
+   "system_select_sha256": "57caf04c46",
+   "schema_select_sha256": "210290a558",
+   "system_list_sha256": "81ca01f7e7",
+   "schema_list_sha256": "ff8f276467"
+  },
+  "dev12-d": {
+   "select_verified_code_sha256": "527ba6ef9a",
+   "select_verified_config_sha256": "b7056f3763",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "b9ba201fc1",
+   "schema_list_sha256": "ff8f276467"
+  },
+  "reg60-a": {
+   "select_verified_code_sha256": "2d1f46841a",
+   "select_verified_config_sha256": "b7056f3763",
+   "system_select_sha256": "57caf04c46",
+   "schema_select_sha256": "210290a558",
+   "system_list_sha256": "81ca01f7e7",
+   "schema_list_sha256": "ff8f276467"
+  },
+  "reg60-b": {
+   "select_verified_code_sha256": "527ba6ef9a",
+   "select_verified_config_sha256": "b7056f3763",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "b9ba201fc1",
+   "schema_list_sha256": "ff8f276467"
+  },
+  "reg60-c": {
+   "select_verified_code_sha256": "eb3a57079b",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "reg60-d": {
+   "select_verified_code_sha256": "b8c7a492ae",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "reg60-e": {
+   "select_verified_code_sha256": "bce24bf9d9",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "reg60-f": {
+   "select_verified_code_sha256": "d73f3a47bb",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "reg60-g": {
+   "select_verified_code_sha256": "672f9ba24f",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "rep-2": {
+   "select_verified_code_sha256": "bce24bf9d9",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "rep-2f": {
+   "select_verified_code_sha256": "d73f3a47bb",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "rep-2g": {
+   "select_verified_code_sha256": "672f9ba24f",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "rep-3": {
+   "select_verified_code_sha256": "bce24bf9d9",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "rep-3f": {
+   "select_verified_code_sha256": "d73f3a47bb",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  },
+  "rep-3g": {
+   "select_verified_code_sha256": "672f9ba24f",
+   "select_verified_config_sha256": "e1f7b263d5",
+   "system_select_sha256": "d908df986e",
+   "schema_select_sha256": "4cc0d020fd",
+   "system_list_sha256": "89693feb7c",
+   "schema_list_sha256": "efd37efaeb"
+  }
+ }
+}

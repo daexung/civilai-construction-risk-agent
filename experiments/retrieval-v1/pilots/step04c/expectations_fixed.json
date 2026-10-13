@@ -1,0 +1,414 @@
+{
+ "fixed_before_model_calls": true,
+ "source_file": "eval/new_questions_04b_2026-10-12.json",
+ "source_sha256": "36e4ae8b46fba2996142a0eef3611f7cdb5188919b5506d6b09be8094be0fa10",
+ "expectation_corrections": [],
+ "correction_note": "원문 대조(필수 조각 존재·절 일치·기대 값 문자열 포함) 결과 수정 없음",
+ "note": "이미 4b에서 결과를 본 개발 자료(독립 평가 아님). 12문 결과를 전체 정확도로 쓰지 않는다.",
+ "questions": [
+  {
+   "id": "V02",
+   "pilot_role": "지시서 지정: 목록 일부 누락(4b 4/6)",
+   "category": "list",
+   "question": "하수관이나 빗물받이 준설하는 품은 어떤 종류가 있어?",
+   "is_list": true,
+   "no_data": false,
+   "hold": false,
+   "required_chunks": [],
+   "required_sections": [
+    "maint:2-4-6",
+    "maint:2-4-7",
+    "maint:2-4-8",
+    "maint:2-4-9",
+    "maint:2-4-10",
+    "maint:2-4-11"
+   ],
+   "acceptable_sections": [
+    "maint:2-4-2",
+    "maint:2-4-3",
+    "maint:2-4-12"
+   ],
+   "forbidden_chunks": [],
+   "forbidden_sections": [
+    "common:8-2-29",
+    "common:8-2-30",
+    "civil:7-4-4"
+   ],
+   "required_references": [],
+   "required_states": {},
+   "expected_values": {},
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "maint:2-4-6",
+    "maint:2-4-7",
+    "maint:2-4-8",
+    "maint:2-4-9",
+    "maint:2-4-10",
+    "maint:2-4-11"
+   ]
+  },
+  {
+   "id": "V09",
+   "pilot_role": "지시서 지정: 같은 절 다른 표 선택",
+   "category": "price",
+   "question": "흙깎기(기계) 작업에서 혼합토사 대규모일 때 불도저 32ton의 일당 시공량이 얼마야?",
+   "is_list": false,
+   "no_data": false,
+   "hold": false,
+   "required_chunks": [
+    "t:full-p124-o10583"
+   ],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [
+    "t:full-p124-o10510",
+    "t:full-p125-o10667",
+    "t:full-p126-o10873"
+   ],
+   "forbidden_sections": [],
+   "required_references": [],
+   "required_states": {},
+   "expected_values": {
+    "기준": "(일당) 혼합토사",
+    "불도저 32ton 대규모 시공량(㎥)": "640"
+   },
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "common:3-2-3"
+   ]
+  },
+  {
+   "id": "V11",
+   "pilot_role": "지시서 지정: 자료 낱말 불일치로 거부",
+   "category": "price",
+   "question": "서양식 탱크형 대변기 한 개 설치하는 데 위생공이 몇 인 들어?",
+   "is_list": false,
+   "no_data": false,
+   "hold": false,
+   "required_chunks": [
+    "t:full-p739-o104300"
+   ],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [
+    "t:full-p739-o104241"
+   ],
+   "forbidden_sections": [],
+   "required_references": [],
+   "required_states": {},
+   "expected_values": {
+    "기준": "(개당)",
+    "서양식대변기(탱크형) 위생공": "0.694",
+    "보통인부": "0.200"
+   },
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "mech:7-1-2"
+   ]
+  },
+  {
+   "id": "V12",
+   "pilot_role": "지시서 지정: 소속 미확정 설명·다른 표",
+   "category": "price",
+   "question": "병원건물에서 강관 배관재의 관이음부속과 관지지물 금액 비율은 얼마야? 냉온수배관 기계실 기준으로.",
+   "is_list": false,
+   "no_data": false,
+   "hold": true,
+   "required_chunks": [
+    "t:full-p69-o4229",
+    "r:complete-82c206c61e21:full-p69:n4313#0"
+   ],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [
+    "t:full-p68-ocorrection:p68-t0"
+   ],
+   "forbidden_sections": [],
+   "required_references": [],
+   "required_states": {
+    "r:complete-82c206c61e21:full-p69:n4313#0": "소속 미확정(membership_unconfirmed): 이 표가 병원건물 요율이라는 연결은 이 설명에 의존하므로 정상 계산 근거로 쓰지 않고 확인 필요로 표시"
+   },
+   "expected_values": {
+    "가. 냉･온수배관 - 기계실": "관이음부속 80, 관지지물 50"
+   },
+   "allowed_status": [
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "common:1-2-4"
+   ]
+  },
+  {
+   "id": "V20",
+   "pilot_role": "지시서 지정: 자료 없음 낱말 근접",
+   "category": "no_data",
+   "question": "풍력발전기 블레이드 교체 품 알려줘",
+   "is_list": false,
+   "no_data": true,
+   "hold": false,
+   "required_chunks": [],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [],
+   "forbidden_sections": [
+    "civil:1-6-6",
+    "maint:2-1-2",
+    "mech:13-6-2"
+   ],
+   "required_references": [],
+   "required_states": {},
+   "expected_values": {},
+   "allowed_status": [
+    "not_found"
+   ],
+   "answer_sections": []
+  },
+  {
+   "id": "V01",
+   "pilot_role": "4b 정상: 목록",
+   "category": "list",
+   "question": "도배 관련 품에는 어떤 것들이 있어?",
+   "is_list": true,
+   "no_data": false,
+   "hold": false,
+   "required_chunks": [],
+   "required_sections": [
+    "arch:5-3-7",
+    "maint:3-2-7",
+    "maint:3-4-3"
+   ],
+   "acceptable_sections": [],
+   "forbidden_chunks": [],
+   "forbidden_sections": [
+    "arch:5-3-1",
+    "maint:3-2-6"
+   ],
+   "required_references": [],
+   "required_states": {},
+   "expected_values": {},
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "arch:5-3-7",
+    "maint:3-2-7",
+    "maint:3-4-3"
+   ]
+  },
+  {
+   "id": "V05",
+   "pilot_role": "4b 정상: 규칙+참조",
+   "category": "rule",
+   "question": "강관비계에서 벽 연결재를 추가로 설치하고 해체하는 경우에는 품을 어떻게 적용해?",
+   "is_list": false,
+   "no_data": false,
+   "hold": false,
+   "required_chunks": [
+    "r:complete-82c206c61e21:full-p103:n7960#0",
+    "t:full-p106-o8368"
+   ],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [
+    "r:complete-82c206c61e21:full-p103:n8022#0",
+    "r:complete-82c206c61e21:full-p104:n8104#0"
+   ],
+   "forbidden_sections": [],
+   "required_references": [
+    {
+     "edge_id": "complete-82c206c61e21:rel2673",
+     "target_status": "resolved",
+     "target_section": "common:2-7-9",
+     "applicability": "unknown"
+    }
+   ],
+   "required_states": {},
+   "expected_values": {},
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "common:2-7-1",
+    "common:2-7-9"
+   ]
+  },
+  {
+   "id": "V07",
+   "pilot_role": "4b 정상: 규칙+주석 표",
+   "category": "rule",
+   "question": "철재면 재도장 바탕처리에서 A급은 어떤 상태를 말해?",
+   "is_list": false,
+   "no_data": false,
+   "hold": false,
+   "required_chunks": [
+    "t:full-p974-o140824",
+    "r:complete-82c206c61e21:full-p974:n140820#0"
+   ],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [
+    "t:full-p974-o140873"
+   ],
+   "forbidden_sections": [],
+   "required_references": [],
+   "required_states": {},
+   "expected_values": {
+    "철재면 A급": "재래도장의 탈락이 심하고 부분적으로 부식되어 약품을 사용하여 도막 및 기타 부착물의 완전 제거를 요하는 정도"
+   },
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "maint:3-3-2"
+   ]
+  },
+  {
+   "id": "V15",
+   "pilot_role": "4b 정상: 값(단위 기준 구분)",
+   "category": "single_estimate",
+   "question": "도로 연약지반에 육상으로 토목섬유 매트를 깔 때 하루에 몇 ㎡ 깔 수 있어?",
+   "is_list": false,
+   "no_data": false,
+   "hold": false,
+   "required_chunks": [
+    "t:full-p165-o15940"
+   ],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [
+    "t:full-p166-o16017"
+   ],
+   "forbidden_sections": [],
+   "required_references": [],
+   "required_states": {},
+   "expected_values": {
+    "기준": "(일당)",
+    "육상 연약지반(도로/철도) 시공량(㎡)": "3,600"
+   },
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "common:5-2-1"
+   ]
+  },
+  {
+   "id": "V16",
+   "pilot_role": "4b 정상: 다중 공종+참조",
+   "category": "multi_work",
+   "question": "타원형 돌망태를 설치하면서 필터매트도 깔려고 하는데 품 근거를 알려줘",
+   "is_list": false,
+   "no_data": false,
+   "hold": false,
+   "required_chunks": [
+    "t:full-p389-o52919",
+    "r:complete-82c206c61e21:full-p389:n52973#0",
+    "t:full-p165-o15940"
+   ],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [
+    "r:complete-82c206c61e21:full-p390:n53021#0",
+    "r:complete-82c206c61e21:full-p390:n53055#0",
+    "r:complete-82c206c61e21:full-p389:n52881#0"
+   ],
+   "forbidden_sections": [],
+   "required_references": [
+    {
+     "edge_id": "complete-82c206c61e21:rel5267",
+     "target_status": "resolved",
+     "target_section": "common:5-2-1",
+     "applicability": "unknown"
+    }
+   ],
+   "required_states": {},
+   "expected_values": {
+    "돌망태 기준": "(㎡당) 돌망태 높이별 석공·특별인부",
+    "매트부설 기준": "(일당) 시공량(㎡), 육상/수중·지반별"
+   },
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "civil:2-2-1",
+    "common:5-2-1"
+   ]
+  },
+  {
+   "id": "V17",
+   "pilot_role": "4b 정상: 부분 참조 상태 보존",
+   "category": "multi_work",
+   "question": "터널 발파굴착에서 B군일 때 1발파당 작업인원과 B군은 어떤 경우인지 알려줘",
+   "is_list": false,
+   "no_data": false,
+   "hold": true,
+   "required_chunks": [
+    "t:full-p397-o53599",
+    "t:full-p397-o53561",
+    "r:complete-82c206c61e21:full-p398:n53728#0"
+   ],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [],
+   "forbidden_sections": [],
+   "required_references": [
+    {
+     "edge_id": "complete-82c206c61e21:rel5361",
+     "target_status": "partial",
+     "target_section": "civil:3-2-4",
+     "applicability": "unknown"
+    }
+   ],
+   "required_states": {
+    "complete-82c206c61e21:rel5361": "partial: '3-2-4 [주] ④' 하위 항목 노드를 찾지 못한 연결. A·B·C군 구분표(3-2-4)는 후보로 보여 주되 하위 항목 확정으로 쓰지 않음"
+   },
+   "expected_values": {},
+   "allowed_status": [
+    "needs_confirmation"
+   ],
+   "answer_sections": [
+    "civil:3-2-5",
+    "civil:3-2-4"
+   ]
+  },
+  {
+   "id": "V19",
+   "pilot_role": "4b 정상: 자료 없음 거부",
+   "category": "no_data",
+   "question": "태양광 발전 모듈 설치 품은 몇 인이야?",
+   "is_list": false,
+   "no_data": true,
+   "hold": false,
+   "required_chunks": [],
+   "required_sections": [],
+   "acceptable_sections": [],
+   "forbidden_chunks": [],
+   "forbidden_sections": [
+    "mech:13-5-9",
+    "mech:13-6-2",
+    "common:6-7-9"
+   ],
+   "required_references": [],
+   "required_states": {},
+   "expected_values": {},
+   "allowed_status": [
+    "not_found"
+   ],
+   "answer_sections": []
+  }
+ ]
+}

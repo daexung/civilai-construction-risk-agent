@@ -1,0 +1,14 @@
+{
+ "frozen_on": "2026-10-12T02:58:51",
+ "config_sha256": "71792e8fb25cfff6d5e8618e29c76e4afda23984362bd82644e539caa0c81ba8",
+ "retrieve_code_sha256": "6c7d120e6d85a0cf0dbcf2e27a18f7156e6fd7f8626114f806d54641b8c67cf8",
+ "evidence_code_sha256": "46463c43ee78fc522efa02a07d0e504168f043e6a79f361f08ee4af8f4852e55",
+ "embed_index_code_sha256": "ebd8898f9ee2369aaed6d43b01efdbcfd3396e1ff1e17cdd19bda17dd1d2753e",
+ "vectors_sha256": "09d96747d3c2de9abcc1cd362ab1753731617d118f75986fe3121ca328166e84",
+ "new_questions_sha256": "fd8e04b303dff18a4bec80954cc99e2d3c89549fcac6ce40f1dd9729e41e4115",
+ "weak_support_cosine": 0.7095,
+ "weak_support_rule": "개발 20문 중 정답이 있는 질문의 최상위 코사인 최솟값 미만이면 근거 약함(표시만, 검색 결과를 숨기지 않음)",
+ "dev_q20_top_cosine": 0.590920090675354,
+ "new_eval_done": true,
+ "new_eval_run": "20261012T025916-eval_search_new"
+}

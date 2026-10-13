@@ -1,0 +1,29 @@
+out/
+__pycache__/
+
+# Keep code, fixed evaluation questions, small result summaries and hashes in Git.
+# Generated source data, vectors, caches, rendered pages and model transcripts stay local.
+baseline/
+corrections/review/
+pilots/**/cache/
+pilots/**/runs/
+pilots/**/responses/
+pilots/**/candidates/
+pilots/**/prompts/
+pilots/**/prep/pdf_pages/
+pilots/**/*.jsonl
+pilots/**/*.log
+pilots/**/*.png
+pilots/**/*.pdf
+pilots/**/*.txt
+pilots/**/*.parquet
+pilots/**/*.json
+!pilots/**/dev_cases*.json
+!pilots/**/trial_questions*.json
+!pilots/**/expectations_fixed.json
+!pilots/**/final_config*.json
+!pilots/**/freeze*.json
+!pilots/**/summary*.json
+!pilots/**/compare*.json
+!pilots/**/usage*.json
+!pilots/**/final_hashes*.json

@@ -1,0 +1,1283 @@
+{
+ "methods": {
+  "ga": {
+   "status": {
+    "supported": 62,
+    "needs_confirmation": 28,
+    "not_found": 14
+   },
+   "questions": 104
+  },
+  "na": {
+   "status": {
+    "supported": 65,
+    "needs_confirmation": 25,
+    "not_found": 14
+   },
+   "questions": 104
+  },
+  "da": {
+   "status": {
+    "supported": 62,
+    "needs_confirmation": 28,
+    "not_found": 14
+   },
+   "questions": 104
+  },
+  "ra": {
+   "status": {
+    "supported": 66,
+    "needs_confirmation": 24,
+    "not_found": 14
+   },
+   "questions": 104
+  }
+ },
+ "baseline_reproduction": {
+  "checked": 107,
+  "mismatch": []
+ },
+ "changed_cases": [
+  {
+   "set": "60",
+   "id": "N19",
+   "method": "ra",
+   "ga_status": "needs_confirmation",
+   "status": "needs_confirmation",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 2,
+   "ga_confirmation_only_n": 2,
+   "confirmation_only_n": 0,
+   "ga_answer_n": 6,
+   "answer_n": 8,
+   "ga_review_n": 2,
+   "review_n": 0,
+   "ga_reasons": [
+    "budget_required",
+    "target_mismatch_warning",
+    "target_term_unconfirmed"
+   ],
+   "reasons": [
+    "budget_required"
+   ],
+   "diagnostic_info": [
+    "target_term_unconfirmed",
+    "target_mismatch_warning"
+   ],
+   "question": "BIM 모델링 작업은 품이 몇 인이야?"
+  },
+  {
+   "set": "g20",
+   "id": "4g_G02",
+   "method": "na",
+   "ga_status": "needs_confirmation",
+   "status": "needs_confirmation",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 1,
+   "ga_confirmation_only_n": 2,
+   "confirmation_only_n": 1,
+   "ga_answer_n": 6,
+   "answer_n": 7,
+   "ga_review_n": 2,
+   "review_n": 1,
+   "ga_reasons": [
+    "target_mismatch_warning",
+    "target_term_unconfirmed"
+   ],
+   "reasons": [
+    "target_mismatch_warning"
+   ],
+   "diagnostic_info": [
+    "target_term_unconfirmed"
+   ],
+   "question": "외벽에 방수모르타르를 15㎜ 두께로 바르려는데 ㎡당 미장공은 몇 인 들어?"
+  },
+  {
+   "set": "g20",
+   "id": "4g_G02",
+   "method": "ra",
+   "ga_status": "needs_confirmation",
+   "status": "supported",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 2,
+   "ga_confirmation_only_n": 2,
+   "confirmation_only_n": 0,
+   "ga_answer_n": 6,
+   "answer_n": 8,
+   "ga_review_n": 2,
+   "review_n": 0,
+   "ga_reasons": [
+    "target_mismatch_warning",
+    "target_term_unconfirmed"
+   ],
+   "reasons": [],
+   "diagnostic_info": [
+    "target_term_unconfirmed",
+    "target_mismatch_warning"
+   ],
+   "question": "외벽에 방수모르타르를 15㎜ 두께로 바르려는데 ㎡당 미장공은 몇 인 들어?"
+  },
+  {
+   "set": "dev",
+   "id": "E02",
+   "method": "na",
+   "ga_status": "needs_confirmation",
+   "status": "supported",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 3,
+   "ga_confirmation_only_n": 3,
+   "confirmation_only_n": 0,
+   "ga_answer_n": 2,
+   "answer_n": 5,
+   "ga_review_n": 3,
+   "review_n": 0,
+   "ga_reasons": [
+    "target_term_unconfirmed"
+   ],
+   "reasons": [],
+   "diagnostic_info": [
+    "target_term_unconfirmed"
+   ],
+   "question": "포크레인으로 터파기하면 하루에 몇 ㎥ 팔 수 있어?"
+  },
+  {
+   "set": "dev",
+   "id": "E02",
+   "method": "ra",
+   "ga_status": "needs_confirmation",
+   "status": "supported",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 3,
+   "ga_confirmation_only_n": 3,
+   "confirmation_only_n": 0,
+   "ga_answer_n": 2,
+   "answer_n": 5,
+   "ga_review_n": 3,
+   "review_n": 0,
+   "ga_reasons": [
+    "target_term_unconfirmed"
+   ],
+   "reasons": [],
+   "diagnostic_info": [
+    "target_term_unconfirmed"
+   ],
+   "question": "포크레인으로 터파기하면 하루에 몇 ㎥ 팔 수 있어?"
+  },
+  {
+   "set": "dev",
+   "id": "E03",
+   "method": "na",
+   "ga_status": "needs_confirmation",
+   "status": "supported",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 6,
+   "ga_confirmation_only_n": 6,
+   "confirmation_only_n": 0,
+   "ga_answer_n": 13,
+   "answer_n": 19,
+   "ga_review_n": 6,
+   "review_n": 0,
+   "ga_reasons": [
+    "target_term_unconfirmed"
+   ],
+   "reasons": [],
+   "diagnostic_info": [
+    "target_term_unconfirmed"
+   ],
+   "question": "아시바 설치하고 해체하는 품은 어떻게 돼?"
+  },
+  {
+   "set": "dev",
+   "id": "E03",
+   "method": "ra",
+   "ga_status": "needs_confirmation",
+   "status": "supported",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 6,
+   "ga_confirmation_only_n": 6,
+   "confirmation_only_n": 0,
+   "ga_answer_n": 13,
+   "answer_n": 19,
+   "ga_review_n": 6,
+   "review_n": 0,
+   "ga_reasons": [
+    "target_term_unconfirmed"
+   ],
+   "reasons": [],
+   "diagnostic_info": [
+    "target_term_unconfirmed"
+   ],
+   "question": "아시바 설치하고 해체하는 품은 어떻게 돼?"
+  },
+  {
+   "set": "dev",
+   "id": "H1",
+   "method": "na",
+   "ga_status": "needs_confirmation",
+   "status": "supported",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 1,
+   "ga_confirmation_only_n": 1,
+   "confirmation_only_n": 0,
+   "ga_answer_n": 1,
+   "answer_n": 2,
+   "ga_review_n": 1,
+   "review_n": 0,
+   "ga_reasons": [
+    "target_term_unconfirmed"
+   ],
+   "reasons": [],
+   "diagnostic_info": [
+    "target_term_unconfirmed"
+   ],
+   "question": "콘베이어스케일 대형(500T/H 이상)을 설치하는 품에서 보통인부는 몇 인이야?"
+  },
+  {
+   "set": "dev",
+   "id": "H1",
+   "method": "ra",
+   "ga_status": "needs_confirmation",
+   "status": "supported",
+   "ga_confirmed_n": 0,
+   "confirmed_n": 1,
+   "ga_confirmation_only_n": 1,
+   "confirmation_only_n": 0,
+   "ga_answer_n": 1,
+   "answer_n": 2,
+   "ga_review_n": 1,
+   "review_n": 0,
+   "ga_reasons": [
+    "target_term_unconfirmed"
+   ],
+   "reasons": [],
+   "diagnostic_info": [
+    "target_term_unconfirmed"
+   ],
+   "question": "콘베이어스케일 대형(500T/H 이상)을 설치하는 품에서 보통인부는 몇 인이야?"
+  }
+ ],
+ "no_data": {
+  "60:Q20": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "60:N19": {
+   "ga": {
+    "status": "needs_confirmation",
+    "confirmed_n": 0,
+    "confirmation_only_n": 2,
+    "answer_n": 6,
+    "review_n": 2,
+    "context_n": 8,
+    "reasons": [
+     "budget_required",
+     "target_term_unconfirmed",
+     "target_mismatch_warning"
+    ]
+   },
+   "na": {
+    "status": "needs_confirmation",
+    "confirmed_n": 0,
+    "confirmation_only_n": 2,
+    "answer_n": 6,
+    "review_n": 2,
+    "context_n": 8,
+    "reasons": [
+     "budget_required",
+     "target_mismatch_warning"
+    ]
+   },
+   "da": {
+    "status": "needs_confirmation",
+    "confirmed_n": 0,
+    "confirmation_only_n": 2,
+    "answer_n": 6,
+    "review_n": 2,
+    "context_n": 8,
+    "reasons": [
+     "budget_required",
+     "target_term_unconfirmed"
+    ]
+   },
+   "ra": {
+    "status": "needs_confirmation",
+    "confirmed_n": 2,
+    "confirmation_only_n": 0,
+    "answer_n": 8,
+    "review_n": 0,
+    "context_n": 8,
+    "reasons": [
+     "budget_required"
+    ]
+   }
+  },
+  "60:N20": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "60:V19": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "60:V20": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "g20:4g_G15": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "g20:4g_G16": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary"
+    ]
+   }
+  },
+  "g20:4g_G17": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "g20:4g_G18": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "dev:E04": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "dev:E05": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "dev:E06": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "dev:F04": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "dev:F05": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  },
+  "dev:H3": {
+   "ga": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "na": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "da": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   },
+   "ra": {
+    "status": "not_found",
+    "confirmed_n": 0,
+    "confirmation_only_n": 0,
+    "answer_n": 0,
+    "review_n": 0,
+    "context_n": 0,
+    "reasons": [
+     "no_primary",
+     "term_absent_in_corpus"
+    ]
+   }
+  }
+ },
+ "over_hold": {
+  "ga": [
+   [
+    "g20",
+    "4g_G02",
+    [
+     "target_term_unconfirmed",
+     "target_mismatch_warning"
+    ]
+   ],
+   [
+    "g20",
+    "4g_G13",
+    [
+     "list_from_section_catalog"
+    ]
+   ]
+  ],
+  "na": [
+   [
+    "g20",
+    "4g_G02",
+    [
+     "target_mismatch_warning"
+    ]
+   ],
+   [
+    "g20",
+    "4g_G13",
+    [
+     "list_from_section_catalog"
+    ]
+   ]
+  ],
+  "da": [
+   [
+    "g20",
+    "4g_G02",
+    [
+     "target_term_unconfirmed"
+    ]
+   ],
+   [
+    "g20",
+    "4g_G13",
+    [
+     "list_from_section_catalog"
+    ]
+   ]
+  ],
+  "ra": [
+   [
+    "g20",
+    "4g_G13",
+    [
+     "list_from_section_catalog"
+    ]
+   ]
+  ]
+ },
+ "other_holds_kept": {
+  "na": {
+   "checked": 24,
+   "lost": []
+  },
+  "da": {
+   "checked": 24,
+   "lost": []
+  },
+  "ra": {
+   "checked": 24,
+   "lost": []
+  }
+ },
+ "coverage": {
+  "ga": {
+   "60": {
+    "method": "ga",
+    "set": "60",
+    "replayed_cases": 62,
+    "not_run": [],
+    "cache_hits": 74,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:34:14"
+   },
+   "g20": {
+    "method": "ga",
+    "set": "g20",
+    "replayed_cases": 20,
+    "not_run": [],
+    "cache_hits": 26,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:42:57"
+   },
+   "dev": {
+    "method": "ga",
+    "set": "dev",
+    "replayed_cases": 22,
+    "not_run": [],
+    "cache_hits": 24,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:46:23"
+   },
+   "g09": {
+    "method": "ga",
+    "set": "g09",
+    "replayed_cases": 0,
+    "not_run": [],
+    "cache_hits": 0,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:50:36"
+   }
+  },
+  "na": {
+   "60": {
+    "method": "na",
+    "set": "60",
+    "replayed_cases": 62,
+    "not_run": [],
+    "cache_hits": 74,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:37:18"
+   },
+   "g20": {
+    "method": "na",
+    "set": "g20",
+    "replayed_cases": 20,
+    "not_run": [],
+    "cache_hits": 26,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:43:47"
+   },
+   "dev": {
+    "method": "na",
+    "set": "dev",
+    "replayed_cases": 22,
+    "not_run": [],
+    "cache_hits": 24,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:47:50"
+   },
+   "g09": {
+    "method": "na",
+    "set": "g09",
+    "replayed_cases": 3,
+    "not_run": [],
+    "cache_hits": 6,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:50:59"
+   }
+  },
+  "da": {
+   "60": {
+    "method": "da",
+    "set": "60",
+    "replayed_cases": 62,
+    "not_run": [],
+    "cache_hits": 74,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:39:50"
+   },
+   "g20": {
+    "method": "da",
+    "set": "g20",
+    "replayed_cases": 20,
+    "not_run": [],
+    "cache_hits": 26,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:44:35"
+   },
+   "dev": {
+    "method": "da",
+    "set": "dev",
+    "replayed_cases": 22,
+    "not_run": [],
+    "cache_hits": 24,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:49:13"
+   },
+   "g09": {
+    "method": "da",
+    "set": "g09",
+    "replayed_cases": 3,
+    "not_run": [],
+    "cache_hits": 6,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:51:23"
+   }
+  },
+  "ra": {
+   "60": {
+    "method": "ra",
+    "set": "60",
+    "replayed_cases": 62,
+    "not_run": [],
+    "cache_hits": 74,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:42:06"
+   },
+   "g20": {
+    "method": "ra",
+    "set": "g20",
+    "replayed_cases": 20,
+    "not_run": [],
+    "cache_hits": 26,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:45:23"
+   },
+   "dev": {
+    "method": "ra",
+    "set": "dev",
+    "replayed_cases": 22,
+    "not_run": [],
+    "cache_hits": 24,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:50:30"
+   },
+   "g09": {
+    "method": "ra",
+    "set": "g09",
+    "replayed_cases": 3,
+    "not_run": [],
+    "cache_hits": 6,
+    "cache_misses": 0,
+    "errors": [],
+    "external_connection_attempts_blocked": 0,
+    "code_sha256": "3f7b2d2e6d9a2449d378a53b706c8162cd80c94bba3426ad61ba7abe184da88d",
+    "finished": "2026-10-13T01:51:44"
+   }
+  }
+ }
+}

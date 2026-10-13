@@ -1,0 +1,40 @@
+{
+ "frozen_for": "4e final-60 replay",
+ "versions_in_final_run": {
+  "chunk_set_id": "cs-37f81b5cfb1b-46f4f035c0fa",
+  "release_id": "rk-complete-82c206c61e21-37f81b5cfb1b",
+  "select_verified_code_sha256": "4aa1af7856c8be6dedb27b3092543eddfcb5c9486249a0580abe0b17c04110f2",
+  "select_verified_config_sha256": "140e5cbfb4cf4bf8b7451692ba2ff4dca7b1469c6cba1be516d08617f3dd9422",
+  "system_select_sha256": "d908df986efbadc38cd5065d4122a0b1e14d11d833b82b61087c7bbd858e2482",
+  "schema_select_sha256": "4cc0d020fd8e4648a549b6295c70fa7898543176362e446c9a24663f5b3ce1b0",
+  "system_list_sha256": "89693feb7c4c1f77352f5e1e3ce0785640bfa6c8abb54bce8c9ffdd7c004583b",
+  "schema_list_sha256": "efd37efaeb7b31d2dd370d789cf5e828078883f76fbf490401c759dc73ae9455",
+  "retrieve_code_sha256": "6c7d120e6d85a0cf0dbcf2e27a18f7156e6fd7f8626114f806d54641b8c67cf8",
+  "retrieve_config_sha256": "71792e8fb25cfff6d5e8618e29c76e4afda23984362bd82644e539caa0c81ba8",
+  "evidence_code_sha256": "f1ccbbceff91e98291a2468a09c3f0c949dda420a588267f008e6e9916b568c8",
+  "select_evidence_code_sha256": "ef4b4c742387c0f7720b405efc5278a4bc79745d3097e643da2cf2770f6980a1"
+ },
+ "files": {
+  "src/select_verified.py": "4aa1af7856c8be6dedb27b3092543eddfcb5c9486249a0580abe0b17c04110f2",
+  "pilots/step04e/run_4e.py": "3059f45883d74e4fdc890775acab4ee46faeb0b5dcb6895244f3b0a2f929cb0c",
+  "pilots/step04e/evaluate_4e.py": "117769f83ac7b2103ba8e71753b7880f14f012ccefcd24557c86425542ee65bc",
+  "pilots/step04e/evaluate_dev_4e.py": "dde8332a3305c0ce9fcac14f81103eb2d865b749105b08318a430d523856ab3d",
+  "pilots/step04e/verify_4e.py": "f563b09f82f3847dc9a722d817f1a3a5a59b319893ce428179a5ff7d42311b39",
+  "pilots/step04e/preserve.py": "4012b73c801342c8a27e65f65a4353b6f2dca9b2c05a08d42b09fc2124661aa4",
+  "pilots/step04e/dev_cases_4e.json": "02141295a7e9b2aee4df3322b1814c3d632fd44f53a0ca0ba90f88197228b551",
+  "pilots/step04e/eval_final-60.json": "978f8ceca27cd5a9963a4758dac3706a655f3ec30c7fec71829381695f8a6b56",
+  "pilots/step04e/eval_dev_dev-final.json": "925107ec7f3b33722a87b0d69def90e9c8a41c9a809b160666ec6bb0e2d44d9c",
+  "pilots/step04d/eval_reg60-g.json": "ef8ddf273215030de53453d3676dfbab9f3d85396dbbff2594207ae3fb3652d0"
+ },
+ "run_dirs": {
+  "final-60": "5141678919b0fbc8460196ee0c58ee8726dd2486843411ca970bf7294274bc23",
+  "dev-final": "23cfcfaefe94eda62b7d18f5d51e08bd12d68ece2b3bd7da779a7db646697d36",
+  "dev-e1": "9e619a246d5d366842f6f210bdc505022fd234ec1820dcd35c52dd30e256be9c",
+  "n08-rep4": "5c873805f0b1863b4e8bbfda972cb4ec2e4d5677fc3847dfec0b6ea644bd9224",
+  "n08-rep5": "20e1633f301ec2392b308c248d94ebab3e00104defd29535903341a5cece5425"
+ },
+ "versions_4d_final": {
+  "select_verified_code_sha256": "672f9ba24f7ec1ab073fca06af0a5a613d60c21d598fb19b4efa9a95ec6cfa21",
+  "select_verified_config_sha256": "e1f7b263d5d233f4c12d2408202a448b9ec36fe64e68a72e7cfc2119b3536166"
+ }
+}

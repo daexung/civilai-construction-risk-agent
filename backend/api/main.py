@@ -136,6 +136,11 @@ app.add_middleware(
     expose_headers=["Content-Disposition"],
 )
 
+# 5단계 로컬 시험 연결: 기본 꺼짐. LOCAL_TRIAL_RETRIEVAL=on일 때만 /api/local-trial/* 를 붙이고 운영(production)에서는 붙이지 않는다.
+if os.environ.get("LOCAL_TRIAL_RETRIEVAL", "off") == "on" and not runtime.production():
+    from backend.api import local_trial
+    app.include_router(local_trial.router)
+
 
 from backend.paths import ROOT
 

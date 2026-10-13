@@ -2,6 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": { "api/[...path].js": { "maxDuration": 150 } },
   "routes": [
+    {
+      "src": "/(?:chat|auth|trial|terms|privacy)(?:/.*)?",
+      "headers": { "X-Robots-Tag": "noindex, follow" },
+      "continue": true
+    },
     { "handle": "filesystem" },
     { "src": "/api/.*", "dest": "/api/[...path]" },
     { "src": "/.*", "dest": "/index.html" }
