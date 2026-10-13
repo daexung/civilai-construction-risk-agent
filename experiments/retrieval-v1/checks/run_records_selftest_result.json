@@ -1,0 +1,36 @@
+{
+ "note": "가상 실행(임시 폴더). 실제 기록과 무관.",
+ "checks": [
+  {
+   "name": "검사 실패 실행은 failed로 남고 마지막 통과 실행이 바뀌지 않음",
+   "passed": true,
+   "detail": null
+  },
+  {
+   "name": "결과 저장 실패는 error로 남고 통과로 표시하지 않음",
+   "passed": true,
+   "detail": null
+  },
+  {
+   "name": "도중에 멈춘 실행은 running으로 남고 통과로 표시하지 않음",
+   "passed": true,
+   "detail": null
+  },
+  {
+   "name": "이전 실행 기록이 모두 남음",
+   "passed": true,
+   "detail": [
+    "20261012T005804-tool",
+    "20261012T005805-tool",
+    "20261012T005806-tool",
+    "20261012T005807-tool"
+   ]
+  },
+  {
+   "name": "실행 뒤 결과 파일이 바뀌면 해시 확인에서 드러남",
+   "passed": true,
+   "detail": null
+  }
+ ],
+ "failed": 0
+}

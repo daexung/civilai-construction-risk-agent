@@ -1,0 +1,778 @@
+{
+ "written_before_results": "2026-10-12. 3단계 근거 조회 결과를 보기 전에 정했다. 근거는 2단계 사전 기대 파일(expected_chunks.json·expected_references.json), 청킹 묶음 DB의 연결(chunk_links)과 원문 노드·간선 값이다. 185쪽 사례만 구현 중 한 번 실행해 본 개발 사례다.",
+ "chunk_set": "cs-37f81b5cfb1b-46f4f035c0fa",
+ "release": "rk-complete-82c206c61e21-37f81b5cfb1b",
+ "rules": [
+  "대상 확인(target_status)과 관계 확정(confirmed·link_state)과 적용 여부(applicability)는 서로 다른 값이다. applicability는 항상 unknown",
+  "resolved 대상만 조각으로 따라가고 ambiguous 후보·missing·external은 따라가지 않는다",
+  "link_state가 confirmed인 것은 구조로 확정된 부모·자식 표뿐이다. 설명·주석 표 후보는 position_evidence_unconfirmed",
+  "held·membership_unconfirmed·formula_unresolved·semantic_unconfirmed 조각은 normal_calculation_basis=false",
+  "예산·깊이·미해결 참조로 빠진 근거가 있으면 coverage.complete=false"
+ ],
+ "cases": [
+  {
+   "id": "shoulder_364",
+   "what": "길어깨 1-2-2(364쪽): 기계 작업의 제목·일당·표·설명, 인력 작업(1-2-1, 363쪽) 근거를 붙이지 않음",
+   "start": [
+    "t:full-p364-o49622"
+   ],
+   "depth": 1,
+   "budget": 6000,
+   "must_units": [
+    "t:full-p364-o49622",
+    "r:complete-82c206c61e21:full-p364:n49658#0"
+   ],
+   "must_not_units": [
+    "t:full-p363-o49569",
+    "r:complete-82c206c61e21:full-p363:n49605#0",
+    "w:civil:1-2-1"
+   ],
+   "must_text": [
+    {
+     "unit": "t:full-p364-o49622",
+     "contains": "(일당)",
+     "field": "context_text"
+    },
+    {
+     "unit": "t:full-p364-o49622",
+     "contains": "기계포설(길어깨)",
+     "field": "context_text"
+    },
+    {
+     "unit": "r:complete-82c206c61e21:full-p364:n49658#0",
+     "contains": "굴착기를 사용한 소로구간",
+     "field": "body_text"
+    }
+   ],
+   "must_not_text": [
+    {
+     "unit": "t:full-p364-o49622",
+     "contains": "인력식 소규모장비 포설",
+     "field": "body_text"
+    }
+   ],
+   "links": [
+    {
+     "unit": "r:complete-82c206c61e21:full-p364:n49658#0",
+     "kind": "related_explanation",
+     "state": "position_evidence_unconfirmed"
+    }
+   ],
+   "correction": {
+    "unit": "t:full-p364-o49622",
+    "correction_id": "civil-1-2-2"
+   },
+   "shared_value_count": {
+    "unit": "t:full-p364-o49622",
+    "n": 1
+   }
+  },
+  {
+   "id": "shoulder_365_366",
+   "what": "길어깨 1-3-2·1-4-2",
+   "cases": [
+    {
+     "start": [
+      "t:full-p365-o49759"
+     ],
+     "must_units": [
+      "t:full-p365-o49759",
+      "r:complete-82c206c61e21:full-p365:n49795#0"
+     ],
+     "must_not_units": [
+      "t:full-p364-o49709",
+      "r:complete-82c206c61e21:full-p364:n49745#0"
+     ],
+     "correction_id": "civil-1-3-2"
+    },
+    {
+     "start": [
+      "t:full-p366-o49896"
+     ],
+     "must_units": [
+      "t:full-p366-o49896",
+      "r:complete-82c206c61e21:full-p366:n49932#0"
+     ],
+     "must_not_units": [
+      "t:full-p365-o49846",
+      "r:complete-82c206c61e21:full-p365:n49882#0"
+     ],
+     "correction_id": "civil-1-4-2"
+    }
+   ]
+  },
+  {
+   "id": "shoulder_previous_table_reverse",
+   "what": "앞 인력 표에서 시작해도 길어깨 설명·표가 붙지 않음(잘못된 원본 관계 15건 제외)",
+   "start": [
+    "t:full-p363-o49569"
+   ],
+   "depth": 1,
+   "budget": 6000,
+   "must_units": [
+    "t:full-p363-o49569",
+    "r:complete-82c206c61e21:full-p363:n49605#0"
+   ],
+   "must_not_units": [
+    "t:full-p364-o49622",
+    "r:complete-82c206c61e21:full-p364:n49658#0",
+    "w:civil:1-2-2"
+   ]
+  },
+  {
+   "id": "shoulder_note_start",
+   "what": "길어깨 설명에서 시작: 관련 표는 길어깨 표(위치 근거 미확정)이고 앞 인력 표가 아님",
+   "start": [
+    "r:complete-82c206c61e21:full-p364:n49658#0"
+   ],
+   "depth": 1,
+   "budget": 6000,
+   "must_units": [
+    "r:complete-82c206c61e21:full-p364:n49658#0",
+    "t:full-p364-o49622"
+   ],
+   "must_not_units": [
+    "t:full-p363-o49569"
+   ],
+   "links": [
+    {
+     "unit": "t:full-p364-o49622",
+     "kind": "related_table",
+     "state": "position_evidence_unconfirmed"
+    }
+   ]
+  },
+  {
+   "id": "correction_heading_node",
+   "what": "순서 번호 없는 교정 제목 노드: 공종 조각의 제목 노드가 교정 노드이고 문서 순서 번호가 없음",
+   "start": [
+    "w:civil:1-2-2"
+   ],
+   "depth": 0,
+   "budget": 6000,
+   "heading_node": {
+    "unit": "w:civil:1-2-2",
+    "node_id": "corr:civil-1-2-2:heading",
+    "doc_order_is_null": true,
+    "origin": "pdf_correction",
+    "text": "1-2-2 기계포설(길어깨)"
+   }
+  },
+  {
+   "id": "p185",
+   "what": "185쪽 6-1-1 표: 공동 값 4칸, 기준, 칸 안 작은 표, 주석, 6-1-3 참조",
+   "development_case": true,
+   "start": [
+    "t:full-p185-o18870"
+   ],
+   "depth": 1,
+   "budget": 6000,
+   "must_units": [
+    "t:full-p185-o18870",
+    "t:full-p185-o18933",
+    "r:complete-82c206c61e21:full-p185:n18949#0",
+    "t:full-p186-o19017",
+    "w:common:6-1-3"
+   ],
+   "must_not_units": [
+    "w:arch:6-1-3",
+    "w:arch:9-1-4"
+   ],
+   "must_not_division": "건축부문",
+   "must_text": [
+    {
+     "unit": "t:full-p185-o18870",
+     "contains": "기준: (일당)",
+     "field": "context_text"
+    },
+    {
+     "unit": "t:full-p185-o18870",
+     "contains": "시공량(㎥) 무근구조물 23",
+     "field": "body_text"
+    },
+    {
+     "unit": "t:full-p185-o18933",
+     "contains": "인력운반 장비(손수레 등)",
+     "field": "body_text"
+    },
+    {
+     "unit": "r:complete-82c206c61e21:full-p185:n18949#0",
+     "contains": "②",
+     "field": "body_text"
+    }
+   ],
+   "links": [
+    {
+     "unit": "t:full-p185-o18933",
+     "kind": "nested_table",
+     "state": "confirmed"
+    },
+    {
+     "unit": "r:complete-82c206c61e21:full-p185:n18949#0",
+     "kind": "related_explanation",
+     "state": "position_evidence_unconfirmed"
+    }
+   ],
+   "shared_value_count": {
+    "unit": "t:full-p185-o18870",
+    "n": 4
+   },
+   "refs": [
+    {
+     "edge_id": "complete-82c206c61e21:rel3600",
+     "status": "resolved",
+     "origin": "existing_reference",
+     "applicability": "unknown",
+     "condition_contains": "미장공에 의한 표면 마무리가 필요한 경우",
+     "sentence_contains": "[공통부문] 6-1-3 표면 마무리",
+     "followed_include": [
+      "t:full-p186-o19017",
+      "w:common:6-1-3"
+     ],
+     "via_unconfirmed_membership": true
+    }
+   ]
+  },
+  {
+   "id": "split_table",
+   "what": "나뉜 큰 표: 선택 부분과 원래 표의 연결, 같은 머리글·기준 반복, 다른 부분은 자동으로 붙지 않음",
+   "start": [
+    "t:full-p73-o4572#p2"
+   ],
+   "depth": 0,
+   "budget": 6000,
+   "must_units": [
+    "t:full-p73-o4572#p2"
+   ],
+   "must_not_units": [
+    "t:full-p73-o4572#p1"
+   ],
+   "table_parts": {
+    "unit": "t:full-p73-o4572#p2",
+    "parts": [
+     "t:full-p73-o4572#p1",
+     "t:full-p73-o4572#p2"
+    ],
+    "selected": "t:full-p73-o4572#p2"
+   },
+   "same_context_as": {
+    "unit_a": "t:full-p73-o4572#p1",
+    "unit_b": "t:full-p73-o4572#p2",
+    "ignore_line_prefix": "(표 일부"
+   }
+  },
+  {
+   "id": "p555",
+   "what": "555쪽 13행 표와 556쪽까지의 주석 표 후보는 미확정 그대로",
+   "start": [
+    "t:full-p555-o80398"
+   ],
+   "depth": 1,
+   "budget": 12000,
+   "must_units": [
+    "t:full-p555-o80398",
+    "t:full-p555-o80829",
+    "t:full-p556-o80865",
+    "t:full-p556-o80886",
+    "t:full-p556-o80906",
+    "r:complete-82c206c61e21:full-p555:n80826#0",
+    "r:complete-82c206c61e21:full-p555:n80855#0"
+   ],
+   "table_rows": {
+    "unit": "t:full-p555-o80398",
+    "n": 13
+   },
+   "links": [
+    {
+     "unit": "t:full-p555-o80829",
+     "kind": "note_table_candidate",
+     "state": "position_evidence_unconfirmed"
+    },
+    {
+     "unit": "t:full-p556-o80865",
+     "kind": "note_table_candidate",
+     "state": "position_evidence_unconfirmed"
+    },
+    {
+     "unit": "t:full-p556-o80886",
+     "kind": "note_table_candidate",
+     "state": "position_evidence_unconfirmed"
+    },
+    {
+     "unit": "t:full-p556-o80906",
+     "kind": "note_table_candidate",
+     "state": "position_evidence_unconfirmed"
+    }
+   ],
+   "basis_state": {
+    "unit": "t:full-p555-o80398",
+    "state": "candidate"
+   },
+   "no_confirmed_link_among": [
+    "t:full-p555-o80829",
+    "t:full-p556-o80865",
+    "t:full-p556-o80886",
+    "t:full-p556-o80906"
+   ]
+  },
+  {
+   "id": "p758_held",
+   "what": "758쪽 보류 표: 두 값을 함께 보존, 정상 계산 근거로 쓰지 않음",
+   "start": [
+    "t:full-p758-o107176"
+   ],
+   "depth": 0,
+   "budget": 6000,
+   "must_units": [
+    "t:full-p758-o107176"
+   ],
+   "must_text": [
+    {
+     "unit": "t:full-p758-o107176",
+     "contains": "0.215 0.415",
+     "field": "body_text"
+    }
+   ],
+   "flags": {
+    "t:full-p758-o107176": [
+     "held",
+     "semantic_unconfirmed"
+    ]
+   },
+   "normal": {
+    "t:full-p758-o107176": false
+   },
+   "all_included_normal": false
+  },
+  {
+   "id": "p501_p502",
+   "what": "501·502쪽 교정 표: 행 수 7·7·13, 원문 글이 원본 레코드와 같음",
+   "start": [
+    "t:full-p501-ocorrection:p501-t0",
+    "t:full-p502-ocorrection:p502-t0",
+    "t:full-p502-ocorrection:p502-t1"
+   ],
+   "depth": 0,
+   "budget": 20000,
+   "table_rows_each": {
+    "t:full-p501-ocorrection:p501-t0": 7,
+    "t:full-p502-ocorrection:p502-t0": 7,
+    "t:full-p502-ocorrection:p502-t1": 13
+   },
+   "body_equals_source_records": true
+  },
+  {
+   "id": "ref_subitem",
+   "what": "하위 항목 참조(1-2-4/7.): 하위 항목 노드까지, 다른 하위 항목은 붙이지 않음",
+   "start": [
+    "r:complete-82c206c61e21:full-p65:n3745#0"
+   ],
+   "depth": 1,
+   "budget": 6000,
+   "refs": [
+    {
+     "edge_id": "complete-82c206c61e21:rel2325",
+     "status": "resolved",
+     "applicability": "unknown",
+     "subitem_node_id": "full-p69:n4320",
+     "followed_include": [
+      "r:complete-82c206c61e21:full-p69:n4315#0",
+      "w:common:1-2-4"
+     ]
+    }
+   ],
+   "excluded_reason": "section_chunk_not_read",
+   "long_text": {
+    "unit": "r:complete-82c206c61e21:full-p65:n3745#0",
+    "sentence_after_char": 120
+   }
+  },
+  {
+   "id": "ref_partial",
+   "what": "부분 확인(3-2-4 [주]④): 절은 읽고 못 찾은 하위 항목을 표시",
+   "start": [
+    "r:complete-82c206c61e21:full-p395:n53428#0"
+   ],
+   "depth": 1,
+   "budget": 8000,
+   "refs": [
+    {
+     "edge_id": "complete-82c206c61e21:rel5341",
+     "status": "partial",
+     "applicability": "unknown"
+    }
+   ],
+   "unresolved_kinds": [
+    "partial_target"
+   ],
+   "coverage_complete": false
+  },
+  {
+   "id": "ref_ambiguous",
+   "what": "모호한 참조(9-1-4 4급 기준점 측량): 후보만 표시, 자동 선택 안 함, 같은 번호의 다른 부문 후보 포함",
+   "start": [
+    "r:complete-82c206c61e21:full-p575:n84713#0#p1"
+   ],
+   "depth": 1,
+   "budget": 8000,
+   "refs": [
+    {
+     "edge_id": "complete-82c206c61e21:rel7615",
+     "status": "ambiguous",
+     "applicability": "unknown",
+     "followed_exclude_all": true,
+     "candidates_include": [
+      "pumsem-2026-errata1:civil:9-1-4",
+      "pumsem-2026-errata1:arch:9-1-4",
+      "pumsem-2026-errata1:civil:9-1-5"
+     ]
+    }
+   ],
+   "must_not_units": [
+    "w:civil:9-1-4",
+    "w:arch:9-1-4",
+    "w:civil:9-1-5"
+   ],
+   "unresolved_kinds": [
+    "ambiguous_target"
+   ],
+   "coverage_complete": false
+  },
+  {
+   "id": "ref_missing",
+   "what": "대상 없음(9-6-5/2)",
+   "start": [
+    "r:complete-82c206c61e21:full-p552:n79947#0"
+   ],
+   "depth": 1,
+   "budget": 6000,
+   "refs": [
+    {
+     "edge_id": "complete-82c206c61e21:rel7280",
+     "status": "missing",
+     "applicability": "unknown",
+     "followed_exclude_all": true
+    }
+   ],
+   "unresolved_kinds": [
+    "missing_target"
+   ],
+   "coverage_complete": false
+  },
+  {
+   "id": "ref_same_number_other_division",
+   "what": "부문 생략·같은 번호가 다른 부문에도 있음(9-1-5): 토목 9-1-5만, 건축 9-1-5 라스 붙임은 붙지 않음",
+   "start": [
+    "r:complete-82c206c61e21:full-p572:n84079#0"
+   ],
+   "depth": 1,
+   "budget": 8000,
+   "refs": [
+    {
+     "edge_id": "complete-82c206c61e21:rel7596",
+     "status": "resolved",
+     "applicability": "unknown",
+     "followed_include": [
+      "w:civil:9-1-5"
+     ]
+    }
+   ],
+   "must_not_units": [
+    "w:arch:9-1-5"
+   ],
+   "must_not_division": "건축부문"
+  },
+  {
+   "id": "ref_scan_candidates",
+   "what": "추가 후보 9건 출발점: 기존 232와 구분(origin), 상태 그대로",
+   "cases": [
+    {
+     "start": [
+      "r:complete-82c206c61e21:full-p249:h26594#0"
+     ],
+     "edge_id": "scan:full-p249:h26594@11:bracket_part",
+     "status": "resolved",
+     "origin": "scan_candidate"
+    },
+    {
+     "start": [
+      "t:full-p157-o14878"
+     ],
+     "edge_id": "scan:full-p157-o14878:c8@1:bracket_part",
+     "status": "partial",
+     "origin": "scan_candidate"
+    },
+    {
+     "start": [
+      "r:complete-82c206c61e21:full-p490:n67036#0"
+     ],
+     "edge_id": "scan:full-p490:n67039@10:bracket_part",
+     "status": "resolved",
+     "origin": "scan_candidate",
+     "start_flags": [
+      "membership_unconfirmed"
+     ],
+     "start_normal": false
+    }
+   ]
+  },
+  {
+   "id": "membership_unconfirmed",
+   "what": "소속 미확정 설명: 가까운 표에 붙이지 않고 정상 계산 근거로 표시하지 않음",
+   "start": [
+    "r:complete-82c206c61e21:full-p64:n3618#0"
+   ],
+   "depth": 0,
+   "budget": 6000,
+   "flags": {
+    "r:complete-82c206c61e21:full-p64:n3618#0": [
+     "membership_unconfirmed",
+     "formula_unresolved"
+    ]
+   },
+   "normal": {
+    "r:complete-82c206c61e21:full-p64:n3618#0": false
+   },
+   "no_related_kind": [
+    "related_table",
+    "related_explanation"
+   ],
+   "all_included_normal": false
+  },
+  {
+   "id": "same_sentence_other_positions",
+   "what": "같은 문장이 서로 다른 원문 위치에 있으면 각각 조회(삭제하지 않음)",
+   "edges": [
+    "complete-82c206c61e21:rel8538",
+    "complete-82c206c61e21:rel8547",
+    "complete-82c206c61e21:rel8556"
+   ],
+   "starts": [
+    "r:complete-82c206c61e21:full-p638:n94631#0",
+    "r:complete-82c206c61e21:full-p639:n94729#0",
+    "r:complete-82c206c61e21:full-p639:n94818#0"
+   ],
+   "same_sentence": true
+  },
+  {
+   "id": "depth_limit_real",
+   "what": "실제 2단계 사슬: 깊이 1이면 둘째 참조는 미해결(깊이 한도)로 기록, 깊이 2면 따라감",
+   "start": [
+    "r:complete-82c206c61e21:full-p729:n103599#0"
+   ],
+   "budget": 12000,
+   "depth1": {
+    "unresolved_kind": "depth_limit",
+    "edge_id": "complete-82c206c61e21:rel10050",
+    "unit_absent": "w:mech:4-2-1",
+    "unit_present": "r:complete-82c206c61e21:full-p833:n118998#0"
+   },
+   "depth2": {
+    "refs_include": [
+     "complete-82c206c61e21:rel9417",
+     "complete-82c206c61e21:rel10050"
+    ],
+    "unit_present": "w:mech:4-2-1"
+   }
+  },
+  {
+   "id": "small_budget",
+   "what": "작은 문맥 예산: 조각을 자르지 않고 과대로 표시, 나머지는 사유와 함께 제외, 완성 표시 안 함",
+   "start": [
+    "t:full-p185-o18870"
+   ],
+   "depth": 1,
+   "budget": 300,
+   "included_exact": [
+    "t:full-p185-o18870"
+   ],
+   "oversize_for_budget": "t:full-p185-o18870",
+   "excluded_reason": "budget",
+   "coverage_complete": false,
+   "no_truncation_of": "t:full-p185-o18870"
+  },
+  {
+   "id": "depth_zero",
+   "what": "깊이 0: 참조는 목록에 남기되 따라가지 않고 미해결(깊이 한도)로 기록",
+   "start": [
+    "t:full-p185-o18870"
+   ],
+   "depth": 0,
+   "budget": 6000,
+   "unresolved_kinds": [
+    "depth_limit"
+   ],
+   "coverage_complete": false
+  }
+ ],
+ "virtual_cases": [
+  {
+   "id": "cycle",
+   "graph": {
+    "A": [
+     "B"
+    ],
+    "B": [
+     "A"
+    ]
+   },
+   "start": [
+    "A"
+   ],
+   "depth": 5,
+   "expect_reads": [
+    "A",
+    "B"
+   ],
+   "expect_steps": 2
+  },
+  {
+   "id": "self_reference",
+   "graph": {
+    "C": [
+     "C"
+    ]
+   },
+   "start": [
+    "C"
+   ],
+   "depth": 3,
+   "expect_reads": [
+    "C"
+   ],
+   "expect_steps": 1
+  },
+  {
+   "id": "depth_limit",
+   "graph": {
+    "0": [
+     "1"
+    ],
+    "1": [
+     "2"
+    ],
+    "2": [
+     "3"
+    ]
+   },
+   "start": [
+    "0"
+   ],
+   "depth": 2,
+   "expect_reads": [
+    "0",
+    "1",
+    "2"
+   ],
+   "expect_cut": [
+    "2"
+   ]
+  },
+  {
+   "id": "same_target_two_edges",
+   "graph_edges": {
+    "A": [
+     [
+      "e1",
+      "T"
+     ],
+     [
+      "e2",
+      "T"
+     ]
+    ]
+   },
+   "start": [
+    "A"
+   ],
+   "depth": 1,
+   "expect_reads": [
+    "A",
+    "T"
+   ],
+   "expect_steps": 2,
+   "expect_already_read": 1
+  },
+  {
+   "id": "no_targets_for_unresolved",
+   "graph_edges": {
+    "A": [
+     [
+      "e1",
+      null
+     ]
+    ]
+   },
+   "start": [
+    "A"
+   ],
+   "depth": 2,
+   "expect_reads": [
+    "A"
+   ],
+   "expect_steps": 1
+  }
+ ],
+ "aggregate": {
+  "references_total": 241,
+  "existing": 232,
+  "scan": 9,
+  "status_existing": {
+   "resolved": 210,
+   "partial": 15,
+   "ambiguous": 6,
+   "missing": 1
+  },
+  "every_edge_has_start_chunk": true,
+  "every_edge_traced_with_status": true,
+  "ambiguous_missing_never_followed": true,
+  "candidate_role_never_followed": true,
+  "unit_not_normal_flagged_consistently": true,
+  "superseded_relations_excluded": 15,
+  "note": "참조 241개 전체에서 출발 청크와 상태를 추적할 수 있는지의 집계다. 전체 의미 검수가 아니다."
+ },
+ "data_unchanged": [
+  "DB 지문(원문 릴리스·청킹 묶음)이 조회 전후 같음",
+  "out/ 자료 파일 해시가 조회 전후 같음(검사 실행 기록 폴더 제외)",
+  "읽기 전용 연결에서 쓰기가 거부됨"
+ ],
+ "extra_checks_added_after_first_run": {
+  "note": "첫 검사 통과 뒤 계획서 3단계 완료 기준(표와 규칙 두 진입점 동일 근거, 재현성)을 확인하려고 추가했다. 결과를 본 뒤 추가한 기대값이므로 개발 기준으로 표시한다.",
+  "two_entry_points": [
+   {
+    "id": "p185",
+    "a": [
+     "t:full-p185-o18870"
+    ],
+    "b": [
+     "r:complete-82c206c61e21:full-p185:n18949#0"
+    ],
+    "same_required": [
+     "t:full-p185-o18870",
+     "t:full-p185-o18933",
+     "r:complete-82c206c61e21:full-p185:n18949#0",
+     "w:common:6-1-3",
+     "t:full-p186-o19017"
+    ]
+   },
+   {
+    "id": "shoulder_364",
+    "a": [
+     "t:full-p364-o49622"
+    ],
+    "b": [
+     "r:complete-82c206c61e21:full-p364:n49658#0"
+    ],
+    "same_required": [
+     "t:full-p364-o49622",
+     "r:complete-82c206c61e21:full-p364:n49658#0"
+    ]
+   }
+  ],
+  "reproducible": [
+   "t:full-p185-o18870",
+   "t:full-p555-o80398",
+   "r:complete-82c206c61e21:full-p575:n84713#0#p1"
+  ]
+ }
+}

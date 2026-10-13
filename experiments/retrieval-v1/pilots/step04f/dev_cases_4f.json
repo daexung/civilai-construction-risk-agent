@@ -1,0 +1,261 @@
+{
+ "fixed_before_model_calls": true,
+ "fixed_on": "2026-10-12",
+ "note": "4f 개발 사례. 이전 단계 결과를 본 뒤 만든 개발·회귀 자료이며 독립 평가가 아니다. 기대 행동은 모델·코드 결과를 보기 전에 원문 확인(source_check)으로 고정했다. 특정 실패 낱말을 차단 목록으로 쓰지 않는다.",
+ "source_check": {
+  "corpus_counts(원문 조각 글에서 글자 그대로 센 횟수)": {
+   "하려는데": 0,
+   "프린팅": 0,
+   "프린터": 0,
+   "농약": 0,
+   "수소": 0,
+   "방제": 1,
+   "무인비행장치": 25,
+   "펌프차": 34,
+   "강관비계": 4,
+   "절삭": 125,
+   "덧씌우기": 61
+  },
+  "방제 1건의 위치": "유지관리 1-2-6 수간보호의 '병충해 방제를 목적으로 수간을 감싸는' 설명 — 무인비행장치 농약 방제와 무관",
+  "무인비행장치 관련 절": "토목 9-5-10 무인비행장치 측량(측량 작업, 방제 아님)",
+  "same_number_sections": {
+   "6-1-3": [
+    "common",
+    "arch",
+    "mech"
+   ],
+   "6-1-4": [
+    "common",
+    "arch"
+   ],
+   "1-1-1": [
+    "common",
+    "civil",
+    "arch",
+    "mech",
+    "maint"
+   ]
+  },
+  "section_titles": {
+   "common:6-1-4": "콘크리트 펌프차 타설",
+   "common:2-7-1": "강관비계 설치 및 해체",
+   "maint:2-1-3": "아스팔트 포장 절삭 후 아스팔트 덧씌우기(1회 절삭, 1회 포장)",
+   "maint:2-1-6": "아스팔트 절삭 및 덧씌우기"
+  },
+  "title_check": {
+   "6-1-3": {
+    "common": "표면 마무리",
+    "arch": "방수층보호재 붙임",
+    "mech": "세대용 계량기함 설치"
+   },
+   "6-1-4": {
+    "common": "콘크리트 펌프차 타설",
+    "arch": "방수층 누름철물 설치"
+   }
+  }
+ },
+ "inflection_normal": [
+  {
+   "id": "F01",
+   "question": "콘크리트를 펌프차로 타설하려고 하는데 하루에 몇 ㎥ 칠 수 있어?",
+   "expected": "정상 질문. 요청 표현(하려고 하는데·몇)이 원문에 없다는 이유로 보류하지 않는다. 대상(펌프차·타설)은 유지. 공통 6-1-4 근거.",
+   "answer_sections_any": [
+    "common:6-1-4"
+   ],
+   "must_not_reasons": [
+    "target_term_unconfirmed",
+    "term_absent_in_corpus"
+   ],
+   "must_not_status": [
+    "not_found"
+   ],
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ]
+  },
+  {
+   "id": "F02",
+   "question": "강관비계를 설치하려는데 품이 어떻게 돼?",
+   "expected": "정상 질문. '설치하려는데'의 작업 '설치'는 원문 낱말이고 '하려는데'는 요청 표현이다. 보류하지 않는다. 공통 2-7-1 근거.",
+   "answer_sections_any": [
+    "common:2-7-1"
+   ],
+   "must_not_reasons": [
+    "target_term_unconfirmed",
+    "term_absent_in_corpus"
+   ],
+   "must_not_status": [
+    "not_found"
+   ],
+   "allowed_status": [
+    "supported",
+    "needs_confirmation"
+   ]
+  }
+ ],
+ "negation_condition": [
+  {
+   "id": "F03",
+   "question": "아스팔트 포장을 절삭하지 않고 덧씌우기만 하려면 품이 어떻게 돼?",
+   "expected": "부정('절삭하지 않고')은 질문의 중요한 조건이다. 근거 절(절삭 후 덧씌우기)은 절삭을 포함하므로 부정 조건을 근거 글로 확인할 수 없다. 활용형 때문에 보류하지는 않지만, 부정 조건을 역할로 기록하고 그 조건이 확인되지 않았음을 표시해 supported로 내보내지 않는다(needs_confirmation). 거부(not_found)하지 않는다. 근거는 유지관리 2-1-x 덧씌우기 절.",
+   "answer_sections_any": [
+    "maint:2-1-3",
+    "maint:2-1-4",
+    "maint:2-1-6",
+    "maint:2-1-7"
+   ],
+   "must_not_status": [
+    "not_found",
+    "supported"
+   ],
+   "allowed_status": [
+    "needs_confirmation"
+   ],
+   "roles_expected": [
+    "negation"
+   ],
+   "must_not_reasons": [
+    "target_term_unconfirmed"
+   ]
+  }
+ ],
+ "similar_no_data": [
+  {
+   "id": "F04",
+   "question": "3D 프린팅으로 건축물 출력하는 품은 얼마야?",
+   "expected": "자료 없음(프린팅·프린터가 원문에 없음, 건축물·출력은 다른 뜻으로만 있음). 확정 근거 0. not_found가 기대 상태이고 needs_confirmation이면 확인용 근거만 허용한다.",
+   "allowed_status": [
+    "not_found",
+    "needs_confirmation"
+   ],
+   "preferred_status": "not_found",
+   "confirmed_evidence_must_be_empty": true
+  },
+  {
+   "id": "F05",
+   "question": "무인비행장치로 농약 방제하는 품은 얼마야?",
+   "expected": "자료 없음. 같은 대상(무인비행장치)의 측량 절(토목 9-5-10)이 있으나 요청 작업(농약 방제)은 아니다. 같은 주제라는 이유로 근거가 되지 않는다. 확정 근거 0이고 9-5-10 측량 절을 주·보조·확인용 문맥으로 보내지 않는 것이 기대(not_found). 확인 필요이면 부족한 조건을 표시해야 한다.",
+   "allowed_status": [
+    "not_found",
+    "needs_confirmation"
+   ],
+   "preferred_status": "not_found",
+   "confirmed_evidence_must_be_empty": true,
+   "forbidden_sections_in_answer_context": [
+    "civil:9-5-10"
+   ]
+  }
+ ],
+ "number_scope": [
+  {
+   "id": "H01",
+   "question": "6-1-3 몇 인이야?",
+   "expected": "번호 + 요청 표현. 3개 부문 대안과 부문 선택 필요, 모델 호출 0.",
+   "alternatives_sections": [
+    "common:6-1-3",
+    "arch:6-1-3",
+    "mech:6-1-3"
+   ],
+   "model_calls": 0,
+   "status": "needs_confirmation"
+  },
+  {
+   "id": "H02",
+   "question": "6-1-3 일당 시공량은?",
+   "expected": "번호 + 요청 표현(일당·시공량). 3개 부문 대안, 모델 호출 0.",
+   "alternatives_sections": [
+    "common:6-1-3",
+    "arch:6-1-3",
+    "mech:6-1-3"
+   ],
+   "model_calls": 0,
+   "status": "needs_confirmation"
+  },
+  {
+   "id": "H03",
+   "question": "6-1-3과 6-1-4 품 알려줘",
+   "expected": "여러 번호. 6-1-3(3개 부문)과 6-1-4(2개 부문) 각각 대안, 모델 호출 0.",
+   "alternatives_sections": [
+    "common:6-1-3",
+    "arch:6-1-3",
+    "mech:6-1-3",
+    "common:6-1-4",
+    "arch:6-1-4"
+   ],
+   "model_calls": 0,
+   "status": "needs_confirmation"
+  },
+  {
+   "id": "H04",
+   "question": "1-1-1 기준이 뭐야",
+   "expected": "번호 + 요청 표현. 5개 부문 대안, 모델 호출 0.",
+   "alternatives_sections": [
+    "common:1-1-1",
+    "civil:1-1-1",
+    "arch:1-1-1",
+    "mech:1-1-1",
+    "maint:1-1-1"
+   ],
+   "model_calls": 0,
+   "status": "needs_confirmation"
+  }
+ ],
+ "number_scope_virtual": [
+  {
+   "id": "H05",
+   "question": "건축부문 6-1-3 일당 시공량",
+   "expected_lookup": "None(부문 명시, 정상 경로)"
+  },
+  {
+   "id": "H06",
+   "question": "6-1-3 표면 마무리 일당 시공량",
+   "expected_lookup": "None(구별되는 제목 '표면 마무리'가 공통 절을 가름, 정상 경로)"
+  },
+  {
+   "id": "H07",
+   "question": "6-1-3 설치 품",
+   "expected_lookup": "대안 3개 부문('설치'는 제목 낱말이지만 원문 전체 절 제목의 35%에 쓰이는 일반 낱말이라 구별하지 못함)"
+  },
+  {
+   "id": "H08",
+   "question": "6-1-4 누름철물 설치 품",
+   "expected_lookup": "None(건축 6-1-4 제목 '방수층 누름철물 설치'의 '누름철물'이 건축 절만 가름, 정상 경로)"
+  }
+ ],
+ "existing_checks_kept": {
+  "no_data": [
+   "Q20",
+   "N19",
+   "N20",
+   "V19",
+   "V20"
+  ],
+  "normal_not_rejected": [
+   "V11",
+   "V13",
+   "V18",
+   "V04"
+  ],
+  "hold_preserved": [
+   "V12",
+   "V17",
+   "N08",
+   "N12",
+   "N18"
+  ],
+  "dev_4e": [
+   "E01",
+   "E02",
+   "E03",
+   "E04",
+   "E05",
+   "E06",
+   "G01",
+   "G02",
+   "G03",
+   "G04"
+  ],
+  "regression": "기존 60문 한 번"
+ }
+}

@@ -1,0 +1,506 @@
+{
+ "trial_results_05b_final_run1.json": {
+  "supported_search_runs": 7,
+  "answer_status_counts_of_supported": {
+   "confirmed": 4,
+   "source_check_needed": 1,
+   "condition_unconfirmed": 2
+  },
+  "rows": [
+   {
+    "id": "G01",
+    "run": 1,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S2.1"
+    ],
+    "values": [
+     [
+      "0.569",
+      "수 량 (규격) ø100~125mm"
+     ]
+    ],
+    "client_ms": 11827,
+    "gen_ms": 5547,
+    "cost": 0.00079,
+    "raw": null
+   },
+   {
+    "id": "G03",
+    "run": 1,
+    "search": "supported",
+    "answer": "source_check_needed",
+    "reason": "validation_failed",
+    "passed_expectation": false,
+    "notes": [
+     "답변 상태 source_check_needed (기대 confirmed; 이유 validation_failed, 생성 numbers)",
+     "답변에 값 0.084 없음",
+     "인용 줄에 값 0.084 없음",
+     "값 기록 없음",
+     "인용한 출처에 유지관리부문 4-1-3 표 없음"
+    ],
+    "gen_state": "failed",
+    "gen_code": "numbers",
+    "cites": [],
+    "values": [],
+    "client_ms": 5866,
+    "gen_ms": 4883,
+    "cost": 0.00087,
+    "raw": null
+   },
+   {
+    "id": "G03",
+    "run": 2,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S2.1"
+    ],
+    "values": [
+     [
+      "0.084",
+      "덕트공 (인)"
+     ]
+    ],
+    "client_ms": 2259,
+    "gen_ms": 1270,
+    "cost": 0.00085,
+    "raw": null
+   },
+   {
+    "id": "G03",
+    "run": 3,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S2.1"
+    ],
+    "values": [
+     [
+      "0.084",
+      "덕트공 (인)"
+     ]
+    ],
+    "client_ms": 6310,
+    "gen_ms": 5221,
+    "cost": 0.00082,
+    "raw": null
+   },
+   {
+    "id": "G08",
+    "run": 1,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S2.3"
+    ],
+    "values": [],
+    "client_ms": 2488,
+    "gen_ms": 1287,
+    "cost": 0.00103,
+    "raw": null
+   },
+   {
+    "id": "G10",
+    "run": 1,
+    "search": "supported",
+    "answer": "condition_unconfirmed",
+    "reason": "model_unmatched",
+    "passed_expectation": false,
+    "notes": [
+     "답변 상태 condition_unconfirmed (기대 confirmed; 이유 model_unmatched, 생성 model_unmatched)",
+     "인용한 출처에 공통부문 4-2-3 설명 없음"
+    ],
+    "gen_state": "condition_unconfirmed",
+    "gen_code": "model_unmatched",
+    "cites": [],
+    "values": [],
+    "client_ms": 9302,
+    "gen_ms": 6359,
+    "cost": 0.00068,
+    "raw": null
+   },
+   {
+    "id": "FREE",
+    "run": 1,
+    "search": "supported",
+    "answer": "condition_unconfirmed",
+    "reason": "model_unmatched",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "condition_unconfirmed",
+    "gen_code": "model_unmatched",
+    "cites": [],
+    "values": [],
+    "client_ms": 2319,
+    "gen_ms": 961,
+    "cost": 0.00063,
+    "raw": null
+   },
+   {
+    "id": "G02",
+    "run": 1,
+    "search": "needs_confirmation",
+    "answer": "needs_confirmation",
+    "reason": "search_needs_confirmation",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 1584,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   },
+   {
+    "id": "G09",
+    "run": 1,
+    "search": "needs_confirmation",
+    "answer": "needs_confirmation",
+    "reason": "search_needs_confirmation",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 1179,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   },
+   {
+    "id": "N19",
+    "run": 1,
+    "search": "needs_confirmation",
+    "answer": "needs_confirmation",
+    "reason": "search_needs_confirmation",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 4579,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   },
+   {
+    "id": "G16",
+    "run": 1,
+    "search": "not_found",
+    "answer": "not_found",
+    "reason": "search_not_found",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 1280,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   },
+   {
+    "id": "G19",
+    "run": 1,
+    "search": "needs_confirmation",
+    "answer": "needs_confirmation",
+    "reason": "division_choice_required",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 23,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   }
+  ]
+ },
+ "trial_results_05b_final.json": {
+  "supported_search_runs": 7,
+  "answer_status_counts_of_supported": {
+   "confirmed": 6,
+   "condition_unconfirmed": 1
+  },
+  "rows": [
+   {
+    "id": "G01",
+    "run": 1,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S2.1"
+    ],
+    "values": [
+     [
+      "0.569",
+      "수 량 (규격) ø100~125mm"
+     ]
+    ],
+    "client_ms": 10451,
+    "gen_ms": 4226,
+    "cost": 0.00076,
+    "raw": null
+   },
+   {
+    "id": "G03",
+    "run": 1,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S2.1"
+    ],
+    "values": [
+     [
+      "0.084",
+      "덕트공 (인)"
+     ]
+    ],
+    "client_ms": 2168,
+    "gen_ms": 1212,
+    "cost": 0.00082,
+    "raw": null
+   },
+   {
+    "id": "G03",
+    "run": 2,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S1.2",
+     "S2.1"
+    ],
+    "values": [
+     [
+      "0.084",
+      "덕트공 (인)"
+     ]
+    ],
+    "client_ms": 4568,
+    "gen_ms": 3741,
+    "cost": 0.001,
+    "raw": null
+   },
+   {
+    "id": "G03",
+    "run": 3,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S2.1"
+    ],
+    "values": [
+     [
+      "0.084",
+      "덕트공 (인)"
+     ]
+    ],
+    "client_ms": 5045,
+    "gen_ms": 4262,
+    "cost": 0.00085,
+    "raw": null
+   },
+   {
+    "id": "G08",
+    "run": 1,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S2.3"
+    ],
+    "values": [],
+    "client_ms": 5383,
+    "gen_ms": 4088,
+    "cost": 0.00103,
+    "raw": null
+   },
+   {
+    "id": "G10",
+    "run": 1,
+    "search": "supported",
+    "answer": "confirmed",
+    "reason": "verified",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "answered",
+    "gen_code": "verified",
+    "cites": [
+     "S1.3"
+    ],
+    "values": [
+     [
+      "1.5",
+      null
+     ]
+    ],
+    "client_ms": 6858,
+    "gen_ms": 4946,
+    "cost": 0.0009,
+    "raw": null
+   },
+   {
+    "id": "FREE",
+    "run": 1,
+    "search": "supported",
+    "answer": "condition_unconfirmed",
+    "reason": "model_unmatched",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": "condition_unconfirmed",
+    "gen_code": "model_unmatched",
+    "cites": [],
+    "values": [],
+    "client_ms": 2226,
+    "gen_ms": 819,
+    "cost": 0.00063,
+    "raw": {
+     "conclusion": "",
+     "explanation": "",
+     "evidence": [],
+     "unmatched_conditions": [
+      "0.5㎜"
+     ]
+    }
+   },
+   {
+    "id": "G02",
+    "run": 1,
+    "search": "needs_confirmation",
+    "answer": "needs_confirmation",
+    "reason": "search_needs_confirmation",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 1456,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   },
+   {
+    "id": "G09",
+    "run": 1,
+    "search": "needs_confirmation",
+    "answer": "needs_confirmation",
+    "reason": "search_needs_confirmation",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 1178,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   },
+   {
+    "id": "N19",
+    "run": 1,
+    "search": "needs_confirmation",
+    "answer": "needs_confirmation",
+    "reason": "search_needs_confirmation",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 4431,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   },
+   {
+    "id": "G16",
+    "run": 1,
+    "search": "not_found",
+    "answer": "not_found",
+    "reason": "search_not_found",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 1489,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   },
+   {
+    "id": "G19",
+    "run": 1,
+    "search": "needs_confirmation",
+    "answer": "needs_confirmation",
+    "reason": "division_choice_required",
+    "passed_expectation": true,
+    "notes": [],
+    "gen_state": null,
+    "gen_code": null,
+    "cites": [],
+    "values": [],
+    "client_ms": 11,
+    "gen_ms": null,
+    "cost": null,
+    "raw": null
+   }
+  ]
+ }
+}

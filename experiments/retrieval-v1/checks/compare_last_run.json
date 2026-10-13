@@ -1,0 +1,70 @@
+{
+ "summary": {
+  "nodes": {
+   "old": 106819,
+   "new": 106825,
+   "added": 6,
+   "removed": 0,
+   "changed": 0
+  },
+  "sections": {
+   "old": 1359,
+   "new": 1362,
+   "added": 3,
+   "removed": 0,
+   "changed": 3
+  },
+  "toc_entries": {
+   "old": 1362,
+   "new": 1362,
+   "added": 0,
+   "removed": 0,
+   "changed": 3
+  },
+  "source_records": {
+   "old": 23481,
+   "new": 23481,
+   "added": 0,
+   "removed": 0,
+   "changed": 30
+  },
+  "record_cells": {
+   "old": 70158,
+   "new": 70158,
+   "added": 0,
+   "removed": 0,
+   "changed": 0
+  },
+  "source_relations": {
+   "old": 11823,
+   "new": 11823,
+   "added": 0,
+   "removed": 0,
+   "changed": 0
+  },
+  "edges": {
+   "old": 241,
+   "new": 241,
+   "added": 0,
+   "removed": 0,
+   "changed": 0
+  },
+  "edge_candidates": {
+   "old": 258,
+   "new": 258,
+   "added": 0,
+   "removed": 0,
+   "changed": 0
+  }
+ },
+ "checks": {
+  "nodes_added": true,
+  "sections_added": true,
+  "sections_changed_only_previous_end": true,
+  "toc_changed_only_three_matches": true,
+  "records_changed_only_section_of_members": true,
+  "other_tables_identical": true,
+  "nothing_removed": true,
+  "nodes_unchanged": true
+ }
+}

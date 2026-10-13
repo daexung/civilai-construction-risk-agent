@@ -1,0 +1,273 @@
+{
+ "fixed_on": "2026-10-12",
+ "purpose": "4g 독립 평가용 새 질문 20개(결과를 보기 전 고정). 정답 준비에 검색·선택 경로를 쓰지 않았다.",
+ "release": "rk-complete-82c206c61e21-37f81b5cfb1b",
+ "chunk_set": "cs-37f81b5cfb1b-46f4f035c0fa",
+ "method": "원문 DB 조각 글(공백 제거·NFKC·소문자) 부분 문자열 + 원문 PDF 글 층(pymupdf) 쪽별 검색. 검색·선택 경로 미사용",
+ "db_chunks": 5764,
+ "no_data": {
+  "G15": {
+   "question": "지중에 광케이블을 포설하는 품은 몇 인이야?",
+   "terms": {
+    "광케이블": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "광섬유": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "광통신": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "케이블포설": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "케이블 포설": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    }
+   },
+   "related_terms": {}
+  },
+  "G16": {
+   "question": "시멘트 벽돌을 공장에서 제조하는 품은 얼마야?",
+   "terms": {
+    "벽돌제조": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "벽돌 제조": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "벽돌생산": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "벽돌 생산": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "벽돌공장": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    }
+   },
+   "related_terms": {
+    "벽돌": {
+     "db_chunk_hits": 57,
+     "sections_n": 11,
+     "sections_sample": {
+      "common:1-2-2 단위표준": 1,
+      "common:1-2-7 운반": 8,
+      "common:1-3-1 재료의 할증": 1,
+      "common:1-5-4 환경관리비": 1,
+      "common:1-5-6 사용료": 1,
+      "arch:6-4-3 방수모르타르 바름": 2,
+      "arch:2-1-1 벽돌 쌓기": 5,
+      "arch:2-1-2 치장쌓기 및 줄눈설치": 3
+     },
+     "pdf_page_hits_n": 11
+    }
+   }
+  },
+  "G17": {
+   "question": "지열 히트펌프로 난방 열원을 설치하는 품은 얼마야?",
+   "terms": {
+    "지열": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "히트펌프": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "열펌프": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    }
+   },
+   "related_terms": {
+    "보일러 설치": {
+     "db_chunk_hits": 33,
+     "sections_n": 7,
+     "sections_sample": {
+      "mech:8-3-1 보일러 설치": 3,
+      "mech:8-3-2 경유보일러 설치": 3,
+      "mech:8-3-3 가스보일러(가정용) 설치": 2,
+      "mech:8-3-4 온수보일러 설치": 3,
+      "mech:8-3-5 전기보일러 설치": 4,
+      "mech:13-5-1 보일러 설치": 8,
+      "mech:13-8-2 폐열보일러 설치": 5
+     },
+     "pdf_page_hits_n": 9
+    },
+    "난방": {
+     "db_chunk_hits": 26,
+     "sections_n": 9,
+     "sections_sample": {
+      "civil:9-5-4 수치지도 작성": 1,
+      "mech:1-6-3 가교화 폴리에틸렌관 접합 및 배관": 2,
+      "mech:6-1-1 유량계(직독식) 설치": 2,
+      "mech:9-5-1 시운전": 3,
+      "mech:9-5-2 건물의 냉난방 및 공조설비 정밀진단(": 2,
+      "mech:13-1-8 이중보온관 설치": 3,
+      "mech:13-4-3 STORAGE TANK": 1,
+      "maint:4-3-1 유량계 교체": 2
+     },
+     "pdf_page_hits_n": 11
+    }
+   }
+  },
+  "G18": {
+   "question": "에스컬레이터를 설치하는 품은 몇 인이야?",
+   "terms": {
+    "에스컬레이터": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    },
+    "승강기": {
+     "db_chunk_hits": 0,
+     "pdf_page_hits": []
+    }
+   },
+   "related_terms": {
+    "엘리베이터": {
+     "db_chunk_hits": 10,
+     "sections_n": 2,
+     "sections_sample": {
+      "common:2-8-14 엘리베이터 난간틀 설치 및 해체": 3,
+      "common:2-8-15 엘리베이터 추락방호망 설치 및 해체": 3
+     },
+     "pdf_page_hits_n": 2
+    }
+   }
+  }
+ },
+ "pdf_pages": 982,
+ "list_enumeration": {
+  "G11_수전_titles": [
+   "civil:6-8-6 부단수 천공 새들분수전 분기점 분기",
+   "mech:7-2-1 매립형 욕조수전 설치",
+   "mech:7-2-2 샤워수전 설치",
+   "mech:7-2-3 세면기수전 설치",
+   "mech:7-2-4 씽크수전 설치",
+   "mech:7-2-5 손빨래수전 설치"
+  ],
+  "G12_난간_titles": [
+   "common:2-8-11 안전난간대 설치 및 해체",
+   "common:2-8-12 계단난간대 설치 및 해체",
+   "common:2-8-13 안전난간대 설치 및 해체(토목)",
+   "common:2-8-14 엘리베이터 난간틀 설치 및 해체",
+   "common:2-8-17 강재거푸집 작업용 난간 설치 및 해체",
+   "arch:8-2-1 용접식난간 설치",
+   "arch:8-2-2 앵커고정식난간 설치",
+   "maint:2-1-20 재래난간 철거공"
+  ],
+  "G13_방수_titles": [
+   "civil:3-4-1 터널 방수",
+   "arch:6-1-2 방수프라이머 바름",
+   "arch:6-1-3 방수층보호재 붙임",
+   "arch:6-1-4 방수층 누름철물 설치",
+   "arch:6-4-1 시멘트 액체방수 바름",
+   "arch:6-4-2 폴리머 시멘트 모르타르방수 바름",
+   "arch:6-4-3 방수모르타르 바름",
+   "arch:6-4-4 시멘트 혼입 폴리머계 도막방수 바름",
+   "arch:6-5-1 규산질계 도포방수 바름",
+   "arch:6-5-2 액상형 흡수방지방수 도포",
+   "arch:6-5-3 벤토나이트방수 붙임",
+   "mech:10-4-2 방수구 설치",
+   "maint:3-2-10 기존방수층 및 보호층 철거",
+   "maint:3-2-11 기존방수층 제거 및 바탕처리"
+  ],
+  "G14_접합_n": 43
+ },
+ "scope_enumeration": {
+  "4-1-1": [
+   [
+    "공통부문",
+    "잔디붙임"
+   ],
+   [
+    "토목부문",
+    "철도안전처리"
+   ],
+   [
+    "건축부문",
+    "먹매김"
+   ],
+   [
+    "기계설비부문",
+    "일반펌프 설치"
+   ],
+   [
+    "유지관리부문",
+    "배관 해체"
+   ]
+  ],
+  "7-1-1": [
+   [
+    "공통부문",
+    "메쌓기"
+   ],
+   [
+    "토목부문",
+    "수중공사"
+   ],
+   [
+    "건축부문",
+    "금속기와 잇기"
+   ],
+   [
+    "기계설비부문",
+    "소변기 설치"
+   ]
+  ],
+  "7-1-2": [
+   [
+    "공통부문",
+    "찰쌓기"
+   ],
+   [
+    "토목부문",
+    "예인선 조합"
+   ],
+   [
+    "건축부문",
+    "금속판 평잇기"
+   ],
+   [
+    "기계설비부문",
+    "대변기 설치"
+   ]
+  ]
+ },
+ "pdf_pages_read_by_eye": {
+  "directory": "experiments/retrieval-v1/pilots/step04g/prep/pdf_pages",
+  "pages": [
+   110,
+   147,
+   150,
+   429,
+   662,
+   729,
+   736,
+   775,
+   776,
+   978
+  ]
+ },
+ "overlap_with_previous_questions": {
+  "used_sections_count": 144,
+  "answer_sections_in_used": [
+   "pumsem-2026-errata1:arch:6-1-2",
+   "pumsem-2026-errata1:arch:6-1-3",
+   "pumsem-2026-errata1:arch:6-1-4",
+   "pumsem-2026-errata1:arch:6-4-1",
+   "pumsem-2026-errata1:maint:4-1-3"
+  ]
+ }
+}

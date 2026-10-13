@@ -1,0 +1,24 @@
+{
+ "frozen_at": "before final 5b run",
+ "sha256": {
+  "backend/api/local_trial.py": "efde11834872840edef62cd06190403c65bf6bba891770753689f7efd48380a7",
+  "backend/api/local_trial_answer.py": "768706ea63971c42a24079e9218cfe2df721099ceb290cf9916bd90cfe06963d",
+  "backend/api/local_trial_qa.md": "3556c6215b4625093e45065f5deb40e8254a7ae24ec9b33bb60339d219ff6750",
+  "backend/agent/tools/llm/prompts/qa.md": "ebde1692337058b60d170a94d6ae1475839566ed080edf22437ae60f987c86a7",
+  "backend/agent/tools/llm/config.json": "19fc61d77a8dd423c405e8a81c23acecb015dcb7a8bcf88df7b2dcdb799fe30a",
+  "experiments/retrieval-v1/src/select_verified.py": "edff2ca3db3771abf92cc670507b3d06b8faf59bde21625dec1977d6650e0626",
+  "frontend/src/components/LocalTrial.tsx": "7015069bf73bd8cc5ebed98c2c7809f182f497da00221e570fb318f2103e2bc9",
+  "frontend/src/components/LocalTrial.css": "e411d30e1cfb3409a94b366a2ca714f7968336c417f31e6b35ab0f3fb4980928",
+  "frontend/src/localTrialApi.ts": "1fb7d692b449d8e61a3ad48f39780621e537427af9a5f3a5042e219d49bd80ad",
+  "experiments/retrieval-v1/pilots/step05b/trial_questions_05b.json": "86bf2973082f4f01d2d19060519f59b4b943fc0922351c4c384d05b204c2b3c5"
+ },
+ "ledger_before_final": {
+  "attempts_used": 8,
+  "cost_used_usd": 0.0056
+ },
+ "answer_model": "gemini-3.5-flash-lite",
+ "caps": {
+  "attempts": 30,
+  "cost_usd": 1.0
+ }
+}

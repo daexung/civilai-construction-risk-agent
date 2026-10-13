@@ -19,6 +19,7 @@ import DeleteConversationDialog from './components/DeleteConversationDialog';
 import RenameConversationDialog from './components/RenameConversationDialog';
 import FeedbackDialog from './components/FeedbackDialog';
 import DeleteAccountDialog from './components/DeleteAccountDialog';
+import LocalTrial from './components/LocalTrial';
 
 interface Conversation {
   id: string;
@@ -439,6 +440,7 @@ export default function App() {
     handleSendExample(query);
   }, [pathname, handleSendExample, authInitializing, historyLoading, accountId, historyOwner]);
 
+  if (process.env.REACT_APP_LOCAL_TRIAL === 'on' && pathname === '/trial') return <LocalTrial />;   // 5단계 로컬 시험(기본 꺼짐)
   if (pathname === '/auth/callback') return <AuthCallback />;
   if (pathname === '/terms' || pathname === '/terms/') return <Terms />;
   if (pathname === '/privacy' || pathname === '/privacy/') return <Privacy />;

@@ -1,0 +1,107 @@
+{
+ "frozen_at": "2026-10-12T18:21:29",
+ "questions_sha256": "788d3bb0734551471141caaed7a353fdb94c30ec65572b34c86d61de82ef361f",
+ "expected_sha256": "93668e096d3b25a170804228e5a719ce5a56b571522377748b318574839116aa",
+ "evidence_check_sha256": "d7d201bedeb0f3def257e95674dcd96d62e33f6662b02ffabd7caf0ab8e561ad",
+ "expectation_builder_sha256": "069e31f50dd86b5db7e9344eb39e33fb50eeb5b8c0b7912b0e181cff81cab1a2",
+ "pdf_pages_checked_by_eye": [
+  110,
+  147,
+  150,
+  429,
+  662,
+  729,
+  736,
+  775,
+  776,
+  978
+ ],
+ "versions": {
+  "chunk_set_id": "cs-37f81b5cfb1b-46f4f035c0fa",
+  "release_id": "rk-complete-82c206c61e21-37f81b5cfb1b",
+  "select_verified_code_sha256": "dc011b6d87c719e2dc6201ac0be7340832253d260d607c46d09bfd3ef8f8d0e4",
+  "select_verified_config_sha256": "234d59559b81ad3a7496abf95c743b762da6d7bd68b02895f2d2947ffb803c07",
+  "system_select_sha256": "d908df986efbadc38cd5065d4122a0b1e14d11d833b82b61087c7bbd858e2482",
+  "schema_select_sha256": "4cc0d020fd8e4648a549b6295c70fa7898543176362e446c9a24663f5b3ce1b0",
+  "system_list_sha256": "89693feb7c4c1f77352f5e1e3ce0785640bfa6c8abb54bce8c9ffdd7c004583b",
+  "schema_list_sha256": "efd37efaeb7b31d2dd370d789cf5e828078883f76fbf490401c759dc73ae9455",
+  "retrieve_code_sha256": "6c7d120e6d85a0cf0dbcf2e27a18f7156e6fd7f8626114f806d54641b8c67cf8",
+  "retrieve_config_sha256": "71792e8fb25cfff6d5e8618e29c76e4afda23984362bd82644e539caa0c81ba8",
+  "evidence_code_sha256": "f1ccbbceff91e98291a2468a09c3f0c949dda420a588267f008e6e9916b568c8",
+  "select_evidence_code_sha256": "ef4b4c742387c0f7720b405efc5278a4bc79745d3097e643da2cf2770f6980a1"
+ },
+ "system_compare_sha256": "9d10b07350cc7506d33761a0a9a65fd129b104b60f473be4d2c620f6a42c7bfd",
+ "schema_compare_sha256": "dcf51e7800203d0799016485ffd16546c3bbe10e13da04b069ce289030822242",
+ "model": {
+  "provider": "vertex",
+  "model": "gemini-3.5-flash-lite"
+ },
+ "embedding_config": {
+  "doc_model": "gemini-embedding-2",
+  "dim": 3072,
+  "note": "문서 벡터는 재호출하지 않는다. 새 질문 벡터만 같은 모델로 생성"
+ },
+ "src_files_sha256": {
+  "build_index.py": "4000bbc2ff386582f6e3ed75b39b0a57364f9ea4f6b52d00ba989531f38ab6b3",
+  "chunking.py": "37046b5b9ab79ce973413860eabac825949feab8f4c2f4f8aa58e82baa724600",
+  "corrections.py": "1d2bcfe831d44dc9417f46a595b564542ce017fb3aed5eff5fb102f578916c76",
+  "db.py": "c6fc7e2067c8879c7b2fa95ee42d9fa8f567110aaa97914b7d1de42dd40f20ee",
+  "embed_index.py": "ebd8898f9ee2369aaed6d43b01efdbcfd3396e1ff1e17cdd19bda17dd1d2753e",
+  "evidence.py": "f1ccbbceff91e98291a2468a09c3f0c949dda420a588267f008e6e9916b568c8",
+  "query.py": "69e867785e26f7ac922232cdd018fa2f975bf1eef888a3539c117e8220e6215e",
+  "retrieve.py": "6c7d120e6d85a0cf0dbcf2e27a18f7156e6fd7f8626114f806d54641b8c67cf8",
+  "run_records.py": "722307506382749be1acb9b866fb80583baee51eeda4bebe3c4f7b6430734bf8",
+  "select_evidence.py": "ef4b4c742387c0f7720b405efc5278a4bc79745d3097e643da2cf2770f6980a1",
+  "select_verified.py": "dc011b6d87c719e2dc6201ac0be7340832253d260d607c46d09bfd3ef8f8d0e4"
+ },
+ "run_4g_sha256": "a8c93b1c44a5897d07e1606a75f1228ebec1ed6d62fb22d21baa68d3297fdfd0",
+ "release": "rk-complete-82c206c61e21-37f81b5cfb1b",
+ "chunk_set": "cs-37f81b5cfb1b-46f4f035c0fa",
+ "git_head": "7f6e93973d3f6efe32f9acabd1405407ccc308d4",
+ "git_branch": "codex/parsing-final-cleanup",
+ "git_status_porcelain": [
+  " M backend/shared/embedding.py",
+  "?? .claude/",
+  "?? docs/planning/RAG-IMPLEMENTATION-PLAN-2026-10-11.md",
+  "?? docs/planning/claude-step-01-evidence-index-2026-10-11.md",
+  "?? docs/planning/claude-step-01b-shoulder-section-correction-2026-10-11.md",
+  "?? docs/planning/claude-step-02-structure-chunking-2026-10-12.md",
+  "?? docs/planning/claude-step-02b-verification-record-repair-2026-10-12.md",
+  "?? docs/planning/claude-step-03-evidence-retrieval-2026-10-12.md",
+  "?? docs/planning/claude-step-04-embedding-search-2026-10-12.md",
+  "?? docs/planning/claude-step-04b-evidence-selection-2026-10-12.md",
+  "?? docs/planning/claude-step-04c-selection-pilot-2026-10-12.md",
+  "?? docs/planning/claude-step-04d-verified-selection-2026-10-12.md",
+  "?? docs/planning/claude-step-04e-targeted-finish-2026-10-12.md",
+  "?? docs/planning/claude-step-04f-question-scope-2026-10-12.md",
+  "?? docs/planning/claude-step-04g-independent-evaluation-2026-10-12.md",
+  "?? docs/planning/rag-practice-update-2026-10-11.md",
+  "?? docs/planning/retrieval-selection-research-decision-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-01-evidence-index-result-2026-10-11.md",
+  "?? docs/reviews/retrieval-step-01b-shoulder-section-correction-result-2026-10-11.md",
+  "?? docs/reviews/retrieval-step-02-structure-chunking-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-02b-verification-record-repair-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-02c-manifest-completeness-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-03-evidence-retrieval-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-04-embedding-search-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-04b-evidence-selection-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-04c-selection-pilot-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-04d-verified-selection-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-04e-targeted-finish-result-2026-10-12.md",
+  "?? docs/reviews/retrieval-step-04f-question-scope-result-2026-10-12.md",
+  "?? experiments/retrieval-v1/"
+ ],
+ "caps": {
+  "attempts": 80,
+  "cost_usd": 2.0
+ },
+ "price_assumption": {
+  "source": "ai.google.dev 공개 단가(입력 $0.30·출력 $2.50 / 100만 토큰). Vertex 서비스 경로의 공식 가격 페이지는 확인하지 못함(4d~4f와 같은 한계)",
+  "query_embedding": "질문당 30토큰·$0.20/100만 토큰으로 보수적 추정"
+ },
+ "planned_calls": {
+  "first_run_20": "질문 벡터 20 + 선택 18(번호 질문 2개는 호출 없음) + 목록 판단 4 + 보완 조회·대상 대조 약 6~10 = 약 50~55시도",
+  "repeat_4x2": "선택 4×2 + 보완·대조 약 6~8 + 새 보완 질문 벡터 약 4 = 약 18~20시도",
+  "total_expected": "약 70~75시도 / 상한 80"
+ }
+}

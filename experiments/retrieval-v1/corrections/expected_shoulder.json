@@ -1,0 +1,29 @@
+{
+ "written_before_results": "2026-10-11. PDF 364~366쪽 그림(corrections/review/page364~366.png)과 PyMuPDF 글자 줄 위치로 정했다. 교정 코드 실행 전 작성.",
+ "pdf_lines": {
+  "364": {"heading": "1-2-2 기계포설(길어깨)", "heading_bbox_top_origin": [78.0, 68.6, 193.0, 80.6], "basis": "(일당)", "basis_bbox": [518.5, 89.2, 544.3, 100.2], "next_heading": "1-2-3 기계포설(본선)", "next_heading_y": 303.6},
+  "365": {"heading": "1-3-2 기계포설(길어깨)", "heading_bbox_top_origin": [78.0, 68.6, 193.0, 80.6], "basis": "(일당)", "basis_bbox": [518.5, 89.2, 544.3, 100.2], "next_heading": "1-3-3 기계포설(본선)", "next_heading_y": 299.6},
+  "366": {"heading": "1-4-2 기계포설(길어깨)", "heading_bbox_top_origin": [78.0, 68.6, 193.0, 80.6], "basis": "(일당)", "basis_bbox": [518.5, 91.6, 544.3, 102.6], "next_heading": "1-4-3 기계포설(본선)", "next_heading_y": 306.0}
+ },
+ "raw_odl_fact": "원시 ODL 출력에는 세 쪽 맨 위의 제목 줄과 (일당) 줄이 모두 없다(노드 자체가 없음).",
+ "expected": [
+  {"section": "토목부문 1-2-2 기계포설(길어깨)", "page": 364, "printed_page": 308, "previous_section": "토목부문 1-2-1",
+   "move_nodes": ["full-p364-o49622", "full-p364:n49658", "full-p364:n49660", "full-p364:n49661", "full-p364:n49662"],
+   "added_from_pdf": ["제목 1-2-2 기계포설(길어깨)", "기준 (일당)"],
+   "must_stay": {"토목부문 1-2-1": ["full-p363:b49568", "full-p363-o49569", "full-p363:n49605", "full-p363:n49607", "full-p363:n49608", "full-p363:n49609"],
+                 "토목부문 1-2-3": ["full-p364:b49664", "full-p364-o49665", "full-p364:n49701", "full-p364:n49703", "full-p364:n49704", "full-p364:n49705"]}},
+  {"section": "토목부문 1-3-2 기계포설(길어깨)", "page": 365, "printed_page": 309, "previous_section": "토목부문 1-3-1",
+   "move_nodes": ["full-p365-o49759", "full-p365:n49795", "full-p365:n49797", "full-p365:n49798", "full-p365:n49799"],
+   "added_from_pdf": ["제목 1-3-2 기계포설(길어깨)", "기준 (일당)"],
+   "must_stay": {"토목부문 1-3-1": ["full-p364:b49708", "full-p364-o49709", "full-p364:n49745", "full-p364:n49747", "full-p364:n49748", "full-p364:n49749"],
+                 "토목부문 1-3-3": ["full-p365:b49801", "full-p365-o49802", "full-p365:n49838", "full-p365:n49840", "full-p365:n49841", "full-p365:n49842"]}},
+  {"section": "토목부문 1-4-2 기계포설(길어깨)", "page": 366, "printed_page": 310, "previous_section": "토목부문 1-4-1",
+   "move_nodes": ["full-p366-o49896", "full-p366:n49932", "full-p366:n49934", "full-p366:n49935", "full-p366:n49936"],
+   "added_from_pdf": ["제목 1-4-2 기계포설(길어깨)", "기준 (일당)"],
+   "must_stay": {"토목부문 1-4-1": ["full-p365:b49845", "full-p365-o49846", "full-p365:n49882", "full-p365:n49884", "full-p365:n49885", "full-p365:n49886"],
+                 "토목부문 1-4-3": ["full-p366:b49938", "full-p366-o49939", "full-p366:n49975", "full-p366:n49977", "full-p366:n49978", "full-p366:n49979"]}}
+ ],
+ "expected_counts": {"sections_before": 1359, "sections_after": 1362, "moved_nodes": 15, "moved_records": "표 레코드 6×3 + 설명 레코드 4×3 = 30(현재 출력 기준)", "added_search_records": "기준 (일당) 3개", "toc_no_body_section_after": 0},
+ "unchanged_expected": ["원본 레코드 23,481개 글·연결 정보", "표 2,328개·칸 82,232개", "관계 11,823건(원래 JSON·confirmed)", "참조 232건 상태(210/15/6/1)와 새 후보 9건", "758쪽 보류"],
+ "search_text_rule": "대상 레코드의 검색용 글 앞머리 '1-2-1 인력식 소규모장비 포설 | '는 '1-2-2 기계포설(길어깨) | '로 바뀌어야 한다(다른 두 쪽도 같음). 원본 레코드 글은 그대로."
+}

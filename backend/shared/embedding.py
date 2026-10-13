@@ -6,6 +6,7 @@ import hashlib
 import json
 import math
 import os
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -41,13 +42,7 @@ def settings(provider: str | None = None, model: str | None = None) -> Embedding
     return EmbeddingSettings(selected, MODELS[selected], int(config["dim"]))
 
 
-def api_key(config: EmbeddingSettings | None = None) -> str:
-    """Read only the selected credential name; never print the credential."""
-    selected = config or settings()
-    if selected.provider == "vertex":
-        key_name = os.environ.get("VERTEX_KEY_NAME", "VERTEX_API_KEY")
-    else:
-        key_name = "GEMINI_API_KEY"
+def _credential(key_name: str) -> str | None:
     key = os.environ.get(key_name)
     env = ROOT / ".env"
     if not key and env.exists():
@@ -56,9 +51,46 @@ def api_key(config: EmbeddingSettings | None = None) -> str:
             if sep and name.strip() == key_name:
                 key = value.strip().strip('"').strip("'")
                 break
-    if not key:
+    return key or None
+
+
+def api_keys(config: EmbeddingSettings | None = None) -> list[str]:
+    """Read configured credentials without logging their values; deduplicate identical keys."""
+    selected = config or settings()
+    names = ([os.environ.get("VERTEX_KEY_NAME", "VERTEX_API_KEY")]
+             if selected.provider == "vertex" else ["GEMINI_API_KEY", "GEMINI_API_KEY_SEC"])
+    keys = list(dict.fromkeys(key for name in names if (key := _credential(name))))
+    if not keys:
+        key_name = names[0]
         raise RuntimeError(f"{key_name}가 없습니다(.env 또는 환경 변수)")
-    return key
+    return keys
+
+
+def api_key(config: EmbeddingSettings | None = None) -> str:
+    """Compatibility accessor for callers that need the first configured credential."""
+    return api_keys(config)[0]
+
+
+class _StudioEmbeddingClient:
+    """Alternate embedding requests across keys; try the other key once on a quota error."""
+
+    def __init__(self, clients):
+        self._clients = clients
+        self._next = 0
+        self._lock = threading.Lock()
+        self.models = self
+
+    def embed_content(self, **kwargs):
+        with self._lock:
+            start = self._next
+            self._next = (start + 1) % len(self._clients)
+        for offset in range(len(self._clients)):
+            index = (start + offset) % len(self._clients)
+            try:
+                return self._clients[index].models.embed_content(**kwargs)
+            except Exception as exc:
+                if not rate_limit_error(exc) or offset == len(self._clients) - 1:
+                    raise
 
 
 def document_title(chunk: dict) -> str:
@@ -94,9 +126,10 @@ def client(config: EmbeddingSettings | None = None):
     from google import genai
 
     selected = config or settings()
-    key = api_key(selected)
-    return (genai.Client(vertexai=True, api_key=key) if selected.provider == "vertex"
-            else genai.Client(api_key=key))
+    keys = api_keys(selected)
+    if selected.provider == "vertex":
+        return genai.Client(vertexai=True, api_key=keys[0])
+    return _StudioEmbeddingClient([genai.Client(api_key=key) for key in keys])
 
 
 def _vectors(result, expected: int, dim: int) -> list[list[float]]:

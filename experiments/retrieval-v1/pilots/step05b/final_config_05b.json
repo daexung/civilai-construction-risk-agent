@@ -1,0 +1,34 @@
+{
+ "version": "v2 (v1 대비 로깅·응답 형식만 변경: 실패·조건미확인 시 모델 출력 일부 기록, 구조 조회 응답에 빈 citations 키. 프롬프트·검증 규칙·검색 코드 동일)",
+ "sha256": {
+  "backend/api/local_trial.py": "ff6862e1374a7b0be213720f1bfa2d439766b75f75161cb337540a51c3bae1c1",
+  "backend/api/local_trial_answer.py": "768706ea63971c42a24079e9218cfe2df721099ceb290cf9916bd90cfe06963d",
+  "backend/api/local_trial_qa.md": "3556c6215b4625093e45065f5deb40e8254a7ae24ec9b33bb60339d219ff6750",
+  "backend/agent/tools/llm/prompts/qa.md": "ebde1692337058b60d170a94d6ae1475839566ed080edf22437ae60f987c86a7",
+  "backend/agent/tools/llm/config.json": "19fc61d77a8dd423c405e8a81c23acecb015dcb7a8bcf88df7b2dcdb799fe30a",
+  "experiments/retrieval-v1/src/select_verified.py": "edff2ca3db3771abf92cc670507b3d06b8faf59bde21625dec1977d6650e0626",
+  "frontend/src/components/LocalTrial.tsx": "7015069bf73bd8cc5ebed98c2c7809f182f497da00221e570fb318f2103e2bc9",
+  "frontend/src/components/LocalTrial.css": "e411d30e1cfb3409a94b366a2ca714f7968336c417f31e6b35ab0f3fb4980928",
+  "frontend/src/localTrialApi.ts": "1fb7d692b449d8e61a3ad48f39780621e537427af9a5f3a5042e219d49bd80ad",
+  "experiments/retrieval-v1/pilots/step05b/trial_questions_05b.json": "86bf2973082f4f01d2d19060519f59b4b943fc0922351c4c384d05b204c2b3c5"
+ },
+ "changed_vs_v1": [
+  "backend/api/local_trial.py"
+ ],
+ "ledger_before_final": {
+  "attempts_used": 15,
+  "cost_used_usd": 0.0113
+ },
+ "answer_model": "gemini-3.5-flash-lite",
+ "caps": {
+  "attempts": 30,
+  "cost_usd": 1.0
+ },
+ "changed_after_final_run": [
+  "frontend/src/components/LocalTrial.tsx"
+ ],
+ "note_after_final_run": "최종 실행 뒤 화면 파일만 바뀜: LocalTrial.tsx에서 조건 경계값(예: 1.2~1.5이하의 1.5)을 \"답변에 쓴 값\" 상자에서 제외. 백엔드·프롬프트·검증 규칙·검색 코드는 최종 실행 때와 동일. 실행 뒤 화면 파일 해시를 아래에 둔다.",
+ "sha256_now": {
+  "frontend/src/components/LocalTrial.tsx": "97fcb16fcf8d9a8ad2d7fd77d1aea2709a5f9e367879aa5f30d832a4e81cb214"
+ }
+}

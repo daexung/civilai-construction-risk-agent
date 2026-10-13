@@ -1,0 +1,56 @@
+{
+ "written_before_results": "2026-10-11. PDF 글자층(PyMuPDF get_text)에서 대상 절 제목 줄의 쪽을 직접 찾아 정했다. 참조 연결 코드 실행 전 작성.",
+ "pdf_facts": {
+  "공통부문 6-1-3 표면 마무리": "본문 186쪽, 목차 11쪽",
+  "건축부문 9-1-4 표면 마무리": "본문 680쪽(같은 제목, 다른 부문·번호)",
+  "공통부문 1-2-4 재료 및 자재의 단가": "본문 65쪽, 하위 항목 '7. 잡재료 및 소모재료' 69쪽, 목차 3쪽",
+  "유지관리부문 1-2 조경공사": "본문 915쪽, 목차 46쪽",
+  "공통부문 2-7-9 비계용 브라켓 설치 및 해체": "본문 106쪽, 목차 5쪽",
+  "토목부문 9-1-4 3급 기준점 측량": "본문 467쪽",
+  "토목부문 9-1-5 4급 기준점 측량": "본문 468쪽",
+  "건축부문 9-1-5 라스 붙임": "본문 681쪽",
+  "토목부문 1-6-6 포장줄눈 절단, 1-6-7 포장줄눈 설치": "본문 373쪽",
+  "공통부문 8-2-30 그래브 준설선": "본문 279쪽",
+  "유지관리부문 4-1-1 배관 해체 ~ 4-1-6 펌프 해체": "본문 977~979쪽"
+ },
+ "real_cases": [
+  {"case": "공통 6-1-x 주석의 [공통부문] 6-1-3", "match_sentence": "[공통부문] 6-1-3", "source_page": 186,
+   "expect_status": "resolved", "expect_targets": [{"division": "공통부문", "number": "6-1-3", "page": 186}],
+   "must_not": ["목차 쪽(57쪽 이전)", "건축부문 9-1-4 표면 마무리", "다른 부문의 6-1-3"]},
+  {"case": "하위 항목 포함 1-2-4/7.", "match_sentence": "1-2-4/7. 잡재료", "source_page": 66,
+   "expect_status": "resolved 또는 partial", "expect_targets": [{"division": "공통부문", "number": "1-2-4", "page": 65}],
+   "expect_subitem": {"text": "7. 잡재료 및 소모재료", "page": 69},
+   "rule": "하위 항목을 원문 노드로 찾으면 resolved, 절만 찾으면 partial"},
+  {"case": "부문 명시 다른 부문 참조", "match_sentence": "[유지관리부문] 1-2 조경공사", "source_page": 147,
+   "expect_status": "resolved", "expect_targets": [{"division": "유지관리부문", "number": "1-2", "page": 915}],
+   "must_not": ["목차 46쪽", "공통부문 1-2"]},
+  {"case": "부문 생략, 번호·제목으로 하나", "match_sentence": "2-7-9 비계용 브라켓", "source_page": 103,
+   "expect_status": "resolved", "expect_targets": [{"division": "공통부문", "number": "2-7-9", "page": 106}],
+   "rule": "부문이 생략돼도 번호와 제목이 맞는 본문 절이 하나뿐일 때만 확정, 근거에 부문 생략을 기록"},
+  {"case": "부문 생략, 번호와 제목이 서로 다른 절을 가리킴", "match_sentence": "9-1-4 4급 기준점 측량", "source_page": 575,
+   "expect_status": "ambiguous", "expect_candidates_include": [{"division": "토목부문", "number": "9-1-4"}, {"division": "토목부문", "number": "9-1-5"}],
+   "must_not": ["둘 중 하나를 확정", "건축부문 9-1-4"]},
+  {"case": "부문 생략, 같은 번호가 다른 부문에 있음", "match_sentence": "9-1-5 4급 기준점 측량", "source_page": 575,
+   "expect_status": "resolved", "expect_targets": [{"division": "토목부문", "number": "9-1-5", "page": 468}],
+   "must_not": ["건축부문 9-1-5 라스 붙임"]},
+  {"case": "한 문장의 두 대상", "match_sentence": "1-6-6 포장줄눈 절단/1-6-7", "source_page": 931,
+   "expect_status": "resolved", "expect_targets": [{"division": "토목부문", "number": "1-6-6", "page": 373}, {"division": "토목부문", "number": "1-6-7", "page": 373}]},
+  {"case": "범위 참조", "match_sentence": "4-1-1 배관 해체~4-1-6", "source_page": 979,
+   "expect_status": "resolved", "expect_targets": [{"division": "유지관리부문", "number": "4-1-1", "page": 977}, {"division": "유지관리부문", "number": "4-1-6", "page": 979}]},
+  {"case": "절 + 하위 항목(슬래시 구분)", "match_sentence": "8-2-30 그래브 준설선 / 4. 작업효율", "source_page": 283,
+   "expect_status": "resolved 또는 partial", "expect_targets": [{"division": "공통부문", "number": "8-2-30", "page": 279}]},
+  {"case": "번호 없는 항목 제목만 있음", "match_sentence": "‘3. 인력편성’ 노무비", "source_page": 162,
+   "expect_status": "resolved(출발 절 안의 유일한 같은 하위 항목) 또는 ambiguous", "must_not": ["다른 절의 '3. 인력편성'을 근거 없이 선택"]}
+ ],
+ "virtual_cases": [
+  {"case": "외부 문서", "input": "‘[전기부문] 1-1-1 일반사항’을 따른다.", "expect_status": "external"},
+  {"case": "본문에 없는 절", "input": "‘[토목부문] 99-9-9 없는 절’을 따른다.", "expect_status": "missing"},
+  {"case": "순환 참조", "input": "A→B, B→A", "expect": "방문한 노드를 기록해 탐색이 끝나고, 같은 노드를 두 번 읽지 않음"},
+  {"case": "대상 변경 후 혼용", "input": "같은 참조를 다른 대상 절 목록으로 다시 연결", "expect": "릴리스 ID와 연결 결과 해시가 달라져 이전 결과와 섞이지 않음"}
+ ],
+ "global_rules": [
+  "확정(resolved)한 대상은 실제 본문 절이어야 하고 목차·부문 표지 쪽이 아니어야 한다",
+  "부문을 명시한 참조는 그 부문의 절에만 연결한다",
+  "기존 관계의 confirmed=false는 바뀌지 않는다. 대상 확인과 적용 여부는 다른 필드다"
+ ]
+}

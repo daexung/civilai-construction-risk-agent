@@ -1,0 +1,41 @@
+{
+ "note": "교정 자료를 일부러 틀리게 바꾼 시험(가상 입력). 모두 거부돼야 한다.",
+ "cases": [
+  {
+   "name": "PDF 해시가 다름",
+   "rejected": true,
+   "reason": "PDF 해시 불일치"
+  },
+  {
+   "name": "입력 해시가 다름",
+   "rejected": true,
+   "reason": "입력 해시 불일치: store"
+  },
+  {
+   "name": "PDF 제목 글자가 다름",
+   "rejected": true,
+   "reason": "civil-1-2-2: PDF heading_pdf 글자 불일치 '1-2-2 기계포설(길어깨)' != '1-2-2 기계포설(본선)'"
+  },
+  {
+   "name": "PDF 위치에 제목이 없음",
+   "rejected": true,
+   "reason": "civil-1-3-2: PDF heading_pdf 글자 불일치 '1-3-3 기계포설(본선)' != '1-3-2 기계포설(길어깨)'"
+  },
+  {
+   "name": "기존 소속이 기대와 다름",
+   "rejected": true,
+   "reason": "civil-1-4-2: full-p366-o49896의 기존 소속이 pumsem-2026-errata1:civil:1-4-1(기대 1-4-3); civil-1-4-2: full-p366:n49932의 기존 소속이 pumsem-2026-errata1:civil:1-4-1(기대 1-4-3); civil-1-4-2: full-p366:n49934의 기존 소속이 "
+  },
+  {
+   "name": "대상 목록이 다음 제목 전 노드와 다름",
+   "rejected": true,
+   "reason": "civil-1-2-2: 다음 제목 전 노드가 교정 자료와 다름 ['full-p364-o49622', 'full-p364:n49658', 'full-p364:n49660', 'full-p364:n49661', 'full-p364:n49662']"
+  },
+  {
+   "name": "목차 쪽 번호가 다름",
+   "rejected": true,
+   "reason": "civil-1-2-2: 목차 항목과 다름 {'toc_id': 'full-p16:n940#0', 'node_id': 'full-p16:n940', 'division': '토목부문', 'number': '1-2-2', 'title': '기계포설(길어깨)', 'printed_page': 308, 'matched_section_id': None, 'match_st"
+  }
+ ],
+ "failed": 0
+}

@@ -1,0 +1,25 @@
+{
+ "frozen_on": "2026-10-12T12:32:18",
+ "versions": {
+  "chunk_set_id": "cs-37f81b5cfb1b-46f4f035c0fa",
+  "release_id": "rk-complete-82c206c61e21-37f81b5cfb1b",
+  "model": "gemini-embedding-2",
+  "dim": 3072,
+  "input_format": "doc-title-none-v1",
+  "vectors_sha256": "09d96747d3c2de9abcc1cd362ab1753731617d118f75986fe3121ca328166e84",
+  "all_inputs_sha256": "6d0316d8d98ab22c95f5421e729ff6d6f5e3625d5aac481a518f445d405a17bd",
+  "config_sha256": "71792e8fb25cfff6d5e8618e29c76e4afda23984362bd82644e539caa0c81ba8",
+  "code_sha256": "6c7d120e6d85a0cf0dbcf2e27a18f7156e6fd7f8626114f806d54641b8c67cf8",
+  "evidence_code_sha256": "f1ccbbceff91e98291a2468a09c3f0c949dda420a588267f008e6e9916b568c8",
+  "select_code_sha256": "ef4b4c742387c0f7720b405efc5278a4bc79745d3097e643da2cf2770f6980a1",
+  "select_config_sha256": "9205a91ecc39e46945400c05e2ddb96f2c55f06f14048682b590b7ce4cda6b8f",
+  "new_questions_04b_sha256": "36e4ae8b46fba2996142a0eef3611f7cdb5188919b5506d6b09be8094be0fa10"
+ },
+ "new_eval_done": true,
+ "previous_freeze": {
+  "file": "eval/freeze_step04.json",
+  "sha256": "18b5b2447faf6d412ad76b9b678f62a63908f0be897e60dd297606b8639ead68"
+ },
+ "note": "4b 최종 설정·코드·질문·벡터 해시. 이 해시가 바뀌면 새 4b 질문 평가를 거부한다.",
+ "new_eval_run": "20261012T123241-eval_selection_new"
+}

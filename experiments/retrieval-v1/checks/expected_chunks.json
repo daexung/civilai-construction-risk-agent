@@ -1,0 +1,31 @@
+{
+ "written_before_results": "2026-10-12. 청킹 코드 실행 전에 원문 릴리스 rk-complete-82c206c61e21-37f81b5cfb1b의 DB 원문 자료(표·레코드·관계)와 이전 단계 PDF 대조로 정했다.",
+ "cases": [
+  {"id": "shoulder", "what": "길어깨 세 표와 설명",
+   "tables": {"full-p364-o49622": "pumsem-2026-errata1:civil:1-2-2", "full-p365-o49759": "pumsem-2026-errata1:civil:1-3-2",
+              "full-p366-o49896": "pumsem-2026-errata1:civil:1-4-2"},
+   "previous_tables_must_not_link": {"full-p364-o49622": "full-p363-o49569", "full-p365-o49759": "full-p364-o49709", "full-p366-o49896": "full-p365-o49846"},
+   "expect": ["표 조각의 절 = 길어깨 절", "표 조각 문맥에 해당 길어깨 제목과 보완한 (일당)이 있음", "표 조각 글에 '인력식 소규모장비 포설'이 없음",
+              "앞 인력 표의 주석 표(note_table_of)로 연결하지 않음", "표 아래 [주] ①~④ 설명 조각도 길어깨 절이고 그 표와 관련(미확정 위치 근거)으로 연결",
+              "superseded_relations 15건은 어떤 조각 연결에도 쓰지 않음"]},
+  {"id": "p185_shared", "what": "185쪽 6-1-1 레디믹스트콘크리트 타설 표의 공동 값과 기준·주석",
+   "table": "full-p185-o18870", "section": "pumsem-2026-errata1:common:6-1-1", "records": 7, "records_with_shared": 5,
+   "nested_table": "full-p185-o18933",
+   "expect": ["표 레코드 7개 글이 그대로 들어감", "공동값 칸이 칸 연결(shared_value)로 남고 표시는 '중복 합산하지 않음' 그대로",
+              "같은 공동값을 독립 수량처럼 다시 쓰지 않음(조각에서 새 숫자를 만들지 않음)", "칸 안 작은 표는 별도 표 조각이며 부모 표로 연결",
+              "같은 절의 주석 n18951(6-1-3 참조 출발)이 설명 조각에 있고 참조 연결 complete-82c206c61e21:rel3600(resolved, 공통 6-1-3)을 찾을 수 있음"]},
+  {"id": "p555", "what": "555쪽 13행 표", "table": "full-p555-o80398", "records": 13,
+   "expect": ["13행 모두 순서대로 조각에 있음", "구조 표지 상태(ok) 유지", "주석 표 full-p555-o80829는 주석 표 후보(미확정)로 연결"]},
+  {"id": "p758", "what": "758쪽 보류 표", "table": "full-p758-o107176",
+   "expect": ["조각 상태 held", "'0.215 0.415'가 그대로 있음", "하나를 고르거나 합치지 않음"]},
+  {"id": "p501_p502", "what": "교정된 501·502쪽 표", "tables": ["full-p501-ocorrection:p501-t0", "full-p502-ocorrection:p502-t0", "full-p502-ocorrection:p502-t1"],
+   "expect": ["레코드 글(분수식 표기 포함)이 원본과 글자 그대로 같음", "행 수 7·7·13 유지"]},
+  {"id": "references", "what": "참조 출발점",
+   "expect": ["기존 232 + 새 후보 9 모두 출발 조각을 찾을 수 있음", "상태(resolved 210 / partial 15 / ambiguous 6 / missing 1)는 그대로",
+              "9-1-4 4급 기준점 측량(575쪽)은 모호함 그대로, 후보 3개", "하위 항목 1-2-4/7. 은 하위 항목 노드까지", "새 후보 9건은 기존 232와 구분(origin)"]},
+  {"id": "exclusions", "what": "검색 제외",
+   "expect": ["목차 구역 1,069행과 부문 표지 52행은 조각에 넣지 않고 제외 사유를 남김", "본문 레코드는 모두 조각에 사용"]}
+ ],
+ "size_policy": {"rule_target_est_tokens": 800, "table_target_est_tokens": 1600, "safety_cap_est_tokens": 6000,
+                 "note": "토큰은 외부 API 없이 추정한다. 상한 6,000도 추정치 기준이며 실제 모델 한도는 임베딩 단계에서 확인한다."}
+}
