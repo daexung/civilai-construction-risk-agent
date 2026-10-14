@@ -37,6 +37,7 @@ def run():
             assert client.post('/api/answer-feedback', json=payload).status_code == 200
             restored = chat_storage.read_conversation(conversation, users[0])['messages'][1]['payload']
             assert restored['answer_rating']['rating'] == 'bad'
+            assert 'execution' not in restored
             with chat_storage.connection() as conn:
                 row = conn.execute('SELECT question,answer FROM public.answer_feedback WHERE answer_id=%s', (answer_id,)).fetchone()
                 assert row == {'question': '검증용 질문', 'answer': '검증용 답변'}

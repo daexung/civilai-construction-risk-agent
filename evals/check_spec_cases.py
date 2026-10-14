@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import argparse
 import sys
 from fractions import Fraction
 from pathlib import Path
@@ -32,6 +33,19 @@ def differences(case: dict, result: dict, spec: dict) -> list[str]:
     issues = []
     if result.get("status") != expected["status"]:
         return [f"status: 예상 {expected['status']}, 실제 {result.get('status')}"]
+    unit = expected.get("unit")
+    if isinstance(unit, str):
+        actual_units = {str((result.get("unit_basis") or {}).get("per", ""))}
+        actual_units.update(str(line.get("unit", "")) for line in result.get("unit_lines", []))
+        if unit not in actual_units:
+            issues.append(f"unit: 예상 {unit}, 실제 {sorted(actual_units)}")
+    elif isinstance(unit, dict):
+        if unit.get("unit_basis_per") is not None and (result.get("unit_basis") or {}).get("per") != unit["unit_basis_per"]:
+            issues.append(f"unit_basis.per: 예상 {unit['unit_basis_per']}, 실제 {(result.get('unit_basis') or {}).get('per')}")
+        lines = {line["name"]: line for line in result.get("unit_lines", [])}
+        for name, expected_unit in (unit.get("unit_lines") or {}).items():
+            if lines.get(name, {}).get("unit") != expected_unit:
+                issues.append(f"unit_lines.{name}.unit: 예상 {expected_unit}, 실제 {lines.get(name, {}).get('unit')}")
     if "unit_lines" in expected:
         basis = result.get("unit_basis", {})
         for key, value in expected["unit_basis"].items():
@@ -113,7 +127,27 @@ def differences(case: dict, result: dict, spec: dict) -> list[str]:
 
 def main() -> int:
     specs = load_specs()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cases", type=Path, help="Operator-reviewed estimate JSONL exported outside the repository")
+    args = parser.parse_args()
     passed = total = 0
+    if args.cases:
+        rows = [json.loads(line) for line in args.cases.read_text(encoding="utf-8").splitlines() if line]
+        cases = [row for row in rows if row.get("label") == "estimate"]
+        if not cases or any("spec_id" not in case or "input" not in case or "expected" not in case for case in cases):
+            parser.error("--cases must contain estimate rows from export_reviewed_answer_cases.py")
+        for case in cases:
+            spec = specs[case["spec_id"]]
+            calculate = CALCULATORS[spec["quantity_model"]["name"]]
+            total += 1
+            issues = differences(case, calculate(spec, case["input"]), spec)
+            if issues:
+                print(f"FAIL {case['id']}: {'; '.join(issues)}")
+            else:
+                passed += 1
+                print(f"PASS {case['id']}")
+        print(f"통과 {passed} / 전체 {total}")
+        return 0 if passed == total else 1
     files = sorted((ROOT / "evals/cases").glob("*.json"))
     if not files:
         print("사례 파일이 없습니다.")

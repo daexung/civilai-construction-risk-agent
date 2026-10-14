@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from time import perf_counter
 from typing import Iterator
+import re
 
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
@@ -20,6 +21,7 @@ from backend.agent.nodes.retrieve import retrieve
 from backend.agent.nodes.route import route
 from backend.agent.nodes.select import select
 from backend.agent.state import AgentState
+from backend.shared import answer_trace
 
 _NODE_TIMINGS: ContextVar[dict[str, float] | None] = ContextVar("civilai_node_timings", default=None)
 _TIMING_BUCKETS = {
@@ -48,15 +50,65 @@ def capture_node_timings() -> Iterator[dict[str, float]]:
 
 
 def _timed_node(name: str, node):
-    bucket = _TIMING_BUCKETS[name]
+    bucket = _TIMING_BUCKETS.get(name)
+
+    def summary(value):
+        if not isinstance(value, dict):
+            return {}
+        keep = {key: value[key] for key in ("route", "status", "decision", "spec_id", "answer_source", "route_source") if key in value}
+        selection = value.get("selection")
+        if isinstance(selection, dict):
+            keep["selection"] = {k: selection[k] for k in ("id", "internal_id", "table_id", "section", "section_no", "confirmed") if k in selection}
+        hits = value.get("hits")
+        if isinstance(hits, list):
+            keep["hits"] = [{k: hit[k] for k in ("chunk_id", "score", "section_no", "page", "table_id") if k in hit}
+                            for hit in hits[:30] if isinstance(hit, dict)]
+        search = value.get("search_info")
+        if isinstance(search, dict):
+            keep["search"] = {k: search[k] for k in ("method", "api_calls", "fallback_reason") if k in search}
+        candidates = value.get("candidates") or value.get("work_candidates")
+        if isinstance(candidates, list):
+            keep["candidates"] = [{"rank": rank, **{k: item[k] for k in ("id", "internal_id", "table_id", "section", "section_no", "score") if k in item}}
+                                  for rank, item in enumerate(candidates[:30], 1) if isinstance(item, dict)]
+        result = value.get("result")
+        if isinstance(result, dict):
+            keep["calculation"] = {k: result[k] for k in ("daily_volume", "work_days", "unit_basis", "per_unit_only", "review_status") if k in result}
+            for key in ("lines", "unit_lines"):
+                if key in result:
+                    keep["calculation"][key] = [{k: line[k] for k in ("kind", "name", "value", "unit", "crew", "source") if k in line}
+                                                for line in result[key][:100] if isinstance(line, dict)]
+        evidence = value.get("evidence")
+        if isinstance(evidence, list):
+            keep["evidence"] = [{k: cite[k] for k in ("internal_id", "chunk_id", "division", "section_no", "pdf_page", "printed_page", "row", "column", "value") if k in cite}
+                                 for cite in evidence[:100] if isinstance(cite, dict)]
+        inputs = value.get("inputs")
+        if isinstance(inputs, dict):
+            from backend.agent.nodes.fill import _common_fields
+            from backend.agent.rules.specs import load_specs
+            spec = load_specs().get(value.get("spec_id"), {})
+            fields = {field["name"]: field for field in [*spec.get("inputs", []), *_common_fields()]}
+            number = re.compile(r"^[+-]?(?:\d+(?:[.,]\d+)?|\d+/\d+)$")
+            selected = {}
+            for name, item in inputs.items():
+                field = fields.get(name, {})
+                allowed = field.get("allowed_values") or []
+                if item in allowed or isinstance(item, (int, float)) or isinstance(item, str) and number.fullmatch(item.strip()):
+                    selected[name] = item
+            if selected:
+                keep["selected_conditions"] = selected
+        return keep
 
     def run(state):
         started = perf_counter()
         try:
-            return node(state)
+            before = summary(state)
+            with answer_trace.step(name, "node", before) as trace_step:
+                result = node(state)
+                answer_trace.set_output(trace_step, summary(result))
+                return result
         finally:
             timings = _NODE_TIMINGS.get()
-            if timings is not None:
+            if timings is not None and bucket is not None:
                 timings[bucket] += (perf_counter() - started) * 1000
 
     return run
@@ -103,7 +155,7 @@ def build_graph(checkpointer=None):
     graph.add_node("answer", _timed_node("answer", answer))
     graph.add_node("select", _timed_node("select", select))
     graph.add_node("fill", _timed_node("fill", fill))
-    graph.add_node("ask", ask)
+    graph.add_node("ask", _timed_node("ask", ask))
     graph.add_node("gate", _timed_node("gate", gate))
     graph.add_node("compute", _timed_node("compute", compute))
     graph.add_node("price", _timed_node("price", price))

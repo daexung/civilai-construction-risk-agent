@@ -6,6 +6,7 @@ from functools import cache
 from backend.agent.state import AgentState
 from backend.agent.tools.search.bm25 import Index, load
 from backend.agent.tools.search.vector import MissingVectorsError, ModelMismatchError, load_index_config
+from backend.shared import answer_trace
 
 
 class _Fallback:
@@ -83,7 +84,7 @@ def get_search():
     return make_search_index(os.getenv("AGENT_OFFLINE") == "1")
 
 
-def retrieve(state: AgentState) -> dict:
+def _retrieve_impl(state: AgentState) -> dict:
     index, method, warning = get_search()
     queries = [state["query"]]
     search_query = state.get("search_query", "").strip()
@@ -113,3 +114,15 @@ def retrieve(state: AgentState) -> dict:
         "warnings": [warning] if warning else [],
         "fallback_reason": index.fallback_reason if isinstance(index, _Fallback) else None,
     }}
+
+
+def retrieve(state: AgentState) -> dict:
+    with answer_trace.step('search', 'tool', {'route': state.get('route')}) as trace_step:
+        result = _retrieve_impl(state)
+        answer_trace.set_output(trace_step, {
+            'method': (result.get('search_info') or {}).get('method'),
+            'api_calls': (result.get('search_info') or {}).get('api_calls'),
+            'fallback_reason': (result.get('search_info') or {}).get('fallback_reason'),
+            'hits': [{key: hit[key] for key in ('rank', 'chunk_id', 'score', 'section_no', 'page', 'table_id') if key in hit}
+                     for hit in result.get('hits', [])[:30] if isinstance(hit, dict)]})
+        return result
