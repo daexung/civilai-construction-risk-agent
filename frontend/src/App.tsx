@@ -21,6 +21,7 @@ import FeedbackDialog from './components/FeedbackDialog';
 import DeleteAccountDialog from './components/DeleteAccountDialog';
 import LocalTrial from './components/LocalTrial';
 import OwnerDashboard from './OwnerDashboard';
+import { adminApi } from './adminApi';
 
 interface Conversation {
   id: string;
@@ -67,6 +68,7 @@ export default function App() {
   const pendingRequest = useRef(false);
   const [usage, setUsage] = useState<UsageStatus | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [adminAccountId, setAdminAccountId] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
   const [authInitializing, setAuthInitializing] = useState(!!authClient);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -92,6 +94,16 @@ export default function App() {
   storeRef.current = store;
   const accountRef = useRef<string | null>(null);
   const accountId = user?.id ?? null;
+  useEffect(() => {
+    setAdminAccountId(null);
+    if (!accountId || pathname !== '/chat') return;
+    let active = true;
+    const controller = new AbortController();
+    adminApi.access(accountId, controller.signal).then(result => {
+      if (active && result.is_admin === true) setAdminAccountId(accountId);
+    }).catch(() => {}); // Missing permission or failed checks keep the entry hidden.
+    return () => { active = false; controller.abort(); };
+  }, [accountId, pathname]);
   const restoringConversation = turns.length === 0 && (authInitializing || historyLoading || !!(accountId && historyOwner !== accountId));
   accountRef.current = accountId;
   useEffect(() => { setDeleteTarget(null); setRenameTarget(null); }, [accountId]);
@@ -465,6 +477,7 @@ export default function App() {
         logoutBusy={logoutLoading || loading || migrating || authLoading}
         logoutError={logoutError}
         accountLabel={accountName}
+        adminAccess={!!accountId && adminAccountId === accountId}
         authLoading={authLoading}
         onLogin={() => { setLoginError(''); setLoginOpen(true); }}
         onSettings={() => { setLogoutError(''); setSettingsOpen(true); }}

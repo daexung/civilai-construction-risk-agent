@@ -4,6 +4,8 @@ import { Simulate } from 'react-dom/test-utils';
 import App from './App';
 import { sendChat, listConversations, readConversation, deleteConversation, renameConversation, importGuestConversation, getUsage, UsageError } from './api';
 import { loginWithGoogle } from './auth';
+import { adminApi } from './adminApi';
+jest.mock('./adminApi', () => ({ adminApi: { access: jest.fn() } }));
 
 jest.mock('./api', () => ({ sendChat: jest.fn(), downloadEstimate: jest.fn(), listConversations: jest.fn(), readConversation: jest.fn(), deleteConversation: jest.fn(), renameConversation: jest.fn(), importGuestConversation: jest.fn(), getUsage: jest.fn(), UsageError: class extends Error { constructor(message, usage) { super(message); this.usage = usage; } } }));
 let mockAuthClient = null;
@@ -17,6 +19,7 @@ beforeEach(async () => {
   mockAuthClient = null;
   getUsage.mockReset().mockResolvedValue({ limit: 5, used: 0, remaining: 5, service_limit: 500, service_remaining: 500, resets_at: new Date(Date.now() + 3600000).toISOString(), timezone: 'Asia/Seoul' });
   loginWithGoogle.mockReset();
+  adminApi.access.mockReset().mockRejectedValue(Object.assign(new Error('denied'), { status: 403 }));
   listConversations.mockReset().mockResolvedValue([]);
   readConversation.mockReset().mockResolvedValue([]);
   deleteConversation.mockReset().mockResolvedValue(undefined);
@@ -82,6 +85,7 @@ test('popup login preserves guest turns and logout clears the account view', asy
   act(() => Simulate.click(container.querySelector('[aria-label="계정 메뉴 열기"]')));
   expect(document.querySelector('.settings-dialog')).toBeNull();
   expect(container.querySelector('.chat-account-menu').textContent).toContain('남은 사용량');
+  expect(container.querySelector('.chat-account-dashboard')).toBeNull();
   expect(container.querySelector('.chat-account').getAttribute('aria-expanded')).toBe('true');
   expect(container.querySelector('.chat-account-chevron').classList.contains('is-open')).toBe(true);
   act(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })));
@@ -541,4 +545,19 @@ test('card answers after a network error retry with the same body and request_id
   expect(sendChat.mock.calls[2][0]).toEqual(failed);
   expect(container.querySelectorAll('.message.user')).toHaveLength(2);
   expect(container.querySelector('.user-question-failed')).toBeNull();
+});
+
+
+test('profile menu shows dashboard only after server confirmation and removes it on logout', async () => {
+  adminApi.access.mockResolvedValue({ is_admin: true });
+  loginWithGoogle.mockResolvedValue({ id: 'admin-A', email: 'admin@example.invalid', user_metadata: { name: '관리자' } });
+  await act(async () => Simulate.click(container.querySelector('.chat-sidebar-login button')));
+  await act(async () => Simulate.click(document.querySelector('.login-dialog-google')));
+  await act(async () => Simulate.click(container.querySelector('[aria-label="계정 메뉴 열기"]')));
+  const entry = container.querySelector('.chat-account-dashboard');
+  expect(entry.textContent).toBe('운영자 대시보드');
+  expect(entry.getAttribute('href')).toBe('/admin');
+  expect(adminApi.access).toHaveBeenCalledWith('admin-A', expect.any(AbortSignal));
+  await act(async () => Simulate.click(container.querySelector('.chat-account-logout')));
+  expect(container.querySelector('.chat-account-dashboard')).toBeNull();
 });

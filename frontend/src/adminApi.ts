@@ -1,8 +1,9 @@
 import { authClient } from './auth';
 
-async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
+async function request<T>(path: string, signal?: AbortSignal, expectedUserId?: string): Promise<T> {
   const { data, error } = await authClient?.auth.getSession() ?? { data: { session: null }, error: null };
   if (error || !data.session?.access_token) throw Object.assign(new Error('로그인이 필요합니다.'), { status: 401 });
+  if (expectedUserId && data.session.user?.id !== expectedUserId) throw Object.assign(new Error('로그인 계정이 바뀌었습니다.'), { status: 401 });
   const response = await fetch(`${process.env.REACT_APP_API_URL ?? ''}/api/admin${path}`, {
     headers: { Authorization: `Bearer ${data.session.access_token}`, Accept: 'application/json' },
     cache: 'no-store', signal,
@@ -24,6 +25,7 @@ const query = (values: Record<string, string | number | undefined>) => {
 };
 
 export const adminApi = {
+  access: (userId: string, signal?: AbortSignal) => request<{ is_admin: boolean }>('/access', signal, userId),
   summary: (period: string, signal?: AbortSignal) => request<any>(`/summary${query({ period })}`, signal),
   ratings: (filters: Record<string, string | number | undefined>, signal?: AbortSignal) => request<any>(`/answer-feedback${query(filters)}`, signal),
   rating: (id: string, signal?: AbortSignal) => request<any>(`/answer-feedback/${encodeURIComponent(id)}`, signal),
