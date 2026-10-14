@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { authClient, loginWithGoogle } from './auth';
+import { authClient, loginDashboardWithGoogle } from './auth';
 import { adminApi } from './adminApi';
 import './OwnerDashboard.css';
 
@@ -34,6 +34,7 @@ export default function OwnerDashboard() {
   const [feedbackCategory, setFeedbackCategory] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [loginStarting, setLoginStarting] = useState(false);
   const [permission, setPermission] = useState<'unknown' | 'denied' | 'allowed'>('unknown');
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -113,7 +114,7 @@ export default function OwnerDashboard() {
 
   const trendMax = useMemo(() => Math.max(1, ...(summary?.trend ?? []).map((r: any) => Number(r.total))), [summary]);
   if (sessionState === 'loading') return <main className="od-page"><p>로그인 상태를 확인하고 있습니다.</p></main>;
-  if (sessionState === 'signed-out') return <main className="od-page"><header className="od-header"><a href="/">품셈이</a><h1>운영자 대시보드</h1></header><section className="od-panel"><h2>로그인이 필요합니다</h2><p>운영자로 등록된 계정으로 로그인해 주세요.</p><button onClick={() => loginWithGoogle().catch((e: Error) => setError(e.message))}>Google 로그인</button>{error && <p role="alert">{error}</p>}</section></main>;
+  if (sessionState === 'signed-out') return <main className="od-page"><header className="od-header"><a href="/">품셈이</a><h1>운영자 대시보드</h1></header><section className="od-panel"><h2>로그인이 필요합니다</h2><p>운영자로 등록된 계정으로 로그인해 주세요.</p><button disabled={loginStarting} onClick={() => { setError(''); setLoginStarting(true); void loginDashboardWithGoogle().catch((e: Error) => { setError(e.message); setLoginStarting(false); }); }}>{loginStarting ? 'Google로 이동 중…' : 'Google 로그인'}</button>{error && <p role="alert">{error}</p>}</section></main>;
 
   return <main className="od-page">
     <header className="od-header"><a href="/">품셈이</a><div><h1>운영자 대시보드</h1><p>실행 상태와 사용자 평가를 확인합니다. 실행 완료는 답변의 정답을 뜻하지 않습니다.</p></div><button className="od-quiet" onClick={() => authClient?.auth.signOut()}>로그아웃</button></header>
