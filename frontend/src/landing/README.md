@@ -13,6 +13,9 @@
 - 저장된 실제 응답 `demo.json`을 사용합니다. 계산 과정을 펼치면 원가계산서·일위대가·산출근거 탭을 조작할 수 있습니다.
 - 예시가 부분 금액임을 표시하고 실제 미산정 항목과 원문 출처를 제공합니다.
 - 시작은 기존 `/chat`, 예시 질문은 기존 `onExample`에 연결합니다.
+- `frontend/prerender-home.cjs`가 이 `Landing` 컴포넌트만 빌드 시 HTML로 렌더링합니다. React hydration도 같은 컴포넌트를 사용하며 `App.tsx`는 서버에서 실행하지 않습니다.
+- `build/index.html`에는 홈페이지를 넣고, `build/app-shell.html`은 비워 둡니다. Vercel은 `/` 이외 경로를 앱 셸로 보내며 기존 `X-Robots-Tag`·API 경로를 유지합니다.
+- 브라우저 저장소를 읽는 베타 안내는 랜딩 hydration 이후 표시하므로 정적 HTML에는 로그인 상태나 개인화된 팝업이 포함되지 않습니다.
 
 ## 검증
 

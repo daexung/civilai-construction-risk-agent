@@ -1,4 +1,4 @@
-import React, { useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowRight, X } from 'lucide-react';
 import useDialogFocus from '../components/useDialogFocus';
@@ -42,8 +42,15 @@ function NoticeDialog({ onClose, onStart, variant = 'landing', onFeedback }: Not
 export default function BetaNotice({ onStart, variant = 'landing', onFeedback }: NoticeProps) {
   const hiddenKey = variant === 'chat' ? 'poomsemi.chatBetaNotice.hiddenDay' : storageKey;
   const [open, setOpen] = useState(() => {
+    // The landing page is pre-rendered and hydrated from the same closed state.
+    // Read browser-specific dismissal state only after hydration to avoid a mismatch.
+    if (variant === 'landing') return false;
     try { return localStorage.getItem(hiddenKey) !== koreaDay(); } catch { return true; }
   });
+  useEffect(() => {
+    if (variant !== 'landing') return;
+    try { setOpen(localStorage.getItem(hiddenKey) !== koreaDay()); } catch { setOpen(true); }
+  }, [hiddenKey, variant]);
   const close = (hideToday: boolean) => {
     if (hideToday) { try { localStorage.setItem(hiddenKey, koreaDay()); } catch { /* Storage may be blocked; closing still works. */ } }
     setOpen(false);

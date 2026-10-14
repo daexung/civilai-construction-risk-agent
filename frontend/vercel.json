@@ -9,6 +9,6 @@
     },
     { "handle": "filesystem" },
     { "src": "/api/.*", "dest": "/api/[...path]" },
-    { "src": "/.*", "dest": "/index.html" }
+    { "src": "/.*", "dest": "/app-shell.html" }
   ]
 }
