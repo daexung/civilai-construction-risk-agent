@@ -72,7 +72,7 @@ function createProxy({ fetchImpl = fetch, oidc = async () => {
       });
       // Never send credentials to a redirect or return internal auth failure pages.
       if (response.status >= 300 && response.status < 400) throw new Error('UPSTREAM_REDIRECT');
-      for (const name of ['content-type', 'content-disposition', 'retry-after']) {
+      for (const name of ['content-type', 'content-disposition', 'retry-after', 'x-robots-tag']) {
         const value = response.headers.get(name);
         if (value) res.setHeader(name, value);
       }

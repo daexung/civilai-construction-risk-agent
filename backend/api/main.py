@@ -45,6 +45,7 @@ from backend.api import runtime
 from backend.api import feedback
 from backend.api import answer_feedback
 from backend.api import answer_runs
+from backend.api import admin
 from backend.shared import answer_trace
 from backend.api import accounts
 from backend.api import dialogue_service
@@ -137,6 +138,18 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Content-Disposition"],
 )
+
+app.include_router(admin.router)
+
+
+@app.middleware("http")
+async def private_admin_responses(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path == "/api/admin" or request.url.path.startswith("/api/admin/"):
+        response.headers["Cache-Control"] = "private, no-store"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    return response
 
 # 5단계 로컬 시험 연결: 기본 꺼짐. LOCAL_TRIAL_RETRIEVAL=on일 때만 /api/local-trial/* 를 붙이고 운영(production)에서는 붙이지 않는다.
 if os.environ.get("LOCAL_TRIAL_RETRIEVAL", "off") == "on" and not runtime.production():

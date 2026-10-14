@@ -20,6 +20,7 @@ import RenameConversationDialog from './components/RenameConversationDialog';
 import FeedbackDialog from './components/FeedbackDialog';
 import DeleteAccountDialog from './components/DeleteAccountDialog';
 import LocalTrial from './components/LocalTrial';
+import OwnerDashboard from './OwnerDashboard';
 
 interface Conversation {
   id: string;
@@ -442,6 +443,7 @@ export default function App() {
 
   if (process.env.REACT_APP_LOCAL_TRIAL === 'on' && pathname === '/trial') return <LocalTrial />;   // 5단계 로컬 시험(기본 꺼짐)
   if (pathname === '/auth/callback') return <AuthCallback />;
+  if (pathname === '/admin' || pathname === '/admin/') return <OwnerDashboard />;
   if (pathname === '/terms' || pathname === '/terms/') return <Terms />;
   if (pathname === '/privacy' || pathname === '/privacy/') return <Privacy />;
 

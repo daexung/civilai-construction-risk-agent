@@ -64,10 +64,12 @@ jobs:
           gcloud auth configure-docker asia-northeast3-docker.pkg.dev --quiet
           docker push "$IMAGE"
       - name: Update existing Cloud Run service
+        env:
+          ADMIN_USER_IDS: ${{ vars.ADMIN_USER_IDS }}
         run: |
           gcloud run services update poomsemi-api \
             --image="$IMAGE" \
-            --update-env-vars=CLIENT_IP_SOURCE=vercel \
+            --update-env-vars="^;^CLIENT_IP_SOURCE=vercel;ADMIN_USER_IDS=${ADMIN_USER_IDS}" \
             --region=asia-northeast3 --project=civil-ai-jds --quiet
       - name: Verify readiness through authenticated Vercel proxy
         run: |

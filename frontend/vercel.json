@@ -3,6 +3,11 @@
   "functions": { "api/[...path].js": { "maxDuration": 150 } },
   "routes": [
     {
+      "src": "/(?:admin|api/admin)(?:/.*)?",
+      "headers": { "X-Robots-Tag": "noindex, nofollow, noarchive", "Cache-Control": "private, no-store" },
+      "continue": true
+    },
+    {
       "src": "/(?:chat|auth|trial|terms|privacy)(?:/.*)?",
       "headers": { "X-Robots-Tag": "noindex, follow" },
       "continue": true
