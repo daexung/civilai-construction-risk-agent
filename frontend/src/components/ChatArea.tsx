@@ -25,6 +25,7 @@ interface Props {
   usage?: UsageStatus | null;
   inputDisabled?: boolean;
   accountLabel?: string | null;
+  adminAccess?: boolean;
   authLoading?: boolean;
   onLogin?: () => void;
   onSettings?: () => void;
@@ -809,7 +810,7 @@ export default function ChatArea(props: Props) {
             <div className="chat-sidebar-bottom">
               <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={props.onFeedback}><ChatIcon name="feedback" />피드백 남기기</button>
-              {props.accountLabel ? <AccountMenu name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login">
+              {props.accountLabel ? <AccountMenu adminAccess={props.adminAccess} name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login">
                 <strong>품셈이와 함께 시작하세요</strong>
                 <div className="chat-guest-usage" role="status" aria-live="polite">
                   {props.authLoading ? '로그인 확인 중…' : !props.usage ? '남은 무료 이용 횟수 확인 중…'

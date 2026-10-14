@@ -28,7 +28,7 @@ def client(monkeypatch):
 
 
 @pytest.mark.parametrize("path", [
-    "/api/admin/summary", "/api/admin/answer-feedback", "/api/admin/feedback", "/api/admin/runs",
+    "/api/admin/access", "/api/admin/summary", "/api/admin/answer-feedback", "/api/admin/feedback", "/api/admin/runs",
     "/api/admin/answer-feedback/2e50c76d-b3d0-4cc1-9bf9-918b0eb4b102",
     "/api/admin/feedback/2e50c76d-b3d0-4cc1-9bf9-918b0eb4b102",
     "/api/admin/runs/2e50c76d-b3d0-4cc1-9bf9-918b0eb4b102",
@@ -70,3 +70,13 @@ def test_admin_query_inputs_are_bounded(client):
     assert bad_period.status_code == 422
     bad_page = client.get("/api/admin/runs?page=10001", headers={"Authorization": "Bearer admin-token"})
     assert bad_page.status_code == 422
+
+
+def test_admin_access_reports_permission_without_loading_dashboard_data(client, monkeypatch):
+    def unexpected_query():
+        raise AssertionError('Permission check must not load dashboard data')
+    monkeypatch.setattr(admin.chat_storage, 'connection', unexpected_query)
+    response = client.get('/api/admin/access', headers={'Authorization': 'Bearer admin-token'})
+    assert response.status_code == 200
+    assert response.json() == {'is_admin': True}
+    assert response.headers['cache-control'] == 'private, no-store'

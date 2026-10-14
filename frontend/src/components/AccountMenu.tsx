@@ -1,11 +1,11 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { ChevronDown, LogOut } from 'lucide-react';
+import { ChevronDown, LayoutDashboard, LogOut } from 'lucide-react';
 import { UsageStatus } from '../types';
 import UsageSummary from './UsageSummary';
 
-interface Props { name: string; usage?: UsageStatus | null; busy?: boolean; error?: string; onLogout?: () => void; }
+interface Props { name: string; adminAccess?: boolean; usage?: UsageStatus | null; busy?: boolean; error?: string; onLogout?: () => void; }
 
-export default function AccountMenu({ name, usage, busy, error, onLogout }: Props) {
+export default function AccountMenu({ name, adminAccess, usage, busy, error, onLogout }: Props) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const wrapper = useRef<HTMLDivElement>(null);
@@ -28,6 +28,7 @@ export default function AccountMenu({ name, usage, busy, error, onLogout }: Prop
     </button>
     {open && <div id={id} className="chat-account-menu" role="region" aria-label="계정 메뉴">
       <UsageSummary usage={usage} />
+      {adminAccess && <a className="chat-account-dashboard" href="/admin"><LayoutDashboard size={17} strokeWidth={1.75} />운영자 대시보드</a>}
       <button className="chat-account-logout" disabled={busy} onClick={onLogout}><LogOut size={17} strokeWidth={1.75} />{busy ? '로그아웃 중…' : '로그아웃'}</button>
       {error && <p className="settings-error" role="alert">{error}</p>}
     </div>}

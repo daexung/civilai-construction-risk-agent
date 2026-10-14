@@ -37,6 +37,12 @@ def _admin_user(authorization: str | None) -> str:
     return user_id
 
 
+@router.get('/access')
+def access(authorization: str | None = Header(default=None)):
+    _admin_user(authorization)
+    return {'is_admin': True}
+
+
 def _window(period: str) -> tuple[datetime, datetime, datetime]:
     now = datetime.now(KST)
     today = datetime.combine(now.date(), time.min, KST)

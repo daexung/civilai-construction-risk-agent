@@ -136,3 +136,6 @@
 .chat-account-logout:disabled { opacity: .5; cursor: wait; }
 .settings-guest .account-usage { margin-bottom: 20px; }
 @media (prefers-reduced-motion: reduce) { .chat-account-chevron { transition: none; } }
+
+.chat-account-dashboard { display:flex; align-items:center; gap:9px; margin-top:12px; padding:11px 8px; border-top:1px solid #eef0ec; border-radius:7px; color:var(--brand-strong); font-size:13px; text-decoration:none; }
+.chat-account-dashboard:hover,.chat-account-dashboard:focus-visible { background:#f3f6f1; }
