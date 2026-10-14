@@ -6,7 +6,7 @@ import psycopg
 from fastapi import HTTPException
 from pydantic import BaseModel, Field, model_validator
 
-from backend.api import chat_storage, usage_limits
+from backend.api import chat_storage, usage_limits, answer_runs
 
 
 class RatingRequest(BaseModel):
@@ -55,11 +55,15 @@ def submit(conn, payload, user_id, quota_subject, question, response):
                 raise HTTPException(429, {'message': '오늘 답변 평가 한도에 도달했습니다. 내일 다시 보내 주세요.'})
         qa = response.get('qa') or {}
         answer = response.get('answer') or '\n'.join(filter(None, [qa.get('conclusion'), qa.get('explanation')])) or response.get('message') or ''
-        conn.execute('INSERT INTO public.answer_feedback(answer_id,user_id,conversation_id,thread_id,rating,reason,comment,question,answer,answer_status) '
-                     'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT(answer_id) DO UPDATE '
-                     'SET rating=EXCLUDED.rating,reason=EXCLUDED.reason,comment=EXCLUDED.comment,updated_at=now()',
+        linked_run = answer_runs.attach_feedback_run(conn, str(payload.answer_id))
+        run_id = linked_run['id'] if linked_run else None
+        conn.execute('INSERT INTO public.answer_feedback(answer_id,user_id,conversation_id,thread_id,rating,reason,comment,question,answer,answer_status,run_id) '
+                     'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT(answer_id) DO UPDATE '
+                     "SET rating=EXCLUDED.rating,reason=EXCLUDED.reason,comment=EXCLUDED.comment,updated_at=now(),"
+                     "run_id=COALESCE(answer_feedback.run_id,EXCLUDED.run_id),review_status='new',reviewed_at=NULL,"
+                     "eval_approved_by=NULL,eval_approved_at=NULL",
                      (payload.answer_id, user_id, payload.thread_id if user_id else None, payload.thread_id,
-                      payload.rating, payload.reason, payload.comment, question[:10000], answer[:20000], response['status']))
+                      payload.rating, payload.reason, payload.comment, question[:10000], answer[:20000], response['status'],run_id))
         conn.execute('UPDATE agent_state.daily_answer_feedback_usage SET used=used+1 WHERE usage_day=%s AND subject IN (%s,%s)',
                      (current.date(), 'service', quota_subject))
         return {'rating': payload.rating, 'status': 'received'}

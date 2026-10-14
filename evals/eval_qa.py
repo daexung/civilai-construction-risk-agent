@@ -44,10 +44,29 @@ def evaluate(cases, model):
         result = answer(state, model=model)
         expected = (case.get("division"), case.get("section_no"))
         correct = correct_section_cited(result["qa"], expected)
-        rows.append({"id": case["id"], "question": case["question"], "expected": expected,
+        row = {"id": case["id"], "question": case["question"], "expected": expected,
                      "correct_section_cited": correct, "latency_ms": round((time.monotonic()-start)*1000, 1),
                      "search": state["search_info"], "candidate_count": len(result["candidates"]),
-                     "comparison_filled": bool(result["qa"]["comparisons"]), **result})
+                     "comparison_filled": bool(result["qa"]["comparisons"]), **result}
+        reviewed = case.get("expected_result") or case.get("expected_case")
+        if not reviewed and isinstance(case.get("expected"), dict) and "numbers" in case["expected"]:
+            reviewed = case["expected"]
+        if reviewed:
+            answer_text = " ".join([result["qa"].get("conclusion", ""), result["qa"].get("explanation", ""),
+                                    *(c.get("summary", "") for c in result["qa"].get("comparisons", []))])
+            expected_status = str(reviewed["status"]).lower()
+            actual_status = "not_found" if result["qa"].get("not_found") else "answered"
+            numbers = reviewed["numbers"]
+            number_checks = {name: str(value) in answer_text for name, value in numbers.items()}
+            unit = reviewed.get("unit")
+            row["reviewed_expected_status"] = expected_status
+            row["reviewed_status_correct"] = expected_status == actual_status
+            row["reviewed_numbers_correct"] = all(number_checks.values())
+            row["reviewed_number_checks"] = number_checks
+            row["reviewed_unit_correct"] = True if unit is None else str(unit) in answer_text
+            row["reviewed_case_correct"] = (row["correct_section_cited"] is True and row["reviewed_status_correct"]
+                                             and row["reviewed_numbers_correct"] and row["reviewed_unit_correct"])
+        rows.append(row)
     return rows
 
 def not_found_counts(rows):
@@ -57,13 +76,20 @@ def not_found_counts(rows):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default=qa_model())
+    parser.add_argument("--cases", type=Path, help="Operator-reviewed JSONL cases exported outside the repository")
     args = parser.parse_args()
     if os.environ.get("AGENT_LLM") != "on":
         parser.error("실제 채점은 AGENT_LLM=on으로 실행하세요")
     enabled = set(enabled_divisions())
-    pool = [json.loads(line) for line in (ROOT / "evals/scope_sample.jsonl").read_text(encoding="utf-8").splitlines() if line]
-    pool = [c for c in pool if c["division"] in enabled]
-    cases = random.Random(SEED).sample(pool, 30)
+    if args.cases:
+        cases = [json.loads(line) for line in args.cases.read_text(encoding="utf-8").splitlines() if line]
+        if not cases or any(c.get("label") != "qa" or "question" not in c or "division" not in c or "section_no" not in c
+                            for c in cases):
+            parser.error("--cases must contain QA rows from export_reviewed_answer_cases.py")
+    else:
+        pool = [json.loads(line) for line in (ROOT / "evals/scope_sample.jsonl").read_text(encoding="utf-8").splitlines() if line]
+        pool = [c for c in pool if c["division"] in enabled]
+        cases = random.Random(SEED).sample(pool, 30)
     rows = evaluate(cases, args.model)
     ambiguous = evaluate([{"id": f"ambiguous-{i}", "question": q} for i, q in enumerate(AMBIGUOUS, 1)], args.model)
     summary = {"count": len(rows), "correct_section_citation_rate": sum(r["correct_section_cited"] for r in rows)/len(rows),
@@ -73,6 +99,9 @@ def main():
                "max_latency_ms": max(r["latency_ms"] for r in rows),
                "ambiguous_comparison_pass": sum(r["candidate_count"] >= 2 and r["comparison_filled"] and r["answer_source"] == "llm" for r in ambiguous)}
     summary["not_found_kind_counts"] = not_found_counts(rows)
+    reviewed_rows = [row for row in rows if "reviewed_case_correct" in row]
+    if reviewed_rows:
+        summary["reviewed_case_pass_rate"] = sum(row["reviewed_case_correct"] for row in reviewed_rows)/len(reviewed_rows)
     stamp = datetime.now(ZoneInfo("Asia/Seoul")).date().isoformat()
     results = ROOT / "evals/results"; results.mkdir(exist_ok=True)
     model_slug = re.sub(r"[^a-zA-Z0-9_.-]", "_", args.model)

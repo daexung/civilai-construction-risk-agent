@@ -44,6 +44,8 @@ from backend.api import usage_limits
 from backend.api import runtime
 from backend.api import feedback
 from backend.api import answer_feedback
+from backend.api import answer_runs
+from backend.shared import answer_trace
 from backend.api import accounts
 from backend.api import dialogue_service
 from backend.agent.estimate.dialogue import build_dialogue_graph, config as dialogue_config
@@ -694,36 +696,47 @@ def _consume_once(quota, claim: dict | None):
 def _chat(payload: ChatRequest, request: Request, user_id: str | None, x_guest_session: str | None,
           started: float, claim: dict | None = None) -> dict:
     with accounts.guard(user_id), usage_limits.processing(user_id, client_ip(request)) as quota, \
-            capture_node_timings() as node_timings:
-        if user_id:
-            response = _member_chat(payload, user_id, quota, claim)
-        else:
-            if payload.conversation_id:
-                raise HTTPException(401, "회원 대화에는 로그인이 필요합니다.")
-            if payload.thread_id:
-                guest = _guest(payload.thread_id, x_guest_session)
-                with guest["lock"]:
-                    _guest(payload.thread_id, x_guest_session)
-                    free = (_uses_dialogue(GRAPH.checkpointer, payload.thread_id)
-                            and dialogue_service.free_card_answer(DIALOGUE, payload.thread_id, payload.model_dump()))
-                    used = usage_limits.status(*quota) if free else _consume_once(quota, claim)
-                    response = _chat_response(payload, free_card_answer=free)
-                    response["usage"] = used
-                    guest["turns"].append((_guest_label(payload), copy.deepcopy(response)))
+            capture_node_timings() as node_timings, answer_trace.capture(
+                request_id=payload.request_id, thread_id=payload.conversation_id or payload.thread_id,
+                conversation_id=payload.conversation_id, user_id=user_id,
+                environment=os.getenv('APP_ENVIRONMENT') or ('production' if os.getenv('K_SERVICE') else 'local'),
+                agent_mode=os.getenv('AGENT_MODE') or 'graph'):
+        try:
+            if user_id:
+                response = _member_chat(payload, user_id, quota, claim)
             else:
-                _prune_guests()
-                secret = x_guest_session or token_urlsafe(32)
-                if len(secret) < 32 or len(secret) > 128:
-                    raise HTTPException(422, "유효하지 않은 임시 세션입니다.")
-                if not payload.message or payload.answers or payload.conditions is not None:
-                    raise HTTPException(422, "새 대화에는 질문이 필요합니다.")
-                used = _consume_once(quota, claim)
-                response = _chat_response(payload)
-                response["usage"] = used
-                with _GUEST_LOCK:
-                    _GUESTS[response["thread_id"]] = {"secret": secret, "used": monotonic(), "lock": threading.Lock(),
-                        "turns": [(_guest_label(payload), copy.deepcopy(response))]}
-                response["guest_session"] = secret
+                if payload.conversation_id:
+                    raise HTTPException(401, "회원 대화에는 로그인이 필요합니다.")
+                if payload.thread_id:
+                    guest = _guest(payload.thread_id, x_guest_session)
+                    with guest["lock"]:
+                        _guest(payload.thread_id, x_guest_session)
+                        free = (_uses_dialogue(GRAPH.checkpointer, payload.thread_id)
+                                and dialogue_service.free_card_answer(DIALOGUE, payload.thread_id, payload.model_dump()))
+                        used = usage_limits.status(*quota) if free else _consume_once(quota, claim)
+                        response = _chat_response(payload, free_card_answer=free)
+                        response["usage"] = used
+                        guest["turns"].append((_guest_label(payload), copy.deepcopy(response)))
+                else:
+                    _prune_guests()
+                    secret = x_guest_session or token_urlsafe(32)
+                    if len(secret) < 32 or len(secret) > 128:
+                        raise HTTPException(422, "유효하지 않은 임시 세션입니다.")
+                    if not payload.message or payload.answers or payload.conditions is not None:
+                        raise HTTPException(422, "새 대화에는 질문이 필요합니다.")
+                    used = _consume_once(quota, claim)
+                    payload = payload.model_copy(update={"thread_id": uuid4().hex})
+                    answer_trace.set_thread_id(payload.thread_id)
+                    response = _chat_response(payload)
+                    response["usage"] = used
+                    with _GUEST_LOCK:
+                        _GUESTS[response["thread_id"]] = {"secret": secret, "used": monotonic(), "lock": threading.Lock(),
+                            "turns": [(_guest_label(payload), copy.deepcopy(response))]}
+                    response["guest_session"] = secret
+            answer_trace.finalize(response, failed=response.get('status') == 'ERROR')
+        except BaseException:
+            answer_trace.finalize(failed=True)
+            raise
     response["timing"] = {
         **{name: round(value, 1) for name, value in node_timings.items()},
         "total_ms": round((perf_counter() - started) * 1000, 1),
@@ -848,6 +861,7 @@ def import_guest(payload: GuestImportRequest, authorization: str | None = Header
                 chat_storage.append_pair(conn, target, str(uuid4()), label, response)
             conn.execute('UPDATE public.answer_feedback SET user_id=%s,conversation_id=%s,thread_id=%s WHERE thread_id=%s AND user_id IS NULL',
                          (user_id, target, target, payload.thread_id))
+            answer_runs.import_guest_thread(conn, payload.thread_id, target, user_id)
             conn.execute("INSERT INTO agent_state.guest_imports(source_id,secret_hash,user_id,conversation_id) VALUES (%s,%s,%s,%s)",
                          (payload.thread_id, secret_hash, user_id, target))
         # Commit the complete transcript and state before disposing of guest memory.
@@ -871,6 +885,8 @@ def delete_guest_conversation(thread_id: str, x_guest_session: str | None = Head
     guest = _guest(thread_id, x_guest_session)
     with guest["lock"]:
         _guest(thread_id, x_guest_session)
+        if not answer_runs.delete_guest_thread(thread_id):
+            raise HTTPException(503, "대화 기록을 삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.")
         GRAPH.checkpointer.delete_thread(thread_id)
         GRAPH.checkpointer.delete_thread(f"dlg:{thread_id}")
         with _GUEST_LOCK:
@@ -902,7 +918,10 @@ def _member_chat(payload: ChatRequest, user_id: str, quota, claim: dict | None =
         duplicate = conn.execute("SELECT payload FROM public.messages WHERE conversation_id=%s "
                                  "AND request_id=%s AND role='assistant'", (conversation_id, request_id)).fetchone()
         if duplicate:
-            return {**duplicate["payload"], "usage": usage_limits.status(*quota)}
+            answer_trace.suppress()
+            replay = {**duplicate["payload"], "usage": usage_limits.status(*quota)}
+            replay.pop("execution", None)
+            return replay
         graph = build_graph(PostgresSaver(conn))
         member_payload = payload.model_copy(update={"thread_id": conversation_id})
         free = (_uses_dialogue(graph.checkpointer, conversation_id)
@@ -917,6 +936,7 @@ def _member_chat(payload: ChatRequest, user_id: str, quota, claim: dict | None =
 
 
 def _chat_response(payload: ChatRequest, graph=None, keep_thread=False, *, free_card_answer=False) -> dict:
+    answer_trace.persist_start()
     if _uses_dialogue((graph or GRAPH).checkpointer, payload.thread_id):
         return _dialogue_chat(payload, graph, free_card_answer=free_card_answer)
     graph = graph or GRAPH
@@ -938,7 +958,7 @@ def _chat_response(payload: ChatRequest, graph=None, keep_thread=False, *, free_
                                      update={"basis_date": payload.basis_date.isoformat()}
                                      if payload.basis_date else None), config)
     else:
-        thread_id = payload.thread_id if previous is not None or keep_thread else uuid4().hex
+        thread_id = payload.thread_id if previous is not None or keep_thread or payload.thread_id else uuid4().hex
         config = {"configurable": {"thread_id": thread_id}}
         initial = new_state(payload.message or "", payload.basis_date.isoformat()
                             if payload.basis_date else None)

@@ -10,6 +10,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from threading import Lock
 from typing import Callable
+from functools import wraps
+from hashlib import sha256
+from backend.shared import answer_trace
 
 from backend.paths import ROOT
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
@@ -34,6 +37,18 @@ class LLMResult:
     text: str
     provider: str
     attempts: int
+    usage: dict | None = None
+
+
+def _usage_summary(value) -> dict | None:
+    """Keep only provider-reported token counts; unsupported/missing fields stay absent."""
+    if value is None:
+        return None
+    keys = ("prompt_token_count", "candidates_token_count", "total_token_count",
+            "thoughts_token_count", "cached_content_token_count")
+    result = {key: getattr(value, key) for key in keys
+              if isinstance(getattr(value, key, None), int) and getattr(value, key) >= 0}
+    return result or None
 
 
 def _env_value(name: str) -> str | None:
@@ -140,7 +155,7 @@ def warmup_client() -> bool:
     return True
 
 
-def generate(
+def _generate(
     prompt: str,
     system: str,
     *,
@@ -168,6 +183,7 @@ def generate(
     model = model or model_name()
     secrets = [key, _env_value("GOOGLE_CLOUD_PROJECT") or ""]
 
+    usage = None
     if request_fn is None:
         try:
             if (clock_fn() - started) * 1000 >= timeout_ms:
@@ -178,6 +194,7 @@ def generate(
             raise LLMUnavailable(_safe_error(exc, secrets), attempts=0, provider=provider) from exc
 
         def request_fn(model_name: str, prompt_text: str, system_text: str, timeout_ms: int) -> str:
+            nonlocal usage
             max_output_tokens = int(os.environ.get('LLM_MAX_OUTPUT_TOKENS', '4096'))
             if not 128 <= max_output_tokens <= 8192:
                 raise ValueError('LLM_MAX_OUTPUT_TOKENS must be between 128 and 8192')
@@ -188,6 +205,7 @@ def generate(
                 options.update(response_mime_type="application/json", response_schema=response_schema)
             config = types.GenerateContentConfig(**options)
             response = client.models.generate_content(model=model_name, contents=prompt_text, config=config)
+            usage = _usage_summary(getattr(response, "usage_metadata", None))
             return (response.text or "").strip()
 
     last_error: Exception | None = None
@@ -213,7 +231,33 @@ def generate(
             raise LLMUnavailable(f"LLM 호출 시간 상한 {timeout_ms}ms 초과", attempts=attempt, provider=provider)
         if not text:
             raise LLMUnavailable("빈 응답", attempts=attempt, provider=provider)
-        return LLMResult(text=text, provider=provider, attempts=attempt)
+        return LLMResult(text=text, provider=provider, attempts=attempt, usage=usage)
 
     message = _safe_error(last_error, secrets) if last_error else f"LLM 호출 시간 상한 {timeout_ms}ms 초과"
     raise LLMUnavailable(message, attempts=attempt, provider=provider)
+
+
+@wraps(_generate)
+def generate(prompt, system, **kwargs):
+    started = time.monotonic()
+    result = None
+    failure = None
+    try:
+        result = _generate(prompt, system, **kwargs)
+        return result
+    except Exception as exc:
+        failure = exc
+        raise
+    finally:
+        try:
+            answer_trace.record_model({'model': kwargs.get('model') or model_name(),
+                                 'provider': result.provider if result else getattr(failure, 'provider', None),
+                                 'system_sha256': sha256(system.encode()).hexdigest(),
+                                 'schema_sha256': answer_trace.digest(kwargs.get('response_schema')),
+                                 'attempts': result.attempts if result else getattr(failure, 'attempts', 0),
+                                 'status': 'success' if result else 'failed',
+                                 'error_type': type(failure).__name__ if failure else None,
+                                 'elapsed_ms': round((time.monotonic() - started) * 1000),
+                                 'usage': result.usage if result else None})
+        except Exception:
+            pass  # Metadata must never change model-call behavior.

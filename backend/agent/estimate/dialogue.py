@@ -16,6 +16,7 @@ import json
 import os
 import re
 import time
+from decimal import Decimal
 import unicodedata
 from functools import cache
 from pathlib import Path
@@ -33,6 +34,7 @@ from backend.agent.nodes.route import _rule_route
 from backend.agent.tools.calc.format import approx, rounded
 from backend.agent.tools.llm import client
 from backend.agent.tools.source import citation
+from backend.shared import answer_trace
 
 PROMPTS = Path(__file__).resolve().parents[1] / "tools/llm/prompts"
 # 턴 예산(§6): agent·reply·도구 내부 LLM의 요청 시도(재시도 포함)를 모두 합친 수, 도구 실행 수, 시간.
@@ -272,7 +274,7 @@ def _apply_answers(state: DialogueState, answers: dict, refs: dict, log: list, n
 
 # ---- tools: 도구 실행(LLM·규칙 공통) ----
 
-def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget: Budget) -> dict:
+def _run_tool_impl(state: DialogueState, name: str, args: dict, message: str, budget: Budget) -> dict:
     budget.tool_calls += 1
     session = state["session"]
     if name == "find_work":
@@ -337,6 +339,103 @@ def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget:
     if name == "confirm_scope":
         return _confirm_scope(state, message)
     return {"status": "error", "data": {"reason": f"알 수 없는 도구: {name}"}}
+
+
+def _trace_tool_value(value, *, depth=0):
+    """Retain useful tool facts while excluding free text and model/user explanations."""
+    if depth > 6:
+        return {"_omitted": "max_depth"}
+    allowed = {"status", "id", "internal_id", "chunk_id", "table_id", "section", "section_no", "page",
+               "pdf_page", "printed_page", "row", "column", "field", "name", "kind", "value", "unit",
+               "score", "rank", "quantity", "selection", "candidates", "missing", "rejected", "data",
+               "applied", "source", "rule_id", "rate_version", "rate", "unit_price", "amount", "total", "revision",
+               "formula", "result", "division", "confirmed", "method", "fallback", "reason_code", "selected_conditions",
+               "daily_volume", "daily_volume_m3", "work_days", "unit_basis", "per_unit_only", "review_status",
+               "lines", "unit_lines", "person_days", "equipment_days", "equipment_units", "sections", "chunk_ids",
+               "truncated", "decision", "spec_id", "section", "statement", "priced", "candidates"}
+    if isinstance(value, dict):
+        out = {}
+        for key, child in value.items():
+            if key not in allowed:
+                continue
+            if key == "value" and isinstance(child, str):
+                if re.fullmatch(r"[+-]?(?:\d+(?:[.,]\d+)?|\d+/\d+)", child.strip()):
+                    out[key] = child
+            elif key == "rejected" and isinstance(child, dict):
+                out[key] = {name: "rejected" for name in child}
+            elif key == "missing" and isinstance(child, list):
+                out[key] = [{k: item[k] for k in ("field", "stage", "question_id", "version") if k in item}
+                            for item in child if isinstance(item, dict)]
+            elif key == "sections" and isinstance(child, list):
+                out[key] = [{"section": item.get("section"), "truncated": item.get("truncated"),
+                             "chunk_ids": item.get("chunk_ids", [])} for item in child[:20] if isinstance(item, dict)]
+            elif key == "candidates" and isinstance(child, list):
+                out[key] = [{"rank": rank, **_trace_tool_value(item, depth=depth + 1)}
+                            for rank, item in enumerate(child[:30], 1) if isinstance(item, dict)]
+            else:
+                out[key] = _trace_tool_value(child, depth=depth + 1)
+        return out
+    if isinstance(value, list):
+        return [_trace_tool_value(child, depth=depth + 1) for child in value[:50]]
+    if isinstance(value, Decimal):
+        return str(value)
+    if isinstance(value, (str, int, float, bool)) or value is None:
+        return value
+    return None
+
+
+def _trace_tool_args(args):
+    kept = {}
+    numeric = re.compile(r"^[+-]?(?:\d+(?:[.,]\d+)?|\d+/\d+)$")
+    for key, value in (args or {}).items():
+        if key == "quantity" and isinstance(value, dict):
+            if isinstance(value.get("value"), (int, float)) or isinstance(value.get("value"), str) and numeric.fullmatch(value["value"].strip()):
+                kept[key] = {k: value[k] for k in ("value", "unit") if k in value and (k == "value" or isinstance(value[k], str))}
+        elif key == "values" and isinstance(value, list):
+            kept[key] = [{"field": item.get("field"), **({"value": item["value"]} if isinstance(item.get("value"), (int, float))
+                         or isinstance(item.get("value"), str) and numeric.fullmatch(item["value"].strip()) else {})}
+                         for item in value if isinstance(item, dict) and item.get("field")]
+        elif key == "values" and isinstance(value, dict):
+            kept[key] = {name: {"value": data.get("value")} for name, data in value.items()
+                         if isinstance(data, dict) and isinstance(data.get("value"), (int, float))}
+    return kept
+
+
+def _trace_selected_conditions(state):
+    session = state.get("session")
+    if not session:
+        return {}
+    item = tools._item(session)
+    spec = tools._spec(item) or {}
+    fields = {field["name"]: field for field in [*spec.get("inputs", []), *_common_fields()]}
+    selected = {}
+    sources = [item.get("conditions") or {},
+               {name: entry.get("value") for name, entry in (session.get("common_conditions") or {}).items()}]
+    numeric = re.compile(r"^[+-]?(?:\d+(?:[.,]\d+)?|\d+/\d+)$")
+    for values in sources:
+        for name, value in values.items():
+            field = fields.get(name, {})
+            allowed = field.get("allowed_values") or []
+            if value in allowed or isinstance(value, (int, float)) or isinstance(value, str) and numeric.fullmatch(value.strip()):
+                selected[name] = value
+    return selected
+
+
+def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget: Budget) -> dict:
+    before = {"tool": name, "args": _trace_tool_args(args)}
+    with answer_trace.step(name, "tool", before) as trace_step:
+        try:
+            result = _run_tool_impl(state, name, args, message, budget)
+        except BaseException:
+            raise
+        safe_output = _trace_tool_value(result)
+        selected = _trace_selected_conditions(state)
+        if selected:
+            safe_output["selected_conditions"] = selected
+        answer_trace.set_output(trace_step, safe_output)
+        if trace_step and result.get("status") in ("rejected", "blocked", "needs_input"):
+            trace_step["status"] = "rejected"
+        return result
 
 
 def _values_arg(session: dict, raw) -> dict | None | bool:
@@ -785,7 +884,27 @@ def _update_pending(state: DialogueState, log: list, refresh: bool = True) -> No
 
 def build_dialogue_graph(checkpointer=None, generate=None):
     def turn(state: DialogueState) -> DialogueState:
-        return run_turn(state, state["request"], generate=generate)
+        request = state.get("request") or {}
+        input_summary = {"has_message": bool(request.get("message")), "answer_fields": sorted((request.get("answers") or {}).keys()),
+                         "condition_fields": sorted((request.get("conditions") or {}).keys()),
+                         "restart": bool(request.get("restart"))}
+        with answer_trace.step("turn", "node", input_summary) as trace_step:
+            result = run_turn(state, request, generate=generate)
+            session = result.get("session")
+            item = tools._item(session) if session else {}
+            selection = item.get("selection") or {}
+            candidates = item.get("candidates") or []
+            quantity = item.get("quantity") or {}
+            output = {"route": result.get("route"), "goal": result.get("goal"),
+                      "selection": {k: selection[k] for k in ("id", "section", "section_no", "confirmed", "source") if k in selection},
+                      "candidates": [{"rank": rank, **{k: candidate[k] for k in ("id", "section", "section_no", "score") if k in candidate}}
+                                     for rank, candidate in enumerate(candidates[:30], 1) if isinstance(candidate, dict)],
+                      "quantity": {k: quantity[k] for k in ("value", "unit", "source") if k in quantity},
+                      "computed_result": _trace_tool_value({k: (item.get("computed_result") or {})[k]
+                                          for k in ("daily_volume", "work_days", "unit_basis", "per_unit_only", "review_status", "lines", "unit_lines")
+                                          if k in (item.get("computed_result") or {})})}
+            answer_trace.set_output(trace_step, output)
+            return result
 
     graph = StateGraph(DialogueState)
     graph.add_node("turn", turn)

@@ -127,6 +127,12 @@ def recover():
             for table in ('daily_chat_usage', 'daily_feedback_usage', 'daily_answer_feedback_usage'):
                 conn.execute(f"DELETE FROM agent_state.{table} WHERE usage_day < ((now() AT TIME ZONE 'Asia/Seoul')::date - 7)")
             conn.execute("DELETE FROM public.answer_feedback WHERE created_at < now() - interval '90 days'")
+            conn.execute("UPDATE public.answer_runs r SET expires_at=GREATEST(r.expires_at, f.created_at + interval '90 days') "
+                         "FROM public.answer_feedback f WHERE f.run_id=r.id")
+            conn.execute("UPDATE public.answer_runs SET status='incomplete',capture_status='partial' "
+                         "WHERE status='running' AND started_at < now() - interval '10 minutes'")
+            conn.execute("DELETE FROM public.answer_runs r WHERE r.expires_at < now() "
+                         "AND NOT EXISTS (SELECT 1 FROM public.answer_feedback f WHERE f.run_id=r.id)")
             if not (os.getenv('SUPABASE_SECRET_KEY') or os.getenv('SUPABASE_SERVICE_ROLE_KEY')):
                 return
             jobs = conn.execute('SELECT * FROM agent_state.account_deletions ORDER BY created_at LIMIT 20').fetchall()

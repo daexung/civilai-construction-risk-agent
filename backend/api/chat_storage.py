@@ -101,6 +101,8 @@ def read_conversation(conversation_id: str, user_id: str) -> dict:
                                             (conversation_id, user_id)).fetchall()}
         for message in messages:
             if message['role'] == 'assistant':
+                # Older interrupted drafts wrote operator metadata into payloads. Keep it private on restore.
+                message['payload'].pop('execution', None)
                 answer_id = message['payload'].get('answer_id') or message['id']
                 message['payload'] = {**message['payload'], 'answer_id': answer_id,
                                       'answer_rating': ratings.get(answer_id)}
