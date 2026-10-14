@@ -34,7 +34,9 @@ def _is_applied(conn, version):
     if version == '20261014000200':
         runs, steps, feedback = (_columns(conn, table) for table in ('answer_runs', 'answer_run_steps', 'answer_feedback'))
         if not runs:
-            raise RuntimeError('The initial answer_runs migration must be applied first')
+            if steps:
+                raise RuntimeError('Trace schema has partial state; no changes applied')
+            return False  # A fresh database needs both migrations, in MIGRATIONS order.
         if not steps:
             return False
         required = {'id', 'request_id', 'environment', 'agent_mode', 'started_at', 'finished_at',
