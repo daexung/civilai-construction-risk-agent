@@ -29,7 +29,7 @@ from backend.agent.nodes.fill import (_UNIT_ALIASES, _extract_common_inputs, _fo
 from backend.agent.nodes.qa_context import build_context
 from backend.agent.nodes.retrieve import retrieve
 from backend.agent.nodes.select import select
-from backend.agent.rules.conditions import price_fields
+from backend.agent.rules.conditions import price_fields, field_active
 from backend.agent.rules.specs import load_specs, specs_by_section
 from backend.agent.tools.calc.adjustments import adjustment_questions
 from backend.agent.tools.calc.daily_crew import check_blocked
@@ -151,13 +151,15 @@ def _build_conditions(item: EstimateItem, spec: dict) -> tuple[dict, str | None]
     item["defaulted_inputs"] = defaulted
     notes = [fields[name].get("default_note") or f"{name} {value}" for name, value in defaulted.items()]
     item["assumptions"] = "가정: " + ", ".join(notes) + " — 다르면 말씀해 주세요." if notes else ""
+    conditions = {name: value for name, value in conditions.items()
+                  if name not in fields or field_active(fields[name], conditions, fields)}
     return conditions, mismatch
 
 
 def _missing_fields(spec: dict, values: dict, names) -> list[dict]:
     return [field for field in spec["inputs"]
             if field["name"] in names and field["required"] and field["name"] not in values
-            and (not field.get("when") or values.get(field["when"]["input"]) == field["when"]["equals"])]
+            and field_active(field, values, {f["name"]: f for f in spec["inputs"]})]
 
 
 _NUMERIC = {"positive_rational", "positive_currency", "nonnegative_integer"}
@@ -229,16 +231,23 @@ def find_work(session: EstimateSession, hits: list[dict] | None = None) -> dict:
     item["candidates"] = decided["candidates"]
     decision = decided["selection"]["decision"]
     candidates = [{"spec_id": (_spec_for(c) or {}).get("id"), "section": c["section"], "section_no": c["section_no"],
-                   "has_spec": c["has_spec"]} for c in item["candidates"]]
+                   "division": c.get("division"), "score": c.get("score"), "has_spec": c["has_spec"]}
+                  for c in item["candidates"]]
     if decision == "chosen":
         top = item["candidates"][0]
-        choose_work(item, {"decision": "chosen", "confirmed": True, "section_no": top["section_no"],
-                           "section": top["section"]}, load_specs()[decided["spec_id"]])
-        return _result("ok", item, {"decision": decision, "candidates": candidates, "spec_id": decided["spec_id"]})
+        selected = next((candidate for candidate in item["candidates"]
+                         if candidate["section_no"] == decided["selection"].get("section_no")), top)
+        selection = {**decided["selection"], "decision": "chosen", "confirmed": True,
+                     "section_no": (decided["selection"].get("section_no") or top["section_no"]),
+                     "section": selected["section"]}
+        choose_work(item, selection, load_specs()[decided["spec_id"]])
+        return _result("ok", item, {"decision": decision, "candidates": candidates, "spec_id": decided["spec_id"],
+                                     "selection": item["selection"], "search_info": item.get("search_info", {})})
     if decision == "provisional":
         item["selection"] = {"decision": "provisional", "confirmed": False}
         item["status"] = "NEEDS_WORK"
-        return _result("needs_input", item, {"decision": decision, "candidates": candidates},
+        return _result("needs_input", item, {"decision": decision, "candidates": candidates,
+                                              "selection": item["selection"], "search_info": item.get("search_info", {})},
                        missing=[_work_question(item)])
     item["selection"] = decided["selection"]
     item.update(status="UNSUPPORTED" if decision == "no_spec" else "NOT_FOUND", reason=decided["selection"]["reason"])
@@ -249,7 +258,10 @@ def find_work(session: EstimateSession, hits: list[dict] | None = None) -> dict:
 def _not_allowed(value, field: dict) -> str:
     """선택지 밖 값의 안내 문구. 명세의 제외 사유(excluded)가 있으면 그대로 쓴다."""
     labels = field.get("labels") or {}
-    choices = " / ".join(str(labels.get(v, v)) for v in field.get("allowed_values") or [])
+    allowed = field.get("allowed_values")
+    if not isinstance(allowed, list):
+        return f"입력값은 {allowed or field['type']}여야 합니다"
+    choices = " / ".join(str(labels.get(v, v)) for v in allowed)
     excluded = (field.get("excluded") or {}).get(str(value))
     if excluded:
         return f"{value}는 이 공종의 적용 범위 밖입니다({excluded}). 가능한 값: {choices}"

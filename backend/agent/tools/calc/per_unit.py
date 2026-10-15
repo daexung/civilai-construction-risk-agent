@@ -6,12 +6,12 @@ import re
 import unicodedata
 from fractions import Fraction
 
-from backend.agent.rules.conditions import price_fields
+from backend.agent.rules.conditions import price_fields, field_active
 from backend.agent.tools.calc.daily_crew import _exact_text, _validate, check_blocked
 from backend.agent.tools.calc.adjustments import apply_adjustments
 from backend.agent.tools.calc.numbers import parse_fraction, parse_table_number
 from backend.agent.tools.calc.price import select_rate_version
-from backend.agent.tools.source.citation import _chunks, cite_table
+from backend.agent.tools.source.citation import _chunks, cite_table, resolve_cites
 
 
 def clean_label(value: str) -> str:
@@ -90,6 +90,8 @@ def per_unit(spec: dict, inputs: dict, *, labor_only: bool = False) -> dict:
             continue
         if name not in fields:
             return {"status": "rejected", "reason": f"알 수 없는 입력: {name}"}
+        if not field_active(fields[name], inputs, fields):
+            continue
         if value is None:
             continue
         checked, error = _validate(fields[name], value)
@@ -97,7 +99,8 @@ def per_unit(spec: dict, inputs: dict, *, labor_only: bool = False) -> dict:
             return {"status": "rejected", "reason": error}
         validated[name] = checked
     missing = [name for name, field in fields.items()
-               if field["required"] and name not in validated and name not in optional]
+               if field["required"] and name not in validated and name not in optional
+               and field_active(field, validated, fields)]
     if missing:
         return {"status": "ask", "missing": missing}
     blocked = check_blocked(spec, validated)
@@ -236,6 +239,20 @@ def per_unit(spec: dict, inputs: dict, *, labor_only: bool = False) -> dict:
                           "rule": ("재료 단가 자료 없음(사용자 입력 기능 예정)" if kind == "material"
                                    else "표 단위당 품 그대로 적용(반올림 없음)"),
                           "source": f"{table_id} {table['source']}", "citations": [citation]})
+    repeat_input = params.get("repeat_input")
+    if repeat_input:
+        repeats = validated[repeat_input]
+        if repeats < 1:
+            return {"status": "rejected", "reason": "칠 횟수는 1 이상의 정수여야 함"}
+        repeat_cites = resolve_cites(params["repeat_basis"])
+        if not repeat_cites:
+            return {"status": "blocked", "reason": "칠 횟수의 원문 기준을 확인할 수 없음"}
+        for line in lines:
+            line["exact"] = str(Fraction(line["exact"]) * repeats)
+            line["applied"] = _exact_text(Fraction(line["exact"]))
+            line["formula"] += f" × {repeats}회"
+            line["rule"] += f"; 1회 기준 품에 칠 횟수 {repeats}회 적용"
+            line["citations"] += repeat_cites
     adjusted = apply_adjustments(spec, validated, lines)
     if adjusted["status"] != "computed":
         return adjusted

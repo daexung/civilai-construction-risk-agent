@@ -63,8 +63,8 @@ def _validate(field: dict, value: Any) -> tuple[Any, str | None]:
             number = int(value)
         else:
             return None, f"{name}는 0 이상의 정수여야 함"
-        if number < 0:
-            return None, f"{name}는 0 이상의 정수여야 함"
+        if number < field.get("minimum", 0):
+            return None, f"{name}는 {field.get('minimum', 0)} 이상의 정수여야 함"
         return number, None
     if kind == "positive_rational":
         if type(value) not in (str, int, Fraction):

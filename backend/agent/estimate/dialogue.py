@@ -352,7 +352,8 @@ def _trace_tool_value(value, *, depth=0):
                "formula", "result", "division", "confirmed", "method", "fallback", "reason_code", "selected_conditions",
                "daily_volume", "daily_volume_m3", "work_days", "unit_basis", "per_unit_only", "review_status",
                "lines", "unit_lines", "person_days", "equipment_days", "equipment_units", "sections", "chunk_ids",
-               "truncated", "decision", "spec_id", "section", "statement", "priced", "candidates"}
+               "truncated", "decision", "spec_id", "section", "statement", "priced", "candidates", "reason",
+               "has_spec", "search_info", "warnings", "queries", "api_calls"}
     if isinstance(value, dict):
         out = {}
         for key, child in value.items():
@@ -415,7 +416,8 @@ def _trace_selected_conditions(state):
     for values in sources:
         for name, value in values.items():
             field = fields.get(name, {})
-            allowed = field.get("allowed_values") or []
+            allowed = field.get("allowed_values")
+            allowed = allowed if isinstance(allowed, list) else []
             if value in allowed or isinstance(value, (int, float)) or isinstance(value, str) and numeric.fullmatch(value.strip()):
                 selected[name] = value
     return selected
@@ -909,8 +911,12 @@ def build_dialogue_graph(checkpointer=None, generate=None):
             candidates = item.get("candidates") or []
             quantity = item.get("quantity") or {}
             output = {"route": result.get("route"), "goal": result.get("goal"),
-                      "selection": {k: selection[k] for k in ("id", "section", "section_no", "confirmed", "source") if k in selection},
-                      "candidates": [{"rank": rank, **{k: candidate[k] for k in ("id", "section", "section_no", "score") if k in candidate}}
+                      "search_info": {k: item.get("search_info", {}).get(k) for k in
+                                     ("method", "api_calls", "fallback_reason") if k in item.get("search_info", {})},
+                      "selection": {k: selection[k] for k in
+                                    ("id", "spec_id", "section", "section_no", "confirmed", "source", "reason") if k in selection},
+                      "candidates": [{"rank": rank, **{k: candidate[k] for k in
+                                      ("id", "spec_id", "division", "section", "section_no", "score", "has_spec") if k in candidate}}
                                      for rank, candidate in enumerate(candidates[:30], 1) if isinstance(candidate, dict)],
                       "quantity": {k: quantity[k] for k in ("value", "unit", "source") if k in quantity},
                       "computed_result": _trace_tool_value({k: (item.get("computed_result") or {})[k]

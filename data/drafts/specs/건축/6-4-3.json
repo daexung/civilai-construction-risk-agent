@@ -57,7 +57,18 @@
         "unit": null,
         "required": true,
         "ask": "외벽에 시공합니까? (외벽인 경우 높이에 따른 할증이 적용됩니다)",
-        "source": "PDF 606쪽 6-4-3 [주] ③"
+        "source": "PDF 606쪽 6-4-3 [주] ③",
+        "text_patterns": {
+          "true": [
+            "외벽(?!\\s*아님)",
+            "외부벽"
+          ],
+          "false": [
+            "실내",
+            "내부",
+            "외벽\\s*아님"
+          ]
+        }
       },
       {
         "name": "floor_count",
@@ -66,16 +77,24 @@
         "unit": "층",
         "required": true,
         "ask": "시공하는 외벽의 층수는 몇 층입니까? (층 구분이 불가능한 경우 0을 입력하세요)",
-        "source": "PDF 606쪽 6-4-3 [주] ③ 및 ※"
+        "source": "PDF 606쪽 6-4-3 [주] ③ 및 ※",
+        "when": {
+          "input": "is_exterior",
+          "equals": true
+        }
       },
       {
         "name": "building_height",
         "type": "positive_rational",
-        "allowed_values": "0 이상의 수",
+        "allowed_values": "0보다 큰 수",
         "unit": "m",
         "required": true,
-        "ask": "층 구분이 불가능한 경우, 건축물의 높이는 몇 m입니까? (층 구분이 가능하여 층수를 입력했다면 0을 입력하세요)",
-        "source": "PDF 606쪽 6-4-3 [주] ③ ※"
+        "ask": "층 구분이 불가능한 외벽의 건축물 높이는 몇 m입니까?",
+        "source": "PDF 606쪽 6-4-3 [주] ③ ※",
+        "when": {
+          "input": "floor_count",
+          "equals": 0
+        }
       }
     ],
     "tables": [
