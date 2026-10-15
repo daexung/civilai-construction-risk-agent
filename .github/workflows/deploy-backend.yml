@@ -42,7 +42,9 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3
       - name: Fetch and verify serving assets
-        run: python3 deploy/serving_assets.py
+        run: |
+          python3 deploy/serving_assets.py
+          python3 deploy/knowledge_assets.py
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
       - name: Build image
@@ -66,10 +68,11 @@ jobs:
       - name: Update existing Cloud Run service
         env:
           ADMIN_USER_IDS: ${{ vars.ADMIN_USER_IDS }}
+          KNOWLEDGE_RETRIEVAL: ${{ vars.KNOWLEDGE_RETRIEVAL }}
         run: |
           gcloud run services update poomsemi-api \
             --image="$IMAGE" \
-            --update-env-vars="^;^CLIENT_IP_SOURCE=vercel;ADMIN_USER_IDS=${ADMIN_USER_IDS}" \
+            --update-env-vars="^;^CLIENT_IP_SOURCE=vercel;ADMIN_USER_IDS=${ADMIN_USER_IDS};KNOWLEDGE_RETRIEVAL=${KNOWLEDGE_RETRIEVAL:-legacy}" \
             --region=asia-northeast3 --project=civil-ai-jds --quiet
       - name: Verify readiness through authenticated Vercel proxy
         run: |

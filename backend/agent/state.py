@@ -20,6 +20,7 @@ class AgentState(TypedDict, total=False):
     answer: str  # 최종 답변
     answer_source: str  # "llm" | "template" | "fixed"
     llm_info: dict  # LLM 모델, 걸린 시간, 실패·거부 사유, 거부된 숫자
+    knowledge: dict | None
     qa: dict | None  # 구조화 상담 답변
     hits: list[dict]  # 검색된 청크
     search_info: dict  # 검색 방식과 경고
@@ -40,7 +41,7 @@ class AgentState(TypedDict, total=False):
 
 def new_state(query: str, basis_date: str | None = None) -> AgentState:
     state: AgentState = {"query": query, "status": "RUNNING", "reason": "", "answer": "", "hits": [],
-                         "qa": None, "search_info": {}, "candidates": [], "spec_id": "", "selection": {}}
+                         "qa": None, "knowledge": None, "search_info": {}, "candidates": [], "spec_id": "", "selection": {}}
     if basis_date is not None:
         state["basis_date"] = basis_date
     return state

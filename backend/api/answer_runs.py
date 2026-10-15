@@ -41,7 +41,7 @@ def versions():
     specs = {str(p.relative_to(ROOT)): file_hash(p) for p in sorted((ROOT / 'data/drafts').rglob('*.json'))
              if 'raw' not in p.parts}
     rates = {str(p.relative_to(ROOT)): file_hash(p) for p in sorted((ROOT / 'data/rates').rglob('*')) if p.is_file()}
-    return {'code_version': os.getenv('APP_CODE_VERSION') or 'sha256:' + answer_trace.digest(code),
+    out = {'code_version': os.getenv('APP_CODE_VERSION') or 'sha256:' + answer_trace.digest(code),
             'code_files_sha256': answer_trace.digest(code), 'asset_hashes': assets,
             'chunk_set_id': 'sha256:' + assets['chunks'] if assets['chunks'] else None,
             'specs_sha256': answer_trace.digest(specs), 'rates_sha256': answer_trace.digest(rates),
@@ -53,6 +53,14 @@ def versions():
             'configured_model': os.getenv('LLM_MODEL') or _configured_model(),
             'agent_mode': os.getenv('AGENT_MODE') or 'graph'}
 
+    if os.getenv('KNOWLEDGE_RETRIEVAL') == 'v1':
+        import json
+        manifest=json.loads((ROOT/'data/knowledge/manifest.json').read_text(encoding='utf-8'))
+        out.update(chunk_set_id=manifest['chunk_set_id'],release_id=manifest['release_id'])
+        out['asset_hashes']['knowledge_vectors']=manifest['vectors_parquet_sha256']
+        out['retrieval_config']={'runtime':'knowledge-v1','policy':'4h/5b','rrf_k':60,'candidates':20,
+                                 'embed_provider':manifest['provider'],'embed_model':manifest['model']}
+    return out
 
 def _configured_model():
     try:
@@ -153,6 +161,7 @@ def _final_summary(response):
         elif isinstance(value, list):
             for child in value[:100]:
                 collect_citations(child)
+    collect_citations(response.get('knowledge') or {})
     collect_citations(response.get('result') or {})
     collect_citations(response.get('priced') or {})
     for cite in qa.get('citations') or []:
@@ -175,7 +184,9 @@ def _final_summary(response):
     info = response.get('llm_info') or {}
     error = info.get('error')
     safe_errors = {'숫자 불일치', '금액 기준 누락', '미산정 누락', 'citations_missing', 'chunk_id', 'quote', 'money', 'numbers'}
-    verification = {'answer_source': response.get('answer_source'),
+    verification = {'knowledge_answer_status': (response.get('knowledge') or {}).get('answer_status'),
+                    'knowledge_reason': (response.get('knowledge') or {}).get('answer_status_reason'),
+                    'answer_source': response.get('answer_source'),
                     'numeric_check': 'failed' if error == '숫자 불일치' else ('passed' if response.get('answer_source') == 'llm' else 'not_applicable'),
                     'citation_check': 'failed' if error in {'citations_missing', 'chunk_id', 'quote', 'money'} else
                                      ('passed' if citations else 'not_applicable'),

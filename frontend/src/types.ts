@@ -248,6 +248,7 @@ export interface UsageStatus {
 }
 
 export interface ChatResponse {
+  knowledge?: KnowledgeResult | null;
   answer_id?: string;
   answer_rating?: { rating: 'good' | 'bad'; reason: string | null; comment: string } | null;
   usage?: UsageStatus;
@@ -286,4 +287,18 @@ export interface ChatTurn {
   elapsedMs?: number;
   sentAtMs?: number;
   receivedAtMs?: number;
+}
+
+export interface KnowledgeResult {
+  list?: {scope: string; included: {division: string; number: string; title: string}[]; note: string} | null;
+  answer: string; answer_status_label: string; answer_status: string;
+  versions: { runtime: string; chunk_set_id: string; release_id: string };
+  sources: KnowledgeSource[]; related: KnowledgeSource[]; review_material: KnowledgeSource[];
+  confirmations: {code: string; text: string}[];
+  alternatives: {division: string; number: string; title: string}[];
+}
+export interface KnowledgeSource {
+  id: string; division: string; section_no: string; section_title: string;
+  pdf_page: number; printed_page: number; image_url?: string;
+  lines: {n: number; text: string; display: string; cited?: boolean; selected?: boolean}[];
 }

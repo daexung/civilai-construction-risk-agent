@@ -112,6 +112,8 @@ def response(thread_id: str, state: dict) -> dict:
     built = _build_response(thread_id, legacy)
     for out, question in zip(built["questions"], (state.get("pending") or [])[:1]):
         out["ref"] = question["ref"]
+    if state.get("turn", {}).get("knowledge"):
+        built["knowledge"] = state["turn"]["knowledge"]
     built["questions_remaining"] = len(state.get("pending") or [])
     session = state.get("session")
     built["estimate_current"] = bool(session and tools.current_estimate(session))

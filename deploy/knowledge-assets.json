@@ -1,0 +1,14 @@
+{
+  "tag": "retrieval-v1-20261015",
+  "repository": "daexung/civilai-construction-risk-agent",
+  "files": {
+    "vectors.parquet": {
+      "bytes": 71930286,
+      "sha256": "09d96747d3c2de9abcc1cd362ab1753731617d118f75986fe3121ca328166e84"
+    },
+    "manifest.json": {
+      "bytes": 701,
+      "sha256": "48709ec002a9a8d0894e996199588acb1dfc5db3658f8d4551277366a193ce73"
+    }
+  }
+}

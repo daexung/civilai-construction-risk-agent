@@ -79,7 +79,11 @@ def _prepare_service() -> None:
         if dialogue_service.enabled():
             usage_limits.require_request_charges()
         prepare_citations()
-        get_search()
+        from backend.knowledge import runtime as knowledge
+        if knowledge.enabled():
+            knowledge.engine()
+        else:
+            get_search()
         load_specs()
         if os.environ.get("AGENT_LLM", "off") == "on":
             try:
@@ -428,7 +432,7 @@ def _search_out(state: dict) -> dict:
     search_info = state.get("search_info", {})
     method = search_info.get("method", "")
     raw = list(search_info.get("warnings", []))
-    if method and method not in ("hybrid", "bm25(오프라인)") and not raw:
+    if method and method not in ("hybrid", "knowledge-v1-hybrid", "bm25(오프라인)") and not raw:
         raw = [f"임베딩 검색이 꺼져 단어 검색({method})으로만 찾았습니다"]
     # 오류 원문은 raw_warnings로만 내리고, 화면에는 쉬운 문장만 보인다.
     warnings = ["의미 검색이 잠시 안 돼 단어 검색으로 찾았습니다."] if raw else []
@@ -467,6 +471,7 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "statement": state.get("statement"),
         "answer": state.get("answer") or None,
         "qa": _qa_out(state),
+        "knowledge": state.get("knowledge"),
         "answer_source": state.get("answer_source") or None,
         "llm_info": state.get("llm_info") or None,
         "basis_date": state.get("basis_date") or date.today().isoformat(),
@@ -988,7 +993,7 @@ def _chat_response(payload: ChatRequest, graph=None, keep_thread=False, *, free_
                 "result": f"도급액 {int(amount):,}원" if isinstance(amount, (int, float)) else None,
             }
             initial.update(inputs={}, input_sources={}, questions=[], reply="", result={},
-                           priced=None, statement=None, answer_source="", llm_info={},
+                           priced=None, statement=None, knowledge=None, answer_source="", llm_info={},
                            route_confidence=None, route_reason="", route_source="rule")
         state = graph.invoke(initial, config)
     return _build_response(thread_id, state)
