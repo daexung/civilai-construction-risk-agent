@@ -81,6 +81,8 @@ def _prepare_service() -> None:
         prepare_citations()
         from backend.knowledge import runtime as knowledge
         if knowledge.enabled():
+            if os.environ.get("AGENT_LLM") != "on":
+                raise RuntimeError("knowledge-v1 requires AGENT_LLM=on")
             knowledge.engine()
         else:
             get_search()

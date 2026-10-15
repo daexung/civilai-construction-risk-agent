@@ -38,6 +38,8 @@ class Caller:
 class Engine(ResponseBuilder):
     def __init__(self):
         self.lock=threading.RLock()
+        if enabled() and not llm.warmup_client():
+            raise RuntimeError('Knowledge model client is not ready')
         conn=psycopg.connect(db.dsn(),connect_timeout=8,autocommit=True,options='-c statement_timeout=20000')
         conn.read_only=True
         try:

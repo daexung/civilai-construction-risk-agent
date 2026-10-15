@@ -81,7 +81,7 @@ def legacy_state(state: dict) -> dict:
     spec = load_specs().get(spec_id) if spec_id else None
     common = {name: entry["value"] for name, entry in session["common_conditions"].items()}
     out.update(spec_id=spec_id, selection=item.get("selection") or {}, candidates=candidates,
-               hits=item.get("hits") or [], basis_date=session.get("basis_date") or date.today().isoformat(),
+               hits=item.get("hits") or [], search_info=item.get("search_info") or {}, basis_date=session.get("basis_date") or date.today().isoformat(),
                inputs={**common, **(item.get("conditions") or {})},
                input_sources={**{name: entry["source"] for name, entry in session["common_conditions"].items()},
                               **{name: "기본값" if name in item.get("defaulted_inputs", {}) else "답변"

@@ -75,3 +75,14 @@ def test_dialogue_restore_retains_knowledge():
     with patch('backend.api.main._build_response',return_value={'questions':[]}),patch.object(dialogue_service,'legacy_state',return_value={}):
         result=dialogue_service.response('test',{'turn':{'knowledge':r}})
     assert result['knowledge']==r
+
+def test_fresh_qa_with_size_runs_verified_tool_before_planner(monkeypatch):
+    monkeypatch.setenv('KNOWLEDGE_RETRIEVAL','v1');monkeypatch.setenv('AGENT_LLM','on')
+    question='배관 ø100㎜에 건물용 적산열량계를 설치하면 개당 배관공은 몇 인이야?'
+    generate=MagicMock(side_effect=AssertionError('Planner must not replace verified QA'))
+    with patch.object(runtime,'ask',return_value=sample()) as ask:
+        state=dialogue.run_turn(dialogue.new_dialogue(),{'message':question},generate=generate)
+    ask.assert_called_once_with(question)
+    assert state['turn']['knowledge']['status']=='needs_confirmation'
+    assert state['session'] is None and not state['pending']
+    generate.assert_not_called()
