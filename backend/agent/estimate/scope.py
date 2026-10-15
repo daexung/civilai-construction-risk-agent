@@ -636,7 +636,8 @@ def confirmed_result(text: str, analysis: dict, confirmation: dict) -> dict[str,
 
     if any(condition.get("ambiguous") for task in included for condition in task["conditions"]):
         return {"status": "confirmed_scope", "work_items": included,
-                "calculation": {"mode": "not_ready", "reason": "한 작업의 전체 수량을 나눌 수 없습니다."},
+                "calculation": {"mode": "not_ready", "blocked": True,
+                                "reason": "한 작업의 전체 수량을 나눌 수 없습니다."},
                 "confirmation": confirmation}
     # 확인한 별도 조건은 작업 하나에만 붙인다. 둘 이상이면 소속을 묻고 멈춘다.
     included_condition_ids = {condition["id"] for task in included for condition in task["conditions"]}
@@ -644,11 +645,18 @@ def confirmed_result(text: str, analysis: dict, confirmation: dict) -> dict[str,
                   and condition["id"] not in included_condition_ids
                   and decisions[condition["id"]]["action"] == "keep_condition"
                   and decisions[condition["segment_id"]]["action"] not in ("keep_excluded", "exclude_work")]
-    if unattached and len(included) == 1:
-        included[0]["conditions"].extend(unattached)
-    elif unattached:
+    remaining_unattached = []
+    for condition in unattached:
+        owner = [task for task in included if task["segment_id"] == condition["segment_id"]]
+        if len(owner) == 1:
+            if not any(existing["id"] == condition["id"] for existing in owner[0]["conditions"]):
+                owner[0]["conditions"].append(condition)
+        else:
+            remaining_unattached.append(condition)
+    if remaining_unattached:
         return {"status": "confirmed_scope", "work_items": included,
-                "calculation": {"mode": "not_ready", "reason": "작업에 연결되지 않은 조건이 남아 있습니다."},
+                "calculation": {"mode": "not_ready", "blocked": True,
+                                "reason": "작업에 연결되지 않은 조건이 남아 있습니다."},
                 "confirmation": confirmation}
 
     if len(included) != 1:
@@ -662,9 +670,13 @@ def confirmed_result(text: str, analysis: dict, confirmation: dict) -> dict[str,
         invalid_quantity = any(Decimal(q["value"].replace(",", "")) <= 0 for q in quantities)
     except InvalidOperation:
         invalid_quantity = True
-    if len(quantities) > 1 or invalid_quantity:
+    # 서로 다른 단위는 도구에 보내기 전에 물량으로 단정하지 않는다. 원문 조건으로 보존해
+    # 선택 명세가 실제 물량 단위(예: ㎜ 두께와 ㎡ 면적)를 가른 뒤 기존 입력 파서가 연결한다.
+    repeated_same_unit = len({condition.get("unit") for condition in quantities}) < len(quantities)
+    if repeated_same_unit or invalid_quantity:
         return {"status": "confirmed_scope", "work_items": included, "calculation": {"mode": "not_ready",
-                "reason": "한 작업에 쓸 수량을 하나로 확인할 수 없습니다."}, "confirmation": confirmation}
+                "blocked": True, "reason": "한 작업에 같은 단위의 수량이 둘 이상 있습니다."},
+                "confirmation": confirmation}
     task_conditions = list(task["conditions"])
     selected_background = [substrate for substrate in analysis["substrates"]
                            if decisions[substrate["id"]]["action"] == "keep_background"]
@@ -687,11 +699,12 @@ def confirmed_result(text: str, analysis: dict, confirmation: dict) -> dict[str,
     source_spans.extend({"kind": "background", "value": substrate["surface"], **substrate["evidence"]}
                         for substrate in selected_background)
     item = {"item_id": "i1", "request_text": request_text, "source_spans": source_spans}
-    if quantities:
+    if len(quantities) == 1:
         from backend.agent.estimate.state import unit_key
         if unit_key(quantities[0]["unit"]) is None:
             return {"status": "confirmed_scope", "work_items": included,
-                    "calculation": {"mode": "not_ready", "reason": "기존 세션에서 처리할 수 없는 단위입니다."},
+                    "calculation": {"mode": "not_ready", "blocked": True,
+                                    "reason": "기존 세션에서 처리할 수 없는 단위입니다."},
                     "confirmation": confirmation}
         item["quantity"] = {"value": quantities[0]["value"], "unit": quantities[0]["unit"]}
     plan = {"original_request": text, "items": [item]}
