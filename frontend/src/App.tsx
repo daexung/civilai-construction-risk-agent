@@ -38,6 +38,13 @@ const HISTORY_KEY = 'poomsemi-chat-history-v1';
 const TAB_HISTORY_KEY = 'poomsemi-chat-tab-v1';
 const EMPTY_TURNS: ChatTurn[] = [];
 const emptyStore = (): ConversationStore => ({ activeId: null, conversations: [] });
+function withTimeout<T>(request: Promise<T>, timeoutMs = 20000): Promise<T> {
+  let timer: ReturnType<typeof globalThis.setTimeout>;
+  const timeout = new Promise<T>((_, reject) => {
+    timer = globalThis.setTimeout(() => reject(new Error('RESTORE_TIMEOUT')), timeoutMs);
+  });
+  return Promise.race([request, timeout]).finally(() => globalThis.clearTimeout(timer));
+}
 function readTabHistory(): { owner: string | null; store: ConversationStore } | null {
   try {
     const value = JSON.parse(sessionStorage.getItem(TAB_HISTORY_KEY) ?? 'null');
@@ -71,6 +78,8 @@ export default function App() {
   const [adminAccountId, setAdminAccountId] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
   const [authInitializing, setAuthInitializing] = useState(!!authClient);
+  const [authError, setAuthError] = useState('');
+  const [authRetry, setAuthRetry] = useState(0);
   const [loginOpen, setLoginOpen] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -79,6 +88,8 @@ export default function App() {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [logoutError, setLogoutError] = useState('');
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState('');
+  const [historyRetry, setHistoryRetry] = useState(0);
   const [historyOwner, setHistoryOwner] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -94,6 +105,8 @@ export default function App() {
   storeRef.current = store;
   const accountRef = useRef<string | null>(null);
   const accountId = user?.id ?? null;
+  const canSendRequest = !authInitializing && !authError && !historyLoading && !historyError
+    && (!accountId || historyOwner === accountId);
   useEffect(() => {
     setAdminAccountId(null);
     if (!accountId || pathname !== '/chat') return;
@@ -130,48 +143,53 @@ export default function App() {
 
   useEffect(() => {
     try { localStorage.removeItem(HISTORY_KEY); } catch { /* Storage may be blocked. */ }
-    if (!authClient) return;
+    if (!authClient) { setAuthInitializing(false); setAuthError(''); return; }
     let active = true;
     let previousId: string | null = null;
-    authClient.auth.getSession().then(({ data }) => { if (active) { previousId = data.session?.user.id ?? null; setUser(data.session?.user ?? null); } })
-      .catch(() => { if (active) showToast('로그인 상태를 확인하지 못했습니다.', 'error'); })
+    setAuthInitializing(true);
+    setAuthError('');
+    withTimeout(authClient.auth.getSession()).then(({ data, error }) => {
+      if (error) throw error;
+      if (active) { previousId = data.session?.user.id ?? null; setUser(data.session?.user ?? null); }
+    })
+      .catch(() => { if (active) setAuthError('로그인 상태를 확인하지 못했습니다. 다시 시도해 주세요.'); })
       .finally(() => { if (active) setAuthInitializing(false); });
     const { data: { subscription } } = authClient.auth.onAuthStateChange((_event, session) => {
       if (!active) return;
       const nextId = session?.user.id ?? null;
       if (previousId && previousId !== nextId) { restored.current = null; setHistoryOwner(null); setStore(emptyStore()); }
       previousId = nextId;
+      setAuthError('');
       setUser(session?.user ?? null);
     });
     return () => { active = false; subscription.unsubscribe(); };
-  }, []);
+  }, [authRetry]);
 
   useEffect(() => {
-    if (!accountId) return;
+    if (!accountId) { setHistoryLoading(false); setHistoryError(''); setHistoryOwner(null); return; }
     const userId = accountId;
     let active = true;
     setHistoryLoading(true);
+    setHistoryError('');
     const selected = restored.current?.owner === userId ? restored.current.store.activeId : null;
     // Authentication is already resolved; fetch the list and selected transcript together.
-    Promise.allSettled([listConversations(), selected ? readConversation(selected) : Promise.resolve(null)]).then(([listResult, transcriptResult]) => {
+    Promise.allSettled([withTimeout(listConversations()), selected ? withTimeout(readConversation(selected)) : Promise.resolve(null)]).then(([listResult, transcriptResult]) => {
       if (!active || accountRef.current !== userId) return;
-      restored.current = null;
       if (listResult.status === 'rejected') throw listResult.reason;
+      if (selected && transcriptResult.status === 'rejected' && transcriptResult.reason?.message !== 'NOT_FOUND') throw transcriptResult.reason;
       const rows = listResult.value;
       const restoredTurns = transcriptResult.status === 'fulfilled' ? transcriptResult.value : null;
       const selectedRow = restoredTurns ? rows.find(row => row.id === selected) : undefined;
-      if (selected && transcriptResult.status === 'rejected' && transcriptResult.reason?.message !== 'NOT_FOUND') {
-        showToast('이전 대화를 불러오지 못했습니다. 왼쪽 목록에서 다시 선택해 주세요.', 'error');
-      }
+      restored.current = null;
       setStore(prev => ({ activeId: prev.activeId ?? selectedRow?.id ?? null,
         conversations: [...prev.conversations,
           ...rows.filter(row => !prev.conversations.some(chat => chat.id === row.id))
             .map(row => ({ ...row, threadId: row.id, saved: true, loaded: row.id === selectedRow?.id,
               turns: row.id === selectedRow?.id ? restoredTurns ?? [] : [] }))] }));
-    }).catch(() => { if (active) showToast('저장된 대화를 불러오지 못했습니다. 새로고침해 주세요.', 'error'); })
+    }).catch(() => { if (active) setHistoryError('저장된 대화를 불러오지 못했습니다. 다시 시도해 주세요.'); })
       .finally(() => { if (active) { setHistoryLoading(false); setHistoryOwner(userId); } });
     return () => { active = false; setHistoryLoading(false); };
-  }, [accountId]);
+  }, [accountId, historyRetry]);
 
   useEffect(() => {
     if (authInitializing || historyLoading || (accountId && historyOwner !== accountId)) return;
@@ -268,7 +286,7 @@ export default function App() {
     thread: string | null,
     conversationId = store.activeId ?? uuidv4(),
   ) => {
-    if (pendingRequest.current) return;
+    if (!canSendRequest || pendingRequest.current) return;
     pendingRequest.current = true;
     const startedAt = performance.now();
     const requestUserId = user?.id ?? null;
@@ -310,7 +328,7 @@ export default function App() {
       pendingRequest.current = false;
       setLoading(false);
     }
-  }, [handleError, store.activeId, store.conversations, user]);
+  }, [canSendRequest, handleError, store.activeId, store.conversations, user]);
 
   const handleSendMessage = useCallback((text: string) => send(text, { message: text }, threadId), [send, threadId]);
   const handleResendMessage = useCallback((text: string) => send(text, { message: text, restart: true }, threadId), [send, threadId]);
@@ -342,7 +360,7 @@ export default function App() {
 
   // 결과 카드의 조건만 바꿔 같은 카드를 새 계산으로 교체한다(공종 입력은 서버가 그대로 둔다).
   const handleChangeConditions = useCallback(async (turnId: string, conditions: Record<string, string>) => {
-    if (!threadId || !store.activeId || pendingRequest.current) return;
+    if (!canSendRequest || !threadId || !store.activeId || pendingRequest.current) return;
     pendingRequest.current = true;
     const conversationId = store.activeId;
     const startedAt = performance.now();
@@ -368,7 +386,7 @@ export default function App() {
       pendingRequest.current = false;
       setLoading(false);
     }
-  }, [threadId, handleError, store.activeId, current, user]);
+  }, [canSendRequest, threadId, handleError, store.activeId, current, user]);
 
   const handleNewChat = useCallback(() => {
     setStore(prev => ({ ...prev, activeId: null }));
@@ -379,13 +397,13 @@ export default function App() {
   }, [send]);
 
   const handleSelectConversation = async (id: string) => {
-    if (loading || historyLoading) return;
+    if (loading || !canSendRequest) return;
     const chat = store.conversations.find(item => item.id === id);
     if (chat?.saved && !chat.loaded) {
       const userId = user?.id;
       setHistoryLoading(true);
       try {
-        const savedTurns = await readConversation(id);
+        const savedTurns = await withTimeout(readConversation(id));
         if (accountRef.current !== userId) return;
         setStore(prev => ({ ...prev, activeId: id, conversations: prev.conversations.map(item => item.id === id
           ? { ...item, turns: savedTurns, loaded: true } : item) }));
@@ -446,12 +464,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (pathname !== '/chat' || authInitializing || historyLoading || (accountId && historyOwner !== accountId)) return;
+    if (pathname !== '/chat' || !canSendRequest) return;
     const query = new URLSearchParams(window.location.search).get('q');
     if (!query) return;
     window.history.replaceState({}, '', '/chat');
     handleSendExample(query);
-  }, [pathname, handleSendExample, authInitializing, historyLoading, accountId, historyOwner]);
+  }, [pathname, handleSendExample, canSendRequest]);
 
   if (process.env.REACT_APP_LOCAL_TRIAL === 'on' && pathname === '/trial') return <LocalTrial />;   // 5단계 로컬 시험(기본 꺼짐)
   if (pathname === '/auth/callback') return <AuthCallback />;
@@ -489,12 +507,18 @@ export default function App() {
         onRenameConversation={id => { setRenameError(''); setRenameTarget(id); }}
         turns={turns}
         restoring={restoringConversation}
-        loading={loading || restoringConversation || historyLoading || authInitializing || deleting || renaming || migrating || authLoading}
+        loading={loading || deleting || renaming || migrating || authLoading}
         generating={loading}
+        authInitializing={authInitializing}
+        authError={authError}
+        onRetryAuth={() => setAuthRetry(value => value + 1)}
+        historyLoading={historyLoading}
+        historyError={historyError}
+        onRetryHistory={() => setHistoryRetry(value => value + 1)}
         expired={!!current?.expired}
         onRecover={handleRecover}
         onRetry={handleRetry}
-        inputDisabled={!!current?.expired || !!(user && current && !current.saved && migrationError) || !!(usage && (usage.remaining === 0 || usage.service_remaining === 0))}
+        inputDisabled={!canSendRequest || !!current?.expired || !!(user && current && !current.saved && migrationError) || !!(usage && (usage.remaining === 0 || usage.service_remaining === 0))}
         onSendMessage={handleSendMessage}
         onResendMessage={handleResendMessage}
         onSendAnswers={handleSendAnswers}

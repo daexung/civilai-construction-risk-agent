@@ -1013,10 +1013,10 @@
 .estimate-review-notice p { margin: 8px 0 0; font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
 .estimate-review-notice .estimate-review-liability { color: #766d5b; }
 .estimate-review-notice a { color: inherit; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
-.chat-restore-status { display: flex; align-items: center; justify-content: center; gap: 11px; flex: 1; min-height: 240px; color: var(--text-muted); font-size: 14px; }
-.chat-restore-spinner { width: 18px; height: 18px; border: 2px solid var(--accent-tint); border-top-color: var(--brand-primary); border-radius: 50%; animation: chat-restore-spin .8s linear infinite; }
-@keyframes chat-restore-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .chat-restore-spinner { animation: none; } }
+.chat-startup-status { display: flex; align-items: center; gap: 9px; padding: 8px 12px; color: var(--text-muted); font-size: 12px; line-height: 1.5; }
+.chat-startup-status.is-error { justify-content: space-between; color: var(--danger, #a33); }
+.chat-startup-status button { flex-shrink: 0; border: 1px solid currentColor; border-radius: 7px; padding: 4px 8px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.chat-workspace > .chat-startup-status { padding: 8px 18px; border-bottom: 1px solid var(--border-color); }
 
 .source-page-badge {
   display: inline-flex;

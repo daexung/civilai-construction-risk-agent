@@ -214,7 +214,7 @@ test('expired guest cache is not restored', async () => {
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(0);
 });
 
-test('restore hides the new-chat screen and fetches transcript before the list finishes', async () => {
+test('chat shell stays visible while auth and saved history restore without sending early', async () => {
   act(() => root.unmount());
   sessionStorage.setItem('poomsemi-chat-tab-v1', JSON.stringify({ owner: 'A', updatedAt: Date.now(),
     store: { activeId: 'saved-id', conversations: [] } }));
@@ -227,18 +227,89 @@ test('restore hides the new-chat screen and fetches transcript before the list f
   readConversation.mockImplementation(() => new Promise(resolve => { finishTranscript = resolve; }));
   root = createRoot(container);
   await act(async () => root.render(<React.StrictMode><App /></React.StrictMode>));
-  expect(container.querySelector('.welcome-header')).toBeNull();
-  expect(container.querySelector('.chat-restore-status').textContent).toContain('대화를 불러오고 있어요');
+  expect(container.querySelector('.welcome-header')).not.toBeNull();
+  expect(container.querySelector('.chat-startup-status').textContent).toContain('로그인 상태를 확인하고 있어요');
+  expect(container.querySelector('textarea').disabled).toBe(true);
+  expect(container.querySelector('.chat-shell')).not.toBeNull();
   expect(container.querySelector('.chat-nav button').hasAttribute('aria-current')).toBe(false);
+  act(() => Simulate.change(container.querySelector('textarea'), { target: { value: '로그인 전 요청 금지' } }));
+  act(() => Simulate.click(container.querySelector('[aria-label="질문 보내기"]')));
+  expect(sendChat).not.toHaveBeenCalled();
   await act(async () => finishAuth({ data: { session: { user: { id: 'A' } } } }));
   expect(readConversation).toHaveBeenCalledWith('saved-id');
-  expect(container.querySelector('.welcome-header')).toBeNull();
+  expect(container.querySelector('.welcome-header')).not.toBeNull();
+  expect(container.querySelector('.chat-startup-status').textContent).toContain('저장된 대화를 확인하고 있어요');
   await act(async () => finishTranscript([{ id: 'a1', role: 'assistant', response: response('saved-id', '복원된 답변') }]));
-  expect(container.querySelector('.chat-restore-status')).not.toBeNull();
+  expect(container.querySelector('.chat-startup-status')).not.toBeNull();
   await act(async () => finishList([{ id: 'saved-id', title: '이전 견적' }]));
-  expect(container.querySelector('.chat-restore-status')).toBeNull();
+  expect(container.querySelector('.chat-startup-status')).toBeNull();
   expect(container.querySelector('.messages').textContent).toContain('복원된 답변');
   expect(sendChat).not.toHaveBeenCalled();
+});
+
+test('saved history failure offers retry and does not leave the chat input waiting', async () => {
+  act(() => root.unmount());
+  mockAuthClient = { auth: {
+    getSession: jest.fn().mockResolvedValue({ data: { session: { user: { id: 'A' } } } }),
+    onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
+  } };
+  listConversations.mockRejectedValueOnce(new Error('NETWORK_ERROR')).mockResolvedValueOnce([]);
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(container.querySelector('.welcome-header')).not.toBeNull();
+  expect(container.querySelector('[role="alert"]').textContent).toContain('저장된 대화를 불러오지 못했습니다');
+  expect(container.querySelector('textarea').disabled).toBe(true);
+  await act(async () => Simulate.click(container.querySelector('.chat-startup-status button')));
+  await act(async () => {});
+  expect(listConversations).toHaveBeenCalledTimes(2);
+  expect(container.querySelector('[role="alert"]')).toBeNull();
+  expect(container.querySelector('textarea').disabled).toBe(false);
+});
+
+test('failed transcript restore keeps the selected conversation available to retry', async () => {
+  act(() => root.unmount());
+  sessionStorage.setItem('poomsemi-chat-tab-v1', JSON.stringify({ owner: 'A', updatedAt: Date.now(),
+    store: { activeId: 'saved-id', conversations: [] } }));
+  mockAuthClient = { auth: {
+    getSession: jest.fn().mockResolvedValue({ data: { session: { user: { id: 'A' } } } }),
+    onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
+  } };
+  listConversations.mockResolvedValue([{ id: 'saved-id', title: '이전 견적' }]);
+  readConversation.mockRejectedValueOnce(new Error('NETWORK_ERROR'))
+    .mockResolvedValueOnce([{ id: 'a1', role: 'assistant', response: response('saved-id', '복원된 답변') }]);
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(container.querySelector('[role="alert"]').textContent).toContain('저장된 대화를 불러오지 못했습니다');
+  expect(readConversation).toHaveBeenCalledWith('saved-id');
+  await act(async () => Simulate.click(container.querySelector('.chat-startup-status button')));
+  await act(async () => {});
+  expect(readConversation).toHaveBeenCalledTimes(2);
+  expect(container.querySelector('[role="alert"]')).toBeNull();
+  expect(container.querySelector('.messages').textContent).toContain('복원된 답변');
+});
+
+test('auth restoration timeout exposes a retry instead of blocking indefinitely', async () => {
+  jest.useFakeTimers();
+  try {
+    act(() => root.unmount());
+    mockAuthClient = { auth: {
+      getSession: jest.fn().mockReturnValueOnce(new Promise(() => {}))
+        .mockResolvedValueOnce({ data: { session: null }, error: null }),
+      onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
+    } };
+    root = createRoot(container);
+    await act(async () => root.render(<App />));
+    expect(container.querySelector('.welcome-header')).not.toBeNull();
+    expect(container.querySelector('[role="status"]').textContent).toContain('로그인 상태를 확인하고 있어요');
+    await act(async () => { jest.advanceTimersByTime(20000); await Promise.resolve(); });
+    expect(container.querySelector('[role="alert"]').textContent).toContain('로그인 상태를 확인하지 못했습니다');
+    expect(container.querySelector('textarea').disabled).toBe(true);
+    await act(async () => Simulate.click(container.querySelector('.chat-startup-status button')));
+    await act(async () => {});
+    expect(mockAuthClient.auth.getSession).toHaveBeenCalledTimes(2);
+    expect(container.querySelector('[role="alert"]')).toBeNull();
+    expect(container.querySelector('textarea').disabled).toBe(false);
+  } finally { jest.useRealTimers(); }
 });
 
 test('another account selection is not restored or requested', async () => {
