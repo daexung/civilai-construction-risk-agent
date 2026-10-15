@@ -741,8 +741,16 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
         log.append({"tool": "estimate_cost", "result": _run_tool(working, "estimate_cost", {}, "", budget)})
         use_llm = False
     elif message or answers:
+        from backend.knowledge import runtime as knowledge
+        knowledge_qa = (knowledge.enabled() and message and not answers and not _confirmed(working['session'])
+                        and _rule_route(message, working.get('route')) == 'qa')
         policy = "llm" if use_llm else "rule"
-        if use_llm:
+        if knowledge_qa:
+            working['route'] = 'qa'
+            result = _run_tool(working, 'search_standard', {'query': message}, message, budget)
+            log.append({'tool':'search_standard','args':{'query':message},'result':result})
+            policy = 'verified'
+        elif use_llm:
             policy = _agent_loop(working, message, bool(answers), log, budget, generate)
         if policy == "rule":
             for name, args in _rule_actions(working, message, bool(answers)):

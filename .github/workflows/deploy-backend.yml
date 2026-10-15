@@ -69,10 +69,11 @@ jobs:
         env:
           ADMIN_USER_IDS: ${{ vars.ADMIN_USER_IDS }}
           KNOWLEDGE_RETRIEVAL: ${{ vars.KNOWLEDGE_RETRIEVAL }}
+          AGENT_LLM: ${{ vars.AGENT_LLM }}
         run: |
           gcloud run services update poomsemi-api \
             --image="$IMAGE" \
-            --update-env-vars="^;^CLIENT_IP_SOURCE=vercel;ADMIN_USER_IDS=${ADMIN_USER_IDS};KNOWLEDGE_RETRIEVAL=${KNOWLEDGE_RETRIEVAL:-legacy}" \
+            --update-env-vars="^;^CLIENT_IP_SOURCE=vercel;ADMIN_USER_IDS=${ADMIN_USER_IDS};KNOWLEDGE_RETRIEVAL=${KNOWLEDGE_RETRIEVAL:-legacy};AGENT_LLM=${AGENT_LLM:-on}" \
             --region=asia-northeast3 --project=civil-ai-jds --quiet
       - name: Verify readiness through authenticated Vercel proxy
         run: |

@@ -219,7 +219,12 @@ def current_estimate(session: EstimateSession) -> dict | None:
 def find_work(session: EstimateSession, hits: list[dict] | None = None) -> dict:
     """공종 후보를 찾는다. hits를 주지 않으면 검색 색인을 쓴다."""
     item = _item(session)
-    item["hits"] = retrieve({"query": item["request_text"]})["hits"] if hits is None else hits
+    if hits is None:
+        found = retrieve({"query": item["request_text"]})
+        item['hits'] = found['hits']
+        item['search_info'] = found.get('search_info', {})
+    else:
+        item['hits'] = hits
     decided = select({"hits": item["hits"], "query": item["request_text"]})
     item["candidates"] = decided["candidates"]
     decision = decided["selection"]["decision"]
