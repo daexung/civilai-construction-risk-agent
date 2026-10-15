@@ -1,3 +1,4 @@
+import KnowledgeAnswer from './KnowledgeAnswer';
 import React, { useId, createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -485,7 +486,7 @@ function AssistantCard({
       <div className="assistant-card-header">
         <AssistantTiming response={response} elapsedMs={elapsedMs} />
       </div>
-      {response.status === 'ANSWERED' && response.qa ? (
+      {response.knowledge ? (<KnowledgeAnswer result={response.knowledge} />) : response.status === 'ANSWERED' && response.qa ? (
         <div className="qa-card">
           <MarkdownAnswer>{`**${response.qa.conclusion}**${response.qa.explanation ? `\n\n${response.qa.explanation}` : ''}`}</MarkdownAnswer>
           {response.qa.comparisons.length > 0 && <ul>{response.qa.comparisons.map((item, i) =>

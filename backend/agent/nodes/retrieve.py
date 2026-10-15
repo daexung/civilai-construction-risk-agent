@@ -85,6 +85,9 @@ def get_search():
 
 
 def _retrieve_impl(state: AgentState) -> dict:
+    from backend.knowledge import runtime as knowledge
+    if knowledge.enabled():
+        return knowledge.search(state.get("search_query") or state["query"])
     index, method, warning = get_search()
     queries = [state["query"]]
     search_query = state.get("search_query", "").strip()

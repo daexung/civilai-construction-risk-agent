@@ -508,6 +508,11 @@ def _citations_in(node) -> list[dict]:
 
 def search_standard(query: str, hits: list[dict] | None = None) -> dict:
     """품셈 원문 자료만 돌려준다. 답변 문장은 만들지 않는다(대화 담당 LLM이 쓴다)."""
+    from backend.knowledge import runtime as knowledge
+    if hits is None and knowledge.enabled():
+        result = knowledge.ask(query)
+        return {"status": "ok", "data": {"knowledge": result, "sections": []},
+                "missing": [], "rejected": {}, "revision": None}
     hits = retrieve({"query": query})["hits"] if hits is None else hits
     contexts = build_context(hits, query=query)
     sections = [{"section": context["section"], "truncated": context["truncated"], "text": context["text"],

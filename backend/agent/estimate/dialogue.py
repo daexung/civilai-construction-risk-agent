@@ -616,6 +616,11 @@ def _template(state: DialogueState, log: list, facts: list[dict], notices: list)
 
 
 def _reply(state: DialogueState, log: list, notices: list, message: str, budget: Budget, generate, use_llm: bool) -> dict:
+    knowledge = next((e['result'].get('data', {}).get('knowledge') for e in reversed(log)
+                      if e['tool']=='search_standard' and e['result'].get('data', {}).get('knowledge')), None)
+    if knowledge:
+        # Do not ask the dialogue model to rewrite verified evidence or upgrade its state.
+        return {'text': knowledge['answer'], 'source': 'knowledge-v1', 'rejected': None, 'knowledge': knowledge}
     facts, literals = _facts(state, log)
     quantity_hint = ("총 인원·작업일수가 필요하면 물량을 알려 주세요."
                      if not state["pending"] and any(entry["result"].get("data", {}).get("per_unit_only") for entry in log)
@@ -771,7 +776,7 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
     trace = [{"tool": e["tool"], "args": e.get("args"), "status": e["result"].get("status"),
               "rejected": e["result"].get("rejected") or None,
               "reason": (e["result"].get("data") or {}).get("reason")} for e in log]
-    working["turn"] = {"answer": reply["text"], "answer_source": reply["source"], "tools": [e["tool"] for e in log],
+    working["turn"] = {"knowledge": reply.get("knowledge"), "answer": reply["text"], "answer_source": reply["source"], "tools": [e["tool"] for e in log],
                        "trace": [*working.pop("agent_errors", []), *trace],
                        "llm_info": {**budget.record(), "rejected": reply["rejected"],
                                     "rejected_text": reply.get("rejected_text")},
@@ -817,7 +822,7 @@ def _agent_loop(state: DialogueState, message: str, answered: bool, log: list, b
 
 def _stops(tool: str, result: dict) -> bool:
     """이번 턴을 멈출 결과. 공종 미확정(find_work의 needs_input) 뒤에는 같은 문장의 물량·조건을 마저 반영한다."""
-    if result["status"] in ("not_found", "blocked", "error") or result.get("confirm_scope"):
+    if result.get("data", {}).get("knowledge") or result["status"] in ("not_found", "blocked", "error") or result.get("confirm_scope"):
         return True
     return result["status"] == "needs_input" and tool != "find_work"
 

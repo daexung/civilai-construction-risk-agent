@@ -17,6 +17,8 @@
 !data/drafts/misfiled.json
 !data/drafts/specs/
 !data/drafts/specs/**
+!data/knowledge/
+!data/knowledge/**
 !data/processed/
 !data/processed/chunks.all.jsonl
 !data/processed/chunks.jsonl
