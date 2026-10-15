@@ -84,7 +84,8 @@ class Retriever:
             if (self.manifest['model'], self.manifest['dim'], self.manifest['input_format']) != (ei.CFG.model, ei.CFG.dim, ei.INPUT_FORMAT):
                 raise RuntimeError('벡터의 모델·차원·입력 형식이 현재 설정과 다름')
             import pyarrow.parquet as pq
-            rows = pq.read_table(ei.BASE / 'vectors.parquet').to_pylist()
+            table = pq.read_table(ei.BASE / 'vectors.parquet')
+            rows = table.drop(['vector']).to_pylist()
             by_id = {r['chunk_id']: r for r in rows}
             if len(by_id) != len(items) or set(by_id) != set(self.by_id):
                 raise RuntimeError('Vector/chunk coverage mismatch')
@@ -94,7 +95,10 @@ class Retriever:
                     raise RuntimeError('Vector input/version mismatch')
             if hashlib.sha256((ei.BASE / 'vectors.parquet').read_bytes()).hexdigest() != self.manifest['vectors_parquet_sha256']:
                 raise RuntimeError('Vector checksum mismatch')
-            self.matrix = np.asarray([by_id[x['chunk_id']]['vector'] for x in items], dtype=np.float32)
+            flat = table['vector'].combine_chunks().values.to_numpy(zero_copy_only=False)
+            raw_matrix = flat.reshape(len(rows), ei.CFG.dim)
+            positions = {r['chunk_id']: i for i, r in enumerate(rows)}
+            self.matrix = raw_matrix[[positions[x['chunk_id']] for x in items]].copy()
             if not np.isfinite(self.matrix).all() or np.any(np.linalg.norm(self.matrix,axis=1)==0):
                 raise RuntimeError('Invalid vectors')
             self.matrix /= np.linalg.norm(self.matrix, axis=1, keepdims=True)
