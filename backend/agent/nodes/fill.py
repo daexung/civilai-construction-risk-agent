@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 from backend.agent.rules.specs import load_specs
+from backend.agent.rules.conditions import field_active
 from backend.agent.state import AgentState
 from backend.agent.tools.calc.adjustments import adjustment_questions
 
@@ -235,7 +236,24 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
     quantity_name = spec["quantity_model"]["params"].get("quantity_input")
     for field in spec["inputs"]:
         name = field["name"]
-        if field["type"] == "positive_currency":
+        if field.get("text_pattern"):
+            hits = {int(m.group(1)) for m in re.finditer(field["text_pattern"], query)}
+            if len(hits) == 1:
+                value = hits.pop()
+                if _valid_for_field(value, field):
+                    values[name] = value
+                else:
+                    ambiguities[name] = field["allowed_values"]
+            elif hits:
+                ambiguities[name] = "서로 다른 수치가 함께 언급되었습니다"
+        elif field.get("text_patterns"):
+            hits = {key == "true" for key, patterns in field["text_patterns"].items()
+                    if any(re.search(pattern, query) for pattern in patterns)}
+            if len(hits) == 1:
+                values[name] = hits.pop()
+            elif hits:
+                ambiguities[name] = "조건이 서로 다르게 언급되었습니다"
+        elif field["type"] == "positive_currency":
             value, reason = _ready_mix_price(normalized)
             if value is not None:
                 values[name] = value
@@ -342,7 +360,8 @@ def _valid_for_field(value: object, field: dict) -> bool:
     if kind == "positive_currency":
         return value == "모름" or _valid_positive_rational(value)
     if kind == "nonnegative_integer":
-        return type(value) is int and value >= 0
+        integer = (type(value) is int or isinstance(value, str) and bool(re.fullmatch(r"\+?\d+", value)))
+        return bool(integer and int(value) >= field.get("minimum", 0))
     if kind == "project_scale":
         if value == "이 견적만":
             return True
@@ -477,8 +496,7 @@ def fill(state: AgentState) -> dict:
             name = field["name"]
             if not field["required"] or (name in inputs and name not in ambiguities):
                 continue
-            condition = field.get("when")
-            if condition and inputs.get(condition["input"]) != condition["equals"]:
+            if not field_active(field, inputs, {f["name"]: f for f in spec["inputs"]}):
                 continue
             question = {"name": name, "ask": field["ask"],
                         "choices": field["allowed_values"]}

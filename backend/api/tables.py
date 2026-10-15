@@ -95,6 +95,8 @@ def statement_rows(statement: dict | None) -> list[dict]:
 def _spec_text(inputs: list[dict]) -> str:
     values = {item["name"]: item["value"] for item in inputs}
     parts = []
+    if "coat_count" in values:
+        parts.append(f"{values['coat_count']}회 칠")
     if "structure" in values:
         parts.append(values["structure"])
     if "slump_band" in values:

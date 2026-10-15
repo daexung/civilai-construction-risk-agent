@@ -5,7 +5,7 @@
     "division": "건축",
     "section_no": "11-2-2",
     "title": "수성페인트 롤러칠('98, '15년 보완)",
-    "work": "수성페인트 롤러칠 1회 품량",
+    "work": "수성페인트 롤러칠",
     "review": "AI 초안 · 검토 전",
     "source_pages": [
       637
@@ -17,7 +17,7 @@
         "allowed_values": "0보다 큰 수",
         "unit": "㎡",
         "required": true,
-        "ask": "수성페인트 롤러칠(1회 기준) 면적은 몇 ㎡입니까?",
+        "ask": "수성페인트 롤러칠 면적은 몇 ㎡입니까? (칠 횟수는 별도 입력)",
         "source": "PDF 637쪽 11-2-2 표 단위 (㎡당) 및 [주] ①"
       },
       {
@@ -31,6 +31,17 @@
         "required": true,
         "ask": "천장 작업입니까? (천장 작업 시 품 20% 가산)",
         "source": "PDF 637쪽 11-2-2 표 비고"
+      },
+      {
+        "name": "coat_count",
+        "type": "nonnegative_integer",
+        "minimum": 1,
+        "allowed_values": "1 이상의 정수",
+        "unit": "회",
+        "required": true,
+        "ask": "수성페인트를 몇 회 칠합니까?",
+        "text_pattern": "(?<![\\d.+-])([0-9]+)\\s*회",
+        "source": "p693-x10: 본 품은 1회 칠 기준"
       }
     ],
     "tables": [
@@ -75,10 +86,16 @@
             "change": "천장은 본 품의 20%를 가산한다.",
             "source": "PDF 637쪽 11-2-2 표 비고"
           }
-        ]
+        ],
+        "repeat_input": "coat_count",
+        "repeat_basis": {
+          "chunk_id": "p693-x10",
+          "quote": "본 품은 수성페인트를 1회 칠하는 기준이다."
+        }
       },
       "steps": [
         "p693-t1에서 직종별 단위당 품을 찾는다.",
+        "1회 기준 단위당 품에 확인한 칠 횟수(coat_count)를 곱한다.",
         "천장 작업(is_ceiling=true)인 경우 단위당 품에 20%를 가산한다.",
         "단위당 품에 물량(quantity)을 곱하여 총 투입 인·일을 구한다."
       ],

@@ -11,6 +11,24 @@ from __future__ import annotations
 
 import json
 
+
+def field_active(field: dict, values: dict, fields: dict, seen=()) -> bool:
+    """상위 조건까지 맞을 때만 종속 입력을 요구하거나 계산에 사용한다."""
+    when = field.get("when")
+    if not when:
+        return True
+    parent = when["input"]
+    if parent in seen:
+        return False
+    actual, expected = values.get(parent), when["equals"]
+    if type(expected) is int and isinstance(actual, str):
+        try:
+            actual = int(actual)
+        except ValueError:
+            return False
+    return (actual == expected
+            and field_active(fields.get(parent, {}), values, fields, (*seen, parent)))
+
 # 가격 단계에서만 읽는 명세 키. 여기 나오는 이름은 품 계산에 쓰인 것으로 보지 않는다.
 _PRICE_KEYS = {"inputs", "supply_rules", "cost_rules"}
 
