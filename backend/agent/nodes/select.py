@@ -24,6 +24,9 @@ def _explicit_candidate(query: str, candidates: list[dict], specs: dict) -> dict
     if len(named_trades) > 1:
         return None
     requested_trade = next((term for term in ("수성페인트", "유성페인트", "페인트", "도장") if term in query), None)
+    # "페인트"처럼 수성·유성을 구별하지 않은 요청은 후보 순위만으로 확정하지 않는다.
+    if requested_trade not in ("수성페인트", "유성페인트"):
+        return None
     all_named = {division for (division, _), entries in specs.items()
                  if any(method in " ".join((entry.get("title", ""), entry.get("work", "")))
                         and (not requested_trade or requested_trade in " ".join((entry.get("title", ""), entry.get("work", ""))))
@@ -36,7 +39,7 @@ def _explicit_candidate(query: str, candidates: list[dict], specs: dict) -> dict
         entries = specs.get((candidate["division"], candidate["section_no"]), [])
         text = " ".join([candidate.get("section", ""), *(s.get("title", "") for s in entries),
                          *(s.get("work", "") for s in entries)])
-        if method in text and requested_trade:
+        if method in text and requested_trade and requested_trade in text:
             method_candidates.append(candidate)
     if len(method_candidates) != 1:
         return None

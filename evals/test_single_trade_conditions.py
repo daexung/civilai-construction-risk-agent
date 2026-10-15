@@ -70,6 +70,38 @@ class SingleTradeConditions(unittest.TestCase):
             result = decide(hits, specs, query=query)
             self.assertNotEqual(result['decision'], 'chosen', query)
 
+    def test_explicit_candidate_requires_trade_and_method_match(self):
+        specs = copy.deepcopy(specs_by_section())
+        oil = copy.deepcopy(spec('11-2-2'))
+        oil.update(id='test/oil-paint-roller', section_no='11-2-5',
+                   title='유성페인트 롤러칠', work='유성페인트 롤러칠')
+        specs[('건축', '11-2-5')] = [oil]
+
+        def select_for(query, sections):
+            hits = [{'section_no': section, 'division': '건축', 'rank': rank,
+                     'section': section, 'chunk_id': f'{section}-chunk'}
+                    for rank, section in enumerate(sections, 1)]
+            return decide(hits, specs, query=query)
+
+        # A matching method with the wrong paint type is not an exact candidate.
+        for query, sections in (
+                ('수성페인트 롤러칠 2회 1㎡', ('11-2-5', '11-2-1')),
+                ('유성페인트 롤러칠 2회 1㎡', ('11-2-2', '11-2-1'))):
+            result = select_for(query, sections)
+            self.assertEqual(result['decision'], 'provisional', query)
+
+        # A matching candidate may be selected even when a different paint type
+        # is also present among the search candidates.
+        result = select_for('수성페인트 롤러칠 2회 1㎡', ('11-2-5', '11-2-2', '11-2-1'))
+        self.assertEqual(result['decision'], 'chosen')
+        self.assertEqual(result['selected']['section_no'], '11-2-2')
+
+        # Generic paint type and missing method stay as clarification questions.
+        result = select_for('페인트 롤러칠 1㎡', ('11-2-2', '11-2-5'))
+        self.assertEqual(result['decision'], 'provisional')
+        result = select_for('수성페인트 칠하기 1㎡', ('11-2-1', '11-2-2'))
+        self.assertEqual(result['decision'], 'provisional')
+
     def test_same_work_name_across_divisions_keeps_confirmation(self):
         specs = dict(specs_by_section())
         duplicate = copy.deepcopy(specs[("건축", "11-2-2")][0])
