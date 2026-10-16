@@ -1,0 +1,102 @@
+{
+  "result": "PASS",
+  "model": "off",
+  "checks": [
+    {
+      "file": "16-review-baseline100.xlsx",
+      "items": [
+        {
+          "id": "i2_5",
+          "status": "PARTIAL",
+          "quantity": "100m2",
+          "labor": 712800,
+          "expense": 14200,
+          "direct": 727000
+        },
+        {
+          "id": "i16_29",
+          "status": "PRICED",
+          "quantity": "2개",
+          "labor": 1803398,
+          "expense": 36066,
+          "direct": 1839464
+        }
+      ],
+      "indirect_labor": 440334,
+      "indirect_cost_rows": 1,
+      "total": 4821789
+    },
+    {
+      "file": "17-review-latest120.xlsx",
+      "items": [
+        {
+          "id": "i2_5",
+          "status": "PARTIAL",
+          "quantity": "120m2",
+          "labor": 855360,
+          "expense": 17040,
+          "direct": 872400
+        },
+        {
+          "id": "i16_29",
+          "status": "PRICED",
+          "quantity": "2개",
+          "labor": 1803398,
+          "expense": 36066,
+          "direct": 1839464
+        }
+      ],
+      "indirect_labor": 465282,
+      "indirect_cost_rows": 1,
+      "total": 5094969
+    },
+    {
+      "file": "18-review-earlier-button120.xlsx",
+      "items": [
+        {
+          "id": "i2_5",
+          "status": "PARTIAL",
+          "quantity": "120m2",
+          "labor": 855360,
+          "expense": 17040,
+          "direct": 872400
+        },
+        {
+          "id": "i16_29",
+          "status": "PRICED",
+          "quantity": "2개",
+          "labor": 1803398,
+          "expense": 36066,
+          "direct": 1839464
+        }
+      ],
+      "indirect_labor": 465282,
+      "indirect_cost_rows": 1,
+      "total": 5094969
+    },
+    {
+      "file": "19-review-refreshed120.xlsx",
+      "items": [
+        {
+          "id": "i2_5",
+          "status": "PARTIAL",
+          "quantity": "120m2",
+          "labor": 855360,
+          "expense": 17040,
+          "direct": 872400
+        },
+        {
+          "id": "i16_29",
+          "status": "PRICED",
+          "quantity": "2개",
+          "labor": 1803398,
+          "expense": 36066,
+          "direct": 1839464
+        }
+      ],
+      "indirect_labor": 465282,
+      "indirect_cost_rows": 1,
+      "total": 5094969
+    }
+  ]
+}

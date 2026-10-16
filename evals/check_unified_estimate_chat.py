@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import os
 import sys
+import copy
 from pathlib import Path
 from unittest.mock import patch
 from io import BytesIO
@@ -78,6 +79,33 @@ def main() -> None:
         assert item_ids == [f"i{row['evidence']['start']}_{row['evidence']['end']}"
                             for row in sorted(analysis["work_items"], key=lambda row: row["evidence"]["start"])]
         assert saved["pending"] and all("::" in q["field"] for q in saved["pending"])
+
+        # A free-text condition/quantity answer that also explicitly names the
+        # other trade must retain that explicit target. The uniquely matching
+        # pending question belongs to the paint item; the waterproof sibling
+        # must receive the requested edit and the paint item must stay intact.
+        paint_id, waterproof_id = item_ids
+        target_probe = copy.deepcopy(saved)
+        target_probe["pending"] = [{"field": f"{paint_id}::quantity", "item_id": paint_id,
+                                    "scope": "item", "ref": "quantity@probe@1"}]
+        before_target = {key: copy.deepcopy(target_probe["session"]["items"][key]) for key in item_ids}
+        with patch.object(tools, "retrieve", side_effect=lambda query: {"hits": [_mock_hit(query["query"])]}):
+            targeted = dialogue.run_turn(target_probe, {"message": "실내 방수 21㎡로 바꿔"})
+        after_target = targeted["session"]["items"]
+        assert after_target[waterproof_id]["quantity"]["value"] == "21"
+        assert after_target[waterproof_id]["input_revision"] > before_target[waterproof_id]["input_revision"]
+        assert after_target[paint_id] == before_target[paint_id]
+        print("PASS explicit sibling target takes precedence over a unique pending-answer match")
+
+        ambiguous_probe = copy.deepcopy(saved)
+        ambiguous_probe["pending"] = [
+            {"field": f"{item_id}::quantity", "item_id": item_id, "scope": "item",
+             "ref": f"quantity@{item_id}@probe@1"} for item_id in item_ids]
+        before_ambiguous = {key: copy.deepcopy(ambiguous_probe["session"]["items"][key]) for key in item_ids}
+        ambiguous = dialogue.run_turn(ambiguous_probe, {"message": "21㎡로 바꿔"})
+        assert any(question["field"] == "target_item" for question in ambiguous["pending"])
+        assert all(ambiguous["session"]["items"][key] == before_ambiguous[key] for key in item_ids)
+        print("PASS ambiguous pending-answer match asks which item and leaves both unchanged")
 
     # Same question fields on the two trades must have distinct refs. A swapped
         # cross-item ref is rejected and leaves both item revisions unchanged.
@@ -173,6 +201,47 @@ def main() -> None:
         assert "오래되었거나" in stale["answer"]
         assert after_revisions == {item_id: stale_state["session"]["items"][item_id]["input_revision"] for item_id in item_ids}
         print("PASS target confirmation edits one item, preserves its sibling, and rejects stale refs")
+
+        # Reproduce the reported ordinary follow-up verbatim. Handle only the
+        # server's normal target/scope/confirmation cards, then require the
+        # selected paint item's quantity to change while the sibling stays fixed.
+        exact_edit = "수성페인트 롤러칠 면적만 120㎡로 변경해줘. 셔터 조건과 수량은 그대로 유지해줘."
+        before_sibling = copy.deepcopy(edited_state["session"]["items"][sibling_id])
+        before_paint = copy.deepcopy(edited_state["session"]["items"][paint_id])
+        before_total = edited_state["session"]["aggregate_result"]["direct_total"]
+        exact_reply = dialogue_service.respond(graph, thread_id, {"message": exact_edit})
+        for _ in range(5):
+            exact_state = dialogue.load(graph, thread_id)
+            pending = exact_state.get("pending") or []
+            if not pending:
+                break
+            answers, refs = {}, {}
+            for question in pending:
+                field = question["field"]
+                if field == "target_item":
+                    value = next(choice for choice in question["choices"] if "수성페인트" in choice)
+                elif field == "scope":
+                    value = next((choice for choice in question["choices"] if "지금 견적" in choice), question["choices"][0])
+                else:
+                    value = question["choices"][0] if question.get("choices") else "계산하기"
+                answers[field], refs[field] = value, question["ref"]
+            exact_reply = dialogue_service.respond(graph, thread_id, {"answers": answers, "refs": refs})
+        exact_state = dialogue.load(graph, thread_id)
+        exact_items = exact_state["session"]["items"]
+        assert exact_items[paint_id]["quantity"]["value"] == "120", {
+            "paint_id": paint_id, "paint_qty": exact_items[paint_id].get("quantity"),
+            "sibling_id": sibling_id, "sibling_qty": exact_items[sibling_id].get("quantity"),
+            "pending": [(q.get("field"), q.get("ask")) for q in exact_state.get("pending") or []],
+            "target_choices": exact_state.get("target_choices"), "answer": exact_reply.get("answer"),
+        }
+        assert exact_items[sibling_id]["quantity"] == before_sibling["quantity"]
+        assert exact_items[sibling_id]["conditions"] == before_sibling["conditions"]
+        assert exact_items[sibling_id]["computed_result"] == before_sibling["computed_result"]
+        assert exact_items[paint_id]["input_revision"] > before_paint["input_revision"]
+        assert exact_items[paint_id]["computed_result"] != before_paint["computed_result"]
+        assert exact_state["session"]["aggregate_result"]["direct_total"] != before_total
+        assert not exact_state.get("pending")
+        print("PASS exact paint-only 120㎡ follow-up preserves sibling quantity and conditions")
 
     # Repeated work names at different positions remain distinct source items.
     repeated = "내부 도장 100㎡ 그리고 외부 도장 20㎡"

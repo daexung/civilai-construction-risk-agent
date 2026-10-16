@@ -29,6 +29,7 @@ FREE_CARD_ANSWER_LIMIT = 30
 
 def free_card_answer(graph, thread_id: str | None, request: dict) -> bool:
     """대화 lock 안에서 현재 질문과 무료 횟수를 확인한다. 판정만 하고 상태는 바꾸지 않는다."""
+    request = _single_item_request(graph, thread_id, request)
     answers, refs = request.get("answers") or {}, request.get("refs") or {}
     if (not thread_id or not answers or not refs or request.get("message")
             or request.get("conditions") is not None or request.get("restart")
@@ -46,8 +47,30 @@ def free_card_answer(graph, thread_id: str | None, request: dict) -> bool:
     return all(name in pending and pending[name] == ref for name, ref in refs.items())
 
 
+def _single_item_request(graph, thread_id: str | None, request: dict) -> dict:
+    """한 항목 대화에서 예전 카드 필드명을 내부 항목별 키로 바꾼다."""
+    state = dialogue.load(graph, thread_id) if thread_id else None
+    session = (state or {}).get("session") or {}
+    order = session.get("item_order") or []
+    if len(order) != 1:
+        return request
+    item_id = order[0]
+    aliases = {question["field"].split("::", 1)[1]: question["field"]
+               for question in (state.get("pending") or [])
+               if question.get("field", "").startswith(f"{item_id}::")}
+    if not aliases:
+        return request
+    normalized = dict(request)
+    for key in ("answers", "refs"):
+        values = request.get(key)
+        if isinstance(values, dict):
+            normalized[key] = {aliases.get(name, name): value for name, value in values.items()}
+    return normalized
+
+
 def respond(graph, thread_id: str, request: dict) -> dict:
     """한 턴을 실행해 저장하고 응답을 만든다. 턴 중 예외가 나면 저장하지 않고 직전 상태를 유지한다."""
+    request = _single_item_request(graph, thread_id, request)
     state = graph.invoke({"request": request}, dialogue.config(thread_id))
     return response(thread_id, state)
 
@@ -74,6 +97,18 @@ def _question_out(question: dict) -> dict:
             "reason": question.get("reason"), "default": None, "ref": question["ref"]}
 
 
+def _public_questions(state: dict) -> list[dict]:
+    pending = state.get("pending") or []
+    session = state.get("session") or {}
+    order = session.get("item_order") or []
+    if len(order) == 1:
+        prefix = f"{order[0]}::"
+        pending = [{**question, "field": question["field"][len(prefix):]}
+                   if question.get("field", "").startswith(prefix) else question
+                   for question in pending]
+    return [_question_out(question) for question in pending]
+
+
 def legacy_state(state: dict) -> dict:
     """대화 상태 → 기존 그래프 상태 모양. 응답·표·Excel 코드를 그대로 쓰기 위한 변환이다."""
     turn = state.get("turn") or {}
@@ -83,7 +118,7 @@ def legacy_state(state: dict) -> dict:
            "llm_info": turn.get("llm_info"), "questions": [], "status": "ANSWERED", "reason": ""}
     pending = state.get("pending") or []
     if pending:
-        out.update(status="MISSING_INFO", questions=[_question_out(q) for q in pending])
+        out.update(status="MISSING_INFO", questions=_public_questions(state))
     if not session:
         return out
     item = tools._item(session)
@@ -102,7 +137,7 @@ def legacy_state(state: dict) -> dict:
     current = tools.current_estimate(session)
     labor_shown = item.get("computed_result") and all(q.get("stage") == "price" for q in pending)
     if pending:
-        out.update(status="MISSING_INFO", questions=[_question_out(q) for q in pending])
+        out.update(status="MISSING_INFO", questions=_public_questions(state))
     elif current:
         partial = current["statement"].get("status") in ("PARTIAL", "UNCALCULATED")
         out.update(status="PARTIAL" if partial else "OK", statement=current["statement"],
@@ -127,6 +162,8 @@ def response(thread_id: str, state: dict) -> dict:
         built["knowledge"] = state["turn"]["knowledge"]
     built["questions_remaining"] = len(state.get("pending") or [])
     session = state.get("session")
+    if session and len(session.get("item_order") or []) == 1 and built.get("questions"):
+        built["questions"] = built["questions"][:1]
     if session and len(session.get("item_order") or []) > 1:
         public_items, combined_units, combined_rates = [], [], []
         for item_id in session["item_order"]:

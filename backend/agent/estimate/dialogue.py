@@ -93,13 +93,15 @@ def _answers_pending(state: DialogueState, message: str) -> bool:
         return False
     changes = _rule_changes(session, message)
     spec = tools._spec(tools._item(session))
-    quantity_name = (tools._quantity_field(spec) or {}).get("name") if spec else None
+    quantity_field = tools._quantity_field(spec) if spec else None
+    quantity_name = (quantity_field or {}).get("name")
     return bool((pending | {field["name"] for field in (spec or {}).get("inputs", []) if "default" in field})
                 & set(changes.get("values") or {})) or (
         "quantity" in changes and (bool(pending & {"quantity", quantity_name})
             # 단위당 답변에서 생략한 물량도 나중에 같은 단위로 말하면 조건 답으로 받는다.
-            or (state.get("goal") == "labor" and quantity_name not in tools._item(session).get("conditions", {})
-                and tools.unit_key(changes["quantity"].get("unit")) == tools.unit_key((tools._quantity_field(spec) or {}).get("unit")))))
+            or (state.get("goal") == "labor" and quantity_field
+                and quantity_name not in tools._item(session).get("conditions", {})
+                and tools.unit_key(changes["quantity"].get("unit")) == tools.unit_key(quantity_field.get("unit")))))
 
 
 def _is_lookup(state: DialogueState, message: str) -> bool:
@@ -321,7 +323,9 @@ def _run_tool_impl(state: DialogueState, name: str, args: dict, message: str, bu
     if session is None:
         return {"status": "error", "data": {"reason": "견적을 먼저 시작해야 합니다(find_work)"}}
     if name == "set_conditions":
-        if not state.get("fresh_session") and not args.get("work") and _confirmed(session)                 and not _answers_pending(state, message) and _cost_target(session, message) != "current":
+        edit_target = ("current" if state.get("aggregate_item_edit") else _cost_target(session, message))
+        if not state.get("fresh_session") and not args.get("work") and _confirmed(session) \
+                and not _answers_pending(state, message) and edit_target != "current":
             # 다른 공종(또는 모호한) 요청의 물량·조건을 지금 견적에 넣지 않는다(LLM이 불러도 같다).
             # 후보 공종으로 바꾸는 요청(args.work)은 set_conditions가 후보인지 검증한다.
             return {"status": "rejected", "missing": [], "rejected": {}, "data": {
@@ -501,7 +505,11 @@ def _rule_actions(state: DialogueState, message: str, answered: bool) -> list[tu
     if route == "out_of_scope" and not _answers_pending(state, message):  # 진행 중인 견적을 범위 밖 질문으로 바꾸지 않는다
         return []
     # 어느 견적인지 먼저 정한다. 새 공종 문장의 물량·조건('자동문 3개소')을 지금 견적에 반영하지 않기 위해서다.
-    target = _cost_target(session, message) if _confirmed(session) and not _answers_pending(state, message) else "current"
+    # The parent multi-item runner has already selected this child as the edit
+    # target. Sibling names in a preservation clause must not reopen the
+    # current-vs-new-work decision inside that selected item.
+    target = ("current" if state.get("aggregate_item_edit") else
+              _cost_target(session, message) if _confirmed(session) and not _answers_pending(state, message) else "current")
     if route == "estimate" and target == "new":  # 새 세션을 만든 뒤 새 문장의 물량을 반영한다
         return _start_actions(state, message, route)
     if route == "estimate" and target == "ambiguous":  # 확인 전에는 물량·조건을 포함해 지금 상태를 바꾸지 않는다
@@ -564,7 +572,10 @@ def _rule_quantity(message: str, per_unit: bool = True) -> dict | None:
 def _rule_changes(session: dict, message: str) -> dict:
     """사용자 문장에서 서버 파서로 읽은 물량·조건 변경. 근거는 문장 그대로다."""
     changes: dict = {}
-    quantity = _rule_quantity(message, per_unit=False)
+    # Parse quantity against this selected work's quantity unit. A follow-up
+    # may mention a sibling quantity solely to preserve it (for example, paint
+    # 120㎡ while keeping shutter quantity at 2개).
+    quantity = _request_quantity(session, message)
     if quantity:
         changes["quantity"] = quantity
     spec = tools._spec(tools._item(session))
@@ -1065,6 +1076,21 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
     stale_fields = [name for name in answers if name not in current_refs or refs.get(name) != current_refs.get(name)]
     target_item_id = None
     target_message = message
+    pending_answer_items = []
+    if message and not request.get("_multi_start"):
+        for item_id in session["item_order"]:
+            view = copy.deepcopy(session)
+            view["items"] = {item_id: copy.deepcopy(session["items"][item_id])}
+            view["item_order"] = [item_id]
+            view["active_item_id"] = item_id
+            child = new_dialogue()
+            child.update(session=view, goal=working.get("goal"), route="estimate",
+                         pending=[{**question, "field": question["field"].split("::", 1)[1]}
+                                  for question in working.get("pending") or []
+                                  if question.get("item_id") == item_id and "::" in question["field"]])
+            if _answers_pending(child, message):
+                pending_answer_items.append(item_id)
+    ambiguous_pending_answer = len(pending_answer_items) > 1
     if answers.get("target_item") is not None:
         choices = working.get("target_choices") or {}
         question = next((q for q in working.get("pending") or [] if q.get("field") == "target_item"), None)
@@ -1081,7 +1107,7 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
     elif message and not request.get("_multi_start"):
         route = _rule_route(message, working.get("route"))
         is_edit = bool(_CHANGE_WORDS.search(message) or _rule_quantity(message, per_unit=False))
-        if route == "qa" and not is_edit:
+        if route == "qa" and not is_edit and not pending_answer_items:
             qa = new_dialogue()
             qa["route"] = "qa"
             qa_result = run_turn(qa, {"message": message, "_multi_item_id": "qa",
@@ -1103,9 +1129,15 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
         scored.sort(reverse=True)
         if len(explicit) == 1:
             target_item_id = explicit[0]
+        elif len(session["item_order"]) == 1 and is_edit:
+            # Preserve the established single-estimate edit flow: with only
+            # one item, its target is unambiguous and needs no target card.
+            target_item_id = session["item_order"][0]
         elif scored and (len(scored) == 1 or scored[0][0] > scored[1][0]):
             target_item_id = scored[0][1]
-        elif is_edit or route == "estimate":
+        elif len(pending_answer_items) == 1:
+            target_item_id = pending_answer_items[0]
+        elif ambiguous_pending_answer or is_edit or route == "estimate":
             choices = {f"{i + 1}. {session['items'][item_id].get('request_text', item_id)}": item_id
                        for i, item_id in enumerate(session["item_order"])}
             qid = "target_item"
@@ -1164,13 +1196,13 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
                     supplied[raw_field] = answers[composite]
                     supplied_refs[raw_field] = question["ref"].split("::", 1)[-1]
         first_run = should_process_all and not item.get("hits") and not item.get("candidates")
-        if item_questions and not supplied and not is_continue and not first_run:
+        targeted_edit = target_item_id == item_id and bool(target_message)
+        if item_questions and not supplied and not is_continue and not first_run and not targeted_edit:
             new_pending.extend(item_questions)
             continue
         if item.get("status") in ("PRICED", "UNSUPPORTED", "NOT_FOUND", "BLOCKED", "ERROR") \
                 and not supplied and not first_run and target_item_id != item_id:
             continue
-        targeted_edit = target_item_id == item_id and bool(target_message)
         if not first_run and not supplied and not is_continue and not targeted_edit:
             # A tool budget stop is resumable only by an explicit Continue card.
             if item.get("status") == "NEEDS_WORK" and budget.tool_calls >= MAX_TOOL_CALLS:
@@ -1197,7 +1229,12 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
         substate = new_dialogue()
         view["active_item_id"] = item_id
         substate.update(session=view, goal=working.get("goal") or "cost", route="estimate",
-                        aggregate_parent=True)
+                        aggregate_parent=True,
+                        aggregate_item_edit=target_item_id == item_id and bool(target_message),
+                        # Child turn refs share the persisted conversation's
+                        # monotonic revision. Resetting to new_dialogue()'s 0
+                        # would let an old card ref survive an item edit.
+                        pending_revision=working.get("pending_revision", 0))
         substate["pending"] = [{**q, "field": q["field"].split("::", 1)[1],
                                 "ref": q["ref"].split("::", 1)[-1]} for q in item_questions
                                if not q["field"].endswith("::continue")]
