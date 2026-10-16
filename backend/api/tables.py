@@ -214,7 +214,7 @@ def add_tables(response: dict) -> dict:
             "rate_rows": rate_rows(response.get("priced"), response.get("statement"), response.get("conditions"))}
 
 
-def _cost_statement_rows(tables: dict, statement: dict) -> list[list]:
+def _cost_statement_rows(tables: dict, statement: dict, response: dict | None = None) -> list[list]:
     """원가계산서의 실무 행을 고정된 다섯 열로 만든다."""
     totals = statement.get("totals", {})
     contract_amount = totals.get("contract_amount")
@@ -223,6 +223,11 @@ def _cost_statement_rows(tables: dict, statement: dict) -> list[list]:
     output = []
 
     def add(major: str, minor: str, amount, basis: str = "", status: str = "산정") -> None:
+        if (response and response.get("multi_trade_items") and major == "재료비" and minor == "직접재료비"
+                and amount == 0 and any((item.get("priced") or {}).get("reference_amounts", {})
+                                        .get("subtotals", {}).get("재료비") is None
+                                        for item in response["multi_trade_items"])):
+            basis = "포함분 0원 · 별도 공종 재료 미산정"
         excluded = status in ("제외", "미산정")
         value = None if excluded else _num(amount)
         ratio = None
@@ -309,6 +314,11 @@ def _missing_cost_rows(response: dict, cost_rows: list[list]) -> list[list[str]]
     result = response.get("result") or {}
     for item in result.get("not_calculated", []):
         add(item.get("item", ""), "미산정", item.get("source") or "이번 계산에서 미산정")
+    for scope in response.get("multi_trade_items", []):
+        item_id = scope.get("item_id", "")
+        for item in scope.get("not_calculated_scope", []):
+            add(f"{item_id} · {item.get('name') or item.get('item') or '범위'}", "미산정",
+                item.get("reason") or item.get("source") or "이번 계산에서 미산정")
     return rows
 
 
@@ -328,6 +338,8 @@ _FOOTER = "표준품셈 기준 금액 · 검토 전 참고용 · 품셈이"
 
 def _work_name(response: dict) -> str:
     work = response.get("work") or {}
+    if response.get("multi_trade_items"):
+        return "복수 공종 견적"
     title = work.get("title") or "공사비"
     if work.get("spec_id"):
         from backend.agent.rules.specs import load_specs
@@ -354,14 +366,24 @@ def _metadata(response: dict) -> tuple[str, str]:
     work_category = conditions.get("work_category", {})
     scale = conditions.get("project_scale", {}).get("value", "이 견적만")
     scale_text = "단독 공사" if scale == "이 견적만" else f"전체 공사 {int(scale):,}원"
-    summary = " · ".join(part for part in (
-        work_category.get("group") or work_category.get("value"),
-        conditions.get("duration", {}).get("value"),
-        conditions.get("contractor_type", {}).get("value"), scale_text) if part)
+    if response.get("multi_trade_items"):
+        field_labels = {"work_category": "공사 종류", "duration": "공사 기간",
+                        "contractor_type": "시공사 업종", "project_scale": "전체 공사 규모"}
+        source_labels = {"default_division": "부문 기본값", "default": "명세 기본값",
+                         "plan": "계획 입력", "answer": "사용자 답"}
+        summary = " · ".join(
+            f"{field_labels.get(name, name)}: {entry.get('value')} (출처: {source_labels.get(entry.get('source'), entry.get('source') or '기본값')})"
+            for name, entry in conditions.items())
+    else:
+        summary = " · ".join(part for part in (
+            work_category.get("group") or work_category.get("value"),
+            conditions.get("duration", {}).get("value"),
+            conditions.get("contractor_type", {}).get("value"), scale_text) if part)
     qty = f" {quantity}{unit}" if quantity is not None else ""
     basis_date = response.get("basis_date") or date.today().isoformat()
     review = (response.get("result") or {}).get("review_status")
-    badge = f" | {review}" if review == "AI 초안 · 검토 전" else ""
+    badge = (f" | {review}" if review else "") if response.get("multi_trade_items") else (
+        " | AI 초안 · 검토 전" if review == "AI 초안 · 검토 전" else "")
     return (f"공사명: {_work_name(response)}{qty}",
             f"기준일: {basis_date} | 조건 요약: {summary}{badge}")
 
@@ -417,26 +439,44 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
         or conditions.get("work_category", {}).get("value"),
         conditions.get("duration", {}).get("value"),
         conditions.get("contractor_type", {}).get("value"), scale_text) if part)
+    if response.get("multi_trade_items"):
+        field_labels = {"work_category": "공사 종류", "duration": "공사 기간",
+                        "contractor_type": "시공사 업종", "project_scale": "전체 공사 규모"}
+        source_labels = {"default_division": "부문 기본값", "default": "명세 기본값",
+                         "plan": "계획 입력", "answer": "사용자 답"}
+        condition_lines = [
+            f"{field_labels.get(name, name)}: {entry.get('value')} (출처: {source_labels.get(entry.get('source'), entry.get('source') or '기본값')})"
+            for name, entry in conditions.items()]
+        condition_summary = "\n".join(condition_lines)
     basis_date = response.get("basis_date") or date.today().isoformat()
 
     sheet["A2"] = f"공사명 : {project}"
     sheet["A3"] = f"기 준 일 : {basis_date}"
     sheet.merge_cells("A4:C4")
     review = (response.get("result") or {}).get("review_status")
-    badge = " | AI 초안 · 검토 전" if review == "AI 초안 · 검토 전" else ""
+    badge = (f" | {review}" if review else "") if response.get("multi_trade_items") else (
+        " | AI 초안 · 검토 전" if review == "AI 초안 · 검토 전" else "")
+    if response.get("multi_trade_items") and badge:
+        badge = f"\n상태:{badge.strip(' |')}"
     sheet["A4"] = f"조    건 : {condition_summary}{badge}"
+    sheet["A4"].alignment = Alignment(vertical="top", wrap_text=True)
+    condition_lines = condition_summary.count("\n") + 1 + (1 if badge.startswith("\n") else 0)
+    sheet.row_dimensions[4].height = (max(25, 18 * condition_lines) if response.get("multi_trade_items") else 25)
 
     totals = (response.get("statement") or {}).get("totals") or {}
     contract = totals.get("contract_amount")
     amount_text = ""
     if contract is not None:
-        amount_text = f"견적금액 : 일금 {won_in_korean(contract)}원정 (₩{int(contract):,})   ※ 부가가치세 포함"
+        if response.get("multi_trade_items") and (response.get("result") or {}).get("review_status") == "부분 산정":
+            amount_text = f"부분 산정 금액(미산정 항목 제외): 일금 {won_in_korean(contract)}원정 (₩{int(contract):,})   ※ 부가가치세 포함"
+        else:
+            amount_text = f"견적금액 : 일금 {won_in_korean(contract)}원정 (₩{int(contract):,})   ※ 부가가치세 포함"
     sheet.merge_cells("A6:C6")
     sheet["A6"] = amount_text
-    sheet["A6"].font = Font(name=_FONT_NAME, size=13, bold=True)
+    sheet["A6"].font = Font(name=_FONT_NAME, size=12 if response.get("multi_trade_items") else 13, bold=True)
     sheet["A6"].alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
     sheet["A6"].border = Border(left=_DOUBLE, right=_DOUBLE, top=_DOUBLE, bottom=_DOUBLE)
-    sheet.row_dimensions[6].height = 34
+    sheet.row_dimensions[6].height = 40 if response.get("multi_trade_items") else 34
 
     header_row = 8
     for column, label in enumerate(("구 분", "금 액(원)", "비 고"), 1):
@@ -448,8 +488,14 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
                             for row in (response.get("tables") or {}).get("rate_rows", []))
     ready_mix = next((line for line in (response.get("priced") or {}).get("supply_lines", [])
                       if line.get("status") == "산정" and line.get("unit_price") is not None), None)
+    material_note = ""
+    if (response.get("multi_trade_items") and totals.get("materials") == 0
+            and any((item.get("priced") or {}).get("reference_amounts", {})
+                    .get("subtotals", {}).get("재료비") is None
+                    for item in response["multi_trade_items"])):
+        material_note = "포함된 재료비 0원 · 별도 공종 재료 미산정"
     entries = (
-        ("재료비", "materials", ""),
+        ("재료비", "materials", material_note),
         ("노무비", "labor", "직접 + 간접 노무비"),
         ("경비", "expenses", "장비·보험료·기타경비 등"),
         ("일반관리비", "management", ""),
@@ -489,7 +535,7 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
         sheet.cell(total_row, column).border = Border(left=_THIN, right=_THIN, top=_DOUBLE, bottom=_DOUBLE)
 
     missing = [item for item in _missing_cost_rows(response, _cost_statement_rows(
-        (response.get("tables") or {}), response.get("statement") or {})) if item[1] == "미산정"]
+        (response.get("tables") or {}), response.get("statement") or {}, response)) if item[1] == "미산정"]
     next_row = total_row + 2
     if missing:
         item, _status, reason = missing[0]
@@ -515,7 +561,8 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
     sheet.row_dimensions[1].height = 38
     sheet.row_dimensions[2].height = 25
     sheet.row_dimensions[3].height = 22
-    sheet.row_dimensions[4].height = 25
+    sheet.row_dimensions[4].height = (max(25, 18 * condition_lines)
+                                      if response.get("multi_trade_items") else 25)
     sheet.row_dimensions[header_row].height = 24
     for column, width in enumerate((28, 20, 52), 1):
         sheet.column_dimensions[get_column_letter(column)].width = width
@@ -771,6 +818,38 @@ def _unit_export_rows(response: dict, unit_rows: list[dict]) -> tuple[list[list]
     return rows, 6
 
 
+def _multi_unit_export_rows(items: list[dict]) -> tuple[list[list], int]:
+    """Preserve each stable item ID and its own unit basis in the existing unit-price sheet."""
+    rows = []
+    category_columns = {"노무비": (7, 8), "재료비": (9, 10), "경비": (11, 12)}
+    for number, item in enumerate(items, 1):
+        priced = item.get("priced") or {}
+        quantity = item.get("quantity") or {}
+        unit = quantity.get("unit") or "단위 미확인"
+        item_id = item.get("item_id", "")
+        title = f"제 {number}호표 [{item_id}] {item.get('request_text', '')} ({unit} 당)"
+        unit_prices = priced.get("unit_prices") or {}
+        rows.append([title, None, None, None, None, _num(priced.get("total")), None,
+                     _num(unit_prices.get("노무비")), None, _num(unit_prices.get("재료비")),
+                     None, _num(unit_prices.get("경비")), None])
+        for entry in unit_price_rows(priced):
+            status = entry.get("status") or ("산정" if entry.get("amount") is not None else "미산정")
+            muted = status in ("제외", "미산정")
+            amount = None if muted else _num(entry.get("amount"))
+            unit_price = None if muted else _num(entry.get("unit_price"))
+            note = (f"{status} · {entry.get('reason') or ''}".strip(" ·") if muted
+                    else _unit_citation_source(entry.get("citations")))
+            spec = "" if entry.get("category") == "노무비" else entry.get("spec", "")
+            values = [entry.get("name", ""), spec, _num(entry.get("quantity")), entry.get("unit", ""),
+                      None, amount, None, None, None, None, None, None, note]
+            columns = category_columns.get(entry.get("category"))
+            if columns:
+                values[columns[0] - 1] = unit_price
+                values[columns[1] - 1] = amount
+            rows.append(values)
+    return rows, 6
+
+
 def _basis_rows(response: dict) -> list[list]:
     result = response.get("result") or {}
     statement = response.get("statement") or {}
@@ -835,6 +914,32 @@ def _basis_rows(response: dict) -> list[list]:
             basis.append([entry["label"], None, f"명세 기본값 적용: {entry['value']}", entry["source"]])
     if result.get("assumptions"):
         basis.append(["가정", None, result["assumptions"], "기본값"])
+    for item in response.get("multi_trade_items", []):
+        item_id = item.get("item_id", "")
+        labor = item.get("labor") or {}
+        item_basis = ((labor.get("unit_basis") or {}).get("per") or "1 단위")[1:]
+        for line in labor.get("unit_lines", []):
+            basis.append([f"[{item_id}] {line.get('name')} 1{item_basis}당 ({line.get('unit')})",
+                          _num(line.get("applied")), line.get("formula", ""),
+                          f"{line.get('rule', '')}; {_citation_source(line.get('citations')) or line.get('source', '')}"])
+            for adjustment in line.get("adjustments", []):
+                basis.append([f"[{item_id}] {line.get('name')} {adjustment.get('종류')}", adjustment.get("값"),
+                              adjustment.get("원문 인용", ""), _citation_source(adjustment.get("citations", []))])
+        for memo in labor.get("adjustment_memos", []):
+            basis.append([f"[{item_id}] 할증 참고", "", memo, "자동 계산 없음"])
+        for scope in item.get("not_calculated_scope", []):
+            basis.append([f"[{item_id}] 미산정 범위", scope.get("name") or scope.get("item"),
+                          scope.get("reason") or scope.get("source"), "미산정"])
+        for key, label in (("rate_version", "노임 기준 버전"),
+                           ("equipment_rate_version", "장비 기준 버전")):
+            version = item.get(key)
+            if version:
+                basis.append([f"[{item_id}] {label}", version.get("id") or version.get("version"),
+                              version.get("title", ""),
+                              f"{version.get('effective_from', '')} ~ {version.get('effective_to') or '현재'}"])
+    overhead = (statement.get("overhead_version") or {})
+    if overhead:
+        basis.append(["통합 제비율 기준 버전", overhead.get("id"), "", overhead.get("effective_from", "")])
     return basis
 
 
@@ -863,7 +968,7 @@ def build_xlsx(response: dict) -> bytes:
     headers = ["비목", "구분", "금액", "구성비", "비고(산출 근거)"]
     for column, value in enumerate(headers, 1):
         sheet.cell(4, column, value)
-    cost_rows = _cost_statement_rows(tables, statement)
+    cost_rows = _cost_statement_rows(tables, statement, response)
     for values in cost_rows:
         sheet.append(values[:4] + [values[4]])
         if values[0] in ("순공사원가", "총원가", "도급액") and not values[1]:
@@ -911,7 +1016,44 @@ def build_xlsx(response: dict) -> bytes:
                     [("품 명", 1), ("규 격", 2), ("단위", 3), ("수량", 4), ("비고", 13)])
     bill = tables.get("bill") or {}
     bill_rows = []
-    if bill:
+    multi_items = response.get("multi_trade_items") or []
+    if multi_items:
+        sums = {"재료비": 0, "노무비": 0, "경비": 0}
+        missing_material = False
+        direct_total = 0
+        for number, item in enumerate(multi_items, 1):
+            priced_item = item.get("priced") or {}
+            reference = priced_item.get("reference_amounts") or {}
+            subtotals = reference.get("subtotals") or {}
+            unit_prices = priced_item.get("unit_prices") or {}
+            quantity = item.get("quantity") or {}
+            if reference.get("total") is not None:
+                direct_total += int(reference["total"])
+            materials_amount = subtotals.get("재료비")
+            if materials_amount is None:
+                missing_material = True
+                materials_amount_display = "미산정"
+                materials_unit_display = "미산정"
+            else:
+                sums["재료비"] += int(Decimal(str(materials_amount)))
+                materials_amount_display = _num(materials_amount)
+                materials_unit_display = _num(unit_prices.get("재료비"))
+            for category in ("노무비", "경비"):
+                if subtotals.get(category) is not None:
+                    sums[category] += int(Decimal(str(subtotals[category])))
+            bill_rows.append([f"[{item.get('item_id')}] {item.get('request_text', '')}",
+                              item.get("item_id", ""), quantity.get("unit", ""),
+                              _num(quantity.get("value")), materials_unit_display, materials_amount_display,
+                              _num(unit_prices.get("노무비")), _num(subtotals.get("노무비")),
+                              _num(unit_prices.get("경비")), _num(subtotals.get("경비")),
+                              _num(priced_item.get("total")), _num(reference.get("total")),
+                              f"제 {number}호표 · {item.get('status', '')}"])
+        bill_rows.append(["합계(공종 물량 별도)", "", "", None,
+                          "미산정" if missing_material else None,
+                          "미산정" if missing_material else _num(sums["재료비"]), None,
+                          _num(sums["노무비"]), None, _num(sums["경비"]), None,
+                          _num(direct_total), "직접비 부분합계"])
+    elif bill:
         prices = bill.get("unit_price") or {}
         amounts = bill.get("amount") or {}
         total_unit = (response.get("priced") or {}).get("total")
@@ -929,7 +1071,7 @@ def build_xlsx(response: dict) -> bytes:
         bill_sheet.append(values)
     bill_start, bill_end = 6, bill_sheet.max_row
     bill_note_row = None
-    if bill and bill.get("partial"):
+    if (bill and bill.get("partial")) or any((item.get("priced") or {}).get("partial") for item in multi_items):
         bill_note_row = bill_sheet.max_row + 1
         bill_sheet.merge_cells(start_row=bill_note_row, start_column=1,
                                end_row=bill_note_row, end_column=len(bill_widths))
@@ -950,7 +1092,8 @@ def build_xlsx(response: dict) -> bytes:
     _grouped_header(unit_sheet, len(unit_widths),
                     [("계", 5, 6), ("노무비", 7, 8), ("재료비", 9, 10), ("경 비", 11, 12)],
                     [("공 종", 1), ("규 격", 2), ("수 량", 3), ("단 위", 4), ("비 고", 13)])
-    unit_rows, unit_data_start = _unit_export_rows(response, tables.get("unit_rows", []))
+    unit_rows, unit_data_start = (_multi_unit_export_rows(multi_items) if multi_items
+                                  else _unit_export_rows(response, tables.get("unit_rows", [])))
     for values in unit_rows:
         unit_sheet.append(values)
     unit_end = unit_sheet.max_row
@@ -972,6 +1115,27 @@ def build_xlsx(response: dict) -> bytes:
     for row in range(unit_data_start + 1, unit_end + 1):
         if unit_sheet.cell(row, 1).value == "펌프차 운전원":
             unit_sheet.cell(row, 7).number_format = "#,##0.0"
+
+    if multi_items:
+        detail = _new_sheet(book, "공종별상세", "공종별 산출 내역", metadata,
+                            [18, 38, 16, 12, 18, 18, 18, 18, 54], orientation="landscape")
+        headers = ["항목 ID", "공종", "상태", "수량", "재료비", "노무비", "경비", "직접비", "미산정 범위"]
+        for column, value in enumerate(headers, 1):
+            detail.cell(4, column, value)
+        for item in multi_items:
+            amounts = ((item.get("priced") or {}).get("reference_amounts") or {})
+            subtotal = amounts.get("subtotals") or {}
+            quantity = item.get("quantity") or {}
+            missing = (item.get("not_calculated_scope") or [])
+            missing_text = "; ".join(f"{entry.get('name')}: {entry.get('reason')}" for entry in missing)
+            detail.append([item.get("item_id"), item.get("request_text"), item.get("status"),
+                           f"{quantity.get('value', '')}{quantity.get('unit', '')}",
+                           ("미산정" if subtotal.get("재료비") is None else _num(subtotal.get("재료비"))), _num(subtotal.get("노무비")),
+                           _num(subtotal.get("경비")), _num(amounts.get("total")), missing_text])
+        _format_sheet(detail, 9, (4,), 5, detail.max_row,
+                      numeric_columns=(5, 6, 7, 8), money_columns=(5, 6, 7, 8))
+        detail.freeze_panes = "A5"
+        detail.print_title_rows = "4:4"
 
     # 단가대비표
     rate_widths = [16, 34, 24, 14, 16, 52, 20, 44]

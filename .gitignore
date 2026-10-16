@@ -36,3 +36,6 @@ experiments/parsing-final/out/
 
 # Temporary credentials produced by GitHub's GCP OIDC action.
 gha-creds-*.json
+
+# Local-only verification artifacts.
+.trial/
