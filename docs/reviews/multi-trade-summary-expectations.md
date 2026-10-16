@@ -13,10 +13,10 @@
 
 | Stable item ID | Work | Quantity | Materials | Labor | Expenses | Direct subtotal | Unpriced scope |
 |---|---|---:|---:|---:|---:|---:|---|
-| `w2_5` | 수성페인트 롤러칠 2회 벽면 | 100㎡ | 미산정 | 712,800원 | 14,200원 | 727,000원 | 재료 단가 미입력 |
-| `w25_27` | 실내 방수모르타르 10㎜ 바닥 | 20㎡ | 미산정 | 383,240원 | 7,660원 | 390,900원 | 재료 단가 미입력 |
+| `w2_5` | 수성페인트 롤러칠 2회 벽면 | 100㎡ | 미산정 | 712,800원 | 14,200원 | 727,000원 | 재료 산출 범위/단가 미산정 |
+| `w25_27` | 실내 방수모르타르 10㎜ 바닥 | 20㎡ | 미산정 | 383,240원 | 7,660원 | 390,900원 | 재료 산출 범위/단가 미산정 |
 
-Direct cost subtotal expected for aggregation: **1,117,900원**, partial because material prices are absent.
+Direct cost subtotal expected for aggregation: **1,117,900원**, partial because material quantity/rate scope remains uncalculated.
 
 Selected rate versions: labor `2026H2`, equipment `2026`; overhead version effective on the fixed basis date: `260413`.
 

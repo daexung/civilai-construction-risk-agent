@@ -11,7 +11,9 @@ os.environ["AGENT_LLM"] = "off"
 os.environ["LOCAL_TRIAL_ITEM_LABOR"] = "on"
 import check_item_labor_trial as base
 from openpyxl import load_workbook
+from openpyxl import Workbook
 from backend.agent.rules.specs import load_specs
+from backend.api.tables import _estimate_sheet
 from backend.agent.estimate.state import new_session, set_common
 import backend.agent.estimate.aggregate as aggregate_module
 from backend.api import item_labor_trial as api
@@ -94,6 +96,10 @@ def main():
         assert "복수 공종 견적" in book["견적서"].cell(2, 1).value
         assert "부분 산정" in book["견적서"].cell(4, 1).value
         assert "부문 기본값" in book["견적서"].cell(4, 1).value
+        assert "공사 종류" in book["견적서"].cell(4, 1).value and "work_category" not in book["견적서"].cell(4, 1).value
+        assert "\n" in book["견적서"].cell(4, 1).value and book["견적서"].row_dimensions[4].height >= 90
+        assert book["견적서"].cell(6, 1).value.startswith("부분 산정 금액(미산정 항목 제외)")
+        assert "포함된 재료비 0원 · 별도 공종 재료 미산정" in book["견적서"].cell(9, 3).value
         cost_materials = [row for row in book["원가계산서"].iter_rows(min_row=5)
                           if row[0].value == "재료비" and row[1].value == "직접재료비"]
         assert cost_materials and "별도 공종 재료 미산정" in cost_materials[0][4].value
@@ -243,6 +249,16 @@ def main():
     assert aggregate_module.aggregate(unavailable)["aggregate_result"]["status"] == "NO_RESULT"
     print("PASS common-condition conflict prompts; one shared statement call receives 200원 combined direct cost")
     print("PASS conflicting or missing rate versions block aggregation; no priced items produce NO_RESULT")
+
+    # Guard the existing single-trade cover wording while the multi-trade label changes.
+    single = {"tables": {}, "statement": {"totals": {"contract_amount": 123456}},
+              "result": {"review_status": "AI 초안 · 검토 전"}, "conditions": [],
+              "work": {"title": "단일 공종"}, "basis_date": "2026-10-16"}
+    single_book = Workbook()
+    _estimate_sheet(single_book, single)
+    assert single_book["견적서"]["A6"].value.startswith("견적금액 :")
+    assert "AI 초안 · 검토 전" in single_book["견적서"]["A4"].value
+    print("PASS single-trade cover wording and review badge remain unchanged")
     return 0
 
 if __name__ == "__main__":

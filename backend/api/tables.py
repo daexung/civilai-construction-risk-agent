@@ -367,10 +367,12 @@ def _metadata(response: dict) -> tuple[str, str]:
     scale = conditions.get("project_scale", {}).get("value", "이 견적만")
     scale_text = "단독 공사" if scale == "이 견적만" else f"전체 공사 {int(scale):,}원"
     if response.get("multi_trade_items"):
+        field_labels = {"work_category": "공사 종류", "duration": "공사 기간",
+                        "contractor_type": "시공사 업종", "project_scale": "전체 공사 규모"}
         source_labels = {"default_division": "부문 기본값", "default": "명세 기본값",
                          "plan": "계획 입력", "answer": "사용자 답"}
         summary = " · ".join(
-            f"{name}: {entry.get('value')} (출처: {source_labels.get(entry.get('source'), entry.get('source') or '기본값')})"
+            f"{field_labels.get(name, name)}: {entry.get('value')} (출처: {source_labels.get(entry.get('source'), entry.get('source') or '기본값')})"
             for name, entry in conditions.items())
     else:
         summary = " · ".join(part for part in (
@@ -380,7 +382,8 @@ def _metadata(response: dict) -> tuple[str, str]:
     qty = f" {quantity}{unit}" if quantity is not None else ""
     basis_date = response.get("basis_date") or date.today().isoformat()
     review = (response.get("result") or {}).get("review_status")
-    badge = f" | {review}" if review else ""
+    badge = (f" | {review}" if review else "") if response.get("multi_trade_items") else (
+        " | AI 초안 · 검토 전" if review == "AI 초안 · 검토 전" else "")
     return (f"공사명: {_work_name(response)}{qty}",
             f"기준일: {basis_date} | 조건 요약: {summary}{badge}")
 
@@ -437,31 +440,43 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
         conditions.get("duration", {}).get("value"),
         conditions.get("contractor_type", {}).get("value"), scale_text) if part)
     if response.get("multi_trade_items"):
+        field_labels = {"work_category": "공사 종류", "duration": "공사 기간",
+                        "contractor_type": "시공사 업종", "project_scale": "전체 공사 규모"}
         source_labels = {"default_division": "부문 기본값", "default": "명세 기본값",
                          "plan": "계획 입력", "answer": "사용자 답"}
-        condition_summary = " · ".join(
-            f"{name}: {entry.get('value')} (출처: {source_labels.get(entry.get('source'), entry.get('source') or '기본값')})"
-            for name, entry in conditions.items())
+        condition_lines = [
+            f"{field_labels.get(name, name)}: {entry.get('value')} (출처: {source_labels.get(entry.get('source'), entry.get('source') or '기본값')})"
+            for name, entry in conditions.items()]
+        condition_summary = "\n".join(condition_lines)
     basis_date = response.get("basis_date") or date.today().isoformat()
 
     sheet["A2"] = f"공사명 : {project}"
     sheet["A3"] = f"기 준 일 : {basis_date}"
     sheet.merge_cells("A4:C4")
     review = (response.get("result") or {}).get("review_status")
-    badge = f" | {review}" if review else ""
+    badge = (f" | {review}" if review else "") if response.get("multi_trade_items") else (
+        " | AI 초안 · 검토 전" if review == "AI 초안 · 검토 전" else "")
+    if response.get("multi_trade_items") and badge:
+        badge = f"\n상태:{badge.strip(' |')}"
     sheet["A4"] = f"조    건 : {condition_summary}{badge}"
+    sheet["A4"].alignment = Alignment(vertical="top", wrap_text=True)
+    condition_lines = condition_summary.count("\n") + 1 + (1 if badge.startswith("\n") else 0)
+    sheet.row_dimensions[4].height = (max(25, 18 * condition_lines) if response.get("multi_trade_items") else 25)
 
     totals = (response.get("statement") or {}).get("totals") or {}
     contract = totals.get("contract_amount")
     amount_text = ""
     if contract is not None:
-        amount_text = f"견적금액 : 일금 {won_in_korean(contract)}원정 (₩{int(contract):,})   ※ 부가가치세 포함"
+        if response.get("multi_trade_items") and (response.get("result") or {}).get("review_status") == "부분 산정":
+            amount_text = f"부분 산정 금액(미산정 항목 제외): 일금 {won_in_korean(contract)}원정 (₩{int(contract):,})   ※ 부가가치세 포함"
+        else:
+            amount_text = f"견적금액 : 일금 {won_in_korean(contract)}원정 (₩{int(contract):,})   ※ 부가가치세 포함"
     sheet.merge_cells("A6:C6")
     sheet["A6"] = amount_text
-    sheet["A6"].font = Font(name=_FONT_NAME, size=13, bold=True)
+    sheet["A6"].font = Font(name=_FONT_NAME, size=12 if response.get("multi_trade_items") else 13, bold=True)
     sheet["A6"].alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
     sheet["A6"].border = Border(left=_DOUBLE, right=_DOUBLE, top=_DOUBLE, bottom=_DOUBLE)
-    sheet.row_dimensions[6].height = 34
+    sheet.row_dimensions[6].height = 40 if response.get("multi_trade_items") else 34
 
     header_row = 8
     for column, label in enumerate(("구 분", "금 액(원)", "비 고"), 1):
@@ -473,8 +488,14 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
                             for row in (response.get("tables") or {}).get("rate_rows", []))
     ready_mix = next((line for line in (response.get("priced") or {}).get("supply_lines", [])
                       if line.get("status") == "산정" and line.get("unit_price") is not None), None)
+    material_note = ""
+    if (response.get("multi_trade_items") and totals.get("materials") == 0
+            and any((item.get("priced") or {}).get("reference_amounts", {})
+                    .get("subtotals", {}).get("재료비") is None
+                    for item in response["multi_trade_items"])):
+        material_note = "포함된 재료비 0원 · 별도 공종 재료 미산정"
     entries = (
-        ("재료비", "materials", ""),
+        ("재료비", "materials", material_note),
         ("노무비", "labor", "직접 + 간접 노무비"),
         ("경비", "expenses", "장비·보험료·기타경비 등"),
         ("일반관리비", "management", ""),
@@ -540,7 +561,8 @@ def _estimate_sheet(book: Workbook, response: dict) -> None:
     sheet.row_dimensions[1].height = 38
     sheet.row_dimensions[2].height = 25
     sheet.row_dimensions[3].height = 22
-    sheet.row_dimensions[4].height = 25
+    sheet.row_dimensions[4].height = (max(25, 18 * condition_lines)
+                                      if response.get("multi_trade_items") else 25)
     sheet.row_dimensions[header_row].height = 24
     for column, width in enumerate((28, 20, 52), 1):
         sheet.column_dimensions[get_column_letter(column)].width = width
