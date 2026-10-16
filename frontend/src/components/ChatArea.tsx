@@ -21,6 +21,12 @@ const NO_DRAFT: Record<string, { value: ChoiceValue; label: string }> = {};
 
 interface Props {
   restoring?: boolean;
+  authInitializing?: boolean;
+  authError?: string;
+  onRetryAuth?: () => void;
+  historyLoading?: boolean;
+  historyError?: string;
+  onRetryHistory?: () => void;
   ratingUserId?: string;
   onRatingSaved?: (answerId: string, value: NonNullable<ChatResponse['answer_rating']>) => void;
   usage?: UsageStatus | null;
@@ -572,7 +578,7 @@ function AssistantCard({
   );
 }
 
-function ChatAreaView({ turns, loading, restoring, generating = loading, inputDisabled, onSendMessage, onResendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved, expired, onRecover, onRetry }: Props) {
+function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onSendMessage, onResendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved, expired, onRecover, onRetry }: Props) {
   const blocked = loading || !!inputDisabled;
   const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
@@ -670,10 +676,6 @@ function ChatAreaView({ turns, loading, restoring, generating = loading, inputDi
       </button>
     </div>
   );
-
-  if (restoring) return <main className="chat-area" aria-busy="true"><div className="chat-restore-status" role="status">
-    <span className="chat-restore-spinner" aria-hidden="true" /><span>대화를 불러오고 있어요</span>
-  </div></main>;
 
   if (turns.length === 0) {
     return (
@@ -795,6 +797,15 @@ export default function ChatArea(props: Props) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [openSource]);
 
+  const navigationBlocked = !!(props.loading || props.authInitializing || props.authError
+    || props.historyLoading || props.historyError);
+  const startupStatus = props.authInitializing ? <div className="chat-startup-status" role="status">로그인 상태를 확인하고 있어요</div>
+    : props.authError ? <div className="chat-startup-status is-error" role="alert"><span>{props.authError}</span>
+      <button type="button" onClick={props.onRetryAuth}>다시 시도</button></div>
+      : props.accountLabel && props.historyLoading ? <div className="chat-startup-status" role="status">저장된 대화를 확인하고 있어요</div>
+        : props.accountLabel && props.historyError ? <div className="chat-startup-status is-error" role="alert"><span>{props.historyError}</span>
+          <button type="button" onClick={props.onRetryHistory}>다시 시도</button></div> : null;
+
   return (
     <SourcePanelContext.Provider value={setOpenSource}>
       <div className={`chat-shell${openSource ? ' with-source' : ''}`}>
@@ -803,9 +814,10 @@ export default function ChatArea(props: Props) {
           <aside id="chat-sidebar" className="chat-sidebar" aria-label="채팅 메뉴">
             <div className="chat-sidebar-brand"><a href="/" aria-label="품셈이 홈">품셈이</a><button className="chat-icon-button" aria-label="사이드바 닫기" onClick={() => setSidebarOpen(false)}><ChatIcon name="panel" /></button></div>
             <nav className="chat-nav">
-              <button className={!props.activeConversationId && !props.restoring ? 'chat-nav-active' : undefined} aria-current={!props.activeConversationId && !props.restoring ? 'page' : undefined} disabled={props.loading} onClick={newChat}><ChatIcon name="plus" />새 대화</button>
+              <button className={!props.activeConversationId && !props.restoring ? 'chat-nav-active' : undefined} aria-current={!props.activeConversationId && !props.restoring ? 'page' : undefined} disabled={navigationBlocked} onClick={newChat}><ChatIcon name="plus" />새 대화</button>
+              {sidebarOpen && startupStatus}
             </nav>
-            {!!props.conversations?.length && <nav className="chat-history" aria-label="이전 대화"><h2>대화</h2>{props.conversations.map(chat => <ChatHistoryItem key={chat.id} id={chat.id} title={chat.title} active={chat.id === props.activeConversationId} disabled={props.loading}
+            {!!props.conversations?.length && <nav className="chat-history" aria-label="이전 대화"><h2>대화</h2>{props.conversations.map(chat => <ChatHistoryItem key={chat.id} id={chat.id} title={chat.title} active={chat.id === props.activeConversationId} disabled={navigationBlocked}
               onSelect={() => { setOpenSource(null); props.onSelectConversation?.(chat.id); if (window.innerWidth < 900) setSidebarOpen(false); }}
               onDelete={() => props.onDeleteConversation?.(chat.id)} onRename={props.onRenameConversation ? () => props.onRenameConversation?.(chat.id) : undefined} />)}</nav>}
             <div className="chat-sidebar-bottom">
@@ -820,13 +832,14 @@ export default function ChatArea(props: Props) {
                     : <>오늘 남은 무료 이용 · <strong>{props.usage.remaining}회</strong></>}
                 </div>
                 <p>로그인하면 하루 20회까지 이용할 수 있어요.</p>
-                <button disabled={props.authLoading || props.loading} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button>
+                <button disabled={props.authLoading || props.loading || props.authInitializing || !!props.authError} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button>
               </div>}
             </div>
           </aside>
         </>}
         <div className="chat-workspace">
-          <header className="chat-header"><div>{!sidebarOpen && <button className="chat-icon-button" aria-label="사이드바 열기" aria-expanded={sidebarOpen} aria-controls="chat-sidebar" onClick={() => setSidebarOpen(true)}><ChatIcon name="panel" /></button>}<span>품셈이</span><span className="chat-header-caption">표준품셈 AI</span></div><button className="chat-icon-button" aria-label="새 대화 시작" title="새 대화" disabled={props.loading} onClick={newChat}><ChatIcon name="plus" /></button></header>
+          <header className="chat-header"><div>{!sidebarOpen && <button className="chat-icon-button" aria-label="사이드바 열기" aria-expanded={sidebarOpen} aria-controls="chat-sidebar" onClick={() => setSidebarOpen(true)}><ChatIcon name="panel" /></button>}<span>품셈이</span><span className="chat-header-caption">표준품셈 AI</span></div><button className="chat-icon-button" aria-label="새 대화 시작" title="새 대화" disabled={navigationBlocked} onClick={newChat}><ChatIcon name="plus" /></button></header>
+          {!sidebarOpen && startupStatus}
           <ChatAreaView key={`${props.activeConversationId ?? 'new'}:${conversationKey}`} {...props} />
         </div>
         {openSource?.image_url && <SourceViewer citation={openSource} onClose={() => setOpenSource(null)} />}
