@@ -558,6 +558,10 @@ def confirm_analysis(text: str, analysis: dict, decisions: list[dict]) -> dict[s
             work = entry.get("work")
             if not isinstance(work, str) or not work.strip() or work not in span["text"]:
                 raise ValueError("포함할 작업 이름은 해당 원문 구절 안에서 골라야 합니다")
+            recognized = [task["work"] for task in analysis["work_items"]
+                          if task["segment_id"] == span_id]
+            if recognized and work not in recognized:
+                raise ValueError("이 구절에 이미 인식된 작업 후보가 있습니다. 후보 중 하나를 선택하거나 범위를 나누어 확인해 주세요")
             normalized["work"] = work
         received[span_id] = normalized
     if set(received) != set(spans):

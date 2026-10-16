@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import Landing from './landing/Landing';
-import OwnerDashboard from './OwnerDashboard';
 import { trackPage } from './analytics';
+
+const OwnerDashboard = lazy(() => import('./OwnerDashboard'));
 
 const container = document.getElementById('root') as HTMLElement;
 const prerenderedHome = container.dataset.prerendered === 'homepage' && window.location.pathname === '/';
@@ -22,7 +23,9 @@ if (prerenderedHome) {
 } else if (ownerDashboard) {
   createRoot(container).render(
     <React.StrictMode>
-      <OwnerDashboard />
+      <Suspense fallback={<main role="status">운영자 화면을 여는 중입니다</main>}>
+        <OwnerDashboard />
+      </Suspense>
     </React.StrictMode>
   );
 } else {

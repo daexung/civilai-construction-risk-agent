@@ -160,8 +160,7 @@ def main():
         assert client.get(f"/api/item-labor/{pending_start['trial_id']}/estimate.xlsx").status_code == 409
         pending_item = next(item for item in pending_trial["items"] if item["task"] == "방수")
         water_spec = next(s for s in load_specs().values() if s["section_no"] == "6-4-3")
-        searched = client.post(f"/api/item-labor/{pending_start['trial_id']}/items/{pending_item['item_id']}/search",
-                               json={"hits": [base.hit(water_spec)]})
+        searched = client.search(pending_start["trial_id"], pending_item["item_id"], [base.hit(water_spec)])
         assert searched.status_code == 200
         pending_item_state = next(item for item in searched.json()["items"] if item["item_id"] == pending_item["item_id"])
         assert pending_item_state["status"] == "NEEDS_INPUT" and pending_item_state["questions"]
@@ -175,8 +174,7 @@ def main():
         unsupported = pending_item
         unsupported_hit = {"section_no": "99-99-99", "division": "건축", "rank": 1,
                            "section": "99-99-99 mock", "chunk_id": "mock-none", "score": 1}
-        unsupported_response = client.post(f"/api/item-labor/{pending_start['trial_id']}/items/{unsupported['item_id']}/search",
-                                           json={"hits": [unsupported_hit]})
+        unsupported_response = client.search(pending_start["trial_id"], unsupported["item_id"], [unsupported_hit])
         assert unsupported_response.status_code == 200
         partial = client.post(f"/api/item-labor/{pending_start['trial_id']}/estimate",
                               json={"basis_date": "2026-10-16"}).json()

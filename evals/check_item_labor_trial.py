@@ -13,6 +13,7 @@ os.environ.setdefault("AGENT_OFFLINE", "1")
 os.environ.setdefault("AGENT_LLM", "off")
 
 import httpx  # noqa: E402
+from unittest.mock import patch  # noqa: E402
 from backend.agent.estimate import tools  # noqa: E402
 from backend.agent.estimate.scope import analyze_request  # noqa: E402
 from backend.agent.rules.specs import load_specs  # noqa: E402
@@ -34,6 +35,7 @@ class LoopbackClient:
     """HTTP ASGI harness with the same loopback client address as the documented local run."""
     def __init__(self, host: str = "127.0.0.1"):
         self.transport = httpx.ASGITransport(app=trial_api.app, client=(host, 49152))
+        self.owners: dict[str, str] = {}
 
     def __enter__(self):
         return self
@@ -41,17 +43,38 @@ class LoopbackClient:
     def __exit__(self, *_):
         return False
 
-    def post(self, path: str, *, json: dict):
+    def adopt(self, trial: dict) -> None:
+        self.owners[trial["trial_id"]] = trial["owner_token"]
+
+    def _headers(self, path: str, extra: dict | None = None) -> dict:
+        parts = path.strip("/").split("/")
+        headers = {}
+        if len(parts) > 2 and parts[:2] == ["api", "item-labor"]:
+            token = self.owners.get(parts[2])
+            if token:
+                headers["X-Trial-Owner"] = token
+        headers.update(extra or {})
+        return headers
+
+    def post(self, path: str, *, json: dict, headers: dict | None = None):
         async def send():
             async with httpx.AsyncClient(transport=self.transport, base_url="http://127.0.0.1") as client:
-                return await client.post(path, json=json)
+                return await client.post(path, json=json, headers=self._headers(path, headers))
         return asyncio.run(send())
 
     def get(self, path: str):
         async def send():
             async with httpx.AsyncClient(transport=self.transport, base_url="http://127.0.0.1") as client:
-                return await client.get(path)
+                return await client.get(path, headers=self._headers(path))
         return asyncio.run(send())
+
+    def search(self, trial_id: str, item_id: str, candidates: list[dict]):
+        path = f"/api/item-labor/{trial_id}/items/{item_id}/search"
+        fixture = {"hits": candidates, "search_info": {"method": "mock-fixture", "queries": [],
+                   "api_calls": 0, "query_cache_hit": True, "release_id": "test-fixture",
+                   "chunk_set_id": "test-fixture"}}
+        with patch.object(trial_api, "_search_candidates", return_value=fixture):
+            return self.post(path, json={})
 
 
 def decisions_for(analysis: dict, *, unconfirmed: str = "exclude_work") -> list[dict]:
@@ -81,6 +104,7 @@ def confirm_text(client: TestClient, text: str) -> tuple[dict, dict]:
     analysis_response = client.post("/api/item-labor/analyze", json={"text": text})
     assert analysis_response.status_code == 200, analysis_response.text
     data = analysis_response.json()
+    client.adopt(data)
     analysis = data["analysis"]
     response = client.post(f"/api/item-labor/{data['trial_id']}/confirm",
                            json={"decisions": decisions_for(analysis)})
@@ -89,7 +113,7 @@ def confirm_text(client: TestClient, text: str) -> tuple[dict, dict]:
 
 
 def choose_work_and_compute(client: TestClient, trial_id: str, item: dict, candidates: list[dict]) -> dict:
-    response = client.post(f"/api/item-labor/{trial_id}/items/{item['item_id']}/search", json={"hits": candidates})
+    response = client.search(trial_id, item["item_id"], candidates)
     assert response.status_code == 200, response.text
     current = response.json()
     found = next(row for row in current["items"] if row["item_id"] == item["item_id"])
@@ -144,7 +168,8 @@ def main() -> int:
 
         # Search cannot start until an explicit scope receipt exists.
         start = client.post("/api/item-labor/analyze", json={"text": "도장 100㎡ 그리고 방수 20㎡"}).json()
-        before = client.post(f"/api/item-labor/{start['trial_id']}/items/w0_2/search", json={"hits": [hit(paint)]})
+        client.adopt(start)
+        before = client.search(start["trial_id"], "w0_2", [hit(paint)])
         add("scope analysis alone cannot start item search", before.status_code in (404, 409))
 
         normal_text = "수성페인트 롤러칠 2회 벽면 100㎡ 그리고 실내 방수모르타르 10㎜ 바닥 20㎡"
@@ -200,7 +225,7 @@ def main() -> int:
         left, right = repeated["items"]
         candidates = [hit(paint)]
         for task in (left, right):
-            response = client.post(f"/api/item-labor/{data2['trial_id']}/items/{task['item_id']}/search", json={"hits": candidates})
+            response = client.search(data2["trial_id"], task["item_id"], candidates)
             assert response.status_code == 200, response.text
         now = client.get(f"/api/item-labor/{data2['trial_id']}").json()
         pending_left = next(item for item in now["items"] if item["item_id"] == left["item_id"])["questions"][0]
@@ -260,7 +285,7 @@ def main() -> int:
             and left_edited["labor"] is None and left_edited["quantity"]["value"] == "110"
             and right_before["status"] == "CALCULATED" and right_before["labor"] is not None
             and right_after == right_before)
-        denied = client.post(f"/api/item-labor/{data2['trial_id']}/items/{left['item_id']}/search", json={"hits": candidates})
+        denied = client.search(data2["trial_id"], left["item_id"], candidates)
         add("edited item cannot recalculate before its revised scope is confirmed", denied.status_code == 409)
         reconfirm = client.post(f"/api/item-labor/{data2['trial_id']}/items/{left['item_id']}/confirm-edit", json={
             "input_revision": left_edited["input_revision"], "confirmed": True})
@@ -278,20 +303,19 @@ def main() -> int:
         excluded_text = "도장 100㎡, 방수 20㎡는 제외"
         receipt_decisions = decisions_for(analysis)
         excluded_response = client.post("/api/item-labor/analyze", json={"text": excluded_text}).json()
+        client.adopt(excluded_response)
         excluded_confirm = client.post(f"/api/item-labor/{excluded_response['trial_id']}/confirm", json={"decisions": receipt_decisions})
         add("excluded waterproof is reported outside work items", excluded_confirm.status_code == 200
             and [item["task"] for item in excluded_confirm.json()["items"]] == ["도장"]
             and bool(excluded_confirm.json()["excluded_scope"]))
         excluded_segment = excluded_confirm.json()["excluded_scope"][0]["segment_id"]
-        excluded_answer = client.post(f"/api/item-labor/{excluded_response['trial_id']}/items/{excluded_segment}/search",
-                                      json={"hits": [hit(paint)]})
+        excluded_answer = client.search(excluded_response["trial_id"], excluded_segment, [hit(paint)])
         add("excluded span cannot be addressed as a work item", excluded_answer.status_code == 409)
 
         # A quantity answer must preserve the specification's unit, including after rejection.
         unit_trial, unit_result = confirm_text(client, "수성페인트 롤러칠 2회 벽면")
         unit_item = unit_result["items"][0]
-        unit_search = client.post(f"/api/item-labor/{unit_trial['trial_id']}/items/{unit_item['item_id']}/search",
-                                  json={"hits": [hit(paint)]}).json()
+        unit_search = client.search(unit_trial["trial_id"], unit_item["item_id"], [hit(paint)]).json()
         quantity_question = next(question for question in unit_search["items"][0]["questions"]
                                  if question["field"] == "quantity")
         wrong_unit = client.post(f"/api/item-labor/{unit_trial['trial_id']}/items/{unit_item['item_id']}/answer", json={
@@ -309,11 +333,11 @@ def main() -> int:
         # A standalone surface cannot be attached to either of two jobs by position.
         data3 = client.post("/api/item-labor/analyze", json={
             "text": "도장 100㎡ 그리고 바닥면 그리고 방수 20㎡"}).json()
+        client.adopt(data3)
         blocked_confirm = client.post(f"/api/item-labor/{data3['trial_id']}/confirm", json={
             "decisions": decisions_for(data3["analysis"])}).json()
         blocked_item = blocked_confirm["items"][0]
-        blocked_search = client.post(f"/api/item-labor/{data3['trial_id']}/items/{blocked_item['item_id']}/search",
-                                     json={"hits": [hit(paint)]})
+        blocked_search = client.search(data3["trial_id"], blocked_item["item_id"], [hit(paint)])
         add("unattached background blocks all affected item searches", blocked_item["status"] == "BLOCKED"
             and blocked_item["labor"] is None and blocked_search.status_code == 409)
 
