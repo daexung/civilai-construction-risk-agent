@@ -14,7 +14,7 @@ import threading
 import uuid
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 
 from backend.agent.estimate import tools
@@ -63,6 +63,16 @@ class ReorderRequest(BaseModel):
     item_ids: list[str] = Field(max_length=30)
 
 
+class SummaryRequest(BaseModel):
+    basis_date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
+    common_conditions: dict[str, Any] = Field(default_factory=dict)
+
+
+class CommonAnswerRequest(BaseModel):
+    field: str
+    value: Any
+
+
 def _guard(request: Request) -> None:
     client_host = request.client.host if request.client else ""
     try:
@@ -88,6 +98,10 @@ def _get_item(trial: dict[str, Any], item_id: str) -> dict[str, Any]:
             raise HTTPException(status_code=409, detail="제외한 범위는 시공 항목이 아닙니다")
         raise HTTPException(status_code=404, detail="항목을 찾을 수 없습니다")
     return item
+
+
+def _invalidate_summary(trial: dict[str, Any]) -> None:
+    trial.pop("summary", None)
 
 
 def _digest(value: Any) -> str:
@@ -280,6 +294,7 @@ def confirm(request: Request, trial_id: str, payload: ConfirmRequest) -> dict:
                      not_calculated_scope=[{"kind": "background", **surface,
                                             "reason": "작업 항목과 바탕의 연결을 확인할 수 없음"}
                                            for surface in unassigned_surfaces])
+        _invalidate_summary(trial)
         if trial["not_calculated_scope"]:
             for item in trial["items"].values():
                 item["unsupported_scope"] = "바탕면을 어느 작업에 연결할지 확인이 필요합니다"
@@ -320,6 +335,7 @@ def search_item(request: Request, trial_id: str, item_id: str, payload: SearchRe
         if result["status"] == "ok":
             result = tools.compute_labor(session)
         _refresh_questions(item, result)
+        _invalidate_summary(trial)
         return _public_trial(trial)
 
 
@@ -379,6 +395,7 @@ def answer_item(request: Request, trial_id: str, item_id: str, payload: AnswerRe
             _refresh_questions(item, {**changed, "missing": item["pending_questions"]})
             raise HTTPException(status_code=422, detail=changed["rejected"])
         _calculate_after(session, item)
+        _invalidate_summary(trial)
         return _public_trial(trial)
 
 
@@ -411,6 +428,7 @@ def edit_item(request: Request, trial_id: str, item_id: str, payload: EditReques
         except (PlanError, KeyError, TypeError, ValueError) as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
         item.update(draft)
+        _invalidate_summary(trial)
         item["scope_confirmed"] = False
         item["scope_receipt"] = None
         item["edit_version"] += 1
@@ -438,6 +456,7 @@ def confirm_edit(request: Request, trial_id: str, item_id: str, payload: Confirm
         item["scope_receipt"] = {**receipt_body, "receipt_hash": _digest(receipt_body)}
         item["scope_confirmed"] = True
         result = _calculate_after(session, item)
+        _invalidate_summary(trial)
         trial["status"] = "ITEMS_IN_PROGRESS"
         return {**_public_trial(trial), "item_action": result["status"]}
 
@@ -450,7 +469,185 @@ def reorder(request: Request, trial_id: str, payload: ReorderRequest) -> dict:
         if len(payload.item_ids) != len(set(payload.item_ids)) or set(payload.item_ids) != set(trial["item_order"]):
             raise HTTPException(status_code=422, detail="현재 항목 ID를 각각 한 번씩 보내야 합니다")
         trial["item_order"] = list(payload.item_ids)
+        trial.pop("summary", None)
         return _public_trial(trial)
+
+
+def _summary_payload(trial: dict[str, Any]) -> dict:
+    from backend.agent.estimate.aggregate import aggregate
+    from backend.agent.estimate.state import new_session
+    from backend.api.tables import add_tables, rate_rows, unit_price_rows
+    summary = trial.get("summary")
+    if not summary:
+        raise HTTPException(status_code=409, detail="먼저 통합 견적을 계산해 주세요")
+    parent = copy.deepcopy(summary)
+    result = aggregate(parent)
+    trial["summary"] = result
+    status = result["aggregate_result"]["status"]
+    public_items = []
+    combined_unit_rows = []
+    combined_rate_rows = []
+    for item_id in result["item_order"]:
+        state = result["items"][item_id]
+        priced = state.get("priced_result") or {}
+        labor = state.get("computed_result") or {}
+        missing = [{"name": entry.get("name") or entry.get("item") or "범위",
+                    "reason": entry.get("reason") or entry.get("source") or "미산정"}
+                   for entry in [*priced.get("unpriced", []), *labor.get("not_calculated", [])]]
+        public_items.append({"item_id": item_id, "request_text": state["request_text"],
+                             "status": ("PARTIAL" if priced.get("partial") else state["status"]),
+                             "quantity": state.get("quantity"), "priced": copy.deepcopy(state.get("priced_result")),
+                             "labor": copy.deepcopy(state.get("computed_result")),
+                             "rate_version": copy.deepcopy(priced.get("rate_version")),
+                             "equipment_rate_version": copy.deepcopy(priced.get("equipment_rate_version")),
+                             "input_revision": state["input_revision"],
+                             "questions": copy.deepcopy(state.get("questions", [])),
+                             "not_calculated_scope": missing})
+        for row in unit_price_rows(priced):
+            combined_unit_rows.append({**row, "item_id": item_id, "name": f"[{item_id}] {row['name']}"})
+        combined_rate_rows.extend({**row, "name": f"[{item_id}] {row['name']}"}
+                                  for row in rate_rows(priced, None, []))
+    if status in ("PENDING", "NEEDS_COMMON", "NO_RESULT", "RATE_VERSION_CONFLICT"):
+        partial_items = [item for item in result["items"].values()
+                         if item.get("status") == "PRICED" and item.get("result_revision") == item.get("input_revision")
+                         and (item.get("priced_result") or {}).get("reference_amounts", {}).get("total") is not None]
+        if status == "RATE_VERSION_CONFLICT":
+            partial_items = []
+        partial_direct = {part: sum(int(((item.get("priced_result") or {}).get("reference_amounts") or {})
+                                     .get("subtotals", {}).get(part) or 0) for item in partial_items)
+                          for part in ("재료비", "노무비", "경비")}
+        partial_total = sum(int(item["priced_result"]["reference_amounts"]["total"]) for item in partial_items)
+        unpriced_by_category = {
+            part: [item["item_id"] for item in partial_items
+                   if ((item.get("priced_result") or {}).get("reference_amounts") or {})
+                   .get("subtotals", {}).get(part) is None]
+            for part in ("재료비", "노무비", "경비")}
+        unpriced_by_category = {part: ids for part, ids in unpriced_by_category.items() if ids}
+        public_status = "NO_RESULT" if status == "PENDING" and not partial_items else status
+        return {"status": public_status, "aggregate": result.get("aggregate_result"),
+                "partial_estimate": ({"scope": "priced_items_only", "direct_subtotals": partial_direct,
+                                      "direct_total": partial_total, "complete_contract_amount": None,
+                                      "unpriced_by_category": unpriced_by_category,
+                                      "item_ids": [item["item_id"] for item in partial_items]}
+                                     if partial_items else None),
+                "common_questions": list(result.get("pending_questions", {}).values()),
+                "basis_date": result.get("basis_date"), "items": public_items}
+    aggregate_public = copy.deepcopy(result["aggregate_result"])
+    aggregate_public["complete_contract_amount"] = (aggregate_public.get("contract_amount")
+                                                     if status == "COMPLETE" else None)
+    aggregate_public["partial_contract_amount"] = (aggregate_public.get("contract_amount")
+                                                     if status == "PARTIAL" else None)
+    aggregate_public["contract_amount_scope"] = "all_items" if status == "COMPLETE" else "priced_items_only"
+    aggregate_public["contract_amount"] = aggregate_public["complete_contract_amount"]
+    return {"status": status, "aggregate": aggregate_public,
+            "statement": result["statement"], "basis_date": result["basis_date"],
+            "common_conditions": copy.deepcopy(result["common_conditions"]),
+            "items": public_items,
+            "tables": add_tables({"statement": result["statement"], "priced": None,
+                                  "conditions": [], "result": {}, "work": {}, "tables": {}})
+                    | {"unit_rows": combined_unit_rows, "rate_rows": combined_rate_rows},
+            "overhead_version": result["statement"].get("overhead_version")}
+
+
+@app.post(PREFIX + "/{trial_id}/estimate")
+def estimate_trial(request: Request, trial_id: str, payload: SummaryRequest) -> dict:
+    _guard(request)
+    from datetime import date
+    from backend.agent.estimate.state import new_session, set_common
+    from backend.agent.nodes.fill import _common_fields
+    from backend.agent.rules.specs import load_specs
+    from backend.agent.estimate.tools import price_item_for_aggregate
+    with _LOCK:
+        trial = _get_trial(trial_id)
+        if not trial.get("confirmation"):
+            raise HTTPException(status_code=409, detail="범위 확인을 먼저 완료해 주세요")
+        try:
+            date.fromisoformat(payload.basis_date)
+            trial.pop("summary", None)
+            trial["summary_xlsx"] = None
+            template = new_session({"original_request": trial["source"], "basis_date": payload.basis_date,
+                                    "items": [{"item_id": item_id,
+                                               "request_text": (trial["items"][item_id].get("session") or {}).get("original_request")
+                                               or trial["items"][item_id]["task"].get("work", "요청 항목")}
+                                              for item_id in trial["item_order"]]})
+            children = {}
+            for field, value in payload.common_conditions.items():
+                set_common(template, field, value)
+            for item_id in trial["item_order"]:
+                trial_item = trial["items"][item_id]
+                if not trial_item.get("scope_confirmed") or trial_item.get("unsupported_scope") or not trial_item.get("session"):
+                    state = template["items"][item_id]
+                    state["status"] = trial_item.get("scope_status", "UNSUPPORTED")
+                    state["reason"] = trial_item.get("unsupported_scope") or "작업 항목을 지원하지 않습니다"
+                    state["selected_spec_id"] = ""
+                    continue
+                session = copy.deepcopy(trial_item["session"])
+                session["basis_date"] = payload.basis_date
+                for field, value in payload.common_conditions.items():
+                    set_common(session, field, value)
+                child_state = session["items"][session["item_order"][0]]
+                category_defaults = {"주택 외 건축" if load_specs()[entry["selected_spec_id"]]["division"] in ("건축", "기계설비")
+                                     else "기타 토목공사"
+                                     for entry in [child_state] if entry.get("selected_spec_id")}
+                for definition in _common_fields():
+                    name = definition["name"]
+                    if name in session["common_conditions"] or name in payload.common_conditions:
+                        continue
+                    default = (next(iter(category_defaults)) if name == "work_category" and len(category_defaults) == 1
+                               else None if name == "work_category" else definition.get("default"))
+                    if default is not None:
+                        session["common_conditions"][name] = {"value": default, "source":
+                                                               "default_division" if name == "work_category" else "default",
+                                                               "explicit": False}
+                item_state = session["items"][session["item_order"][0]]
+                if item_state.get("status") not in ("UNSUPPORTED", "NOT_FOUND", "BLOCKED", "ERROR"):
+                    price_item_for_aggregate(session)
+                    item_state = session["items"][session["item_order"][0]]
+                children[item_id] = session
+                template["items"][item_id] = copy.deepcopy(item_state)
+                template["items"][item_id]["item_id"] = item_id
+            template["item_order"] = list(trial["item_order"])
+            for item_id, session in children.items():
+                trial["items"][item_id]["session"] = session
+            trial["summary"] = template
+            return _summary_payload(trial)
+        except (ValueError, KeyError, TypeError) as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.post(PREFIX + "/{trial_id}/common-answer")
+def answer_common(request: Request, trial_id: str, payload: CommonAnswerRequest) -> dict:
+    _guard(request)
+    from backend.agent.estimate.state import set_common
+    with _LOCK:
+        trial = _get_trial(trial_id)
+        if not trial.get("summary"):
+            raise HTTPException(status_code=409, detail="통합 견적을 먼저 계산해 주세요")
+        try:
+            set_common(trial["summary"], payload.field, payload.value)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        return _summary_payload(trial)
+
+
+@app.get(PREFIX + "/{trial_id}/estimate.xlsx")
+def export_trial(request: Request, trial_id: str) -> Response:
+    _guard(request)
+    from backend.api.tables import build_xlsx
+    with _LOCK:
+        trial = _get_trial(trial_id)
+        summary = _summary_payload(trial)
+        if summary["status"] not in ("COMPLETE", "PARTIAL") or not summary.get("aggregate", {}).get("included"):
+            raise HTTPException(status_code=409, detail="내보낼 수 있는 계산 금액이 없습니다")
+        response = {"tables": summary["tables"], "statement": summary["statement"],
+                    "basis_date": summary["basis_date"], "work": {"title": "복수 공종 견적"},
+                    "result": {"review_status": "부분 산정" if summary["status"] == "PARTIAL" else "산정 완료"},
+                    "conditions": [{"name": name, **entry} for name, entry in summary["common_conditions"].items()],
+                    "multi_trade_items": summary["items"],
+                    "aggregate": summary["aggregate"]}
+        body = build_xlsx(response)
+        return Response(body, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        headers={"Content-Disposition": 'attachment; filename="multi-trade-estimate.xlsx"'})
 
 
 @app.get(PREFIX + "/{trial_id}")

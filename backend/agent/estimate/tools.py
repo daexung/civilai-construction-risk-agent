@@ -494,6 +494,33 @@ def estimate_cost(session: EstimateSession) -> dict:
                                                      if name in conditions}})
 
 
+def price_item_for_aggregate(session: EstimateSession) -> dict:
+    """Calculate one item's direct price without creating a per-item cost statement."""
+    labor = compute_labor(session)
+    if labor["status"] != "ok":
+        return labor
+    item = _item(session)
+    spec = _spec(item)
+    conditions = item["conditions"]
+    missing = [_field_question(item, spec, field, "price")
+               for field in _missing_fields(spec, conditions, price_fields(spec))]
+    if missing:
+        item.update(status="NEEDS_INPUT", questions=missing)
+        return _result("needs_input", item, labor["data"], missing=missing)
+    basis = session.get("basis_date") or date.today().isoformat()
+    key = _digest(item["labor_key"], {name: conditions.get(name) for name in sorted(price_fields(spec))}, basis)
+    if not (item.get("priced_result") and item.get("price_key") == key
+            and item.get("result_revision") == item["input_revision"]):
+        common = {name: entry["value"] for name, entry in session["common_conditions"].items()}
+        priced = price_unit(spec, item["computed_result"]["unit_lines"], select_rate_version(basis),
+                            {**common, **conditions}, basis)
+        item.update(priced_result=priced, price_key=key, result_revision=item["input_revision"])
+    item.update(status="PRICED", questions=[], review_status=spec.get("review", ""))
+    return _result("ok", item, {**labor["data"], "priced": item["priced_result"],
+                                "price_conditions": {name: conditions[name] for name in price_fields(spec)
+                                                     if name in conditions}})
+
+
 def explain_basis(session: EstimateSession) -> dict:
     """최신 품 결과에 붙은 표·주석 원문 인용."""
     labor = compute_labor(session)

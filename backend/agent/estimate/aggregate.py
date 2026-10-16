@@ -62,6 +62,11 @@ def _combined_priced(included: list[dict], failed: list[dict]) -> dict:
     """원가계산서 입력. 공종 하나면 그 공종의 가격 결과를 그대로 쓴다(단일 공종 main과 같은 계산)."""
     failed_entries = [{"name": f"{item['item_id']} {item['request_text']}", "category": "경비",
                        "reason": item.get("reason") or item["status"]} for item in failed]
+    versions = {((item["priced_result"].get("rate_version") or {}).get("id"),
+                 (item["priced_result"].get("equipment_rate_version") or {}).get("version"))
+                for item in included}
+    if len(versions) > 1 or (len(included) > 1 and any(None in version for version in versions)):
+        raise ValueError("공종별 가격 기준 버전이 달라 통합할 수 없습니다")
     if len(included) == 1:
         priced = copy.deepcopy(included[0]["priced_result"])
         priced["unpriced"] = list(priced.get("unpriced", [])) + failed_entries
@@ -87,7 +92,8 @@ def aggregate(session: EstimateSession) -> EstimateSession:
     session = copy.deepcopy(session)
     session["pending_questions"] = {qid: q for qid, q in session["pending_questions"].items() if q.get("scope") != "common"}
     items = [session["items"][item_id] for item_id in session["item_order"]]
-    waiting = [item for item in items if item["status"] not in SETTLED or item.get("result_revision") != item["input_revision"]]
+    waiting = [item for item in items if item["status"] not in SETTLED
+               or (item["status"] == "PRICED" and item.get("result_revision") != item["input_revision"])]
     session["statement"] = None
     if session["pending_questions"] or waiting:
         session["aggregate_result"] = {"status": "PENDING", "waiting": [
@@ -107,6 +113,15 @@ def aggregate(session: EstimateSession) -> EstimateSession:
                        "reason": item.get("reason") or "계산 결과가 없어요"} for item in failed]
     if not included:
         session["aggregate_result"] = {"status": "NO_RESULT", "included": [], "excluded": excluded_items}
+        return session
+    versions = {((item["priced_result"].get("rate_version") or {}).get("id"),
+                 (item["priced_result"].get("equipment_rate_version") or {}).get("version"))
+                for item in included}
+    if len(versions) > 1 or (len(included) > 1 and any(None in version for version in versions)):
+        session["aggregate_result"] = {"status": "RATE_VERSION_CONFLICT", "included": [],
+                                        "excluded": excluded_items,
+                                        "reason": "공종별 가격 기준 버전이 달라 통합할 수 없습니다",
+                                        "versions": sorted(map(str, versions))}
         return session
     common_values = {name: entry["value"] for name, entry in session["common_conditions"].items()}
     statement = calculate_cost_statement(_combined_priced(included, failed), common_values,
