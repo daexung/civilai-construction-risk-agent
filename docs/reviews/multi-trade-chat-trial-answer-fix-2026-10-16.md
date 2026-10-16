@@ -37,3 +37,23 @@ No external calls were made: analysis only was reached, and the already-running 
 ## Frontend verification limit
 
 The focused frontend test could not start because Node reported `EPERM` while resolving its sandbox temporary path. The foreground CRA server on port `3012` compiled without TypeScript issues, but its one loopback HTTP check timed out. The browser surface also rejected the requested visibility capability. Per the run constraint, there was no further frontend/browser retry; the UI remains unverified. Port `3000` was not touched.
+
+## Follow-up: completed two-trade HTTP workflow
+
+The earlier two-question attempt above is preserved as its original incomplete result. This follow-up uses two other exact cache-hit evaluation questions with existing calculator specs:
+
+- `시멘트 액체방수를 바닥에 300㎡ 바르려면 인력 품은 어떻게 잡아야 해?`
+- `건물 기계실 배관 ø100㎜에 건물용 적산열량계를 설치하면 개당 배관공은 몇 인이야?`
+
+The analyzer marked both full question spans `unconfirmed`. The evaluator explicitly confirmed `방수`, which the analyzer had proposed, and selected `건물용 적산열량계` from the second exact source span. The analyzer separately identified `바닥` and `300㎡`; those were retained as background and quantity conditions. Confirmation produced two independent items, and each `request_text` remained byte-for-byte the original evaluation question.
+
+One bounded loopback HTTP run completed both local query-cache searches (`api_calls: 0`, cache hit for each), accepted only the exact supported specs, answered source-supported inputs, and calculated both items:
+
+| Item | Selected spec | Confirmed inputs | Labor result |
+| --- | --- | --- | --- |
+| Cement liquid waterproofing | Architecture 6-4-1 | Floor, 300㎡ | Waterproofer 0.075 person/㎡; general worker 0.040 person/㎡ |
+| Building heat meter installation | Mechanical 6-2-2 | ø100~125mm band from the stated ø100mm; 1 each from “per unit” | Plumber 0.569 person/each; general worker 0.569 person/each |
+
+The combined estimate included both items and returned `PARTIAL`: direct total 7,782,586 KRW (waterproofing 7,537,800 KRW; meter 244,786 KRW). Material costs remain uncalculated under the specs, so this is not a complete contract amount. The exported workbook returned HTTP 200, passed ZIP integrity checks, opened with `openpyxl`, and its detail sheet contained both item descriptions. The artifact is `.trial/multi-trade-two-calculated-items.xlsx`.
+
+The server ran with `AGENT_OFFLINE=1` and `AGENT_LLM=off`; embedding and client creation functions were patched to raise if called. No external model, embedding, or database calls were made. The saved reproduction is `evals/reproduce_cached_two_trade_trial.py`; it owns its local server, separates server stdout/stderr logs, and has a 52-second deadline. The spiral-duct demolition question was not substituted with an installation spec; this successful follow-up used the exact cached heat-meter installation evaluation question instead.
