@@ -29,6 +29,8 @@ def allowed_origins() -> list[str]:
 def validate_production() -> None:
     if not production():
         return
+    if os.getenv('AGENT_MODE', 'tools') not in ('tools', 'graph'):
+        raise ValueError('Production AGENT_MODE must be tools or graph')
     allowed_origins()
     if len(os.getenv('QUOTA_HASH_SECRET', '')) < 32:
         raise ValueError('Production requires an independent QUOTA_HASH_SECRET of at least 32 characters')

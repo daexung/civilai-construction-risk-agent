@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import copy
 import os
 from datetime import date
 
@@ -14,10 +15,13 @@ from fastapi import HTTPException
 from backend.agent.estimate import dialogue, tools
 from backend.agent.tools.calc.format import approx
 from backend.agent.rules.specs import load_specs
+from backend.api.tables import add_tables, rate_rows, unit_price_rows
 
 
 def enabled() -> bool:
-    return os.environ.get("AGENT_MODE", "") == "tools"
+    # New conversations use the unified Dialogue engine unless deployment opts
+    # back into the legacy graph. Existing checkpoints are routed separately.
+    return os.environ.get("AGENT_MODE", "tools") == "tools"
 
 
 FREE_CARD_ANSWER_LIMIT = 30
@@ -34,6 +38,11 @@ def free_card_answer(graph, thread_id: str | None, request: dict) -> bool:
     if not state or state.get("free_card_answers", 0) >= FREE_CARD_ANSWER_LIMIT:
         return False
     pending = {question["field"]: question["ref"] for question in state.get("pending") or []}
+    # A duplicate field across items is only free when its externally visible
+    # composite key identifies exactly one current question.
+    if any(name.endswith("::continue") or name.startswith(("scope::", "scope_owner::"))
+           or name == "target_item" for name in refs):
+        return False
     return all(name in pending and pending[name] == ref for name, ref in refs.items())
 
 
@@ -72,6 +81,9 @@ def legacy_state(state: dict) -> dict:
     out = {"route": state.get("route") or ("estimate" if state.get("goal") == "cost" else "qa"),
            "route_source": "agent", "answer": turn.get("answer"), "answer_source": turn.get("answer_source"),
            "llm_info": turn.get("llm_info"), "questions": [], "status": "ANSWERED", "reason": ""}
+    pending = state.get("pending") or []
+    if pending:
+        out.update(status="MISSING_INFO", questions=[_question_out(q) for q in pending])
     if not session:
         return out
     item = tools._item(session)
@@ -87,11 +99,10 @@ def legacy_state(state: dict) -> dict:
                               **{name: "기본값" if name in item.get("defaulted_inputs", {}) else "답변"
                                  for name in item.get("conditions") or {}}},
                review_status=item.get("review_status") or (spec or {}).get("review", ""))
-    pending = state.get("pending") or []
     current = tools.current_estimate(session)
     labor_shown = item.get("computed_result") and all(q.get("stage") == "price" for q in pending)
     if pending:
-        out.update(status="MISSING_INFO", questions=[_question_out(q) for q in pending[:1]])
+        out.update(status="MISSING_INFO", questions=[_question_out(q) for q in pending])
     elif current:
         partial = current["statement"].get("status") in ("PARTIAL", "UNCALCULATED")
         out.update(status="PARTIAL" if partial else "OK", statement=current["statement"],
@@ -106,16 +117,76 @@ def legacy_state(state: dict) -> dict:
 
 
 def response(thread_id: str, state: dict) -> dict:
-    from backend.api.main import _build_response  # main이 이 모듈을 가져오므로 늦게 가져온다
+    from backend.api import main as main_api  # main이 이 모듈을 가져오므로 늦게 가져온다
 
     legacy = legacy_state(state)
-    built = _build_response(thread_id, legacy)
-    for out, question in zip(built["questions"], (state.get("pending") or [])[:1]):
+    built = main_api._build_response(thread_id, legacy)
+    for out, question in zip(built["questions"], state.get("pending") or []):
         out["ref"] = question["ref"]
     if state.get("turn", {}).get("knowledge"):
         built["knowledge"] = state["turn"]["knowledge"]
     built["questions_remaining"] = len(state.get("pending") or [])
     session = state.get("session")
+    if session and len(session.get("item_order") or []) > 1:
+        public_items, combined_units, combined_rates = [], [], []
+        for item_id in session["item_order"]:
+            item = session["items"][item_id]
+            spec = tools._spec(item)
+            priced = item.get("priced_result") or {}
+            labor = item.get("computed_result") or {}
+            quantity = item.get("quantity")
+            if quantity is None and spec:
+                quantity_field = tools._quantity_field(spec)
+                if quantity_field and item.get("conditions", {}).get(quantity_field["name"]) is not None:
+                    quantity = {"value": item["conditions"][quantity_field["name"]],
+                                "unit": quantity_field.get("unit"), "source": "confirmed_request"}
+            missing = [{"name": row.get("name") or row.get("item") or "범위",
+                        "reason": row.get("reason") or row.get("source") or "미산정"}
+                       for row in [*priced.get("unpriced", []), *labor.get("not_calculated", [])]]
+            item_status = item.get("status", "NEEDS_WORK")
+            ui_status = ("PARTIAL" if priced.get("partial") else "OK") if item_status == "PRICED" else (
+                "COMPUTED" if labor else "MISSING_INFO" if item.get("questions") else item_status)
+            common = {name: entry["value"] for name, entry in session["common_conditions"].items()}
+            item_values = {**common, **{name: entry.get("value") if isinstance(entry, dict) else entry
+                                        for name, entry in (item.get("conditions") or {}).items()}}
+            raw_item_state = {"route": "estimate", "status": ui_status,
+                              "spec_id": item.get("selected_spec_id", ""),
+                              "selection": item.get("selection") or {},
+                              "candidates": item.get("candidates") or [], "hits": item.get("hits") or [],
+                              "search_info": item.get("search_info") or {},
+                              "basis_date": session.get("basis_date"), "inputs": item_values,
+                              "input_sources": {}, "review_status": item.get("review_status", ""),
+                              "result": item.get("computed_result"), "priced": item.get("priced_result"),
+                              "questions": [{**question, "name": question.get("name") or question.get("field"),
+                                            "ask": question.get("ask", ""), "choices": question.get("choices")}
+                                           for question in item.get("questions") or []], "statement": None}
+            item_response = main_api._build_response(thread_id, raw_item_state)
+            public = {"item_id": item_id, "request_text": item.get("request_text", ""),
+                      "status": "PARTIAL" if priced.get("partial") else item_status,
+                      "task": (item.get("selection") or {}).get("section"),
+                      "work": item_response.get("work"), "quantity": quantity,
+                      "result": item_response.get("result"), "labor": item_response.get("result"),
+                      "priced": item_response.get("priced"),
+                      "tables": item_response.get("tables"), "inputs": item_response.get("inputs"),
+                      "evidence": item_response.get("evidence"),
+                      "rate_version": copy.deepcopy(priced.get("rate_version")),
+                      "equipment_rate_version": copy.deepcopy(priced.get("equipment_rate_version")),
+                      "input_revision": item.get("input_revision", 0),
+                      "questions": copy.deepcopy(item.get("questions", [])),
+                      "not_calculated_scope": missing}
+            public_items.append(public)
+            combined_units.extend({**row, "item_id": item_id, "name": f"[{item_id}] {row['name']}"}
+                                  for row in unit_price_rows(priced))
+            combined_rates.extend({**row, "name": f"[{item_id}] {row['name']}"}
+                                  for row in rate_rows(priced, None, []))
+        built["multi_trade_items"] = public_items
+        # The parent card represents only the shared statement. Per-item labor,
+        # units and prices are rendered from each item's own converted response.
+        built["result"], built["priced"], built["evidence"], built["inputs"] = None, None, [], []
+        built["work"] = {"title": "복수 공종 견적", "spec_id": "", "section_no": None, "confirmed": True}
+        built["tables"] = add_tables({"statement": built.get("statement"), "priced": None,
+                                      "conditions": built.get("conditions", []), "result": {}, "work": {},
+                                      "tables": {}}) | {"unit_rows": combined_units, "rate_rows": combined_rates}
     built["estimate_current"] = bool(session and tools.current_estimate(session))
     work_days = (built.get("result") or {}).get("work_days")
     if work_days and work_days.get("value"):

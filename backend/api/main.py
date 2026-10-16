@@ -510,13 +510,21 @@ def source_image(table_id: str) -> FileResponse:
     return FileResponse(path, media_type="image/png")
 
 
-def _uses_dialogue(checkpointer, thread_id: str | None) -> bool:
-    """처리 방식은 대화에 저장된 상태로 정한다. 새 흐름 상태(dlg:)가 있으면 tools, 기존 그래프 상태만 있으면 기존 방식.
-    둘 다 없는 새 대화만 설정(AGENT_MODE)을 따른다. 설정을 바꿔도 기존 견적을 초기화하거나 새 흐름으로 덮어쓰지 않는다."""
+def _uses_dialogue(checkpointer, thread_id: str | None, request: ChatRequest | None = None) -> bool:
+    """기존 실행 checkpoint를 우선 복원하되, QA graph 대화의 새 견적 요청은 Dialogue로 전환한다."""
     if thread_id:
         if checkpointer.get_tuple(dialogue_config(thread_id)) is not None:
             return True
-        if checkpointer.get_tuple({"configurable": {"thread_id": thread_id}}) is not None:
+        legacy = checkpointer.get_tuple({"configurable": {"thread_id": thread_id}})
+        if legacy is not None:
+            checkpoint = getattr(legacy, "checkpoint", None) or {}
+            values = checkpoint.get("channel_values", {}) if isinstance(checkpoint, dict) else {}
+            if request and request.message and dialogue_service.enabled():
+                from backend.agent.nodes.route import _rule_route
+                route = _rule_route(request.message, values.get("route"))
+                explicit_new = bool(re.search(r"새\s*견적|새로\s*(?:견적|계산)", request.message))
+                if route == "estimate" and (values.get("route") != "estimate" or explicit_new):
+                    return True
             return False
     return dialogue_service.enabled()
 
@@ -720,7 +728,7 @@ def _chat(payload: ChatRequest, request: Request, user_id: str | None, x_guest_s
                 request_id=payload.request_id, thread_id=payload.conversation_id or payload.thread_id,
                 conversation_id=payload.conversation_id, user_id=user_id,
                 environment=os.getenv('APP_ENVIRONMENT') or ('production' if os.getenv('K_SERVICE') else 'local'),
-                agent_mode=os.getenv('AGENT_MODE') or 'graph'):
+                agent_mode=os.getenv('AGENT_MODE') or 'tools'):
         try:
             if user_id:
                 response = _member_chat(payload, user_id, quota, claim)
@@ -731,7 +739,7 @@ def _chat(payload: ChatRequest, request: Request, user_id: str | None, x_guest_s
                     guest = _guest(payload.thread_id, x_guest_session)
                     with guest["lock"]:
                         _guest(payload.thread_id, x_guest_session)
-                        free = (_uses_dialogue(GRAPH.checkpointer, payload.thread_id)
+                        free = (_uses_dialogue(GRAPH.checkpointer, payload.thread_id, payload)
                                 and dialogue_service.free_card_answer(DIALOGUE, payload.thread_id, payload.model_dump()))
                         used = usage_limits.status(*quota) if free else _consume_once(quota, claim)
                         response = _chat_response(payload, free_card_answer=free)
@@ -944,7 +952,7 @@ def _member_chat(payload: ChatRequest, user_id: str, quota, claim: dict | None =
             return replay
         graph = build_graph(PostgresSaver(conn))
         member_payload = payload.model_copy(update={"thread_id": conversation_id})
-        free = (_uses_dialogue(graph.checkpointer, conversation_id)
+        free = (_uses_dialogue(graph.checkpointer, conversation_id, payload)
                 and dialogue_service.free_card_answer(build_dialogue_graph(graph.checkpointer),
                                                        conversation_id, member_payload.model_dump()))
         used = usage_limits.status(*quota) if free else _consume_once(quota, claim)
@@ -957,7 +965,7 @@ def _member_chat(payload: ChatRequest, user_id: str, quota, claim: dict | None =
 
 def _chat_response(payload: ChatRequest, graph=None, keep_thread=False, *, free_card_answer=False) -> dict:
     answer_trace.persist_start()
-    if _uses_dialogue((graph or GRAPH).checkpointer, payload.thread_id):
+    if _uses_dialogue((graph or GRAPH).checkpointer, payload.thread_id, payload):
         return _dialogue_chat(payload, graph, free_card_answer=free_card_answer)
     graph = graph or GRAPH
     if payload.conditions is not None:

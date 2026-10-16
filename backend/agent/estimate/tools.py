@@ -43,8 +43,15 @@ def new_estimate(request_text: str, basis_date: str | None = None) -> EstimateSe
                         "items": [{"request_text": request_text}]})
 
 
-def _item(session: EstimateSession) -> EstimateItem:
-    return session["items"][session["item_order"][0]]
+def _item(session: EstimateSession, item_id: str | None = None) -> EstimateItem:
+    """Resolve an explicit/current item; multi-item callers may never silently select row zero."""
+    order = session.get("item_order") or []
+    target = item_id or session.get("active_item_id")
+    if target is None and len(order) == 1:
+        target = order[0]  # backward compatibility for saved one-item sessions
+    if target not in session.get("items", {}) or target not in order:
+        raise PlanError("항목 ID가 없거나 현재 세션에 없습니다. 공종 항목을 확인해 주세요.")
+    return session["items"][target]
 
 
 def _result(status: str, item: EstimateItem, data: dict | None = None, missing: list | None = None,

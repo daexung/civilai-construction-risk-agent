@@ -516,6 +516,34 @@ function AssistantCard({
 
       <EstimateGuidance response={response} />
 
+      {!!response.multi_trade_items?.length && <section className="multi-trade-items" aria-label="항목별 견적">
+        <h3>항목별 산출</h3>
+        {response.multi_trade_items.map((item) => {
+          const itemResponse: ChatResponse = { ...response, work: item.work, inputs: item.inputs,
+            evidence: item.evidence, result: item.result, priced: item.priced, tables: item.tables, statement: null };
+          const amount = item.priced?.reference_amounts?.total;
+          return <article className="multi-trade-item" key={item.item_id}>
+            <header><div><strong>{item.request_text}</strong>
+              {item.quantity && <span> · {item.quantity.value}{item.quantity.unit}</span>}</div>
+              <small>{item.status === 'PRICED' ? '산정 완료' : item.status === 'PARTIAL' ? '부분 산정' :
+                item.status === 'NEEDS_INPUT' ? '조건 확인 필요' : item.status === 'NEEDS_WORK' ? '검색 대기' : item.status}</small>
+            </header>
+            {amount != null && <p className="multi-trade-amount">
+              항목 직접비 참고액: <strong>{won(String(amount))}원</strong>
+              {item.priced?.partial && <span> (미산정 항목 제외)</span>}
+            </p>}
+            {item.not_calculated_scope.length > 0 && <ul className="multi-trade-missing">
+              {item.not_calculated_scope.map((entry, index) => <li key={`${entry.name}-${index}`}>
+                {entry.name}: {entry.reason}</li>)}
+            </ul>}
+            {item.result && ('unit_lines' in item.result
+              ? <ComputedCard work={item.work} inputs={item.inputs} result={item.result}
+                  priced={item.priced} tables={item.tables} response={itemResponse} />
+              : <BlockedCard result={item.result} />)}
+          </article>;
+        })}
+      </section>}
+
       {response.status === 'MISSING_INFO' && (
         <div className="question-list">
           {(response.questions_remaining ?? 0) >= 2 && (
@@ -532,7 +560,9 @@ function AssistantCard({
           ))}
           {interactive && (
             <>
-              {response.questions.every(question => question.ref) && draft.scope?.value !== '새 견적 시작' && (
+              {response.questions.every(question => question.ref) &&
+                !response.questions.some(question => /^(?:scope|scope_owner)::/.test(question.name) ||
+                  question.name.endsWith('::continue') || question.name === 'target_item') && (
                 <p>선택한 답은 이용 횟수에서 차감되지 않아요.</p>
               )}
               <button

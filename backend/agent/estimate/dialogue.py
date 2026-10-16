@@ -25,8 +25,8 @@ from typing import Callable, TypedDict
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 
-from backend.agent.estimate import reply_check, tools
-from backend.agent.estimate.state import COMMON_FIELDS
+from backend.agent.estimate import aggregate, reply_check, scope, tools
+from backend.agent.estimate.state import COMMON_FIELDS, SETTLED, PlanError, new_session, question_version
 from backend.agent.rules.specs import load_specs
 from backend.agent.nodes.fill import _common_fields, extract_inputs
 from backend.agent.nodes.retrieve import get_search
@@ -186,10 +186,24 @@ class DialogueState(TypedDict, total=False):
     goal: str | None           # "labor" | "cost"
     route: str | None
     turn: dict                 # 마지막 턴의 답변·출처·예산 기록
+    scope_analysis: dict | None
+    scope_source: str | None
+    scope_stage: str | None
+    scope_receipt: dict | None
+    scope_owner_choices: dict
+    unified_estimate: bool
+    target_choices: dict
+    target_message: str | None
+    aggregate_parent: bool
+    notices: list[str]
 
 
 def new_dialogue() -> DialogueState:
-    return {"session": None, "pending": [], "pending_revision": 0, "free_card_answers": 0, "goal": None, "route": None, "turn": {}}
+    return {"session": None, "pending": [], "pending_revision": 0, "free_card_answers": 0,
+            "goal": None, "route": None, "turn": {}, "scope_analysis": None,
+            "scope_source": None, "scope_stage": None, "scope_receipt": None,
+            "scope_owner_choices": {}, "unified_estimate": False,
+            "target_choices": {}, "target_message": None, "aggregate_parent": False, "notices": []}
 
 
 class Budget:
@@ -290,7 +304,7 @@ def _run_tool_impl(state: DialogueState, name: str, args: dict, message: str, bu
         state["session"] = session = tools.new_estimate(message, state["request"].get("basis_date"))
         state["free_card_answers"] = 0
         # 계산 목표는 사용자 요청으로 정한다. 비용 요청이면 LLM이 compute_labor를 골라도 비용 목표를 유지한다.
-        state["goal"] = "cost" if _rule_route(message, None) == "estimate" else "labor"
+        state["goal"] = "cost" if state.get("aggregate_parent") or _rule_route(message, None) == "estimate" else "labor"
         state["fresh_session"] = True  # 첫 문장의 물량·조건은 변경이 아니라 시작 값이다
         result = tools.find_work(session)
         # 원래 요청의 물량은 LLM이 set_conditions를 생략해도 서버가 보존한다(서버 파서로 읽은 값·단위·근거).
@@ -333,6 +347,8 @@ def _run_tool_impl(state: DialogueState, name: str, args: dict, message: str, bu
         return tools.compute_labor(session, allow_per_unit=state["goal"] == "labor")
     if name == "estimate_cost":
         state["goal"] = "cost"
+        if state.get("aggregate_parent"):
+            return tools.price_item_for_aggregate(session)
         return tools.estimate_cost(session)
     if name == "explain_basis":
         return tools.explain_basis(session)
@@ -424,7 +440,15 @@ def _trace_selected_conditions(state):
 
 
 def _run_tool(state: DialogueState, name: str, args: dict, message: str, budget: Budget) -> dict:
+    if budget.tool_calls >= MAX_TOOL_CALLS or budget.remaining_ms() <= 0:
+        budget.exhausted = budget.exhausted or "공유 도구/시간 예산 소진"
+        return {"status": "needs_input", "data": {"reason": budget.exhausted}, "missing": [], "rejected": {}}
     before = {"tool": name, "args": _trace_tool_args(args)}
+    session = state.get("session")
+    if session and len(session.get("item_order") or []) > 1:
+        before["item_id"] = session.get("active_item_id")
+    elif session and state.get("aggregate_parent"):
+        before["item_id"] = tools._item(session).get("item_id")
     with answer_trace.step(name, "tool", before) as trace_step:
         try:
             result = _run_tool_impl(state, name, args, message, budget)
@@ -468,6 +492,11 @@ def _rule_actions(state: DialogueState, message: str, answered: bool) -> list[tu
         return finish if session else []
     route = _rule_route(message, state.get("route"))
     state["route"] = route
+    if state.get("aggregate_parent") and session and not _confirmed(session) \
+            and not tools._item(session).get("hits") and message:
+        # A multi-item view already has a session, so the usual change parser
+        # must not treat its initial quantity as an edit before finding the work.
+        return _start_actions(state, message, "estimate")
     # '32m야'처럼 대기 질문에 값만 답한 문장은 라우터가 범위 밖으로 봐도 답으로 반영한다.
     if route == "out_of_scope" and not _answers_pending(state, message):  # 진행 중인 견적을 범위 밖 질문으로 바꾸지 않는다
         return []
@@ -710,7 +739,135 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
     for key, value in new_dialogue().items():
         working.setdefault(key, value)
     working["request"] = request
-    budget, log, notices = Budget(clock), [], []
+    budget, log, notices = request.get("_shared_budget") or Budget(clock), [], []
+    if working.get("scope_analysis") and request.get("answers"):
+        analysis = working["scope_analysis"]
+        current = {q["field"]: q for q in working.get("pending") or [] if q.get("scope") == "intent"}
+        answers, refs = request.get("answers") or {}, request.get("refs") or {}
+        valid = {name: value for name, value in answers.items()
+                 if name in current and refs.get(name) == current[name].get("ref")}
+        if len(valid) != len(current):
+            working["turn"] = {"answer": "범위 카드의 최신 선택을 모두 보내 주세요.", "answer_source": "template",
+                               "tools": [], "trace": [], "llm_info": budget.record(), "last_status": "needs_input"}
+            working.pop("request", None)
+            return working
+        assignments = {}
+        try:
+            if working.get("scope_stage") == "owners":
+                choices = working.get("scope_owner_choices") or {}
+                for name, choice in valid.items():
+                    identifier = name.split("::", 1)[1]
+                    if choice not in choices.get(identifier, {}):
+                        raise ValueError("항목 연결 선택이 현재 작업 목록과 다릅니다")
+                    assignments[identifier] = choices[identifier][choice]
+                receipt = working["scope_receipt"]
+                resolved = scope.confirmed_result(working["scope_source"], analysis, receipt,
+                                                  condition_owners=assignments)
+            else:
+                decisions = _scope_decisions(analysis, valid)
+                receipt = scope.confirm_analysis(working["scope_source"], analysis, decisions)["confirmation"]
+                resolved = scope.confirmed_result(working["scope_source"], analysis, receipt)
+        except ValueError as exc:
+            working["turn"] = {"answer": f"작업 범위를 확인하지 못했어요. 원래 문장으로 다시 요청해 주세요. ({exc})",
+                               "answer_source": "template", "tools": [], "trace": [],
+                               "llm_info": budget.record(), "last_status": "needs_input"}
+            working["pending"] = []
+            working["scope_analysis"], working["scope_source"] = None, None
+            working["scope_stage"], working["scope_receipt"] = None, None
+            working["scope_owner_choices"] = {}
+            working.pop("request", None)
+            return working
+        plan = (resolved.get("calculation") or {}).get("plan")
+        if not plan:
+            unassigned = [*resolved.get("unassigned_conditions", []), *resolved.get("unassigned_backgrounds", [])]
+            if unassigned and working.get("scope_stage") != "owners":
+                questions, owner_choices = [], {}
+                for entry in unassigned:
+                    qid = f"scope_owner::{entry['id']}"
+                    choices = {f"{idx}. {owner.get('label') or owner['work']}": owner["id"]
+                               for idx, owner in enumerate(entry.get("owners", []), 1)}
+                    owner_choices[entry["id"]] = choices
+                    version = question_version(analysis["analysis_hash"], entry["id"], choices)
+                    questions.append({"field": qid, "question_id": qid, "version": version,
+                                      "scope": "intent", "item_id": None, "stage": "scope",
+                                      "kind": "choice", "required": True,
+                                      "ask": f"‘{entry['text']}’은(는) 어느 작업에 연결할까요?",
+                                      "choices": list(choices),
+                                      "ref": _ref({"question_id": qid, "version": version},
+                                                  working.get("pending_revision", 0) + 1)})
+                working["scope_stage"], working["scope_receipt"] = "owners", receipt
+                working["scope_owner_choices"] = owner_choices
+                working["pending"] = questions
+                working["turn"] = {"answer": "조건과 바탕면의 작업 소속을 확인해 주세요.",
+                                   "answer_source": "template", "tools": [], "trace": [],
+                                   "llm_info": budget.record(), "last_status": "needs_input"}
+                working.pop("request", None)
+                return working
+            working["pending"] = []
+            working["turn"] = {"answer": (resolved.get("calculation") or {}).get("reason") or "포함할 작업을 선택해 주세요.",
+                               "answer_source": "template", "tools": [], "trace": [],
+                               "llm_info": budget.record(), "last_status": "needs_input"}
+            working["scope_analysis"], working["scope_source"] = None, None
+            working["scope_stage"], working["scope_receipt"] = None, None
+            working["scope_owner_choices"] = {}
+            working.pop("request", None)
+            return working
+        try:
+            working["session"] = new_session({**plan, "basis_date": request.get("basis_date")})
+        except PlanError as exc:
+            working["pending"] = []
+            working["scope_analysis"], working["scope_source"] = None, None
+            working["scope_stage"], working["scope_receipt"] = None, None
+            working["scope_owner_choices"] = {}
+            working["turn"] = {"answer": str(exc), "answer_source": "template", "tools": [], "trace": [],
+                               "llm_info": budget.record(), "last_status": "needs_input"}
+            working.pop("request", None)
+            return working
+        working["scope_analysis"], working["scope_source"] = None, None
+        working["scope_stage"], working["scope_receipt"] = None, None
+        working["scope_owner_choices"] = {}
+        working["goal"], working["route"], working["unified_estimate"] = "cost", "estimate", True
+        return _run_multi_turn(working, {**request, "_multi_start": True}, generate, clock, budget)
+    # A clearly enumerated multi-work request is confirmed once, then each item
+    # is driven through this same single-item tool policy using a view of the
+    # shared EstimateSession. The persisted session still owns all item IDs.
+    if not request.get("_multi_item_id"):
+        session = working.get("session")
+        if session and working.get("unified_estimate"):
+            return _run_multi_turn(working, request, generate, clock, budget)
+        message_for_scope = (request.get("message") or "").strip()
+        explicit_new = bool(re.search(r"새\s*견적|새로\s*(?:견적|계산)", message_for_scope))
+        if message_for_scope and request.get("answers") is None and not request.get("restart") \
+                and (not session or explicit_new) \
+                and _rule_route(message_for_scope, working.get("route")) == "estimate":
+            analysis = scope.analyze_request(message_for_scope)
+            questions = _scope_questions(analysis, working.get("pending_revision", 0) + 1)
+            if questions:
+                working["scope_analysis"], working["scope_source"] = analysis, message_for_scope
+                working["pending"] = questions
+                working["route"] = "estimate"
+                working["turn"] = {"answer": "작업별 범위를 확인해 주세요. 선택을 확정하면 같은 대화에서 순서대로 계산합니다.",
+                                   "answer_source": "template", "tools": [], "trace": [],
+                                   "llm_info": budget.record(), "last_status": "needs_input"}
+                working.pop("request", None)
+                return working
+            if analysis.get("work_items"):
+                # A one-item request uses this same scope/session/runner path; no legacy single-estimate fork.
+                decisions = _scope_decisions(analysis, {})
+                receipt = scope.confirm_analysis(message_for_scope, analysis, decisions)["confirmation"]
+                resolved = scope.confirmed_result(message_for_scope, analysis, receipt)
+                plan = (resolved.get("calculation") or {}).get("plan")
+                if plan:
+                    try:
+                        working["session"] = new_session({**plan, "basis_date": request.get("basis_date")})
+                    except PlanError as exc:
+                        working["route"] = "estimate"
+                        working["turn"] = {"answer": str(exc), "answer_source": "template", "tools": [],
+                                           "trace": [], "llm_info": budget.record(), "last_status": "needs_input"}
+                        working.pop("request", None)
+                        return working
+                    working["goal"], working["route"], working["unified_estimate"] = "cost", "estimate", True
+                    return _run_multi_turn(working, {**request, "_multi_start": True}, generate, clock, budget)
     before = _inputs_key(working)
     message = (request.get("message") or "").strip()
     generate = generate or client.generate
@@ -767,13 +924,13 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
         # 목표에 맞는 계산을 한다. 그래야 남은 질문이 나오고, 바뀐 입력으로 결과가 최신이 된다.
         changed = _inputs_key(working) != before or any(entry["tool"] == "answers" for entry in log)
         last = log[-1] if log else None
-        if working["session"] and changed and last and last["tool"] not in ("compute_labor", "estimate_cost")                 and last["result"]["status"] in ("ok", "needs_input") and not last["result"].get("confirm_scope"):
+        if budget.tool_calls < MAX_TOOL_CALLS and budget.remaining_ms() > 0 and working["session"] and changed and last and last["tool"] not in ("compute_labor", "estimate_cost")                 and last["result"]["status"] in ("ok", "needs_input") and not last["result"].get("confirm_scope"):
             finish = "estimate_cost" if working["goal"] == "cost" else "compute_labor"
             log.append({"tool": finish, "args": {}, "result": _run_tool(working, finish, {}, message, budget)})
         # 비용 목표인데 이번 턴이 품 계산에서 끝났으면(LLM이 compute_labor만 고른 경우 등) 비용 계산까지 잇는다.
         # 가격 조건이 없으면 estimate_cost가 질문을 낸다. 이미 최신 견적이면(조회 턴) 다시 계산하지 않는다.
         labor = [entry for entry in log if entry["tool"] == "compute_labor"]
-        if working["goal"] == "cost" and working["session"] and labor and labor[-1]["result"]["status"] == "ok"                 and not any(entry["tool"] == "estimate_cost" for entry in log)                 and tools.current_estimate(working["session"]) is None:
+        if budget.tool_calls < MAX_TOOL_CALLS and budget.remaining_ms() > 0 and working["goal"] == "cost" and working["session"] and labor and labor[-1]["result"]["status"] == "ok"                 and not any(entry["tool"] == "estimate_cost" for entry in log)                 and tools.current_estimate(working["session"]) is None:
             log.append({"tool": "estimate_cost", "args": {}, "result": _run_tool(working, "estimate_cost", {}, message, budget)})
     # 반영하지 못한 값은 답변 첫머리에 알린다(이전 결과를 새 결과처럼 보이지 않게).
     notices += [f"반영하지 못했어요 - {_label(working, name)}: {reason}" for entry in log if entry["tool"] == "set_conditions"
@@ -895,6 +1052,255 @@ def _update_pending(state: DialogueState, log: list, refresh: bool = True) -> No
         state["pending"] = []
 
 
+def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budget: Budget) -> DialogueState:
+    """Resume item views under one persisted session and one request budget."""
+    message = (request.get("message") or "").strip()
+    if message and re.search(r"새\s*견적|새로\s*(?:견적|계산)", message):
+        fresh = new_dialogue()
+        return run_turn(fresh, {"message": message, "basis_date": request.get("basis_date"),
+                                "_shared_budget": budget}, generate=generate, clock=clock)
+    session = copy.deepcopy(working["session"])
+    answers, refs = request.get("answers") or {}, request.get("refs") or {}
+    current_refs = {q["field"]: q.get("ref") for q in working.get("pending") or []}
+    stale_fields = [name for name in answers if name not in current_refs or refs.get(name) != current_refs.get(name)]
+    target_item_id = None
+    target_message = message
+    if answers.get("target_item") is not None:
+        choices = working.get("target_choices") or {}
+        question = next((q for q in working.get("pending") or [] if q.get("field") == "target_item"), None)
+        selected = answers["target_item"]
+        if not question or refs.get("target_item") != question.get("ref") or selected not in choices:
+            working["turn"] = {"answer": "항목 선택 카드가 오래되었어요. 바뀔 항목을 다시 골라 주세요.",
+                               "answer_source": "template", "tools": [], "trace": [],
+                               "llm_info": budget.record(), "last_status": "needs_input"}
+            working.pop("request", None)
+            return working
+        target_item_id = choices[selected]
+        target_message = working.get("target_message") or ""
+        working["target_choices"], working["target_message"] = {}, None
+    elif message and not request.get("_multi_start"):
+        route = _rule_route(message, working.get("route"))
+        is_edit = bool(_CHANGE_WORDS.search(message) or _rule_quantity(message, per_unit=False))
+        if route == "qa" and not is_edit:
+            qa = new_dialogue()
+            qa["route"] = "qa"
+            qa_result = run_turn(qa, {"message": message, "_multi_item_id": "qa",
+                                      "_shared_budget": budget}, generate=generate, clock=clock)
+            working["turn"] = qa_result.get("turn", {})
+            working["route"] = "qa"
+            working.pop("request", None)
+            return working
+        tokens = {word for word in _words(message) if len(word) >= 2 and not _generic(word)}
+        explicit = [item_id for item_id in session["item_order"] if item_id in message]
+        scored = []
+        for item_id in session["item_order"]:
+            item = session["items"][item_id]
+            selection = item.get("selection") or {}
+            vocabulary = _words(item.get("request_text", "") + " " + str(selection.get("section") or ""))
+            score = len(tokens.intersection(vocabulary))
+            if score:
+                scored.append((score, item_id))
+        scored.sort(reverse=True)
+        if len(explicit) == 1:
+            target_item_id = explicit[0]
+        elif scored and (len(scored) == 1 or scored[0][0] > scored[1][0]):
+            target_item_id = scored[0][1]
+        elif is_edit or route == "estimate":
+            choices = {f"{i + 1}. {session['items'][item_id].get('request_text', item_id)}": item_id
+                       for i, item_id in enumerate(session["item_order"])}
+            qid = "target_item"
+            version = question_version(session["estimate_id"], message,
+                                       [(item_id, session["items"][item_id]["input_revision"])
+                                        for item_id in session["item_order"]])
+            question = {"field": qid, "question_id": qid, "version": version, "scope": "intent",
+                        "item_id": None, "stage": "scope", "kind": "choice", "required": True,
+                        "ask": "어느 작업의 조건이나 물량을 바꿀까요?", "choices": list(choices),
+                        "ref": _ref({"question_id": qid, "version": version}, working.get("pending_revision", 0) + 1)}
+            working["target_choices"], working["target_message"] = choices, message
+            working["pending"] = [question]
+            working["pending_revision"] = working.get("pending_revision", 0) + 1
+            working["turn"] = {"answer": "합계는 유지하고 바꿀 작업을 골라 주세요.", "answer_source": "template",
+                               "tools": [], "trace": [], "llm_info": budget.record(), "last_status": "needs_input"}
+            working.pop("request", None)
+            return working
+    pending_by_item: dict[str, list[dict]] = {item_id: [] for item_id in session["item_order"]}
+    common_questions = []
+    for question in working.get("pending") or []:
+        if question.get("scope") == "common":
+            common_questions.append(question)
+            continue
+        item_id = question.get("item_id")
+        if item_id in pending_by_item:
+            pending_by_item[item_id].append(question)
+
+    # Shared workbook conditions are answered once and invalidate only the combined statement.
+    for question in common_questions:
+        key = question["field"]
+        if key in answers and refs.get(key) == question.get("ref"):
+            try:
+                tools.set_common(session, key, answers[key])
+                session["pending_questions"].pop(question.get("question_id"), None)
+            except PlanError as exc:
+                working.setdefault("notices", []).append(str(exc))
+
+    processed = []
+    trace_rows = []
+    new_pending = []
+    should_process_all = bool(request.get("_multi_start"))
+    continue_requested = any(name.endswith("::continue") and refs.get(name) for name in answers)
+    for item_id in session["item_order"]:
+        item = session["items"][item_id]
+        item_questions = pending_by_item.get(item_id, [])
+        supplied = {}
+        supplied_refs = {}
+        is_continue = False
+        for question in item_questions:
+            composite = question["field"]
+            if composite in answers and refs.get(composite) == question.get("ref"):
+                if composite.endswith("::continue"):
+                    is_continue = True
+                else:
+                    raw_field = composite.split("::", 1)[1]
+                    supplied[raw_field] = answers[composite]
+                    supplied_refs[raw_field] = question["ref"].split("::", 1)[-1]
+        first_run = should_process_all and not item.get("hits") and not item.get("candidates")
+        if item_questions and not supplied and not is_continue and not first_run:
+            new_pending.extend(item_questions)
+            continue
+        if item.get("status") in ("PRICED", "UNSUPPORTED", "NOT_FOUND", "BLOCKED", "ERROR") \
+                and not supplied and not first_run and target_item_id != item_id:
+            continue
+        targeted_edit = target_item_id == item_id and bool(target_message)
+        if not first_run and not supplied and not is_continue and not targeted_edit:
+            # A tool budget stop is resumable only by an explicit Continue card.
+            if item.get("status") == "NEEDS_WORK" and budget.tool_calls >= MAX_TOOL_CALLS:
+                version = str(item.get("input_revision", 0))
+                qid = f"{item_id}:continue"
+                new_pending.append({"field": f"{item_id}::continue", "question_id": qid,
+                                   "version": version, "scope": "item", "item_id": item_id,
+                                   "ask": f"{item_id} 작업의 검색·계산을 계속할까요?", "choices": ["계속 진행"],
+                                   "ref": f"{item_id}::{qid}@{version}@{working.get('pending_revision', 0) + 1}"})
+            continue
+        if budget.tool_calls >= MAX_TOOL_CALLS or budget.remaining_ms() <= 0:
+            if item.get("status") == "NEEDS_WORK":
+                qid = f"{item_id}:continue"
+                version = str(item.get("input_revision", 0))
+                new_pending.append({"field": f"{item_id}::continue", "question_id": qid,
+                                   "version": version, "scope": "item", "item_id": item_id,
+                                   "ask": f"{item_id} 작업의 검색·계산을 계속할까요?", "choices": ["계속 진행"],
+                                   "ref": f"{item_id}::{qid}@{version}@{working.get('pending_revision', 0) + 1}"})
+            continue
+
+        view = copy.deepcopy(session)
+        view["items"] = {item_id: copy.deepcopy(item)}
+        view["item_order"] = [item_id]
+        substate = new_dialogue()
+        view["active_item_id"] = item_id
+        substate.update(session=view, goal=working.get("goal") or "cost", route="estimate",
+                        aggregate_parent=True)
+        substate["pending"] = [{**q, "field": q["field"].split("::", 1)[1],
+                                "ref": q["ref"].split("::", 1)[-1]} for q in item_questions
+                               if not q["field"].endswith("::continue")]
+        local_request = {"message": (target_message if targeted_edit else item.get("request_text", ""))
+                         if (first_run or is_continue or targeted_edit) else None,
+                         "answers": supplied or None, "refs": supplied_refs or None,
+                         "basis_date": request.get("basis_date"), "_multi_item_id": item_id,
+                         "_shared_budget": budget}
+        if supplied and not first_run and not targeted_edit:
+            local_request["message"] = None
+        result = run_turn(substate, local_request, generate=generate, clock=clock)
+        returned_session = result.get("session")
+        if returned_session and returned_session.get("item_order"):
+            returned_item = returned_session["items"][returned_session["item_order"][0]]
+            # Keep the source-stable outer ID even though legacy tools use a one-item view.
+            returned_item["item_id"] = item_id
+            session["items"][item_id] = returned_item
+            for q in result.get("pending") or []:
+                qid = q.get("question_id", q["field"])
+                raw_ref = q.get("ref", "")
+                composite = f"{item_id}::{qid}"
+                new_pending.append({**q, "field": f"{item_id}::{q['field']}", "question_id": composite,
+                                    "item_id": item_id, "scope": "item", "ref": f"{item_id}::{raw_ref}"})
+        processed.extend((result.get("turn") or {}).get("tools", []))
+        trace_rows.extend({**entry, "item_id": item_id} for entry in
+                          ((result.get("turn") or {}).get("trace") or []))
+
+    # Items left after a budget boundary stay in the checkpoint and expose a charged Continue action.
+    for item_id in session["item_order"]:
+        item = session["items"][item_id]
+        if item.get("status") not in SETTLED and not pending_by_item.get(item_id) \
+                and not any(q.get("item_id") == item_id for q in new_pending):
+            qid = f"{item_id}:continue"
+            version = str(item.get("input_revision", 0))
+            new_pending.append({"field": f"{item_id}::continue", "question_id": qid,
+                               "version": version, "scope": "item", "item_id": item_id,
+                               "ask": f"{item.get('request_text', '작업')}의 검색·계산을 이어서 진행할까요?",
+                               "choices": ["계속 진행"], "ref": f"{item_id}::{qid}@{version}@{working.get('pending_revision', 0) + 1}"})
+    session["active_item_id"] = session["item_order"][0] if session["item_order"] else None
+    session = aggregate.aggregate(session)
+    if session.get("aggregate_result", {}).get("status") == "NEEDS_COMMON":
+        for q in session.get("pending_questions", {}).values():
+            new_pending.append({**q, "field": q["field"], "scope": "common",
+                                "ref": f"{q['question_id']}@{q['version']}@{working.get('pending_revision', 0) + 1}"})
+    if session.get("statement"):
+        session["statement_key"] = tools._statement_key(session)
+    working["session"] = session
+    working["pending_revision"] = working.get("pending_revision", 0) + 1
+    # Deduplicate same-item questions and keep their refs stable until answered.
+    working["pending"] = list({q["field"]: q for q in new_pending}.values())
+    answer_text = "작업별 진행 상태를 갱신했어요. 확인이 필요한 항목은 아래 카드에서 답하고, 남은 작업은 계속 진행을 눌러 주세요."
+    if stale_fields:
+        answer_text = "오래되었거나 다른 작업의 질문 답은 반영하지 않았어요. " + answer_text
+    working["turn"] = {"answer": answer_text,
+                       "answer_source": "template", "tools": processed, "trace": trace_rows,
+                       "llm_info": budget.record(), "last_status": "needs_input" if working["pending"] else
+                       session.get("aggregate_result", {}).get("status")}
+    if request.get("free_card_answer"):
+        working["free_card_answers"] = working.get("free_card_answers", 0) + 1
+    working.pop("request", None)
+    return working
+
+
+def _scope_decisions(analysis: dict, answers: dict) -> list[dict]:
+    decisions = []
+    for span in analysis["scope_spans"]:
+        classification = span["classification"]
+        work_ids = span.get("work_ids") or []
+        if (work_ids and classification == "requested") or classification == "unconfirmed":
+            choice = answers.get(f"scope::{span['span_id']}")
+            action = {"계산에 포함": "include_work", "작업에서 제외": "exclude_work",
+                      "조건으로 반영": "keep_condition", "바탕면으로 반영": "keep_background"}.get(
+                          choice, "exclude_work")
+            decision = {"span_id": span["span_id"], "action": action}
+            if action == "include_work" and classification == "unconfirmed":
+                task = next((row for row in analysis["work_items"] if row["segment_id"] == span["span_id"]), None)
+                decision["work"] = (task or {}).get("work") or span["text"]
+            decisions.append(decision)
+        else:
+            action = {"requested": "include_work", "background": "keep_background",
+                      "condition": "keep_condition", "excluded": "keep_excluded",
+                      "unconfirmed": "exclude_work"}[classification]
+            decisions.append({"span_id": span["span_id"], "action": action})
+    return decisions
+
+
+def _scope_questions(analysis: dict, revision: int) -> list[dict]:
+    questions = []
+    for span in analysis["scope_spans"]:
+        if not ((span.get("work_ids") and span["classification"] == "requested")
+                or span["classification"] == "unconfirmed"):
+            continue
+        qid = f"scope::{span['span_id']}"
+        version = question_version(analysis["analysis_hash"], span["span_id"])
+        questions.append({"field": qid, "question_id": qid, "version": version, "scope": "intent",
+                          "item_id": None, "stage": "scope", "kind": "choice", "required": True,
+                          "ask": f"‘{span['text']}’ 작업을 이번 견적에 포함할까요?",
+                          "choices": (["계산에 포함", "작업에서 제외"] if span["classification"] == "requested"
+                                      else ["계산에 포함", "작업에서 제외", "조건으로 반영", "바탕면으로 반영"]),
+                          "ref": _ref({"question_id": qid, "version": version}, revision)})
+    return questions
+
+
 # ---- 저장: LangGraph 체크포인터 ----
 
 def build_dialogue_graph(checkpointer=None, generate=None):
@@ -922,6 +1328,20 @@ def build_dialogue_graph(checkpointer=None, generate=None):
                       "computed_result": _trace_tool_value({k: (item.get("computed_result") or {})[k]
                                           for k in ("daily_volume", "work_days", "unit_basis", "per_unit_only", "review_status", "lines", "unit_lines")
                                           if k in (item.get("computed_result") or {})})}
+            if session and len(session.get("item_order") or []) > 1:
+                output["items"] = [{
+                    "item_id": item_id,
+                    "status": session["items"][item_id].get("status"),
+                    "input_revision": session["items"][item_id].get("input_revision"),
+                    "result_revision": session["items"][item_id].get("result_revision"),
+                    "spec_id": session["items"][item_id].get("selected_spec_id"),
+                    "search_info": {key: session["items"][item_id].get("search_info", {}).get(key)
+                                    for key in ("method", "api_calls")
+                                    if key in (session["items"][item_id].get("search_info") or {})},
+                    "quantity": {key: (session["items"][item_id].get("quantity") or {})[key]
+                                 for key in ("value", "unit")
+                                 if key in (session["items"][item_id].get("quantity") or {})},
+                } for item_id in session["item_order"]]
             answer_trace.set_output(trace_step, output)
             return result
 
