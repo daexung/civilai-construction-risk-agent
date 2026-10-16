@@ -57,7 +57,7 @@ export default function MultiTradeTrial() {
   const [quantityEdits, setQuantityEdits] = useState<Record<string, string>>({});
 
   useEffect(() => { health().then(setHealthInfo).catch(() => setHealthInfo(null)); }, []);
-  const scopeSpans = analysisRun?.analysis.scope_spans ?? [];
+  const scopeSpans = useMemo(() => analysisRun?.analysis.scope_spans ?? [], [analysisRun]);
   const scopeComplete = useMemo(() => scopeSpans.length > 0 && scopeSpans.every(span => !!decisions[span.span_id]),
     [scopeSpans, decisions]);
   const owner = analysisRun?.owner_token;

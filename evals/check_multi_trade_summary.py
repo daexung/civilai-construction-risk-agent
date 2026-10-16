@@ -108,7 +108,7 @@ def main():
         print("PASS workbook generated with multi-item detail sheet")
         print("Saved sanitized local workbook example:", example)
         print("Statement totals:", result["statement"]["totals"])
-        trial = api._get_trial(started["trial_id"])
+        trial = api._get_trial(started["trial_id"], started["owner_token"])
         previous_keys = {item_id: trial["items"][item_id]["session"]["items"][item_id].get("price_key")
                          for item_id in trial["item_order"]}
         with patch("backend.agent.estimate.tools.price_item_for_aggregate",

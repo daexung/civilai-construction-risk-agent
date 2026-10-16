@@ -674,7 +674,15 @@ def estimate_trial(request: Request, trial_id: str, payload: SummaryRequest,
                     state["reason"] = trial_item.get("unsupported_scope") or "작업 항목을 지원하지 않습니다"
                     state["selected_spec_id"] = ""
                     continue
-                if trial_item.get("search_status") != "COMPLETE":
+                search_status = trial_item.get("search_status")
+                if search_status in (None, "CACHE_MISS", "UNAVAILABLE"):
+                    state = template["items"][item_id]
+                    # Until a local search yields candidates, the work is still open for confirmation.
+                    # Cache misses and unavailable assets are not proof that this item is unsupported.
+                    state["status"] = "NEEDS_WORK"
+                    state["reason"] = trial_item.get("search_message") or "작업 검색이 완료되지 않아 확인이 필요합니다"
+                    continue
+                if search_status != "COMPLETE":
                     state = template["items"][item_id]
                     state["status"] = "ERROR"
                     state["reason"] = trial_item.get("search_message") or "실제 검색이 완료되지 않았습니다"
