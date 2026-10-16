@@ -51,7 +51,7 @@ def versions():
                                  'embed_provider': os.getenv('EMBED_PROVIDER') or config['embed_provider'],
                                  'embed_model': os.getenv('EMBED_MODEL') or config.get('embed_model')},
             'configured_model': os.getenv('LLM_MODEL') or _configured_model(),
-            'agent_mode': os.getenv('AGENT_MODE') or 'graph'}
+            'agent_mode': os.getenv('AGENT_MODE') or 'tools'}
 
     if os.getenv('KNOWLEDGE_RETRIEVAL') == 'v1':
         import json

@@ -32,8 +32,8 @@ const close = () => act(() => Simulate.click(document.querySelector('.beta-notic
 test('ordinary dismissal allows the notice on the next visit and restores background access', () => {
   render();
   expect(document.querySelector('[role="dialog"]').textContent).toContain('20');
-  expect(document.querySelector('.beta-notice-scope').textContent).toContain('단일 공종');
-  expect(document.querySelector('.beta-notice-scope').textContent).toContain('추후 업데이트');
+  expect(document.querySelector('.beta-notice-scope').textContent).toContain('여러 공종');
+  expect(document.querySelector('.beta-notice-scope').textContent).toContain('통합 견적');
   expect(container.hasAttribute('inert')).toBe(true);
   expect(document.activeElement).toBe(document.querySelector('.beta-notice-title'));
   act(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true })));
@@ -83,7 +83,7 @@ test('chat feedback dismisses the notice and shows it on the next visit unless t
   const onFeedback = jest.fn();
   const renderChat = () => act(() => root.render(<BetaNotice variant="chat" onStart={() => {}} onFeedback={onFeedback} />));
   renderChat();
-  expect(document.querySelector('.beta-notice-scope').textContent).toContain('단일 공종');
+  expect(document.querySelector('.beta-notice-scope').textContent).toContain('여러 공종');
   expect(document.querySelector('.beta-notice-feedback').textContent).toContain('정확하지');
   expect(container.hasAttribute('inert')).toBe(true);
   act(() => Simulate.click(document.querySelector('.beta-notice-feedback-action')));

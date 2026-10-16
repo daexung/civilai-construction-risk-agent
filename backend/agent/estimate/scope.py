@@ -574,7 +574,8 @@ def confirm_analysis(text: str, analysis: dict, decisions: list[dict]) -> dict[s
     return {"status": "confirmed_scope", "confirmation": receipt}
 
 
-def confirmed_result(text: str, analysis: dict, confirmation: dict) -> dict[str, Any]:
+def confirmed_result(text: str, analysis: dict, confirmation: dict,
+                     condition_owners: dict[str, str] | None = None) -> dict[str, Any]:
     """재검증한 확인증으로만 단일 공종 호환 계획을 만든다."""
     if (not isinstance(analysis, dict) or analysis.get("analysis_version") != ANALYSIS_VERSION
             or analysis.get("analysis_hash") != _analysis_hash(analysis) or analysis.get("source_text") != text):
@@ -649,73 +650,111 @@ def confirmed_result(text: str, analysis: dict, confirmation: dict) -> dict[str,
                   and condition["id"] not in included_condition_ids
                   and decisions[condition["id"]]["action"] == "keep_condition"
                   and decisions[condition["segment_id"]]["action"] not in ("keep_excluded", "exclude_work")]
+    condition_owners = condition_owners or {}
     remaining_unattached = []
     for condition in unattached:
         owner = [task for task in included if task["segment_id"] == condition["segment_id"]]
         if len(owner) == 1:
             if not any(existing["id"] == condition["id"] for existing in owner[0]["conditions"]):
                 owner[0]["conditions"].append(condition)
+        elif condition.get("id") in condition_owners:
+            selected = next((task for task in included
+                             if task["segment_id"] == condition_owners[condition["id"]]), None)
+            if selected and not any(existing["id"] == condition["id"] for existing in selected["conditions"]):
+                selected["conditions"].append(condition)
+            elif selected:
+                pass
+            else:
+                remaining_unattached.append(condition)
         else:
             remaining_unattached.append(condition)
     if remaining_unattached:
         return {"status": "confirmed_scope", "work_items": included,
                 "calculation": {"mode": "not_ready", "blocked": True,
                                 "reason": "작업에 연결되지 않은 조건이 남아 있습니다."},
+                "unassigned_conditions": [{"id": condition["id"], "text": condition["evidence"]["text"],
+                                           "owners": [{"id": task["segment_id"], "work": task["work"],
+                                                       "label": f"{task['work']} · {span_map[task['segment_id']]['text']}"}
+                                                      for task in included]}
+                                          for condition in remaining_unattached],
                 "confirmation": confirmation}
 
-    if len(included) != 1:
-        return {"status": "confirmed_scope", "source_text": text, "work_items": included,
+    if not included:
+        return {"status": "confirmed_scope", "source_text": text, "work_items": [],
                 "substrates": analysis["substrates"], "excluded_requests": confirmed_excluded,
-                "unconfirmed_scope": [], "calculation": {"mode": "not_ready",
-                "reason": "이번 단계는 확인된 단일 작업만 기존 세션 계획으로 바꿉니다."}, "confirmation": confirmation}
-    task = included[0]
-    quantities = [condition for condition in task["conditions"] if condition["kind"] == "quantity"]
-    try:
-        invalid_quantity = any(Decimal(q["value"].replace(",", "")) <= 0 for q in quantities)
-    except InvalidOperation:
-        invalid_quantity = True
-    # 서로 다른 단위는 도구에 보내기 전에 물량으로 단정하지 않는다. 원문 조건으로 보존해
-    # 선택 명세가 실제 물량 단위(예: ㎜ 두께와 ㎡ 면적)를 가른 뒤 기존 입력 파서가 연결한다.
-    repeated_same_unit = len({condition.get("unit") for condition in quantities}) < len(quantities)
-    if repeated_same_unit or invalid_quantity:
-        return {"status": "confirmed_scope", "work_items": included, "calculation": {"mode": "not_ready",
-                "blocked": True, "reason": "한 작업에 같은 단위의 수량이 둘 이상 있습니다."},
+                "unconfirmed_scope": [], "calculation": {"mode": "not_ready", "reason": "포함할 작업을 선택해 주세요."},
                 "confirmation": confirmation}
-    task_conditions = list(task["conditions"])
+
+    # Build all confirmed work spans into one ordered plan. IDs depend on source
+    # offsets, so the same saved analysis restores the same item/question scope.
     selected_background = [substrate for substrate in analysis["substrates"]
                            if decisions[substrate["id"]]["action"] == "keep_background"]
-    task_segment = span_map[task["segment_id"]]
-    selected_text = task_segment["text"]
-    if task["work"] not in selected_text:
-        selected_text = f"{task['work']} {selected_text}"
-    request_parts = [(task_segment["start"], selected_text)]
-    request_parts.extend((condition["evidence"]["start"], condition["evidence"]["text"])
-                         for condition in task_conditions
-                         if not (task_segment["start"] <= condition["evidence"]["start"]
-                                 and condition["evidence"]["end"] <= task_segment["end"]))
-    request_parts.extend((substrate["evidence"]["start"], substrate["evidence"]["text"])
-                         for substrate in selected_background
-                         if substrate.get("segment_id") != task["segment_id"])
-    request_text = " ".join(part for _, part in sorted(set(request_parts)))
-    source_spans = [{"kind": "work", "value": task["work"], **task["evidence"]}]
-    source_spans.extend({"kind": condition["kind"], "value": condition["value"], **condition["evidence"]}
-                        for condition in task_conditions)
-    source_spans.extend({"kind": "background", "value": substrate["surface"], **substrate["evidence"]}
-                        for substrate in selected_background)
-    item = {"item_id": "i1", "request_text": request_text, "source_spans": source_spans}
-    if len(quantities) == 1:
-        from backend.agent.estimate.state import unit_key
-        if unit_key(quantities[0]["unit"]) is None:
+    if len(included) > 1:
+        unassigned_backgrounds = [surface for surface in selected_background
+                                  if surface.get("segment_id") not in {task["segment_id"] for task in included}
+                                  and surface.get("id") not in condition_owners]
+        if unassigned_backgrounds:
             return {"status": "confirmed_scope", "work_items": included,
                     "calculation": {"mode": "not_ready", "blocked": True,
-                                    "reason": "기존 세션에서 처리할 수 없는 단위입니다."},
+                                    "reason": "바탕면을 어느 작업에 연결할지 확인이 필요합니다."},
+                    "unassigned_backgrounds": [{"id": surface["id"], "text": surface["surface"],
+                                                "owners": [{"id": task["segment_id"], "work": task["work"],
+                                                            "label": f"{task['work']} · {span_map[task['segment_id']]['text']}"}
+                                                           for task in included]}
+                                               for surface in unassigned_backgrounds],
                     "confirmation": confirmation}
-        item["quantity"] = {"value": quantities[0]["value"], "unit": quantities[0]["unit"]}
-    plan = {"original_request": text, "items": [item]}
+    plan_items = []
+    for index, task in enumerate(sorted(included, key=lambda row: row["evidence"]["start"]), 1):
+        quantities = [condition for condition in task["conditions"] if condition["kind"] == "quantity"]
+        try:
+            invalid_quantity = any(Decimal(q["value"].replace(",", "")) <= 0 for q in quantities)
+        except InvalidOperation:
+            invalid_quantity = True
+        repeated_same_unit = len({condition.get("unit") for condition in quantities}) < len(quantities)
+        if repeated_same_unit or invalid_quantity:
+            return {"status": "confirmed_scope", "work_items": included, "calculation": {"mode": "not_ready",
+                    "blocked": True, "reason": "한 작업에 같은 단위의 수량이 둘 이상 있습니다."},
+                    "confirmation": confirmation}
+        task_segment = span_map[task["segment_id"]]
+        # A separate background is attached only when the original scope segment
+        # has exactly one included owner. Never copy it across all work items.
+        owned_background = [surface for surface in selected_background
+                            if surface.get("segment_id") == task["segment_id"]
+                            or condition_owners.get(surface.get("id")) == task["segment_id"]]
+        if len(included) == 1:
+            owned_background += [surface for surface in selected_background if surface not in owned_background]
+        selected_text = task_segment["text"]
+        if task["work"] not in selected_text:
+            selected_text = f"{task['work']} {selected_text}"
+        request_parts = [(task_segment["start"], selected_text)]
+        request_parts.extend((condition["evidence"]["start"], condition["evidence"]["text"])
+                             for condition in task["conditions"]
+                             if not (task_segment["start"] <= condition["evidence"]["start"]
+                                     and condition["evidence"]["end"] <= task_segment["end"]))
+        request_parts.extend((surface["evidence"]["start"], surface["evidence"]["text"])
+                             for surface in owned_background if surface.get("segment_id") != task["segment_id"])
+        request_text = " ".join(part for _, part in sorted(set(request_parts)))
+        source_spans = [{"kind": "work", "value": task["work"], **task["evidence"]}]
+        source_spans.extend({"kind": condition["kind"], "value": condition["value"], **condition["evidence"]}
+                            for condition in task["conditions"])
+        source_spans.extend({"kind": "background", "value": surface["surface"], **surface["evidence"]}
+                            for surface in owned_background)
+        item = {"item_id": f"i{task['evidence']['start']}_{task['evidence']['end']}",
+                "request_text": request_text, "source_spans": source_spans}
+        if len(quantities) == 1:
+            from backend.agent.estimate.state import unit_key
+            if unit_key(quantities[0]["unit"]) is None:
+                return {"status": "confirmed_scope", "work_items": included,
+                        "calculation": {"mode": "not_ready", "blocked": True,
+                                        "reason": "기존 세션에서 처리할 수 없는 단위입니다."},
+                        "confirmation": confirmation}
+            item["quantity"] = {"value": quantities[0]["value"], "unit": quantities[0]["unit"]}
+        plan_items.append(item)
+    plan = {"original_request": text, "items": plan_items}
     return {"status": "confirmed_scope", "source_text": text, "work_items": included,
             "substrates": analysis["substrates"], "excluded_requests": confirmed_excluded,
             "unconfirmed_scope": [], "confirmation": confirmation,
-            "calculation": {"mode": "single_trade", "plan": plan}}
+            "calculation": {"mode": "single_trade" if len(plan_items) == 1 else "multi_trade", "plan": plan}}
 
 
 if __name__ == "__main__":

@@ -275,6 +275,11 @@ export interface ChatResponse {
   basis_date: string;
   search: SearchInfo;
   timing?: { route_ms: number; retrieve_ms: number; compute_ms: number; llm_ms: number; total_ms: number };
+  multi_trade_items?: { item_id: string; request_text: string; status: string; work: WorkInfo | null;
+    quantity?: { value: string; unit: string } | null; reason?: string;
+    result: ComputedResult | BlockedResult | null; priced: PricedResult | null; tables: ResultTables;
+    inputs: InputRow[]; evidence: EvidenceItem[];
+    not_calculated_scope: { name: string; reason: string }[] }[];
 }
 
 export interface ChatTurn {

@@ -30,7 +30,19 @@ from backend.agent.estimate import dialogue, reply_check, tools  # noqa: E402
 from backend.agent.nodes.compute import CALCULATORS  # noqa: E402
 from backend.agent.rules.specs import load_specs  # noqa: E402
 from backend.agent.tools.llm import client  # noqa: E402
+from backend.agent.tools.source import citation  # noqa: E402
 from backend.api import chat_storage, dialogue_service  # noqa: E402
+
+# This check uses fixed retrieval hits. If local source artifacts are available,
+# use them for citation fixtures; otherwise keep the test self-contained.
+SOURCE_DATA = Path(os.environ.get("CIVILAI_SOURCE_DATA", ROOT / "data"))
+PAGE_MAP = SOURCE_DATA / "processed/page_map.json"
+PDF = SOURCE_DATA / "raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf"
+if PAGE_MAP.is_file() and PDF.is_file():
+    citation.PAGE_MAP = PAGE_MAP
+    citation.PDF = PDF
+    citation._pages.cache_clear()
+api_main.prepare_citations = lambda: None
 
 HITS = [{"rank": rank, "section_no": no, "division": division, "section": f"{no} {title}", "page": page,
          "table_id": None, "text": title, "chunk_id": f"fixed-{rank}"}
@@ -266,9 +278,18 @@ def check_one_question(checks: list) -> None:
             return post({"thread_id": previous["thread_id"], "answers": {question["name"]: value},
                          "refs": {question["name"]: question["ref"]}})
 
-        def start(message="콘크리트 펌프차 타설 비용 알려줘"):
+        def start(message="콘크리트 펌프차 타설 비용 알려줘", work="6-1-4"):
             first = post({"message": message})
-            return answer(first, "6-1-4")
+            pending = state(first).get("pending") or []
+            scope_questions = [q for q in pending if q["field"].startswith("scope::")]
+            if scope_questions:
+                first = post({"thread_id": first["thread_id"],
+                              "answers": {q["field"]: "계산에 포함" for q in scope_questions},
+                              "refs": {q["field"]: q["ref"] for q in scope_questions}})
+                pending = state(first).get("pending") or []
+            if any(q["field"].endswith("::work") or q["field"] == "work" for q in pending):
+                first = answer(first, work)
+            return first
 
         def state(reply):
             return dialogue.load(api_main.DIALOGUE, reply["thread_id"])
@@ -278,7 +299,7 @@ def check_one_question(checks: list) -> None:
         checks.append(("O1 공종 선택 후 화면 붐 길이 1개·remaining 6·전체 pending 보존·물량 맨 뒤",
                        [q["name"] for q in current["questions"]] == ["pump_size"]
                        and current["questions_remaining"] == 6
-                       and [q["field"] for q in state(current)["pending"]] == expected
+                       and [q["field"].split("::", 1)[-1] for q in state(current)["pending"]] == expected
                        and current["questions"][0]["ref"] == state(current)["pending"][0]["ref"]))
         sequence, counts = [], []
         before = len(consumed); generate.reset_mock(); retrieval.reset_mock()
@@ -308,7 +329,7 @@ def check_one_question(checks: list) -> None:
             checks.append((f"O3 {mode}: 글로 세 조건 동시 반영·견적 유지·남은 질문 1개 표시",
                            saved["session"]["estimate_id"] == estimate_id
                            and all(item["conditions"].get(k) == v for k,v in {"pump_size":"41m", "structure":"철근", "slump_band":"15㎝"}.items())
-                           and [q["field"] for q in saved["pending"]] == expected[3:]
+                           and [q["field"].split("::", 1)[-1] for q in saved["pending"]] == expected[3:]
                            and [q["name"] for q in changed["questions"]] == ["facility_type"]
                            and changed["questions_remaining"] == 3))
             if mode == "llm":
@@ -336,7 +357,7 @@ def check_one_question(checks: list) -> None:
         mismatch = start("콘크리트 타설 1m 비용 알려줘")
         checks.append(("O7 단위 불일치 물량은 맨 앞·불일치 사유 포함",
                        mismatch["questions"][0]["name"] == "volume"
-                       and state(mismatch)["pending"][0]["field"] == "volume"
+                       and state(mismatch)["pending"][0]["field"].split("::", 1)[-1] == "volume"
                        and "맞지 않아요" in (mismatch["questions"][0].get("reason") or "")))
         before = len(consumed)
         stale = post({"thread_id": hidden["thread_id"], "answers": {"pump_size":"32m"},
@@ -346,7 +367,7 @@ def check_one_question(checks: list) -> None:
                        and "pump_size" not in tools._item(state(stale)["session"])["conditions"]))
         door_hits = [{**HITS[0], "section_no":"10-1-7", "division":"건축", "section":"10-1-7 자동문 설치"}]
         with patch.object(tools, "retrieve", return_value={"hits":door_hits}):
-            door = post({"message":"자동문 설치 비용 알려줘"})
+            door = start("자동문 설치 비용 알려줘", "10-1-7")
             done = answer(door,"3")
         checks.append(("O9 조건 1개 자동문: 질문 1개·remaining 1, 답 후 기존 품 결과",
                        [q["name"] for q in door["questions"]] == ["quantity"] and door["questions_remaining"] == 1
@@ -479,13 +500,61 @@ def main() -> int:
             assert result.status_code == expect, (result.status_code, result.text[:500])
             return result.json()
 
+        def ref_for(refs: dict, field: str) -> str | None:
+            return next((ref for name, ref in refs.items()
+                         if name == field or name.endswith(f"::{field}") or name.endswith(f":{field}")), None)
+
         def answer(previous: dict, values: dict, refs: dict | None = None) -> dict:
-            if refs is None:
-                names = {q["field"] for q in stored(previous["thread_id"])["pending"]}
-                values = {name: value for name, value in values.items()
-                          if name not in {"placement", "vibrator_used", "reset_status"} or name in names}
-                refs = {q["field"]: q["ref"] for q in stored(previous["thread_id"])["pending"] if q["field"] in values}
-            return post({"thread_id": previous["thread_id"], "answers": values, "refs": refs})
+            thread_id = previous["thread_id"]
+            pending = stored(thread_id).get("pending") or []
+            staged = [q for q in pending if q["field"].startswith(("scope::", "scope_owner::"))
+                      or q["field"].endswith("::continue")
+                      or ((q["field"].endswith("::work") or q["field"] == "work") and "work" not in values)]
+            scope_advanced = bool(staged)
+            while staged:
+                previous = post({"thread_id": thread_id,
+                                 "answers": {q["field"]: ("계산에 포함" if q["field"].startswith("scope::")
+                                                               else q["choices"][0] if q["field"].startswith("scope_owner::")
+                                                               else q["choices"][0] if q["field"].endswith("::work") or q["field"] == "work"
+                                                               else "계속 진행") for q in staged},
+                                 "refs": {q["field"]: q["ref"] for q in staged}})
+                pending = stored(thread_id).get("pending") or []
+                staged = [q for q in pending if q["field"].startswith(("scope::", "scope_owner::"))
+                          or q["field"].endswith("::continue")
+                          or ((q["field"].endswith("::work") or q["field"] == "work") and "work" not in values)]
+            if "work" in values and not any(q["field"].endswith("::work") or q["field"] == "work"
+                                             for q in pending):
+                # Scope inclusion now establishes the requested work; older
+                # fixtures supplied a separate selection answer here.
+                return previous
+            if scope_advanced and "work" in values and any(
+                    q["field"].endswith("::work") or q["field"] == "work" for q in pending):
+                return previous  # let the caller select work on the next fixture turn
+            mapped, mapped_refs = {}, {}
+            for question in pending:
+                field = question["field"]
+                local = field.split("::", 1)[-1].rsplit(":", 1)[-1]
+                key = field if field in values else local if local in values else None
+                if key is None or key in {"placement", "vibrator_used", "reset_status"} and local not in values:
+                    continue
+                mapped[field] = values[key]
+                supplied_ref = next((ref for ref_field, ref in (refs or {}).items()
+                                      if ref_field == field or ref_field == local
+                                      or ref_field.endswith(f"::{local}") or ref_field.endswith(f":{local}")), None)
+                mapped_refs[field] = supplied_ref if refs is not None else question["ref"]
+            if not mapped:
+                state = stored(thread_id)
+                raise AssertionError(f"fixture supplied no answerable fields; pending={[q['field'] for q in pending]}; "
+                                     f"supplied={sorted(values)}; status={previous.get('status')}; "
+                                     f"session={bool(state.get('session'))}; turn={state.get('turn')}")
+            return post({"thread_id": thread_id, "answers": mapped, "refs": mapped_refs})
+
+        def answer_work(previous: dict, work: str) -> dict:
+            result = answer(previous, {"work": work})
+            pending = stored(previous["thread_id"]).get("pending") or []
+            if any(q["field"].endswith("::work") or q["field"] == "work" for q in pending):
+                result = answer(result, {"work": work})
+            return result
 
         def stored(thread_id: str) -> dict:
             return dialogue.load(dialogue.build_dialogue_graph(api_main.GRAPH.checkpointer), thread_id)
@@ -502,8 +571,10 @@ def main() -> int:
 
         # 2. 공종 → 품 조건만(가격 조건·물량 없음) → 품과 근거
         llm.plan(("compute_labor", {}))
-        t2 = answer(t1, {"work": "6-1-4"})
-        checks.append(("D2 품 조건만 질문(관급/사급·물량 없음)", set(q["field"] for q in stored(thread)["pending"]) == set(PUMP) - {"placement", "vibrator_used", "reset_status"}
+        t2 = answer_work(t1, "6-1-4")
+        checks.append(("D2 품 조건만 질문(관급/사급·물량 없음)",
+                       {q["field"].split("::", 1)[-1] for q in stored(thread)["pending"]}
+                       == set(PUMP) - {"placement", "vibrator_used", "reset_status"}
                        and [q["name"] for q in t2["questions"]] == ["pump_size"] and t2["questions_remaining"] == 5))
         llm.plan(("compute_labor", {}))
         t2b = answer(t2, PUMP)
@@ -704,7 +775,7 @@ def main() -> int:
                 llm.plan(("find_work", {}), ("compute_labor", {}))
                 first = post({"message": "콘크리트 펌프차 타설 품 알려줘"})
                 llm.plan(("compute_labor", {}))
-                asked = answer(first, {"work": "6-1-4"})
+                asked = answer_work(first, "6-1-4")
                 pending_thread = first["thread_id"]
                 names = {q["name"] for q in asked["questions"]}
                 llm.plan(("set_conditions", {"values": {"pump_size": {"value": "32m", "evidence": "32m"}}}), ("compute_labor", {}))
@@ -730,7 +801,11 @@ def main() -> int:
                 "placement": ("붐", "붐타설"), "vibrator_used": (True, "진동기 사용"), "reset_status": ("없음", "재셋팅 없음"),
             }.items()}}), ("estimate_cost", {}))
         s1 = post({"message": "철근콘크리트 펌프차 32m 붐타설 슬럼프 15cm 진동기 사용 재셋팅 없음 10세제곱미터 비용"})
-        llm.plan(("estimate_cost", {}))
+        # Unified scope confirmation now creates the session and searches the
+        # selected work in this turn; preserve the same calculation actions.
+        llm.plan(("find_work", {}), ("set_conditions", {"quantity": {
+            "value": "10", "unit": "㎥", "evidence": "10세제곱미터"}}),
+                 ("compute_labor", {}), ("estimate_cost", {}))
         s1b = answer(s1, {"facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ"})
         old_ref = {q["name"]: q["ref"] for q in s1b["questions"]}
         llm.plan(("set_conditions", {"quantity": {"value": "20", "unit": "㎥", "evidence": "20세제곱미터"}}), ("estimate_cost", {}))
@@ -744,22 +819,27 @@ def main() -> int:
         checks.append(("D8 같은 필드라도 예전 질문(revision)의 답은 미적용, 현재 질문 답은 적용",
                        [q["name"] for q in s1b["questions"]] == ["concrete_supply"] == [q["name"] for q in s2["questions"]]
                        and old_ref != new_ref and stale["status"] == "MISSING_INFO" and "반영하지 않았어요" in stale["answer"]
-                       and stale["questions"][0]["ref"] not in (old_ref["concrete_supply"], new_ref["concrete_supply"])
+                       and stale["questions"][0]["ref"] == ref_for(new_ref, "concrete_supply")
                        and fresh["estimate_current"]))
 
         # 24. 공종이 실제로 바뀌면 대기 질문을 다시 정하고, 예전 카드 ref의 답은 거부한다
         llm.plan(("find_work", {}), ("set_conditions", {"work": "6-1-4"}), ("set_conditions", {
             "quantity": {"value": "10", "unit": "㎥", "evidence": "10세제곱미터"}}), ("estimate_cost", {}))
         w1 = post({"message": "펌프차 콘크리트 타설 10세제곱미터 비용"})
-        llm.plan(("estimate_cost", {}))
-        w2 = answer(w1, {name: value for name, value in PUMP.items() if name in {q["field"] for q in stored(w1["thread_id"])["pending"]}})
+        llm.plan(("find_work", {}), ("set_conditions", {"work": "6-1-4"}), ("set_conditions", {
+            "quantity": {"value": "10", "unit": "㎥", "evidence": "10세제곱미터"}}), ("estimate_cost", {}))
+        w2 = answer(w1, PUMP)
         w2_ref = {q["name"]: q["ref"] for q in w2["questions"]}
         llm.plan(("set_conditions", {"work": "6-1-1"}), ("estimate_cost", {}))
         switched = post({"thread_id": w1["thread_id"], "message": "레디믹스트콘크리트 타설로 바꿔줘"})
         llm.plan(("estimate_cost", {}))
-        old_card = answer(switched, {"concrete_supply": "관급"}, refs={"concrete_supply": w2_ref.get("concrete_supply")})
+        old_field = next(name for name in w2_ref
+                         if name == "concrete_supply" or name.endswith("::concrete_supply")
+                         or name.endswith(":concrete_supply"))
+        old_card = post({"thread_id": w1["thread_id"], "answers": {old_field: "관급"},
+                         "refs": {old_field: w2_ref[old_field]}})
         checks.append(("D24 공종이 바뀐 뒤 예전 카드(ref)의 답은 거부",
-                       "concrete_supply" in w2_ref and tools._item(stored(w1["thread_id"])["session"])["selection"]["section_no"] == "6-1-1"
+                       ref_for(w2_ref, "concrete_supply") is not None and tools._item(stored(w1["thread_id"])["session"])["selection"]["section_no"] == "6-1-1"
                        and "반영하지 않았어요" in old_card["answer"]
                        and tools._item(stored(w1["thread_id"])["session"])["conditions"].get("concrete_supply") != "관급"))
 
@@ -933,9 +1013,22 @@ def main() -> int:
                     llm.actions = [{"__raise__": True}]
                 first = post({"message": message})
                 thread_id = first["thread_id"]
-                out["start"] = (tools._item(stored(thread_id)["session"]).get("quantity") or {})
+                # The initial turn now asks for scope. Search runs when the
+                # user confirms that card, so restore the selected action plan.
+                if mode in ("llm", "llm_reply"):
+                    llm.plan(("find_work", {}))
+                elif mode == "llm_failed":
+                    llm.actions = [{"__raise__": True}]
+                initial_state = stored(thread_id)
+                if initial_state.get("session"):
+                    out["start"] = tools._item(initial_state["session"]).get("quantity") or {}
+                else:
+                    quantity = next((condition for condition in (initial_state.get("scope_analysis") or {}).get("conditions", [])
+                                     if condition.get("kind") == "quantity"), {})
+                    out["start"] = {"value": quantity.get("value"), "unit": quantity.get("unit")}
+                work_card = answer(first, {"work": "6-3-1"})
                 fail_or_plan(mode)
-                chosen = answer(first, {"work": "6-3-1"})
+                chosen = answer(work_card, {"work": "6-3-1"})
                 out["asked"] = [q["field"] for q in stored(thread_id)["pending"]]
                 out["shown"] = [q["name"] for q in chosen["questions"]]
                 out["selected"] = (tools._item(stored(thread_id)["session"]).get("quantity") or {})
@@ -944,7 +1037,7 @@ def main() -> int:
                 done = answer(chosen, values) if values else chosen
                 item_after = tools._item(stored(thread_id)["session"])
                 out["after"] = (item_after.get("quantity") or {})
-                out["volume"] = item_after["conditions"].get("volume")
+                out["volume"] = item_after.get("quantity", {}).get("value")
                 out["goal"] = stored(thread_id)["goal"]
                 out["status"] = done["status"]
             return out
@@ -957,8 +1050,21 @@ def main() -> int:
                        and len({(f["status"], tuple(f["asked"])) for f in flows.values()}) == 1))
         if not checks[-1][1]:
             print("  D28", flows)
-        two = form_flow("rule", "거푸집 100㎡ 200㎡ 비용")
-        checks.append(("D28b 물량이 여러 개면 고르지 않고 공종 선택 뒤 물량을 묻는다", two["start"] == {} and two["asked"][-1] == "volume" and len(two["shown"]) == 1))
+        # A single work with two same-unit quantities cannot be represented by
+        # one quantity field. Scope confirmation must retain the ambiguity and
+        # stop before creating a session or selecting either value.
+        with patch.dict(os.environ, {"AGENT_LLM": "off"}):
+            two = post({"message": "거푸집 100㎡ 200㎡ 비용"})
+        two_state = stored(two["thread_id"])
+        two_scope = next(q for q in two_state["pending"] if q["field"].startswith("scope::"))
+        two_chosen = post({"thread_id": two["thread_id"],
+                           "answers": {two_scope["field"]: "계산에 포함"},
+                           "refs": {two_scope["field"]: two_scope["ref"]}})
+        checks.append(("D28b 같은 공종의 같은 단위 수량이 여러 개면 임의 선택하지 않고 미산정으로 유지",
+                       two_chosen["status"] == "ANSWERED" and stored(two["thread_id"]).get("session") is None
+                       and "한 작업에 같은 단위의 수량이 둘 이상 있습니다" in two_chosen["answer"]
+                       and len([c for c in (two_state.get("scope_analysis") or {}).get("conditions", [])
+                                if c.get("kind") == "quantity"]) == 2))
 
         # 29. 비용으로 시작한 요청은 LLM이 compute_labor만 골라도 비용 흐름을 이어 간다(가격 질문 → 견적).
         def cost_flow(mode: str) -> tuple:
@@ -968,8 +1074,7 @@ def main() -> int:
                 elif mode == "llm_failed":
                     llm.actions = [{"__raise__": True}]
                 first = post({"message": "콘크리트 타설 100세제곱미터 비용 알려줘"})
-                fail_or_plan(mode)
-                second = answer(first, {"work": "6-1-4"})
+                second = answer_work(first, "6-1-4")
                 fail_or_plan(mode)
                 third = answer(second, PUMP)
                 fail_or_plan(mode)
@@ -988,8 +1093,23 @@ def main() -> int:
         #     서버가 명세 단위(㎥)의 물량 300을 보존하고(32m·15cm 제외), 계산으로 이어 남은 질문 → 견적까지 간다.
         s5_message = "철근콘크리트 300세제곱미터를 32m 붐 펌프차로 타설 비용 알려줘. 슬럼프 15cm, 진동기 사용, 재셋팅 없음"
         with patch.object(tools, "retrieve", return_value={"hits": HITS[:1]}):
-            llm.plan(("find_work", {}), ("set_conditions", {"work": "6-1-4"}))
-            p1 = post({"message": s5_message})
+            llm.plan(("find_work", {}), ("set_conditions", {"work": "6-1-4", "values": {
+                "pump_size": {"value": "32m", "evidence": "32m"},
+                "structure": {"value": "철근", "evidence": "철근콘크리트"},
+                "slump_band": {"value": "15㎝", "evidence": "15cm"},
+                "placement": {"value": "붐", "evidence": "붐"},
+                "vibrator_used": {"value": True, "evidence": "진동기 사용"},
+                "reset_status": {"value": "없음", "evidence": "재셋팅 없음"},
+            }}))
+            scope_prompt = post({"message": s5_message})
+            scope_questions = [q for q in stored(scope_prompt["thread_id"])["pending"]
+                               if q["field"].startswith("scope::")]
+            p1 = post({"thread_id": scope_prompt["thread_id"],
+                       # The main request is in the first span; the later
+                       # vibrator/reset clauses describe conditions on it.
+                       "answers": {q["field"]: ("계산에 포함" if q["field"] == "scope::s0_47"
+                                                   else "조건으로 반영") for q in scope_questions},
+                       "refs": {q["field"]: q["ref"] for q in scope_questions}})
         p_item = tools._item(stored(p1["thread_id"])["session"])
         llm.actions = []  # 카드 답 뒤에도 LLM이 바로 답한다
         p2 = answer(p1, {"facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ"})
@@ -1001,7 +1121,9 @@ def main() -> int:
                        and [q["name"] for q in p2["questions"]] == ["concrete_supply"] and p3["estimate_current"]
                        and stored(p1["thread_id"])["goal"] == "cost"))
         if not checks[-1][1]:
-            print("  D30", p_item.get("quantity"), [q["name"] for q in p1["questions"]], p1["status"], [q["name"] for q in p2["questions"]], p3.get("estimate_current"))
+            print("  D30", p_item.get("quantity"), p_item.get("conditions"), [q["name"] for q in p1["questions"]],
+                  p1["questions_remaining"], p1["status"], [q["name"] for q in p2["questions"]],
+                  p3.get("estimate_current"), stored(p1["thread_id"])["goal"])
 
         # 9. LLM이 근거 검증을 우회하지 못함: 근거와 다른 값, source 주입은 무시된다
         before = item()["quantity"]["value"]

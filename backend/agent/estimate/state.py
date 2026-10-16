@@ -79,6 +79,7 @@ class EstimateSession(TypedDict, total=False):
     common_conditions: dict   # {field: {value, source, explicit}}
     items: dict               # {item_id: EstimateItem}
     item_order: list
+    active_item_id: str | None
     pending_questions: dict   # {question_id: Question}
     aggregate_result: dict | None
     statement: dict | None
