@@ -44,6 +44,18 @@
         "required": true,
         "ask": "낙석방지망의 종류는 포켓식입니까, 비포켓식입니까?",
         "source": "PDF 331쪽 [참고자료] 낙석방지망 재료량 비고 및 산출기준"
+      },
+      {
+        "name": "foundation_drilling",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "낙석방지망 설치를 위한 기초천공(착암) 작업이 포함됩니까?",
+        "source": "PDF 1-9-4 1. 기초 착암"
       }
     ],
     "tables": [
@@ -52,15 +64,23 @@
         "role": "기초 착암 작업조 및 시공량",
         "source": "PDF 330쪽 1. 기초 착암",
         "values": {
-          "착암공 비계공 보통인부": {
-            "수량 2": "800",
-            "수량 3": "800"
+          "착암공": {
+            "수량": "2"
+          },
+          "비계공": {
+            "수량": "3"
+          },
+          "보통인부": {
+            "수량": "2"
           },
           "공기압축기": {
-            "수량 1": "10.3㎥/min"
+            "수량": "1"
           },
           "소형브레이커": {
-            "수량 2": "2.7㎥/min"
+            "수량": "2"
+          },
+          "시공량": {
+            "수량": "800"
           }
         },
         "cite": {
@@ -73,13 +93,19 @@
         "source": "PDF 331쪽 2. 철망 및 와이어 설치",
         "values": {
           "특별인부": {
-            "수량": "2"
+            "기계식": "2",
+            "인력식": "2"
           },
           "보통인부": {
-            "수량": "3"
+            "기계식": "3",
+            "인력식": "3"
           },
           "크레인": {
-            "수량": "1"
+            "기계식": "1"
+          },
+          "시공량": {
+            "기계식": "400",
+            "인력식": "100"
           }
         },
         "cite": {
@@ -112,14 +138,105 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "volume",
+        "base_output": {
+          "table": "p387-t0",
+          "row": "시공량",
+          "column_input": "installation_method"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p387-t0",
+          "column_input": "installation_method",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "크레인",
+            "table": "p387-t0",
+            "column": "기계식",
+            "unit": "대·일",
+            "when": {
+              "installation_method": "기계식"
+            }
+          }
+        ],
+        "additional_work": [
+          {
+            "when": {
+              "foundation_drilling": true
+            },
+            "quantity_input": "volume",
+            "base_output": {
+              "table": "p386-t2",
+              "row": "시공량",
+              "column": "수량"
+            },
+            "crew_table": "p386-t2",
+            "crew_column": "수량",
+            "crew": [
+              "착암공",
+              "비계공",
+              "보통인부"
+            ],
+            "equipment": [
+              {
+                "name": "공기압축기",
+                "table": "p386-t2",
+                "row": "공기압축기",
+                "column": "수량",
+                "unit": "대·일"
+              },
+              {
+                "name": "소형브레이커",
+                "table": "p386-t2",
+                "row": "소형브레이커",
+                "column": "수량",
+                "unit": "대·일"
+              }
+            ],
+            "source": "1-9-4 1. 기초 착암(별도 시공량 800㎡/일)"
+          }
+        ],
+        "materials": [
+          {
+            "name": "철망",
+            "table": "p387-t1",
+            "row": "철망",
+            "unit": "㎡"
+          },
+          {
+            "name": "결속선",
+            "table": "p387-t1",
+            "row": "결속선",
+            "unit": "m"
+          },
+          {
+            "name": "에폭시",
+            "table": "p387-t1",
+            "row": "에폭시",
+            "unit": "kg",
+            "when": {
+              "net_type": "포켓식"
+            }
+          }
+        ]
+      },
       "steps": [
-        "기초 착암: 물량(㎡)을 시공량(800㎡)으로 나누어 작업일수를 구하고 인원 및 장비 수량을 산출한다.",
-        "철망 및 와이어 설치: 기계식/인력식에 따른 시공량으로 작업일수를 구하고 인원 및 장비 수량을 산출한다.",
-        "재료량: 물량(㎡)에 단위 수량을 곱하여 산출하며, 에폭시는 포켓식인 경우에만 계상한다."
+        "설치 방식(기계식/인력식)의 일당 시공량으로 철망·와이어 설치 작업일수를 구한다.",
+        "기초천공이 포함되면 기초 착암(800㎡/일)의 작업일수를 따로 구해 인력·장비를 더한다.",
+        "재료량은 ㎡당 철망 1.15㎡, 결속선 0.3m, 에폭시 0.01kg(포켓식만)이다."
       ],
-      "source": "PDF 330~331쪽 1-9-4 낙석방지망 설치 전체",
+      "source": "PDF 330~331쪽 1-9-4 표 및 [참고자료]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -146,22 +263,10 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "하나의 절 안에 '기초 착암'과 '철망 및 와이어 설치'라는 두 개의 독립적인 일당 작업조가 존재하여 단일 adjusted_daily_crew 모델로 처리할 수 없으며, 파싱 결과에 기계식/인력식 구분 및 시공량이 누락되어 자동 계산이 불가능합니다.",
+  "calc_type_reason": "철망·와이어 설치(방식별 시공량)와 기초 착암(별도 시공량)은 같은 면적에 각자 시공량을 갖는 두 작업이라 additional_work로 표현한다. 재료량은 [참고자료]의 ㎡당 수량이다.",
   "citations": [
-    {
-      "table_id": "p386-t2",
-      "row": "착암공 비계공 보통인부",
-      "column": "수량 2",
-      "value": "800"
-    },
-    {
-      "table_id": "p387-t0",
-      "row": "특별인부",
-      "column": "수량",
-      "value": "2"
-    },
     {
       "table_id": "p387-t1",
       "row": "에폭시",
@@ -181,6 +286,42 @@
     {
       "chunk_id": "p387-x4",
       "quote": "③ 재료량은 설계수량을 적용한다."
+    },
+    {
+      "table_id": "p386-t2",
+      "row": "착암공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p386-t2",
+      "row": "비계공",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p386-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p386-t2",
+      "row": "공기압축기",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p386-t2",
+      "row": "소형브레이커",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p386-t2",
+      "row": "시공량",
+      "column": "수량",
+      "value": "800"
     }
   ],
   "open_questions": [

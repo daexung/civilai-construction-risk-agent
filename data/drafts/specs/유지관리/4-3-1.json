@@ -153,11 +153,69 @@
         }
       },
       {
-        "condition": "work_type == '보호통' 이고 diameter가 ø65~80, ø100~150, ø200~300 중 하나인 경우",
-        "reason": "해당 규격의 보호통 시공량은 표에 '-'로 표시되어 산정 불가",
+        "condition": "보호통에 해당 규격의 시공량이 원문에서 대시로 표시됨 (ø65~80)",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "보호통"
+          },
+          {
+            "input": "diameter",
+            "op": "==",
+            "value": "ø65~80"
+          }
+        ],
+        "reason": "원문 표 셀의 대시 의미를 0으로 단정하지 않고 보호통 시공량을 계산 보류",
         "source": "PDF 925쪽 4-3-1 표",
         "cite": {
-          "table_id": "p981-t0"
+          "table_id": "p981-t0",
+          "row": "보호통",
+          "column": "ø65~80"
+        }
+      },
+      {
+        "condition": "보호통에 해당 규격의 시공량이 원문에서 대시로 표시됨 (ø100~150)",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "보호통"
+          },
+          {
+            "input": "diameter",
+            "op": "==",
+            "value": "ø100~150"
+          }
+        ],
+        "reason": "원문 표 셀의 대시 의미를 0으로 단정하지 않고 보호통 시공량을 계산 보류",
+        "source": "PDF 925쪽 4-3-1 표",
+        "cite": {
+          "table_id": "p981-t0",
+          "row": "보호통",
+          "column": "ø100~150"
+        }
+      },
+      {
+        "condition": "보호통에 해당 규격의 시공량이 원문에서 대시로 표시됨 (ø200~300)",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "보호통"
+          },
+          {
+            "input": "diameter",
+            "op": "==",
+            "value": "ø200~300"
+          }
+        ],
+        "reason": "원문 표 셀의 대시 의미를 0으로 단정하지 않고 보호통 시공량을 계산 보류",
+        "source": "PDF 925쪽 4-3-1 표",
+        "cite": {
+          "table_id": "p981-t0",
+          "row": "보호통",
+          "column": "ø200~300"
         }
       }
     ],

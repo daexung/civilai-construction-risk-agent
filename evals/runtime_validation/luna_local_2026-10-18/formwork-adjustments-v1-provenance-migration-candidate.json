@@ -1,0 +1,379 @@
+{
+  "id": "formwork-adjustments-v1",
+  "version": "1.0.0",
+  "review_status": "candidate_unreviewed",
+  "policy_versions": {
+    "formwork-6-3-1-height-started-interval-compound-v1": "1"
+  },
+  "system_policy_ids": [
+    "formwork-6-3-1-height-started-interval-compound-v1"
+  ],
+  "policy_note_ids": {
+    "formwork-6-3-1-height-started-interval-compound-v1": "evidence-b29a23168b16a5da70306d2a"
+  },
+  "policy_sources": {
+    "formwork-6-3-1-height-started-interval-compound-v1": {
+      "edition": "2026",
+      "section_no": "6-3-1",
+      "pdf_page": 193,
+      "printed_page": 137,
+      "text": "본 품은 수직고 7m까지 적용하며, 양중장비를 활용하지 않고 수직고가 7m를 초과하는 경우 매 3m마다 시공량을 9%까지 감한다."
+    }
+  },
+  "source_hash": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+  "sections": [
+    {
+      "division": "공통",
+      "section_no": "6-3-1"
+    }
+  ],
+  "inputs": [
+    {
+      "name": "lifting_equipment_used",
+      "type": "boolean",
+      "allowed_values": [
+        true,
+        false
+      ],
+      "unit": null,
+      "required": false,
+      "ask": "수직고 7m 초과 구간에서 실제로 양중장비(호이스트 포함)를 사용합니까?",
+      "source": "2026 건설공사 표준품셈 PDF 193쪽(인쇄 137쪽), 6-3-1 비고"
+    }
+  ],
+  "conditional_unpriced": [
+    {
+      "when": {
+        "crane_used": true
+      },
+      "name": "상시 크레인 장비비",
+      "reason": "표준품셈은 상시 크레인을 작업조에 추가하고 시공량은 감하지 않도록 하나, 현장 크레인 규격과 단가가 확정되지 않아 장비비를 산정하지 않았습니다.",
+      "source": "2026 건설공사 표준품셈 PDF 193쪽(인쇄 137쪽), 6-3-1 비고"
+    }
+  ],
+  "handled_conditions": [
+    "수직고 7m 초과",
+    "지붕 슬래브 설치(경사도 20˚ 미만)",
+    "상시적인 크레인 활용"
+  ],
+  "rules": [
+    {
+      "when": {
+        "height": {
+          "gt": 7
+        },
+        "crane_used": false
+      },
+      "operation": "require_field",
+      "policy_inputs": [
+        "lifting_equipment_used"
+      ],
+      "asks": {
+        "lifting_equipment_used": "수직고가 7m를 넘습니다. 이 구간에서 양중장비(호이스트 포함)를 사용합니까?"
+      },
+      "source": "2026 건설공사 표준품셈 PDF 193쪽(인쇄 137쪽), 6-3-1 비고",
+      "id": "height-input-required"
+    },
+    {
+      "when": {
+        "height": {
+          "gt": 7
+        },
+        "lifting_equipment_used": false,
+        "crane_used": false
+      },
+      "operation": "apply_system_policy",
+      "system_policy_ref": "formwork-6-3-1-height-started-interval-compound-v1",
+      "reason": "System assumption: count started 3 m intervals and apply the stated maximum 9% successively (compound multiplier). The source does not specify the partial-interval or accumulation formula.",
+      "source": "2026 Standard Construction Estimate, common 6-3-1, PDF p.193 (printed p.137)",
+      "id": "height-policy-ref"
+    },
+    {
+      "when": {
+        "is_roof_slab": true
+      },
+      "operation": "multiply_output",
+      "value": "83/100",
+      "reason": "지붕 슬래브(경사도 20도 미만): 시공량의 17% 감산",
+      "source": "2026 건설공사 표준품셈 PDF 193쪽(인쇄 137쪽), p193-t0 비고",
+      "id": "roof-slope-reduction"
+    }
+  ],
+  "policy_evidence_ids": {
+    "formwork-6-3-1-height-started-interval-compound-v1": "evidence-b29a23168b16a5da70306d2a"
+  },
+  "calculation_contract": {
+    "contract_version": "1.0",
+    "source": {
+      "edition": "2026",
+      "pdf_sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+      "pages": [
+        {
+          "pdf_page": 191,
+          "printed_page": 135
+        },
+        {
+          "pdf_page": 192,
+          "printed_page": 136
+        },
+        {
+          "pdf_page": 193,
+          "printed_page": 137
+        }
+      ],
+      "citations": [
+        {
+          "note_id": "evidence-051c979910dbb696e4d1a336",
+          "evidence_id": "evidence-051c979910dbb696e4d1a336",
+          "kind": "prose_text",
+          "location": {
+            "kind": "prose_text",
+            "pdf_page": 192,
+            "printed_page": 136
+          },
+          "content": "6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)\n2. 자재수량\n설명 | [주] ① 자재수량은 설계조건에 따라 별도 계상할 수 있다.\n설명 | ② 2회 이상에서는 1회 사용수량에 대해 해당 요율을 적용한다. ③ 제물치장에 소요되는 볼트, 나무덧쇠, 파이프 등은 별도 계상한다. ④ 폼타이(Form Tie) 사용시 소요수량은 콘크리트의 측압에 따라 다음에 의거 계상한다."
+        },
+        {
+          "note_id": "evidence-169b21988ff7430e06b80631",
+          "evidence_id": "evidence-169b21988ff7430e06b80631",
+          "kind": "prose_text",
+          "location": {
+            "kind": "prose_text",
+            "pdf_page": 193,
+            "printed_page": 137
+          },
+          "content": "6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)\n3. 설치 및 해체\n설명 | [주] ① 본 품은 설치면적을 기준한 것이며, 합판거푸집(내수합판 12㎜기준)의 가공, 제작, 조립, 해체를 포함한다.\n설명 | ② 본 품에는 청소, 박리제 바름 및 보수 품이 포함되어 있으며, 동바리 설치(재료포함)는 제외되어 있다. ③ 공구손료 및 경장비의 기계경비는 인력품의 1%로 계상한다."
+        },
+        {
+          "note_id": "evidence-44eb0a0f6ac63dc354a5e0bd",
+          "evidence_id": "evidence-44eb0a0f6ac63dc354a5e0bd",
+          "kind": "prose_text",
+          "location": {
+            "kind": "prose_text",
+            "pdf_page": 192,
+            "printed_page": 136
+          },
+          "content": "6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)\n2. 자재수량\n설명 | ※ 폼타이 규격은 12.7㎜를 기준한 것이며, 코킹재를 사용할 경우 별도 계상한다.\n설명 | 136 공통부문"
+        },
+        {
+          "note_id": "evidence-8ec794b544d2932fb75e0557",
+          "evidence_id": "evidence-8ec794b544d2932fb75e0557",
+          "kind": "prose_text",
+          "location": {
+            "kind": "prose_text",
+            "pdf_page": 191,
+            "printed_page": 135
+          },
+          "content": "6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)\n설명 | 1. 사용횟수 - 사용횟수는 구조물 형상 또는 시공조건(타설횟수, 시공물량, 복잡도 등)에 따라 반복 재사용이\n설명 | 가능한 사용횟수를 산출하여 적용한다. - 현장 여건상 특수거푸집(종이거푸집, 문양거푸집 등)을 사용할 경우 별도 계상한다."
+        },
+        {
+          "note_id": "evidence-b29a23168b16a5da70306d2a",
+          "evidence_id": "evidence-b29a23168b16a5da70306d2a",
+          "kind": "table_note",
+          "location": {
+            "kind": "table_note",
+            "pdf_page": 193,
+            "printed_page": 137,
+            "table_heading": "3. 설치 및 해체",
+            "label": "비고",
+            "parser_table_id": "p193-t0",
+            "table_bbox": [
+              68.0,
+              100.3,
+              543.4,
+              260.6
+            ]
+          },
+          "content": "- 현장여건(고소작업, 거푸집 적재공간 협소 등)에 따라 상시적인 크레인을 활용한 시공이 필요한 경우 해당 장비를 작업조에 추가하여 계상하고, 시공량은 감하지 않는다. - 본 품은 수직고 7m까지 적용하며, 양중장비를 활용하지 않고 수직고가 7m를 초과하는 경우 매 3m마다 시공량을 9%까지 감한다. - 지붕 슬래브 설치(경사도 20˚ 미만)에서는 시공량의 17%를 감한다. - 조적턱, 창호턱 등 소량의 거푸집이 산재되어 시공되는 경우 ‘매우복잡’을 적용한다."
+        },
+        {
+          "note_id": "evidence-d22c12981295f695554dea4a",
+          "evidence_id": "evidence-d22c12981295f695554dea4a",
+          "kind": "prose_text",
+          "location": {
+            "kind": "prose_text",
+            "pdf_page": 192,
+            "printed_page": 136
+          },
+          "content": "6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)\n2. 자재수량\n설명 | ㉮ 폼타이(D형1/2인치 경우) 소요량은 거푸집 ㎡당 2.14본(1.07조)으로 하고 사용횟수는 10회로 한다. ㉯ 특수한 경우(거푸집 측압이 6t/㎡이상)에는 폼타이 수량을 적의 조정하여 사용한다. ㉰ 세퍼레이터는 필요한 경우에 소모재료로 계상한다. ⑤ 폼 타이 제거 후 구멍땜이 필요한 경우 다음표를 기준으로 계상한다."
+        },
+        {
+          "note_id": "evidence-efed92d82b69b9361ccf3ccc",
+          "evidence_id": "evidence-efed92d82b69b9361ccf3ccc",
+          "kind": "prose_text",
+          "location": {
+            "kind": "prose_text",
+            "pdf_page": 192,
+            "printed_page": 136
+          },
+          "content": "6-3-1 합판거푸집 설치 및 해체('01, '08, '09, '17, '18, '22, '24, '26년 보완)\n1. 사용횟수\n설명 | [참고자료] 사용횟수에 따른 유형별 적용시설은 다음을 참고한다."
+        }
+      ],
+      "policy_evidence": {
+        "formwork-6-3-1-height-started-interval-compound-v1": {
+          "edition": "2026",
+          "pdf_sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+          "division": "공통",
+          "section_no": "6-3-1",
+          "pdf_page": 193,
+          "printed_page": 137,
+          "kind": "table_note",
+          "table_heading": "3. 설치 및 해체",
+          "label": "비고",
+          "parser_table_id": "p193-t0",
+          "table_bbox": [
+            68.0,
+            100.3,
+            543.4,
+            260.6
+          ],
+          "required_text": "본 품은 수직고 7m까지 적용하며, 양중장비를 활용하지 않고 수직고가 7m를 초과하는 경우 매 3m마다 시공량을 9%까지 감한다.",
+          "evidence_id": "evidence-b29a23168b16a5da70306d2a"
+        }
+      },
+      "note_rule_map": [
+        {
+          "note_id": "evidence-8ec794b544d2932fb75e0557",
+          "rule_ids": [],
+          "excluded_reason": "This note concerns reuse counts and special formwork materials, outside the daily installation-output adjustment target."
+        },
+        {
+          "note_id": "evidence-efed92d82b69b9361ccf3ccc",
+          "rule_ids": [],
+          "excluded_reason": "This is reference guidance for selecting reuse-count facility types, outside the daily installation-output adjustment target."
+        },
+        {
+          "note_id": "evidence-051c979910dbb696e4d1a336",
+          "rule_ids": [],
+          "excluded_reason": "These notes govern material quantities and form-tie accounting, not daily installation output."
+        },
+        {
+          "note_id": "evidence-d22c12981295f695554dea4a",
+          "rule_ids": [],
+          "excluded_reason": "These notes govern form-tie, separator, and patching material accounting, not daily installation output."
+        },
+        {
+          "note_id": "evidence-44eb0a0f6ac63dc354a5e0bd",
+          "rule_ids": [],
+          "excluded_reason": "This note specifies material and caulking treatment, outside daily installation output."
+        },
+        {
+          "note_id": "evidence-169b21988ff7430e06b80631",
+          "rule_ids": [],
+          "excluded_reason": "The 1% tool and light-equipment expense is a separate cost rule, not an adjustment to the daily area output targeted by this module."
+        },
+        {
+          "note_id": "evidence-b29a23168b16a5da70306d2a",
+          "rule_ids": [
+            "height-input-required",
+            "height-policy-ref",
+            "roof-slope-reduction"
+          ],
+          "excluded_reason": "The scattered small-formwork clause selects the existing base-output complexity row. The crane clause is mapped to no output deduction; its added equipment quantity/cost is separate from this daily-output adjustment and remains explicitly unpriced/partial."
+        }
+      ]
+    },
+    "site_inputs": [
+      {
+        "name": "is_roof_slab",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "지붕 슬래브 설치(경사도 20˚ 미만) 작업입니까?",
+        "source": "PDF 193쪽 3. 설치 및 해체 표 비고"
+      },
+      {
+        "name": "lifting_equipment_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": false,
+        "ask": "수직고 7m 초과 구간에서 실제로 양중장비(호이스트 포함)를 사용합니까?",
+        "source": "2026 건설공사 표준품셈 PDF 193쪽(인쇄 137쪽), 6-3-1 비고"
+      },
+      {
+        "name": "crane_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "현장여건에 따라 상시적인 크레인을 활용한 시공이 필요합니까?",
+        "source": "PDF 193쪽 3. 설치 및 해체 표 비고"
+      },
+      {
+        "name": "height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "수직고는 몇 m입니까?",
+        "source": "PDF 193쪽 3. 설치 및 해체 표 비고"
+      }
+    ],
+    "application": {
+      "conditions": [
+        "수직고가 7m를 초과하고 양중장비를 활용하지 않는 조건",
+        "지붕 슬래브 설치이며 경사도가 20도 미만인 조건",
+        "상시적인 크레인을 활용하는 조건"
+      ],
+      "target": {
+        "name": "시공량",
+        "unit": "㎡/일"
+      },
+      "order": [
+        "height-input-required",
+        "height-policy-ref",
+        "roof-slope-reduction"
+      ],
+      "system_policies": [
+        "formwork-6-3-1-height-started-interval-compound-v1"
+      ],
+      "policy_versions": {
+        "formwork-6-3-1-height-started-interval-compound-v1": "1"
+      },
+      "policy_sources": {
+        "formwork-6-3-1-height-started-interval-compound-v1": {
+          "edition": "2026",
+          "section_no": "6-3-1",
+          "pdf_page": 193,
+          "printed_page": 137,
+          "text": "본 품은 수직고 7m까지 적용하며, 양중장비를 활용하지 않고 수직고가 7m를 초과하는 경우 매 3m마다 시공량을 9%까지 감한다."
+        }
+      }
+    },
+    "executor": {
+      "kind": "json_interpreter",
+      "module_version": "1.0.0"
+    },
+    "verification": {
+      "cases": [
+        {
+          "id": "auth-height-7.001",
+          "citation": "trusted evaluation case"
+        },
+        {
+          "id": "auth-height-40",
+          "citation": "trusted evaluation case"
+        },
+        {
+          "id": "auth-height-roof",
+          "citation": "trusted evaluation case"
+        },
+        {
+          "id": "auth-height-40.001",
+          "citation": "trusted evaluation case"
+        }
+      ]
+    }
+  }
+}

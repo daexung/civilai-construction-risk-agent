@@ -54,7 +54,7 @@
         "id": "p456-t1",
         "role": "정재하시험 회당 소요 인력 및 재료",
         "source": "PDF 1쪽 8-2-6 표",
-        "unit": "인, 개",
+        "unit": "인, 개/회",
         "values": {
           "중급기술자": {
             "수량": "4.20"
@@ -80,21 +80,61 @@
       "params": {
         "unit_rate_table": {
           "table": "p456-t1",
-          "row_input": "고정 행이름",
-          "column_input": "수량",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "중급기술자",
             "초급기술자",
             "보통인부"
-          ]
+          ],
+          "basis_cites_by_row": {
+            "중급기술자": {
+              "table_id": "p456-t1",
+              "row": "중급기술자",
+              "column": "단위",
+              "value": "인"
+            },
+            "초급기술자": {
+              "table_id": "p456-t1",
+              "row": "초급기술자",
+              "column": "단위",
+              "value": "인"
+            },
+            "보통인부": {
+              "table_id": "p456-t1",
+              "row": "보통인부",
+              "column": "단위",
+              "value": "인"
+            }
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "additional_materials": [
+          {
+            "table": "p456-t1",
+            "row": "단독콘",
+            "column": "수량",
+            "name": "단독콘",
+            "unit": "개",
+            "quantity_input": "quantity",
+            "basis": "1/회",
+            "source": "원문 p.400 표 (회당), 단독콘 행",
+            "cite": {
+              "table_id": "p456-t1",
+              "row": "단독콘",
+              "column": "수량",
+              "value": "72.0"
+            }
+          }
+        ]
       },
       "steps": [
-        "p456-t1에서 직종별 인원 및 단독콘 수량을 가져온다.",
-        "시험 횟수(quantity)를 곱하여 총 소요량을 구한다."
+        "원문 표의 (회당) 기준으로 중급기술자, 초급기술자, 보통인부의 수량을 조회한다.",
+        "단독콘 행의 개수도 같은 표의 회당 수량으로 산출한다.",
+        "주변파일 반력 이용 방식만 적용한다. 실하중 또는 Anchor 반력 방식은 별도 계상 문구에 따라 자동 계산을 차단한다.",
+        "회당 인력 및 단독콘 수량에 시험 횟수를 반영한다."
       ],
       "source": "PDF 1쪽 8-2-6 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"

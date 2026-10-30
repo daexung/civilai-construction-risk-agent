@@ -113,11 +113,10 @@
     "blocked": [
       {
         "condition": "궤도정정 작업인데 레일 이동범위가 1m미만이 아닌 경우",
-        "blocked_if": {
-          "input": "rail_movement",
-          "op": "!=",
-          "value": "1m미만"
-        },
+        "blocked_if_all": [
+          {"input": "work_type", "op": "==", "value": "궤도정정"},
+          {"input": "rail_movement", "op": "!=", "value": "1m미만"}
+        ],
         "reason": "궤도정정은 레일의 이동범위 1m미만 기준임",
         "source": "PDF 900쪽 2-2-14 [주] ①",
         "cite": {
@@ -127,11 +126,10 @@
       },
       {
         "condition": "궤도이설 작업인데 레일 이동범위가 1m~3m가 아닌 경우",
-        "blocked_if": {
-          "input": "rail_movement",
-          "op": "!=",
-          "value": "1m~3m"
-        },
+        "blocked_if_all": [
+          {"input": "work_type", "op": "==", "value": "궤도이설"},
+          {"input": "rail_movement", "op": "!=", "value": "1m~3m"}
+        ],
         "reason": "궤도이설은 레일의 이동범위 1m~3m 기준임",
         "source": "PDF 900쪽 2-2-14 [주] ①",
         "cite": {

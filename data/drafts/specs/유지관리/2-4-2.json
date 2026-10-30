@@ -52,22 +52,21 @@
         "role": "하수관 세정 일당 작업조 및 시공량",
         "source": "PDF 903쪽 2-4-2 표",
         "values": {
-          "배관공(수도) 보통인부": {
-            "단위": "인",
-            "수량": "1",
-            "시공량(m) A-Type": "340",
-            "시공량(m) B-Type": "260"
+          "배관공(수도)": {
+            "수량": "3"
+          },
+          "보통인부": {
+            "수량": "1"
           },
           "진공흡입준설차": {
-            "단위": "대",
             "수량": "1"
           },
-          "물탱크( 살수차)": {
-            "단위": "대",
+          "물탱크(살수차)": {
             "수량": "1"
           },
-          "비고": {
-            "- 준설 작업이 필요하지 않은 경우에는 시공량의 20%를 증가하여 적용한다.": ""
+          "시공량": {
+            "A-Type": "340",
+            "B-Type": "260"
           }
         },
         "cite": {
@@ -111,15 +110,61 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p959-t1",
+          "row": "시공량",
+          "column_input": "site_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p959-t1",
+          "column": "수량",
+          "trades": [
+            "배관공(수도)",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공(수도)": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "진공흡입준설차",
+            "table": "p959-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "물탱크(살수차)",
+            "table": "p959-t1",
+            "column": "수량",
+            "unit": "대·일"
+          }
+        ],
+        "output_adjustments": [
+          {
+            "when": {
+              "dredging_required": false
+            },
+            "operation": "multiply_output",
+            "value": "6/5",
+            "source": "표 비고: 준설 작업이 필요하지 않은 경우에는 시공량의 20%를 증가하여 적용한다",
+            "cite": {
+              "table_id": "p959-t1"
+            }
+          }
+        ]
+      },
       "steps": [
-        "p959-t1에서 현장 여건(site_type)에 따른 시공량을 확인한다.",
-        "준설 작업이 필요하지 않은 경우(dredging_required = false), 시공량을 20% 증가시킨다.",
-        "물량을 시공량으로 나누어 작업일수를 구한다.",
-        "작업일수에 직종별 인원 및 장비 대수를 곱하여 총 투입량을 산출한다. (단, 파싱 오류로 직종별 인원 구분이 불가함)"
+        "Type 열의 일당 시공량(m)을 고른다.",
+        "준설 작업이 필요 없으면 시공량을 20% 증가한다.",
+        "물량 ÷ 시공량으로 작업일수를 구하고 인원·장비 대수를 곱한다."
       ],
-      "source": "PDF 903쪽 2-4-2 표 및 비고",
+      "source": "PDF 2-4-2 표 및 비고",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -127,22 +172,10 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 '배관공(수도)'와 '보통인부'의 행 이름이 '배관공(수도) 보통인부'로 병합되어 있어, JSON 객체 변환 시 키 중복이 발생하고 직종별 인원을 정확히 추출할 수 없으므로 자동 계산이 불가합니다.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다. 비고의 시공량 20% 증가를 출력 보정으로 표현한다.",
   "citations": [
-    {
-      "table_id": "p959-t1",
-      "row": "배관공(수도) 보통인부",
-      "column": "수량",
-      "value": "1"
-    },
-    {
-      "table_id": "p959-t1",
-      "row": "비고",
-      "column": "- 준설 작업이 필요하지 않은 경우에는 시공량의 20%를 증가하여 적용한다.",
-      "value": ""
-    },
     {
       "table_id": "p959-t2",
       "row": "A-Type",
@@ -158,6 +191,42 @@
     {
       "chunk_id": "p959-x12",
       "quote": "④ 현장 여건별 적용기준은 다음표를 기준한다."
+    },
+    {
+      "table_id": "p959-t1",
+      "row": "배관공(수도)",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p959-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p959-t1",
+      "row": "진공흡입준설차",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p959-t1",
+      "row": "물탱크(살수차)",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p959-t1",
+      "row": "시공량",
+      "column": "A-Type",
+      "value": "340"
+    },
+    {
+      "table_id": "p959-t1",
+      "row": "시공량",
+      "column": "B-Type",
+      "value": "260"
     }
   ],
   "open_questions": [

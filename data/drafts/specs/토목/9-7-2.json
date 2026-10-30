@@ -125,33 +125,63 @@
       "params": {
         "unit_rate_table": {
           "table": "p583-t0",
-          "row_input": "합계",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "지적기사",
             "지적산업기사",
             "지적기능사"
-          ]
+          ],
+          "trade_in_columns": true,
+          "row_by_trade": {
+            "지적기사": "합계",
+            "지적산업기사": "합계",
+            "지적기능사": "합계"
+          },
+          "basis_cites_by_row": {
+            "합계": {
+              "chunk_id": "p583-x10",
+              "quote": "본 품은 1필지당 토지는 1,500㎡, 임야는 5,000㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고, 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다."
+            }
+          }
         },
         "quantity_input": "parcel_count",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "coefficient_combination": "multiply",
+        "coefficient_rules": [
           {
-            "when": {},
-            "change": "land_type에 따라 기준면적(토지 1,500㎡, 임야 5,000㎡)을 정하고, area가 기준면적을 초과할 경우 가산횟수 n=(area-기준면적)/기준면적을 구하여 p583-t1의 면적계수를 곱함",
-            "source": "PDF 527쪽 [주] ② 면적계수"
+            "kind": "area_increment",
+            "table": "p583-t1",
+            "row": "계수",
+            "area_input": "area",
+            "land_input": "land_type",
+            "base_area_by_value": {
+              "토지": "1500",
+              "임야": "5000"
+            },
+            "cite": {
+              "chunk_id": "p583-x14",
+              "quote": "※ n은 가산횟수로 (대상면적-기준면적) ÷ 기준면적"
+            }
           },
           {
-            "when": {},
-            "change": "region_type에 따라 p583-t2의 지역구분계수를 곱함",
-            "source": "PDF 527쪽 [주] ③ 지역구분계수"
+            "table": "p583-t2",
+            "row": "계수",
+            "input": "region_type",
+            "cite": {
+              "chunk_id": "p583-x14",
+              "quote": "본 품은 면지역을 기준으로 하였으며, 행정구역이 다를 경우 다음의 계수를 곱하여 품을 계상한다."
+            }
           }
         ]
       },
       "steps": [
-        "p583-t0에서 직종별 기본 품(합계)을 가져온다.",
-        "land_type과 area를 바탕으로 가산횟수 n을 계산하고, p583-t1에서 해당하는 면적계수를 구하여 곱한다.",
-        "region_type에 따라 p583-t2에서 지역구분계수를 구하여 곱한다.",
-        "조정된 단위당 품에 parcel_count(필지 수)를 곱하여 총 품을 구한다."
+        "p583-t0 합계행의 직종별 품은 1필지 기준이다.",
+        "토지는 1,500㎡, 임야는 5,000㎡ 기준으로 면적 가산횟수를 구하고 p583-t1에서 정확한 계수를 조회한다.",
+        "지역구분계수를 p583-t2에서 조회한다.",
+        "원문이 면적 및 지역 계수를 곱하여 계상하도록 명시하므로 두 계수를 기본 품에 곱한다.",
+        "직종별 단위당 품에 대상 필지 수를 반영한다."
       ],
       "source": "PDF 527쪽 9-7-2 본문 및 [주] ②, ③",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -162,36 +192,32 @@
         "item": "기계경비 및 재료소모품비",
         "source": "PDF 528쪽 ⑤ 기타사항 ㉯",
         "cite": {
-          "section_no": "9-7-2",
-          "subsection_no": "5",
-          "marker": "㉯"
+          "chunk_id": "p584-x0",
+          "quote": "본 품에 사용되는 기계경비 및 재료소모품비는 별도 계상한다."
         }
       },
       {
         "item": "지적측량기준점 설치비",
         "source": "PDF 528쪽 ⑤ 기타사항 ㉰",
         "cite": {
-          "section_no": "9-7-2",
-          "subsection_no": "5",
-          "marker": "㉰"
+          "chunk_id": "p584-x0",
+          "quote": "작업상 지적측량기준점을 설치할 경우에는 지적측량기준점 설치비를 별도 계상한다."
         }
       },
       {
         "item": "선박 등 임차료 실비",
         "source": "PDF 528쪽 ⑤ 기타사항 ㉱",
         "cite": {
-          "section_no": "9-7-2",
-          "subsection_no": "5",
-          "marker": "㉱"
+          "chunk_id": "p584-x0",
+          "quote": "도서지역 등의 측량을 위하여 선박 등을 임차할 경우에는 임차료 실비를 별도 계상한다."
         }
       },
       {
         "item": "국내여행자 일비 (여비)",
         "source": "PDF 528쪽 ⑤ 기타사항 ㉲",
         "cite": {
-          "section_no": "9-7-2",
-          "subsection_no": "5",
-          "marker": "㉲"
+          "chunk_id": "p584-x0",
+          "quote": "본 품의 외업에 필요한 여비는 공무원여비규정에 의한 국내여행자의 일비를 별도 계상한다."
         }
       }
     ],

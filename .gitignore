@@ -39,3 +39,13 @@ gha-creds-*.json
 
 # Local-only verification artifacts.
 .trial/
+
+# Local agent settings and private validation artifacts.
+.claude/
+.env.*
+!.env.example
+evals/archive/
+user-flow-validation-*/
+*.log
+*.lock
+tmp_*.txt

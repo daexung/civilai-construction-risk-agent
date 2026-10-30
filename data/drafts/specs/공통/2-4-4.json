@@ -50,17 +50,39 @@
     "tables": [
       {
         "id": "p98-t2",
-        "role": "세로형 가설방음판 설치 및 해체 일당 시공량 및 인력",
+        "role": "Daily crew, equipment and output by height and operation",
         "source": "2-4-4 세로형 가설방음판 설치 및 해체",
         "unit": "인, m",
         "values": {
-          "비계공 보통인부": {
-            "단위": "인",
-            "수량": "3",
-            "시공량(m) 설치높이 3m이하 설치": "120",
-            "시공량(m) 해체": "230",
-            "시공량(m) 설치높이 6m이하 설치": "100",
-            "시공량(m) 설치높이 10m이하 설치": "90"
+          "3m이하 | 설치": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "120"
+          },
+          "3m이하 | 해체": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "300"
+          },
+          "6m이하 | 설치": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "100"
+          },
+          "6m이하 | 해체": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "260"
+          },
+          "10m이하 | 설치": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "90"
+          },
+          "10m이하 | 해체": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "230"
           }
         },
         "cite": {
@@ -70,12 +92,59 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p98-t2",
+          "row_selector": {
+            "input": "height",
+            "value_map": {
+              "3m이하": "3m이하",
+              "6m이하": "6m이하",
+              "10m이하": "10m이하"
+            },
+            "contains": [
+              "{value}"
+            ],
+            "input_contains": [
+              "work_type"
+            ]
+          },
+          "column_input": "시공량(m)"
+        },
+        "crew": {
+          "table": "p98-t2",
+          "row_selector": {
+            "input": "height",
+            "value_map": {
+              "3m이하": "3m이하",
+              "6m이하": "6m이하",
+              "10m이하": "10m이하"
+            },
+            "contains": [
+              "{value}"
+            ],
+            "input_contains": [
+              "work_type"
+            ]
+          },
+          "column_template": "{trade}",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "coefficients": [],
+        "output_adjustments": [],
+        "equipment": null,
+        "materials": [],
+        "daily_equipment_allowances": []
+      },
       "steps": [
-        "입력된 설치높이와 작업종류에 따라 p98-t2 표에서 일당 시공량을 찾는다.",
-        "물량을 일당 시공량으로 나누어 작업일수를 구한다.",
-        "작업일수에 비계공 3인, 보통인부 1인을 곱하여 총 투입 인·일을 산출한다."
+        "Select the source daily output and crew by height and installation or dismantling.",
+        "Calculate workdays from length divided by daily output.",
+        "Multiply workdays by the source crew and crane count, where listed."
       ],
       "source": "p98-t2",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -83,20 +152,9 @@
     "blocked": [],
     "not_calculated": [
       {
-        "item": "문양이나 도색 작업",
-        "source": "p99-x0 [주] ②",
-        "cite": {
-          "chunk_id": "p99-x0",
-          "quote": "문양이나 도색 등이 필요한 경우에 별도 계상한다."
-        }
-      },
-      {
-        "item": "고소작업차 기계경비",
-        "source": "p99-x0 [주] ④",
-        "cite": {
-          "chunk_id": "p99-x0",
-          "quote": "현장여건에 따라 고소작업차가 필요할 경우 기계경비는 별도 계상한다."
-        }
+        "item": "Optional self-propelled lift cost",
+        "source": "p98-t2 source note",
+        "reason": "The source states that a lift, if required by site conditions, is accounted for separately; this item does not state its rate."
       }
     ],
     "supply_rules": [],
@@ -113,9 +171,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 해체 시공량의 열 이름이 '시공량(m) 해체'로 중복되어 JSON 키로 사용할 때 덮어씌워지는 문제가 발생하며, 행 이름도 '비계공 보통인부'로 병합되어 있어 자동 계산 모델에 정확히 매핑하기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "The source provides a daily crew and production quantity for every height and operation combination; shared daily_crew calculates days, labor, and listed crane.",
   "citations": [
     {
       "table_id": "p98-t2",

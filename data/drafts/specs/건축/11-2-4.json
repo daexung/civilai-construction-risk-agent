@@ -72,9 +72,11 @@
             "보통인부": "0.004"
           },
           "콘크리트･모르타르면": {
-            "도장공": "0.024"
+            "도장공": "0.024",
+            "보통인부": "0.004"
           },
           "석고보드면": {
+            "도장공": "0.024",
             "보통인부": "0.004"
           }
         },
@@ -90,7 +92,6 @@
         "unit_rate_table": {
           "table": "p694-t0",
           "row_input": "surface_type",
-          "column_input": "인력",
           "trades": [
             "도장공",
             "보통인부"
@@ -107,7 +108,11 @@
               "도장공",
               "보통인부"
             ],
-            "source": "비고 - 천장은 본 품의 20%를 가산한다."
+            "source": "비고 - 천장은 본 품의 20%를 가산한다.",
+            "cite": {
+              "chunk_id": "p694-t0",
+              "quote": "- 천장은 본 품의 20%를 가산한다."
+            }
           }
         ],
         "note_adjustments": []
@@ -130,18 +135,16 @@
         }
       },
       {
-        "item": "비계사용시 높이별 품 할증",
-        "source": "[주] ③비계사용시 높이별 품 할증은 ‘[건축부문] 11-1-1 콘크리트･모르타르면 바탕만들기’에 준하여 계상한다.",
-        "cite": {
-          "chunk_id": "p694-x5"
-        }
-      },
-      {
         "item": "재료량(페인트 등)",
         "source": "[주] ④ 재료량(페인트 등)은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다.",
         "cite": {
           "chunk_id": "p694-x5"
         }
+      },
+      {
+        "item": "Scaffold and height-based surcharge",
+        "source": "11-1-1 cross-reference on source page",
+        "reason": "This paint rate is calculated from the applicable base table and ceiling rule. Height-based scaffold additions require the 11-1-1 height and scaffold inputs, which this spec does not yet collect."
       }
     ],
     "supply_rules": [],
@@ -159,7 +162,7 @@
   },
   "calc_type": "per_unit",
   "calc_type_raw": "per_unit",
-  "calc_type_reason": "단위(㎡)당 직종별 인·일 품이 표에 직접 제시되어 있으므로 per_unit 모델을 사용합니다.",
+  "calc_type_reason": "Source unit-rate table selected by surface and trade; shared per_unit calculator applies the stated ceiling rate.",
   "citations": [
     {
       "table_id": "p694-t0",

@@ -50,8 +50,8 @@
         "name": "coating_type",
         "type": "enum",
         "allowed_values": [
-          "내부도장",
-          "외부도장"
+          "외부도장",
+          "내부도장"
         ],
         "unit": null,
         "required": true,
@@ -77,31 +77,45 @@
         "values": {
           "300": {
             "외부도장 도장공(인)": "0.18",
-            "외부도장 보통인부(인)": "0.04"
+            "외부도장 보통인부(인)": "0.04",
+            "내부도장 도장공(인)": "-",
+            "내부도장 보통인부(인)": "-"
           },
           "350": {
             "외부도장 도장공(인)": "0.21",
-            "외부도장 보통인부(인)": "0.05"
+            "외부도장 보통인부(인)": "0.05",
+            "내부도장 도장공(인)": "-",
+            "내부도장 보통인부(인)": "-"
           },
           "400": {
             "외부도장 도장공(인)": "0.23",
-            "외부도장 보통인부(인)": "0.06"
+            "외부도장 보통인부(인)": "0.06",
+            "내부도장 도장공(인)": "-",
+            "내부도장 보통인부(인)": "-"
           },
           "450": {
             "외부도장 도장공(인)": "0.25",
-            "외부도장 보통인부(인)": "0.06"
+            "외부도장 보통인부(인)": "0.06",
+            "내부도장 도장공(인)": "-",
+            "내부도장 보통인부(인)": "-"
           },
           "500": {
             "외부도장 도장공(인)": "0.27",
-            "외부도장 보통인부(인)": "0.07"
+            "외부도장 보통인부(인)": "0.07",
+            "내부도장 도장공(인)": "-",
+            "내부도장 보통인부(인)": "-"
           },
           "600": {
             "외부도장 도장공(인)": "0.30",
-            "외부도장 보통인부(인)": "0.07"
+            "외부도장 보통인부(인)": "0.07",
+            "내부도장 도장공(인)": "-",
+            "내부도장 보통인부(인)": "-"
           },
           "700": {
             "외부도장 도장공(인)": "0.32",
-            "외부도장 보통인부(인)": "0.08"
+            "외부도장 보통인부(인)": "0.08",
+            "내부도장 도장공(인)": "-",
+            "내부도장 보통인부(인)": "-"
           },
           "800": {
             "내부도장 도장공(인)": "0.27",
@@ -191,7 +205,8 @@
           "trades": [
             "도장공(인)",
             "보통인부(인)"
-          ]
+          ],
+          "column_input": "coating_type"
         },
         "quantity_input": "quantity",
         "surcharges": [],
@@ -207,12 +222,438 @@
     },
     "blocked": [
       {
-        "condition": "coating_type이 '내부도장'이고 pipe_diameter가 300~700인 경우",
-        "reason": "해당 관경 구간의 내부도장 품이 표에 명시되어 있지 않음(-)",
-        "source": "PDF 368쪽 6-3-3 도장 표",
-        "cite": {
-          "table_id": "p424-t0"
-        }
+        "condition": "coating_type=내부도장 AND pipe_diameter=300",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "300"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "300",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "300",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=350",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "350"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "350",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "350",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=400",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "400"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "400",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "400",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=450",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "450"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "450",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "450",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=500",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "500"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "500",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "500",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=600",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "600"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "600",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "600",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=700",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "700"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "700",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "700",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=300",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "300"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "300",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "300",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=350",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "350"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "350",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "350",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=400",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "400"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "400",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "400",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=450",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "450"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "450",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "450",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=500",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "500"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "500",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "500",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=600",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "600"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "600",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "600",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
+      },
+      {
+        "condition": "coating_type=내부도장 AND pipe_diameter=700",
+        "blocked_if_all": [
+          {
+            "input": "coating_type",
+            "op": "==",
+            "value": "내부도장"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "700"
+          }
+        ],
+        "reason": "원문 표의 해당 관경 내부도장 셀이 대시(-)로 표시되어 있어 수치 품으로 계산하지 않음",
+        "source": "PDF printed p.368, 6-3-3 table",
+        "cite": [
+          {
+            "table_id": "p424-t0",
+            "row": "700",
+            "column": "내부도장 도장공(인)",
+            "value": "-"
+          },
+          {
+            "table_id": "p424-t0",
+            "row": "700",
+            "column": "내부도장 보통인부(인)",
+            "value": "-"
+          }
+        ]
       }
     ],
     "not_calculated": [

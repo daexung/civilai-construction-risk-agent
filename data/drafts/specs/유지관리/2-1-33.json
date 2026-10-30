@@ -157,16 +157,92 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p948-t2",
+          "row_selector": {
+            "input": "type_class",
+            "contains": [
+              "{value}"
+            ],
+            "exact_input_contains": [
+              "size"
+            ]
+          },
+          "column_input": "section_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p948-t2",
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "row_selector": {
+            "input": "type_class",
+            "contains": [
+              "{value}",
+              "{trade}"
+            ]
+          },
+          "rate_codes": {
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "굴착기 0.4㎥",
+            "table": "p948-t2",
+            "row": "A-Type_굴착기_0.4㎥",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "type_class": "A-Type"
+            }
+          },
+          {
+            "name": "굴착기 0.2㎥",
+            "table": "p948-t2",
+            "row": "B-Type_굴착기_0.2㎥",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "type_class": "B-Type"
+            }
+          },
+          {
+            "name": "트럭 2.5ton",
+            "table": "p948-t2",
+            "row": "A-Type_트럭_2.5ton",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "type_class": "A-Type"
+            }
+          },
+          {
+            "name": "트럭 2.5ton",
+            "table": "p948-t2",
+            "row": "B-Type_트럭_2.5ton",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "type_class": "B-Type"
+            }
+          }
+        ]
+      },
       "steps": [
-        "입력받은 type_class(A-Type/B-Type), size(규격), section_type(직선/곡선)에 따라 p948-t2에서 일일시공량을 찾는다.",
-        "작업일수 = quantity ÷ 일일시공량으로 계산한다.",
-        "p948-t2에서 type_class에 해당하는 직종별 인원(특별인부, 보통인부)과 장비 대수(굴착기, 트럭)를 찾는다.",
-        "직종별 인·일 = 작업일수 × 인원, 장비 대·일 = 작업일수 × 대수로 총 투입량을 구한다.",
-        "공구손료 및 경장비는 노무비 합계의 2%로 계상한다."
+        "Type·규격·구간(직선/곡선)으로 일당 시공량(m)을 고른다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "Type별 직종 인원·장비 대수(굴착기·트럭)를 작업일수에 곱한다.",
+        "공구손료·경장비는 인력품의 2%를 비용 규칙으로 둔다."
       ],
-      "source": "PDF 892쪽 p948-t2 및 893쪽 [주]",
+      "source": "PDF 892쪽 2-1-33 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -202,9 +278,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "작업조에 굴착기와 트럭 2종의 장비가 투입되나, 현재 명세 형식의 adjusted_daily_crew 모델은 단일 장비(equipment 객체)만 지원하는 것으로 보여 자동 계산 대신 not_calculable로 분류했습니다.",
+  "calc_type_reason": "Type별 인원·장비와 규격×구간별 일당 시공량이 표에 있어 복합 행 선택자로 표현된다.",
   "citations": [
     {
       "table_id": "p948-t2"

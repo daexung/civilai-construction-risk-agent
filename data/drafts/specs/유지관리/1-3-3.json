@@ -41,14 +41,13 @@
         "unit": "인, m",
         "values": {
           "특별인부": {
-            "단위": "인",
-            "수량": "3",
-            "시공량(m)": "24"
+            "수량": "3"
           },
           "보통인부": {
-            "단위": "인",
-            "수량": "1",
-            "시공량(m)": "24"
+            "수량": "1"
+          },
+          "시공량": {
+            "수량": "24"
           }
         },
         "cite": {
@@ -58,26 +57,35 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "per_unit",
+      "name": "adjusted_daily_crew",
       "params": {
-        "unit_rate_table": {
+        "quantity_input": "crack_length",
+        "base_output": {
           "table": "p924-t0",
-          "row_input": "고정",
-          "column_input": "고정",
+          "row": "시공량",
+          "column": "수량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p924-t0",
+          "column": "수량",
           "trades": [
             "특별인부",
             "보통인부"
-          ]
+          ],
+          "rate_codes": {
+            "특별인부": "",
+            "보통인부": ""
+          }
         },
-        "quantity_input": "crack_length",
-        "surcharges": [],
-        "note_adjustments": []
+        "equipment": []
       },
       "steps": [
-        "p924-t0에서 특별인부와 보통인부의 수량을 시공량(24m)으로 나누어 단위(m)당 품을 구한다.",
-        "균열 길이(crack_length)를 곱해 총 품을 구한다."
+        "표에서 일당 시공량을 고른다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수로 총 투입량을 구한다."
       ],
-      "source": "1-3-3 콘크리트 균열 보수(패커주입공법)",
+      "source": "PDF 1-3-3 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -128,28 +136,10 @@
       }
     ]
   },
-  "calc_type": "per_unit",
+  "calc_type": "daily_crew",
   "calc_type_raw": "per_unit",
-  "calc_type_reason": "일당 수량과 시공량이 표에 주어져 있어, 이를 나누어 단위당 품을 산출한 뒤 물량을 곱하는 방식이 적합합니다.",
+  "calc_type_reason": "표에 인원과 일당 시공량(m)이 함께 있는 일당 작업조 표라 일당 작업조로 표현한다. 균열폭 10㎜ 초과는 원문이 적의 산출하라고 하여 보류한다.",
   "citations": [
-    {
-      "table_id": "p924-t0",
-      "row": "특별인부",
-      "column": "수량",
-      "value": "3"
-    },
-    {
-      "table_id": "p924-t0",
-      "row": "보통인부",
-      "column": "수량",
-      "value": "1"
-    },
-    {
-      "table_id": "p924-t0",
-      "row": "특별인부",
-      "column": "시공량(m)",
-      "value": "24"
-    },
     {
       "chunk_id": "p924-x5",
       "quote": "③ 균열폭은 10㎜까지를 기준으로 한 것이며, 균열의 폭이나 형태가 다양하여 본 품에 준할 수 없을\n설명 | 때에는 적의 산출한다."
@@ -165,6 +155,24 @@
     {
       "chunk_id": "p924-x5",
       "quote": "⑥ 현장 여건상 고소작업 등의 인력인상에 장비가 필요할 시 기계경비는 별도 계상한다."
+    },
+    {
+      "table_id": "p924-t0",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p924-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p924-t0",
+      "row": "시공량",
+      "column": "수량",
+      "value": "24"
     }
   ],
   "open_questions": [

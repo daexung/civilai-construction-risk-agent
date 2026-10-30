@@ -74,8 +74,46 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p213-t1",
+          "row": "시공량(개소)",
+          "column_input": "weight_band"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p213-t1",
+          "trades": [
+            "형틀목공",
+            "보통인부"
+          ],
+          "column_template": "{trade}",
+          "row_selector": "수량"
+        },
+        "equipment": [
+          {
+            "table": "p213-t1",
+            "name": "크레인",
+            "row": "수량",
+            "column": "크레인"
+          }
+        ],
+        "quantity_input": "quantity",
+        "output_adjustments": [
+          {
+            "when": {
+              "height_over_30m": true
+            },
+            "operation": "multiply_output",
+            "value": "0.9",
+            "cite": {
+              "chunk_id": "p213-t1",
+              "quote": "- 시공높이 30m를 초과하는 경우 시공량의 10%를 감하여 적용한다."
+            }
+          }
+        ]
+      },
       "steps": [
         "p213-t1에서 단위중량별 시공량을 확인한다.",
         "시공높이가 30m를 초과하는 경우 시공량에 0.9를 곱하여 감산한다.",
@@ -108,11 +146,65 @@
           "quote": "⑤ 공구손료 및 경장비(자체추진 고소작업대(시저형) 등) 기계경비는 인력품의 17%로 계상한다."
         }
       }
+    ],
+    "citations": [
+      {
+        "table_id": "p213-t1",
+        "row": "수량",
+        "column": "형틀목공",
+        "value": "3"
+      },
+      {
+        "table_id": "p213-t1",
+        "row": "수량",
+        "column": "보통인부",
+        "value": "2"
+      },
+      {
+        "table_id": "p213-t1",
+        "row": "수량",
+        "column": "크레인",
+        "value": "1"
+      },
+      {
+        "table_id": "p213-t1",
+        "row": "시공량(개소)",
+        "column": "2ton미만",
+        "value": "12"
+      },
+      {
+        "table_id": "p213-t1",
+        "row": "시공량(개소)",
+        "column": "5ton미만",
+        "value": "11"
+      },
+      {
+        "table_id": "p213-t1",
+        "row": "시공량(개소)",
+        "column": "10ton미만",
+        "value": "10"
+      },
+      {
+        "table_id": "p213-t1",
+        "row": "시공량(개소)",
+        "column": "20ton미만",
+        "value": "8"
+      },
+      {
+        "table_id": "p213-t1",
+        "row": "시공량(개소)",
+        "column": "30ton미만",
+        "value": "6"
+      },
+      {
+        "chunk_id": "p213-t1",
+        "quote": "- 시공높이 30m를 초과하는 경우 시공량의 10%를 감하여 적용한다."
+      }
     ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "작업조 인원이 고정되어 있어 adjusted_daily_crew 모델의 column_input에 매핑할 변수가 없고, 시공높이 30m 초과 시 시공량 10% 감산 조건이 비고란에 있어 현재의 표 기반 파라미터로 완벽히 자동 계산하기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "?? ????? ?? ??????????? ??? 30m ?? ?? ???? ???.",
   "citations": [
     {
       "table_id": "p213-t1",
@@ -122,17 +214,49 @@
     },
     {
       "table_id": "p213-t1",
+      "row": "수량",
+      "column": "보통인부",
+      "value": "2"
+    },
+    {
+      "table_id": "p213-t1",
+      "row": "수량",
+      "column": "크레인",
+      "value": "1"
+    },
+    {
+      "table_id": "p213-t1",
       "row": "시공량(개소)",
       "column": "2ton미만",
       "value": "12"
     },
     {
-      "chunk_id": "p213-x18",
-      "quote": "③ 기초콘크리트 및 기초 앵커볼트 설치 작업은 별도 계상한다."
+      "table_id": "p213-t1",
+      "row": "시공량(개소)",
+      "column": "5ton미만",
+      "value": "11"
     },
     {
-      "chunk_id": "p213-x18",
-      "quote": "⑤ 공구손료 및 경장비(자체추진 고소작업대(시저형) 등) 기계경비는 인력품의 17%로 계상한다."
+      "table_id": "p213-t1",
+      "row": "시공량(개소)",
+      "column": "10ton미만",
+      "value": "10"
+    },
+    {
+      "table_id": "p213-t1",
+      "row": "시공량(개소)",
+      "column": "20ton미만",
+      "value": "8"
+    },
+    {
+      "table_id": "p213-t1",
+      "row": "시공량(개소)",
+      "column": "30ton미만",
+      "value": "6"
+    },
+    {
+      "chunk_id": "p213-t1",
+      "quote": "- 시공높이 30m를 초과하는 경우 시공량의 10%를 감하여 적용한다."
     }
   ],
   "open_questions": [

@@ -99,7 +99,33 @@
         },
         "quantity_input": "area",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "굴착기(0.6㎥)",
+            "when": {
+              "section_type": "공동구"
+            },
+            "cite": {
+              "table_id": "p399-t3",
+              "row": "굴착기(0.6㎥)",
+              "column": "공동구",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "굴착기(0.2㎥)",
+            "when": {
+              "section_type": "바닥/인버트"
+            },
+            "cite": {
+              "table_id": "p399-t3",
+              "row": "굴착기(0.2㎥)",
+              "column": "바닥/인버트",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p399-t3 표에서 구간(공동구 또는 바닥/인버트)에 해당하는 단위당 품을 찾는다.",

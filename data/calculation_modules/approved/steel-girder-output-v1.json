@@ -1,0 +1,24 @@
+{
+  "id": "steel-girder-output-v1",
+  "version": "1.0.0",
+  "review_status": "approved_for_runtime",
+  "source_hash": "CC226366B633A4E7D479EE55298318D9959DC988A910875C2EE775D958EE944B",
+  "sections": [{"division": "토목", "section_no": "5-3-2"}],
+  "handled_conditions": ["지조립 없이 직접 인양하여 가설하는 경우", "교량 확폭, 과도교, 과선교 지하 통로내인 경우"],
+  "rules": [
+    {
+      "when": {"direct_lifting": true},
+      "operation": "add_output",
+      "value": "1",
+      "reason": "공장 제작 단일 거더를 지조립 없이 직접 인양하는 경우 일당시공량 1개 추가",
+      "source": "2026 건설공사 표준품셈 PDF 417쪽 주 ②"
+    },
+    {
+      "when": {"special_condition": true},
+      "operation": "add_output",
+      "value": "-1",
+      "reason": "확폭·과도교·과선교 지하 통로내 작업은 일당 가설 개수 1개 차감",
+      "source": "2026 건설공사 표준품셈 PDF 417쪽 주 ⑤"
+    }
+  ]
+}

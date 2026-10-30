@@ -116,28 +116,52 @@
           ]
         },
         "quantity_input": "quantity",
-        "surcharges": [],
-        "note_adjustments": [
+        "surcharges": [
           {
             "when": {
               "surface_type": "벽/천장"
             },
-            "change": "본 품의 15% 가산",
-            "source": "PDF 829쪽 13-7-13 표 비고"
+            "rate": "0.15",
+            "applies_to": [
+              "보온공",
+              "특별인부"
+            ],
+            "application_cite": {
+              "chunk_id": "p885-t1",
+              "quote": "벽, 천장 Spray시는 본 품의 15% 가산한다."
+            },
+            "source": "PDF 829쪽 p885-t1 비고: 벽·천장 Spray시 직종 인력품 15% 가산"
           },
           {
             "when": {
-              "scaffold_used": true
+              "scaffold_used": true,
+              "scaffold_height": {
+                "min": "6",
+                "max": "9",
+                "min_inclusive": true,
+                "max_inclusive": true
+              }
             },
-            "change": "높이 6~9m까지 15% 가산하고, 9m초과하는 경우 매 3m 증가마다 품의 5%씩 가산",
-            "source": "PDF 829쪽 13-7-13 표 비고"
+            "rate": "0.15",
+            "applies_to": [
+              "보온공",
+              "특별인부"
+            ],
+            "application_cite": {
+              "chunk_id": "p885-t1",
+              "quote": "비계사용시 높이 6∼9m까지 15% 가산하고, 9m초과하는 경우 매 3m 증가마다 품의 5%씩 가산한다."
+            },
+            "source": "PDF 829쪽 p885-t1 비고: 비계높이 6m 이상 9m 이하 요율",
+            "source_rate_is_exact_for_condition": true
           }
-        ]
+        ],
+        "note_adjustments": []
       },
       "steps": [
-        "단위당 품을 표에서 고른다.",
-        "물량을 곱해 총 품을 구한다.",
-        "surcharges/note_adjustments를 원문 순서대로 적용한다."
+        "p885-t1에서 두께별 보온공·특별인부 단위품을 고른다.",
+        "벽·천장 Spray 적용 시 인력품 15% 가산한다.",
+        "비계 높이 6m 이상 9m 이하에서는 15% 가산한다. 9m 초과 누적식은 구간별 원문 경계 확인 전 보류한다.",
+        "조정 단위품에 면적을 곱한다."
       ],
       "source": "PDF 829쪽 13-7-13",
       "rounding": "동일 원칙(1-2-8·1-2-1)"
@@ -154,6 +178,26 @@
         "source": "PDF 829쪽 13-7-13 표 비고",
         "cite": {
           "table_id": "p885-t1"
+        }
+      },
+      {
+        "blocked_if_all": [
+          {
+            "input": "scaffold_used",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "scaffold_height",
+            "op": ">",
+            "value": "9"
+          }
+        ],
+        "reason": "9m 초과 시 매 3m마다 5% 가산 산식의 증가 횟수 및 구간 경계 해석을 확인해야 함",
+        "source": "PDF 829쪽 p885-t1 비고",
+        "cite": {
+          "chunk_id": "p885-t1",
+          "quote": "비계사용시 높이 6∼9m까지 15% 가산하고, 9m초과하는 경우 매 3m 증가마다 품의 5%씩 가산한다."
         }
       }
     ],

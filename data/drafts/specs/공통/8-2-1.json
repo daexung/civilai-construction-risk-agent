@@ -121,7 +121,8 @@
         "type": "enum",
         "allowed_values": [
           "굴착/굴착운반/발근/석재류집적",
-          "흐트러진상태 토사운반/연한지반 굴착운반",
+          "흐트러진상태 토사운반",
+          "연한지반 굴착운반",
           "평탄/흐트러진상태 정지/전압",
           "제방 상향작업",
           "수중작업",
@@ -130,7 +131,7 @@
         "unit": null,
         "required": true,
         "ask": "작업 종류는 무엇입니까?",
-        "source": "PDF 170쪽 2. 1회 싸이클 시간 [주] ①~⑥"
+        "source": "PDF 169~170쪽 2. 1회 싸이클 시간 [주]"
       },
       {
         "name": "f_coefficient",
@@ -343,22 +344,865 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "derived": [
+          {
+            "name": "q_base",
+            "kind": "table_cell",
+            "unit": "㎥",
+            "source": "PDF 169쪽 가. qﾟ의 값",
+            "cases": [
+              {
+                "table": "p225-t0",
+                "row_input": "bulldozer_type",
+                "column_input": "bulldozer_capacity"
+              }
+            ]
+          },
+          {
+            "name": "e",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "PDF 169쪽 나. e의 값",
+            "band_input": "transport_distance",
+            "bands": [
+              {
+                "label": "10이하",
+                "at_most": "10"
+              },
+              {
+                "label": "20",
+                "equals": "20"
+              },
+              {
+                "label": "30",
+                "equals": "30"
+              },
+              {
+                "label": "40",
+                "equals": "40"
+              },
+              {
+                "label": "50",
+                "equals": "50"
+              },
+              {
+                "label": "60",
+                "equals": "60"
+              },
+              {
+                "label": "70",
+                "equals": "70"
+              },
+              {
+                "label": "80",
+                "equals": "80"
+              }
+            ],
+            "cases": [
+              {
+                "table": "p225-t1",
+                "row": "e"
+              }
+            ]
+          },
+          {
+            "name": "E_table",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "PDF 169쪽 다. E의 값",
+            "cases": [
+              {
+                "table": "p225-t2",
+                "row_input": "soil_type",
+                "column_join": [
+                  "soil_state",
+                  "site_condition"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "E_deduction",
+            "kind": "sum_terms",
+            "source": "PDF 169쪽 [주] ④ 정지작업 겸용 0.1, ⑤ 터파기 0.05",
+            "terms": [
+              {
+                "when": {
+                  "is_grading": true
+                },
+                "value": "1/10"
+              },
+              {
+                "when": {
+                  "is_trenching": true
+                },
+                "value": "1/20"
+              }
+            ]
+          },
+          {
+            "name": "E",
+            "kind": "expression",
+            "source": "PDF 169쪽 [주] ④⑤ E에서 해당 값을 뺀다",
+            "expression": {
+              "sub": [
+                {
+                  "input": "E_table"
+                },
+                {
+                  "input": "E_deduction"
+                }
+              ]
+            }
+          },
+          {
+            "name": "V1",
+            "kind": "table_cell",
+            "cases": [
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "굴착/굴착운반/발근/석재류집적"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "전진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "흐트러진상태 토사운반"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "전진 2단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "평탄/흐트러진상태 정지/전압"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "전진 3단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "제방 상향작업"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "전진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "수중작업"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "전진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "타이어",
+                  "work_type": "흐트러진상태 토사운반"
+                },
+                "table": "p226-t1",
+                "row_input": "bulldozer_capacity",
+                "column": "전진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "타이어",
+                  "work_type": "연한지반 굴착운반"
+                },
+                "table": "p226-t1",
+                "row_input": "bulldozer_capacity",
+                "column": "전진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "타이어",
+                  "work_type": "평탄/흐트러진상태 정지/전압"
+                },
+                "table": "p226-t1",
+                "row_input": "bulldozer_capacity",
+                "column": "전진 2단"
+              }
+            ],
+            "unit": "m/분"
+          },
+          {
+            "name": "V2",
+            "kind": "table_cell",
+            "cases": [
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "굴착/굴착운반/발근/석재류집적"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "후진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "흐트러진상태 토사운반"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "후진 2단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "평탄/흐트러진상태 정지/전압"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "후진 3단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "제방 상향작업"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "후진 2단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "무한궤도",
+                  "work_type": "수중작업"
+                },
+                "table": "p226-t0",
+                "row_input": "bulldozer_capacity",
+                "column": "후진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "타이어",
+                  "work_type": "흐트러진상태 토사운반"
+                },
+                "table": "p226-t1",
+                "row_input": "bulldozer_capacity",
+                "column": "후진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "타이어",
+                  "work_type": "연한지반 굴착운반"
+                },
+                "table": "p226-t1",
+                "row_input": "bulldozer_capacity",
+                "column": "후진 1단"
+              },
+              {
+                "when": {
+                  "bulldozer_type": "타이어",
+                  "work_type": "평탄/흐트러진상태 정지/전압"
+                },
+                "table": "p226-t1",
+                "row_input": "bulldozer_capacity",
+                "column": "후진 2단"
+              }
+            ],
+            "unit": "m/분"
+          },
+          {
+            "name": "q",
+            "kind": "expression",
+            "source": "PDF 168쪽 q = qﾟ × e",
+            "unit": "㎥",
+            "expression": {
+              "mul": [
+                {
+                  "input": "q_base"
+                },
+                {
+                  "input": "e"
+                }
+              ]
+            }
+          },
+          {
+            "name": "cm",
+            "kind": "expression",
+            "source": "PDF 169쪽 cm = L/V1 + L/V2 + t(0.25분)",
+            "unit": "분",
+            "expression": {
+              "add": [
+                {
+                  "div": [
+                    {
+                      "input": "transport_distance"
+                    },
+                    {
+                      "input": "V1"
+                    }
+                  ]
+                },
+                {
+                  "div": [
+                    {
+                      "input": "transport_distance"
+                    },
+                    {
+                      "input": "V2"
+                    }
+                  ]
+                },
+                {
+                  "number": "1/4"
+                }
+              ]
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "kind": "formula",
+            "name": "1회 싸이클 시간 cm",
+            "resource_kind": "reference",
+            "unit": "분",
+            "expression": {
+              "input": "cm"
+            },
+            "formula": "cm = L/V1 + L/V2 + 0.25",
+            "source": "PDF 169쪽 2. 1회 싸이클 시간"
+          },
+          {
+            "kind": "formula",
+            "name": "시간당 작업량 Q",
+            "resource_kind": "reference",
+            "unit": "㎥/hr",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "number": "60"
+                    },
+                    {
+                      "input": "q"
+                    },
+                    {
+                      "input": "f_coefficient"
+                    },
+                    {
+                      "input": "E"
+                    }
+                  ]
+                },
+                {
+                  "input": "cm"
+                }
+              ]
+            },
+            "formula": "Q = 60 × q × f × E / cm",
+            "source": "PDF 168쪽 8-2-1 산정식"
+          }
+        ]
+      },
       "steps": [
-        "1. p225-t0에서 불도저 종별 및 규격에 따른 qﾟ 값을 찾는다.",
-        "2. p225-t1에서 운반거리에 따른 e 값을 찾는다.",
-        "3. q = qﾟ × e 를 계산한다.",
-        "4. p225-t2에서 토질명, 상태, 현장조건에 따른 E 값을 찾는다.",
-        "5. 정지작업 겸용 시 E에서 0.1을 빼고, 터파기 시 0.05를 뺀다.",
-        "6. 작업 종류에 따라 p226-t0 또는 p226-t1에서 전진(V1), 후진(V2) 단수를 결정하고 속도를 찾는다.",
-        "7. cm = L/V1 + L/V2 + 0.25 를 계산한다.",
-        "8. Q = (60 × q × f × E) / cm 을 계산하여 시간당 작업량을 구한다."
+        "qﾟ·e·E 표에서 값을 고르고 정지·터파기면 E에서 0.1·0.05를 뺀다.",
+        "작업 종류별 변속 단수로 V1·V2를 고른다.",
+        "cm = L/V1 + L/V2 + 0.25, q = qﾟ×e, Q = 60×q×f×E/cm를 계산한다."
       ],
-      "source": "PDF 168쪽 8-2-1 산정식",
+      "source": "PDF 168~170쪽 8-2-1 산정식",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "무한궤도 · 연한지반 굴착운반: 변속 단수가 원문에 없음",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "무한궤도"
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "연한지반 굴착운반"
+          }
+        ],
+        "reason": "원문 [주]가 이 종류·작업 조합의 변속 단수를 정하지 않는다.",
+        "source": "PDF 170쪽 1회 싸이클 시간 [주]",
+        "cite": {
+          "table_id": "p226-t0"
+        }
+      },
+      {
+        "condition": "무한궤도 · 작업현장 이동: 변속 단수가 원문에 없음",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "무한궤도"
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "작업현장 이동"
+          }
+        ],
+        "reason": "원문은 작업현장 이동에 전진 3단 또는 4단(무한궤도) / 2단 또는 3단(타이어)을 쓴다고만 하며 하나로 정하지 않는다.",
+        "source": "PDF 170쪽 1회 싸이클 시간 [주]",
+        "cite": {
+          "table_id": "p226-t0"
+        }
+      },
+      {
+        "condition": "타이어 · 굴착/굴착운반/발근/석재류집적: 변속 단수가 원문에 없음",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "굴착/굴착운반/발근/석재류집적"
+          }
+        ],
+        "reason": "원문 [주]가 이 종류·작업 조합의 변속 단수를 정하지 않는다.",
+        "source": "PDF 170쪽 1회 싸이클 시간 [주]",
+        "cite": {
+          "table_id": "p226-t1"
+        }
+      },
+      {
+        "condition": "타이어 · 제방 상향작업: 변속 단수가 원문에 없음",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "제방 상향작업"
+          }
+        ],
+        "reason": "원문 [주]가 이 종류·작업 조합의 변속 단수를 정하지 않는다.",
+        "source": "PDF 170쪽 1회 싸이클 시간 [주]",
+        "cite": {
+          "table_id": "p226-t1"
+        }
+      },
+      {
+        "condition": "타이어 · 수중작업: 변속 단수가 원문에 없음",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "수중작업"
+          }
+        ],
+        "reason": "원문 [주]가 이 종류·작업 조합의 변속 단수를 정하지 않는다.",
+        "source": "PDF 170쪽 1회 싸이클 시간 [주]",
+        "cite": {
+          "table_id": "p226-t1"
+        }
+      },
+      {
+        "condition": "타이어 · 작업현장 이동: 변속 단수가 원문에 없음",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "작업현장 이동"
+          }
+        ],
+        "reason": "원문은 작업현장 이동에 전진 3단 또는 4단(무한궤도) / 2단 또는 3단(타이어)을 쓴다고만 하며 하나로 정하지 않는다.",
+        "source": "PDF 170쪽 1회 싸이클 시간 [주]",
+        "cite": {
+          "table_id": "p226-t1"
+        }
+      },
+      {
+        "condition": "무한궤도 15ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "무한궤도"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "15"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "무한궤도 28ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "무한궤도"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "28"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "무한궤도 33ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "무한궤도"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "33"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "타이어 4(초습지)ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "4(초습지)"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "타이어 7ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "7"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "타이어 10ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "10"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "타이어 12ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "12"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "타이어 13(습지)ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "13(습지)"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "타이어 19ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "19"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "타이어 32ton: 원문 qﾟ 표에 없는 종류·규격",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "타이어"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "32"
+          }
+        ],
+        "reason": "원문 qﾟ 표의 이 칸은 '-'(해당 없음)이다.",
+        "source": "PDF 169쪽 가. qﾟ의 값",
+        "cite": {
+          "table_id": "p225-t0"
+        }
+      },
+      {
+        "condition": "파쇄암 · 자연상태 · 양호: 원문 E 표에 없는 조합",
+        "blocked_if_all": [
+          {
+            "input": "soil_type",
+            "op": "==",
+            "value": "파쇄암"
+          },
+          {
+            "input": "soil_state",
+            "op": "==",
+            "value": "자연상태"
+          },
+          {
+            "input": "site_condition",
+            "op": "==",
+            "value": "양호"
+          }
+        ],
+        "reason": "원문 E 표의 이 칸은 비어 있다('-').",
+        "source": "PDF 169쪽 다. E의 값",
+        "cite": {
+          "table_id": "p225-t2"
+        }
+      },
+      {
+        "condition": "파쇄암 · 자연상태 · 보통: 원문 E 표에 없는 조합",
+        "blocked_if_all": [
+          {
+            "input": "soil_type",
+            "op": "==",
+            "value": "파쇄암"
+          },
+          {
+            "input": "soil_state",
+            "op": "==",
+            "value": "자연상태"
+          },
+          {
+            "input": "site_condition",
+            "op": "==",
+            "value": "보통"
+          }
+        ],
+        "reason": "원문 E 표의 이 칸은 비어 있다('-').",
+        "source": "PDF 169쪽 다. E의 값",
+        "cite": {
+          "table_id": "p225-t2"
+        }
+      },
+      {
+        "condition": "파쇄암 · 자연상태 · 불량: 원문 E 표에 없는 조합",
+        "blocked_if_all": [
+          {
+            "input": "soil_type",
+            "op": "==",
+            "value": "파쇄암"
+          },
+          {
+            "input": "soil_state",
+            "op": "==",
+            "value": "자연상태"
+          },
+          {
+            "input": "site_condition",
+            "op": "==",
+            "value": "불량"
+          }
+        ],
+        "reason": "원문 E 표의 이 칸은 비어 있다('-').",
+        "source": "PDF 169쪽 다. E의 값",
+        "cite": {
+          "table_id": "p225-t2"
+        }
+      },
+      {
+        "condition": "파쇄암 · 흐트러진 상태 · 양호: 원문 E 표에 없는 조합",
+        "blocked_if_all": [
+          {
+            "input": "soil_type",
+            "op": "==",
+            "value": "파쇄암"
+          },
+          {
+            "input": "soil_state",
+            "op": "==",
+            "value": "흐트러진 상태"
+          },
+          {
+            "input": "site_condition",
+            "op": "==",
+            "value": "양호"
+          }
+        ],
+        "reason": "원문 E 표의 이 칸은 비어 있다('-').",
+        "source": "PDF 169쪽 다. E의 값",
+        "cite": {
+          "table_id": "p225-t2"
+        }
+      },
+      {
+        "condition": "무한궤도 4(초습지)ton · 평탄/흐트러진상태 정지/전압: 해당 단의 속도가 원문에 없음",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "무한궤도"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "4(초습지)"
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "평탄/흐트러진상태 정지/전압"
+          }
+        ],
+        "reason": "원문 V1·V2 표에 전진 3단 또는 후진 3단 속도가 '-'이다.",
+        "source": "PDF 170쪽 V1 및 V2의 값",
+        "cite": {
+          "table_id": "p226-t0"
+        }
+      },
+      {
+        "condition": "무한궤도 13(습지)ton · 평탄/흐트러진상태 정지/전압: 해당 단의 속도가 원문에 없음",
+        "blocked_if_all": [
+          {
+            "input": "bulldozer_type",
+            "op": "==",
+            "value": "무한궤도"
+          },
+          {
+            "input": "bulldozer_capacity",
+            "op": "==",
+            "value": "13(습지)"
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "평탄/흐트러진상태 정지/전압"
+          }
+        ],
+        "reason": "원문 V1·V2 표에 전진 3단 또는 후진 3단 속도가 '-'이다.",
+        "source": "PDF 170쪽 V1 및 V2의 값",
+        "cite": {
+          "table_id": "p226-t0"
+        }
+      },
+      {
+        "condition": "운반거리 80m 초과: 원문 e 표 범위(10이하~80) 밖",
+        "blocked_if": {
+          "input": "transport_distance",
+          "op": ">",
+          "value": "80"
+        },
+        "reason": "원문 e 값 표는 운반거리 80m까지만 있어 80m를 넘으면 e를 정하지 않는다(외삽하지 않음).",
+        "source": "PDF 169쪽 나. e의 값",
+        "cite": {
+          "table_id": "p225-t1"
+        }
+      }
+    ],
     "not_calculated": [
       {
         "item": "체적환산계수(f)",
@@ -372,28 +1216,10 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "formula",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "장비의 시간당 작업량(Q)을 구하는 공식으로, 현재 지원하는 일당 작업조(daily_crew)나 단위당 품(per_unit) 모델에 맞지 않습니다.",
+  "calc_type_reason": "표 조회값(qﾟ·e·E·V1·V2)과 가감을 파생 입력으로 만든 뒤 선언형 식으로 시간당 작업량을 계산한다. 금액이 아닌 참조 값이다.",
   "citations": [
-    {
-      "table_id": "p225-t0",
-      "row": "무한궤도",
-      "column": "4(초습지)",
-      "value": "0.5"
-    },
-    {
-      "table_id": "p225-t1",
-      "row": "e",
-      "column": "10이하",
-      "value": "1.00"
-    },
-    {
-      "table_id": "p225-t2",
-      "row": "모래,사질토",
-      "column": "자연상태 양호",
-      "value": "0.80"
-    },
     {
       "chunk_id": "p225-x13",
       "quote": "④ 정지작업을 겸하는 경우는 0.1을 뺀 값으로 한다."
@@ -409,6 +1235,150 @@
     {
       "chunk_id": "p224-x5",
       "quote": "Q =  cm ⋅q⋅f⋅E"
+    },
+    {
+      "table_id": "p225-t1",
+      "row": "e",
+      "column": "10이하",
+      "value": "1.00"
+    },
+    {
+      "table_id": "p225-t1",
+      "row": "e",
+      "column": "20",
+      "value": "0.96"
+    },
+    {
+      "table_id": "p225-t1",
+      "row": "e",
+      "column": "30",
+      "value": "0.92"
+    },
+    {
+      "table_id": "p225-t1",
+      "row": "e",
+      "column": "40",
+      "value": "0.88"
+    },
+    {
+      "table_id": "p225-t1",
+      "row": "e",
+      "column": "50",
+      "value": "0.84"
+    },
+    {
+      "table_id": "p225-t1",
+      "row": "e",
+      "column": "60",
+      "value": "0.80"
+    },
+    {
+      "table_id": "p225-t1",
+      "row": "e",
+      "column": "70",
+      "value": "0.76"
+    },
+    {
+      "table_id": "p225-t1",
+      "row": "e",
+      "column": "80",
+      "value": "0.72"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "모래, 사질토",
+      "column": "자연상태 양호",
+      "value": "0.80"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "모래, 사질토",
+      "column": "자연상태 보통",
+      "value": "0.65"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "모래, 사질토",
+      "column": "자연상태 불량",
+      "value": "0.50"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "모래, 사질토",
+      "column": "흐트러진 상태 양호",
+      "value": "0.85"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "모래, 사질토",
+      "column": "흐트러진 상태 보통",
+      "value": "0.70"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "모래, 사질토",
+      "column": "흐트러진 상태 불량",
+      "value": "0.55"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "자갈섞인 흙, 점성토",
+      "column": "자연상태 양호",
+      "value": "0.70"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "자갈섞인 흙, 점성토",
+      "column": "자연상태 보통",
+      "value": "0.55"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "자갈섞인 흙, 점성토",
+      "column": "흐트러진 상태 보통",
+      "value": "0.60"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "자갈섞인 흙, 점성토",
+      "column": "흐트러진 상태 불량",
+      "value": "0.45"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "파쇄암",
+      "column": "자연상태 양호",
+      "value": "-"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "파쇄암",
+      "column": "자연상태 보통",
+      "value": "-"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "파쇄암",
+      "column": "자연상태 불량",
+      "value": "-"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "파쇄암",
+      "column": "흐트러진 상태 양호",
+      "value": "-"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "파쇄암",
+      "column": "흐트러진 상태 보통",
+      "value": "0.35"
+    },
+    {
+      "table_id": "p225-t2",
+      "row": "파쇄암",
+      "column": "흐트러진 상태 불량",
+      "value": "0.25"
     }
   ],
   "open_questions": [

@@ -204,26 +204,35 @@
           "column_input": "pipe_type",
           "trades": [
             "용접공"
+          ],
+          "base_rate_multipliers": [
+            {
+              "when": {
+                "work_type": "금긋기 및 절단"
+              },
+              "factor": "7/10",
+              "source": "PDF 인쇄 369쪽 비고: 절단품은 본 품의 70% 계상",
+              "cite": {
+                "chunk_id": "p425-t0",
+                "quote": "본 품의 70%, 선단가공(Beveling) 품은 본 품의 30%를 계상한다."
+              }
+            },
+            {
+              "when": {
+                "work_type": "선단가공(Beveling)"
+              },
+              "factor": "3/10",
+              "source": "PDF 인쇄 369쪽 비고: 선단가공품은 본 품의 30% 계상",
+              "cite": {
+                "chunk_id": "p425-t0",
+                "quote": "본 품의 70%, 선단가공(Beveling) 품은 본 품의 30%를 계상한다."
+              }
+            }
           ]
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": [
-          {
-            "when": {
-              "work_type": "금긋기 및 절단"
-            },
-            "change": "본 품의 70% 계상",
-            "source": "PDF 369쪽 6-3-4 비고"
-          },
-          {
-            "when": {
-              "work_type": "선단가공(Beveling)"
-            },
-            "change": "본 품의 30% 계상",
-            "source": "PDF 369쪽 6-3-4 비고"
-          }
-        ]
+        "note_adjustments": []
       },
       "steps": [
         "p425-t0에서 관경과 종별에 따른 용접공 품을 찾는다.",
@@ -235,11 +244,279 @@
     },
     "blocked": [
       {
-        "condition": "pipe_type == B종 이고 pipe_diameter <= 600",
-        "reason": "표에 해당 규격의 품이 없음(-)",
-        "source": "PDF 369쪽 6-3-4 표",
+        "condition": "pipe_type=B종 및 pipe_diameter=80 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "80"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
         "cite": {
-          "table_id": "p425-t0"
+          "table_id": "p425-t0",
+          "row": "80",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=100 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "100"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "100",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=125 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "125"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "125",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=150 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "150"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "150",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=200 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "200"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "200",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=250 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "250"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "250",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=300 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "300"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "300",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=350 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "350"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "350",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=400 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "400"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "400",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=450 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "450"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "450",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=500 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "500"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "500",
+          "column": "B종",
+          "value": "-"
+        }
+      },
+      {
+        "condition": "pipe_type=B종 및 pipe_diameter=600 원문 셀이 대시",
+        "blocked_if_all": [
+          {
+            "input": "pipe_type",
+            "op": "==",
+            "value": "B종"
+          },
+          {
+            "input": "pipe_diameter",
+            "op": "==",
+            "value": "600"
+          }
+        ],
+        "reason": "원문 표의 B종 해당 관경 셀이 대시이므로 이 조건의 품은 산출하지 않는다.",
+        "source": "PDF 인쇄 369쪽 6-3-4 표",
+        "cite": {
+          "table_id": "p425-t0",
+          "row": "600",
+          "column": "B종",
+          "value": "-"
         }
       }
     ],
@@ -285,6 +562,86 @@
     {
       "chunk_id": "p425-x14",
       "quote": "공구손료 및 경장비(절단장비 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "80",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "100",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "125",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "150",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "200",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "250",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "300",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "350",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "400",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "450",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "500",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "table_id": "p425-t0",
+      "row": "600",
+      "column": "B종",
+      "value": "-"
+    },
+    {
+      "chunk_id": "p425-t0",
+      "quote": "본 품의 70%, 선단가공(Beveling) 품은 본 품의 30%를 계상한다."
+    },
+    {
+      "chunk_id": "p425-t0",
+      "quote": "본 품의 70%, 선단가공(Beveling) 품은 본 품의 30%를 계상한다."
     }
   ],
   "open_questions": [

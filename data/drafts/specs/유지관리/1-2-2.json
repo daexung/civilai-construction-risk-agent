@@ -68,17 +68,6 @@
         "required": true,
         "ask": "전정할 수목의 수량은 몇 주입니까?",
         "source": "일반적인 수목 수량 단위"
-      },
-      {
-        "name": "aerial_lift_spec",
-        "type": "enum",
-        "allowed_values": [
-          "고소작업차"
-        ],
-        "unit": null,
-        "required": true,
-        "ask": "사용할 고소작업차를 선택해주세요. (작업여건 및 안전율을 고려하여 적합한 규격 적용)",
-        "source": "PDF 859쪽 1-2-2 [주] ④"
       }
     ],
     "tables": [
@@ -88,6 +77,15 @@
         "source": "PDF 859쪽 1-2-2 일반전정 표",
         "unit": "인/작업조, 대/작업조, 주/일",
         "values": {
+          "조경공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "고소작업차": {
+            "수량": "1"
+          },
           "인력 시공_낙엽수": {
             "11㎝ 미만": "36",
             "11∼21㎝ 미만": "22",
@@ -123,24 +121,6 @@
             "41∼51㎝ 미만": "15",
             "51~61㎝ 미만": "10",
             "61cm 초과": "7"
-          },
-          "조경공": {
-            "인력 시공_낙엽수": "2",
-            "인력 시공_상록수": "2",
-            "기계 시공_낙엽수": "2",
-            "기계 시공_상록수": "2"
-          },
-          "보통인부": {
-            "인력 시공_낙엽수": "1",
-            "인력 시공_상록수": "1",
-            "기계 시공_낙엽수": "1",
-            "기계 시공_상록수": "1"
-          },
-          "고소작업차": {
-            "인력 시공_낙엽수": "0",
-            "인력 시공_상록수": "0",
-            "기계 시공_낙엽수": "1",
-            "기계 시공_상록수": "1"
           }
         },
         "cite": {
@@ -152,47 +132,251 @@
     "quantity_model": {
       "name": "adjusted_daily_crew",
       "params": {
+        "quantity_input": "quantity",
         "base_output": {
           "table": "p915-t0",
-          "row_input": "work_condition",
+          "row": "work_condition",
           "column_input": "dbm_size"
         },
         "coefficients": [],
         "crew": {
           "table": "p915-t0",
-          "column_input": "work_condition",
+          "column": "수량",
           "trades": [
             "조경공",
             "보통인부"
           ],
           "rate_codes": {
-            "조경공": "조경공_단가코드",
-            "보통인부": "보통인부_단가코드"
+            "조경공": "",
+            "보통인부": ""
           }
         },
-        "equipment": {
-          "name": "고소작업차",
-          "table": "p915-t0",
-          "unit": "대·일",
-          "machine_code_input": "aerial_lift_spec",
-          "operator_rate_code": "고소작업차_조종사_단가코드"
-        },
-        "quantity_input": "quantity"
+        "equipment": [
+          {
+            "name": "고소작업차",
+            "table": "p915-t0",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "work_condition": "기계 시공_낙엽수"
+            }
+          },
+          {
+            "name": "고소작업차",
+            "table": "p915-t0",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "work_condition": "기계 시공_상록수"
+            }
+          }
+        ]
       },
       "steps": [
-        "p915-t0에서 시공 방법/수종(work_condition)과 흉고직경(dbm_size)에 해당하는 기준 일일시공량을 찾는다.",
-        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
-        "p915-t0에서 시공 방법/수종에 해당하는 직종별 인원 및 장비 대수를 찾는다.",
-        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+        "시공 방법·수종과 흉고직경 구간의 일당 시공량(주)을 고른다(표에 '-'이면 적용 불가).",
+        "수량 ÷ 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원(기계 시공은 고소작업차 1대)으로 총 투입량을 구한다."
       ],
-      "source": "PDF 859쪽 1-2-2 일반전정 표",
+      "source": "PDF 859쪽 1-2-2 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "인력 시공 시 흉고직경 31cm 이상이거나, 기계 시공 시 흉고직경 11cm 미만인 경우",
-        "reason": "해당 조건의 시공량이 표에 제시되어 있지 않음 (- 표시)",
-        "source": "PDF 859쪽 1-2-2 일반전정 표",
+        "condition": "인력 시공_낙엽수 · 31∼41㎝ 미만: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "인력 시공_낙엽수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "31∼41㎝ 미만"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "인력 시공_낙엽수 · 41∼51㎝ 미만: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "인력 시공_낙엽수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "41∼51㎝ 미만"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "인력 시공_낙엽수 · 51~61㎝ 미만: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "인력 시공_낙엽수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "51~61㎝ 미만"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "인력 시공_낙엽수 · 61cm 초과: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "인력 시공_낙엽수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "61cm 초과"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "인력 시공_상록수 · 31∼41㎝ 미만: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "인력 시공_상록수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "31∼41㎝ 미만"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "인력 시공_상록수 · 41∼51㎝ 미만: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "인력 시공_상록수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "41∼51㎝ 미만"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "인력 시공_상록수 · 51~61㎝ 미만: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "인력 시공_상록수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "51~61㎝ 미만"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "인력 시공_상록수 · 61cm 초과: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "인력 시공_상록수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "61cm 초과"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "기계 시공_낙엽수 · 11㎝ 미만: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "기계 시공_낙엽수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "11㎝ 미만"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
+        "cite": {
+          "table_id": "p915-t0"
+        }
+      },
+      {
+        "condition": "기계 시공_상록수 · 11㎝ 미만: 원문 표에 시공량이 없음('-')",
+        "blocked_if_all": [
+          {
+            "input": "work_condition",
+            "op": "==",
+            "value": "기계 시공_상록수"
+          },
+          {
+            "input": "dbm_size",
+            "op": "==",
+            "value": "11㎝ 미만"
+          }
+        ],
+        "reason": "원문 표는 이 시공 방법·수종·흉고직경 조합에 시공량을 두지 않는다('-').",
+        "source": "PDF 859쪽 1-2-2 표",
         "cite": {
           "table_id": "p915-t0"
         }
@@ -224,20 +408,8 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "작업조 인원과 장비 대수가 고정되어 있고, 흉고직경별 기준 일일시공량이 표로 제시되어 있어 일당 작업조형 계산이 적합함.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다. 원문 '-' 칸은 0이 아니라 해당 조합 없음으로 막는다.",
   "citations": [
-    {
-      "table_id": "p915-t0",
-      "row": "인력 시공 | 낙엽수 | 조경공",
-      "column": "11㎝\n미만",
-      "value": "36"
-    },
-    {
-      "table_id": "p915-t0",
-      "row": "기계 시공 | 상록수 | 조경공",
-      "column": "11∼\n21㎝\n미만",
-      "value": "56"
-    },
     {
       "chunk_id": "p915-x11",
       "quote": "③ 상차 및 외부 운반 작업, 폐기물처리비는 별도 계상한다."
@@ -245,6 +417,24 @@
     {
       "chunk_id": "p915-x11",
       "quote": "⑤ 공구손료 및 경장비(전정기 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "table_id": "p915-t0",
+      "row": "조경공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p915-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p915-t0",
+      "row": "고소작업차",
+      "column": "수량",
+      "value": "1"
     }
   ],
   "open_questions": [

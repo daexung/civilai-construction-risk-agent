@@ -8,8 +8,8 @@
     "work": "Trash Rack 제작 (ton당)",
     "review": "AI 초안 · 검토 전",
     "source_pages": [
-      819,
-      820
+      875,
+      876
     ],
     "inputs": [
       {
@@ -24,29 +24,68 @@
     ],
     "tables": [
       {
-        "id": "p876-t0",
-        "role": "공정별 제작품 (용접~보조)",
-        "source": "PDF 820쪽 1. 공정별 제작품",
+        "id": "p875-t2",
+        "role": "공정별 제작품 (ton당)",
+        "source": "PDF 875쪽 13-6-15 공정별 제작품",
         "unit": "인/ton",
         "values": {
-          "용접": {
-            "직종": "플랜트용접공",
+          "Holing · 플랜트제관공": {
+            "수량": "3.22"
+          },
+          "Threading · 플랜트제관공": {
+            "수량": "4.3"
+          },
+          "사도 · 기계연마공": {
+            "수량": "18.66"
+          },
+          "현도 · 제도공": {
+            "수량": "0.3"
+          },
+          "괘서 · 현도공": {
+            "수량": "0.086"
+          },
+          "교정 · 마킹공": {
+            "수량": "2"
+          },
+          "절단 · 플랜트제관공": {
+            "수량": "0.5"
+          },
+          "절단 · 산소절단공": {
+            "수량": "0.656"
+          },
+          "기술관리 · 플랜트제관공": {
+            "수량": "36.902"
+          },
+          "기술관리 · 기계기사": {
+            "수량": "5.2"
+          },
+          "제작정리 · 플랜트제관공": {
+            "수량": "1.25"
+          }
+        },
+        "cite": {
+          "table_id": "p875-t2"
+        }
+      },
+      {
+        "id": "p876-t0",
+        "role": "공정별 제작품 (ton당)",
+        "source": "PDF 876쪽 13-6-15 공정별 제작품 이어짐",
+        "unit": "인/ton",
+        "values": {
+          "용접 · 플랜트용접공": {
             "수량": "4.46"
           },
-          "교정": {
-            "직종": "플랜트제관공",
+          "교정 · 플랜트제관공": {
             "수량": "0.75"
           },
-          "조작": {
-            "직종": "특수비계공",
+          "조작 · 특수비계공": {
             "수량": "3.3"
           },
-          "소운반": {
-            "직종": "인부",
+          "소운반 · 인부": {
             "수량": "1"
           },
-          "보조(기능)": {
-            "직종": "특별인부",
+          "보조(기능) · 특별인부": {
             "수량": "37.68"
           }
         },
@@ -57,41 +96,525 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "quantity_input": "quantity",
+        "unit_rate_table": {
+          "table": "p875-t2",
+          "column_input": "수량",
+          "trades": [
+            "작업품"
+          ],
+          "resource_units": {
+            "작업품": "인"
+          },
+          "trade_name_by_trade": {
+            "작업품": "플랜트제관공"
+          },
+          "citation_overrides": {
+            "작업품": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "Holing · 플랜트제관공",
+                "value": "3.22 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          "row_input": "Holing · 플랜트제관공"
+        },
+        "additional_unit_rates": [
+          {
+            "name": "Threading",
+            "table": "p875-t2",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "Threading · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "Threading · 플랜트제관공",
+                "value": "4.3 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "사도",
+            "table": "p875-t2",
+            "trades": [
+              "기계연마공"
+            ],
+            "row_by_trade": {
+              "기계연마공": "사도 · 기계연마공"
+            },
+            "column_by_trade": {
+              "기계연마공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "기계연마공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "사도 · 기계연마공",
+                "value": "18.66 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "현도",
+            "table": "p875-t2",
+            "trades": [
+              "제도공"
+            ],
+            "row_by_trade": {
+              "제도공": "현도 · 제도공"
+            },
+            "column_by_trade": {
+              "제도공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "제도공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "현도 · 제도공",
+                "value": "0.3 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "괘서",
+            "table": "p875-t2",
+            "trades": [
+              "현도공"
+            ],
+            "row_by_trade": {
+              "현도공": "괘서 · 현도공"
+            },
+            "column_by_trade": {
+              "현도공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "현도공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "괘서 · 현도공",
+                "value": "0.086 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "교정",
+            "table": "p875-t2",
+            "trades": [
+              "마킹공"
+            ],
+            "row_by_trade": {
+              "마킹공": "교정 · 마킹공"
+            },
+            "column_by_trade": {
+              "마킹공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "마킹공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "교정 · 마킹공",
+                "value": "2 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "절단",
+            "table": "p875-t2",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "절단 · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "절단 · 플랜트제관공",
+                "value": "0.5 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "절단",
+            "table": "p875-t2",
+            "trades": [
+              "산소절단공"
+            ],
+            "row_by_trade": {
+              "산소절단공": "절단 · 산소절단공"
+            },
+            "column_by_trade": {
+              "산소절단공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "산소절단공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "절단 · 산소절단공",
+                "value": "0.656 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "기술관리",
+            "table": "p875-t2",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "기술관리 · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "기술관리 · 플랜트제관공",
+                "value": "36.902 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "기술관리",
+            "table": "p875-t2",
+            "trades": [
+              "기계기사"
+            ],
+            "row_by_trade": {
+              "기계기사": "기술관리 · 기계기사"
+            },
+            "column_by_trade": {
+              "기계기사": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "기계기사": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "기술관리 · 기계기사",
+                "value": "5.2 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "제작정리",
+            "table": "p875-t2",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "제작정리 · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 875,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "제작정리 · 플랜트제관공",
+                "value": "1.25 인/ton",
+                "printed_page": 819
+              }
+            }
+          },
+          {
+            "name": "용접",
+            "table": "p876-t0",
+            "trades": [
+              "플랜트용접공"
+            ],
+            "row_by_trade": {
+              "플랜트용접공": "용접 · 플랜트용접공"
+            },
+            "column_by_trade": {
+              "플랜트용접공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트용접공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 876,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "용접 · 플랜트용접공",
+                "value": "4.46 인/ton",
+                "printed_page": 820
+              }
+            }
+          },
+          {
+            "name": "교정",
+            "table": "p876-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "교정 · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 876,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "교정 · 플랜트제관공",
+                "value": "0.75 인/ton",
+                "printed_page": 820
+              }
+            }
+          },
+          {
+            "name": "조작",
+            "table": "p876-t0",
+            "trades": [
+              "특수비계공"
+            ],
+            "row_by_trade": {
+              "특수비계공": "조작 · 특수비계공"
+            },
+            "column_by_trade": {
+              "특수비계공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "특수비계공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 876,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "조작 · 특수비계공",
+                "value": "3.3 인/ton",
+                "printed_page": 820
+              }
+            }
+          },
+          {
+            "name": "소운반",
+            "table": "p876-t0",
+            "trades": [
+              "인부"
+            ],
+            "row_by_trade": {
+              "인부": "소운반 · 인부"
+            },
+            "column_by_trade": {
+              "인부": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "인부": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 876,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "소운반 · 인부",
+                "value": "1 인/ton",
+                "printed_page": 820
+              }
+            }
+          },
+          {
+            "name": "보조(기능)",
+            "table": "p876-t0",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "보조(기능) · 특별인부"
+            },
+            "column_by_trade": {
+              "특별인부": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "특별인부": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 876,
+                "section_no": "13-6-15",
+                "section_title": "Trash Rack 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "보조(기능) · 특별인부",
+                "value": "37.68 인/ton",
+                "printed_page": 820
+              }
+            }
+          }
+        ],
+        "surcharges": [],
+        "note_adjustments": []
+      },
       "steps": [
-        "Trash Rack 제작 물량(ton)을 입력받는다.",
-        "표에 제시된 직종별 수량(ton당)을 물량에 곱하여 총 품을 산출해야 하나, 파싱 결과의 한계로 전체 직종에 대한 자동 계산이 불가하다."
+        "원문 p875~876의 13-6-15 공정별 제작품에서 공정·직종별 ton당 품을 각각 읽는다.",
+        "각 직종의 반복 공정 품은 원문 행을 보존해 개별 산출하고, Trash Rack 제작 ton을 곱하여 합산한다.",
+        "소모자재 수량은 별도 원문 표에 있으나 단가가 제공되지 않아 노무량 계산과 분리한다."
       ],
-      "source": "PDF 819~820쪽 1. 공정별 제작품",
-      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
+      "source": "PDF 875~876쪽 13-6-15 공정별 제작품 및 소모자재",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 원문 값을 그대로 적용"
     },
     "blocked": [],
     "not_calculated": [
       {
-        "item": "소모자재 (산소, 아세틸렌 등)",
-        "source": "PDF 820쪽 2. 소모자재",
+        "item": "소모자재 (산소, 아세틸렌, 용접봉, 사도, 현도 등)",
+        "source": "PDF 875~876쪽 2. 소모자재 (ton당)",
         "cite": {
           "table_id": "p876-t1"
         }
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 공정별 행 이름이 하나로 병합되어 있고, 동일 직종(예: 플랜트제관공)이 여러 번 등장하여 JSON 객체의 키로 고유하게 식별할 수 없어 자동 계산 명세로 구성하기 어렵습니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "PDF 875~876쪽의 공정별 제작품 16개 source rate를 공정·직종별 행과 셀로 복원하고 반복 직종은 원문 행 단위 투입량으로 출력한다. 소모자재는 별도 단가 부재로 물량 산정 범위에서 제외한다.",
   "citations": [
     {
-      "table_id": "p876-t0",
-      "row": "용접",
-      "column": "수량",
-      "value": "4.46"
+      "table_id": "p875-t2"
     },
     {
-      "chunk_id": "p876-x15",
-      "quote": "산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을"
+      "table_id": "p876-t0"
+    },
+    {
+      "table_id": "p876-t1"
     }
   ],
   "open_questions": [

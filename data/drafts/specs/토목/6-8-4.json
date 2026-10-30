@@ -274,7 +274,33 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "크레인",
+            "when": {
+              "pipe_diameter": "80"
+            },
+            "cite": {
+              "table_id": "p438-t1",
+              "row": "80",
+              "column": "크레인",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "크레인",
+            "when": {
+              "pipe_diameter": "100"
+            },
+            "cite": {
+              "table_id": "p438-t1",
+              "row": "100",
+              "column": "크레인",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p438-t1에서 관경별 단위당 품(배관공, 보통인부, 크레인)을 찾는다.",

@@ -98,48 +98,78 @@
         "unit": "m/일",
         "values": {
           "ø8": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "132"
           },
           "10": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "115"
           },
           "15": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "100"
           },
           "20": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "85"
           },
           "25": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "70"
           },
           "32": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "57"
           },
           "40": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "50"
           },
           "50": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "37"
           },
           "65": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "32"
           },
           "80": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "25"
           },
           "100": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "19"
           },
           "125": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "15"
           },
           "150": {
+            "배관공": "3",
+            "보통인부": "1",
             "시공량(m)": "12"
           },
           "200": {
+            "배관공": "4",
+            "보통인부": "1",
             "시공량(m)": "11"
           },
           "250": {
+            "배관공": "4",
+            "보통인부": "1",
             "시공량(m)": "8"
           }
         },
@@ -166,16 +196,86 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p705-t0",
+          "row": "pipe_size",
+          "column": "시공량(m)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p705-t0",
+          "column_template": "{trade}",
+          "row_input": "pipe_size",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [],
+        "output_adjustments": [
+          {
+            "when": {
+              "location": "화장실배관",
+              "scissor_lift_used": false
+            },
+            "operation": "set_output_percent",
+            "value": "17",
+            "source": "비고: 시공위치 화장실배관 시공량 요율 -17%",
+            "cite": {
+              "table_id": "p705-t1"
+            }
+          },
+          {
+            "when": {
+              "location": "기계실배관",
+              "scissor_lift_used": false
+            },
+            "operation": "set_output_percent",
+            "value": "23",
+            "source": "비고: 시공위치 기계실배관 시공량 요율 -23%",
+            "cite": {
+              "table_id": "p705-t1"
+            }
+          },
+          {
+            "when": {
+              "location": "옥외배관(암거내)",
+              "scissor_lift_used": false
+            },
+            "operation": "multiply_output",
+            "value": "111/100",
+            "source": "비고: 시공위치 옥외배관(암거내) 시공량 요율 +11%",
+            "cite": {
+              "table_id": "p705-t1"
+            }
+          },
+          {
+            "when": {
+              "scissor_lift_used": true,
+              "location": "일반"
+            },
+            "operation": "multiply_output",
+            "value": "63/50",
+            "source": "비고: 자체 추진 고소작업대(시저형)시공의 경우 시공량의 26%를 가산한다",
+            "cite": {
+              "table_id": "p705-t0"
+            }
+          }
+        ]
+      },
       "steps": [
-        "p705-t0에서 관규격별 기준 일일시공량을 확인한다.",
-        "작업조 인원은 관규격 8~150mm의 경우 배관공 3인, 보통인부 1인이며, 200~250mm의 경우 배관공 4인, 보통인부 1인(추정)을 적용한다.",
-        "자체 추진 고소작업대(시저형) 시공 시 기준 시공량의 26%를 가산한다.",
-        "시공위치에 따라 p705-t1의 요율(화장실배관 -17%, 기계실배관 -23%, 옥외배관 +11%)을 시공량에 적용한다.",
-        "조정된 일당시공량으로 총 물량을 나누어 작업일수를 구하고, 작업조 인원을 곱해 총 투입 인·일을 산출한다."
+        "관규격 행의 일당 시공량(m)을 고른다.",
+        "시공위치(화장실 -17%, 기계실 -23%, 옥외 +11%) 또는 고소작업대(시저형) +26%를 적용한다.",
+        "물량 ÷ 시공량으로 작업일수를 구하고 인원을 곱한다. 공구손료는 인력시공 2%, 고소작업대 시공 10%."
       ],
-      "source": "1-2-2 용접배관 표 및 비고",
+      "source": "PDF 704~705쪽 1-2-2 표 및 비고",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -191,6 +291,66 @@
         "cite": {
           "chunk_id": "p705-x18",
           "quote": "현장여건에 따라 콘크리트용 인서트를 사용할 경우 ‘[건축부문] 8-1-4 인서트(Insert) 설치’를 따른다."
+        }
+      },
+      {
+        "condition": "고소작업대 가산과 시공위치(화장실배관) 요율이 함께 적용되는 경우",
+        "blocked_if_all": [
+          {
+            "input": "scissor_lift_used",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "location",
+            "op": "==",
+            "value": "화장실배관"
+          }
+        ],
+        "reason": "두 증감 요율이 함께 적용될 때 결합 방식(합산/곱)이 원문에 명시되어 있지 않다.",
+        "source": "PDF 704~705쪽 1-2-2 비고",
+        "cite": {
+          "table_id": "p705-t1"
+        }
+      },
+      {
+        "condition": "고소작업대 가산과 시공위치(기계실배관) 요율이 함께 적용되는 경우",
+        "blocked_if_all": [
+          {
+            "input": "scissor_lift_used",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "location",
+            "op": "==",
+            "value": "기계실배관"
+          }
+        ],
+        "reason": "두 증감 요율이 함께 적용될 때 결합 방식(합산/곱)이 원문에 명시되어 있지 않다.",
+        "source": "PDF 704~705쪽 1-2-2 비고",
+        "cite": {
+          "table_id": "p705-t1"
+        }
+      },
+      {
+        "condition": "고소작업대 가산과 시공위치(옥외배관(암거내)) 요율이 함께 적용되는 경우",
+        "blocked_if_all": [
+          {
+            "input": "scissor_lift_used",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "location",
+            "op": "==",
+            "value": "옥외배관(암거내)"
+          }
+        ],
+        "reason": "두 증감 요율이 함께 적용될 때 결합 방식(합산/곱)이 원문에 명시되어 있지 않다.",
+        "source": "PDF 704~705쪽 1-2-2 비고",
+        "cite": {
+          "table_id": "p705-t1"
         }
       }
     ],
@@ -221,18 +381,39 @@
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(인력시공)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "when": {
+          "scissor_lift_used": false
+        },
+        "cite": {
+          "chunk_id": "p705-x18",
+          "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 인력품의 2%(인력시공)"
+        }
+      },
+      {
+        "name": "공구손료 및 경장비(고소작업대 시공)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.10",
+        "when": {
+          "scissor_lift_used": true
+        },
+        "cite": {
+          "chunk_id": "p705-x18",
+          "quote": "공구손료 및 경장비(절단기, 자체 추진 고소작업대(시저형) 등)의 기계경비는 인력품의 2%(인력시공)"
+        }
+      }
+    ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "시공량에 대한 조건부 가산(고소작업대 26%) 및 요율(시공위치) 적용이 복합적이며, 작업조 인원 표의 파싱 결과가 불완전하여 자동 계산 모델(adjusted_daily_crew)에 완벽히 매핑하기 어렵습니다.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다. 비고의 시공위치 요율·26% 가산을 출력 보정으로 표현한다.",
   "citations": [
-    {
-      "table_id": "p705-t0",
-      "row": "ø8",
-      "column": "시공량(m)",
-      "value": "132"
-    },
     {
       "table_id": "p705-t1",
       "row": "요율",
@@ -240,7 +421,7 @@
       "value": "- 17%"
     },
     {
-      "chunk_id": "p705-x18",
+      "chunk_id": "p705-t0",
       "quote": "자체 추진 고소작업대(시저형)시공의 경우 시공량의 26%를 가산한다."
     },
     {
@@ -262,6 +443,276 @@
     {
       "chunk_id": "p705-x18",
       "quote": "밸브류 설치품은 ‘[기계설비부문] 5-1-1 일반밸브 및 콕류 설치’를 적용하고"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "ø8",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "ø8",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "ø8",
+      "column": "시공량(m)",
+      "value": "132"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "10",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "10",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "10",
+      "column": "시공량(m)",
+      "value": "115"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "15",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "15",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "15",
+      "column": "시공량(m)",
+      "value": "100"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "20",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "20",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "20",
+      "column": "시공량(m)",
+      "value": "85"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "25",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "25",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "25",
+      "column": "시공량(m)",
+      "value": "70"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "32",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "32",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "32",
+      "column": "시공량(m)",
+      "value": "57"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "40",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "40",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "40",
+      "column": "시공량(m)",
+      "value": "50"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "50",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "50",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "50",
+      "column": "시공량(m)",
+      "value": "37"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "65",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "65",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "65",
+      "column": "시공량(m)",
+      "value": "32"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "80",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "80",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "80",
+      "column": "시공량(m)",
+      "value": "25"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "100",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "100",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "100",
+      "column": "시공량(m)",
+      "value": "19"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "125",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "125",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "125",
+      "column": "시공량(m)",
+      "value": "15"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "150",
+      "column": "배관공",
+      "value": "3"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "150",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "150",
+      "column": "시공량(m)",
+      "value": "12"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "200",
+      "column": "배관공",
+      "value": "4"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "200",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "200",
+      "column": "시공량(m)",
+      "value": "11"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "250",
+      "column": "배관공",
+      "value": "4"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "250",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p705-t0",
+      "row": "250",
+      "column": "시공량(m)",
+      "value": "8"
     }
   ],
   "open_questions": [

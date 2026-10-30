@@ -112,16 +112,71 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "volume",
+        "base_output": {
+          "table": "p967-t1",
+          "row": "시공량(㎥)",
+          "column_input": "obstacle_removal"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p967-t1",
+          "column_input": "obstacle_removal",
+          "trades": [
+            "특별인부",
+            "보통인부",
+            "용접공"
+          ],
+          "rate_codes": {
+            "특별인부": "",
+            "보통인부": "",
+            "용접공": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "굴착기+압쇄기",
+            "table": "p967-t1",
+            "column_input": "obstacle_removal",
+            "unit": "대·일"
+          },
+          {
+            "name": "굴착기",
+            "table": "p967-t1",
+            "column_input": "obstacle_removal",
+            "unit": "대·일"
+          }
+        ],
+        "materials": [
+          {
+            "when": {
+              "obstacle_removal": "장애물 제거"
+            },
+            "name": "산소(대기압상태기준)",
+            "table": "p967-t2",
+            "row": "산소(대기압상태기준)",
+            "unit": "L"
+          },
+          {
+            "when": {
+              "obstacle_removal": "장애물 제거"
+            },
+            "name": "아세틸렌",
+            "table": "p967-t2",
+            "row": "아세틸렌",
+            "unit": "㎏"
+          }
+        ]
+      },
       "steps": [
-        "obstacle_removal 입력에 따라 p967-t1에서 일일시공량과 직종별 인원, 장비 대수를 찾는다.",
-        "작업일수 = volume ÷ 일일시공량으로 구한다.",
-        "직종별 인·일 = 작업일수 × 인원, 장비 대·일 = 작업일수 × 대수로 구한다.",
-        "obstacle_removal이 '장애물 제거'인 경우, p967-t2를 참조하여 산소와 아세틸렌 재료량을 volume에 곱하여 산출한다.",
-        "공구손료 및 경장비는 산출된 인력품 합계의 4%로 계상한다."
+        "장애물 제거 여부 열에서 일당 시공량을 고른다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수(굴착기+압쇄기, 굴착기)로 총 투입량을 구한다.",
+        "장애물 제거 시 산소·아세틸렌 재료량을 물량에 곱한다."
       ],
-      "source": "PDF 911쪽 3-1-2 표 및 [주]",
+      "source": "PDF 911쪽 3-1-2 표 및 [주] ⑧",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -172,9 +227,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "일당 작업조형이나, 투입되는 장비가 2종류(굴착기+압쇄기, 굴착기) 고정 투입되어 현재 단일 장비만 지원하는 adjusted_daily_crew 모델 스펙으로 완벽히 표현하기 어렵고, 장애물 제거 시 추가되는 재료(산소, 아세틸렌) 산식(물량 비례)이 혼합되어 있어 복합적인 계산이 필요합니다.",
+  "calc_type_reason": "장애물 유무 열별 인원·장비 대수·일당 시공량이 한 표에 있고 재료량 표(p967-t2)는 materials로 표현된다.",
   "citations": [
     {
       "table_id": "p967-t1",

@@ -178,8 +178,8 @@
       "params": {
         "unit_rate_table": {
           "table": "p853-t0",
-          "row_input": "고정",
-          "column_input": "수량",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "기계기사",
             "플랜트제관공",
@@ -191,7 +191,38 @@
             "특별인부",
             "검사및교정",
             "시험및조정"
-          ]
+          ],
+          "table_selector": {
+            "input": "gate_type",
+            "values": {
+              "Tainter Gate": "p853-t0",
+              "Roller Gate": "p854-t1"
+            }
+          },
+          "trades_by_table": {
+            "p853-t0": [
+              "기계기사",
+              "플랜트제관공",
+              "플랜트용접공",
+              "비계공",
+              "플랜트기계설치공",
+              "도장공",
+              "측량사",
+              "특별인부",
+              "검사및교정"
+            ],
+            "p854-t1": [
+              "기계기사",
+              "플랜트제관공",
+              "플랜트용접공",
+              "비계공",
+              "플랜트기계설치공",
+              "도장공",
+              "측량사",
+              "특별인부",
+              "시험및조정"
+            ]
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],

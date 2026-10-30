@@ -84,14 +84,58 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p914-t0",
+          "row": "시공량",
+          "column": "개소"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p914-t0",
+          "column": "수량",
+          "trades": [
+            "중급기술자",
+            "보링공",
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "중급기술자": "",
+            "보링공": "",
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "크레인",
+            "table": "p914-t0",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "고소작업차",
+            "table": "p914-t0",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "강연선인장기",
+            "table": "p914-t0",
+            "column": "수량",
+            "unit": "대·일"
+          }
+        ]
+      },
       "steps": [
-        "p914-t0에서 기준 일일시공량(9개소)을 확인한다.",
-        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
-        "직종별 인·일 = 작업일수 × 표의 직종별 인원, 장비 대·일 = 작업일수 × 표의 장비 대수로 구한다."
+        "일당 시공량 9개소로 설치 개소 ÷ 9 = 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수(크레인·고소작업차·강연선인장기)로 총 투입량을 구한다.",
+        "블록 2ton 초과·비탈경사/수직고 기준 초과는 원문 범위 밖이라 보류한다."
       ],
-      "source": "1-1-2 지압판블록 설치 표",
+      "source": "PDF 858쪽 1-1-2 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -139,9 +183,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "일당 작업조에 크레인, 고소작업차, 강연선인장기 등 여러 대의 장비가 투입되나, 현재 adjusted_daily_crew 모델은 단일 장비만 지원하므로 자동 계산이 제한됩니다.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량(개소)이 한 표에 있어 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p914-t0",

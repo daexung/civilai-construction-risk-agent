@@ -75,7 +75,8 @@
           "trades": [
             "철공",
             "보통인부"
-          ]
+          ],
+          "column": "수량"
         },
         "quantity_input": "quantity"
       },
@@ -113,7 +114,7 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "일당 작업조 인원과 일일 시공량이 표로 제시되어 있어, 물량을 일일 시공량으로 나누어 작업일수를 구하는 방식이 적합합니다.",
+  "calc_type_reason": "인원·장비 대수가 표의 '수량' 열에 있어 열 지정만 보완하면 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p675-t2",

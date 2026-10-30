@@ -58,6 +58,15 @@
         "required": true,
         "ask": "측량결과에 대한 설명을 부가한 감정도 및 감정서 발급을 요청합니까?",
         "source": "PDF 2쪽 ⑤ 기타사항 ㉴"
+      },
+      {
+        "name": "parcel_count",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "필지",
+        "required": true,
+        "ask": "대상 필지는 몇 필지입니까?",
+        "source": "PDF 2쪽 ② 면적계수 및 1쪽 직종별 기본 품 표의 1필지 기준"
       }
     ],
     "tables": [
@@ -117,31 +126,59 @@
       "params": {
         "unit_rate_table": {
           "table": "p613-t1",
-          "row_input": "합계",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "지적기사",
             "지적산업기사",
             "지적기능사"
-          ]
+          ],
+          "trade_in_columns": true,
+          "row_by_trade": {
+            "지적기사": "합계",
+            "지적산업기사": "합계",
+            "지적기능사": "합계"
+          },
+          "basis_cites_by_row": {
+            "합계": {
+              "chunk_id": "p614-x0",
+              "quote": "본 품은 1필지당 300㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고, 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다."
+            }
+          }
         },
-        "quantity_input": "1",
+        "quantity_input": "parcel_count",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "coefficient_combination": "additive_deltas",
+        "coefficient_rules": [
           {
-            "when": {
-              "appraisal_requested": true
-            },
-            "change": "추가 품 가산 적용할 수 있다 (구체적 수치 없음)",
-            "source": "PDF 2쪽 ⑤ 기타사항 ㉴"
+            "kind": "area_increment",
+            "table": "p614-t0",
+            "row": "계수",
+            "area_input": "area",
+            "base_area": "300",
+            "cite": {
+              "chunk_id": "p614-x4",
+              "quote": "※ n은 가산횟수로 (대상면적-기준면적) ÷ 기준면적"
+            }
+          },
+          {
+            "table": "p614-t1",
+            "row": "계수",
+            "input": "region_type",
+            "cite": {
+              "chunk_id": "p614-x4",
+              "quote": "본 품은 면지역을 기준으로 하였으며, 행정구역이 다를 경우 다음의 계수를 곱하여 품을 계상한다."
+            }
           }
         ]
       },
       "steps": [
-        "p613-t1에서 직종별 합계 품을 가져온다.",
-        "면적(area)을 300㎡ 기준으로 나누어 가산횟수(n)를 구하고, p614-t0에 따라 면적계수를 산출한다.",
-        "region_type에 따라 p614-t1에서 지역구분계수를 찾는다.",
-        "총 계수 = 기본계수(1.00) + 등록계수(0.00) + 지역구분계수 + 면적계수",
-        "직종별 품 = 기본 품 × 총 계수"
+        "p613-t1의 합계행에서 직종별 1필지 기본 품을 찾는다.",
+        "기준면적 300㎡를 초과하면 n=ceil((면적-기준면적)/기준면적)으로 가산횟수를 산정하고 p614-t0의 정확한 계수를 조회한다.",
+        "면 지역은 기준계수 1.00, 그 밖의 지역은 p614-t1의 지역계수를 적용한다.",
+        "원문 계산예에 따라 총 계수는 1.00 + 등록계수 0.00 + (지역계수-1.00) + (면적계수-1.00)으로 산정한다.",
+        "직종별 기본 품에 총 계수와 필지 수를 반영한다. 감정도·감정서 요청 시 추가 품 수치가 없어 계산을 차단한다."
       ],
       "source": "PDF 1~2쪽",
       "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"

@@ -1,0 +1,78 @@
+[
+  {
+    "id": "auth-height-7.001",
+    "spec_path": "data/drafts/specs/공통/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "복잡",
+      "height": "7.001",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "allowed_system_policies": [
+      "formwork-6-3-1-height-started-interval-compound-v1"
+    ],
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "27.3"
+    }
+  },
+  {
+    "id": "auth-height-40",
+    "spec_path": "data/drafts/specs/공통/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "복잡",
+      "height": "40",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "allowed_system_policies": [
+      "formwork-6-3-1-height-started-interval-compound-v1"
+    ],
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "10.631060024624333494473"
+    }
+  },
+  {
+    "id": "auth-height-roof",
+    "spec_path": "data/drafts/specs/공통/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "복잡",
+      "height": "7.001",
+      "is_roof_slab": true,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "allowed_system_policies": [
+      "formwork-6-3-1-height-started-interval-compound-v1"
+    ],
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "22.659"
+    }
+  },
+  {
+    "id": "auth-height-40.001",
+    "spec_path": "data/drafts/specs/공통/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "복잡",
+      "height": "40.001",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "allowed_system_policies": [
+      "formwork-6-3-1-height-started-interval-compound-v1"
+    ],
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "9.67426462240814347997043"
+    }
+  }
+]

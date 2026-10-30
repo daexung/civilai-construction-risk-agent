@@ -26,13 +26,101 @@
         "source": "PDF 734쪽 1. Screwed Type, 2. Welder-Back Screwed Type, 735쪽 3. Flange Type"
       },
       {
-        "name": "diameter",
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "개",
+        "required": true,
+        "ask": "밸브 수량은 몇 개입니까?",
+        "source": "PDF 734쪽, 735쪽 표 단위 (개당)"
+      },
+      {
+        "name": "diameter_screwed",
         "type": "enum",
         "allowed_values": [
           "ø25이하",
           "32",
           "40",
           "50",
+          "65",
+          "80",
+          "90",
+          "100"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Screwed Type 밸브의 구경은?",
+        "source": "p790-t0의 구경 행 머리글",
+        "when": {
+          "input": "valve_type",
+          "equals": "Screwed Type"
+        }
+      },
+      {
+        "name": "pressure_screwed",
+        "type": "enum",
+        "allowed_values": [
+          "10.5",
+          "21.0∼27.5",
+          "42∼62",
+          "105",
+          "176"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Screwed Type 밸브의 사용압력은?",
+        "source": "p790-t0의 사용압력 머리글",
+        "when": {
+          "input": "valve_type",
+          "equals": "Screwed Type"
+        }
+      },
+      {
+        "name": "diameter_welder_back",
+        "type": "enum",
+        "allowed_values": [
+          "ø 25이하",
+          "32",
+          "40",
+          "50",
+          "65",
+          "80",
+          "90",
+          "100"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Welder-Back Screwed Type 밸브의 구경은?",
+        "source": "p790-t1의 구경 행 머리글",
+        "when": {
+          "input": "valve_type",
+          "equals": "Welder-Back Screwed Type"
+        }
+      },
+      {
+        "name": "pressure_welder_back",
+        "type": "enum",
+        "allowed_values": [
+          "10.5",
+          "21∼27",
+          "42∼63",
+          "105",
+          "176"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Welder-Back Screwed Type 밸브의 사용압력은?",
+        "source": "p790-t1의 사용압력 머리글",
+        "when": {
+          "input": "valve_type",
+          "equals": "Welder-Back Screwed Type"
+        }
+      },
+      {
+        "name": "diameter_flange",
+        "type": "enum",
+        "allowed_values": [
+          "ø50",
           "65",
           "80",
           "90",
@@ -48,38 +136,34 @@
           "500",
           "600"
         ],
-        "unit": "㎜",
+        "unit": null,
         "required": true,
-        "ask": "구경은 몇 ㎜입니까?",
-        "source": "PDF 734쪽 p790-t0, p790-t1, 735쪽 p791-t0"
+        "ask": "Flange Type 밸브의 구경은?",
+        "source": "p791-t0의 구경 행 머리글",
+        "when": {
+          "input": "valve_type",
+          "equals": "Flange Type"
+        }
       },
       {
-        "name": "pressure",
+        "name": "pressure_flange",
         "type": "enum",
         "allowed_values": [
           "10.5",
-          "21.0∼27.5",
           "21∼27",
-          "42∼62",
-          "42∼63",
           "42",
           "63",
           "105",
           "176"
         ],
-        "unit": "㎏/㎠",
+        "unit": null,
         "required": true,
-        "ask": "사용압력은 몇 ㎏/㎠입니까?",
-        "source": "PDF 734쪽 p790-t0, p790-t1, 735쪽 p791-t0"
-      },
-      {
-        "name": "quantity",
-        "type": "positive_rational",
-        "allowed_values": "0보다 큰 수",
-        "unit": "개",
-        "required": true,
-        "ask": "밸브 수량은 몇 개입니까?",
-        "source": "PDF 734쪽, 735쪽 표 단위 (개당)"
+        "ask": "Flange Type 밸브의 사용압력은?",
+        "source": "p791-t0의 사용압력 머리글",
+        "when": {
+          "input": "valve_type",
+          "equals": "Flange Type"
+        }
       }
     ],
     "tables": [
@@ -525,12 +609,44 @@
       "params": {
         "unit_rate_table": {
           "table": "p790-t0",
-          "row_input": "diameter",
-          "column_input": "pressure",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "플랜트배관공",
             "특별인부"
-          ]
+          ],
+          "table_selector": {
+            "input": "valve_type",
+            "values": {
+              "Screwed Type": "p790-t0",
+              "Welder-Back Screwed Type": "p790-t1",
+              "Flange Type": "p791-t0"
+            }
+          },
+          "row_input_by_table": {
+            "p790-t0": "diameter_screwed",
+            "p790-t1": "diameter_welder_back",
+            "p791-t0": "diameter_flange"
+          },
+          "column_input_by_table": {
+            "p790-t0": "pressure_screwed",
+            "p790-t1": "pressure_welder_back",
+            "p791-t0": "pressure_flange"
+          },
+          "trades_by_table": {
+            "p790-t0": [
+              "플랜트배관공",
+              "특별인부"
+            ],
+            "p790-t1": [
+              "플랜트배관공",
+              "특별인부"
+            ],
+            "p791-t0": [
+              "플랜트배관공",
+              "특별인부"
+            ]
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],

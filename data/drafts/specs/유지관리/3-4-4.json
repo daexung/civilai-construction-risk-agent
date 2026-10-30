@@ -40,9 +40,11 @@
         "source": "PDF 920쪽 3-4-4 표",
         "unit": "인, ㎡",
         "values": {
-          "내 장 공": {
-            "수 량": "2",
-            "시공량(㎡)": "61"
+          "내장공": {
+            "수량": "2"
+          },
+          "시공량": {
+            "수량": "61"
           }
         },
         "cite": {
@@ -52,14 +54,46 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p976-t0",
+          "row": "시공량",
+          "column": "수량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p976-t0",
+          "column": "수량",
+          "trades": [
+            "내장공"
+          ],
+          "rate_codes": {
+            "내장공": ""
+          }
+        },
+        "equipment": [],
+        "output_adjustments": [
+          {
+            "when": {
+              "has_obstacle": true
+            },
+            "operation": "set_output_percent",
+            "value": "15",
+            "source": "표 비고: 사용중인 세대로 가구 등의 지장물이 있는 경우 시공량의 15%를 감한다",
+            "cite": {
+              "table_id": "p976-t0"
+            }
+          }
+        ]
+      },
       "steps": [
-        "내장공 2인 기준 일일시공량 61㎡를 적용한다.",
-        "사용중인 세대로 가구 등의 지장물이 있는 경우 시공량의 15%를 감한다.",
-        "물량을 일일시공량으로 나누어 작업일수를 구하고 인원을 곱한다."
+        "일당 시공량 61㎡로 물량 ÷ 시공량 = 작업일수를 구한다.",
+        "사용중인 세대로 지장물이 있으면 시공량의 15%를 감한다.",
+        "작업일수 × 내장공 2인으로 총 투입량을 구한다."
       ],
-      "source": "PDF 920쪽 3-4-4 표 및 비고",
+      "source": "PDF 3-4-4 표 및 비고",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -76,16 +110,10 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과 텍스트에 직종(내장공)과 시공량(61)이 누락되어 있어, 지시사항에 따라 파싱 결과에 없는 행/열 이름을 만들 수 없으므로 자동 계산 모델(adjusted_daily_crew)을 구성하지 않았습니다.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다. 비고의 지장물 15% 감을 출력 보정으로 표현한다.",
   "citations": [
-    {
-      "table_id": "p976-t0",
-      "row": "구분",
-      "column": "수량",
-      "value": "2"
-    },
     {
       "chunk_id": "p976-x2",
       "quote": "비 고 - 사용중인 세대로 가구 등의 지장물이 있는 경우 시공량의 15%를 감한다."

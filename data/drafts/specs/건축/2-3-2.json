@@ -43,24 +43,97 @@
         "role": "ALC패널 설치 일당 작업조 및 시공량 (파싱 누락 있음)",
         "source": "PDF 584쪽 2-3-2 표",
         "values": {
-          "구분": {
-            "패널두께(mm) 75": "수량 3",
-            "패널두께(mm) 100": "수량 3",
-            "패널두께(mm) 125": "수량 3",
-            "패널두께(mm) 150": "수량 3",
-            "패널두께(mm) 175": "수량 3",
-            "패널두께(mm) 200": "수량 3"
+          "75_조적공": {
+            "수량": "3",
+            "시공량(㎡)": "22"
+          },
+          "75_보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "22"
+          },
+          "100_조적공": {
+            "수량": "3",
+            "시공량(㎡)": "19"
+          },
+          "100_보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "19"
+          },
+          "125_조적공": {
+            "수량": "3",
+            "시공량(㎡)": "16"
+          },
+          "125_보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "16"
+          },
+          "150_조적공": {
+            "수량": "3",
+            "시공량(㎡)": "14"
+          },
+          "150_보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "14"
+          },
+          "175_조적공": {
+            "수량": "3",
+            "시공량(㎡)": "13"
+          },
+          "175_보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "13"
+          },
+          "200_조적공": {
+            "수량": "3",
+            "시공량(㎡)": "11"
+          },
+          "200_보통인부": {
+            "수량": "1",
+            "시공량(㎡)": "11"
           }
         },
         "cite": {
           "table_id": "p640-t0"
-        }
+        },
+        "unit": "인, ㎡"
       }
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "area",
+        "base_output": {
+          "table": "p640-t0",
+          "row_selector": {
+            "input": "panel_thickness",
+            "contains": [
+              "조적공"
+            ],
+            "exact_input_contains": [
+              "panel_thickness"
+            ]
+          },
+          "column_selector": "시공량(㎡)"
+        },
+        "crew": {
+          "table": "p640-t0",
+          "trades": [
+            "조적공",
+            "보통인부"
+          ],
+          "row_selector": {
+            "input": "panel_thickness",
+            "contains": [
+              "{trade}"
+            ],
+            "exact_input_contains": [
+              "panel_thickness"
+            ]
+          },
+          "column": "수량"
+        }
+      },
       "steps": [
         "파싱 결과에 직종(조적공, 보통인부)과 시공량 데이터가 누락되어 계산식을 구성할 수 없습니다."
       ],
@@ -81,20 +154,22 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "name": "공구손료 및 경장비",
-        "category": "경비",
-        "base": "labor_subtotal",
+        "item": "tooling and light equipment cost",
         "rate": "0.03",
+        "basis": "labor amount",
+        "source": "설명 | ② 본 품은 먹매김, 패널 절단 및 설치, 충전재 주입 및 마무리 작업을 포함한다. ③ 부속철물 설치는 별도 계상한다. ④ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 3%로 계상한다.",
         "cite": {
           "chunk_id": "p640-x7",
-          "quote": "④ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 3%로 계상한다."
+          "quote": "설명 | ② 본 품은 먹매김, 패널 절단 및 설치, 충전재 주입 및 마무리 작업을 포함한다. ③ 부속철물 설치는 별도 계상한다. ④ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 3%로 계상한다."
         }
       }
-    ]
+    ],
+    "calc_type": "daily_crew",
+    "calc_type_reason": "Source gives daily output and crew size by panel thickness; the existing daily-crew engine scales both to area."
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 직종(조적공, 보통인부) 및 시공량 데이터가 누락되어 일당 작업조 계산을 수행할 수 없습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "Source gives daily output and crew size by panel thickness; the existing daily-crew engine scales both to area.",
   "citations": [
     {
       "table_id": "p640-t0",
@@ -139,6 +214,9 @@
     {
       "chunk_id": "p640-x7",
       "quote": "④ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "table_id": "p640-t0"
     }
   ],
   "open_questions": [

@@ -88,8 +88,29 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p133-t1",
+          "row_input": "soil_type",
+          "column": "시공량(㎡)"
+        },
+        "crew": {
+          "table": "p133-t1",
+          "trades": []
+        },
+        "equipment": [
+          {
+            "table": "p133-t1",
+            "row_from": "base_output",
+            "name_column": "구분",
+            "quantity_column": "수량",
+            "unit": "대",
+            "source": "PDF p.77 3-5-1 equipment daily count"
+          }
+        ]
+      },
       "steps": [
         "입력된 토질(암) 분류에 따라 p133-t1에서 시공량과 투입 장비(굴착기 또는 대형브레이커)를 확인한다.",
         "물량을 시공량으로 나누어 장비 투입 대·일을 구한다.",
@@ -98,41 +119,25 @@
       "source": "PDF 77쪽 3-5-1 표 및 [주] ②",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [
+    "blocked": [],
+    "not_calculated": [
       {
-        "condition": "호박돌 섞인 고결토·경질토 및 풍화암일 경우 리퍼 기계경비 산정",
-        "blocked_if": {
-          "input": "soil_type",
-          "op": "==",
-          "value": "호박돌 섞인 고결토･경질토"
-        },
-        "reason": "리퍼 기계경비를 굴착기 기계경비의 2%로 계상해야 하나, 현재 모델은 장비비 기준 경비율 산정을 지원하지 않음",
-        "source": "PDF 77쪽 3-5-1 [주] ②",
+        "item": "ripper machinery cost (2% of excavator machinery cost; applicable to the cited hard-soil classes)",
+        "source": "PDF p.77 [Note] ?",
         "cite": {
-          "table_id": "p133-t1"
-        }
-      },
-      {
-        "condition": "호박돌 섞인 고결토·경질토 및 풍화암일 경우 리퍼 기계경비 산정",
-        "blocked_if": {
-          "input": "soil_type",
-          "op": "==",
-          "value": "풍화암"
-        },
-        "reason": "리퍼 기계경비를 굴착기 기계경비의 2%로 계상해야 하나, 현재 모델은 장비비 기준 경비율 산정을 지원하지 않음",
-        "source": "PDF 77쪽 3-5-1 [주] ②",
-        "cite": {
-          "table_id": "p133-t1"
+          "chunk_id": "p133-x15",
+          "quote": "설명 | 2%로 계상한다."
         }
       }
     ],
-    "not_calculated": [],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "calc_type": "daily_crew",
+    "calc_type_reason": "Source provides equipment type, daily count, and daily area output by soil class; quantity converts these to equipment-days and hours."
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "토질에 따라 투입 장비가 굴착기와 대형브레이커로 달라지며, 특정 토질에서 리퍼 기계경비를 굴착기 기계경비의 2%로 계상해야 하나 현재 모델에서 장비비 기준 경비율 산정을 지원하지 않아 자동 계산이 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "Source provides equipment type, daily count, and daily area output by soil class; quantity converts these to equipment-days and hours.",
   "citations": [
     {
       "table_id": "p133-t1",
@@ -173,6 +178,9 @@
     {
       "chunk_id": "p133-x15",
       "quote": "② 호박돌 섞인 고결토·경질토 및 풍화암은 리퍼를 사용한 기준이며, 리퍼의 기계경비는 굴착기 기계경비의\n설명 | 2%로 계상한다."
+    },
+    {
+      "table_id": "p133-t1"
     }
   ],
   "open_questions": [

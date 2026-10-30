@@ -21,7 +21,11 @@
         "unit": null,
         "required": true,
         "ask": "조회할 정보는 무엇입니까? (천공속도 / 소형터널 굴착기준)",
-        "source": "PDF 340쪽 3-2-3 표 상단 및 하단"
+        "source": "PDF 340쪽 3-2-3 표 상단 및 하단",
+        "source_table_map": {
+          "천공속도": "p396-t0",
+          "소형터널 굴착기준": "p396-t1"
+        }
       },
       {
         "name": "equipment_type",
@@ -33,7 +37,11 @@
         "unit": null,
         "required": true,
         "ask": "천공기계 종류는 무엇입니까?",
-        "source": "PDF 340쪽 p396-t0"
+        "source": "PDF 340쪽 p396-t0",
+        "when": {
+          "input": "target_info",
+          "equals": "천공속도"
+        }
       },
       {
         "name": "rock_type_breaker",
@@ -47,7 +55,11 @@
         "unit": null,
         "required": true,
         "ask": "소형브레이커 적용 시 암종은 무엇입니까?",
-        "source": "PDF 340쪽 p396-t0"
+        "source": "PDF 340쪽 p396-t0",
+        "when": {
+          "input": "equipment_type",
+          "equals": "소형브레이커"
+        }
       },
       {
         "name": "advance_length_jumbo",
@@ -61,13 +73,36 @@
         "unit": "m",
         "required": true,
         "ask": "점보드릴 적용 시 굴진장은 얼마입니까?",
-        "source": "PDF 340쪽 p396-t0"
+        "source": "PDF 340쪽 p396-t0",
+        "when": {
+          "input": "equipment_type",
+          "equals": "점보드릴"
+        }
+      },
+      {
+        "name": "small_tunnel_metric",
+        "type": "enum",
+        "allowed_values": [
+          "굴착단면 1㎡당천공수(도갱면적 5.3㎡)",
+          "굴착단면 1㎡당천공수(도갱면적 9.7㎡)",
+          "1구멍당천공길이(m)",
+          "뚫기 1구멍 1m당 폭약량(㎏/m)",
+          "심빼기구멍수"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "소형터널에서 조회할 기준 항목은 무엇입니까?",
+        "source": "PDF 340쪽 [주] ④ 소형터널 굴착 기준 표의 행 구분",
+        "source_row_key": true,
+        "when": {
+          "input": "target_info",
+          "equals": "소형터널 굴착기준"
+        }
       },
       {
         "name": "small_tunnel_rock_advance",
         "type": "enum",
         "allowed_values": [
-          "풍화암(연암 0.8 준용)",
           "연암 0.8",
           "연암 1.0",
           "연암 1.1",
@@ -78,20 +113,12 @@
         ],
         "unit": "m",
         "required": true,
-        "ask": "소형터널의 암질 및 1발파 진행거리는 얼마입니까?",
-        "source": "PDF 340쪽 p396-t1 및 ※ 풍화암 준용 규정"
-      },
-      {
-        "name": "small_tunnel_area",
-        "type": "enum",
-        "allowed_values": [
-          "5.3",
-          "9.7"
-        ],
-        "unit": "㎡",
-        "required": true,
-        "ask": "소형터널의 도갱면적은 얼마입니까?",
-        "source": "PDF 340쪽 p396-t1"
+        "ask": "암질 및 1발파 진행거리(표의 열)는 무엇입니까? 풍화암은 원문 각주에 따라 연암 0.8m를 적용합니다.",
+        "source": "PDF 340쪽 p396-t1 및 ※ 풍화암 준용 규정",
+        "when": {
+          "input": "target_info",
+          "equals": "소형터널 굴착기준"
+        }
       }
     ],
     "tables": [

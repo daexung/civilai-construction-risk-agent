@@ -12,6 +12,42 @@
     ],
     "inputs": [
       {
+        "name": "construction_method",
+        "type": "enum",
+        "allowed_values": [
+          "top_down",
+          "other"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "What construction method is used: top-down or other?",
+        "source": "PDF p628, 1-2-2 [?] ???"
+      },
+      {
+        "name": "steel_fabrication_complete",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Is shop fabrication and assembly of the steel complete?",
+        "source": "PDF p628, 1-2-2 [?] ???"
+      },
+      {
+        "name": "underground_material_delivery_complete",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Has the steel material been delivered underground for installation?",
+        "source": "PDF p628, 1-2-2 [?] ???"
+      },
+      {
         "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
@@ -91,7 +127,50 @@
       "source": "PDF 572쪽 1-2-2 표",
       "rounding": "동일 원칙(1-2-8·1-2-1)"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "The source table applies to top-down construction.",
+        "blocked_if": {
+          "input": "construction_method",
+          "op": "!=",
+          "value": "top_down"
+        },
+        "reason": "The source table applies to top-down construction.",
+        "source": "PDF p628, 1-2-2 [?] ???",
+        "cite": {
+          "chunk_id": "p628-x19",
+          "quote": "① 본 품은 탑다운 공법에 의해 설치되는 1층 바닥 스판을 포함하여 지하층 바닥 스판에 가공이 완료된 상태의 철골을 현장에서 설치하는 기준이다."
+        }
+      },
+      {
+        "condition": "The source table assumes steel fabrication and assembly are complete before site installation.",
+        "blocked_if": {
+          "input": "steel_fabrication_complete",
+          "op": "==",
+          "value": false
+        },
+        "reason": "The source table assumes steel fabrication and assembly are complete before site installation.",
+        "source": "PDF p628, 1-2-2 [?] ???",
+        "cite": {
+          "chunk_id": "p628-x19",
+          "quote": "① 본 품은 탑다운 공법에 의해 설치되는 1층 바닥 스판을 포함하여 지하층 바닥 스판에 가공이 완료된 상태의 철골을 현장에서 설치하는 기준이다."
+        }
+      },
+      {
+        "condition": "The source table assumes steel materials are already delivered underground; above-ground-to-underground transport is excluded.",
+        "blocked_if": {
+          "input": "underground_material_delivery_complete",
+          "op": "==",
+          "value": false
+        },
+        "reason": "The source table assumes steel materials are already delivered underground; above-ground-to-underground transport is excluded.",
+        "source": "PDF p628, 1-2-2 [?] ???",
+        "cite": {
+          "chunk_id": "p628-x19",
+          "quote": "② 지하 현장 세우기는 철골 가공 조립(공장 생산)이 완료된 상태로 지하에 철골 재료 반입이 완료된 것을 조립 설치하는 기준으로 지상에서 지하로 자재를 반입하는 작업은 제외되어 있다."
+        }
+      }
+    ],
     "not_calculated": [
       {
         "item": "지상에서 지하로 자재를 반입하는 작업",

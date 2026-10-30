@@ -1,0 +1,172 @@
+{
+  "record_version": "2026-10-18.v3",
+  "set_role": "final_evaluation",
+  "calculation_scope": "per_unit labor quantity from underground depth table",
+  "source_pdf": "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf",
+  "source_pdf_sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+  "author": "Luna",
+  "prior_exposure": "Previously inspected existing formwork authoring/final cases and hand-authored formwork candidate; the two newly selected sections were source-inspected before case preparation, but no candidate response for these sections was inspected.",
+  "independent_second_person_review": false,
+  "expected_value_method": "Pinned PDF source table row/column/unit/condition, followed by separately calculated exact rational arithmetic; never derived from candidate output.",
+  "cases": [
+    {
+      "id": "steel-final-depth-7-q5",
+      "spec_path": "data/drafts/specs/건축/1-2-2.json",
+      "inputs": {
+        "underground_level": "지하7층 미만",
+        "quantity": "5",
+        "construction_method": "top_down",
+        "steel_fabrication_complete": true,
+        "underground_material_delivery_complete": true
+      },
+      "expected": {
+        "status": "computed",
+        "labor_unit_rates": {
+          "철골공": "439/500",
+          "용접공": "43/125",
+          "특별인부": "26/125"
+        },
+        "labor_total_by_trade": {
+          "철골공": "439/100",
+          "용접공": "43/25",
+          "특별인부": "26/25"
+        },
+        "quantity": "5",
+        "quantity_unit": "ton"
+      },
+      "calculation_basis": {
+        "table_id": "p628-t5",
+        "table_rows": [
+          "철골공",
+          "용접공",
+          "특별인부"
+        ],
+        "selected_column": "지하7층 미만",
+        "source_rates_person_days_per_ton": {
+          "철골공": "439/500",
+          "용접공": "43/125",
+          "특별인부": "26/125"
+        },
+        "formula": "each trade total = source rate (person-day/ton) ? measured steel quantity (ton)",
+        "rounding": "Exact rational comparison; totals preserved exactly; quantity is tons."
+      }
+    },
+    {
+      "id": "steel-final-depth-10-q15",
+      "spec_path": "data/drafts/specs/건축/1-2-2.json",
+      "inputs": {
+        "underground_level": "지하10층 미만",
+        "quantity": "15",
+        "construction_method": "top_down",
+        "steel_fabrication_complete": true,
+        "underground_material_delivery_complete": true
+      },
+      "expected": {
+        "status": "computed",
+        "labor_unit_rates": {
+          "철골공": "927/1000",
+          "용접공": "153/500",
+          "특별인부": "121/500"
+        },
+        "labor_total_by_trade": {
+          "철골공": "2781/200",
+          "용접공": "459/100",
+          "특별인부": "363/100"
+        },
+        "quantity": "15",
+        "quantity_unit": "ton"
+      },
+      "calculation_basis": {
+        "table_id": "p628-t5",
+        "table_rows": [
+          "철골공",
+          "용접공",
+          "특별인부"
+        ],
+        "selected_column": "지하10층 미만",
+        "source_rates_person_days_per_ton": {
+          "철골공": "927/1000",
+          "용접공": "153/500",
+          "특별인부": "121/500"
+        },
+        "formula": "each trade total = source rate (person-day/ton) ? measured steel quantity (ton)",
+        "rounding": "Exact rational comparison; totals preserved exactly; quantity is tons."
+      }
+    },
+    {
+      "id": "steel-final-depth-10plus-q75",
+      "spec_path": "data/drafts/specs/건축/1-2-2.json",
+      "inputs": {
+        "underground_level": "지하10층 이상",
+        "quantity": "75",
+        "construction_method": "top_down",
+        "steel_fabrication_complete": true,
+        "underground_material_delivery_complete": true
+      },
+      "expected": {
+        "status": "computed",
+        "labor_unit_rates": {
+          "철골공": "122/125",
+          "용접공": "67/250",
+          "특별인부": "69/250"
+        },
+        "labor_total_by_trade": {
+          "철골공": "366/5",
+          "용접공": "201/10",
+          "특별인부": "207/10"
+        },
+        "quantity": "75",
+        "quantity_unit": "ton"
+      },
+      "calculation_basis": {
+        "table_id": "p628-t5",
+        "table_rows": [
+          "철골공",
+          "용접공",
+          "특별인부"
+        ],
+        "selected_column": "지하10층 이상",
+        "source_rates_person_days_per_ton": {
+          "철골공": "122/125",
+          "용접공": "67/250",
+          "특별인부": "69/250"
+        },
+        "formula": "each trade total = source rate (person-day/ton) ? measured steel quantity (ton)",
+        "rounding": "Exact rational comparison; totals preserved exactly; quantity is tons."
+      }
+    }
+  ],
+  "source_locator": {
+    "division": "??",
+    "section_no": "1-2-2",
+    "pdf_page": 628,
+    "printed_page": 572,
+    "table_id": "p628-t5",
+    "unit": "person-days per ton",
+    "source_notes": [
+      "p628-x19 [?] ???"
+    ]
+  },
+  "evaluation_controls": {
+    "frozen_before_new_candidate_generation": true,
+    "same_author": "Luna",
+    "independent_second_person_review": false,
+    "prompt_exposure": "final input and expected values are evaluator-only",
+    "retirement_rule": "if a final evaluation failure is used to modify the candidate, retire this set from future withheld-performance totals"
+  },
+  "source_spec_path": "data/drafts/specs/건축/1-2-2.json",
+  "source_spec_sha256": "7621be366533d69b5778b26c484ceab80dd83c056309c705b089e3d812bba8f8",
+  "version_reason": "Added source-required top-down method, completed fabrication, and underground delivery facts and hashed this set before the next mock candidate run; expected quantities unchanged.",
+  "source_conditions": [
+    {
+      "note_id": "p628-x19",
+      "rule": "top-down construction; steel fabrication/assembly complete; underground steel delivery complete",
+      "not_calculated": "above-ground-to-underground material transport is excluded; existing not_calculated record retained"
+    },
+    {
+      "note_id": "p628-x19",
+      "rule": "tool/light-equipment expense is 2% of labor",
+      "scope": "not part of the person-day quantities evaluated in this case set; source cost rule remains in draft spec"
+    }
+  ]
+}

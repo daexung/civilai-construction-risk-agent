@@ -14,24 +14,6 @@
     ],
     "inputs": [
       {
-        "name": "q",
-        "type": "positive_rational",
-        "allowed_values": "0보다 큰 수",
-        "unit": "㎥",
-        "required": true,
-        "ask": "버킷용량(q)은 몇 ㎥입니까?",
-        "source": "PDF 174쪽 공식 Q = 3,600*q*k*f*E / cm"
-      },
-      {
-        "name": "f",
-        "type": "positive_rational",
-        "allowed_values": "0보다 큰 수",
-        "unit": null,
-        "required": true,
-        "ask": "체적환산계수(f)는 얼마입니까?",
-        "source": "PDF 174쪽 공식"
-      },
-      {
         "name": "loader_type",
         "type": "enum",
         "allowed_values": [
@@ -142,6 +124,94 @@
         "required": true,
         "ask": "터파기 작업입니까? (작업효율 E에서 0.05 감산)",
         "source": "PDF 175쪽 3. E의 값 [주] ⑤"
+      },
+      {
+        "name": "machine_spec",
+        "type": "enum",
+        "unit": "㎥",
+        "required": true,
+        "allowed_values": [
+          "0.25㎥",
+          "0.57㎥",
+          "0.76㎥",
+          "0.95㎥",
+          "1.15㎥",
+          "1.34㎥",
+          "1.53㎥",
+          "1.72㎥",
+          "2.29㎥",
+          "2.87㎥",
+          "3.50㎥",
+          "5.00㎥"
+        ],
+        "ask": "로더의 규격(버킷용량)은 무엇입니까?",
+        "machine_codes": {
+          "무한궤도식": {
+            "0.57㎥": "0301-0057",
+            "0.76㎥": "0301-0076",
+            "0.95㎥": "0301-0095",
+            "1.15㎥": "0301-0115",
+            "1.34㎥": "0301-0134",
+            "1.53㎥": "0301-0153",
+            "1.72㎥": "0301-0172",
+            "2.87㎥": "0301-0287"
+          },
+          "타이어식": {
+            "0.25㎥": "0302-0025",
+            "0.57㎥": "0302-0057",
+            "0.95㎥": "0302-0095",
+            "1.34㎥": "0302-0134",
+            "1.72㎥": "0302-0172",
+            "2.29㎥": "0302-0229",
+            "2.87㎥": "0302-0287",
+            "3.50㎥": "0302-0350",
+            "5.00㎥": "0302-0500"
+          }
+        },
+        "source": "2026년도 건설기계 경비산출표 로더"
+      },
+      {
+        "name": "volume_basis",
+        "type": "enum",
+        "allowed_values": [
+          "자연상태",
+          "흐트러진 상태"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 물량은 자연상태 기준입니까, 흐트러진 상태 기준입니까?",
+        "source": "PDF 1-2-3 체적환산계수 표"
+      },
+      {
+        "name": "L",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": null,
+        "required": false,
+        "required_when": {
+          "input": "volume_basis",
+          "equals": "자연상태"
+        },
+        "ask": "토량변화율 L(흐트러진 상태 체적/자연상태 체적)은 얼마입니까? (현장 시험값)",
+        "source": "PDF 1-2-3 체적환산계수 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "작업할 토량은 몇 ㎥입니까?",
+        "source": "현장 물량"
+      },
+      {
+        "name": "fuel_price",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "원/ℓ",
+        "required": true,
+        "ask": "경유(주연료) 단가는 ℓ당 몇 원입니까? (해당 지역 가격, 품셈 8-1-7)",
+        "source": "품셈 8-1-7 유류가격은 해당지역의 가격"
       }
     ],
     "tables": [
@@ -214,12 +284,632 @@
         "cite": {
           "table_id": "p231-t1"
         }
+      },
+      {
+        "id": "p231-t2",
+        "unit": "무차원",
+        "source": "PDF 175쪽 3. E의 값",
+        "values": {
+          "모래, 사질토": {
+            "자연상태 양호": "0.70",
+            "자연상태 보통": "0.55",
+            "자연상태 불량": "0.40",
+            "흐트러진 상태 양호": "0.75",
+            "흐트러진 상태 보통": "0.60",
+            "흐트러진 상태 불량": "0.45"
+          },
+          "자갈 섞인 흙, 점성토": {
+            "자연상태 양호": "0.60",
+            "자연상태 보통": "0.45",
+            "자연상태 불량": "0.30",
+            "흐트러진 상태 양호": "0.60",
+            "흐트러진 상태 보통": "0.50",
+            "흐트러진 상태 불량": "0.35"
+          },
+          "파쇄암": {
+            "흐트러진 상태 양호": "0.55",
+            "흐트러진 상태 보통": "0.35",
+            "흐트러진 상태 불량": "0.25"
+          }
+        }
       }
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "derived": [
+          {
+            "name": "q",
+            "kind": "table_cell",
+            "unit": "㎥",
+            "source": "장비 규격 = 버킷용량 q",
+            "cases": [
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "machine_spec": "0.57㎥"
+                },
+                "value": "0.57",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "machine_spec": "0.76㎥"
+                },
+                "value": "0.76",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "machine_spec": "0.95㎥"
+                },
+                "value": "0.95",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "machine_spec": "1.15㎥"
+                },
+                "value": "1.15",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "machine_spec": "1.34㎥"
+                },
+                "value": "1.34",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "machine_spec": "1.53㎥"
+                },
+                "value": "1.53",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "machine_spec": "1.72㎥"
+                },
+                "value": "1.72",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "machine_spec": "2.87㎥"
+                },
+                "value": "2.87",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "0.25㎥"
+                },
+                "value": "0.25",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "0.57㎥"
+                },
+                "value": "0.57",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "0.95㎥"
+                },
+                "value": "0.95",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "1.34㎥"
+                },
+                "value": "1.34",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "1.72㎥"
+                },
+                "value": "1.72",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "2.29㎥"
+                },
+                "value": "2.29",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "2.87㎥"
+                },
+                "value": "2.87",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "3.50㎥"
+                },
+                "value": "3.50",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "machine_spec": "5.00㎥"
+                },
+                "value": "5.00",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              }
+            ]
+          },
+          {
+            "name": "L_eff",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "1-2-3 체적환산계수",
+            "cases": [
+              {
+                "when": {
+                  "volume_basis": "자연상태"
+                },
+                "input_value": "L",
+                "cite": {
+                  "table_id": "p65-t1",
+                  "row": "흐트러진상태의체적",
+                  "column": "자연상태의체적",
+                  "value": "1/L"
+                }
+              },
+              {
+                "when": {
+                  "volume_basis": "흐트러진 상태"
+                },
+                "value": "1",
+                "cite": {
+                  "table_id": "p65-t1",
+                  "row": "흐트러진상태의체적",
+                  "column": "자연상태의체적",
+                  "value": "1/L"
+                }
+              }
+            ]
+          },
+          {
+            "name": "f",
+            "kind": "expression",
+            "unit": "",
+            "source": "f = 1/L (자연상태 환산), 흐트러진 상태 1",
+            "expression": {
+              "div": [
+                {
+                  "number": "1"
+                },
+                {
+                  "input": "L_eff"
+                }
+              ]
+            }
+          },
+          {
+            "name": "m",
+            "kind": "table_cell",
+            "unit": "초/m",
+            "cases": [
+              {
+                "when": {
+                  "loader_type": "무한궤도식"
+                },
+                "value": "2.0",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "m : 계수(초/m) 무한궤도식 : 2.0"
+                }
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식"
+                },
+                "value": "1.8",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "타 이 어 식 : 1.8"
+                }
+              }
+            ]
+          },
+          {
+            "name": "t1",
+            "kind": "table_cell",
+            "unit": "초",
+            "source": "PDF 174쪽 1. t1의 값",
+            "cases": [
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "t1_method": "산적상태에서 담을 때"
+                },
+                "table": "p230-t0",
+                "row_input": "t1_condition",
+                "column": "무한궤도식 산적상태에서\n담을 때"
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식",
+                  "t1_method": "지면부터 굴착 집토하여 담을 때"
+                },
+                "table": "p230-t0",
+                "row_input": "t1_condition",
+                "column": "무한궤도식 지면부터 굴착\n집토하여 담을 때"
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "t1_method": "산적상태에서 담을 때"
+                },
+                "table": "p230-t0",
+                "row_input": "t1_condition",
+                "column": "타이어식 산적상태에서\n담을 때"
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "t1_method": "지면부터 굴착 집토하여 담을 때"
+                },
+                "table": "p230-t0",
+                "row_input": "t1_condition",
+                "column": "타이어식 지면부터 굴착\n집토하여 담을 때"
+              }
+            ]
+          },
+          {
+            "name": "t2",
+            "kind": "table_cell",
+            "unit": "초",
+            "cases": [
+              {
+                "when": {},
+                "value": "14",
+                "cite": {
+                  "chunk_id": "p230-x9",
+                  "quote": "t2 : 기어변화 등 기본 시간과 다음 운반기계가 도착할 때까지의 시간(14초)"
+                }
+              }
+            ]
+          },
+          {
+            "name": "cm",
+            "kind": "expression",
+            "unit": "초",
+            "source": "PDF 174쪽 cm = m·ℓ + t1 + t2",
+            "cite": {
+              "chunk_id": "p230-x9",
+              "quote": "cm = m･ℓ+ t1 + t2"
+            },
+            "expression": {
+              "add": [
+                {
+                  "mul": [
+                    {
+                      "input": "m"
+                    },
+                    {
+                      "input": "l"
+                    }
+                  ]
+                },
+                {
+                  "input": "t1"
+                },
+                {
+                  "input": "t2"
+                }
+              ]
+            }
+          },
+          {
+            "name": "K",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "PDF 175쪽 2. K의 값",
+            "cases": [
+              {
+                "when": {
+                  "k_condition": "굴착기계로 깎거나 쌓아모은 산적상태에서 적재하는 것으로 굴착력을 필요로 하지 않고 쉽게 버킷에 산적할 수 있는 것, 즉 조건이 좋은 모래, 보통토 등"
+                },
+                "table": "p231-t0",
+                "row": "굴착기계로 깎거나 쌓아모은 산적상태에서 적재하는 것으로 굴착력을 필요로 하지 않고 쉽게 버킷에 산적할 수 있는 것, 즉 조건이 좋은 모래, 보통토 등",
+                "column": "계수"
+              },
+              {
+                "when": {
+                  "k_condition": "흐트러진 산적상태에서 적재하는 것으로 위 상태보다 약간 삽날이 들어가기 어려운 토질로서 버킷에 가득 채울 수 있는 것, 즉 점토, 역질토"
+                },
+                "table": "p231-t0",
+                "row": "흐트러진 산적상태에서 적재하는 것으로 위 상태보다 약간 삽날이 들어가기 어려운 토질로서 버킷에 가득 채울 수 있는 것, 즉 점토, 역질토",
+                "column": "계수"
+              },
+              {
+                "when": {
+                  "k_condition": "모래, 사력보통토, 점토, 역질토 등 직접 자연상태에서 굴착적재 할 수 있는 여건으로 버킷에 평적에 약간 미달되게 채울 수 있는 것"
+                },
+                "table": "p231-t1",
+                "row": "모래, 사력보통토, 점토, 역질토 등 직접 자연상태에서 굴착적재 할 수 있는 여건으로 버킷에 평적에 약간 미달되게 채울 수 있는 것",
+                "column": "계수"
+              },
+              {
+                "when": {
+                  "k_condition": "버킷에 가득 채울 수 없는 것으로 다른 기계로 쌓아 모아놓은 부순돌 및 점질토나 역질토로서 굳어진 덩어리상태로 되어 있는 것"
+                },
+                "table": "p231-t1",
+                "row": "버킷에 가득 채울 수 없는 것으로 다른 기계로 쌓아 모아놓은 부순돌 및 점질토나 역질토로서 굳어진 덩어리상태로 되어 있는 것",
+                "column": "계수"
+              },
+              {
+                "when": {
+                  "k_condition": "버킷에 넣기 어렵고 허술하며 불규칙한 공극이 생긴 것, 예를 들면 발파 또는 리퍼로 깎은 암괴, 호박돌, 역 등"
+                },
+                "table": "p231-t1",
+                "row": "버킷에 넣기 어렵고 허술하며 불규칙한 공극이 생긴 것, 예를 들면 발파 또는 리퍼로 깎은 암괴, 호박돌, 역 등",
+                "column": "계수"
+              }
+            ]
+          },
+          {
+            "name": "E_table",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "PDF 175쪽 3. E의 값 [주] ⑧",
+            "cases": [
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "e_state": "흐트러진 상태",
+                  "e_soil_type": "모래, 사질토"
+                },
+                "table": "p231-t2",
+                "row": "모래, 사질토",
+                "column": "흐트러진 상태 양호"
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "e_state": "흐트러진 상태",
+                  "e_soil_type": "자갈 섞인 흙, 점성토"
+                },
+                "table": "p231-t2",
+                "row": "자갈 섞인 흙, 점성토",
+                "column": "흐트러진 상태 양호"
+              },
+              {
+                "when": {
+                  "loader_type": "무한궤도식"
+                },
+                "table": "p231-t2",
+                "row_input": "e_soil_type",
+                "column_join": [
+                  "e_state",
+                  "e_condition"
+                ]
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "e_state": "자연상태"
+                },
+                "table": "p231-t2",
+                "row_input": "e_soil_type",
+                "column_join": [
+                  "e_state",
+                  "e_condition"
+                ]
+              },
+              {
+                "when": {
+                  "loader_type": "타이어식",
+                  "e_state": "흐트러진 상태",
+                  "e_soil_type": "파쇄암"
+                },
+                "table": "p231-t2",
+                "row_input": "e_soil_type",
+                "column_join": [
+                  "e_state",
+                  "e_condition"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "E_deduction",
+            "kind": "sum_terms",
+            "source": "PDF 175쪽 3. E의 값 [주] ⑤ 터파기 0.05를 뺀다",
+            "terms": [
+              {
+                "when": {
+                  "is_trench": true
+                },
+                "value": "1/20"
+              }
+            ],
+            "cite": {
+              "chunk_id": "p231-x13",
+              "quote": "⑤ 터파기에 대하여는 0.05를 뺀 값으로 한다."
+            }
+          },
+          {
+            "name": "E",
+            "kind": "expression",
+            "unit": "",
+            "expression": {
+              "sub": [
+                {
+                  "input": "E_table"
+                },
+                {
+                  "input": "E_deduction"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Q",
+            "kind": "expression",
+            "unit": "㎥/hr",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "number": "3600"
+                    },
+                    {
+                      "input": "q"
+                    },
+                    {
+                      "input": "K"
+                    },
+                    {
+                      "input": "f"
+                    },
+                    {
+                      "input": "E"
+                    }
+                  ]
+                },
+                {
+                  "input": "cm"
+                }
+              ]
+            },
+            "source": "Q = 3,600 × q × K × f × E / cm"
+          }
+        ],
+        "outputs": [
+          {
+            "kind": "formula",
+            "name": "1회 싸이클 시간 cm",
+            "resource_kind": "reference",
+            "unit": "초",
+            "expression": {
+              "input": "cm"
+            },
+            "formula": "cm = m×ℓ + t1 + t2",
+            "source": "PDF 174쪽 8-2-5 cm",
+            "cite": {
+              "chunk_id": "p230-x9",
+              "quote": "cm = m･ℓ+ t1 + t2"
+            }
+          },
+          {
+            "kind": "formula",
+            "name": "시간당 작업량 Q",
+            "resource_kind": "reference",
+            "unit": "㎥/hr",
+            "expression": {
+              "input": "Q"
+            },
+            "formula": "Q = 3,600 × q × K × f × E / cm"
+          },
+          {
+            "kind": "formula",
+            "name": "로더",
+            "resource_kind": "equipment",
+            "unit": "hr",
+            "expression": {
+              "div": [
+                {
+                  "number": "1"
+                },
+                {
+                  "input": "Q"
+                }
+              ]
+            },
+            "formula": "장비 가동시간(기준 물량 1㎥당) = 1 ÷ 시간당 작업량 Q (Q와 물량은 같은 토량 기준)",
+            "source": "PDF 8-2 시간당 작업량 Q의 정의(㎥/hr)"
+          }
+        ],
+        "equipment": {
+          "line_name": "로더",
+          "label": "로더",
+          "machine_code_input": "machine_spec",
+          "machine_type_input": "loader_type",
+          "operator_rate_code": "1048",
+          "fuel_price_input": "fuel_price"
+        },
+        "quantity_input": "quantity"
+      },
       "steps": [
         "로더 종류에 따라 계수 m을 결정한다 (무한궤도식: 2.0, 타이어식: 1.8).",
         "p230-t0 표에서 로더 종류, 작업방법, 현장조건에 맞는 t1 값을 찾는다.",
@@ -231,11 +921,23 @@
         "시간당 작업량 Q = 3,600 * q * K * f * E / cm 을 계산한다."
       ],
       "source": "PDF 174~175쪽",
-      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+      "rounding": "총 투입량은 정확한 유리수로 보존"
     },
     "blocked": [
       {
         "condition": "타이어식 로더로 발파암 및 암괴 등을 적재하는 경우",
+        "blocked_if_all": [
+          {
+            "input": "loader_type",
+            "op": "==",
+            "value": "타이어식"
+          },
+          {
+            "input": "k_condition",
+            "op": "==",
+            "value": "버킷에 넣기 어렵고 허술하며 불규칙한 공극이 생긴 것, 예를 들면 발파 또는 리퍼로 깎은 암괴, 호박돌, 역 등"
+          }
+        ],
         "reason": "발파암 및 암괴 등을 적재할 경우는 무한궤도식 로더로 계상해야 함",
         "source": "PDF 175쪽 2. K의 값 [주] ②",
         "cite": {
@@ -248,9 +950,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "formula",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "장비의 시간당 작업량(Q)을 계산하는 공식이 주어져 있으나, 현재 지원하는 일당 작업조형이나 단위당 품 계산 모델에 맞지 않아 별도의 장비 작업량 계산 함수가 필요합니다.",
+  "calc_type_reason": "원문 t1·K·E 표와 cm·Q 식으로 시간당 작업량(참조값)을 선언형 formula로 계산. E 표는 원문 이미지로 복구. 장비 규격→q, 장비 가동시간·기계경비 연결. 장비 규격→q, 장비 가동시간·기계경비 연결.",
   "citations": [
     {
       "chunk_id": "p230-x9",

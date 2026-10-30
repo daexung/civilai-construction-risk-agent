@@ -99,7 +99,7 @@
       {
         "id": "p926-t0",
         "role": "교량받침 0.5ton 이하 시공량 및 작업조 인원/장비",
-        "source": "PDF 870쪽 첫 번째 표",
+        "source": "PDF 870쪽 1-3-8 교량받침 교체 일당표",
         "unit": "시공량: 개/일, 인원: 인/작업조, 장비: 대/작업조",
         "values": {
           "0.2ton 이하": {
@@ -140,7 +140,7 @@
       {
         "id": "p926-t1",
         "role": "교량받침 1.0ton 이하 ~ 1.5ton 초과 시공량 및 작업조 인원/장비",
-        "source": "PDF 870쪽 두 번째 표",
+        "source": "PDF 870쪽 1-3-8 교량받침 교체 일당표",
         "unit": "시공량: 개/일, 인원: 인/작업조, 장비: 대/작업조",
         "values": {
           "1.0ton 이하": {
@@ -194,34 +194,108 @@
         }
       }
     ],
-    "crew_rules": [
-      {
-        "when": {
-          "scaffold_installed": true
-        },
-        "when_text": "scaffold_installed = true",
-        "change": {
-          "고소작업차": "-1"
-        },
-        "source": "PDF 871쪽 [주] ③",
-        "cite": {
-          "chunk_id": "p927-x0",
-          "quote": "교대 및 교각 전체에 비계 및 작업발판을 설치한 경우에는 고소작업차의 투입을 제외한다."
-        }
-      }
-    ],
+    "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p926-t0",
+          "table_selector": {
+            "input": "bearing_weight",
+            "values": {
+              "0.2ton 이하": "p926-t0",
+              "0.3ton 이하": "p926-t0",
+              "0.5ton 이하": "p926-t0",
+              "1.0ton 이하": "p926-t1",
+              "1.5ton 이하": "p926-t1",
+              "1.5ton 초과": "p926-t1"
+            }
+          },
+          "row_input": "bearing_weight",
+          "column_input": "pier_height"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p926-t0",
+          "table_selector": {
+            "input": "bearing_weight",
+            "values": {
+              "0.2ton 이하": "p926-t0",
+              "0.3ton 이하": "p926-t0",
+              "0.5ton 이하": "p926-t0",
+              "1.0ton 이하": "p926-t1",
+              "1.5ton 이하": "p926-t1",
+              "1.5ton 초과": "p926-t1"
+            }
+          },
+          "row_input": "bearing_weight",
+          "trades": [
+            "특별인부",
+            "보통인부",
+            "용접공"
+          ],
+          "column_selector_by_trade": {
+            "특별인부": "특별인부",
+            "보통인부": "보통인부",
+            "용접공": "용접공"
+          }
+        },
+        "equipment": [
+          {
+            "table": "p926-t0",
+            "table_selector": {
+              "input": "bearing_weight",
+              "values": {
+                "0.2ton 이하": "p926-t0",
+                "0.3ton 이하": "p926-t0",
+                "0.5ton 이하": "p926-t0",
+                "1.0ton 이하": "p926-t1",
+                "1.5ton 이하": "p926-t1",
+                "1.5ton 초과": "p926-t1"
+              }
+            },
+            "name": "크레인",
+            "row_selector": "bearing_weight",
+            "column": "크레인",
+            "unit": "대·일"
+          },
+          {
+            "table": "p926-t0",
+            "table_selector": {
+              "input": "bearing_weight",
+              "values": {
+                "0.2ton 이하": "p926-t0",
+                "0.3ton 이하": "p926-t0",
+                "0.5ton 이하": "p926-t0",
+                "1.0ton 이하": "p926-t1",
+                "1.5ton 이하": "p926-t1",
+                "1.5ton 초과": "p926-t1"
+              }
+            },
+            "name": "고소작업차",
+            "row_selector": "bearing_weight",
+            "column": "고소작업차",
+            "unit": "대·일",
+            "when": {
+              "scaffold_installed": false
+            },
+            "cite": {
+              "chunk_id": "p927-x0",
+              "quote": "교대 및 교각 전체에 비계 및 작업발판을 설치한 경우에는 고소작업차의 투입을 제외한다."
+            }
+          }
+        ],
+        "quantity_input": "quantity"
+      },
       "steps": [
-        "입력받은 bearing_weight에 따라 p926-t0 또는 p926-t1 표를 선택한다.",
-        "선택한 표에서 bearing_weight 행과 pier_height 열이 교차하는 값으로 일일 시공량(개)을 찾는다.",
-        "동일한 표의 bearing_weight 행에서 특별인부, 보통인부, 용접공, 크레인, 고소작업차의 기준 수량을 찾는다.",
-        "scaffold_installed가 true이면 고소작업차 수량에서 1을 뺀다.",
-        "작업일수 = quantity ÷ 일일 시공량(개)으로 구한다.",
-        "직종별 인·일 및 장비 대·일 = 작업일수 × 조정된 수량으로 구한다."
+        "교량받침 중량에 따라 p926-t0(0.5ton 이하) 또는 p926-t1(1.0ton 이하 이상)의 원문표를 선택한다.",
+        "선택된 중량 행과 교대·교각높이 열의 교차 셀에서 일일시공량(개)을 읽는다.",
+        "같은 중량 행의 특별인부·보통인부·용접공, 크레인, 고소작업차 기준 수량을 읽는다.",
+        "교대 및 교각 전체에 비계와 작업발판을 설치한 경우 고소작업차는 투입하지 않는다(871쪽 주 ③).",
+        "작업일수 = 교체수량 ÷ 원문 일일시공량; 직종 인·일 및 장비 대·일 = 작업일수 × 표 수량.",
+        "상부 인상/인하, 코핑부 보강 및 비계 설치는 별도 계상으로 이 모델에서 계산하지 않는다."
       ],
-      "source": "PDF 870쪽 표 및 871쪽 [주] ③",
+      "source": "PDF 870~871쪽 1-3-8 교량받침 교체 표와 주 ③",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -255,9 +329,11 @@
           "quote": "⑤ 공구손료 및 경장비(치핑기, 용접기, 발전기, 핸드믹서기 등)의 기계경비는 인력품의 5%로 계상한다."
         }
       }
-    ]
+    ],
+    "calc_type_reason": "PDF 870쪽 두 표는 중량 범위별로 나뉘며 각 행에 일일시공량, 높이별 열, 작업조 및 장비 수량이 명시되어 있다. 중량으로 표를 고르고 행·열을 정확히 조회하는 adjusted_daily_crew 경로에 연결했다. 주 ③은 설치 비계 여부에 따른 고소작업차 제외로 반영했다.",
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
   "calc_type_reason": "시공량은 중량과 높이의 2차원 참조이고, 작업조는 중량에 따른 1차원 참조이며, 원문 표가 두 개(p926-t0, p926-t1)로 분리되어 있어 현재의 adjusted_daily_crew 모델 파라미터로 완벽히 표현하기 어렵습니다.",
   "citations": [
@@ -296,9 +372,7 @@
       "quote": "⑥ 교량받침 설치를 위한 소모재료(무수축 모르타르 등)는 설계수량에 따른다."
     }
   ],
-  "open_questions": [
-    "원문 표가 p926-t0, p926-t1 두 개로 분리되어 파싱되었으며, 시공량은 중량과 높이의 2차원 참조, 작업조는 중량의 1차원 참조 구조를 가집니다. 현재 adjusted_daily_crew 모델 파라미터로 이를 완벽히 표현하기 어려워 not_calculable로 분류했습니다."
-  ],
+  "open_questions": [],
   "questions": [
     "교량받침 1기당 중량이 0.5ton 이하이고 교각 높이가 20m 이하일 때 일일 시공량은 얼마인가요?",
     "교대 및 교각 전체에 비계 및 작업발판을 설치한 경우 장비 투입은 어떻게 달라지나요?",

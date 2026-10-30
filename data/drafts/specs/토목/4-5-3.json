@@ -45,7 +45,8 @@
             "자연대기온도법": "16.6"
           },
           "특별인부": {
-            "레일인장법": "2.2"
+            "레일인장법": "2.2",
+            "자연대기온도법": "-"
           },
           "보통인부": {
             "레일인장법": "6.7",
@@ -72,7 +73,21 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "특별인부",
+            "when": {
+              "method": "자연대기온도법"
+            },
+            "cite": {
+              "table_id": "p406-t2",
+              "row": "특별인부",
+              "column": "자연대기온도법",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p406-t2에서 설정 방법에 따른 직종별 단위당 품을 고른다.",
@@ -171,6 +186,12 @@
     "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
     "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
     "citation_retry_used": false,
-    "citation_issues_after_retry": []
+    "citation_issues_after_retry": [],
+    "source_cell_review_2026_10_19": {
+      "table_id": "p406-t2",
+      "physical_pdf_page": 406,
+      "printed_page": 350,
+      "method": "visual source PDF cell audit; dash in special labor under natural ambient method restored verbatim"
+    }
   }
 }

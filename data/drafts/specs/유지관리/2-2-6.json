@@ -144,7 +144,15 @@
         "unit_rate_table": {
           "table": "p952-t0",
           "row_input": "work_type",
-          "column_input": "block_time_and_site_condition",
+          "column_input": {
+            "input": "block_time",
+            "contains": [
+              "{value}"
+            ],
+            "exact_component_inputs": [
+              "site_condition"
+            ]
+          },
           "trades": [
             "궤도공",
             "보통인부"

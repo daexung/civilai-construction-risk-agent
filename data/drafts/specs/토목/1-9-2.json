@@ -146,15 +146,62 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p385-t0",
+          "row_input": "block_size",
+          "column_selector": {
+            "input": "block_type",
+            "contains": [
+              "{value}"
+            ],
+            "input_contains": [
+              "alignment"
+            ]
+          }
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p385-t0",
+          "column_input": "block_type",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "굴착기(0.4㎥)",
+            "table": "p385-t0",
+            "column": "A-Type",
+            "unit": "대·일",
+            "when": {
+              "block_type": "A-Type"
+            }
+          },
+          {
+            "name": "굴착기(0.2㎥)",
+            "table": "p385-t0",
+            "column": "B-Type",
+            "unit": "대·일",
+            "when": {
+              "block_type": "B-Type"
+            }
+          }
+        ]
+      },
       "steps": [
-        "입력된 block_type(A-Type/B-Type)에 따라 작업조 인원(특별인부, 보통인부)과 굴착기 대수를 p385-t0에서 확인한다.",
-        "입력된 block_type, block_size, alignment에 해당하는 일일시공량을 p385-t0에서 찾는다.",
-        "작업일수 = quantity ÷ 일일시공량으로 구한다.",
-        "직종별 인·일 = 작업일수 × 작업조 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+        "Type, 경계블록 규격, 직선/곡선 구간으로 일당 시공량(m)을 고른다.",
+        "설치 물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "Type별 직종 인원·굴착기 대수를 작업일수에 곱한다."
       ],
-      "source": "PDF 329쪽 p385-t0",
+      "source": "PDF 329쪽 1-9-2 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -182,9 +229,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "작업조(A/B-Type)와 시공량(규격, 선형)이 하나의 표에 혼합된 다차원 구조로, 현재의 adjusted_daily_crew 파라미터(단일 행/열 매핑)로는 자동 계산을 완벽히 표현하기 어려워 not_calculable로 분류했습니다.",
+  "calc_type_reason": "Type별 인원·굴착기 대수와 규격×(Type, 선형)별 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p385-t0",

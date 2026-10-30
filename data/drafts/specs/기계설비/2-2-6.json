@@ -69,16 +69,20 @@
         "source": "PDF 719쪽 [참고자료] 제연댐퍼 재료량 표",
         "unit": "개/㎡, ㎏/㎡",
         "values": {
-          "앵커": {
+          "앵커 | 규격 1/2〃": {
+            "단위": "개",
             "수량": "20"
           },
           "블라인드리벳": {
+            "단위": "개",
             "수량": "75"
           },
-          "철물": {
+          "철물 | 규격 D22 철근": {
+            "단위": "㎏",
             "수량": "12.5"
           },
           "실리콘": {
+            "단위": "㎏",
             "수량": "1.25"
           }
         },
@@ -93,7 +97,7 @@
       "params": {
         "unit_rate_table": {
           "table": "p719-t3",
-          "row_input": "connection_type",
+          "row_input": null,
           "column_input": "connection_type",
           "trades": [
             "덕트공",
@@ -102,7 +106,49 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "additional_materials": [
+          {
+            "table": "p719-t4",
+            "row": "앵커 | 규격 1/2〃",
+            "name": "앵커 1/2〃",
+            "unit": "개",
+            "basis": "㎡",
+            "quantity_input": "quantity",
+            "column": "수량",
+            "source": "PDF 663쪽 참고자료 제연댐퍼 재료량"
+          },
+          {
+            "table": "p719-t4",
+            "row": "블라인드리벳",
+            "name": "블라인드리벳",
+            "unit": "개",
+            "basis": "㎡",
+            "quantity_input": "quantity",
+            "column": "수량",
+            "source": "PDF 663쪽 참고자료 제연댐퍼 재료량"
+          },
+          {
+            "table": "p719-t4",
+            "row": "철물 | 규격 D22 철근",
+            "name": "철물 D22 철근",
+            "unit": "kg",
+            "basis": "㎡",
+            "quantity_input": "quantity",
+            "column": "수량",
+            "source": "PDF 663쪽 참고자료 제연댐퍼 재료량"
+          },
+          {
+            "table": "p719-t4",
+            "row": "실리콘",
+            "name": "실리콘",
+            "unit": "kg",
+            "basis": "㎡",
+            "quantity_input": "quantity",
+            "column": "수량",
+            "source": "PDF 663쪽 참고자료 제연댐퍼 재료량"
+          }
+        ]
       },
       "steps": [
         "p719-t3에서 연결방식별 단위당 품을 고른다.",

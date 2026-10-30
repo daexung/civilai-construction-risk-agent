@@ -12,6 +12,16 @@ from backend.agent.tools.source.citation import resolve_cites
 
 
 from backend.paths import ROOT
+
+
+def _decimal(text: object) -> Decimal:
+    """'0.5'뿐 아니라 총량 줄의 정확한 분수('1/3')도 읽는다."""
+    try:
+        return Decimal(str(text))
+    except Exception:
+        from fractions import Fraction
+        value = Fraction(str(text))
+        return Decimal(value.numerator) / Decimal(value.denominator)
 RATES = ROOT / "data/rates/labor_rates.json"
 AMOUNTS = ROOT / "backend/agent/rules/common/1-2-2_amount_units.json"
 EQUIPMENT_RATES = ROOT / "data/rates/equipment_rates.json"
@@ -71,6 +81,20 @@ def _money(value: Decimal | None, places: int) -> str | None:
 
 def _exact(value: Decimal) -> str:
     return format(value.normalize(), "f")
+
+
+def _line_quantity(line: dict, inputs: dict | None = None,
+                   primary_quantity_input: str | None = None) -> Decimal:
+    """Scale a rate by its explicitly declared quantity input, if it is a separate total."""
+    quantity = _decimal(line["applied"])
+    secondary_input = line.get("quantity_input")
+    if secondary_input and secondary_input != primary_quantity_input:
+        if inputs is None or secondary_input not in inputs:
+            raise ValueError(f"additional rate quantity input missing: {secondary_input}")
+        quantity *= _decimal(inputs[secondary_input])
+    else:
+        quantity *= _decimal(line.get("quantity_factor", "1"))
+    return quantity
 
 
 def _reference_amounts(unit_prices: dict, total: str | None, volume: str | None) -> dict | None:
@@ -137,7 +161,8 @@ def _equipment_version_info(version: dict | None) -> dict | None:
 
 def _machine_citation(code: str, entry: dict, item: str, value: str) -> dict:
     return {"code": "2026년도 건설기계 경비산출표", "division": "건설기계",
-            "section_no": "4504", "section_title": "콘크리트 펌프차", "section": "4504 콘크리트 펌프차",
+            "section_no": entry.get("section_no", "4504"), "section_title": entry["name"],
+            "section": f"{entry.get('section_no', '4504')} {entry['name']}",
             "subsection": entry["spec"], "item": item, "row": code, "column": item,
             "value": value, "pdf_page": entry["pdf_page"], "printed_page": entry["pdf_page"],
             "quote": None, "internal_id": code,
@@ -166,31 +191,38 @@ def _operator_hours_citation() -> dict:
 def _machine_rows(spec: dict, line: dict, version: dict | None,
                   equipment_version: dict | None, inputs: dict) -> list[dict]:
     setting = spec["quantity_model"]["params"]["equipment"]
+    label = setting.get("label", "펌프차")
     field = next(field for field in spec["inputs"] if field["name"] == setting["machine_code_input"])
     size = inputs.get(setting["machine_code_input"])
-    code = field["machine_codes"].get(size)
+    codes = field["machine_codes"]
+    if setting.get("machine_type_input"):  # 기종(예: 무한궤도식/타이어식)별로 규격→기계 코드가 다르다
+        codes = codes.get(inputs.get(setting["machine_type_input"]), {})
+    code = codes.get(size)
     if not code:
         return []
     base = {"kind": "equipment_component", "machine_code": code,
             "machine_spec": size, "unit": line["unit"],
-            "quantity": line["applied"], "rate_code": None,
+            "quantity": _exact(_line_quantity(line, inputs,
+                                                 spec["quantity_model"]["params"].get("quantity_input"))),
+            "rate_code": None,
             "amount_exact": None, "amount": None, "reason": None}
     if equipment_version is None:
         reason = "기준일에 적용 가능한 건설기계 경비산출표 없음"
         return [{**base, "category": category, "name": name, "unit_price": None,
                  "reason": reason, "citations": list(line.get("citations", []))}
-                for category, name in (("경비", "펌프차 기계손료"),
-                                       ("노무비", "펌프차 운전원"),
-                                       ("재료비", "펌프차 연료·잡재료비"))]
+                for category, name in (("경비", f"{label} 기계손료"),
+                                       ("노무비", f"{label} 운전원"),
+                                       ("재료비", f"{label} 연료·잡재료비"))]
     machine = equipment_version["machines"][code]
     base["machine_spec"] = machine["spec"]
-    quantity = Decimal(line["applied"])
+    quantity = _line_quantity(line, inputs,
+                              spec["quantity_model"]["params"].get("quantity_input"))
     amount_rule = _rule_citation("일위대가표의 금액란", "0.1")
     standard = _standard_citation("8-1-6", "기계경비 적산요령", 223,
         "3. 운전경비 : 기계를 사용하는데 필요한 다음 각호 경비의 합계액으로 한다.")
     hourly = Decimal(machine["hourly_depreciation"])
     exact = quantity * hourly
-    depreciation = {**base, "category": "경비", "name": "펌프차 기계손료",
+    depreciation = {**base, "category": "경비", "name": f"{label} 기계손료",
                     "unit_price": _exact(hourly), "amount_exact": _exact(exact),
                     "amount": _money(_truncate(exact, "0.1"), 1),
                     "citations": list(line.get("citations", [])) + [
@@ -199,7 +231,7 @@ def _machine_rows(spec: dict, line: dict, version: dict | None,
                             "손료계수의 합계를 곱한 값을 말한다. (원미만의 값은 절사한다.)"),
                         amount_rule]}
     wage = version["rates"].get(setting["operator_rate_code"]) if version else None
-    operator = {**base, "category": "노무비", "name": "펌프차 운전원",
+    operator = {**base, "category": "노무비", "name": f"{label} 운전원",
                 "rate_code": setting["operator_rate_code"], "unit_price": None,
                 "reason": None, "citations": list(line.get("citations", [])) + [
                     _machine_citation(code, machine, "조종원", str(machine["operator_per_day"])),
@@ -215,7 +247,7 @@ def _machine_rows(spec: dict, line: dict, version: dict | None,
     else:
         operator["reason"] = "적용 가능한 건설기계운전사 공표 노임단가 없음"
     fuel_amount = quantity * Decimal(machine["fuel_l_per_hr"])
-    fuel = {**base, "category": "재료비", "name": "펌프차 연료·잡재료비",
+    fuel = {**base, "category": "재료비", "name": f"{label} 연료·잡재료비",
             "unit_price": None, "fuel_l_per_hr": machine["fuel_l_per_hr"],
             "fuel_l_per_unit": _exact(fuel_amount),
             "misc_pct_of_fuel": machine["misc_pct_of_fuel"],
@@ -224,6 +256,27 @@ def _machine_rows(spec: dict, line: dict, version: dict | None,
                 _machine_citation(code, machine, "주연료", machine["fuel_l_per_hr"] + "ℓ/hr"),
                 _standard_citation("8-1-7", "손료보정 등", 224,
                     "5. 유류가격은 해당지역의 가격으로 한다.")]}
+    price_name = setting.get("fuel_price_input")
+    price = inputs.get(price_name) if price_name else None
+    if price not in (None, "", "모름"):
+        # 품셈 8-4 운전경비: 주연료비 + 잡재료비(주연료비 × 잡재료율). 연료 단가는 사용자가 준 현장 단가다.
+        fuel_price = Decimal(str(price))
+        if fuel_price <= 0:
+            raise ValueError(f"{price_name}는 양의 숫자여야 합니다")
+        hourly_fuel = Decimal(machine["fuel_l_per_hr"]) * fuel_price * (
+            Decimal(1) + Decimal(machine["misc_pct_of_fuel"]) / Decimal(100))
+        exact = quantity * hourly_fuel
+        input_time = datetime.now().astimezone().isoformat(timespec="seconds")
+        fuel.update(unit_price=_exact(hourly_fuel), amount_exact=_exact(exact),
+                    amount=_money(_truncate(exact, "0.1"), 1), reason=None,
+                    citations=fuel["citations"] + [{
+                        "code": "사용자 입력", "division": None, "section_no": None,
+                        "section_title": "유류 단가", "section": "사용자 입력", "subsection": None,
+                        "item": "사용자 입력 단가", "row": None, "column": None,
+                        "value": f"{_money(fuel_price, 0)}원/ℓ", "pdf_page": None, "printed_page": None,
+                        "quote": f"사용자 입력 단가 {price}원/ℓ, 입력 시각 {input_time}",
+                        "internal_id": f"USER:{price_name}:{input_time}",
+                        "label": f"사용자 입력 유류 단가 {_money(fuel_price, 0)}원/ℓ · 입력 시각 {input_time}"}, amount_rule])
     return [depreciation, operator, fuel]
 
 
@@ -238,24 +291,53 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
     rows = []
     unpriced = []
     priced_labor = []
+    secondary_labor = []
+    secondary_category_values = {"재료비": [], "노무비": [], "경비": []}
     equipment_lines = []
     equipment_version = select_equipment_version(basis_date)
     labor_missing = False
+    inputs = inputs or {}
+    primary_quantity_input = spec["quantity_model"]["params"].get("quantity_input")
     for line in unit_lines:
-        if Decimal(line["applied"]) == 0:
+        if line["kind"] in ("lookup", "reference"):
+            # 조회·참조 값은 금액이 아니다. 단가·합산에서 빼고 이유를 남긴다.
+            if not any(other["kind"] == "equipment" for other in unit_lines):
+                unpriced.append({"name": line["name"], "reason": "조회 값(금액 산정 대상 아님)", "category": None,
+                                 "reference_only": True,
+                                 "citations": list(line.get("citations", []))})
+            continue  # 장비시간을 함께 내는 식의 중간값(Q·cm)은 빠진 비용이 아니므로 미산정에 올리지 않는다
+        secondary_total = bool(line.get("quantity_input")
+                               and line.get("quantity_input") != primary_quantity_input)
+        line_quantity = _line_quantity(line, inputs, primary_quantity_input)
+        if line_quantity == 0:
             continue
         code = codes.get(line["name"]) or names_to_codes.get(line["name"])
         category = {"labor": "노무비", "equipment": "경비", "material": "재료비"}[line["kind"]]
         row = {"kind": line["kind"], "category": category,
-               "name": line["name"], "unit": line["unit"], "quantity": line["applied"],
+               "name": line["name"], "unit": (line["unit"].split("/", 1)[0]
+                                                if secondary_total else line["unit"]),
+               "quantity": _exact(line_quantity),
                "rate_code": code if line["kind"] == "labor" else None,
                "unit_price": None, "amount_exact": None, "amount": None,
                "citations": list(line.get("citations", [])), "reason": None}
+        if line.get("quantity_input"):
+            row["quantity_input"] = line["quantity_input"]
+            row["quantity_basis"] = ("separate_total_input" if secondary_total else "primary_basis")
         if line["kind"] == "material":
             row["reason"] = "재료 단가 자료 없음(사용자 입력 기능 예정)"
         elif line["kind"] == "equipment":
-            if line["name"] == "콘크리트펌프차":
-                equipment_lines.extend(_machine_rows(spec, line, rate_version, equipment_version, inputs or {}))
+            setting = spec["quantity_model"]["params"].get("equipment")
+            if line["name"] == "콘크리트펌프차" or (
+                    isinstance(setting, dict) and setting.get("line_name") == line["name"]):
+                machine_line = dict(line)
+                machine_line["applied"] = _exact(line_quantity)
+                machine_line.pop("quantity_input", None)
+                machine_rows = _machine_rows(spec, machine_line, rate_version, equipment_version, inputs)
+                if secondary_total:
+                    for equipment_row in machine_rows:
+                        equipment_row["quantity_basis"] = "separate_total_input"
+                        equipment_row["quantity_input"] = line["quantity_input"]
+                equipment_lines.extend(machine_rows)
                 if not equipment_lines:
                     row["reason"] = "장비 규격 미입력으로 기계경비 미산정"
             else:
@@ -271,12 +353,16 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
                                  else "해당 직종의 공표 노임단가 없음")
                 labor_missing = True
             else:
-                exact = Decimal(line["applied"]) * Decimal(wage["daily"])
+                exact = line_quantity * Decimal(wage["daily"])
                 applied = _truncate(exact, "0.1")
                 row.update(unit_price=wage["daily"], amount_exact=_exact(exact),
                            amount=_money(applied, 1),
                            citations=row["citations"] + [_wage_citation(rate_version, code, wage), amount_rule])
-                priced_labor.append(applied)
+                if secondary_total:
+                    secondary_labor.append(applied)
+                    secondary_category_values["노무비"].append(applied)
+                else:
+                    priced_labor.append(applied)
         rows.append(row)
         if row["reason"]:
             unpriced.append({"name": row["name"], "reason": row["reason"],
@@ -290,8 +376,14 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
             unpriced.append({"name": component["name"], "reason": component["reason"],
                              "category": component["category"], "citations": component["citations"]})
         else:
-            category_values[component["category"]].append(Decimal(component["amount"]))
+            target = (secondary_category_values if component.get("quantity_basis") == "separate_total_input"
+                      else category_values)
+            target[component["category"]].append(Decimal(component["amount"]))
     for rule in spec.get("cost_rules", []):
+        # A source rate that depends on a declared site fact (e.g. precision cutting) carries `when`.
+        if rule.get("when") and not all((inputs or {}).get(name) == expected
+                                        for name, expected in rule["when"].items()):
+            continue
         if rule["base"] != "labor_subtotal":
             raise ValueError(f"지원하지 않는 요율 기준: {rule['base']}")
         citations = resolve_cites(rule["cite"])
@@ -308,16 +400,25 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
             cost.update(amount_exact=_exact(exact), amount=_money(applied, 1),
                         citations=citations + [amount_rule])
             category_values[rule["category"]].append(applied)
+            if secondary_labor:
+                secondary_exact = sum(secondary_labor, Decimal("0")) * Decimal(rule["rate"])
+                secondary_applied = _truncate(secondary_exact, "0.1")
+                secondary_category_values[rule["category"]].append(secondary_applied)
+                cost["secondary_amount_exact"] = _exact(secondary_exact)
+                cost["secondary_amount"] = _money(secondary_applied, 1)
         costs.append(cost)
 
     for item in spec["not_calculated"]:
+        when = item.get("when", {})
+        if when and not all((inputs or {}).get(name) == expected
+                            for name, expected in when.items()):
+            continue
         unpriced.append({"name": item["item"], "reason": "이번 계산 범위에서 미산정",
                          "category": None, "citations": resolve_cites(item.get("cite"))})
 
     supply_lines = []
     excluded = []
     unpriced_supply = []
-    inputs = inputs or {}
     for rule in spec.get("supply_rules", []):
         value = inputs.get(rule["input"])
         citations = resolve_cites(rule.get("cite"))
@@ -395,15 +496,26 @@ def price_unit(spec: dict, unit_lines: list[dict], rate_version: dict | None,
     unit_total = (str(sum(int(value) for value in unit_prices.values() if value is not None))
                   if has_amount else None)
     total_exact = sum((value for values in category_values.values() for value in values), Decimal("0"))
-    partial = bool(unpriced or excluded)
+    # 비용 분류가 없는 미산정 공사도 부분 견적이다. 명시적인 조회·참조 값만 제외한다.
+    partial = bool(any(not entry.get("reference_only", False) for entry in unpriced) or excluded)
     reference_amounts = _reference_amounts(unit_prices, unit_total,
-                                            (inputs or {}).get(spec["quantity_model"]["params"]["quantity_input"]))
+                                            (inputs or {}).get(spec["quantity_model"]["params"].get("quantity_input"), "1"))
+    secondary_totals = {category: sum(values, Decimal("0"))
+                        for category, values in secondary_category_values.items() if values}
+    if reference_amounts and secondary_totals:
+        for category, amount in secondary_totals.items():
+            current = Decimal(reference_amounts["subtotals"].get(category) or "0")
+            reference_amounts["subtotals"][category] = _money(_truncate(current + amount, "1"), 0)
+        total = Decimal(reference_amounts["total"] or "0") + sum(secondary_totals.values(), Decimal("0"))
+        reference_amounts["total"] = _money(_truncate(total, "1"), 0)
     return {"status": "PARTIAL" if partial else "OK", "partial": partial,
             "rate_version": _version_info(rate_version),
             "equipment_rate_version": _equipment_version_info(equipment_version),
             "lines": rows, "equipment_lines": equipment_lines,
             "cost_lines": costs, "supply_lines": supply_lines,
             "labor_subtotal": _money(labor_subtotal, 1), "subtotals": subtotals,
+            "secondary_totals": {category: _money(value, 1)
+                                 for category, value in secondary_totals.items()},
             "unit_prices": unit_prices,
             "total_exact": _money(total_exact, 1) if has_amount else None,
             "total": unit_total,

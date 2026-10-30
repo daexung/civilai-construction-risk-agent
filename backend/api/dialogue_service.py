@@ -15,7 +15,7 @@ from fastapi import HTTPException
 from backend.agent.estimate import dialogue, tools
 from backend.agent.tools.calc.format import approx
 from backend.agent.rules.specs import load_specs
-from backend.api.tables import add_tables, rate_rows, unit_price_rows
+from backend.api.tables import add_tables, lookup_reference_rows, rate_rows, unit_price_rows
 
 
 def enabled() -> bool:
@@ -93,7 +93,7 @@ def export_response(graph, thread_id: str) -> dict:
 
 def _question_out(question: dict) -> dict:
     return {"name": question["field"], "ask": question["ask"], "choices": question.get("choices"),
-            "labels": question.get("labels"), "decision_table": question.get("decision_table"),
+            "labels": question.get("labels"), "unit": question.get("unit"), "decision_table": question.get("decision_table"),
             "reason": question.get("reason"), "default": None, "ref": question["ref"]}
 
 
@@ -173,7 +173,7 @@ def response(thread_id: str, state: dict) -> dict:
             labor = item.get("computed_result") or {}
             quantity = item.get("quantity")
             if quantity is None and spec:
-                quantity_field = tools._quantity_field(spec)
+                quantity_field = tools._quantity_field(spec, item)
                 if quantity_field and item.get("conditions", {}).get(quantity_field["name"]) is not None:
                     quantity = {"value": item["conditions"][quantity_field["name"]],
                                 "unit": quantity_field.get("unit"), "source": "confirmed_request"}
@@ -213,7 +213,7 @@ def response(thread_id: str, state: dict) -> dict:
                       "not_calculated_scope": missing}
             public_items.append(public)
             combined_units.extend({**row, "item_id": item_id, "name": f"[{item_id}] {row['name']}"}
-                                  for row in unit_price_rows(priced))
+                                  for row in [*unit_price_rows(priced), *lookup_reference_rows(item_response.get("result"))])
             combined_rates.extend({**row, "name": f"[{item_id}] {row['name']}"}
                                   for row in rate_rows(priced, None, []))
         built["multi_trade_items"] = public_items

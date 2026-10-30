@@ -125,7 +125,11 @@
         "unit": "㎡",
         "required": true,
         "ask": "추가작업 부분(Shell, Roof 등)의 녹제거 면적은 몇 ㎡입니까? (없으면 0)",
-        "source": "p825-t1 비고"
+        "source": "p825-t1 비고",
+        "when": {
+          "input": "task_remove_rust",
+          "equals": true
+        }
       },
       {
         "name": "has_toxic_gas",
@@ -187,41 +191,175 @@
       "params": {
         "unit_rate_table": {
           "table": "p825-t1",
-          "row_input": "작업구분(task_*)",
-          "column_input": "fluid_type",
-          "trades": [
-            "보통인부"
-          ]
+          "row_input": null,
+          "column_input": null,
+          "trades": []
         },
         "quantity_input": "area",
-        "surcharges": [
-          {
-            "when": {
-              "has_clean_out_door": false
-            },
-            "rate": "0.2",
-            "applies_to": [
-              "보통인부"
-            ],
-            "source": "p825-t1 비고 (떠내기 및 오물제거에 한함)"
-          }
-        ],
+        "surcharges": [],
         "note_adjustments": [
           {
             "when": {
               "extra_rust_removal_area": ">0"
             },
             "change": "추가작업 부분 면적 × 녹제거 품 × 0.8 가산",
-            "source": "p825-t1 비고"
+            "source": "p825-t1 비고",
+            "implemented_by": "additional_unit_rates task-specific source row/multiplier"
+          }
+        ],
+        "additional_unit_rates": [
+          {
+            "table": "p825-t1",
+            "basis": "㎡",
+            "quantity_input": "area",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "떠내기"
+            },
+            "column_selector": "fluid_type",
+            "when": {
+              "task_scoop": true
+            },
+            "source": "PDF 769쪽 13-4-7 표: 떠내기 행, 보통인부 열",
+            "multipliers": [
+              {
+                "when": {
+                  "has_clean_out_door": false
+                },
+                "factor": "1.2",
+                "cite": {
+                  "table_id": "p825-t1",
+                  "row": "비고",
+                  "value": "Clean Out Door가 없는 탱크는 떠내기 및 오물제거에 각각 20%씩 가산한다."
+                }
+              }
+            ]
+          },
+          {
+            "table": "p825-t1",
+            "basis": "㎡",
+            "quantity_input": "area",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "오물제거"
+            },
+            "column_selector": "fluid_type",
+            "when": {
+              "task_remove_dirt": true
+            },
+            "source": "PDF 769쪽 13-4-7 표: 오물제거 행, 보통인부 열",
+            "multipliers": [
+              {
+                "when": {
+                  "has_clean_out_door": false
+                },
+                "factor": "1.2",
+                "cite": {
+                  "table_id": "p825-t1",
+                  "row": "비고",
+                  "value": "Clean Out Door가 없는 탱크는 떠내기 및 오물제거에 각각 20%씩 가산한다."
+                }
+              }
+            ]
+          },
+          {
+            "table": "p825-t1",
+            "basis": "㎡",
+            "quantity_input": "area",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "녹제거"
+            },
+            "column_selector": "fluid_type",
+            "when": {
+              "task_remove_rust": true
+            },
+            "source": "PDF 769쪽 13-4-7 표: 녹제거 행, 보통인부 열"
+          },
+          {
+            "table": "p825-t1",
+            "basis": "㎡",
+            "quantity_input": "area",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "되붓기"
+            },
+            "column_selector": "fluid_type",
+            "when": {
+              "task_pour_back": true
+            },
+            "source": "PDF 769쪽 13-4-7 표: 되붓기 행, 보통인부 열"
+          },
+          {
+            "table": "p825-t1",
+            "basis": "㎡",
+            "quantity_input": "area",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "드럼운반"
+            },
+            "column_selector": "fluid_type",
+            "when": {
+              "task_drum_transport": true
+            },
+            "source": "PDF 769쪽 13-4-7 표: 드럼운반 행, 보통인부 열"
+          },
+          {
+            "table": "p825-t1",
+            "basis": "㎡",
+            "quantity_input": "area",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "닦아내기"
+            },
+            "column_selector": "fluid_type",
+            "when": {
+              "task_wipe": true
+            },
+            "source": "PDF 769쪽 13-4-7 표: 닦아내기 행, 보통인부 열"
+          },
+          {
+            "table": "p825-t1",
+            "basis": "㎡",
+            "quantity_input": "extra_rust_removal_area",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "녹제거"
+            },
+            "column_selector": "fluid_type",
+            "quantity_multiplier": "0.8",
+            "when": {
+              "task_remove_rust": true
+            },
+            "cite": {
+              "table_id": "p825-t1",
+              "row": "비고",
+              "value": "추가작업 부분(Shell, Roof 등)에 대해서는 탱크 청소 품의 80%를 별도 계상한다."
+            },
+            "source": "PDF 769쪽 13-4-7 비고: 추가 Shell/Roof 녹제거 면적은 원 품의 80% 별도 계상"
           }
         ]
       },
       "steps": [
-        "선택된 작업(task_*)에 대해 p825-t1에서 fluid_type에 해당하는 단위당 품을 찾는다.",
-        "각 작업의 단위당 품을 합산하고 바닥면적(area)을 곱하여 기본 품을 구한다.",
-        "has_clean_out_door가 false이면 떠내기 및 오물제거 품에 20%를 가산한다.",
-        "extra_rust_removal_area가 0보다 크면, 해당 면적에 녹제거 단위당 품의 80%를 곱하여 가산한다.",
-        "has_toxic_gas가 true이면 오물제거 및 녹제거 품에 유해가스 할증율을 적용한다."
+        "선택한 유체(fluid_type)와 수행 작업(task_*)에 맞는 p825-t1의 보통인부 행을 조회한다.",
+        "선택 작업별 단위당 노무량에 탱크 바닥면적(area)을 곱해 합산한다.",
+        "Clean Out Door가 없는 경우 떠내기와 오물제거에 각각 원문 20%를 가산한다.",
+        "녹제거 추가 부분(extra_rust_removal_area)은 원문 80% 계수를 적용해 별도 산출한다.",
+        "유해가스 발생 시 본 절에 요율이 없어 계산을 차단한다."
       ],
       "source": "13-4-7 탱크청소",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -328,8 +466,9 @@
     }
   ],
   "open_questions": [
-    "유해가스 발생 시 적용할 '유해가스 할증율'의 구체적인 수치가 본 절에 없어 공통부문의 어떤 항목을 적용해야 할지 확인이 필요합니다.",
-    "되붓기와 드럼운반 작업의 경우 '물' 유체에 대한 품이 표에 없는데(빈칸), 물일 경우 해당 작업을 수행하지 않는 것인지 아니면 다른 기준을 적용하는지 명확하지 않습니다."
+    "유해가스 할증률은 원문에서 다른 기준을 참조하므로 승인된 요율을 찾기 전까지 해당 조합을 차단합니다.",
+    "표의 대시(물에 대한 되붓기·드럼운반)는 원문상 계수 부재로 해당 조합을 계산하지 않습니다.",
+    "소모자재는 원문 지시대로 별도 산정하며, 이 계산에서 재료비는 산출하지 않습니다."
   ],
   "questions": [
     "탱크 바닥면적이 100㎡이고 중유 탱크일 때, 떠내기와 오물제거 작업만 수행하면 보통인부 품은 얼마인가요?",

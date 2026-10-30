@@ -53,10 +53,30 @@
         "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
-        "unit": "작업별 단위(인/일, ㎥, ㎡, ton, 개, 대 등)",
+        "unit": null,
         "required": true,
         "ask": "작업 물량은 얼마입니까?",
-        "source": "단위당 품 계산을 위한 물량"
+        "source": "단위당 품 계산을 위한 물량",
+        "unit_by": {
+          "input": "work_type",
+          "values": {
+            "기술관리": "일",
+            "포장해체": "㎥",
+            "표면손질": "㎡",
+            "용접면손질": "㎡",
+            "소운반": "ton",
+            "Scaffolder 조립설치 및 철거": "㎡",
+            "Chain block 설치 및 철거": "개",
+            "윈치설치 및 철거": "대",
+            "조양": "ton",
+            "Tube Panel 조립조정": "개",
+            "Header류 조립조정": "개",
+            "Buckstay 조립조정": "개",
+            "Tube piece 조립조정": "개",
+            "Casing 조립": "ton",
+            "Casing 설치": "ton"
+          }
+        }
       }
     ],
     "tables": [
@@ -90,9 +110,9 @@
           },
           "Chain block 설치 및 철거 Tube Panel 조립시는 6개 설치 기준 Header, Buck stay 조립시는 4개설치 기준": {
             "용접공": "0.021",
-            "비계공": "0.021",
-            "일반기계운전사": "0.021",
-            "(윈치운전)": "0.021"
+            "비계공": "0.028",
+            "일반기계운전사": "0.028",
+            "(윈치운전)": "0.028"
           },
           "윈치설치 및 철거 조양을 위한 윈치 플리 로프 등의 설치와 사용후 철거까지 포함됨.": {
             "기계설비공": "3.3",
@@ -127,15 +147,6 @@
             "특별인부": "1.5",
             "플랜트용접공": "1.5"
           },
-          "Buckstay 조립조정": {
-            "플랜트기계설치공": "1.5"
-          },
-          "조양된 buckstay를 alignment하고": {
-            "특별인부": "1.5"
-          },
-          "tiebar 취급함.": {
-            "플랜트용접공": "1.5"
-          },
           "Tube piece 조립조정 낱개로 되어 있는 tube 및 7개 미만의 tube set로 된 것으로서 alignment hangering 부착물 취부함.": {
             "플랜트기계설치공": "0.4",
             "특별인부": "0.4",
@@ -147,14 +158,18 @@
             "특별인부": "0.92",
             "건설기계운전조": "0.61"
           },
-          "Casing 설치": {
-            "윈치운전조": "1.01"
+          "Buckstay 조립조정 조양된 buckstay를 alignment하고 tiebar 취급함.": {
+            "플랜트기계설치공": "1.5",
+            "특별인부": "1.5",
+            "플랜트용접공": "1.5"
           },
-          "성형된 casing을 운반, 조양 alignment": {
-            "비계공": "2.87"
-          },
-          "후 설치": {
+          "Casing 설치 성형된 casing을 운반, 조양 alignment 후 설치": {
+            "윈치운전조": "1.01",
+            "비계공": "2.87",
             "특별인부": "1.33"
+          },
+          "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)": {
+            "기술관리, 포장해체를 제외한 모든 품의 10%": ""
           }
         },
         "cite": {
@@ -166,19 +181,15 @@
         "role": "50만㎾ 이상 보일러 설치 참고 품",
         "source": "PDF 771쪽 [참고] 표",
         "values": {
-          "Tube Panel 조립조정": {
-            "플랜트기계설치공": "1.38"
-          },
-          "조양된 Panel을 alignment하고 hangering": {
-            "특별인부": "1.45"
-          },
-          "혹은 supporting 후 가고정 해체함": {
-            "플랜트용접공": "1.16"
-          },
           "Header류 조립조정 header 및 그에 준하는 것으로서 조양된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함": {
             "플랜트기계설치공": "0.90",
             "특별인부": "1.02",
             "플랜트용접공": "0.78"
+          },
+          "Tube Panel 조립조정 조양된 Panel을 alignment하고 hangering 혹은 supporting 후 가고정 해체함": {
+            "플랜트기계설치공": "1.38",
+            "특별인부": "1.45",
+            "플랜트용접공": "1.16"
           }
         },
         "cite": {
@@ -191,19 +202,613 @@
       "name": "per_unit",
       "params": {
         "unit_rate_table": {
-          "table": "p826-t0 및 p827-t0",
+          "table": "p826-t0",
           "row_input": "work_type",
-          "column_input": "직종",
-          "trades": []
+          "column_input": null,
+          "trades": [],
+          "row_value_map": {
+            "기술관리": "기술관리 Boiler 본체 설비공사 기간중",
+            "포장해체": "포장해체 수송을 위해 포장된 목재를 해체하고 목재를 소정 위치에 정리함",
+            "표면손질": "표면손질",
+            "용접면손질": "용접면손질 용착 효율을 높이기 위하여 용접전에 Grinder 혹은 sand paper로 깨끗이 손질하는 작업 joint당 면적은 2×3.63t(D-t)",
+            "소운반": "소운반 Boiler tube용 자재 기타 작업에 필요한 자재를 조양위치까지 운반",
+            "Scaffolder 조립설치 및 철거": "Scaffolder 조립설치 및 철거 용접, 검사, 위치조정 등에 필요한 Scaffolder 조립설치(1.5×2.0×1.6m Unit 기준)",
+            "Chain block 설치 및 철거": "Chain block 설치 및 철거 Tube Panel 조립시는 6개 설치 기준 Header, Buck stay 조립시는 4개설치 기준",
+            "윈치설치 및 철거": "윈치설치 및 철거 조양을 위한 윈치 플리 로프 등의 설치와 사용후 철거까지 포함됨.",
+            "조양": "조양 tube 및 header류, 기타 자재 등을 설치 위치까지 조양해서 가고정하는 작업",
+            "Tube Panel 조립조정": "Tube Panel 조립조정 조양된 Panel을 alignment하고 hangering 혹은 supporting 후 가고정 해체함",
+            "Header류 조립조정": "Header류 조립조정 header 및 그에 준하는 것으로서 조양 된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함",
+            "Buckstay 조립조정": "Buckstay 조립조정 조양된 buckstay를 alignment하고 tiebar 취급함.",
+            "Tube piece 조립조정": "Tube piece 조립조정 낱개로 되어 있는 tube 및 7개 미만의 tube set로 된 것으로서 alignment hangering 부착물 취부함.",
+            "Casing 조립": "Casing 조립 조작으로 분리된 casing의 소재를 성형 용접함",
+            "Casing 설치": "Casing 설치 성형된 casing을 운반, 조양 alignment 후 설치"
+          },
+          "table_selector": {
+            "routes": [
+              {
+                "when": {
+                  "work_type": "기술관리",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "기술관리",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "포장해체",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "포장해체",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "표면손질",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "표면손질",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "용접면손질",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "용접면손질",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "소운반",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "소운반",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Scaffolder 조립설치 및 철거",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Scaffolder 조립설치 및 철거",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Chain block 설치 및 철거",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Chain block 설치 및 철거",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "윈치설치 및 철거",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "윈치설치 및 철거",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "조양",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "조양",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p826-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Tube Panel 조립조정",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Tube Panel 조립조정",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p827-t1"
+              },
+              {
+                "when": {
+                  "work_type": "Header류 조립조정",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Header류 조립조정",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p827-t1"
+              },
+              {
+                "when": {
+                  "work_type": "Buckstay 조립조정",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Buckstay 조립조정",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Tube piece 조립조정",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Tube piece 조립조정",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Casing 조립",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Casing 조립",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Casing 설치",
+                  "boiler_capacity_500mw_over": false
+                },
+                "table": "p827-t0"
+              },
+              {
+                "when": {
+                  "work_type": "Casing 설치",
+                  "boiler_capacity_500mw_over": true
+                },
+                "table": "p827-t0"
+              }
+            ]
+          },
+          "quantity_unit_selector": {
+            "input": "work_type",
+            "values": {
+              "기술관리": "일",
+              "포장해체": "㎥",
+              "표면손질": "㎡",
+              "용접면손질": "㎡",
+              "소운반": "ton",
+              "Scaffolder 조립설치 및 철거": "㎡",
+              "Chain block 설치 및 철거": "개",
+              "윈치설치 및 철거": "대",
+              "조양": "ton",
+              "Tube Panel 조립조정": "개",
+              "Header류 조립조정": "개",
+              "Buckstay 조립조정": "개",
+              "Tube piece 조립조정": "개",
+              "Casing 조립": "ton",
+              "Casing 설치": "ton"
+            }
+          },
+          "basis_by_row": {
+            "기술관리 Boiler 본체 설비공사 기간중": "인/일",
+            "포장해체 수송을 위해 포장된 목재를 해체하고 목재를 소정 위치에 정리함": "인/㎥",
+            "표면손질": "인/㎡",
+            "용접면손질 용착 효율을 높이기 위하여 용접전에 Grinder 혹은 sand paper로 깨끗이 손질하는 작업 joint당 면적은 2×3.63t(D-t)": "인/㎡",
+            "소운반 Boiler tube용 자재 기타 작업에 필요한 자재를 조양위치까지 운반": "인/ton",
+            "Scaffolder 조립설치 및 철거 용접, 검사, 위치조정 등에 필요한 Scaffolder 조립설치(1.5×2.0×1.6m Unit 기준)": "인/㎡",
+            "Chain block 설치 및 철거 Tube Panel 조립시는 6개 설치 기준 Header, Buck stay 조립시는 4개설치 기준": "인/개",
+            "윈치설치 및 철거 조양을 위한 윈치 플리 로프 등의 설치와 사용후 철거까지 포함됨.": "인/대",
+            "조양 tube 및 header류, 기타 자재 등을 설치 위치까지 조양해서 가고정하는 작업": "인/ton",
+            "Tube Panel 조립조정 조양된 Panel을 alignment하고 hangering 혹은 supporting 후 가고정 해체함": "인/개",
+            "Header류 조립조정 header 및 그에 준하는 것으로서 조양 된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함": "인/개",
+            "Buckstay 조립조정 조양된 buckstay를 alignment하고 tiebar 취급함.": "인/개",
+            "Tube piece 조립조정 낱개로 되어 있는 tube 및 7개 미만의 tube set로 된 것으로서 alignment hangering 부착물 취부함.": "인/개",
+            "Casing 조립 조작으로 분리된 casing의 소재를 성형 용접함": "인/ton",
+            "Casing 설치 성형된 casing을 운반, 조양 alignment 후 설치": "인/ton",
+            "Header류 조립조정 header 및 그에 준하는 것으로서 조양된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함": "인/개"
+          },
+          "trades_by_row": {
+            "기술관리 Boiler 본체 설비공사 기간중": [
+              "기계기사"
+            ],
+            "포장해체 수송을 위해 포장된 목재를 해체하고 목재를 소정 위치에 정리함": [
+              "목공",
+              "특별인부"
+            ],
+            "표면손질": [
+              "특별인부"
+            ],
+            "용접면손질 용착 효율을 높이기 위하여 용접전에 Grinder 혹은 sand paper로 깨끗이 손질하는 작업 joint당 면적은 2×3.63t(D-t)": [
+              "특별인부"
+            ],
+            "소운반 Boiler tube용 자재 기타 작업에 필요한 자재를 조양위치까지 운반": [
+              "비계공",
+              "건설기계운전조"
+            ],
+            "Scaffolder 조립설치 및 철거 용접, 검사, 위치조정 등에 필요한 Scaffolder 조립설치(1.5×2.0×1.6m Unit 기준)": [
+              "일반기계운전사",
+              "(윈치운전)",
+              "비계공",
+              "특별인부"
+            ],
+            "Chain block 설치 및 철거 Tube Panel 조립시는 6개 설치 기준 Header, Buck stay 조립시는 4개설치 기준": [
+              "용접공",
+              "비계공",
+              "일반기계운전사",
+              "(윈치운전)"
+            ],
+            "윈치설치 및 철거 조양을 위한 윈치 플리 로프 등의 설치와 사용후 철거까지 포함됨.": [
+              "기계설비공",
+              "비계공",
+              "용접공",
+              "특별인부",
+              "건설기계운전조"
+            ],
+            "조양 tube 및 header류, 기타 자재 등을 설치 위치까지 조양해서 가고정하는 작업": [
+              "플랜트기계설치공",
+              "비계공",
+              "플랜트용접공",
+              "건설기계운전조"
+            ],
+            "Tube Panel 조립조정 조양된 Panel을 alignment하고 hangering 혹은 supporting 후 가고정 해체함": [
+              "플랜트기계설치공",
+              "특별인부",
+              "플랜트용접공"
+            ],
+            "Header류 조립조정 header 및 그에 준하는 것으로서 조양 된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함": [
+              "플랜트기계설치공",
+              "특별인부",
+              "플랜트용접공"
+            ],
+            "Buckstay 조립조정 조양된 buckstay를 alignment하고 tiebar 취급함.": [
+              "플랜트기계설치공",
+              "특별인부",
+              "플랜트용접공"
+            ],
+            "Tube piece 조립조정 낱개로 되어 있는 tube 및 7개 미만의 tube set로 된 것으로서 alignment hangering 부착물 취부함.": [
+              "플랜트기계설치공",
+              "특별인부",
+              "플랜트용접공"
+            ],
+            "Casing 조립 조작으로 분리된 casing의 소재를 성형 용접함": [
+              "플랜제관공",
+              "플랜트용접공",
+              "특별인부",
+              "건설기계운전조"
+            ],
+            "Casing 설치 성형된 casing을 운반, 조양 alignment 후 설치": [
+              "윈치운전조",
+              "비계공",
+              "특별인부"
+            ],
+            "Header류 조립조정 header 및 그에 준하는 것으로서 조양된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함": [
+              "플랜트기계설치공",
+              "특별인부",
+              "플랜트용접공"
+            ]
+          },
+          "resource_units": {
+            "건설기계운전조": "조",
+            "일반기계운전사": "인",
+            "(윈치운전)": "조",
+            "윈치운전조": "조"
+          },
+          "row_value_map_by_table": {
+            "p827-t1": {
+              "Tube Panel 조립조정": "Tube Panel 조립조정 조양된 Panel을 alignment하고 hangering 혹은 supporting 후 가고정 해체함",
+              "Header류 조립조정": "Header류 조립조정 header 및 그에 준하는 것으로서 조양된 것을 alignment하고 hangering 혹은 supporting후 가고정 해체함"
+            }
+          },
+          "resource_units_by_row": {
+            "소운반 Boiler tube용 자재 기타 작업에 필요한 자재를 조양위치까지 운반": {
+              "건설기계운전조": "인"
+            },
+            "윈치설치 및 철거 조양을 위한 윈치 플리 로프 등의 설치와 사용후 철거까지 포함됨.": {
+              "건설기계운전조": "조"
+            },
+            "조양 tube 및 header류, 기타 자재 등을 설치 위치까지 조양해서 가고정하는 작업": {
+              "건설기계운전조": "조"
+            },
+            "Casing 조립 조작으로 분리된 casing의 소재를 성형 용접함": {
+              "건설기계운전조": "조"
+            },
+            "Casing 설치 성형된 casing을 운반, 조양 alignment 후 설치": {
+              "윈치운전조": "조"
+            }
+          },
+          "preserve_labor_source_unit": [
+            "건설기계운전조",
+            "윈치운전조"
+          ]
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "input_rate_adjustments": [
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "표면손질"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "용접면손질"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "소운반"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "Scaffolder 조립설치 및 철거"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "Chain block 설치 및 철거"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "윈치설치 및 철거"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "조양"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "Tube Panel 조립조정"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "Header류 조립조정"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "Buckstay 조립조정"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "Tube piece 조립조정"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "Casing 조립"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          },
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "when": {
+              "work_type": "Casing 설치"
+            },
+            "cite": {
+              "table_id": "p827-t0",
+              "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%"
+            }
+          }
+        ]
       },
       "steps": [
-        "work_type에 해당하는 행을 p826-t0 또는 p827-t0에서 찾는다.",
-        "boiler_capacity_500mw_over가 true이고 work_type이 Tube Panel 조립조정 또는 Header류 조립조정인 경우 p827-t1의 값을 우선 적용한다.",
-        "찾은 단위당 품에 quantity를 곱하여 총 품을 구한다."
+        "작업구분에 따라 원문의 해당 행·표와 인/일·인/㎥·인/㎡·인/ton·인/개·인/대 중 표시된 분모를 선택한다.",
+        "50만㎾ 이상인 경우 Tube Panel 및 Header류 조립조정은 p827-t1 참고 품을 적용한다.",
+        "검사 및 교정 품은 기술관리와 포장해체를 제외한 각 작업의 품에 원문 10%를 가산한다.",
+        "원문 행의 인 및 조 단위를 보존하고 선택 물량을 곱해 산출한다.",
+        "본용접은 각 tube size별 별도 산출이며 비파괴시험은 검사·교정 범위에서 제외한다."
       ],
       "source": "PDF 770~771쪽",
       "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -211,16 +816,23 @@
     "blocked": [
       {
         "condition": "50만㎾ 이상 보일러의 Buckstay 조립조정",
-        "blocked_if": {
-          "input": "boiler_capacity_500mw_over",
-          "op": "==",
-          "value": true
-        },
         "reason": "파싱 결과(p828-t0)에 50만㎾ 이상 Buckstay 조립조정의 수량이 누락되어 계산 불가",
         "source": "PDF 771쪽 [참고] 표",
         "cite": [
           {
             "table_id": "p828-t0"
+          }
+        ],
+        "blocked_if_all": [
+          {
+            "input": "boiler_capacity_500mw_over",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "Buckstay 조립조정"
           }
         ]
       }
@@ -232,15 +844,6 @@
         "cite": {
           "table_id": "p827-t0",
           "row": "본용접 Preheating, 본용접, annealing 작업",
-          "column": "직종"
-        }
-      },
-      {
-        "item": "검사 및 교정",
-        "source": "PDF 771쪽 p827-t0 검사 및 교정 비고",
-        "cite": {
-          "table_id": "p827-t0",
-          "row": "검사 및 교정 외관검사, 수압시험후 casing leak test 교정 작업(비파괴 시험은 제외)",
           "column": "직종"
         }
       }

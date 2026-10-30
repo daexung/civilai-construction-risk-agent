@@ -96,33 +96,39 @@
           "trades": [
             "포장공",
             "보통인부"
-          ]
+          ],
+          "column": "수량"
         },
         "equipment": [
           {
             "name": "아스팔트피니셔",
             "table": "p375-t2",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           },
           {
             "name": "굴착기",
             "table": "p375-t2",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           },
           {
             "name": "머캐덤롤러",
             "table": "p375-t2",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           },
           {
             "name": "탠덤롤러",
             "table": "p375-t2",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           },
           {
             "name": "살수차",
             "table": "p375-t2",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           }
         ],
         "quantity_input": "area"
@@ -167,7 +173,7 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "표에 일당 작업조 인원, 장비 대수 및 일일 시공량이 명시되어 있어 이를 바탕으로 작업일수를 구하는 방식입니다.",
+  "calc_type_reason": "인원·장비 대수가 표의 '수량' 열에 있어 열 지정만 보완하면 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p375-t2",

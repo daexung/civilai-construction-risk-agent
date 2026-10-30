@@ -21,7 +21,11 @@
         "unit": null,
         "required": true,
         "ask": "건설기계를 어떤 기준으로 선정하시겠습니까?",
-        "source": "PDF 163쪽 8-1-1 1. 작업종류별, 2. 운반거리별"
+        "source": "PDF 163쪽 8-1-1 1. 작업종류별, 2. 운반거리별",
+        "source_table_map": {
+          "작업종류별": "p219-t0",
+          "운반거리별": "p219-t1"
+        }
       },
       {
         "name": "work_type",
@@ -41,7 +45,11 @@
         "required": true,
         "ask": "작업종류는 무엇입니까?",
         "decision_table": "p219-t0",
-        "source": "PDF 163쪽 p219-t0"
+        "source": "PDF 163쪽 p219-t0",
+        "when": {
+          "input": "lookup_type",
+          "equals": "작업종류별"
+        }
       },
       {
         "name": "earth_work_type",
@@ -54,7 +62,11 @@
         "required": true,
         "ask": "작업구분은 무엇입니까?",
         "decision_table": "p219-t1",
-        "source": "PDF 163쪽 p219-t1"
+        "source": "PDF 163쪽 p219-t1",
+        "when": {
+          "input": "lookup_type",
+          "equals": "운반거리별"
+        }
       },
       {
         "name": "haul_distance",
@@ -69,7 +81,11 @@
         "required": true,
         "ask": "운반거리는 어느 범위에 해당합니까?",
         "decision_table": "p219-t1",
-        "source": "PDF 163쪽 p219-t1"
+        "source": "PDF 163쪽 p219-t1",
+        "when": {
+          "input": "lookup_type",
+          "equals": "운반거리별"
+        }
       }
     ],
     "tables": [

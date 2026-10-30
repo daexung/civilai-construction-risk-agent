@@ -1,0 +1,152 @@
+{
+  "section": {
+    "division": "공통",
+    "section_no": "6-1-4"
+  },
+  "cases": [
+    {
+      "id": "author-daily-ratio-type-i",
+      "kind": "daily_output_ratio",
+      "inputs": {
+        "pump_size": "32m",
+        "volume": "100",
+        "structure": "무근",
+        "slump_band": "8~12㎝",
+        "facility_type": "Type-Ⅰ",
+        "site_type": "Type-Ⅰ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "218.4",
+        "work_days": "125/273"
+      },
+      "source": {
+        "pdf_pages": [
+          186,
+          187
+        ],
+        "printed_pages": [
+          130,
+          131
+        ],
+        "table_ids": [
+          "p187-t0",
+          "p187-t1",
+          "p187-t3"
+        ]
+      }
+    },
+    {
+      "id": "author-daily-ratio-type-iii",
+      "kind": "daily_output_ratio",
+      "inputs": {
+        "pump_size": "32m",
+        "volume": "100",
+        "structure": "철근",
+        "slump_band": "15㎝",
+        "facility_type": "Type-Ⅲ",
+        "site_type": "Type-Ⅱ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "104",
+        "work_days": "25/26"
+      },
+      "source": {
+        "pdf_pages": [
+          186,
+          187
+        ],
+        "printed_pages": [
+          130,
+          131
+        ],
+        "table_ids": [
+          "p187-t0",
+          "p187-t1",
+          "p187-t3"
+        ]
+      }
+    },
+    {
+      "id": "author-crew-pipe-addition",
+      "kind": "labor_addition",
+      "inputs": {
+        "pump_size": "32m",
+        "volume": "100",
+        "structure": "무근",
+        "slump_band": "8~12㎝",
+        "facility_type": "Type-Ⅰ",
+        "site_type": "Type-Ⅰ",
+        "placement": "배관",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "218.4",
+        "work_days": "125/273",
+        "person_days.특별인부": "250/273"
+      },
+      "source": {
+        "pdf_pages": [
+          186,
+          187
+        ],
+        "printed_pages": [
+          130,
+          131
+        ],
+        "table_ids": [
+          "p186-t1"
+        ],
+        "note": "p186-t1 pipeline placement adds one special laborer"
+      }
+    },
+    {
+      "id": "author-pump-equipment-time",
+      "kind": "equipment_time",
+      "inputs": {
+        "pump_size": "32m",
+        "volume": "50",
+        "structure": "무근",
+        "slump_band": "8~12㎝",
+        "facility_type": "Type-Ⅰ",
+        "site_type": "Type-Ⅰ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "218.4",
+        "work_days": "125/546",
+        "equipment_days.콘크리트펌프차": "125/546"
+      },
+      "source": {
+        "pdf_pages": [
+          186,
+          187
+        ],
+        "printed_pages": [
+          130,
+          131
+        ],
+        "table_ids": [
+          "p186-t1",
+          "p187-t0"
+        ]
+      }
+    }
+  ]
+}

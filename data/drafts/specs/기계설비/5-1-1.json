@@ -108,7 +108,35 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "보통인부(인)",
+            "when": {
+              "valve_size": "ø15∼ 25"
+            },
+            "source": "원문 인쇄 675쪽 표의 해당 직종 셀이 대시",
+            "cite": {
+              "table_id": "p731-t0",
+              "row": "ø15∼ 25",
+              "column": "보통인부(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "보통인부(인)",
+            "when": {
+              "valve_size": "32∼ 50"
+            },
+            "source": "원문 인쇄 675쪽 표의 해당 직종 셀이 대시",
+            "cite": {
+              "table_id": "p731-t0",
+              "row": "32∼ 50",
+              "column": "보통인부(인)",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p731-t0에서 밸브 규격별 단위당 품을 찾는다.",
@@ -158,6 +186,18 @@
     {
       "chunk_id": "p731-x5",
       "quote": "공구손료 및 경장비(전기드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "table_id": "p731-t0",
+      "row": "ø15∼ 25",
+      "column": "보통인부(인)",
+      "value": "-"
+    },
+    {
+      "table_id": "p731-t0",
+      "row": "32∼ 50",
+      "column": "보통인부(인)",
+      "value": "-"
     }
   ],
   "open_questions": [

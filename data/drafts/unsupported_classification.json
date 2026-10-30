@@ -1,0 +1,5357 @@
+{
+ "count": 147,
+ "categories": {
+  "G1_sub_task_quantity_units": "작업 종류마다 물량 단위가 달라 상담 계층의 단일 물량 필드로 표현되지 않음(공통 기능 부족)",
+  "G2_work_time_formula_chain": "지층·규격별 작업소요시간(T=Σ…)을 구한 뒤 인·일/대·일로 환산하는 식 사슬(공식 계산기+표 항 확장 필요)",
+  "G3_hourly_capacity_formula": "장비 시간당 작업량(Q) 산정식과 계수표(인·일을 직접 내지 않음)",
+  "G4_survey_coefficient_formula": "측량 품: 인원×작업량×지형·면적·지역 계수 등 여러 표를 곱·합하는 식",
+  "G5_parse_loss_or_price_lists": "표가 비었거나 행·열 이름이 병합/누락되어 원문 재추출이 먼저 필요하거나, 기계 가격·계수 목록",
+  "G6_policy_or_explanatory": "계산 대상이 아닌 기준·설명·참조 항목(역할과 참조 관계를 보존)",
+  "G7_source_leaves_rule_open": "원문이 적용 범위·율을 '범위 내'로만 두어 검토자가 승인한 시스템 정책이 필요",
+  "R_remaining_daily_or_per_unit": "표와 입력이 있어 기존 일당 작업조/단위당 품으로 연결 가능해 보이나 아직 원문 대조·연결하지 않음"
+ },
+ "items": [
+  {
+   "id": "2026-정오표1차/공통/0301-0057/로더(무한궤도)",
+   "path": "data/drafts/specs/공통/0301-0057.json",
+   "title": "로더(무한궤도)",
+   "source_pages": [
+    276
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "제공된 파싱 결과에서 표의 행 이름이 모든 기계 분류번호의 병합된 문자열로 동일하게 인식되어, 규격별로 고유한 행을 식별하고 값을 조회할 수 없습니다.",
+   "steps": [
+    "기계 규격에 따른 주연료, 잡재료, 조종원 수를 표에서 확인한다.",
+    "파싱 결과의 표 구조 오류로 인해 자동 조회가 불가능하므로 원문 표를 직접 참조해야 한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/1-2-2/단위표준",
+   "path": "data/drafts/specs/공통/1-2-2.json",
+   "title": "단위표준('12, '23년 보완)",
+   "source_pages": [
+    60,
+    61,
+    62
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 0개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p62-t1"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "이 절은 특정 공종의 물량이나 인·일을 계산하는 것이 아니라, 설계서 작성 시 적용할 단위와 소수점 처리 기준을 제시하는 공통 기준이므로 자동 계산 대상이 아닙니다.",
+   "steps": [
+    "이 절은 공사 수량이나 금액을 산출하는 계산식이 아니라, 설계서 작성 시 적용할 단위와 소수점 처리 기준을 제시하는 공통 기준이므로 자동 계산 대상이 아닙니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/1-2-4/재료및자재의단가",
+   "path": "data/drafts/specs/공통/1-2-4.json",
+   "title": "재료 및 자재의 단가",
+   "source_pages": [
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 0개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p67-t1"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "이 절은 재료의 단위중량, 발생재 공제율, 강관배관 부자재 요율 등 다양한 참조용 표를 포함하고 있으며, 파싱 결과의 행/열 구분이 불완전하여 자동화된 조회나 단일 계산 모델을 구성하기 어렵습니다.",
+   "steps": [
+    "이 절은 재료의 단위중량, 발생재 공제율, 강관배관 부자재 요율 등 참조용 데이터를 제공합니다.",
+    "자동화된 계산보다는 설계 시 필요한 값을 표에서 직접 찾아 적용해야 합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/1-2-7/운반",
+   "path": "data/drafts/specs/공통/1-2-7.json",
+   "title": "운반('08, '10, '16, '22, '23년 보완)",
+   "source_pages": [
+    15,
+    16,
+    17,
+    18
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "표·입력 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "이 절은 단일 작업에 대한 품셈이 아니라, 인력운반 공식, 지게운반, 벽돌운반, 화물자동차 적재량 등 여러 운반 관련 기준과 공식이 혼재되어 있어 하나의 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "이 절은 소운반 거리 기준, 인력운반 기본공식, 지게운반, 벽돌운반, 기계설비 인력운반 공식, 화물자동차 적재량 등 운반과 관련된 다양한 기준과 공식, 룩업 테이블이 혼재되어 있습니다.",
+    "단일 계산 모델로 정의하기 어려우며, 각 하위 항목(예: 벽돌운반, 화물자동차 적재량 등)별로 별도의 명세 분리가 필요할 수 있습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/1-2-8/작업조구성및적용",
+   "path": "data/drafts/specs/공통/1-2-8.json",
+   "title": "작업조 구성 및 적용('24년 신설)",
+   "source_pages": [
+    18,
+    19
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:일당시공량(예시) 1,000단위\\n(3', 'newline_column:일당시공량(예시) 10,000단위\\n(']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p74-t1",
+    "p75-t0"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p75-t0": [
+     "newline_column:일당시공량(예시) 1,000단위\n(3",
+     "newline_column:일당시공량(예시) 10,000단위\n(",
+     "newline_column:일당시공량(예시) 100단위\n(300",
+     "newline_column:일당시공량(예시) 10단위\n(30㎡)",
+     "newline_column:일당시공량(예시) 1단위이하\n(3㎡)"
+    ]
+   },
+   "draft_reason": "이 절은 특정 작업의 품을 계산하는 것이 아니라, 다른 작업조 기준 품셈을 단위당 품으로 환산할 때 적용하는 소수점 자릿수 표기 기준을 설명하는 공통 지침이므로 자동 계산 대상이 아닙니다.",
+   "steps": [
+    "작업조 기준의 일당시공량이 제시된 항목을 시공단위의 품으로 산정하는 경우, 일당시공량 단위에 따라 소수자리를 조정하여 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/1-2-9/소규모_작업물량_제한",
+   "path": "data/drafts/specs/공통/1-2-9.json",
+   "title": "소규모(작업물량 제한)",
+   "source_pages": [
+    19
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 0개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p75-t1",
+    "p75-t2"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "이 절은 개별 작업의 품을 계산하는 것이 아니라, 다른 일당 작업조형 품셈에서 총 시공량이 1일 시공량 미만일 때 적용하는 공통 할증 규칙이므로 단독으로 계산하기 어렵습니다.",
+   "steps": [
+    "총 시공량(A)과 1일시공량(B)을 비교하여 적용시공량(Q)을 산정한다.",
+    "다수 규격 혼재 시 규격별 소요일수의 합을 구하여 1일 미만인지 이상인지 판단한다.",
+    "1일 미만일 경우 일수 편차에 따른 요율을 곱하여 시공량을 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/1-3-1/재료의할증",
+   "path": "data/drafts/specs/공통/1-3-1.json",
+   "title": "재료의 할증",
+   "source_pages": [
+    76,
+    77,
+    78,
+    79
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "표·입력 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "재료 목록이 방대하고 파싱 결과의 표 구조가 복잡하여 자동 계산(조회) 모델로 구성하기 어렵습니다.",
+   "steps": [
+    "원문 표에서 해당 재료의 할증률을 확인하여 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/1-4-5/위험할증",
+   "path": "data/drafts/specs/공통/1-4-5.json",
+   "title": "위험('23년 보완)",
+   "source_pages": [
+    28,
+    29
+   ],
+   "draft_calc_type": "rate",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:고소작업차사용/적용조건 - 10m 미만', 'blank_cell:비계사용/적용조건 - 10m 미만']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p84-t0",
+    "p84-t1",
+    "p84-t2",
+    "p85-t0"
+   ],
+   "inputs": [
+    "work_category",
+    "scaffold_type",
+    "work_height",
+    "bridge_condition",
+    "tunnel_condition",
+    "tunnel_ladder_used",
+    "hazard_condition"
+   ],
+   "table_defects": {
+    "p84-t0": [
+     "blank_cell:고소작업차사용/적용조건 - 10m 미만",
+     "blank_cell:비계사용/적용조건 - 10m 미만"
+    ],
+    "p84-t2": [
+     "blank_cell:비고/- 터널내 사다리작업으로 작"
+    ]
+   },
+   "draft_reason": "작업 위치 및 환경에 따른 위험요소 발생 시 적용할 할증률(%)을 결정하는 항목이므로 rate로 분류합니다.",
+   "steps": [
+    "작업 종류(work_category)에 따라 해당하는 표를 참조한다.",
+    "고소작업의 경우 높이와 장비(비계/고소작업차)에 따라 p84-t0에서 할증률을 찾는다. 60m 초과 시 10m마다 가산율을 적용한다.",
+    "교량상 작업의 경우 p84-t1에서 할증률을 찾는다.",
+    "터널내 작업의 경우 p84-t2에서 할증률을 찾고, 사다리작업 시 최대 10%까지 가산한다.",
+    "유해 작업의 경우 p85-t0에서 할증률을 찾는다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/1-4-7/작업환경",
+   "path": "data/drafts/specs/공통/1-4-7.json",
+   "title": "작업환경('23년 보완)",
+   "source_pages": [
+    29,
+    30
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:구분/적용조건 - 기타 중요한 기', 'blank_cell:구분/적용조건 - 중요기기 및 설']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p85-t3",
+    "p86-t0",
+    "p86-t1"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p86-t0": [
+     "blank_cell:구분/적용조건 - 기타 중요한 기",
+     "blank_cell:구분/적용조건 - 중요기기 및 설",
+     "blank_cell:구분/적용조건 - 특별한 사양 및"
+    ],
+    "p86-t1": [
+     "blank_cell:구분/적용조건 - 동일장소에서 수",
+     "blank_cell:구분/적용조건 - 소음·진동 발생",
+     "blank_cell:구분/적용조건 - 원거리, 계속이",
+     "blank_cell:구분/적용조건 - 위험 발생",
+     "blank_cell:구분/적용조건 - 작업공간의 협소"
+    ]
+   },
+   "draft_reason": "작업환경에 따른 할증률을 제시하는 공통 기준으로, 구체적인 물량 계산보다는 품 할증 적용 여부를 판단하는 지침이므로 자동 계산하기 어렵고, 파싱 결과에 일부 할증률이 누락되어 있습니다.",
+   "steps": [
+    "작업환경(야간, 특수작업, 기타)에 해당하는지 확인하고 할증률을 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/2-12-4/파이프루프공",
+   "path": "data/drafts/specs/공통/2-12-4.json",
+   "title": "파이프 루프공('92년 신설)",
+   "source_pages": [
+    121,
+    122
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 6개 결함 없음, 입력 5개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p121-t0",
+    "p121-t1",
+    "p121-t2",
+    "p121-t3",
+    "p122-t0",
+    "p122-t1"
+   ],
+   "inputs": [
+    "soil_type",
+    "pipe_diameter_work",
+    "pipe_diameter_crew",
+    "push_length",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "작업능력 표가 두 개로 나뉘어 있고 파싱 결과에서 일부 토질명이 누락되었으며, 인원편성 관경 기준과 작업능력 관경 기준이 불일치하여 단일 모델로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "작업능력 표에서 토질, 관경, 추진장에 따른 일일 작업능력을 찾는다.",
+    "추진 길이를 작업능력으로 나누어 추진 작업일수를 구한다.",
+    "추진 작업일수에 작업편성인원과 장비를 곱하여 추진 품을 구한다.",
+    "조립해체 횟수에 따라 조립해체 인원과 장비 품을 별도로 더한다.",
+    "기계이동 횟수에 따라 기계이동 장비 소요시간을 별도로 더한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/2-2-2/주요자재손율",
+   "path": "data/drafts/specs/공통/2-2-2.json",
+   "title": "주요자재('22, '26년 보완)",
+   "source_pages": [
+    38
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:1개년\\n(%)', 'newline_column:2개년\\n(%)']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p94-t0"
+   ],
+   "inputs": [
+    "material_type",
+    "usage_period",
+    "length_under_2m",
+    "is_retaining_wall_or_bridge",
+    "is_cut"
+   ],
+   "table_defects": {
+    "p94-t0": [
+     "newline_column:1개년\n(%)",
+     "newline_column:2개년\n(%)",
+     "newline_column:2개년초과\n평균손율\n(%)",
+     "newline_column:3개월\n(%)",
+     "newline_column:6개월\n(%)"
+    ]
+   },
+   "draft_reason": "이 절은 인·일 품을 계산하는 것이 아니라 자재의 손율(%)을 조회하고 단가가 포함된 손료(금액)를 산정하는 기준이므로 자동 계산 모델에 맞지 않습니다.",
+   "steps": [
+    "p94-t0에서 자재 종류와 사용기간에 따른 손율을 찾는다.",
+    "철물 및 강재류의 길이가 2m 이하인 경우 1회 사용 후 손율을 100%로 적용한다.",
+    "강재의 경우 절단 여부에 따라 주어진 산정식으로 손료를 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/2208-5008/타워크레인",
+   "path": "data/drafts/specs/공통/2208-5008.json",
+   "title": "타워크레인",
+   "source_pages": [
+    239
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "제공된 파싱 결과에 타워크레인 기계경비 표가 누락되어 있어 자동 계산 명세를 작성할 수 없습니다.",
+   "steps": [
+    "타워크레인 규격에 따른 상각비, 정비비, 관리비 계수를 표에서 찾는다.",
+    "부수물과 조립볼트는 별도로 계상한다.",
+    "권상용 와이어 소모는 별도 계상한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/3-11-1/머신가이던스_굴착기",
+   "path": "data/drafts/specs/공통/3-11-1.json",
+   "title": "머신 가이던스(MG) 굴착기('23년 신설, '24, '26년 보완)",
+   "source_pages": [
+    85,
+    86
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 4개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p141-t1",
+    "p141-t2"
+   ],
+   "inputs": [
+    "total_volume",
+    "work_type",
+    "bucket_capacity",
+    "condition"
+   ],
+   "table_defects": {},
+   "draft_reason": "장비조립·해체 품과 굴착기 작업능력(일당시공량)이 별도로 제시되어 있으나, 작업능력에 따른 직종별 인원 편성표가 없어 완전한 일당 작업조 계산이 어렵습니다.",
+   "steps": [
+    "전체 토공량이 10,000㎥ 이상인지 확인한다.",
+    "장비조립·해체는 회당 인원 및 장비 투입량을 산정한다.",
+    "작업능력은 물량을 일당시공량으로 나누어 굴착기 투입 일수를 산정한다.",
+    "주연료 15% 할증을 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/3-11-3/머신가이던스_불도저",
+   "path": "data/drafts/specs/공통/3-11-3.json",
+   "title": "머신 가이던스(MG) 불도저('24년 신설)",
+   "source_pages": [
+    87
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p143-t0",
+    "p143-t1"
+   ],
+   "inputs": [
+    "total_volume",
+    "soil_condition",
+    "work_type"
+   ],
+   "table_defects": {},
+   "draft_reason": "장비조립·해체 표의 '조립', '해체' 항목이 어떤 직종이나 장비를 의미하는지 명확하지 않으며, 작업능력 표에는 인력 편성 없이 불도저의 일당 시공량만 제시되어 있어 표준적인 일당 작업조나 단위당 품 계산식으로 자동화하기 어렵습니다.",
+   "steps": [
+    "장비조립·해체 표의 '조립', '해체' 항목이 어떤 직종이나 장비를 의미하는지 명확하지 않아 자동 계산이 어렵습니다.",
+    "작업능력 표에는 인력 편성 없이 불도저의 일당 시공량만 제시되어 있어 표준적인 일당 작업조 계산식에 맞지 않습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/3-11-4/머신컨트롤불도저",
+   "path": "data/drafts/specs/공통/3-11-4.json",
+   "title": "머신 컨트롤(MC) 불도저('25년 신설)",
+   "source_pages": [
+    144
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 4개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p144-t0",
+    "p144-t1"
+   ],
+   "inputs": [
+    "work_type",
+    "total_volume",
+    "soil_type",
+    "work_kind"
+   ],
+   "table_defects": {},
+   "draft_reason": "회당 인력이 투입되는 조립·해체 작업과 일당 장비가 투입되는 작업능력 산정이 한 절에 혼재되어 있어 단일 계산 모델로 처리하기 어렵습니다.",
+   "steps": [
+    "작업 구분에 따라 장비조립·해체 또는 작업능력을 선택한다.",
+    "장비조립·해체의 경우 회당 고급기술자 1인, 중급기술자 1인, 용접공 1인을 조립 1.5일, 해체 1일 기준으로 산정한다.",
+    "작업능력의 경우 전체 토공량이 10,000㎥ 이상인 보통토사의 깎기, 집토, 소운반에 한해 일일시공량 320㎥를 적용하여 불도저(10ton) 투입 일수를 산정한다.",
+    "불도저 주연료에 15% 할증을 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/3-2-3/흙깎기_기계",
+   "path": "data/drafts/specs/공통/3-2-3.json",
+   "title": "흙깎기(기계)('25년 신설)",
+   "source_pages": [
+    68,
+    69
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 6개 결함 없음, 입력 6개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p124-t1",
+    "p124-t2",
+    "p124-t3",
+    "p125-t0",
+    "p125-t1",
+    "p125-t2"
+   ],
+   "inputs": [
+    "soil_type",
+    "scale",
+    "rock_type",
+    "volume",
+    "separate_gathering",
+    "ripper_used"
+   ],
+   "table_defects": {},
+   "draft_reason": "인력 투입 없이 장비의 일당 시공량만 제시되어 있어 현재 지원하는 adjusted_daily_crew 모델(인력+장비)에 정확히 부합하지 않으며, 파싱 결과 누락이 많아 자동 계산이 어렵습니다.",
+   "steps": [
+    "토질, 공사규모, 암 분류에 따라 해당 표에서 장비의 일당 시공량을 찾는다.",
+    "물량을 일당 시공량으로 나누어 장비의 투입 대·일을 구한다.",
+    "혼합토사에서 유압식 리퍼 사용 시, 또는 암 굴착 시 치즐 소모재료비는 기계경비에 요율을 곱하여 별도 계상한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/3-7-1/프리캐스트_콘크리트_블록설치",
+   "path": "data/drafts/specs/공통/3-7-1.json",
+   "title": "프리캐스트 콘크리트 블록설치",
+   "source_pages": [
+    134,
+    135
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:기계 | 크레인/시공량(㎡) 비탈경사\\n1:1', 'newline_column:시공량(㎡) 비탈경사\\n1:1.0 미만']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p134-t2"
+   ],
+   "inputs": [
+    "method",
+    "slope",
+    "quantity",
+    "yuhang_quantity",
+    "vertical_height_over_20m",
+    "fill_required"
+   ],
+   "table_defects": {
+    "p134-t2": [
+     "blank_cell:기계 | 크레인/시공량(㎡) 비탈경사\n1:1",
+     "newline_column:시공량(㎡) 비탈경사\n1:1.0 미만",
+     "newline_column:시공량(㎡) 비탈경사\n1:1.0이상∼",
+     "newline_column:시공량(㎡) 비탈경사\n1:1.5 이상"
+    ]
+   },
+   "draft_reason": "표의 행이 시공방법(인력/기계)과 직종으로 계층화되어 있고, 유항 설치에 따른 물량 비례 인원 추가(0.4인/10본)가 있어 현재의 adjusted_daily_crew 모델로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "1. 선택한 시공 방법(인력/기계)과 비탈경사에 따라 p134-t2 표에서 일당 시공량(㎡)과 작업조 인원(특별인부, 보통인부, 크레인)을 찾는다.",
+    "2. 작업일수 = 시공량(quantity) ÷ 일당 시공량으로 계산한다.",
+    "3. 기본 직종별 인·일 = 작업일수 × 작업조 인원으로 계산한다.",
+    "4. 유항(留杭) 설치 수량(yuhang_quantity)이 0보다 크면, 보통인부 인·일에 (0.4 × yuhang_quantity ÷ 10)을 추가로 더한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/3-7-4/절토사면녹화",
+   "path": "data/drafts/specs/공통/3-7-4.json",
+   "title": "절토사면 녹화('98, '13, '19, '25년 보완)",
+   "source_pages": [
+    135,
+    136,
+    137
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 5개 결함 없음, 입력 2개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p135-t2",
+    "p135-t3",
+    "p136-t0",
+    "p136-t1",
+    "p136-t2"
+   ],
+   "inputs": [
+    "work_type",
+    "vertical_height"
+   ],
+   "table_defects": {},
+   "draft_reason": "부착망 설치(일당), 기계기구 설치 및 해체(회당), 뿜어붙이기(일당) 등 단위와 성격이 다른 여러 세부 공종이 복합되어 있어 단일 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "작업 종류(부착망 설치, 기계기구 설치 및 해체, 뿜어붙이기)에 따라 적용할 표와 계산 방식이 다릅니다.",
+    "부착망 설치와 뿜어붙이기는 일당 작업조형으로 시공량을 바탕으로 작업일수를 산출합니다.",
+    "기계기구 설치 및 해체는 회당 품으로 산출합니다.",
+    "수직고 20m 이상인 경우 시공량에서 할증률만큼 감산하여 적용합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/3302-0030/기계경비계수",
+   "path": "data/drafts/specs/공통/3302-0030.json",
+   "title": "아스팔트 디스트리뷰터",
+   "source_pages": [
+    297
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에 아스팔트 디스트리뷰터(3302)의 기계경비 계수표 데이터가 누락되어 있어 명세를 구성할 수 없습니다.",
+   "steps": [
+    "파싱 결과에 아스팔트 디스트리뷰터의 기계경비 계수표가 누락되어 조회 기능을 구성할 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-1-10/차수그라우팅",
+   "path": "data/drafts/specs/공통/5-1-10.json",
+   "title": "차수그라우팅('26년 신설)",
+   "source_pages": [
+    107,
+    108,
+    109
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:자동화믹서플랜트/규격', 'merged_row_label:기계설비공 특별인부 보통인부']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p163-t0",
+    "p164-t0",
+    "p164-t1",
+    "p164-t2",
+    "p165-t0"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p164-t2": [
+     "blank_cell:자동화믹서플랜트/규격",
+     "merged_row_label:기계설비공 특별인부 보통인부"
+    ]
+   },
+   "draft_reason": "장비조립·해체(회당), 천공(시간 계산식), 그라우트 주입(일당) 등 단위와 계산 방식이 다른 세 가지 작업이 한 절에 혼재되어 있어 단일 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "장비조립·해체(회당), 천공(시간 계산식), 그라우트 주입(일당) 등 단위와 계산 방식이 다른 세 가지 작업이 한 절에 혼재되어 있어 단일 계산 모델로 자동화하기 어렵습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-1-7/어스앵커공법",
+   "path": "data/drafts/specs/공통/5-1-7.json",
+   "title": "어스앵커 공법('20, '26년 보완)",
+   "source_pages": [
+    101,
+    102,
+    103
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:공기압축기/회전식', 'blank_cell:크롤러드릴(공기식)/회전식']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p157-t3",
+    "p158-t0",
+    "p158-t1",
+    "p158-t2",
+    "p159-t0",
+    "p159-t1",
+    "p159-t2",
+    "p159-t3"
+   ],
+   "inputs": [
+    "work_type"
+   ],
+   "table_defects": {
+    "p158-t0": [
+     "blank_cell:공기압축기/회전식",
+     "blank_cell:크롤러드릴(공기식)/회전식",
+     "blank_cell:크롤러드릴(탑승유압식)/타격식"
+    ],
+    "p158-t2": [
+     "blank_cell:회전식/경암",
+     "blank_cell:회전식/보통암",
+     "blank_cell:회전식/연암",
+     "blank_cell:회전식/풍화암",
+     "blank_cell:회전식/혼합층"
+    ]
+   },
+   "draft_reason": "어스앵커 공법은 장비조립·해체, 천공(수식 계산), 그라우팅, 인장, PC강선 제거 등 성격이 다른 여러 하위 작업으로 구성되어 있어 단일 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "작업 종류에 따라 적용할 표와 계산 방식이 다름",
+    "천공의 경우 지층별 굴착연장을 곱하여 합산하는 수식 계산 필요",
+    "그라우팅, 인장, PC강선 제거는 일당 시공량을 바탕으로 한 per_unit 계산 필요"
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-1-8/복공판설치철거",
+   "path": "data/drafts/specs/공통/5-1-8.json",
+   "title": "복공판 설치·철거('25년 신설)",
+   "source_pages": [
+    104
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['empty_values']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p160-t0"
+   ],
+   "inputs": [
+    "operation",
+    "quantity"
+   ],
+   "table_defects": {
+    "p160-t0": [
+     "empty_values"
+    ]
+   },
+   "draft_reason": "파싱 결과에 직종명(철골공, 용접공 등)과 철거 시공량이 누락되어 일당 작업조 계산 모델을 구성할 수 없습니다.",
+   "steps": [
+    "파싱 결과에 직종명(철골공, 용접공 등)과 철거 시공량이 누락되어 자동 계산 모델을 구성할 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-1-9/주열식현장벽체공법",
+   "path": "data/drafts/specs/공통/5-1-9.json",
+   "title": "주열식 현장벽체공법(CIP,Cast In Placed Pile)('26년 신설)",
+   "source_pages": [
+    104,
+    105,
+    106
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G2_work_time_formula_chain",
+   "category_basis": [
+    "단계에 작업소요시간/T 합산식",
+    "표 8개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p161-t0",
+    "p161-t1",
+    "p161-t2",
+    "p162-t0",
+    "p162-t1",
+    "p162-t2",
+    "p162-t3",
+    "p162-t4"
+   ],
+   "inputs": [
+    "pile_diameter",
+    "drilling_length",
+    "leader_length_over_30m",
+    "bit_type"
+   ],
+   "table_defects": {
+    "p162-t4": [
+     "merged_row_label:개량형 비트 | 말뚝직경\n(㎜) 500∼600",
+     "merged_row_label:개량형 비트 | 말뚝직경\n(㎜) 500미만",
+     "merged_row_label:오거 비트 | 말뚝직경\n(㎜) 500미만",
+     "merged_row_label:오거 비트 | 말뚝직경\n(㎜) 500이상",
+     "merged_row_label:해머 비트 | 말뚝직경\n(㎜) 500∼600",
+     "merged_row_label:해머 비트 | 말뚝직경\n(㎜) 500미만"
+    ]
+   },
+   "draft_reason": "작업소요시간(T)을 구하기 위해 지층별 굴착시간과 연장을 곱해 합산하는 복잡한 수식이 필요하며, 이는 단순 일당 작업조나 단위당 품 모델로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "p162-t2의 공식 T=(t1+t2+t3+t4)/f를 사용하여 본당 작업소요시간을 계산한다.",
+    "t2(천공시간)는 지층별 굴착연장과 p162-t4의 지층별 굴착시간을 곱하여 합산한다.",
+    "t4(콘크리트 타설)는 p162-t3에서 말뚝길이에 따른 소요시간을 찾는다.",
+    "총 소요시간을 바탕으로 일당 시공량을 산출하고, p161-t1(인력) 및 p161-t2(장비) 편성을 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-2-2/고압분사주입공법",
+   "path": "data/drafts/specs/공통/5-2-2.json",
+   "title": "고압분사 주입공법",
+   "source_pages": [
+    166,
+    167,
+    168
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G2_work_time_formula_chain",
+   "category_basis": [
+    "단계에 작업소요시간/T 합산식",
+    "표 7개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p167-t0",
+    "p167-t1",
+    "p167-t2",
+    "p168-t0",
+    "p168-t1",
+    "p168-t2",
+    "p168-t3"
+   ],
+   "inputs": [
+    "soil_type",
+    "diameter",
+    "pre_drilling",
+    "work_type"
+   ],
+   "table_defects": {},
+   "draft_reason": "장비소요시간을 지층별 천공길이와 유효직경별 분사주입 길이에 따라 수식(T=T1+T2)으로 직접 계산해야 하며, 현재 지원하는 일당 작업조형이나 단위당 품 모델과 맞지 않습니다.",
+   "steps": [
+    "지층별 천공길이와 토질에 따른 천공시간(t1)을 곱하여 총 천공시간을 구한다.",
+    "유효직경별 분사주입 길이와 직경에 따른 분사주입시간(t3)을 곱하여 총 분사주입시간을 구한다.",
+    "로드 연결 및 분해 시간을 더하고 작업계수(f1, f2)를 적용하여 총 장비소요시간(T)을 산출한다.",
+    "총 소요시간을 바탕으로 인력 및 장비편성표를 적용하여 품을 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-2-3/플라스틱보드드레인",
+   "path": "data/drafts/specs/공통/5-2-3.json",
+   "title": "플라스틱 보드 드레인(PBD)",
+   "source_pages": [
+    113,
+    114
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 6개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p169-t0",
+    "p170-t0",
+    "p170-t1",
+    "p170-t2",
+    "p170-t3",
+    "p170-t4"
+   ],
+   "inputs": [
+    "site_condition",
+    "depth",
+    "n_value"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에 장비조립 및 해체, 장비 및 인력편성 표의 수량과 직종명이 누락되어 있어 인력 및 장비 투입량을 계산할 수 없습니다.",
+   "steps": [
+    "파싱 결과에 장비조립 및 해체, 장비 및 인력편성 표의 수량과 직종명이 누락되어 있어 자동 계산이 불가능함."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-2-4/다짐말뚝",
+   "path": "data/drafts/specs/공통/5-2-4.json",
+   "title": "다짐말뚝('15, '21, '26년 보완)",
+   "source_pages": [
+    115,
+    116
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G2_work_time_formula_chain",
+   "category_basis": [
+    "단계에 작업소요시간/T 합산식",
+    "표 5개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p171-t0",
+    "p171-t1",
+    "p172-t0",
+    "p172-t1",
+    "p172-t2"
+   ],
+   "inputs": [
+    "pile_length",
+    "assembly_condition",
+    "equipment_spec"
+   ],
+   "table_defects": {
+    "p172-t1": [
+     "newline_column:작업\n시간"
+    ]
+   },
+   "draft_reason": "본당 작업소요시간(min)을 구하는 공식은 있으나, 이를 전체 물량에 대한 인·일 및 대·일로 환산하는 명시적인 기준(예: 1일 작업시간)이 없고, 장비조립·해체 품이 별도로 존재하여 자동 계산하기 어렵습니다.",
+   "steps": [
+    "본당 작업소요시간 T = (T1+T2)/f 를 계산한다.",
+    "T1 = 2min, T2 = L1 × 1min, f = 0.8",
+    "산출된 작업소요시간을 바탕으로 장비 및 인력의 투입시간을 산정한다.",
+    "장비조립·해체는 회당 별도로 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-3-1/기성말뚝기초",
+   "path": "data/drafts/specs/공통/5-3-1.json",
+   "title": "기성말뚝 기초('99년 신설, '15, '16, '20, '26년 보완)",
+   "source_pages": [
+    172,
+    173,
+    174,
+    175,
+    176
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G2_work_time_formula_chain",
+   "category_basis": [
+    "단계에 작업소요시간/T 합산식",
+    "표 7개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p172-t3",
+    "p174-t0",
+    "p174-t2",
+    "p174-t3",
+    "p175-t2",
+    "p175-t3",
+    "p175-t4"
+   ],
+   "inputs": [
+    "pile_type",
+    "pile_diameter",
+    "drilling_length",
+    "bit_type",
+    "casing_used",
+    "pile_joint_needed",
+    "foundation_type",
+    "leader_length_over_30m"
+   ],
+   "table_defects": {},
+   "draft_reason": "본당 작업소요시간을 지층별 굴착연장과 비트 종류에 따라 복합적으로 계산(∑(L1×a1))해야 하며, 이를 통한 일일시공량 산출 기준(일 작업시간 등)이 명시되어 있지 않아 자동 계산 모델을 적용하기 어렵습니다.",
+   "steps": [
+    "지층별 굴착연장과 비트 종류에 따라 천공시간(t2)을 계산한다.",
+    "준비시간(t1), 말뚝근입/항타시간(t3), 그라우팅시간(t4), 용접시간(t5)을 합산하여 본당 소요시간(T)을 구한다.",
+    "작업계수(f)를 적용하여 최종 본당 소요시간을 산출한다.",
+    "산출된 본당 소요시간을 바탕으로 일일 시공량을 역산하여 인력 및 장비 편성을 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-3-2/말뚝박기용천공",
+   "path": "data/drafts/specs/공통/5-3-2.json",
+   "title": "말뚝박기용 천공",
+   "source_pages": [
+    176,
+    177,
+    178
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G2_work_time_formula_chain",
+   "category_basis": [
+    "단계에 작업소요시간/T 합산식",
+    "표 6개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p177-t0",
+    "p177-t1",
+    "p177-t2",
+    "p178-t0",
+    "p178-t1",
+    "p178-t2"
+   ],
+   "inputs": [
+    "bit_type",
+    "casing_used",
+    "pile_driving_needed"
+   ],
+   "table_defects": {
+    "p177-t0": [
+     "newline_column:오거크레인\n(리더부\n미조립)",
+     "newline_column:파일천공 전용장비\n(리더부 포함) 외",
+     "newline_column:파일천공 전용장비\n(리더부 포함) 작"
+    ],
+    "p178-t1": [
+     "blank_cell:500미만 | 천공길이(m)/오거(㎾)"
+    ],
+    "p178-t2": [
+     "blank_cell:개량형비트 | 말뚝직경\n(㎜/경암",
+     "blank_cell:개량형비트 | 말뚝직경\n(㎜/연암",
+     "blank_cell:오거비트 | 말뚝직경\n(㎜)/경암",
+     "blank_cell:오거비트 | 말뚝직경\n(㎜)/연암",
+     "blank_cell:오거비트 | 말뚝직경\n(㎜)/혼합층",
+     "blank_cell:해머비트 | 말뚝직경\n(㎜)/토사 사질토",
+     "blank_cell:해머비트 | 말뚝직경\n(㎜)/토사 점질토",
+     "blank_cell:해머비트 | 말뚝직경\n(㎜)/혼합층"
+    ]
+   },
+   "draft_reason": "지층별 천공연장에 따른 작업소요시간(T) 합산 공식과 장비조립·해체 품이 복합되어 있어 현재의 단일 물량 기반 템플릿으로 계산하기 어렵습니다.",
+   "steps": [
+    "작업소요시간 T = (T1 + T2 + T3) / f 공식을 사용한다.",
+    "T1은 3분, T3는 2분(항타 필요시 5-3-1 참고), f는 0.8을 적용한다.",
+    "T2는 지층별 천공연장(L1)에 p178-t2의 지층별 천공시간(t1)을 곱하여 모두 합산한다.",
+    "산출된 작업소요시간을 바탕으로 일일시공량을 구하고, p177-t1(인력)과 p177-t2(장비)를 적용한다.",
+    "장비조립 및 해체는 p177-t0을 기준으로 별도 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5-3-5/현장타설말뚝",
+   "path": "data/drafts/specs/공통/5-3-5.json",
+   "title": "현장타설말뚝",
+   "source_pages": [
+    123,
+    124,
+    125,
+    126,
+    127
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G2_work_time_formula_chain",
+   "category_basis": [
+    "단계에 작업소요시간/T 합산식",
+    "표 16개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p179-t2",
+    "p180-t0",
+    "p180-t1",
+    "p181-t0",
+    "p181-t1",
+    "p181-t2",
+    "p181-t3",
+    "p182-t0",
+    "p182-t1",
+    "p182-t2",
+    "p182-t3",
+    "p182-t4",
+    "p182-t5",
+    "p183-t0",
+    "p183-t1",
+    "p183-t2"
+   ],
+   "inputs": [
+    "method",
+    "diameter",
+    "soil_type"
+   ],
+   "table_defects": {
+    "p182-t0": [
+     "blank_cell:비고/- 극경암 등 이상 지질층 "
+    ]
+   },
+   "draft_reason": "장비 조립·해체, 굴착, 말뚝조성 등 여러 단계의 작업이 복합되어 있으며, 작업소요시간(T)을 구하는 복잡한 수식과 지층별 천공시간 등 다양한 변수가 얽혀 있어 단순 표준 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "장비 조립·해체, 굴착, 말뚝조성 각 단계별로 인력 및 장비 편성을 확인한다.",
+    "굴착 및 말뚝조성의 작업소요시간(T)을 수식에 따라 계산한다.",
+    "지층별 천공시간, 철근망 이음 횟수 등 현장 조건에 따른 변수를 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/5205-0035/공기압축기(이동식)",
+   "path": "data/drafts/specs/공통/5205-0035.json",
+   "title": "기계경비 산출표",
+   "source_pages": [
+    282
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "파싱 결과의 행 이름(분류번호)이 모두 병합되어 있어, 규격별로 값을 구분하여 참조할 수 있는 정상적인 표 구조를 구성할 수 없습니다.",
+   "steps": [
+    "파싱 결과의 행 식별자(분류번호)가 하나의 긴 문자열로 병합되어 있어, 개별 기계 규격별 값을 참조할 수 있는 표 구조를 만들 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/6-3-2/강재거푸집_설치_및_해체",
+   "path": "data/drafts/specs/공통/6-3-2.json",
+   "title": "강재거푸집 설치 및 해체",
+   "source_pages": [
+    137,
+    138
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:복 잡 한 구 조/비 고', 'blank_cell:약 간 복 잡 한 구 조/비 고']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p193-t1",
+    "p193-t2",
+    "p194-t0"
+   ],
+   "inputs": [
+    "work_method",
+    "quantity",
+    "operation",
+    "structure_type",
+    "height"
+   ],
+   "table_defects": {
+    "p193-t1": [
+     "blank_cell:복 잡 한 구 조/비 고",
+     "blank_cell:약 간 복 잡 한 구 조/비 고",
+     "blank_cell:터 널/비 고",
+     "blank_cell:터 널/유 형"
+    ]
+   },
+   "draft_reason": "인력 설치(단위당 품)와 장비조합 설치(일당 작업조) 두 가지 계산 방식이 혼재되어 단일 모델로 처리하기 어렵고, 수직고 할증이 '10% 범위 내'로 모호하여 자동 계산이 불가능합니다.",
+   "steps": [
+    "작업 방식(인력 또는 장비조합)에 따라 적용할 표와 계산 방식이 다름.",
+    "인력 설치의 경우 p193-t2를 사용하여 단위당 품(100㎡당)으로 계산함.",
+    "장비조합 설치의 경우 p194-t0을 사용하여 일당 작업조 방식으로 계산함.",
+    "수직고 7m 이상 시 할증률이 '10% 범위 내'로 명시되어 있어 자동 계산이 불가함."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/6-4-1/PSC빔제작",
+   "path": "data/drafts/specs/공통/6-4-1.json",
+   "title": "PSC빔 제작('16, '21, '25년 보완)",
+   "source_pages": [
+    144,
+    145,
+    146
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:기계설비공/∅ 12.7㎜', 'blank_cell:기계설비공/∅ 15.2㎜']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p200-t0",
+    "p201-t0",
+    "p201-t1",
+    "p201-t2",
+    "p201-t3",
+    "p202-t0",
+    "p202-t1"
+   ],
+   "inputs": [
+    "work_type",
+    "strand_size",
+    "quantity"
+   ],
+   "table_defects": {
+    "p201-t2": [
+     "blank_cell:기계설비공/∅ 12.7㎜",
+     "blank_cell:기계설비공/∅ 15.2㎜",
+     "blank_cell:보통인부/∅ 12.7㎜",
+     "blank_cell:보통인부/∅ 15.2㎜"
+    ]
+   },
+   "draft_reason": "이 절은 제작대 설치, 쉬즈관 설치, 정착구 설치, 강연선 설치, 인장, 그라우팅, 제작대 해체 등 7개의 독립된 세부 작업으로 구성되어 있으며, 각각 물량 단위와 작업조가 달라 단일 계산식으로 묶기 어렵습니다.",
+   "steps": [
+    "이 절은 7개의 세부 작업(제작대 설치, 쉬즈관 설치, 정착구 설치, 강연선 설치, 인장, 그라우팅, 제작대 해체)으로 구성되어 있습니다.",
+    "각 작업은 서로 다른 시공량 단위(m, 개, ton, 개소, ㎥)와 작업조 편성을 가집니다.",
+    "따라서 단일 계산식으로 자동 산정하기 어려우며, 선택한 작업에 해당하는 표를 참조하여 개별적으로 일당 작업조 계산을 수행해야 합니다.",
+    "각 작업별 [주]에 명시된 공구손료, 기계경비, 잡재료 비율 및 별도 계상 항목을 확인하여 적용하십시오."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/6-4-2/PSC_BOX_설치",
+   "path": "data/drafts/specs/공통/6-4-2.json",
+   "title": "PSC BOX 설치",
+   "source_pages": [
+    147,
+    148,
+    149
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표·입력 없음",
+    "초안 사유에 표 누락 언급"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "하나의 절에 여러 세부 작업의 단위당 품이 혼재되어 단일 계산 모델로 처리하기 어려우며, 일부 표의 파싱 결과에 직종 이름이 누락되어 있습니다.",
+   "steps": [
+    "이 절은 정착구 설치, 쉬즈관 설치, 강연선 설치, 인장, 그라우팅 등 여러 세부 작업으로 구성되어 있습니다.",
+    "각 작업별로 별도의 단위당 품 표가 존재하여 단일 계산 모델로 통합하기 어렵습니다.",
+    "또한 정착구 설치 및 쉬즈관 설치 표의 파싱 결과에 직종 이름이 누락되어 있어 정확한 계산이 불가능합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/6-5-1/빔가설공",
+   "path": "data/drafts/specs/공통/6-5-1.json",
+   "title": "빔 가설공('08, '21, '25년 보완)",
+   "source_pages": [
+    149,
+    150
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p205-t1"
+   ],
+   "inputs": [
+    "beam_weight",
+    "quantity",
+    "is_restricted_condition"
+   ],
+   "table_defects": {},
+   "draft_reason": "빔가설과 빔상차의 인원/장비가 분리되어 있고, 일당가설중량(본)이 빔가설에만 명시되어 있어 자동 계산 모델로 매핑하기 복잡함",
+   "steps": [
+    "beam_weight에 따라 p205-t1에서 일당가설중량(본)을 선택한다.",
+    "is_restricted_condition이 true이면 선택된 일당가설중량에 0.85를 곱하여 감산한다.",
+    "작업일수 = quantity ÷ 조정된 일당가설중량으로 구한다.",
+    "빔가설과 빔상차의 각 직종/장비 수량에 작업일수를 곱하여 총 투입량을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/7-2-2/찰붙임",
+   "path": "data/drafts/specs/공통/7-2-2.json",
+   "title": "찰붙임",
+   "source_pages": [
+    160
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 4개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p216-t1"
+   ],
+   "inputs": [
+    "stone_length",
+    "area",
+    "slope",
+    "height"
+   ],
+   "table_defects": {},
+   "draft_reason": "작업조 인원(수량 열)과 일일시공량(뒷길이 및 시공량 열)이 하나의 표에 비정규화되어 병기되어 있어, 현재의 adjusted_daily_crew 모델 파라미터 구조로는 두 정보를 동시에 기계적으로 추출하기 어렵습니다.",
+   "steps": [
+    "입력된 뒷길이에 해당하는 시공량(㎡)을 p216-t1 표에서 찾는다.",
+    "작업일수 = area ÷ 시공량(㎡)으로 구한다.",
+    "p216-t1 표에서 석공 3인, 보통인부 1인, 굴착기+ 부착용집게 1대의 수량을 가져온다.",
+    "직종별 인·일 = 작업일수 × 수량, 장비 대·일 = 작업일수 × 수량으로 구한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/7-4-2/앵커긴결공법",
+   "path": "data/drafts/specs/공통/7-4-2.json",
+   "title": "앵커 긴결공법",
+   "source_pages": [
+    162
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표·입력 없음",
+    "초안 사유에 표 누락 언급"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에 직종 이름과 시공량 구분이 누락되어 계산식을 구성할 수 없습니다.",
+   "steps": [
+    "파싱 결과에 직종 이름과 시공량 구분이 누락되어 계산식을 구성할 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/7811-0025/엔진(가솔린)",
+   "path": "data/drafts/specs/공통/7811-0025.json",
+   "title": "엔진(가솔린)",
+   "source_pages": [
+    284
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "제공된 원문 및 파싱 결과에 7811-0025(엔진(가솔린))에 대한 구체적인 수치 데이터가 없어 계산식을 구성할 수 없습니다.",
+   "steps": [
+    "원문 표에 7811-0025(엔진(가솔린))에 대한 규격별 주연료 및 잡재료 데이터가 존재하지 않아 계산할 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-1-2/공사규모구분",
+   "path": "data/drafts/specs/공통/8-1-2.json",
+   "title": "공사규모별 표준건설기계",
+   "source_pages": [
+    163,
+    164
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "건설기계 일반 기준 절"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p219-t2"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "이 절은 특정 품이나 비용을 계산하는 것이 아니라, 공사수량 및 현장 여건에 따라 공사규모(대/중/소)를 판단하기 위한 정성적/정량적 가이드라인을 제시하므로 자동 계산에 적합하지 않습니다.",
+   "steps": [
+    "이 절은 공사수량 및 현장조건에 따라 공사규모를 대규모, 중규모, 소규모로 구분하는 가이드라인을 제시합니다.",
+    "실제 적용 시에는 공사량, 공사기간, 현장조건 등을 종합적으로 고려하여 판단해야 하므로 자동 계산하지 않습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-1-3/운반및수송",
+   "path": "data/drafts/specs/공통/8-1-3.json",
+   "title": "운반 및 수송('10, '17년 보완)",
+   "source_pages": [
+    164,
+    165
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "건설기계 일반 기준 절",
+    "표 결함 8건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p220-t0",
+    "p221-t0"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p220-t0": [
+     "newline_column:덤프\n트럭",
+     "newline_column:로더\n(타이어)",
+     "newline_column:리프트\n트럭",
+     "newline_column:모터\n그레이더",
+     "newline_column:스크레\n이퍼",
+     "newline_column:아스팔트\n디스트리뷰터\n슬러리실\n기계",
+     "newline_column:크레인\n(타이어)",
+     "newline_column:트럭\n트랙터\n트레일러"
+    ]
+   },
+   "draft_reason": "이 절은 운반 차량 구분, 수송비, 회항비, 분해조립비, 운전사 구분 등 운반 및 수송에 관한 일반적인 산정 기준과 참조 표를 제공하며, 단일한 수식으로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "이 절은 운반 및 수송에 관한 일반적인 산정 기준을 제공하므로 자동 계산하지 않는다.",
+    "자주식 건설기계의 이동속도는 p220-t0 표를 참조한다.",
+    "운전사의 구분은 p221-t0 표를 참조한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-1-7/손료보정",
+   "path": "data/drafts/specs/공통/8-1-7.json",
+   "title": "손료보정 등('25년 보완)",
+   "source_pages": [
+    168
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "건설기계 일반 기준 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [
+    "machine_type",
+    "work_type",
+    "is_special_bulldozer",
+    "bulldozer_weight_over_19t",
+    "is_exclusive_dump",
+    "dump_weight_over_18t"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에 표의 기종(행)과 일부 작업(열) 텍스트가 누락되어 정확한 표 구성 및 인용이 불가능하므로 자동 계산 명세를 작성할 수 없습니다.",
+   "steps": [
+    "기종과 작업 종류에 따라 기계손료 가산비율을 확인한다.",
+    "불도저와 덤프트럭의 경우 규격과 종류에 따라 보정 제외 여부를 판정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-12/크러셔",
+   "path": "data/drafts/specs/공통/8-2-12.json",
+   "title": "크러셔",
+   "source_pages": [
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-12: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p242-t2",
+    "p248-t1"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "이 절은 인·일이나 단위당 품을 계산하는 것이 아니라, 크러셔 장비의 시간당 생산능력(ton/hr)을 산정하기 위한 제원표와 효율 계수를 제공하므로 단일한 자동 계산 모델로 구성하기 어렵습니다.",
+   "steps": [
+    "크러셔의 종류(정치식, 이동식) 및 세부 기계(죠 크러셔, 롤 크러셔 등)에 따라 해당 표에서 생산능력을 찾는다.",
+    "투입되는 암석의 크기, 단위용적중량, 공급량, 운전조건, 암질 등 작업조건에 따라 작업효율을 적용한다.",
+    "스크린의 경우 주어진 계산식과 별표 4의 효율 계수를 사용하여 통과량을 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-13/대형브레이커",
+   "path": "data/drafts/specs/공통/8-2-13.json",
+   "title": "대형브레이커('14, '17, '25년 보완)",
+   "source_pages": [
+    192,
+    193
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-13: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "시간당 작업량(㎥/hr)을 제시하는 기준이나, 파싱 결과에서 표의 행/열 구조와 값이 원문과 크게 다르게 추출되어(예: 철근 구조물 값이 모두 1.6~3.3으로 나옴) 자동 계산 모델을 구성할 수 없습니다.",
+   "steps": [
+    "원문의 표(구조물 헐기, 아스콘 포장 깨기, 굴착, 치즐 소모량)에서 조건에 맞는 값을 찾는다.",
+    "파싱 결과 오류로 인해 표 데이터를 정확히 구성할 수 없어 자동 계산을 보류한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-19/콘크리트운반",
+   "path": "data/drafts/specs/공통/8-2-19.json",
+   "title": "콘크리트 운반",
+   "source_pages": [
+    195,
+    196
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-19: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p252-t0",
+    "p252-t1"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "장비의 시간당 작업량(운반량)을 산정하는 공식으로, 현장 조건(속도, 거리, 플랜트 사이클 시간 등)과 범위값(대기시간 등)에 대한 판단이 크게 필요하여 자동 계산이 어렵습니다.",
+   "steps": [
+    "콘크리트 믹서트럭 및 덤프트럭의 시간당 운반량(Q) 산정식을 제공한다.",
+    "운반거리, 주행속도, 플랜트 사이클 시간 등 현장 조건에 따른 변수 입력이 필요하다.",
+    "배출시간, 대기시간 등 범위로 제시된 값에 대한 현장 판단이 필요하여 자동 계산이 어렵다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-2/리퍼(유압식)",
+   "path": "data/drafts/specs/공통/8-2-2.json",
+   "title": "리퍼(유압식)('25년 보완)",
+   "source_pages": [
+    170,
+    171
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-2: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p227-t0",
+    "p227-t1",
+    "p227-t2"
+   ],
+   "inputs": [
+    "tractor_size",
+    "ripping_teeth",
+    "rock_type",
+    "seismic_velocity",
+    "work_distance",
+    "volume_conversion_factor"
+   ],
+   "table_defects": {},
+   "draft_reason": "이 절은 장비의 시간당 작업량(Q)을 구하는 공식과 계수만 제공하며, 직접적인 인·일 산출을 위한 작업조나 단위당 품 표가 없어 자동 계산 명세로 구성하기 어렵습니다.",
+   "steps": [
+    "1회의 작업거리(ℓ)를 입력받아 1회 싸이클 시간(cm = 0.05ℓ+0.25)을 계산한다.",
+    "트랙터 규격과 발톱수에 따라 p227-t0에서 1회 리핑단면적(An)을 구한다.",
+    "암질, 발톱수, 트랙터 규격, 탄성파속도에 따라 p227-t1에서 작업효율(E)을 구한다.",
+    "공식 Q = (60 * An * ℓ * f * E) / cm 을 통해 시간당 파쇄량을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-21/경운기",
+   "path": "data/drafts/specs/공통/8-2-21.json",
+   "title": "경운기",
+   "source_pages": [
+    197
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-21: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p253-t0"
+   ],
+   "inputs": [
+    "material_type",
+    "road_condition",
+    "distance",
+    "capacity",
+    "volume_conversion_factor"
+   ],
+   "table_defects": {},
+   "draft_reason": "장비의 시간당 작업량(Q)을 구하는 산정식으로, 현재 지원하는 일당 작업조형이나 단위당 품 계산 모델에 해당하지 않습니다.",
+   "steps": [
+    "입력된 재료 종류(material_type)에 따라 p253-t0 표에서 적재 적하 시간(t)을 찾는다.",
+    "입력된 작업로 상태(road_condition)에 따라 p253-t0 표에서 적재시 속도(V1)와 공차시 속도(V2)를 찾는다.",
+    "싸이클시간 cm = distance / V1 + distance / V2 + t 를 계산한다.",
+    "시간당 작업량 Q = (60 * capacity * volume_conversion_factor * 0.9) / cm 을 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-22/디젤파일해머",
+   "path": "data/drafts/specs/공통/8-2-22.json",
+   "title": "디젤 파일 해머",
+   "source_pages": [
+    198,
+    199,
+    200,
+    201,
+    202
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-22: 건설기계 시간당 작업량 절",
+    "표·계수 중심"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p254-t0",
+    "p258-t3"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "디젤 파일 해머의 시공시간(Tc)을 구하기 위해 여러 세부 시간(Tb, Tw, Ts, Tt, Te)을 각각의 복잡한 수식과 표를 통해 계산한 후 합산해야 하므로, 현재 지원하는 표준 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "파일 1본당 시공시간(Tc)은 타격시간(Tb), 용접시간(Tw), 세우기 및 위치 조정시간(Ts), 이동 및 준비시간(Tt), 기타시간(Te)을 각각의 수식으로 계산하여 합산한 후 작업계수(F)로 나누어 구한다.",
+    "배치인원은 표 4를 참조하여 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-23/유압파일해머",
+   "path": "data/drafts/specs/공통/8-2-23.json",
+   "title": "유압 파일 해머",
+   "source_pages": [
+    202,
+    203,
+    204,
+    205,
+    206
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-23: 건설기계 시간당 작업량 절",
+    "표·계수 중심"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p259-t0",
+    "p259-t1",
+    "p259-t2",
+    "p259-t3",
+    "p260-t0",
+    "p261-t0",
+    "p261-t1",
+    "p261-t2",
+    "p262-t0"
+   ],
+   "inputs": [
+    "pile_type",
+    "n_value",
+    "driving_length_steel",
+    "thickness",
+    "diameter_steel",
+    "driving_length_concrete",
+    "diameter_concrete",
+    "is_joint_welding",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "1본당 시공시간(Tc)을 구하는 공식이 주어지고, 이를 바탕으로 장비 가동시간과 인력을 산출하는 구조이므로 기존의 일당 작업조형(adjusted_daily_crew) 함수로 계산할 수 없습니다.",
+   "steps": [
+    "파일 종류(강관/콘크리트)에 따라 1본당 시공시간(Tc) 계산 공식을 선택한다.",
+    "토질계수(α), 판두께계수(β), 시공시간(Ta)을 표에서 찾아 Tc를 계산한다.",
+    "Tc에 물량(본)을 곱하여 총 작업시간을 구한다.",
+    "장비조합 표에 따라 장비별 가동시간을 산출하고, 배치인원 표에 따라 인력을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-24/진동파일해머",
+   "path": "data/drafts/specs/공통/8-2-24.json",
+   "title": "진동파일 해머('96, '26년 보완)",
+   "source_pages": [
+    206,
+    207,
+    208,
+    209,
+    210,
+    211
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-24: 건설기계 시간당 작업량 절",
+    "표·계수 중심"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p262-t1",
+    "p262-t2",
+    "p263-t0",
+    "p263-t1",
+    "p264-t1",
+    "p265-t0",
+    "p266-t3"
+   ],
+   "inputs": [
+    "welding_required"
+   ],
+   "table_defects": {},
+   "draft_reason": "파일 1본당 시공시간(Tc)을 구하기 위해 토질별 N치 가중평균, 근입장, 해머계수 등 복잡한 수식을 계산해야 하므로 현재 지원하는 단순 작업조나 단위당 품 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "파일 1본당 시공시간(Tc)을 수식(토질별 N치 가중평균, 근입장, 해머계수 등)으로 계산한다.",
+    "일일 작업시간을 Tc로 나누어 일일 시공량을 구한다.",
+    "배치인원 및 장비조합을 적용하여 총 품을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-25/진동파일해머_워터제트병용",
+   "path": "data/drafts/specs/공통/8-2-25.json",
+   "title": "진동파일해머(워터제트 병용 압입공)",
+   "source_pages": [
+    267,
+    268,
+    269,
+    270
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-25: 건설기계 시간당 작업량 절",
+    "표·계수 중심"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p267-t0",
+    "p267-t1",
+    "p268-t0",
+    "p268-t1",
+    "p269-t0",
+    "p269-t1",
+    "p270-t0",
+    "p270-t1"
+   ],
+   "inputs": [
+    "soil_type",
+    "pile_length",
+    "n_value",
+    "f1_condition",
+    "f2_condition",
+    "f3_condition",
+    "f4_condition",
+    "welder_needed"
+   ],
+   "table_defects": {},
+   "draft_reason": "파일 1본당 시공시간(Tc)을 구하는 복잡한 수식과 다수의 장비 선정 조건이 혼재되어 있어, 현재 지원하는 표준 계산 모델(daily_crew 등)로 자동화하기 어렵습니다.",
+   "steps": [
+    "1. 근입길이(L)와 가중평균 N치를 이용해 기본 시공시간(To)을 계산한다.",
+    "2. 토질에 따른 토질계수(α)를 적용한다.",
+    "3. 현장 조건에 따른 작업계수(F = F0 + f1 + f2 + f3 + f4)를 산출한다.",
+    "4. Tc = (To * α) / F 공식으로 파일 1본당 시공시간을 구한다.",
+    "5. 토질, 파일연장, 최대 N치 및 일축압축강도에 따라 진동파일해머와 워터젯트 펌프 규격을 선정한다.",
+    "6. 배치인원 표를 기준으로 인원을 산정하며, 용접공 추가 여부를 판단한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-26/유압식압입인발기",
+   "path": "data/drafts/specs/공통/8-2-26.json",
+   "title": "유압식 압입 인발기(유압식 압입 인발공)",
+   "source_pages": [
+    214,
+    215,
+    216
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-26: 건설기계 시간당 작업량 절",
+    "표·계수 중심"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p271-t0",
+    "p271-t1",
+    "p271-t2",
+    "p272-t0",
+    "p272-t1",
+    "p272-t2"
+   ],
+   "inputs": [
+    "operation_type",
+    "pile_length",
+    "driven_length",
+    "n_max",
+    "f1_condition",
+    "f2_condition",
+    "f3_condition",
+    "electric_welding_needed"
+   ],
+   "table_defects": {},
+   "draft_reason": "작업능력이 표 형태의 일일시공량이 아닌, 1본당 시공시간(분/본)을 구하는 수식으로 제시되어 있어 현재의 adjusted_daily_crew 모델로 계산할 수 없습니다.",
+   "steps": [
+    "작업 종류(압입/인발)에 따라 시공시간(Tc) 공식을 선택한다.",
+    "준비시간(Ts), 압입시간(Tb), 작업계수(F)를 계산하여 1본당 시공시간(분/본)을 구한다.",
+    "일일 작업시간을 시공시간으로 나누어 일일시공량(본/일)을 산출한다.",
+    "총 물량(본)을 일일시공량으로 나누어 작업일수를 구한다.",
+    "작업일수에 배치인원 및 기계조합을 곱하여 총 품을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-29/펌프식준설선",
+   "path": "data/drafts/specs/공통/8-2-29.json",
+   "title": "펌프식 준설선",
+   "source_pages": [
+    218,
+    219,
+    220,
+    221,
+    222,
+    223
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-29: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p278-t2",
+    "p278-t3",
+    "p279-t0",
+    "p279-t1",
+    "p279-t2",
+    "p279-t3",
+    "p279-t4",
+    "p279-t5"
+   ],
+   "inputs": [
+    "soil_type",
+    "n_value",
+    "distance",
+    "thickness_condition",
+    "plane_condition",
+    "section_condition",
+    "sea_condition"
+   ],
+   "table_defects": {},
+   "draft_reason": "이 절은 장비(펌프식 준설선)의 시간당 작업능력(Q)을 산출하는 공식을 다루며, 인·일이나 단위당 품을 직접 계산하는 표준 작업조 모델에 맞지 않아 자동 계산 명세로 작성하기 어렵습니다.",
+   "steps": [
+    "토질, N값, 배송거리에 따라 전동환산(q) 표에서 1시간당 준설량(q)을 구한다.",
+    "배송거리가 짧은 경우 단거리 능력 산정식으로 q를 보정한다.",
+    "흙의 두께, 평면형상, 단면형상, 해상조건에 따른 효율(E1~E4)을 곱하여 작업효율(E)을 구한다.",
+    "공식 Q = (q * bo * E) / 746 을 이용하여 1시간당 준설능력(Q)을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-30/그래브준설선",
+   "path": "data/drafts/specs/공통/8-2-30.json",
+   "title": "그래브 준설선('10, '11년 보완)",
+   "source_pages": [
+    223,
+    224,
+    225,
+    226
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-30: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p280-t0",
+    "p280-t1",
+    "p281-t0",
+    "p281-t1",
+    "p281-t2",
+    "p281-t3",
+    "p282-t0",
+    "p282-t1"
+   ],
+   "inputs": [
+    "bucket_capacity",
+    "soil_category",
+    "soil_state",
+    "n_value",
+    "blasting_status",
+    "water_depth",
+    "thickness_condition",
+    "marine_condition"
+   ],
+   "table_defects": {},
+   "draft_reason": "장비의 시간당 작업량(Q)을 산출하는 공식으로, 현재 지원하는 일당 작업조형이나 단위당 품 계산 모델에 맞지 않아 자동 계산을 보류합니다.",
+   "steps": [
+    "1. 체적환산계수(f)를 토질, 상태, N의 값에 따라 p280-t0에서 구한다.",
+    "2. 버킷계수(k)를 토질, 상태, N의 값, 버킷용량에 따라 p280-t1, p281-t0에서 구한다. (쇄암/발파 후 준설이면 괄호 안의 값 적용)",
+    "3. 1회 싸이클시간(cm)을 버킷용량에 따라 p281-t1에서 구하고, 수심(10m 기준) 1m 증감마다 2초씩 보정한다.",
+    "4. 작업효율(E) = E1(p281-t2) × E2(p282-t0) 로 구한다.",
+    "5. 시간당 준설량 Q = (3,600 × q × k × f × E) / cm 공식을 통해 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-31/쇄암선(중추식)",
+   "path": "data/drafts/specs/공통/8-2-31.json",
+   "title": "쇄암선(중추식)('11년 보완)",
+   "source_pages": [
+    226,
+    227
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-31: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p282-t2",
+    "p282-t3"
+   ],
+   "inputs": [
+    "soil_condition",
+    "weight",
+    "efficiency"
+   ],
+   "table_defects": {
+    "p282-t3": [
+     "blank_cell:암반 | 상태 경질/중추중량(ton) 10",
+     "blank_cell:암반 | 상태 경질/중추중량(ton) 20"
+    ]
+   },
+   "draft_reason": "이 절은 장비의 시간당 작업능력(Q)을 계산하는 공식을 제시하고 있으며, 현재 지원하는 일당 작업조형(daily_crew)이나 단위당 품(per_unit) 모델에 해당하지 않습니다.",
+   "steps": [
+    "표 p282-t2에서 토질조건과 중추중량에 따른 1본당 쇄암면적(S)을 찾는다.",
+    "표 p282-t3에서 토질조건과 중추중량에 따른 1층 쇄암하는데 필요한 낙추횟수(n)를 찾는다.",
+    "작업효율(E)는 입력받은 값을 사용한다.",
+    "공식 Q = (60 * d * S * E) / (t + n/P) 에 대입하여 시간당 작업능력(Q)을 계산한다. (d=1, t=1, P=2)"
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-32/이동식임목파쇄기",
+   "path": "data/drafts/specs/공통/8-2-32.json",
+   "title": "이동식 임목파쇄기('07년 신설, '11년 보완)",
+   "source_pages": [
+    227,
+    228
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-32: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p283-t0",
+    "p283-t1",
+    "p284-t0",
+    "p284-t1",
+    "p284-t2"
+   ],
+   "inputs": [
+    "machine_spec",
+    "screen_size",
+    "work_condition",
+    "need_assistant"
+   ],
+   "table_defects": {
+    "p283-t0": [
+     "blank_cell:메인파쇄기날/비고"
+    ]
+   },
+   "draft_reason": "장비의 시간당 작업량(Q)을 산출하는 공식(Q=q*K*S*E)과 소모품 소모량이 주어지는 기계경비 산출 성격의 명세로, 현재 지원하는 daily_crew나 per_unit 모델에 맞지 않아 자동 계산을 보류함.",
+   "steps": [
+    "93.25㎾ 규격은 시간당 작업량 Q = 6.0 ㎥/hr 로 고정 적용한다.",
+    "354.35~402.84㎾ 규격은 Q = q * K * S * E 공식을 사용하여 시간당 작업량을 산출한다.",
+    "q는 26㎥/hr, K는 p283-t1, S는 p284-t0, E는 p284-t1에서 찾아 곱한다.",
+    "규격별 소모품 소모량은 각각 p283-t0, p284-t2를 참조하여 시간당 소모량을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-33/하천골재채취선",
+   "path": "data/drafts/specs/공통/8-2-33.json",
+   "title": "하천골재채취선('05년 신설)",
+   "source_pages": [
+    228,
+    229
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-33: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p284-t3",
+    "p284-t4",
+    "p285-t0"
+   ],
+   "inputs": [
+    "n_value",
+    "distance",
+    "weather_condition",
+    "flow_velocity",
+    "power",
+    "soil_type_for_pipe"
+   ],
+   "table_defects": {},
+   "draft_reason": "장비의 시간당 작업량(Q) 및 소모품 소모율을 산출하는 공식과 표만 제공되며, 인·일을 산출하는 표준적인 작업조나 단위당 품 표가 없으므로 현재 지원하는 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "p284-t3에서 N치와 거리에 따른 746㎾ 기준 시간당 준설량(q)을 찾는다.",
+    "p284-t4에서 천후 조건과 유속에 따른 작업효율(E)을 찾는다.",
+    "공식 Q = (q * b * E) / 746 을 이용하여 시간당 준설량(Q)을 계산한다.",
+    "p285-t0에서 토질 및 자갈함유량에 따른 배사관 소모율을 찾는다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-4/트랜처",
+   "path": "data/drafts/specs/공통/8-2-4.json",
+   "title": "트랜처",
+   "source_pages": [
+    173,
+    174
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-4: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p229-t2",
+    "p229-t3"
+   ],
+   "inputs": [
+    "L",
+    "depth",
+    "soil_type",
+    "condition",
+    "filter_material"
+   ],
+   "table_defects": {},
+   "draft_reason": "장비의 시간당 작업량(Q)을 산정하는 공식과 계수만 제공하며, 직종별 인·일이나 단위당 품을 직접 계산하는 표준 모델(daily_crew 등)에 맞지 않습니다.",
+   "steps": [
+    "1열 실작업거리(L)와 전진/후진 속도를 이용해 1열 왕복시간(t2)을 구한다.",
+    "흡수관 삽입 및 수평조절시간(t1)과 회전 및 기어 변속시간 등(t3)을 더해 1회 싸이클시간(cm)을 구한다.",
+    "굴착심도 계수(d)와 작업효율(E)을 표에서 찾는다.",
+    "공식 Q = (60 * L * d * E) / cm 을 통해 시간당 작업량을 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-6/모터스크레이퍼",
+   "path": "data/drafts/specs/공통/8-2-6.json",
+   "title": "모터 스크레이퍼",
+   "source_pages": [
+    176,
+    177
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-6: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p232-t0",
+    "p233-t1"
+   ],
+   "inputs": [
+    "soil_condition",
+    "site_condition",
+    "road_condition",
+    "push_dozer_used",
+    "has_large_cobble",
+    "L1",
+    "L2",
+    "q_capacity",
+    "f_factor"
+   ],
+   "table_defects": {
+    "p233-t1": [
+     "newline_column:공차시주행\n속도(m/분)",
+     "newline_column:적재시주행\n속도(m/분)"
+    ]
+   },
+   "draft_reason": "기계의 시간당 작업량(Q)을 산출하는 공식으로, 현재 지원하는 일당 작업조형이나 단위당 품 계산 모델에 해당하지 않습니다.",
+   "steps": [
+    "입력된 조건에 따라 적재계수(K), 작업효율(E), 주행속도(V1, V2)를 구한다.",
+    "푸쉬도우저 사용 여부에 따라 기어변속시간(t)을 결정한다.",
+    "1회 싸이클시간(cm) = L1/V1 + L2/V2 + t 를 계산한다.",
+    "시간당 작업량(Q) = (60 * q * f * E) / cm 를 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-7/모터그레이더",
+   "path": "data/drafts/specs/공통/8-2-7.json",
+   "title": "모터 그레이더",
+   "source_pages": [
+    178,
+    179
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-7: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p234-t0",
+    "p235-t0",
+    "p235-t1",
+    "p235-t2"
+   ],
+   "inputs": [
+    "work_type_v",
+    "work_type_t",
+    "soil_type_l",
+    "work_type_e"
+   ],
+   "table_defects": {},
+   "draft_reason": "시간당 작업량 산출 공식이 면적(A)과 체적(Q) 두 가지로 나뉘며, 작업횟수(Pi, P) 및 싸이클시간(Cmi) 등 현장 상황에 따라 반복 계산이 필요하여 단순 입력만으로 자동화하기 어렵습니다.",
+   "steps": [
+    "작업 조건에 따라 V1, V2, t, ℓ, E 값을 표에서 찾는다.",
+    "방향변환 또는 왕복작업 여부에 따라 cm 산출공식을 선택하여 1회 싸이클시간(cm)을 계산한다.",
+    "작업장 전체의 폭(W)을 속도(Vi)로 행하는 작업횟수(Pi)와 싸이클시간(Cmi)을 곱하여 합산한다.",
+    "면적 작업량(A) 또는 체적 작업량(Q) 공식을 사용하여 1시간당 작업량을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-8/덤프트럭",
+   "path": "data/drafts/specs/공통/8-2-8.json",
+   "title": "덤프트럭('17년 보완)",
+   "source_pages": [
+    179,
+    180,
+    181
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-8: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p236-t0",
+    "p237-t0",
+    "p237-t1",
+    "p237-t2"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "덤프트럭의 시간당 작업량은 적재기계의 제원, 운반거리, 도로 상태, 토질 등 매우 다양한 현장 변수를 조합하여 여러 단계의 공식을 거쳐야 하므로 단순 자동 계산으로 처리하기 어렵습니다.",
+   "steps": [
+    "덤프트럭의 1시간당 작업량(Q) 공식을 확인한다.",
+    "적재시간(t1), 왕복시간(t2), 적하시간(t3), 대기시간(t4), 덮개시간(t5), 세륜시간(t6)을 각각 산출하여 1회 싸이클시간(cm)을 구한다.",
+    "공식에 대입하여 Q를 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-2-9/롤러",
+   "path": "data/drafts/specs/공통/8-2-9.json",
+   "title": "롤러('04, '17, '25년 보완)",
+   "source_pages": [
+    182,
+    183,
+    184
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G3_hourly_capacity_formula",
+   "category_basis": [
+    "공통 8-2-9: 건설기계 시간당 작업량 절",
+    "단계 문구에 Q/시간당"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p238-t0",
+    "p239-t0",
+    "p239-t1",
+    "p240-t0",
+    "p240-t1"
+   ],
+   "inputs": [
+    "calc_target",
+    "roller_type",
+    "roller_spec",
+    "work_type",
+    "soil_type",
+    "site_condition",
+    "f_coeff",
+    "d_thickness"
+   ],
+   "table_defects": {},
+   "draft_reason": "장비의 시간당 작업량(Q, A)을 산출하는 공식 위주의 절이며, 현재 지원하는 일당 작업조형(daily_crew)이나 단위당 품(per_unit) 모델에 해당하지 않습니다.",
+   "steps": [
+    "다짐기계와 토질에 따라 p238-t0에서 적합성을 확인한다.",
+    "p239-t0에서 다짐기계와 규격에 따른 유효다짐폭(W)과 공종별 다짐속도(V)를 찾는다.",
+    "p239-t1, p240-t0에서 공종과 다짐기계에 따른 소요다짐횟수(N)를 찾는다.",
+    "p240-t1에서 공종, 다짐기계, 현장조건에 따른 작업효율(E)을 찾는다.",
+    "공식 Q = 1,000 * V * W * D * E * (f / N) 또는 A = 1,000 * V * W * E * (1 / N)에 대입하여 시간당 작업량을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-4-1/토공기계",
+   "path": "data/drafts/specs/공통/8-4-1.json",
+   "title": "[00]토공기계",
+   "source_pages": [
+    275
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "파싱된 표의 행 이름(분류번호)이 모든 기계에 대해 하나의 긴 문자열로 병합되어 있어, 개별 기계 규격별로 값을 조회하는 자동화 모델을 구성하거나 정상적인 JSON 표 구조를 만들 수 없습니다.",
+   "steps": [
+    "기계 분류번호 또는 기계명 및 규격에 따라 주연료, 잡재료율, 조종원 수를 표에서 확인한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-4-3/운반및하역기계",
+   "path": "data/drafts/specs/공통/8-4-3.json",
+   "title": "[20]운반 및 하역기계('21년 보완)",
+   "source_pages": [
+    278,
+    279
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 3건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p334-t0"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p334-t0": [
+     "newline_column:잡재료\n(주연료의%)",
+     "newline_column:조종원\n(인/일)",
+     "newline_column:주연료\n(ℓ/hr)"
+    ]
+   },
+   "draft_reason": "파싱된 표의 데이터(주연료 등)가 원문과 다르게 모두 동일한 값으로 잘못 추출되었고, 행 구조가 깨져 있어 자동 조회가 불가능합니다.",
+   "steps": [
+    "기계명과 규격에 따른 주연료, 잡재료, 조종원 품을 표에서 확인한다.",
+    "파싱된 표의 데이터 오류(모든 주연료가 5.8로 인식됨 등) 및 구조적 문제로 인해 자동 조회를 보류한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-4-8/기타기계",
+   "path": "data/drafts/specs/공통/8-4-8.json",
+   "title": "[70]기타기계('24년 보완)",
+   "source_pages": [
+    283,
+    284
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "제공된 파싱 결과에서 표의 행과 열이 심각하게 병합되고 손상되어(모든 기계명이 '고성능착정기'로 나오는 등) 기계별 규격과 값을 구조화하여 계산식에 연동할 수 없습니다.",
+   "steps": [
+    "원문 표에서 기계명과 규격에 맞는 주연료, 잡재료, 조종원 값을 직접 확인해야 합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-5-1/토공기계가격",
+   "path": "data/drafts/specs/공통/8-5-1.json",
+   "title": "[00]토공기계",
+   "source_pages": [
+    287,
+    288,
+    289
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p343-t2",
+    "p344-t0",
+    "p345-t0"
+   ],
+   "inputs": [
+    "machine_type"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과의 표 구조에서 기종 정보가 병합되고 분류번호가 중복되어 고유 식별이 불가능하므로 자동 조회가 어렵습니다.",
+   "steps": [
+    "기종과 분류번호에 따른 기계가격을 표에서 확인한다.",
+    "파싱 결과의 행 식별자 중복 및 기종 정보 병합으로 인해 자동 조회가 제한된다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-5-2/다짐기계",
+   "path": "data/drafts/specs/공통/8-5-2.json",
+   "title": "[10]다짐기계",
+   "source_pages": [
+    290
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절",
+    "표 결함 0건/표 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에서 기종 텍스트가 병합되어 있고 분류번호가 중복되어 고유 키를 구성할 수 없어 자동 조회가 불가능합니다.",
+   "steps": [
+    "파싱 결과에서 기종 정보가 병합되어 있고, 분류번호의 중복(예: 0012, 0015)이 발생하여 기계적인 표 조회가 불가능합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-5-6/골재생산기계등",
+   "path": "data/drafts/specs/공통/8-5-6.json",
+   "title": "[50]골재생산기계 등",
+   "source_pages": [
+    295,
+    296,
+    297
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p351-t0",
+    "p352-t0",
+    "p353-t0"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "이 절은 기계의 가격을 나열한 단순 단가표로, 품셈 계산식이 존재하지 않으며 파싱 결과의 기종 구분이 병합되어 있어 자동화된 조회가 어렵습니다.",
+   "steps": [
+    "이 절은 기계 가격 단가표로, 별도의 품셈 계산식이 없습니다.",
+    "파싱 결과에서 기종 정보가 병합되어 있어 정확한 단가 조회가 어렵습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-5-7/기초공사용기계",
+   "path": "data/drafts/specs/공통/8-5-7.json",
+   "title": "[60]기초공사용기계",
+   "source_pages": [
+    297,
+    298,
+    299
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p353-t1",
+    "p354-t0",
+    "p355-t0"
+   ],
+   "inputs": [
+    "machine_type",
+    "classification_number"
+   ],
+   "table_defects": {},
+   "draft_reason": "단순 단가표이며, 파싱 결과에서 여러 기종의 이름이 하나의 텍스트로 병합되어 있어 중복되는 분류번호(예: 0100, 0150 등)에 대해 어떤 기종의 가격인지 기계적으로 구분하여 자동 조회하기 어렵습니다.",
+   "steps": [
+    "기종과 분류번호에 해당하는 가격을 표에서 직접 확인합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/공통/8-5-8/기타기계",
+   "path": "data/drafts/specs/공통/8-5-8.json",
+   "title": "[70]기타기계",
+   "source_pages": [
+    299,
+    300,
+    301,
+    302
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "기계 분류번호/가격/경비 목록 절"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p355-t1",
+    "p356-t0",
+    "p357-t0",
+    "p358-t0"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "파싱된 표의 기종 컬럼 텍스트가 모두 병합되어 있어, 개별 기종과 분류번호를 키로 하여 가격을 조회하는 자동화 모델을 구성하기 어렵습니다.",
+   "steps": [
+    "기종과 분류번호에 따른 가격을 표에서 직접 확인해야 합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/12-2-3/도압배관",
+   "path": "data/drafts/specs/기계설비/12-2-3.json",
+   "title": "도압배관",
+   "source_pages": [
+    1
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:비고/- Loop 시험(LEAK ']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p776-t1"
+   ],
+   "inputs": [
+    "item_name",
+    "quantity",
+    "pipe_material",
+    "loop_test",
+    "fire_prohibited_zone"
+   ],
+   "table_defects": {
+    "p776-t1": [
+     "blank_cell:비고/- Loop 시험(LEAK "
+    ]
+   },
+   "draft_reason": "파싱된 표의 행과 값이 원문과 다르게 병합되어 있어 자동 계산을 위한 표 구조를 만들 수 없습니다.",
+   "steps": [
+    "표에서 명칭에 따른 계장공, 배관공, 보통인부 품을 찾는다.",
+    "배관 재질이 SCH 80이면 10%, SUS27이면 30%를 가산한다.",
+    "Loop 시험(LEAK TEST 포함) 시 20%를 가산한다.",
+    "화기사용 금지구역 시 1.5배(50% 가산)를 적용한다.",
+    "물량을 곱하여 총 품을 구한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/12-3-2/입·출력장치설치",
+   "path": "data/drafts/specs/기계설비/12-3-2.json",
+   "title": "입･출력장치(I/O Equipment) 설치('03년 신설)",
+   "source_pages": [
+    722
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 0개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p778-t1",
+    "p778-t2"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "파싱 결과 표(p778-t1)에 '설치', '점검·시험', '계장공' 등의 행/열 이름과 값이 누락되어 있어 자동 계산 명세를 구성할 수 없습니다.",
+   "steps": [
+    "파싱 결과 누락으로 인해 계산식을 구성할 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-1-5/Flange취부",
+   "path": "data/drafts/specs/기계설비/13-1-5.json",
+   "title": "Flange 취부",
+   "source_pages": [
+    736,
+    737,
+    738
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:사용압력범위(Flange) 10.5㎏', 'newline_column:사용압력범위(Flange) 21㎏/㎠']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p792-t1"
+   ],
+   "inputs": [
+    "flange_type",
+    "diameter",
+    "quantity"
+   ],
+   "table_defects": {
+    "p792-t1": [
+     "newline_column:사용압력범위(Flange) 10.5㎏",
+     "newline_column:사용압력범위(Flange) 21㎏/㎠"
+    ]
+   },
+   "draft_reason": "플랜지 타입별로 참조하는 표가 다르고, 파싱 결과에서 압력별 특별인부 열 이름이 중복되어 기계적인 표 조회가 불가능합니다.",
+   "steps": [
+    "플랜지 타입에 따라 해당하는 표(1. Screwed Type, 2. Seal Welded Screwed Type, 3. Slip-on Flange Welded Type)를 선택한다.",
+    "구경과 사용압력범위에 해당하는 플랜트배관공과 특별인부의 단위당 품을 찾는다.",
+    "수량을 곱하여 총 품을 구한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-10-1/OPEN_BELT_CONVEYOR_설치",
+   "path": "data/drafts/specs/기계설비/13-10-1.json",
+   "title": "OPEN BELT CONVEYOR 설치('92년 보완)",
+   "source_pages": [
+    901,
+    902
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 3개 결함 없음, 입력 7개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p901-t0",
+    "p901-t1",
+    "p902-t0"
+   ],
+   "inputs": [
+    "work_type",
+    "belt_width",
+    "conveyor_length",
+    "is_portable",
+    "endless_material",
+    "endless_width",
+    "endless_count"
+   ],
+   "table_defects": {},
+   "draft_reason": "산출식을 통한 총 품 계산 후 비율 배분 방식과, 특정 조건(Belt Endless 작업만)일 때 표를 참조하는 방식이 혼재되어 있어 현재의 표준 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "작업 종류가 '전체 설치'인 경우, 길이에 따른 산출식을 적용하여 총 품(인)을 구한다.",
+    "길이가 5M 미만인 경우 5M로 계산한다.",
+    "총 품(인)을 공종별 품 배분표(p901-t0)의 비율에 따라 직종별로 배분한다.",
+    "Portable Belt conveyor인 경우 산출된 품의 50%를 적용한다.",
+    "작업 종류가 'Belt Endless 작업만'인 경우, 재질과 폭에 따라 p901-t1 또는 p902-t0에서 개소당 품을 찾아 작업 개소를 곱한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-11-2/Cooling_Tower_설치",
+   "path": "data/drafts/specs/기계설비/13-11-2.json",
+   "title": "Cooling Tower 설치",
+   "source_pages": [
+    850
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:검사 및 교정/단위', 'blank_cell:검사 및 교정/수량']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p906-t1"
+   ],
+   "inputs": [
+    "duration",
+    "base_area",
+    "surface_area",
+    "weight",
+    "eliminator_area",
+    "slate_area",
+    "filler_volume"
+   ],
+   "table_defects": {
+    "p906-t1": [
+     "blank_cell:검사 및 교정/단위",
+     "blank_cell:검사 및 교정/수량"
+    ]
+   },
+   "draft_reason": "공정별로 단위(일, ㎡, ton, ㎥)가 달라 각각의 물량을 입력받아 합산해야 하며, 검사 및 교정은 기술관리를 제외한 전 품의 10%로 계산하는 복합적인 구조이므로 단일 per_unit 모델로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "각 공정별로 해당하는 물량(일, ㎡, ton, ㎥)을 입력받아 표의 수량과 곱하여 품을 산출한다.",
+    "검사 및 교정 품은 기술관리를 제외한 나머지 모든 공정 품의 합계에 10%를 곱하여 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-11-3/Batcher_Plant_설치",
+   "path": "data/drafts/specs/기계설비/13-11-3.json",
+   "title": "Batcher Plant 설치",
+   "source_pages": [
+    851,
+    852
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['merged_row_label:비계공 | 수량 1.255 | 기계설비공']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p907-t0",
+    "p907-t1",
+    "p907-t2",
+    "p908-t0",
+    "p908-t1"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p907-t0": [
+     "merged_row_label:비계공 | 수량 1.255 | 기계설비공"
+    ],
+    "p907-t1": [
+     "blank_cell:(기술관리 및 뒷정리를 제외/수량"
+    ]
+   },
+   "draft_reason": "표의 파싱 결과가 행과 열이 섞여 있거나 여러 공정이 하나의 행 이름으로 뭉쳐 있어 자동 계산 모델을 적용하기 어렵습니다.",
+   "steps": [
+    "원문 표의 파싱 상태가 불규칙하여 자동 계산을 보류합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-11-5/공사별설치소모자재",
+   "path": "data/drafts/specs/기계설비/13-11-5.json",
+   "title": "공사별 설치 소모자재[참고]",
+   "source_pages": [
+    853,
+    854
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 2개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p909-t1",
+    "p910-t0"
+   ],
+   "inputs": [
+    "work_type",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "본 절은 노무 품셈이 아닌 공사별 소모자재의 기준량을 제시하는 참고용 표이며, 파싱 결과에 일부 품명이 누락되어 자동 계산 명세로 구성하기 부적합합니다.",
+   "steps": [
+    "본 절은 노무 품셈이 아닌 공사별 소모자재의 ton당 기준량을 제시하는 참고표입니다.",
+    "파싱 결과에 일부 품명이 누락되어 자동 계산 명세로 구성하지 않습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-2-4/전기아크용접_V형",
+   "path": "data/drafts/specs/기계설비/13-2-4.json",
+   "title": "강판 전기아크용접",
+   "source_pages": [
+    749
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:인 력(인) 특별\\n인부']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p805-t0"
+   ],
+   "inputs": [
+    "thickness",
+    "posture",
+    "weld_method",
+    "work_place",
+    "steel_type",
+    "quantity"
+   ],
+   "table_defects": {
+    "p805-t0": [
+     "newline_column:인 력(인) 특별\n인부"
+    ]
+   },
+   "draft_reason": "파싱된 표(p805-t0)의 열 이름 중 '인 력(인) 특별\\n인부'가 하향, 횡향, 입향에 대해 동일하게 중복 파싱되어 JSON 객체로 온전히 보존할 수 없으므로 자동 계산이 불가합니다.",
+   "steps": [
+    "표 p805-t0에서 두께와 자세에 따른 용접봉사용량, 인력, 소요전력을 찾는다.",
+    "작업효율(수동/자동, 공장/현장)을 인력에 나누어 보정한다.",
+    "물량을 곱하여 총 투입량을 구한다.",
+    "파싱된 표의 열 이름 중복으로 인해 자동 계산 명세 작성을 보류한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-2-5/예열",
+   "path": "data/drafts/specs/기계설비/13-2-5.json",
+   "title": "예열(Electric Resistance Heating)('92년 보완)",
+   "source_pages": [
+    808,
+    809
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:재질 단철/두 께 (inch) 1', 'blank_cell:재질 단철/두 께 (inch) 1½']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p808-t2",
+    "p809-t0",
+    "p809-t1"
+   ],
+   "inputs": [
+    "pipe_size",
+    "thickness",
+    "heating_method",
+    "quantity"
+   ],
+   "table_defects": {
+    "p809-t1": [
+     "blank_cell:재질 단철/두 께 (inch) 1",
+     "blank_cell:재질 단철/두 께 (inch) 1½",
+     "blank_cell:재질 단철/두 께 (inch) 2이상",
+     "blank_cell:재질 단철/두 께 (inch) ½이하",
+     "blank_cell:재질 탄소강/두 께 (inch) 1",
+     "blank_cell:재질 탄소강/두 께 (inch) 1½",
+     "blank_cell:재질 탄소강/두 께 (inch) 2이상",
+     "blank_cell:재질 탄소강/두 께 (inch) ½이하"
+    ]
+   },
+   "draft_reason": "표 파싱 결과에서 행과 열이 병합되거나 값이 열 이름으로 인식되는 등 구조가 심각하게 깨져 있어 자동 계산을 위한 정확한 값 추출이 불가능합니다.",
+   "steps": [
+    "입력된 파이프 규격과 두께에 따라 표에서 플랜트 용접공 품을 찾습니다.",
+    "Gas Heating일 경우 개소당 0.125인을 적용합니다.",
+    "개소 수를 곱하여 총 품을 계산합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-2-6/응력제거",
+   "path": "data/drafts/specs/기계설비/13-2-6.json",
+   "title": "응력제거",
+   "source_pages": [
+    753,
+    754,
+    755
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['merged_row_label:P\\nNo. 1 | 재질 탄소강', 'merged_row_label:P\\nNo. 3 | 재질 합금강 Cr¾%이하']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p809-t2",
+    "p810-t0",
+    "p810-t2",
+    "p811-t0",
+    "p811-t1"
+   ],
+   "inputs": [
+    "heating_method",
+    "quantity"
+   ],
+   "table_defects": {
+    "p809-t2": [
+     "merged_row_label:P\nNo. 1 | 재질 탄소강",
+     "merged_row_label:P\nNo. 3 | 재질 합금강 Cr¾%이하"
+    ],
+    "p810-t0": [
+     "merged_row_label:P\nNo. 6 | 재질 〃 Martensitic"
+    ]
+   },
+   "draft_reason": "파싱된 표의 행/열 구조가 심하게 병합되어 있어 기계적인 값 추출이 불가능하며, 1. Induction Heating Device 표의 직종이 명시되어 있지 않아 자동 계산을 구성하기 어렵습니다.",
+   "steps": [
+    "가열 방식(heating_method)에 따라 적용할 표가 다릅니다.",
+    "Induction Heating Device의 경우 p809-t2, p810-t0 표에서 재질과 두께에 따른 개소당 품을 찾습니다.",
+    "Ring Burner...의 경우 p810-t2, p811-t0 표에서 파이프 규격과 벽 두께에 따른 개소당 플랜트 용접공 품을 찾습니다.",
+    "Ring Burner... 방식이고 재질이 합금강 등인 경우, p811-t1 표에서 파이프 규격과 재질에 해당하는 할증률(%)을 찾아 기준 품에 가산합니다.",
+    "찾은 단위당 품에 물량(quantity)을 곱하여 총 품을 산출합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-4-2/철골가공조립",
+   "path": "data/drafts/specs/기계설비/13-4-2.json",
+   "title": "철골 가공조립('18년 보완)",
+   "source_pages": [
+    765
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 8개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p821-t0",
+    "p821-t1"
+   ],
+   "inputs": [
+    "work_type",
+    "punch_method",
+    "hole_diameter",
+    "anchor_diameter",
+    "quantity",
+    "poor_scaffolding",
+    "is_machine_installation",
+    "needs_steel_frame"
+   ],
+   "table_defects": {},
+   "draft_reason": "강판 구멍뚫기는 1일작업량 기준이고 앵커 볼트 설치는 개당 품 기준으로 계산 구조가 다르며, 하나의 명세로 통합하기 복잡하여 자동 계산에서 제외합니다.",
+   "steps": [
+    "작업 종류(강판 구멍뚫기, 앵커 볼트 설치)에 따라 계산 방식이 다름.",
+    "강판 구멍뚫기는 1일작업량 기준(인원/1일작업량으로 단위당 품 산출 필요), 앵커 볼트 설치는 개당 품 기준임.",
+    "하나의 명세로 통합하기 복잡하여 자동 계산에서 제외함."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-5-10/복수기설치",
+   "path": "data/drafts/specs/기계설비/13-5-10.json",
+   "title": "복수기 설치",
+   "source_pages": [
+    783
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:Condenser 내부소재 /단위', 'blank_cell:Condenser 내부소재 /수량']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p839-t1",
+    "p839-t2"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p839-t1": [
+     "blank_cell:Condenser 내부소재 /단위",
+     "blank_cell:Condenser 내부소재 /수량"
+    ]
+   },
+   "draft_reason": "작업 구분별로 적용 단위(인/일, 인/㎡, 조/ton, 조/대, 인/개 등)가 모두 달라 단일 물량 입력으로 계산할 수 없으며, 종속 계산(특정 항목 제외 후 15% 가산)이 포함되어 있어 자동 계산 모델로 단순화하기 어렵습니다.",
+   "steps": [
+    "작업 구분별로 단위(일, ㎡, ton, 대, 개)가 달라 개별 물량 산출이 필요하다.",
+    "Leak test 교정은 기술관리와 포장해체를 제외한 나머지 품의 15%를 가산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-5-2/보일러드럼설치",
+   "path": "data/drafts/specs/기계설비/13-5-2.json",
+   "title": "보일러 드럼 설치",
+   "source_pages": [
+    772,
+    773,
+    774
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 4개 결함 없음, 입력 1개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p828-t2",
+    "p829-t0",
+    "p830-t0",
+    "p830-t1"
+   ],
+   "inputs": [
+    "drum_weight"
+   ],
+   "table_defects": {},
+   "draft_reason": "세부 작업별로 적용 단위(㎥, 대, ton, ㎡, 개 등)가 달라 단일 물량 입력으로 계산할 수 없고, 검사 및 교정 등 복합 계산이 포함되어 자동 계산 모델로 표현하기 어렵습니다.",
+   "steps": [
+    "세부 작업별로 단위(㎥, 대, ton, ㎡, 개 등)가 달라 각각의 물량을 산출하여 곱해야 함.",
+    "검사 및 교정은 특정 작업 품을 제외한 10%로 계산해야 함."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-5-8/터빈설치",
+   "path": "data/drafts/specs/기계설비/13-5-8.json",
+   "title": "터빈 설치",
+   "source_pages": [
+    834,
+    835,
+    836,
+    837
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "표·입력 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "터빈 설치 작업은 세부 작업 구분이 매우 많고, 각 작업별로 용량에 따른 직종별 투입 인원이 표로 제시되어 있어, 단일 계산식으로 자동화하기보다는 내역서 작성 시 개별 항목을 조회하여 적용하는 것이 적합합니다.",
+   "steps": [
+    "터빈 용량(MW)과 세부 작업 구분에 따라 표에서 직종별 인원을 찾아 적용한다.",
+    "검사 및 교정은 포장해체, 기술관리를 제외한 모든 품의 10%를 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-5-9/발전기설치",
+   "path": "data/drafts/specs/기계설비/13-5-9.json",
+   "title": "발전기 설치",
+   "source_pages": [
+    781,
+    782,
+    783
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['empty_values']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p837-t1",
+    "p838-t0"
+   ],
+   "inputs": [
+    "capacity"
+   ],
+   "table_defects": {
+    "p837-t1": [
+     "empty_values"
+    ],
+    "p838-t0": [
+     "empty_values"
+    ]
+   },
+   "draft_reason": "작업구분별로 적용 단위(인/일, 인/㎥, 인/대 등)가 다르고, 각 세부 작업의 물량을 개별적으로 입력받아 합산해야 하며, '검사 및 교정'과 같은 특수 계산 규칙이 포함되어 있어 단순 단위당 품 계산으로 자동화하기 어렵습니다.",
+   "steps": [
+    "발전기 용량에 따라 각 세부 작업(기술관리, 포장해체 등)의 단위당 품을 표에서 찾는다.",
+    "각 세부 작업별로 해당하는 물량(일, ㎥, 대 등)을 곱하여 품을 산출한다.",
+    "검사 및 교정 품은 기술관리, 포장해체를 제외한 나머지 작업 품 합계의 10%로 계산하여 합산한다.",
+    "부대기기 및 부대배관 작업 품은 별도로 계상하여 합산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-6-11/Roller_Gate_Guide_Metal_제작",
+   "path": "data/drafts/specs/기계설비/13-6-11.json",
+   "title": "Roller Gate Guide Metal 제작",
+   "source_pages": [
+    814,
+    815
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 3개 결함 없음, 입력 1개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p870-t1",
+    "p871-t0",
+    "p871-t1"
+   ],
+   "inputs": [
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과의 표 구조가 심하게 깨져 있고, 동일 직종이 여러 공정에 나뉘어 있어 단순 단위당 품 계산으로 자동화하기 어렵습니다.",
+   "steps": [
+    "제작 물량(ton)에 표의 직종별 수량을 곱하여 산출한다.",
+    "동일 직종이 여러 공정에 나뉘어 있으므로 모두 합산한다.",
+    "검사는 전체 인력품의 7%로 별도 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-6-12/Roller_Gate_Guide_Metal_설치",
+   "path": "data/drafts/specs/기계설비/13-6-12.json",
+   "title": "Roller Gate Guide Metal 설치",
+   "source_pages": [
+    871,
+    872,
+    873
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 3개 결함 없음, 입력 1개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p871-t2",
+    "p872-t0",
+    "p873-t0"
+   ],
+   "inputs": [
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "제공된 파싱 결과에서 공정별 행 이름이 하나로 뭉쳐져 있고, 동일 직종이 여러 번 중복 등장하여 기계적인 표 룩업 및 합산이 불가능합니다.",
+   "steps": [
+    "파싱된 표의 행 이름이 여러 공정으로 병합되어 있고, 동일 직종이 여러 번 중복 등장하여 기계적인 합산이 불가능합니다.",
+    "원문 표를 참조하여 각 공정별 직종 수량을 직접 합산한 후 물량(ton)을 곱하여 산출해야 합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-6-14/Tainter_Gate_Guide_Metal_설치",
+   "path": "data/drafts/specs/기계설비/13-6-14.json",
+   "title": "Tainter Gate Guide Metal 설치",
+   "source_pages": [
+    818,
+    819
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 3개 결함 없음, 입력 1개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p874-t1",
+    "p875-t0",
+    "p875-t1"
+   ],
+   "inputs": [
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에서 표의 행 이름이 중복되거나 여러 행이 하나의 긴 문자열로 뭉쳐져 있어, 직종별 수량을 정확히 매핑하고 합산하는 자동 계산 모델을 구성하기 어렵습니다.",
+   "steps": [
+    "단위(ton)당 공정별 직종 수량을 표에서 확인한다.",
+    "전체 물량(ton)을 곱하여 총 투입 인력을 산출한다.",
+    "소모자재 역시 단위당 수량에 물량을 곱하여 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-6-8/공정별제작품",
+   "path": "data/drafts/specs/기계설비/13-6-8.json",
+   "title": "Spiral Casing 설치",
+   "source_pages": [
+    808,
+    809,
+    810
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 4개 결함 없음, 입력 1개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p864-t0",
+    "p865-t0",
+    "p866-t0",
+    "p866-t1"
+   ],
+   "inputs": [
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱된 표의 행 이름이 여러 공정으로 병합되어 있고, 일부 표(p866-t0, p866-t1)의 수량 값이 원문과 다르게 모두 동일한 값으로 잘못 파싱되어 자동 계산을 구성할 수 없습니다.",
+   "steps": [
+    "물량(ton)에 표의 직종별 수량 및 소모자재 수량을 곱하여 산출해야 하나, 파싱 결과 오류로 자동 계산이 불가합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-7-14/혼선로및전로본체조립설치",
+   "path": "data/drafts/specs/기계설비/13-7-14.json",
+   "title": "혼선로 및 전로 본체 조립 설치",
+   "source_pages": [
+    829
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 1개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p885-t2"
+   ],
+   "inputs": [
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "표에 제시된 품의 단위가 인/일, 인/㎡, 인/기, 인/대, 인/ton으로 다양하여 단일 물량으로 계산할 수 없으며, 파싱 결과의 표 구조도 불량하여 자동 계산 모델을 구성하기 어렵습니다.",
+   "steps": [
+    "표에 제시된 품의 단위가 인/일, 인/㎡, 인/기, 인/대, 인/ton으로 다양하여 단일 물량으로 계산할 수 없습니다.",
+    "파싱 결과의 표 구조가 작업구분과 비고를 모두 병합하여 출력하는 등 불량하여 자동 계산 모델을 구성하기 어렵습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-7-15/O2, N2 Spherical Gas Holder 조립설치",
+   "path": "data/drafts/specs/기계설비/13-7-15.json",
+   "title": "O2, N2 Spherical Gas Holder 조립설치",
+   "source_pages": [
+    830
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p886-t0"
+   ],
+   "inputs": [
+    "quantity",
+    "area",
+    "weight"
+   ],
+   "table_defects": {},
+   "draft_reason": "하나의 표 안에서 작업구분별로 적용되는 물량 단위(기, ㎡, ton)가 달라 단일 물량 입력으로 계산할 수 없으며, 파싱된 표 구조가 병합되어 있어 자동 계산 모델을 적용하기 어렵습니다.",
+   "steps": [
+    "작업구분별로 적용되는 단위(기, ㎡, ton)가 다르므로, 각각의 물량을 해당 품에 곱하여 산출합니다.",
+    "검사 시험 및 교정 품은 산출된 본 품의 10%를 가산합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-7-19/Mill Line 기기류 조립설치",
+   "path": "data/drafts/specs/기계설비/13-7-19.json",
+   "title": "Mill Line 기기류 조립설치",
+   "source_pages": [
+    832
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 4개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p888-t0"
+   ],
+   "inputs": [
+    "equipment_type",
+    "weight",
+    "surface_area",
+    "duration_days"
+   ],
+   "table_defects": {},
+   "draft_reason": "작업구분별로 적용 단위(인/일, 인/㎡, 인/ton)가 다르고, 파싱 결과에서 직종 이름이 중복되어 자동 계산 모델을 구성하기 어렵습니다.",
+   "steps": [
+    "작업구분별(기술관리, 표면손질, 가조립 및 해체, 조립설치)로 단위(일, ㎡, ton)에 맞는 물량을 곱하여 품을 산출한다.",
+    "시험 및 교정은 기술관리를 제외한 나머지 품의 10%를 가산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-7-21/전기집진기설치",
+   "path": "data/drafts/specs/기계설비/13-7-21.json",
+   "title": "전기집진기 설치(Electric Precipitator)",
+   "source_pages": [
+    889,
+    890
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G6_policy_or_explanatory",
+   "category_basis": [
+    "표·입력 없음"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "제공된 파싱 결과에서 표의 1~5번 작업구분이 하나의 긴 문자열로 병합되어 행 이름으로 인식되었고, 동일한 직종(예: 비계공)에 대해 여러 개의 수량이 중복 매핑되어 있어 정상적인 2차원 표(JSON 객체)로 구성할 수 없습니다.",
+   "steps": [
+    "파싱된 표의 행 이름 병합 및 직종 중복 문제로 인해 자동 계산 모델을 구성할 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/13-8-2/폐열보일러설치",
+   "path": "data/drafts/specs/기계설비/13-8-2.json",
+   "title": "폐열보일러 설치('02년 신설, '03, '05년 보완)",
+   "source_pages": [
+    893,
+    894
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:◦ 검사 및 교정 - 외관검/기술관리, 포장해체를 제외한']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p893-t0",
+    "p894-t0"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p893-t0": [
+     "blank_cell:◦ 검사 및 교정 - 외관검/기술관리, 포장해체를 제외한"
+    ]
+   },
+   "draft_reason": "공정별로 단위가 다르고 물량을 개별 입력해야 하며, 검사/교정 품이 타 공정 품의 합계에 의존하고, 장비 사용시간은 현장 여건에 따라 별도 산정해야 하므로 일괄 자동 계산이 어렵습니다.",
+   "steps": [
+    "각 공정별 물량을 산출하여 표의 단위당 품을 곱한다.",
+    "검사 및 교정 품은 기술관리, 포장해체를 제외한 나머지 공정 총 품의 10%로 산정한다.",
+    "장비는 폐열보일러 1대당 기준 대수를 참고하되, 실제 사용시간은 현장 여건에 따라 별도 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/3-1-1/일반마감배관보온",
+   "path": "data/drafts/specs/기계설비/3-1-1.json",
+   "title": "일반마감 배관보온",
+   "source_pages": [
+    665
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 7개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p721-t0"
+   ],
+   "inputs": [
+    "pipe_size",
+    "insulation_type",
+    "quantity",
+    "is_machine_room",
+    "is_grooved_joint",
+    "vinyl_wrapping",
+    "finish_material"
+   ],
+   "table_defects": {},
+   "draft_reason": "비고란에 명시된 여러 시공량 증감 조건(기계실, 그루브조인트, 비닐감기, 마감재 변경 등)이 중복 적용될 때의 누적 연산 방식(합산인지 곱연산인지)이 불분명하며, 이를 적용하기 위한 계수표가 원문에 존재하지 않아 자동 계산 모델로 표현하기 어렵습니다.",
+   "steps": [
+    "입력된 배관규격과 보온재 종류/두께에 따라 p721-t0에서 기준 시공량을 찾는다.",
+    "비고란의 조건(기계실, 그루브조인트, 비닐감기, 마감재)에 해당하는 시공량 증감 비율을 확인한다.",
+    "조건이 여러 개일 경우 누적 계산 방식(합산/곱연산)을 현장 상황에 맞게 판단하여 최종 일당시공량을 산출한다.",
+    "물량을 최종 일당시공량으로 나누어 작업일수를 구한다.",
+    "작업일수에 보온공 2인, 보통인부 1인을 곱하여 총 투입 인·일을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/3-3-2/원형덕트보온",
+   "path": "data/drafts/specs/기계설비/3-3-2.json",
+   "title": "원형덕트 보온('14, '20년 보완)",
+   "source_pages": [
+    724
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p724-t1"
+   ],
+   "inputs": [
+    "insulation_thickness",
+    "insulation_material",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "표의 행이 직종(보온공, 보통인부)과 보온두께(25이하, 50이하)를 동시에 나타내고 있어, 전체 작업조가 고정인지 두께별로 투입 인원이 다른지 원문만으로 확정할 수 없어 자동 계산을 보류합니다.",
+   "steps": [
+    "표의 행이 직종(보온공, 보통인부)과 보온두께(25이하, 50이하)를 동시에 나타내고 있어 작업조 구성이 불명확하므로 자동 계산을 보류한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/8-1-1/냉동기반입",
+   "path": "data/drafts/specs/기계설비/8-1-1.json",
+   "title": "냉동기 반입",
+   "source_pages": [
+    689
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:1회 특별\\n인부', 'newline_column:2회 특별\\n인부']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p745-t0"
+   ],
+   "inputs": [
+    "capacity",
+    "work_condition",
+    "quantity"
+   ],
+   "table_defects": {
+    "p745-t0": [
+     "newline_column:1회 특별\n인부",
+     "newline_column:2회 특별\n인부",
+     "newline_column:가조립 특별\n인부"
+    ]
+   },
+   "draft_reason": "파싱된 표의 열 이름(예: '1회 특별\\n인부')이 여러 층에 대해 중복되어 고유한 열 식별자로 사용할 수 없어 자동 계산이 불가합니다.",
+   "steps": [
+    "파싱된 표의 열 이름 중복으로 인해 자동 계산이 불가하므로, 원문 표를 직접 참조하여 품을 산정합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/8-2-3/공기조화기설치",
+   "path": "data/drafts/specs/기계설비/8-2-3.json",
+   "title": "공기조화기(Air Handling Unit) 설치",
+   "source_pages": [
+    694,
+    695
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p750-t1",
+    "p751-t0"
+   ],
+   "inputs": [
+    "unit_type",
+    "capacity",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에서 팬코일유닛의 상치형과 천정형 구분이 누락되고 행 이름이 중복되어, 단일 표로 구성하여 자동 계산하기 어렵습니다.",
+   "steps": [
+    "공기조화기 종류와 규격에 따라 표에서 기계설비공과 보통인부 품을 찾는다.",
+    "수량을 곱하여 총 품을 구한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/8-2-5/전열교환기설치",
+   "path": "data/drafts/specs/기계설비/8-2-5.json",
+   "title": "전열교환기 설치('20년 신설)",
+   "source_pages": [
+    696
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 0개 결함 없음, 입력 2개"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [
+    "capacity",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과 텍스트에 직종명(기계설비공, 보통인부)과 800이하 풍량 데이터가 누락되어 표를 구성할 수 없습니다.",
+   "steps": [
+    "파싱 결과 텍스트에 직종명(기계설비공, 보통인부)과 800이하 풍량 데이터가 누락되어 표를 구성할 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/8-3-3/가스보일러(가정용)설치",
+   "path": "data/drafts/specs/기계설비/8-3-3.json",
+   "title": "가스보일러(가정용) 설치('92년 신설, '16, '20년 보완)",
+   "source_pages": [
+    697
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 0개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [
+    "capacity",
+    "install_type",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과 표(p753-t0)에 직종 이름(보일러공, 보통인부)과 30,000 Kcal/hr 열이 누락되어 있고, 행 이름이 중복되어 계산식을 구성할 수 없습니다.",
+   "steps": [
+    "파싱 결과에 직종 이름(보일러공, 보통인부)과 30,000 Kcal/hr 열이 누락되어 단위당 품을 계산할 수 없습니다.",
+    "바닥설치형인 경우 본 품에 15%를 감산합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/기계설비/8-6-1/로터리오일버너",
+   "path": "data/drafts/specs/기계설비/8-6-1.json",
+   "title": "로터리 오일 버너",
+   "source_pages": [
+    700
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:로터리오일버너\\n(반자동식) 기계설비공', 'newline_column:로터리오일버너\\n(반자동식) 특별인부\\n']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p756-t0"
+   ],
+   "inputs": [
+    "motor_power",
+    "burner_type",
+    "quantity"
+   ],
+   "table_defects": {
+    "p756-t0": [
+     "newline_column:로터리오일버너\n(반자동식) 기계설비공",
+     "newline_column:로터리오일버너\n(반자동식) 특별인부\n",
+     "newline_column:로터리오일버너\n(수동식) 기계설비공\n",
+     "newline_column:로터리오일버너\n(수동식) 특별인부\n(",
+     "newline_column:로터리오일버너\n(전자동식)(on of",
+     "newline_column:로터리오일버너\n(전자동식)(비례) 기"
+    ]
+   },
+   "draft_reason": "파싱된 표 데이터에 전동기 전력(kW) 규격(0.4이하 등)이 누락되어 있어, 규격에 따른 품을 자동으로 찾을 수 없습니다.",
+   "steps": [
+    "전동기 전력(kW)과 버너 종류에 따라 표에서 기계설비공과 특별인부의 품을 찾는다.",
+    "파싱된 표에 전동기 전력 규격이 누락되어 있어 자동 계산이 불가하다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/1-1-1/비탈면보강공",
+   "path": "data/drafts/specs/유지관리/1-1-1.json",
+   "title": "비탈면 보강공('20년 신설, '25년 보완)",
+   "source_pages": [
+    857,
+    858
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 3개 결함 없음, 입력 0개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p913-t0",
+    "p913-t1",
+    "p913-t2"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "천공 작업의 인력/장비 편성은 타 부문(공통 3-7-5)을 참조해야 하며, 보강재 조립(ton)과 그라우팅(㎥) 등 서로 다른 단위의 독립적인 작업이 한 절에 혼재되어 있어 단일 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "천공 작업의 인력 및 장비 편성은 공통부문 3-7-5를 참조해야 합니다.",
+    "보강재 조립(ton)과 그라우팅(㎥)은 별도의 단위와 일당시공량을 가지므로 개별 계산이 필요합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/1-3-8/교량받침교체",
+   "path": "data/drafts/specs/유지관리/1-3-8.json",
+   "title": "교량받침 교체('21년 신설)",
+   "source_pages": [
+    870,
+    871
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 3개 결함 없음, 입력 4개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p926-t0",
+    "p926-t1",
+    "p927-t0"
+   ],
+   "inputs": [
+    "bearing_weight",
+    "pier_height",
+    "quantity",
+    "scaffold_installed"
+   ],
+   "table_defects": {},
+   "draft_reason": "시공량은 중량과 높이의 2차원 참조이고, 작업조는 중량에 따른 1차원 참조이며, 원문 표가 두 개(p926-t0, p926-t1)로 분리되어 있어 현재의 adjusted_daily_crew 모델 파라미터로 완벽히 표현하기 어렵습니다.",
+   "steps": [
+    "입력받은 bearing_weight에 따라 p926-t0 또는 p926-t1 표를 선택한다.",
+    "선택한 표에서 bearing_weight 행과 pier_height 열이 교차하는 값으로 일일 시공량(개)을 찾는다.",
+    "동일한 표의 bearing_weight 행에서 특별인부, 보통인부, 용접공, 크레인, 고소작업차의 기준 수량을 찾는다.",
+    "scaffold_installed가 true이면 고소작업차 수량에서 1을 뺀다.",
+    "작업일수 = quantity ÷ 일일 시공량(개)으로 구한다.",
+    "직종별 인·일 및 장비 대·일 = 작업일수 × 조정된 수량으로 구한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/1-3-9/교량신축이음교체",
+   "path": "data/drafts/specs/유지관리/1-3-9.json",
+   "title": "교량신축이음 교체",
+   "source_pages": [
+    871,
+    872
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p927-t1"
+   ],
+   "inputs": [
+    "cut_width",
+    "blocked_lanes",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "일일 시공량이 단일 값이 아닌 범위(예: 3.0~4.0m)로 제시되어 있어 자동 계산을 위한 정확한 일일 시공량 확정이 불가능합니다.",
+   "steps": [
+    "표에서 절단폭과 차단 차로 수에 따른 수량(인원, 장비 대수)과 시공량(m)을 확인한다.",
+    "시공량이 단일 값이 아닌 범위(예: 3.0~4.0m)로 제시되어 있어, 현장 여건에 맞는 일일 시공량을 별도로 결정해야 한다.",
+    "결정된 일일 시공량을 바탕으로 작업일수를 산정하고, 총 투입 인력 및 장비를 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/2-1-10/소파보수",
+   "path": "data/drafts/specs/유지관리/2-1-10.json",
+   "title": "소파보수(도로복구)",
+   "source_pages": [
+    879,
+    880
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 5개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p935-t2",
+    "p935-t4",
+    "p936-t0",
+    "p936-t1",
+    "p936-t2"
+   ],
+   "inputs": [
+    "site_type",
+    "area_per_location",
+    "total_area"
+   ],
+   "table_defects": {},
+   "draft_reason": "현장 여건(A, B, C Type)에 따라 시공량 할증계수를 찾는 면적 구간 기준표가 달라져, 단일 입력으로 여러 표를 조건부 참조해야 하므로 현재의 adjusted_daily_crew 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "p935-t4를 참조하여 현장 여건에 따른 Type(A, B, C)을 결정한다.",
+    "p935-t2에서 해당 Type의 기준 시공량과 작업조 인원/장비 대수를 찾는다.",
+    "결정된 Type에 따라 p936-t0(A), p936-t1(B), p936-t2(C) 중 하나를 선택하여 개소별 평균 시공면적에 해당하는 시공량 할증계수를 찾는다.",
+    "일당시공량 = 기준 시공량 × 시공량 할증계수",
+    "작업일수 = 총 시공면적 ÷ 일당시공량",
+    "직종별 인·일 및 장비 대·일 = 작업일수 × 작업조 투입량"
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/2-1-11/맨홀보수",
+   "path": "data/drafts/specs/유지관리/2-1-11.json",
+   "title": "맨홀보수('20년 보완)",
+   "source_pages": [
+    880
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 5개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p936-t3",
+    "p936-t4"
+   ],
+   "inputs": [
+    "manhole_type",
+    "quantity",
+    "raise_height",
+    "internal_plastering",
+    "other_cutter"
+   ],
+   "table_defects": {},
+   "draft_reason": "일당 작업조 형태이나, 인상높이에 따른 할증이 전체 시공량이 아닌 인력품에만 가산(%)되므로 현재의 adjusted_daily_crew 모델 파라미터로 표현할 수 없습니다.",
+   "steps": [
+    "맨홀 종류에 따른 일당 시공량을 확인한다.",
+    "물량을 일당 시공량으로 나누어 작업일수를 구한다.",
+    "작업일수에 직종별 인원 및 장비 대수를 곱하여 기본 품을 구한다.",
+    "인상높이에 따른 할증률을 인력품에만 가산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/2-1-15/차선도색",
+   "path": "data/drafts/specs/유지관리/2-1-15.json",
+   "title": "차선도색('08, '14, '16, '17, '20, '25, '26년 보완)",
+   "source_pages": [
+    882,
+    883,
+    884
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:시공량(㎡) 문자,\\n기호', 'newline_column:시공량(㎡) 횡단보도,\\n주차장']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p938-t1",
+    "p938-t2",
+    "p939-t0",
+    "p939-t1",
+    "p940-t2"
+   ],
+   "inputs": [
+    "method",
+    "line_type",
+    "quantity",
+    "surface_obstacle"
+   ],
+   "table_defects": {
+    "p938-t1": [
+     "newline_column:시공량(㎡) 문자,\n기호",
+     "newline_column:시공량(㎡) 횡단보도,\n주차장"
+    ],
+    "p938-t2": [
+     "blank_cell:비고/- 노면에 표지병 등이 설치"
+    ],
+    "p939-t1": [
+     "newline_column:시공량(㎡) 문자,\n기호",
+     "newline_column:시공량(㎡) 횡단보도,\n주차장"
+    ],
+    "p940-t2": [
+     "newline_column:시공량(㎡) 문자,\n기호",
+     "newline_column:시공량(㎡) 횡단보도,\n주차장"
+    ]
+   },
+   "draft_reason": "하위 공법별로 표가 나뉘어 있고, 일부 표(수용성형 페인트 수동식)의 인원 및 시공량 데이터가 파싱 결과에서 누락되어 자동 계산 모델을 구성하기 어렵습니다.",
+   "steps": [
+    "공법(method)에 따라 해당하는 표를 선택한다.",
+    "도색 종류(line_type)에 맞는 일당 시공량을 찾는다.",
+    "표지병 등으로 인한 작업능률 저하 시 시공량을 10% 감산한다.",
+    "물량을 시공량으로 나누어 작업일수를 구하고, 인원 및 장비 수량에 곱하여 총 투입량을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/2-1-19/현장가열표층재생공법",
+   "path": "data/drafts/specs/유지관리/2-1-19.json",
+   "title": "현장가열 표층재생공법",
+   "source_pages": [
+    886
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G7_source_leaves_rule_open",
+   "category_basis": [
+    "단계/사유에 '범위 내·까지' 문구"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p942-t0"
+   ],
+   "inputs": [
+    "quantity",
+    "paving_thickness",
+    "surface_temp"
+   ],
+   "table_defects": {},
+   "draft_reason": "인력 없이 7종의 장비로만 구성된 작업조이며, 팁(날) 재료량 별도 산출 및 온도에 따른 모호한 연료 할증 규정(50% 범위 내) 등이 포함되어 있어 현재의 단일 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "물량(㎡)을 일당 시공량(2,800㎡)으로 나누어 작업일수를 구한다.",
+    "작업일수에 각 장비 1대를 곱하여 장비별 투입 대·일을 산출한다.",
+    "물량 100㎡당 팁(날) 0.7개를 곱하여 팁(날) 소요량을 산출한다.",
+    "현장노면온도가 25℃ 미만인 경우 예열연료를 최대 50% 범위 내에서 가산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/2-1-20/재래난간철거공",
+   "path": "data/drafts/specs/유지관리/2-1-20.json",
+   "title": "재래난간 철거공",
+   "source_pages": [
+    886,
+    887
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p943-t0"
+   ],
+   "inputs": [
+    "part",
+    "material",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "표의 파싱 결과(p942-t1)가 다차원 구조를 띠고 있어 행/열 이름 중복 없이 JSON 객체로 매핑하기 어렵고, 자동 계산 모델에 직접 적용하기 어렵습니다.",
+   "steps": [
+    "입력된 구분(횡재부/속주)과 규격(강재난간 등)에 따라 p942-t1에서 배치인원과 시공량을 찾는다.",
+    "작업일수 = 철거 물량 ÷ 시공량으로 구한다.",
+    "직종별 인·일 = 작업일수 × 배치인원으로 구한다.",
+    "횡재부의 경우 p943-t0에서 규격에 맞는 산소와 아세틸렌 사용량을 찾아 물량(10m당)에 비례하여 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/2-1-8/소파보수(표층)",
+   "path": "data/drafts/specs/유지관리/2-1-8.json",
+   "title": "소파보수(표층)('20년 신설)",
+   "source_pages": [
+    933,
+    934
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['merged_row_label:로더(타이어)+소형노면파쇄기']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p933-t0",
+    "p933-t2",
+    "p933-t3",
+    "p933-t4",
+    "p934-t0",
+    "p933-t1"
+   ],
+   "inputs": [
+    "site_type",
+    "area",
+    "avg_area_per_spot",
+    "overlay_only"
+   ],
+   "table_defects": {
+    "p933-t0": [
+     "merged_row_label:로더(타이어)+소형노면파쇄기"
+    ]
+   },
+   "draft_reason": "장비가 여러 종류 투입되고, Type별로 시공량 할증계수 표가 분리되어 있으며, 덧씌우기 시 시공량 25% 증가 등 복합적인 계산 규칙이 있어 현재의 adjusted_daily_crew 단일 스키마로 표현하기 어렵습니다.",
+   "steps": [
+    "1. 현장 여건(A/B/C Type)에 따라 p933-t0에서 기준 일일시공량과 작업조(인원, 장비)를 결정한다.",
+    "2. 개소별 평균 시공면적에 따라 해당 Type의 할증계수 표(p933-t3, p933-t4, p934-t0)에서 할증계수를 찾아 기준 시공량에 곱한다.",
+    "3. 절삭없이 덧씌우는 경우 시공량을 25% 증가시키고, 포장공 1인과 파쇄기 1대를 작업조에서 제외한다.",
+    "4. 총 시공면적을 최종 일일시공량으로 나누어 작업일수를 구하고, 작업조에 곱해 총 투입량을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/2-1-9/소파보수",
+   "path": "data/drafts/specs/유지관리/2-1-9.json",
+   "title": "소파보수(포장복구)('08년 신설, '09, '11, '14, '20년 보완)",
+   "source_pages": [
+    878
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['merged_row_label:포장공 보통인부 (수량 1)', 'merged_row_label:포장공 보통인부 (수량 3)']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p934-t1",
+    "p934-t3",
+    "p934-t4",
+    "p935-t0",
+    "p935-t1"
+   ],
+   "inputs": [
+    "repair_type",
+    "total_area"
+   ],
+   "table_defects": {
+    "p934-t1": [
+     "merged_row_label:포장공 보통인부 (수량 1)",
+     "merged_row_label:포장공 보통인부 (수량 3)",
+     "newline_column:A-Type 시공량\n(㎡)",
+     "newline_column:B-Type 시공량\n(㎡)",
+     "newline_column:C-Type 시공량\n(㎡)"
+    ]
+   },
+   "draft_reason": "파싱된 표(p934-t1)에서 '포장공'과 '보통인부' 직종이 하나의 행 이름('포장공 보통인부')으로 병합되어 있어, 직종별 인원을 정확히 분리하여 자동 계산 모델에 매핑할 수 없습니다.",
+   "steps": [
+    "파싱된 표(p934-t1)에서 '포장공'과 '보통인부' 직종이 '포장공 보통인부'로 병합되어 있어 자동 계산이 불가능합니다.",
+    "수동으로 Type별 기준 시공량과 수량을 확인하십시오.",
+    "개소별 평균 시공면적에 따라 해당 Type의 할증계수 표(p934-t4, p935-t0, p935-t1)에서 계수를 찾습니다.",
+    "일당 시공량 = 기준 시공량 × 할증계수",
+    "작업일수 = 총 시공면적 ÷ 일당 시공량",
+    "직종별 인·일 및 장비 대·일 = 작업일수 × 수량"
+   ]
+  },
+  {
+   "id": "2026-정오표1차/유지관리/3-2-12/석면건축자재해체",
+   "path": "data/drafts/specs/유지관리/3-2-12.json",
+   "title": "석면건축자재 해체('09년 신설, '11년 보완)",
+   "source_pages": [
+    917
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p973-t0"
+   ],
+   "inputs": [
+    "material_type",
+    "spray_surface",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에 표의 직종 이름(석면해체공, 보통인부)과 뿜칠재 열이 누락되어 단위당 품을 계산할 수 없습니다.",
+   "steps": [
+    "파싱 결과에 직종 이름(석면해체공, 보통인부)과 뿜칠재 열이 누락되어 자동 계산이 불가능합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/1-8-9/차선도색",
+   "path": "data/drafts/specs/토목/1-8-9.json",
+   "title": "차선도색('08, '14, '16, '17, '20, '25, '26년 보완)",
+   "source_pages": [
+    322,
+    323,
+    324
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['merged_row_label:특별인부 보통인부', 'newline_column:시공량(㎡) 문자,\\n기호']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p378-t3",
+    "p379-t0",
+    "p379-t1",
+    "p380-t0",
+    "p380-t1",
+    "p380-t2",
+    "p380-t3"
+   ],
+   "inputs": [
+    "work_type",
+    "line_type",
+    "quantity",
+    "has_road_stud",
+    "pre_cleaning"
+   ],
+   "table_defects": {
+    "p378-t3": [
+     "merged_row_label:특별인부 보통인부",
+     "newline_column:시공량(㎡) 문자,\n기호",
+     "newline_column:시공량(㎡) 횡단보도,\n주차장"
+    ],
+    "p379-t0": [
+     "blank_cell:비고/- 노면에 표지병 등이 설치"
+    ],
+    "p379-t1": [
+     "merged_row_label:특별인부 보통인부"
+    ],
+    "p380-t0": [
+     "merged_row_label:특별인부 보통인부",
+     "newline_column:시공량(㎡) 문자,\n기호",
+     "newline_column:시공량(㎡) 횡단보도,\n주차장"
+    ],
+    "p380-t3": [
+     "merged_row_label:특별인부 보통인부",
+     "newline_column:시공량(㎡) 문자,\n기호",
+     "newline_column:시공량(㎡) 횡단보도,\n주차장"
+    ]
+   },
+   "draft_reason": "하위 작업(밑그림, 수용성, 융착식 등)이 5개로 나뉘어 있고 각각 적용할 표와 공구손료 비율이 다르며, 표지병 설치 시 시공량 10% 이내 감산 등 복합적인 판단이 필요하여 단일 모델로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "작업 종류(work_type)에 해당하는 표에서 일당 인원, 장비, 시공량을 찾는다.",
+    "표지병 등이 설치된 경우(has_road_stud) 시공량을 최대 10% 감산한다.",
+    "물량(quantity)을 시공량으로 나누어 작업일수를 구하고, 인원/장비에 곱하여 총 투입량을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/1-9-1/방음벽설치",
+   "path": "data/drafts/specs/토목/1-9-1.json",
+   "title": "방음벽 설치('08, '17, '21년 보완)",
+   "source_pages": [
+    384,
+    385
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:11m 이하/3m', 'blank_cell:11m 이하/4m']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p384-t0",
+    "p384-t1",
+    "p384-t2"
+   ],
+   "inputs": [
+    "work_type",
+    "anchor_type",
+    "post_method",
+    "post_height",
+    "post_spacing",
+    "panel_area",
+    "high_altitude_vehicle_needed",
+    "anchor_quantity",
+    "post_quantity",
+    "panel_quantity"
+   ],
+   "table_defects": {
+    "p384-t1": [
+     "blank_cell:11m 이하/3m",
+     "blank_cell:11m 이하/4m",
+     "blank_cell:9m 이하/3m",
+     "blank_cell:9m 이하/4m"
+    ],
+    "p384-t2": [
+     "blank_cell:11m이하/3㎡ 이하",
+     "blank_cell:11m이하/4㎡ 이하",
+     "blank_cell:7m이하/4㎡ 이하",
+     "blank_cell:9m이하/3㎡ 이하",
+     "blank_cell:9m이하/4㎡ 이하"
+    ]
+   },
+   "draft_reason": "앵커볼트, 지주, 방음판 설치 등 세 가지 독립된 작업의 일당 시공량과 작업조가 각각 달라 단일 모델로 통합 계산하기 어렵습니다.",
+   "steps": [
+    "작업 종류(앵커볼트, 지주, 방음판)에 따라 적용할 표와 작업조가 다릅니다.",
+    "선택한 작업의 표에서 조건에 맞는 일당 시공량을 찾습니다.",
+    "물량을 일당 시공량으로 나누어 작업일수를 구하고, 해당 작업조 인원 및 장비 대수를 곱하여 산정합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/3-1-2/터널여굴량",
+   "path": "data/drafts/specs/토목/3-1-2.json",
+   "title": "터널 여굴(餘掘)량('07, '13, '17년 보완)",
+   "source_pages": [
+    337,
+    338
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G7_source_leaves_rule_open",
+   "category_basis": [
+    "단계/사유에 '범위 내·까지' 문구"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p393-t2"
+   ],
+   "inputs": [
+    "tunnel_part",
+    "excavation_method",
+    "rock_condition",
+    "tunnel_size"
+   ],
+   "table_defects": {},
+   "draft_reason": "여굴량이 고정값이 아닌 범위(예: 12~19cm)로 제시되어 있고, 현장 여건에 따른 추가 적용(20% 범위 내) 등 판단이 필요하여 자동 계산이 어렵습니다.",
+   "steps": [
+    "터널 부위별 여굴두께 기준을 표에서 확인한다.",
+    "암질 조건 및 터널 단면 크기에 따라 추가 여굴(20% 범위 내) 또는 예외 기준(5㎝ 이내)을 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/3-2-1/싸이클시간",
+   "path": "data/drafts/specs/토목/3-2-1.json",
+   "title": "터널굴착 1발파당 싸이클 시간(Cycle Time)",
+   "source_pages": [
+    338,
+    339
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:버 력 처 리 | 운반차입환/발파 굴착 C군', 'newline_column:비고\\n(하반)']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p394-t0",
+    "p395-t0"
+   ],
+   "inputs": [
+    "tunnel_class",
+    "excavation_part",
+    "vehicle_crossing",
+    "steel_fiber_shotcrete",
+    "water_issue",
+    "small_tunnel"
+   ],
+   "table_defects": {
+    "p394-t0": [
+     "blank_cell:버 력 처 리 | 운반차입환/발파 굴착 C군",
+     "newline_column:비고\n(하반)"
+    ]
+   },
+   "draft_reason": "터널 굴착 1발파당 싸이클 시간은 T1~T6 등 별도 계산이 필요한 변수와 장비 조합, 터널 단면적, 암질 등에 따른 복잡한 조건이 많아 현재의 단순 계산 모델로는 자동화하기 어렵습니다.",
+   "steps": [
+    "터널 군(A, B, C) 및 굴착 부위(상/하반)에 따라 기본 싸이클 시간을 표에서 찾는다.",
+    "T1~T6 항목은 공사물량 및 장비 능력에 따라 별도로 계산하여 합산한다.",
+    "차량교행, 용수발생, 소형터널 등 현장 조건에 따른 할증 및 제외 규정을 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/3-2-5/터널굴착_1발파당_작업인원",
+   "path": "data/drafts/specs/토목/3-2-5.json",
+   "title": "터널굴착 1발파당 작업인원('07, '20년 보완)",
+   "source_pages": [
+    341,
+    342
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 5개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p397-t3",
+    "p398-t0"
+   ],
+   "inputs": [
+    "excavation_method",
+    "tunnel_group",
+    "is_parallel",
+    "is_small",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "표가 두 개로 나뉘어 파싱되었고, 인원이 단일 값이 아닌 범위(예: 2~4)로 제시되어 있으며, 병렬터널/소형터널에 대한 복잡한 인원 대체 및 비율 적용 규칙이 있어 단순 수식으로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "입력된 굴착방법과 터널군에 따라 표에서 1발파당 직종별 인원을 찾는다.",
+    "병렬터널인 경우 찾은 인원의 59%를 적용한다.",
+    "소형터널인 경우 비고의 별도 기준(A군 기준, 착암공 2인 등)을 적용한다.",
+    "발파 횟수를 곱하여 총 투입 인·일을 구한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/5-1-2/강교제작공수산정",
+   "path": "data/drafts/specs/토목/5-1-2.json",
+   "title": "강교 제작공수 산정방법('24년 신설)",
+   "source_pages": [
+    411,
+    412,
+    413
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:75°미만~\\n45°이상', 'newline_column:85°미만~\\n75°이상']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p411-t1",
+    "p412-t0",
+    "p412-t1",
+    "p412-t2",
+    "p413-t0",
+    "p413-t1",
+    "p413-t2",
+    "p413-t3"
+   ],
+   "inputs": [
+    "bridge_type",
+    "high_strength_steel_ratio",
+    "large_part_weight",
+    "part_weight",
+    "continuous_spans",
+    "total_weight",
+    "skew_angle",
+    "curve_radius",
+    "girder_height_curve"
+   ],
+   "table_defects": {
+    "p413-t1": [
+     "newline_column:75°미만~\n45°이상",
+     "newline_column:85°미만~\n75°이상"
+    ]
+   },
+   "draft_reason": "강교 제작공수를 산정하기 위해 여러 표에서 계수를 찾고 복잡한 수식에 대입해야 하므로, 현재 지원하는 표준 계산 모델(일당 작업조 등)로 자동화하기 어렵습니다.",
+   "steps": [
+    "1. 고강도강 사용 보정계수 = 1 + 영향계수(p411-t1) × 고강도강재 상당품 비율",
+    "2. 절단, 용접 및 단품제작 보정계수 = 대형단품계수(p412-t0) × 부품계수(p412-t1)",
+    "3. 절단, 용접 및 단품제작 공수 = 기본제작공수 × 고강도강 사용 보정계수 × 절단, 용접 및 단품제작 보정계수",
+    "4. 가조립 공수 = 가조립 기본공수 × 대형단품계수(p412-t0)",
+    "5. 강교 본체의 조건에 따른 보정계수 = 1 + 연속증감계수(p412-t2) + 총중량증감계수(p413-t0) + MAX(사각증감계수(p413-t1), 곡률증감계수(p413-t2)) + 거더높이증감계수(p413-t3)",
+    "6. 최종 강교 제작공수 = (절단, 용접 및 단품제작 공수 + 가조립 공수) × 강교 본체의 조건에 따른 보정계수"
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/5-3-1/강재거더_지조립",
+   "path": "data/drafts/specs/토목/5-3-1.json",
+   "title": "강재거더 지조립('24년 신설)",
+   "source_pages": [
+    360,
+    361
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['newline_column:작업난이도\\n(개소)']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p416-t1",
+    "p416-t2",
+    "p417-t0"
+   ],
+   "inputs": [
+    "girder_type",
+    "site_condition",
+    "quantity",
+    "parallel_assembly",
+    "secondary_transport"
+   ],
+   "table_defects": {
+    "p416-t2": [
+     "newline_column:작업난이도\n(개소)"
+    ],
+    "p417-t0": [
+     "newline_column:작업난이도\n(개소)"
+    ]
+   },
+   "draft_reason": "일당시공량 조정이 곱셈 계수가 아닌 덧셈(개소수 증감) 방식이며, 공구손료 비율이 거더 형태에 따라 달라 조건부 경비율 적용이 필요하므로 현재 모델로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "p416-t1에서 거더 형태(개구제형/폐합형)에 따른 기본조립개소수와 작업조 인원/장비를 확인한다.",
+    "p416-t2, p417-t0에서 현장 조건에 따른 작업난이도(개소) 증감값을 확인하여 일당시공량(기본조립개소수 + 작업난이도)을 구한다.",
+    "작업일수 = 조인트 개소수 ÷ 일당시공량으로 구한다.",
+    "직종별 인·일 및 장비 대·일 = 작업일수 × 작업조 인원/장비 대수로 구한다.",
+    "공구손료 및 경장비는 거더 형태에 따라 인력품의 5%(개구제형) 또는 4%(폐합형)로 계상한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/6-4-1/T.S접합및부설",
+   "path": "data/drafts/specs/토목/6-4-1.json",
+   "title": "T.S 접합 및 부설('23, '25년 보완)",
+   "source_pages": [
+    1
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['merged_row_label:배관공(수도)']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p425-t1"
+   ],
+   "inputs": [
+    "pipe_diameter",
+    "quantity"
+   ],
+   "table_defects": {
+    "p425-t1": [
+     "merged_row_label:배관공(수도)"
+    ]
+   },
+   "draft_reason": "파싱된 표 구조에서 직종과 관경/시공량이 같은 행에 병합되어 있어, 기계적인 daily_crew 모델의 파라미터로 매핑하기 어렵습니다.",
+   "steps": [
+    "표에서 관경에 따른 일당 시공량을 확인한다.",
+    "작업조 인원(배관공 2인, 보통인부 1인)을 확인한다.",
+    "물량 ÷ 일당시공량으로 작업일수를 구하고, 직종별 인원 × 작업일수로 총 품을 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/6-7-5/강관압입추진공",
+   "path": "data/drafts/specs/토목/6-7-5.json",
+   "title": "강관압입추진공",
+   "source_pages": [
+    377,
+    378,
+    379
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G5_parse_loss_or_price_lists",
+   "category_basis": [
+    "표 결함: ['blank_cell:200톤/1,100~1,200', 'blank_cell:200톤/1,350~1,500']"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p433-t1",
+    "p433-t2",
+    "p434-t0",
+    "p434-t1",
+    "p435-t0"
+   ],
+   "inputs": [
+    "pipe_diameter",
+    "soil_type",
+    "push_length_band",
+    "push_volume",
+    "assembly_count",
+    "lighting_required",
+    "crane_type_changed"
+   ],
+   "table_defects": {
+    "p434-t0": [
+     "blank_cell:200톤/1,100~1,200",
+     "blank_cell:200톤/1,350~1,500",
+     "blank_cell:200톤/1,650~1,800",
+     "blank_cell:200톤/2,000~3,000",
+     "blank_cell:300톤/1,350~1,500",
+     "blank_cell:300톤/1,650~1,800",
+     "blank_cell:300톤/2,000~3,000",
+     "blank_cell:300톤/800~1,000"
+    ]
+   },
+   "draft_reason": "본작업(일당 작업조), 장비조립 및 해체(회당), 조명시설(m당) 등 여러 단위의 작업이 혼재되어 있고, 인원과 장비 편성표가 분리되어 있어 단일 일당 작업조 모델로 자동 계산하기 복잡합니다.",
+   "steps": [
+    "추진관경, 토질, 추진연장에 따라 p434-t1에서 작업능력(m/일)을 구한다.",
+    "추진물량 / 작업능력으로 작업일수를 산출한다.",
+    "작업일수에 p433-t2의 작업편성인원과 p434-t0의 작업편성장비를 곱하여 본작업 투입량을 구한다.",
+    "조립/해체 횟수에 따라 p433-t1의 장비조립 및 해체 품을 별도로 산출하여 합산한다.",
+    "조명시설 필요 시 추진물량에 p435-t0의 조명시설 품을 곱하여 합산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/7-1-1/수중공사_설계기준",
+   "path": "data/drafts/specs/토목/7-1-1.json",
+   "title": "수중공사('10, '11년 보완)",
+   "source_pages": [
+    387
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 0개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p443-t0"
+   ],
+   "inputs": [],
+   "table_defects": {},
+   "draft_reason": "이 절은 구체적인 품(인·일, 장비 대·일)을 계산하는 표가 없고, 기초고르기 여유 폭이나 예선 운항속도 등 설계 및 수량 산출 기준만을 제시하고 있으므로 자동 계산 명세로 작성할 수 없습니다.",
+   "steps": [
+    "이 절은 수중공사의 기초고르기 여유 폭, 수심의 정의, 준설 토량 산출 기준, 예선 운항속도 등 설계 및 산출 기준을 제시합니다.",
+    "직접적인 노무 품이나 장비 투입량을 계산하는 수식이 없으므로 계산 명세를 제공하지 않습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/7-3-3/일반블록거치",
+   "path": "data/drafts/specs/토목/7-3-3.json",
+   "title": "일반블록 거치",
+   "source_pages": [
+    392
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 1개 결함 없음, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p448-t2"
+   ],
+   "inputs": [
+    "weight_class",
+    "location",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "작업량과 투입 인원이 고정값이 아닌 범위(예: 14~20, 3~5)로 제시되어 있어, 현장 조건에 따른 정확한 값을 특정할 수 없으므로 자동 계산이 불가능합니다.",
+   "steps": [
+    "작업량과 투입 인원이 고정값이 아닌 범위로 제시되어 있어 자동 계산이 불가능합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/7-3-4/소파블록거치",
+   "path": "data/drafts/specs/토목/7-3-4.json",
+   "title": "소파블록 거치",
+   "source_pages": [
+    392,
+    393
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "R_remaining_daily_or_per_unit",
+   "category_basis": [
+    "표 2개 결함 없음, 입력 4개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p448-t3",
+    "p449-t0"
+   ],
+   "inputs": [
+    "block_weight",
+    "placement_type",
+    "work_condition",
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "작업량과 투입 인원이 단일 값이 아닌 범위(예: 22~28, 2~4)로 제시되어 있어, 현장 조건에 따른 판단 없이 기계적으로 자동 계산할 수 없습니다.",
+   "steps": [
+    "현장 조건(수상/수중)에 따라 해당 표(p448-t3 또는 p449-t0)를 선택한다.",
+    "블록 중량과 거치 방법(충적/난적)에 해당하는 작업량 범위를 확인하고, 현장 조건에 맞게 적정 작업량을 결정한다.",
+    "결정된 작업량으로 총 물량을 나누어 작업일수를 산출한다.",
+    "표에서 직종별 인원(범위인 경우 적정 값 결정)을 확인하고 작업일수를 곱하여 총 투입 인·일을 구한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-1-1/GNSS기준점측량",
+   "path": "data/drafts/specs/토목/9-1-1.json",
+   "title": "GNSS에 의한 기준점 측량('21년 보완)",
+   "source_pages": [
+    407
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-1-1: 측량 절",
+    "표 2개, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p463-t0",
+    "p463-t1"
+   ],
+   "inputs": [
+    "quantity",
+    "point_type",
+    "elevation"
+   ],
+   "table_defects": {
+    "p463-t0": [
+     "newline_column:인원수 고급\n기술자",
+     "newline_column:인원수 중급\n기술자",
+     "newline_column:인원수 초급\n기술\n자",
+     "newline_column:인원수 합계 특급\n기술자"
+    ]
+   },
+   "draft_reason": "파싱된 인원수 표(p463-t0)에 작업구분(계획준비, 답사선점 등) 행 이름이 누락되어 단위당 품을 구조화할 수 없으며, 내업/외업 구분 및 작업량 계수(R) 적용 등 복합적인 계산이 필요하여 현재 구조로 자동화하기 어렵습니다.",
+   "steps": [
+    "1. 작업구분(계획준비, 답사선점, 복구, 관측, 계산, 정리점검)별로 기준 인원수를 확인한다. (내업은 괄호 표시)",
+    "2. 계획준비 및 정리점검은 100점당 1작업 단위로 환산하고, 작업량 계수 R = 0.8 + 20/Q (최대 0.9)를 곱하여 인원을 산출한다.",
+    "3. 답사선점, 복구, 관측은 통합기준점인 경우 계수 1.0을 적용하고, 그 외는 평균표고에 따라 p463-t1의 계수를 곱하여 인원을 산출한다.",
+    "4. 각 작업별 산출된 인원을 직종별로 합산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-1-2/1급_기준점_측량",
+   "path": "data/drafts/specs/토목/9-1-2.json",
+   "title": "1급 기준점 측량",
+   "source_pages": [
+    408,
+    409
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-1-2: 측량 절",
+    "표 3개, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p464-t0",
+    "p464-t1",
+    "p464-t2"
+   ],
+   "inputs": [
+    "terrain_type",
+    "target_points",
+    "given_points"
+   ],
+   "table_defects": {},
+   "draft_reason": "측량 품셈은 작업량(점수)에 따른 계수 산정식과 지형 계수, 그리고 인원수 산정식(T = 인원수×표준작업량×K×P) 등 복합적인 계산이 필요하며, 현재 제공된 계산 모델로는 완벽히 처리하기 어렵습니다.",
+   "steps": [
+    "지형 유형에 따른 계수(K)를 p464-t1에서 찾는다.",
+    "작업량(점수) = 구하는점 + 주어진점을 계산한다.",
+    "작업량(점수)에 따른 계수(P)를 p464-t2 또는 산식으로 구한다.",
+    "각 작업별 인원수 = 표의 인원수 × (구하는점/10) × K × P 로 계산한다. (단, 조표(매설)은 구하는점 10점을 1작업 단위로 함)"
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-1-3/2급기준점측량",
+   "path": "data/drafts/specs/토목/9-1-3.json",
+   "title": "2급 기준점 측량",
+   "source_pages": [
+    409,
+    410
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-1-3: 측량 절",
+    "표 2개, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p466-t0",
+    "p466-t1"
+   ],
+   "inputs": [
+    "points_to_find",
+    "points_given",
+    "terrain_type"
+   ],
+   "table_defects": {},
+   "draft_reason": "수량(T) 산정식에 필요한 '표준작업량'의 명확한 정의가 없고, 각 세부 작업별 인원 합산 방식이 불분명하여 자동 계산이 어렵습니다.",
+   "steps": [
+    "수량(T) = 인원수 × 표준작업량 × K × P 공식을 사용한다.",
+    "K는 p466-t0에서 지형 유형에 따라 찾는다.",
+    "P는 작업량(구하는점+주어진점)에 따라 p466-t1에서 찾거나 공식으로 계산한다.",
+    "표준작업량과 인원수 적용 방식이 명확하지 않아 자동 계산을 보류한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-1-4/3급기준점측량",
+   "path": "data/drafts/specs/토목/9-1-4.json",
+   "title": "3급 기준점 측량",
+   "source_pages": [
+    411,
+    412
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-1-4: 측량 절",
+    "표 3개, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p467-t0",
+    "p467-t1",
+    "p467-t2"
+   ],
+   "inputs": [
+    "terrain_type",
+    "target_points",
+    "given_points"
+   ],
+   "table_defects": {},
+   "draft_reason": "수량(T) 산정식이 '인원수 × (작업량/기준작업량) × K × P' 형태의 고유한 측량 품셈 계산식이며, 현재 지원하는 일당 작업조형이나 단위당 품 계산 모델과 맞지 않습니다.",
+   "steps": [
+    "지형 유형에 따라 p467-t1에서 계수 K를 구한다.",
+    "작업량(점수) = 구하는 점 + 주어진 점을 계산한다.",
+    "작업량에 따라 p467-t2에서 계수 P를 구하거나 공식(P = 0.8 + 6/작업량)으로 계산한다.",
+    "p467-t0에서 직종별 인원수 합계를 구한다.",
+    "수량(T) = 인원수 × (작업량/30) × K × P 로 직종별 수량을 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-1-5/4급기준점측량",
+   "path": "data/drafts/specs/토목/9-1-5.json",
+   "title": "4급 기준점 측량",
+   "source_pages": [
+    412,
+    413
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-1-5: 측량 절",
+    "표 4개, 입력 4개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p468-t1",
+    "p469-t0",
+    "p469-t1",
+    "p469-t2"
+   ],
+   "inputs": [
+    "terrain_type",
+    "points_to_find",
+    "points_given",
+    "distance"
+   ],
+   "table_defects": {
+    "p468-t1": [
+     "newline_column:1일당 고급\n기술자",
+     "newline_column:1일당 중급\n기술자",
+     "newline_column:1일당 초급\n기능사\n(측량)",
+     "newline_column:1일당 초급\n기술자",
+     "newline_column:일\n수",
+     "newline_column:합계 고급\n기술자",
+     "newline_column:합계 중급\n기술자",
+     "newline_column:합계 초급\n기능사\n(측량)"
+    ]
+   },
+   "draft_reason": "수량 산정식에 점간 거리별 증감계수(S)의 적용 방법이 명시되어 있지 않고, 내업/외업 인원의 합산 방식이 불명확하여 자동 계산이 어렵습니다.",
+   "steps": [
+    "표에서 기본 인원수를 구한다.",
+    "지형계수(K), 작업량계수(P), 거리증감계수(S)를 산정하여 곱한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-11-1/토지구획정리_지적확정측량",
+   "path": "data/drafts/specs/토목/9-11-1.json",
+   "title": "토지구획정리 지적확정측량('11, '25년 보완)",
+   "source_pages": [
+    541,
+    542,
+    543
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-11-1: 측량 절",
+    "표 1개, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p597-t1"
+   ],
+   "inputs": [
+    "area",
+    "include_staking",
+    "continuous_work"
+   ],
+   "table_defects": {
+    "p597-t1": [
+     "newline_column:100만㎡초과\n∼200만㎡",
+     "newline_column:10만㎡\n이하",
+     "newline_column:10만㎡초과\n∼50만㎡",
+     "newline_column:200만㎡초과\n∼300만㎡",
+     "newline_column:300만㎡\n초과",
+     "newline_column:50만㎡초과\n∼100만㎡"
+    ]
+   },
+   "draft_reason": "면적 구간별로 다른 체감계수를 적용하여 분할 합산하는 특수한 계산 구조이므로 현재 표준 모델로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "측량지구면적이 10,000㎡ 이하인 경우 10,000㎡로 간주한다.",
+    "면적을 10만㎡ 이하, 10만~50만㎡, 50만~100만㎡ 등의 구간으로 나눈다.",
+    "각 구간별 면적에 대해 (구간면적 / 100,000) × 기준 품 × 해당 구간 체감계수를 계산하여 모두 합산한다.",
+    "말박기측량을 수반하지 않을 경우 기준 품에서 말박기 측량 품을 제외하고 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-11-2/경지구획정리지적확정측량",
+   "path": "data/drafts/specs/토목/9-11-2.json",
+   "title": "경지구획정리 지적확정측량('25년 보완)",
+   "source_pages": [
+    544,
+    545
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-11-2: 측량 절",
+    "표 2개, 입력 2개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p600-t0",
+    "p600-t1"
+   ],
+   "inputs": [
+    "survey_area",
+    "additional_survey_required"
+   ],
+   "table_defects": {
+    "p600-t1": [
+     "newline_column:1000만㎡\n초과",
+     "newline_column:100만㎡\n이하",
+     "newline_column:100만㎡초과\n∼300만㎡",
+     "newline_column:300만㎡초과\n∼500만㎡",
+     "newline_column:500만㎡초과\n∼800만㎡",
+     "newline_column:800만㎡초과\n∼1000만㎡"
+    ]
+   },
+   "draft_reason": "면적 구간별로 체감계수를 적용하여 누적 합산하는 복잡한 계산 방식이므로 현재 지원되는 자동 계산 모델로 처리하기 어렵습니다.",
+   "steps": [
+    "측량지구 면적이 30,000㎡ 이하인 경우 30,000㎡의 품으로 간주한다.",
+    "면적 구간별로 p600-t1의 체감계수를 적용하여 p600-t0의 품을 누적 합산한다.",
+    "중심점·가구점, 필계점, 말박기 측량이 필요한 경우 산출된 품의 30%를 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-12-1/예정지적좌표도_작성업무",
+   "path": "data/drafts/specs/토목/9-12-1.json",
+   "title": "예정지적좌표도 작성업무('11, '25년 보완)",
+   "source_pages": [
+    546
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-12-1: 측량 절",
+    "표 0개, 입력 1개"
+   ],
+   "pdf_verified": false,
+   "tables": [],
+   "inputs": [
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱 결과에 표의 행 이름(작업별)이 누락되어 있어 단위당 품 표를 구성할 수 없습니다.",
+   "steps": [
+    "파싱 결과에 표의 행 이름(작업별)이 누락되어 단위당 품 표를 구성할 수 없습니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-18-6/연속지적도품질개선",
+   "path": "data/drafts/specs/토목/9-18-6.json",
+   "title": "연속지적도 품질개선(수치)('26년 신설)",
+   "source_pages": [
+    566
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-18-6: 측량 절",
+    "표 1개, 입력 1개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p622-t0"
+   ],
+   "inputs": [
+    "quantity"
+   ],
+   "table_defects": {},
+   "draft_reason": "파싱된 표 데이터에 작업구분(행 이름)이 누락되어 있어, 직종별 합계 인원수를 명확히 식별하여 단위당 품 계산식에 적용할 수 없습니다.",
+   "steps": [
+    "지적(임야)도 1도곽을 기준으로 한 품이다.",
+    "표의 파싱 결과에 작업구분(행 이름)이 누락되어 있어 직종별 합계 인원수를 자동 추출하여 계산할 수 없다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-2-1/기본수준측량",
+   "path": "data/drafts/specs/토목/9-2-1.json",
+   "title": "기본 수준측량('25년 보완)",
+   "source_pages": [
+    414,
+    415,
+    416,
+    417
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-2-1: 측량 절",
+    "표 1개, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p470-t1"
+   ],
+   "inputs": [
+    "terrain",
+    "elevation_diff",
+    "tunnel_bridge_ratio_over_70"
+   ],
+   "table_defects": {},
+   "draft_reason": "수량 산정식이 T = 인원수×작업량×K 로 주어지며, 작업량의 단위가 공정별로 다르고(50km, 점 등), 관측 공정에만 계수 K가 적용되는 등 복잡한 계산 구조를 가지고 있어 단순 단위당 품이나 일당 작업조형으로 자동 계산하기 어렵습니다.",
+   "steps": [
+    "작업구분별로 기준 품을 찾는다.",
+    "관측 공정의 경우, p470-t1 표에서 지형과 표고차에 따른 계수(K)를 찾아 곱한다.",
+    "노선의 70% 이상이 터널, 교량에 해당하는 경우 관측 공정에 60% 할증을 적용한다.",
+    "수량(T) = 인원수 × 작업량 × K 공식을 사용하여 최종 수량을 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-2-2/1급수준측량",
+   "path": "data/drafts/specs/토목/9-2-2.json",
+   "title": "1급 수준측량('26년 보완)",
+   "source_pages": [
+    417,
+    418,
+    419
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-2-2: 측량 절",
+    "표 3개, 입력 6개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p473-t0",
+    "p473-t1",
+    "p474-t0"
+   ],
+   "inputs": [
+    "distance",
+    "points_stone",
+    "points_copper",
+    "terrain_elevation",
+    "is_tunnel_bridge_over_70",
+    "is_basic_survey_method"
+   ],
+   "table_defects": {
+    "p473-t0": [
+     "newline_column:고급\n기술자",
+     "newline_column:중급\n기술자",
+     "newline_column:초급\n기술자",
+     "newline_column:특급\n기술자"
+    ]
+   },
+   "draft_reason": "작업 공정별로 기준 단위(15km, 점)가 다르고, 공정별로 지형 계수(K)와 작업량 계수(P) 적용 여부가 달라 단일 계산 모델로 자동 처리하기 복잡함.",
+   "steps": [
+    "1. 작업구분별로 p473-t0에서 기준 인원수를 찾는다. 괄호 ( ) 안의 숫자는 내업을 의미한다.",
+    "2. 관측 공정의 경우, terrain_elevation 입력에 따라 p473-t1에서 지형/표고차 계수(K)를 찾는다.",
+    "3. 선점, 매설 공정을 제외한 나머지 공정은 distance 입력에 따라 p474-t0에서 작업량 계수(P)를 찾거나, 공식(0.8 + 3/작업량)을 사용하여 산출한다. (30km 이상은 0.90 적용)",
+    "4. 관측 공정 수량 = 인원수 × (distance / 15) × K × P",
+    "5. is_tunnel_bridge_over_70이 true인 경우, 관측 공정 수량에 60% 할증을 적용한다.",
+    "6. 선점/매설 공정 수량 = 인원수 × (points_stone 또는 points_copper)",
+    "7. 기타 공정(답사, 계산, 성과정리 등) 수량 = 인원수 × (distance / 15) × P",
+    "8. 각 공정별 수량을 직종별로 합산하여 총 수량(T)을 구한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-2-3/2급수준측량",
+   "path": "data/drafts/specs/토목/9-2-3.json",
+   "title": "2급 수준측량('26년 보완)",
+   "source_pages": [
+    420,
+    421,
+    422
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-2-3: 측량 절",
+    "표 3개, 입력 5개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p476-t0",
+    "p476-t1",
+    "p476-t2"
+   ],
+   "inputs": [
+    "total_distance",
+    "points_stone",
+    "points_copper",
+    "tunnel_bridge_ratio_over_70",
+    "is_basic_leveling_method"
+   ],
+   "table_defects": {},
+   "draft_reason": "공정별(관측, 선점/매설, 내업 등)로 적용되는 단위(km, 점)와 할증 계수(K, P)가 다르고, 지형별로 거리를 분할하여 복합적으로 계산해야 하므로 단순 단위당 품 계산 모델로 자동화하기 어렵습니다. 또한 원문 표의 파싱 결과가 다층 구조를 온전히 담지 못해 직접 참조가 제한적입니다.",
+   "steps": [
+    "1. 공정별(관측, 내업 등)로 15km 기준 품을 표 p476-t0에서 찾는다.",
+    "2. 관측 공정의 경우, 지형 및 표고차 유형별로 거리를 분할하고 표 p476-t1의 계수(K)를 적용한다.",
+    "3. 전체 작업량(거리)에 따라 표 p476-t2 또는 수식을 사용하여 작업량 계수(P)를 산출한다.",
+    "4. 관측 및 내업 공정의 수량(T)은 '인원수 × (해당 거리/15) × K(관측만) × P' 로 계산한다.",
+    "5. 선점 및 매설 공정은 점 단위 품을 표 p476-t0에서 찾고, '인원수 × 점수' 로 계산한다 (P계수 제외).",
+    "6. 노선의 70% 이상이 터널/교량인 경우 관측 공정에 60% 할증을 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-2-5/4급수준측량",
+   "path": "data/drafts/specs/토목/9-2-5.json",
+   "title": "4급 수준측량('26년 신설)",
+   "source_pages": [
+    426,
+    427,
+    428
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-2-5: 측량 절",
+    "표 3개, 입력 6개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p482-t0",
+    "p482-t1",
+    "p482-t2"
+   ],
+   "inputs": [
+    "work_distance",
+    "num_points_stone",
+    "num_points_copper",
+    "terrain_elevation",
+    "tunnel_bridge_over_70",
+    "survey_method"
+   ],
+   "table_defects": {},
+   "draft_reason": "단위당 품이 주어지나, 공정별로 적용되는 계수(K, P)가 다르고 수량 산정식(T = 인원수×작업량×K×P)이 복잡하여 단순 per_unit 모델로 자동 계산하기 어려움.",
+   "steps": [
+    "작업량(거리)에 따른 계수 P를 산출한다. (P = 0.8 + 3/작업량, 단 15km 이하는 1.0, 30km 이상은 0.90 적용)",
+    "지형/표고차에 따른 계수 K를 p482-t1에서 찾는다.",
+    "관측 공정의 수량(T) = p482-t0의 관측 품 × (작업량/15) × K × P 로 계산한다.",
+    "답사, 계산, 성과정리 등 기타 15km 단위 공정의 수량(T) = p482-t0의 해당 품 × (작업량/15) × P 로 계산한다.",
+    "표석 선점/매설 공정의 수량(T) = p482-t0의 표석 품 × 표석 점수 로 계산한다. (P계수 제외)",
+    "동판 매설 공정의 수량(T) = p482-t0의 동판 품 × 동판 점수 로 계산한다. (P계수 제외)",
+    "터널/교량 70% 이상 시 관측 공정 품에 1.6을 곱하여 할증한다.",
+    "모든 공정의 품을 직종별로 합산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-3-1/지형현황",
+   "path": "data/drafts/specs/토목/9-3-1.json",
+   "title": "지형현황('08, '25, '26년 보완)",
+   "source_pages": [
+    432,
+    433,
+    434,
+    435,
+    436,
+    437,
+    438
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-3-1: 측량 절",
+    "표 7개, 입력 5개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p488-t0",
+    "p488-t1",
+    "p488-t2",
+    "p488-t3",
+    "p488-t4",
+    "p489-t0",
+    "p492-t0"
+   ],
+   "inputs": [
+    "survey_method",
+    "terrain_type",
+    "scale",
+    "area",
+    "job_type"
+   ],
+   "table_defects": {},
+   "draft_reason": "기준점 측량, 수준 측량, 지상현황측량 각각의 작업량비를 별도로 산출(점수 배점, 관측 거리 계산 등)한 뒤 기본 인원표에 곱하여 합산하는 매우 복잡한 다단계 계산 구조를 가지고 있어 현재의 단순 모델로는 자동화하기 어렵습니다.",
+   "steps": [
+    "기준점 측량, 수준 측량, 지상현황측량의 작업량비를 각각 산출한다.",
+    "산출된 작업량비를 기본 투입 인원표에 곱하여 직종별 인원을 구한다.",
+    "각 작업의 인원을 합산하여 총 투입 인원을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-3-3/택지조성측량",
+   "path": "data/drafts/specs/토목/9-3-3.json",
+   "title": "택지조성측량",
+   "source_pages": [
+    497,
+    498,
+    499,
+    500
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-3-3: 측량 절",
+    "표 8개, 입력 8개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p497-t1",
+    "p497-t2",
+    "p498-t0",
+    "p498-t1",
+    "p498-t2",
+    "p499-t0",
+    "p499-t1",
+    "p500-t0"
+   ],
+   "inputs": [
+    "terrain_type",
+    "area",
+    "scale",
+    "grid_size",
+    "contour_interval",
+    "boundary_dispute",
+    "mountain_jungle",
+    "per_parcel_area"
+   ],
+   "table_defects": {
+    "p497-t1": [
+     "newline_column:고급\n기술자",
+     "newline_column:중급\n기술자",
+     "newline_column:초급\n기술자",
+     "newline_column:초급기능사\n(측량)"
+    ],
+    "p497-t2": [
+     "newline_column:고급\n기술자",
+     "newline_column:중급\n기술자",
+     "newline_column:초급\n기술자",
+     "newline_column:초급기능사\n(측량)"
+    ],
+    "p498-t1": [
+     "newline_column:고급\n기술자",
+     "newline_column:중급\n기술자",
+     "newline_column:초급\n기술자",
+     "newline_column:초급기능사\n(측량)"
+    ],
+    "p498-t2": [
+     "newline_column:고급\n기술자",
+     "newline_column:중급\n기술자",
+     "newline_column:초급\n기술자",
+     "newline_column:초급기능사\n(측량)"
+    ],
+    "p499-t0": [
+     "newline_column:고급\n기술자",
+     "newline_column:중급\n기술자",
+     "newline_column:초급\n기술자",
+     "newline_column:초급기능사\n(측량)"
+    ],
+    "p499-t1": [
+     "newline_column:고급\n기술자",
+     "newline_column:중급\n기술자",
+     "newline_column:초급\n기술자",
+     "newline_column:초급기능사\n(측량)"
+    ]
+   },
+   "draft_reason": "지형 조건, 면적, 축척 등에 따라 적용할 표가 다르고, 기준 면적과 실제 면적의 비율을 곱하는 방식(계산예 참고)이 혼재되어 있어 단순 자동 계산으로 처리하기 어렵습니다.",
+   "steps": [
+    "지형 조건(촌락/구릉)과 면적, 축척, 방안, 등고선 간격에 맞는 기준 표를 찾는다.",
+    "실제 면적과 기준 면적의 비율을 구하여 기준 품에 곱한다 (계산예 참고).",
+    "주석에 따른 할증 및 증감 요소를 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-3-4/구획정리확정측량",
+   "path": "data/drafts/specs/토목/9-3-4.json",
+   "title": "구획정리 확정측량",
+   "source_pages": [
+    444,
+    445,
+    446,
+    447,
+    448,
+    449,
+    450
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-3-4: 측량 절",
+    "표 6개, 입력 2개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p500-t1",
+    "p503-t0",
+    "p503-t1",
+    "p504-t0",
+    "p504-t1",
+    "p505-t0"
+   ],
+   "inputs": [
+    "district_type",
+    "work_type"
+   ],
+   "table_defects": {
+    "p503-t0": [
+     "newline_column:번화지구 5만㎡ 고급\n기술\n자",
+     "newline_column:번화지구 인\n부",
+     "newline_column:번화지구 중급\n기술\n자",
+     "newline_column:번화지구 초급\n기능사\n(측량)",
+     "newline_column:번화지구 초급\n기술\n자",
+     "newline_column:보통지구 10만㎡ 고급\n기술\n자",
+     "newline_column:보통지구 인\n부",
+     "newline_column:보통지구 중급\n기술\n자"
+    ],
+    "p503-t1": [
+     "newline_column:번화지구 5만㎡ 고급\n기술자",
+     "newline_column:번화지구 인\n부",
+     "newline_column:번화지구 중급\n기술\n자",
+     "newline_column:번화지구 초급\n기능사\n(측량)",
+     "newline_column:번화지구 초급\n기술\n자",
+     "newline_column:보통지구 10만㎡ 고급\n기술\n자",
+     "newline_column:보통지구 인\n부",
+     "newline_column:보통지구 중급\n기술\n자"
+    ],
+    "p504-t0": [
+     "newline_column:번화지구 5만㎡ 고급\n기술\n자",
+     "newline_column:번화지구 인\n부",
+     "newline_column:번화지구 중급\n기술\n자",
+     "newline_column:번화지구 초급\n기능사\n(측량)",
+     "newline_column:번화지구 초급\n기술\n자",
+     "newline_column:보통지구 10만㎡ 고급\n기술\n자",
+     "newline_column:보통지구 인\n부",
+     "newline_column:보통지구 중급\n기술\n자"
+    ],
+    "p504-t1": [
+     "newline_column:번화지구 5만㎡ 고급\n기술\n자",
+     "newline_column:번화지구 인\n부",
+     "newline_column:번화지구 중급\n기술\n자",
+     "newline_column:번화지구 초급\n기능사\n(측량)",
+     "newline_column:번화지구 초급\n기술\n자",
+     "newline_column:보통지구 10만㎡ 고급\n기술\n자",
+     "newline_column:보통지구 인\n부",
+     "newline_column:보통지구 중급\n기술\n자"
+    ],
+    "p505-t0": [
+     "newline_column:고급\n기술자",
+     "newline_column:중급\n기술자",
+     "newline_column:초급\n기능사\n(측량)",
+     "newline_column:초급\n기술자"
+    ]
+   },
+   "draft_reason": "산정기준면적(5만, 10만, 30만㎡)에 대한 품만 제시되어 있으며, 실제 면적이 기준과 다를 때의 산정 방식(비례, 보간 등)이 명시되어 있지 않아 자동 계산이 불가합니다.",
+   "steps": [
+    "지구별(번화지구, 보통지구, 촌락지구) 및 작업종류에 따라 해당 표에서 인원을 확인합니다.",
+    "실제 면적이 산정기준면적과 다를 경우의 적용 방식은 발주처와 협의가 필요합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-4-1/노선측량",
+   "path": "data/drafts/specs/토목/9-4-1.json",
+   "title": "노선측량(철도, 도로 신설)",
+   "source_pages": [
+    453,
+    454,
+    455
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-4-1: 측량 절",
+    "표 4개, 입력 0개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p509-t2",
+    "p510-t0",
+    "p510-t1",
+    "p511-t0"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p509-t2": [
+     "blank_cell:비고/노선선정 진행\n기준\n(m)",
+     "newline_column:노선선점 진행\n기준\n(m)",
+     "newline_column:노선선정 진행\n기준\n(m)",
+     "newline_column:용지경계\n말뚝설치 일수",
+     "newline_column:용지경계\n말뚝설치 진행\n기준\n(m)",
+     "newline_column:종단측량 진행\n기준\n(m)",
+     "newline_column:중심선측량 진행\n기준\n(m)",
+     "newline_column:횡단측량 진행\n기준\n(m)"
+    ],
+    "p510-t0": [
+     "newline_column:노선\n선점",
+     "newline_column:노선\n선정",
+     "newline_column:용지경계말뚝\n설치",
+     "newline_column:종단\n측량",
+     "newline_column:중심선\n측량",
+     "newline_column:횡단\n측량"
+    ],
+    "p510-t1": [
+     "newline_column:노선\n선점",
+     "newline_column:노선\n선정",
+     "newline_column:용지경계\n말뚝설치",
+     "newline_column:종단\n측량",
+     "newline_column:횡단\n측량"
+    ],
+    "p511-t0": [
+     "newline_column:노선\n선점",
+     "newline_column:노선\n선정",
+     "newline_column:소요\n인원",
+     "newline_column:소요\n일수",
+     "newline_column:용지\n경계\n말뚝\n설치",
+     "newline_column:종단\n측량",
+     "newline_column:중심선\n측량",
+     "newline_column:횡단\n측량"
+    ]
+   },
+   "draft_reason": "노선측량은 지형, 지질, 곡선 비율, 클로소이드 곡선 등 현장 조건에 따라 품이 크게 달라지며, 예비측량/본측량 구분, 교량/터널 제외 등 단순 수식으로 자동화하기 어려운 정성적 판단 요소가 많아 계산식으로 특정하기 어렵습니다.",
+   "steps": [
+    "현장 조건(지형, 지질, 곡선 비율 등)에 따라 진행기준과 인원편성을 적용하여 산정한다.",
+    "곡선 비율, 클로소이드 완화곡선, 시가지 교통 장애 등 정성적 판단 요소가 많아 자동 계산이 어렵다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-4-2/수도노선측량",
+   "path": "data/drafts/specs/토목/9-4-2.json",
+   "title": "수도노선측량",
+   "source_pages": [
+    455,
+    456,
+    457
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-4-2: 측량 절",
+    "표 3개, 입력 4개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p511-t1",
+    "p512-t0",
+    "p512-t1"
+   ],
+   "inputs": [
+    "survey_length",
+    "area_type",
+    "survey_type",
+    "is_flat_terrain"
+   ],
+   "table_defects": {
+    "p512-t0": [
+     "empty_row:내업 | 고급기술자"
+    ]
+   },
+   "draft_reason": "1km당 소요일수와 작업조 인원을 곱하여 품을 산출하는 구조로, 현재 구현된 adjusted_daily_crew와 정확히 일치하지 않아 별도 계산 로직 구현이 필요합니다.",
+   "steps": [
+    "p511-t1에서 지구별, 측량종류별 1km당 소요일수를 찾는다.",
+    "p512-t0에서 측량종류별 기술자 및 기능사 인원을 찾는다.",
+    "p512-t1에서 지구별, 측량종류별 인부 인원을 찾는다.",
+    "총 투입 인·일 = 측량 연장(km) × 1km당 소요일수 × 직종별 인원으로 계산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-5-1/항공사진촬영",
+   "path": "data/drafts/specs/토목/9-5-1.json",
+   "title": "항공사진촬영('10, '21, '26년 보완)",
+   "source_pages": [
+    464,
+    465,
+    466,
+    467,
+    468,
+    469,
+    470,
+    471
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-5-1: 측량 절",
+    "표 7개, 입력 6개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p520-t0",
+    "p521-t1",
+    "p522-t1",
+    "p522-t2",
+    "p524-t0",
+    "p527-t0",
+    "p527-t1"
+   ],
+   "inputs": [
+    "gsd",
+    "camera_type",
+    "region",
+    "month",
+    "photo_count",
+    "db_construction"
+   ],
+   "table_defects": {
+    "p520-t0": [
+     "newline_column:비행\n고도(m)",
+     "newline_column:스테레오\n면적\n(㎢)",
+     "newline_column:촬영기선\n장\n(㎞)",
+     "newline_column:촬영면적\n(㎢)",
+     "newline_column:코스\n간격\n(㎞)"
+    ],
+    "p521-t1": [
+     "newline_column:비행\n고도(m)",
+     "newline_column:스테레오\n면적(㎢)",
+     "newline_column:촬영기선\n장\n(㎞)",
+     "newline_column:촬영면적\n(㎢)",
+     "newline_column:코스\n간격\n(㎞)"
+    ],
+    "p524-t0": [
+     "newline_column:인원 고급\n기능사",
+     "newline_column:인원 고급\n기술자",
+     "newline_column:인원 중급\n기술자",
+     "newline_column:인원 특급\n기술자",
+     "newline_column:작업일수 25cm\n<\nGSD\n≤\n42",
+     "newline_column:작업일수 42cm\n<\nGSD\n≤\n65",
+     "newline_column:작업일수 65cm\n<\nGSD",
+     "newline_column:작업일수 GSD\n≤\n25cm"
+    ],
+    "p527-t0": [
+     "newline_column:인원수 1일당 고급\n기술자",
+     "newline_column:인원수 1일당 정보처리\n기사",
+     "newline_column:인원수 1일당 중급\n기능사\n(항공사진",
+     "newline_column:인원수 합계 고급\n기술자",
+     "newline_column:인원수 합계 정보처리\n기사",
+     "newline_column:인원수 합계 중급\n기능사\n(항공사진)"
+    ]
+   },
+   "draft_reason": "운항시간, 소요일수, 인원, 장비비 등 다단계의 복잡한 수식 계산이 얽혀 있어 단일 정형 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "GSD 및 카메라 제원에 따라 비행고도, 촬영기선장, 코스간격 등을 확인한다.",
+    "지역 및 월별 천후표를 참조하여 평균쾌청일수를 확인한다.",
+    "기지이동시간, 촬영운항시간(계기비행, 왕복운항, 순촬영, 예비운항), 천후장애시간, 보완촬영시간을 각각의 계산식에 따라 산출한다.",
+    "산출된 시간들을 바탕으로 순촬영소요일수 및 운항소요일수를 계산한다.",
+    "운항소요일수와 사진매수를 바탕으로 항공사진촬영 투입 인원(계획준비, 데이터처리 등)을 산정한다.",
+    "장비 상각비, 정비비, 오버홀비 등은 별도 수식에 따라 계산한다.",
+    "항공사진 DB 구축 시, 사진 매수에 따른 증감계수를 적용하여 투입 인원을 산정한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-5-10/무인비행장치측량",
+   "path": "data/drafts/specs/토목/9-5-10.json",
+   "title": "무인비행장치 측량('20년 신설, '26년 보완)",
+   "source_pages": [
+    518,
+    519,
+    520
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-5-10: 측량 절",
+    "표 6개, 입력 0개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p574-t0",
+    "p576-t0",
+    "p576-t1",
+    "p576-t2",
+    "p576-t3",
+    "p576-t4"
+   ],
+   "inputs": [],
+   "table_defects": {
+    "p574-t0": [
+     "newline_column:기준\n단위"
+    ]
+   },
+   "draft_reason": "세부 작업별로 면적, GSD, 지형 유형에 따른 복잡한 계수 적용이 필요하며, 인원수 표의 구조가 자동 계산 모델로 매핑하기에 너무 복잡합니다.",
+   "steps": [
+    "원문 표와 계수를 참조하여 직접 계산합니다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-5-4/수치도화",
+   "path": "data/drafts/specs/토목/9-5-4.json",
+   "title": "수치지도 작성",
+   "source_pages": [
+    473,
+    474
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-5-4: 측량 절",
+    "표 4개, 입력 5개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p529-t1",
+    "p529-t2",
+    "p529-t3",
+    "p529-t4"
+   ],
+   "inputs": [
+    "scale",
+    "area",
+    "terrain",
+    "work_type",
+    "revision_area"
+   ],
+   "table_defects": {},
+   "draft_reason": "1시간당 작업량을 바탕으로 총 투입 인·일을 구한 뒤 참여비율로 분배하는 방식이므로 기존 adjusted_daily_crew나 per_unit 모델에 맞지 않습니다.",
+   "steps": [
+    "p529-t2에서 사진축척에 따른 1시간당 작업량을 찾는다.",
+    "p529-t3에서 지형에 따른 계수를 찾고, p529-t4에서 도화작업 종류에 따른 계수를 찾는다.",
+    "총 투입 인·일(계) = {도화 면적 ÷ (1시간당 작업량 × 지형계수 × 도화작업계수)} ÷ 8시간 으로 계산한다.",
+    "수정도화 작업인 경우, 사진판독 시간 = {수정면적 ÷ (1시간당 작업량 × 8)} 일을 총 투입 인·일에 가산한다.",
+    "총 투입 인·일에 p529-t1의 직종별 참여비율(%)을 곱하여 직종별 투입 인·일을 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-5-6/지도제작_기본도",
+   "path": "data/drafts/specs/토목/9-5-6.json",
+   "title": "지도제작(기본도)",
+   "source_pages": [
+    513,
+    514,
+    515
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-5-6: 측량 절",
+    "표 10개, 입력 6개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p569-t0",
+    "p569-t1",
+    "p569-t2",
+    "p569-t3",
+    "p570-t0",
+    "p570-t1",
+    "p570-t2",
+    "p570-t3",
+    "p570-t4",
+    "p570-t5"
+   ],
+   "inputs": [
+    "work_type",
+    "creation_type",
+    "edit_type",
+    "scale",
+    "terrain",
+    "photo_analysis"
+   ],
+   "table_defects": {
+    "p569-t0": [
+     "newline_column:중급기능사\n(지도제작)",
+     "newline_column:초급기능사\n(지도제작)"
+    ],
+    "p570-t2": [
+     "newline_column:사진\n식자공",
+     "newline_column:사진\n제판공",
+     "newline_column:중급\n기술자",
+     "newline_column:중급기능사\n(지도제작)",
+     "newline_column:초급\n기술자",
+     "newline_column:초급기능사\n(지도제작)"
+    ]
+   },
+   "draft_reason": "작업 종류(지형도, 수치지도, 스크라이빙, 착묵)에 따라 적용되는 표와 계수가 다르고 복잡하여 단일 계산 모델로 자동화하기 어렵습니다.",
+   "steps": [
+    "작업 종류(지형도 제작, 수치지도 제작, 스크라이빙, 착묵)에 따라 해당하는 표에서 기본 인원을 찾는다.",
+    "축척과 지형에 따른 계수를 찾아 곱한다.",
+    "착묵품 제도 시 사진분석이 필요하면 인원을 가산한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-6-1/지적삼각측량",
+   "path": "data/drafts/specs/토목/9-6-1.json",
+   "title": "지적삼각측량('05년 보완)",
+   "source_pages": [
+    521,
+    522
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-6-1: 측량 절",
+    "표 2개, 입력 2개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p577-t0",
+    "p577-t1"
+   ],
+   "inputs": [
+    "elevation",
+    "is_auxiliary"
+   ],
+   "table_defects": {
+    "p577-t0": [
+     "newline_column:인원수 1일당 지적\n기사",
+     "newline_column:인원수 지적\n기능사",
+     "newline_column:인원수 지적\n산업\n기사",
+     "newline_column:인원수 합계 지적\n기사"
+    ]
+   },
+   "draft_reason": "지적삼각측량은 기준점수(여점 3점, 구점 5점)에 대한 총 품이 제시되어 있고, 실제 점수에 비례하여 단가를 산출하는 특수한 계산 방식(계산예 참고)을 사용하므로 자동 계산 모델로 표현하기 어렵습니다.",
+   "steps": [
+    "p577-t0에서 지적삼각측량의 기본 품(합계)을 확인한다.",
+    "작업지역의 표고에 따라 p577-t1의 표고계수를 가산한다.",
+    "지적삼각보조점 측량인 경우 측량비의 50%를 적용한다.",
+    "계산예를 참고하여 점수에 따른 단가 및 합계를 산출한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-7-4/경지구획정리_신규등록_측량",
+   "path": "data/drafts/specs/토목/9-7-4.json",
+   "title": "경지구획정리 신규등록 측량(수치)('05년 신설, '11, '25년 보완)",
+   "source_pages": [
+    530,
+    531
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-7-4: 측량 절",
+    "표 2개, 입력 3개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p586-t0",
+    "p586-t1"
+   ],
+   "inputs": [
+    "area",
+    "continuous_work",
+    "additional_survey"
+   ],
+   "table_defects": {
+    "p586-t0": [
+     "merged_row_label:소계 | 구분\n작업별 내업",
+     "merged_row_label:소계 | 구분\n작업별 외업",
+     "merged_row_label:지구계 준비 도 | 구분\n작업별 작성",
+     "merged_row_label:지구계 준비 도 | 구분\n작업별 확인",
+     "merged_row_label:필계점 | 구분\n작업별 계산",
+     "merged_row_label:필계점 | 구분\n작업별 측량"
+    ],
+    "p586-t1": [
+     "newline_column:1000만㎡\n초과",
+     "newline_column:100만㎡\n이하",
+     "newline_column:100만㎡초과\n∼300만㎡",
+     "newline_column:300만㎡초과\n∼500만㎡",
+     "newline_column:500만㎡초과\n∼800만㎡",
+     "newline_column:800만㎡초과\n∼1000만㎡"
+    ]
+   },
+   "draft_reason": "면적 구간별 체감계수를 각각 합산하는 누진 계산 방식이며, 최소 면적 보정 및 추가 측량에 따른 할증 등 복잡한 조건이 있어 현재의 단순 계산 모델로는 자동화하기 어렵습니다.",
+   "steps": [
+    "측량지구 면적이 30,000㎡ 이하인 경우 30,000㎡로 간주한다.",
+    "면적이 1,000,000㎡를 초과하고 작업과정이 연속될 경우, 면적 구간별로 체감계수를 곱하여 각각 합산한다.",
+    "중심점·가구점, 필계점, 말박기 측량이 필요한 경우 산출된 품의 30%를 적용한다."
+   ]
+  },
+  {
+   "id": "2026-정오표1차/토목/9-9-1/분할측량(도해)",
+   "path": "data/drafts/specs/토목/9-9-1.json",
+   "title": "분할측량(도해)('05, '23, '25년 보완)",
+   "source_pages": [
+    534,
+    535
+   ],
+   "draft_calc_type": "not_calculable",
+   "category": "G4_survey_coefficient_formula",
+   "category_basis": [
+    "토목 9-9-1: 측량 절",
+    "표 4개, 입력 5개"
+   ],
+   "pdf_verified": false,
+   "tables": [
+    "p590-t0",
+    "p590-t1",
+    "p590-t2",
+    "p590-t3"
+   ],
+   "inputs": [
+    "land_type",
+    "area",
+    "region",
+    "divided_parcels",
+    "survey_type"
+   ],
+   "table_defects": {},
+   "draft_reason": "본문의 '계수를 곱하여 계상한다'는 설명과 계산예의 덧셈 방식(기본계수+등록계수+지역구분계수+면적계수)이 충돌하며, 계산예의 면적계수 산출 근거가 불명확하여 자동 계산이 어렵습니다.",
+   "steps": [
+    "본문의 계수 적용 방식(곱셈)과 계산예의 적용 방식(덧셈)이 충돌하여 자동 계산을 보류함."
+   ]
+  }
+ ]
+}

@@ -188,3 +188,31 @@
 - 줄글 인용: `{"section_no": "6-1-4", "subsection_no": "2", "marker": "①"}` — `marker`는 원문의 ①②…, ※, "가."~"하." 중 하나. 절 본문 첫 줄이면 `"marker": "본문"`
 
 `cite`가 여러 근거를 가리키면 배열로 쓴다.
+# Contract addendum
+
+New generated modules must also include the additive `calculation_contract` described in [calculation-contract-v1.md](calculation-contract-v1.md). The pre-existing calculation fields below remain the backwards-compatible estimate-spec interface. Any older note in this document saying `per_unit` is unimplemented is superseded: the `per_unit` calculator is implemented and registered in the estimate flow.
+
+## Semantic authoring and system policy references
+
+The structured calculation-module authoring response contains rule semantics and explicit source-note interpretations only. Program code supplies module identity/version, PDF hash and page mappings, executor metadata, and trusted verification-case metadata; it then validates the full v1 contract. The model must account for every supplied calculation note as a rule mapping or a source-backed exclusion.
+
+`apply_system_policy` requires an explicitly authorized `system_policy_ref`. The candidate contract and executable artifact must agree on the policy ID, version, exact section scope, and official source citation. The runtime invokes the registered evaluator; candidate rules cannot attach a competing `value` or `value_expr`. In particular, the formwork height convention is scoped only to common 6-3-1. Official source text and system assumptions remain distinct in calculation provenance.
+
+## 작업 종류에 따라 단위가 달라지는 물량 (`unit_by`)
+
+물량 입력의 단위가 작업 종류(선택 입력)에 따라 달라지면 물량 입력에 `unit_by`를 선언한다.
+
+```json
+{"name": "quantity", "type": "positive_rational", "unit": "개/m/㎡",
+ "unit_by": {"input": "work_type", "values": {"지주 설치": "개", "와이어 설치": "m", "철망 설치": "㎡"}}}
+```
+
+`unit`은 사람이 읽는 설명이고 실제 단위는 `unit_by`가 정한다(`backend/agent/rules/quantity_units.py`). 작업 종류를
+받기 전에는 물량을 묻지 않고, 작업 종류가 바뀌면 그 항목의 결과를 버리고 새 단위로 다시 묻는다. 계산 결과의 단위 기준
+(`unit_basis.per`)과 Excel 단위도 같은 값을 쓴다. 다른 항목의 물량·결과는 건드리지 않는다.
+
+## formula·lookup_only의 상담 연결
+
+`formula`·`lookup_only` 명세는 `executable.json`에 오르면 상담 흐름에서 호출된다. 두 계산기는 입력 물량을 이미 반영한
+총량 줄을 내므로 `backend/agent/tools/calc/adapters.py`가 물량 기준 1(1식)로 맞춰 단가·응답·집계가 읽게 한다.
+`lookup_only`는 조회 값이라 금액을 만들지 않고(`reference_only`) 합산에서 사유와 함께 빠진다.

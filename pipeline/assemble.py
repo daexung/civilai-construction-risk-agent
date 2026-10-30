@@ -98,7 +98,11 @@ def column_names(header_rows: list, col_count: int) -> list[str]:
 def join_continuations(lines: list[str]) -> list[str]:
     out = []
     for line in lines:
-        if out and line.strip().startswith(CONTINUATION_PREFIXES):
+        # Explicit trailing operators (for example the source label
+        # "굴착기 +" followed by "부착용집게") bind the next physical line
+        # to the same row label. Keep this narrowly tied to visible syntax.
+        if out and (line.strip().startswith(CONTINUATION_PREFIXES)
+                    or out[-1].rstrip().endswith(("+", "×", "&"))):
             out[-1] = f"{out[-1]} {line}"
         else:
             out.append(line)
@@ -160,6 +164,13 @@ def unstack(row: list, bracket: list, names: list[str]) -> list[list[str | None]
         # 첫 열이 한 줄이면 칸 안 줄바꿈이다(500쪽 '획지수 | (50,000×0.65 / ÷120)=270')
         return [[" ".join(s) if s else None for s in stacks]]
 
+    # Text cells can wrap a single label over multiple physical lines. Join
+    # only explicit continuations (prefix markers or a trailing operator)
+    # before aligning them to the row depth; e.g. "굴착기 +" / "부착용집게".
+    for c, lines in enumerate(stacks):
+        if c not in numeric:
+            stacks[c] = join_continuations(lines)
+
     # Equipment lists can print a shared code stem and type above N aligned
     # specifications. ODL may keep all N+1 lines in one cell even when the
     # numeric columns contain N separate values (including mixed list nodes).
@@ -206,15 +217,30 @@ def parallel_column_groups(row: list) -> list[tuple[int, int]]:
     avoids pairing, for example, two workers with three tile sizes.
     """
     lengths = [len(cell.split("\n")) if cell else 0 for cell in row]
-    if any(n < 2 for n in lengths):
-        return [(0, len(row))]
-    cut = next((i for i in range(1, len(row)) if lengths[i] != lengths[0]), None)
-    if cut is None or cut < 2 or len(row) - cut < 2 or len(set(lengths[cut:])) != 1:
-        return [(0, len(row))]
-    if not all(any(all(VALUE_RE.match(re.sub(r"\s+", "", line)) for line in row[c].split("\n"))
-                   for c in range(start + 1, stop)) for start, stop in ((0, cut), (cut, len(row)))):
-        return [(0, len(row))]
-    return [(0, cut), (cut, len(row))]
+
+    def group_depth(start: int, stop: int) -> int | None:
+        # A one-line merged category label or an empty cell may span a whole
+        # side-by-side list. Ignore those cells when determining its row
+        # depth, but require at least two independently stacked columns so a
+        # wrapped label cannot create a group on its own.
+        active = [lengths[i] for i in range(start, stop) if lengths[i] >= 2]
+        if len(active) < 2 or len(set(active)) != 1:
+            return None
+        depth = active[0]
+        has_values = any(
+            all(VALUE_RE.match(re.sub(r"\s+", "", line)) for line in row[c].split("\n"))
+            for c in range(start + 1, stop) if lengths[c] == depth
+        )
+        return depth if has_values else None
+
+    # Multiple side-by-side grids may have independent row counts while
+    # sharing a single merged label. Find only a boundary with at least two
+    # aligned columns and value evidence on both sides.
+    for cut in range(2, len(row) - 1):
+        left, right = group_depth(0, cut), group_depth(cut, len(row))
+        if left is not None and right is not None and left != right:
+            return [(0, cut), (cut, len(row))]
+    return [(0, len(row))]
 
 
 def note_clauses(note: str) -> list[str]:

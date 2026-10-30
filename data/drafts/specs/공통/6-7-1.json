@@ -40,17 +40,6 @@
         "required": true,
         "ask": "설치할 플륨관의 수량은 몇 본입니까?",
         "source": "PDF 155쪽 6-7-1 표의 시공량 단위(본)"
-      },
-      {
-        "name": "excavator_spec",
-        "type": "enum",
-        "allowed_values": [
-          "현장조건에 맞는 굴착기 규격"
-        ],
-        "unit": null,
-        "required": true,
-        "ask": "작업여건(시공높이, 위치 등) 및 안전율을 고려하여 적용할 굴착기 규격은 무엇입니까?",
-        "source": "PDF 156쪽 [주] ④"
       }
     ],
     "tables": [
@@ -95,7 +84,6 @@
         "coefficients": [],
         "crew": {
           "table": "p211-t2",
-          "column": "수량",
           "trades": [
             "특별인부",
             "보통인부"
@@ -103,15 +91,19 @@
           "rate_codes": {
             "특별인부": "1003",
             "보통인부": "1002"
+          },
+          "row_selector": "수량",
+          "column_template": "{trade}"
+        },
+        "equipment": [
+          {
+            "name": "굴착기",
+            "table": "p211-t2",
+            "unit": "대·일",
+            "row": "수량",
+            "column": "굴착기"
           }
-        },
-        "equipment": {
-          "name": "굴착기",
-          "table": "p211-t2",
-          "unit": "대·일",
-          "machine_code_input": "excavator_spec",
-          "operator_rate_code": "1048"
-        },
+        ],
         "quantity_input": "quantity"
       },
       "steps": [
@@ -149,7 +141,7 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "일당 작업조(특별인부, 보통인부, 굴착기)와 본당 중량에 따른 일일 시공량이 표로 제시되어 있으므로 일당 작업조형 계산이 적합합니다.",
+  "calc_type_reason": "인원 대수가 '수량' 행에 직종별 열로 있어 열 지정만 보완하면 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p211-t2",

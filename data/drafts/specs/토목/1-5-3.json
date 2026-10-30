@@ -75,12 +75,70 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "area",
+        "base_output": {
+          "table": "p367-t1",
+          "row": "시공량(㎡)",
+          "column_input": "thickness"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p367-t1",
+          "column": "수량",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "포장공": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "아스팔트피니셔",
+            "table": "p367-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "굴착기",
+            "table": "p367-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "머캐덤롤러",
+            "table": "p367-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "타이어롤러",
+            "table": "p367-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "탠덤롤러",
+            "table": "p367-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "살수차",
+            "table": "p367-t1",
+            "column": "수량",
+            "unit": "대·일"
+          }
+        ]
+      },
       "steps": [
-        "p367-t1에서 1층 포설두께에 따른 시공량을 확인한다.",
-        "시공 면적을 시공량으로 나누어 작업일수를 구한다.",
-        "작업일수에 표의 직종별 인원 및 장비 대수를 곱하여 총 투입량을 산출한다."
+        "p367-t1에서 1층 포설두께에 따른 일당 시공량을 고른다.",
+        "시공 면적 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수로 총 투입량을 구한다."
       ],
       "source": "PDF 311쪽 1-5-3 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -90,9 +148,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "일당 작업조형이나, 다수의 고정 규격 장비가 투입되는 반면 현재 명세 형식의 equipment 파라미터는 단일 장비 및 규격 선택형으로 설계되어 있어 모든 장비를 명세할 수 없음.",
+  "calc_type_reason": "두께 열별 일당 시공량과 인원·장비 대수가 표에 있어 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p367-t1",
@@ -111,9 +169,7 @@
       "quote": "본 품은 소형장비(피니셔)를 사용한 아스팔트 기층 포설 기준이다."
     }
   ],
-  "open_questions": [
-    "현재 adjusted_daily_crew 모델의 equipment 파라미터가 단일 장비 및 규격 선택형(machine_code_input)으로 설계되어 있어, 본 절과 같이 다수의 고정 규격 장비가 투입되는 경우를 명세할 수 없음."
-  ],
+  "open_questions": [],
   "questions": [
     "1층 포설두께가 6cm일 때 아스팔트 기층 기계포설(소형장비)의 일당 시공량은 얼마인가요?",
     "현장 여건에 따라 탠덤롤러 대신 다른 다짐 장비를 사용해도 되나요?",

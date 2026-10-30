@@ -116,7 +116,11 @@
               "기계설비공",
               "용접공"
             ],
-            "source": "p825-t0 비고"
+            "source": "p825-t0 비고",
+            "application_cite": {
+              "chunk_id": "p825-t0",
+              "quote": "0.5ton 미만은 30% 가산"
+            }
           },
           {
             "when": {
@@ -130,7 +134,11 @@
               "기계설비공",
               "용접공"
             ],
-            "source": "p825-t0 비고"
+            "source": "p825-t0 비고",
+            "application_cite": {
+              "chunk_id": "p825-t0",
+              "quote": "0.5∼1ton 미만은 15% 가산"
+            }
           },
           {
             "when": {
@@ -144,7 +152,11 @@
               "기계설비공",
               "용접공"
             ],
-            "source": "p825-t0 비고"
+            "source": "p825-t0 비고",
+            "application_cite": {
+              "chunk_id": "p825-t0",
+              "quote": "5ton 이상은 20% 감"
+            }
           },
           {
             "when": {
@@ -157,7 +169,11 @@
               "기계설비공",
               "용접공"
             ],
-            "source": "p825-t0 비고 (기술관리를 제외한 본 품의 10% 가산)"
+            "source": "p825-t0 비고 (기술관리를 제외한 본 품의 10% 가산)",
+            "application_cite": {
+              "chunk_id": "p825-t0",
+              "quote": "검사 및 교정이 필요한 경우에 기술관리를 제외한 본 품의 10%를 가산한다"
+            }
           },
           {
             "when": {
@@ -171,7 +187,11 @@
               "기계설비공",
               "용접공"
             ],
-            "source": "p825-t0 비고"
+            "source": "p825-t0 비고",
+            "application_cite": {
+              "chunk_id": "p825-t0",
+              "quote": "Steel Stack 등 ton당 용접장(6㎜ Fillet 환산)이 30m를 초과하는 경우 20%를 가산한다"
+            }
           }
         ],
         "note_adjustments": []

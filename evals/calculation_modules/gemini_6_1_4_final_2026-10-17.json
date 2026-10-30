@@ -1,0 +1,114 @@
+{
+  "section": {
+    "division": "공통",
+    "section_no": "6-1-4"
+  },
+  "cases": [
+    {
+      "id": "heldout-daily-ratio-type-iv",
+      "kind": "daily_output_ratio",
+      "inputs": {
+        "pump_size": "32m",
+        "volume": "100",
+        "structure": "철근",
+        "slump_band": "18㎝이상",
+        "facility_type": "Type-Ⅳ",
+        "site_type": "Type-Ⅲ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "33.6",
+        "work_days": "125/42"
+      },
+      "source": {
+        "pdf_pages": [
+          187
+        ],
+        "printed_pages": [
+          131
+        ],
+        "table_ids": [
+          "p187-t0",
+          "p187-t1",
+          "p187-t3"
+        ]
+      }
+    },
+    {
+      "id": "heldout-crew-pipe-addition-volume-200",
+      "kind": "labor_addition",
+      "inputs": {
+        "pump_size": "32m",
+        "volume": "200",
+        "structure": "무근",
+        "slump_band": "8~12㎝",
+        "facility_type": "Type-Ⅰ",
+        "site_type": "Type-Ⅰ",
+        "placement": "배관",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "218.4",
+        "work_days": "250/273",
+        "person_days.특별인부": "500/273"
+      },
+      "source": {
+        "pdf_pages": [
+          186,
+          187
+        ],
+        "printed_pages": [
+          130,
+          131
+        ],
+        "table_ids": [
+          "p186-t1"
+        ],
+        "note": "p186-t1 pipeline placement adds one special laborer"
+      }
+    },
+    {
+      "id": "heldout-pump-equipment-time-volume-75",
+      "kind": "equipment_time",
+      "inputs": {
+        "pump_size": "32m",
+        "volume": "75",
+        "structure": "무근",
+        "slump_band": "8~12㎝",
+        "facility_type": "Type-Ⅰ",
+        "site_type": "Type-Ⅰ",
+        "placement": "붐",
+        "vibrator_used": true,
+        "reset_status": "없음",
+        "concrete_supply": "관급"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "218.4",
+        "work_days": "125/364",
+        "equipment_days.콘크리트펌프차": "125/364"
+      },
+      "source": {
+        "pdf_pages": [
+          186,
+          187
+        ],
+        "printed_pages": [
+          130,
+          131
+        ],
+        "table_ids": [
+          "p186-t1",
+          "p187-t0"
+        ]
+      }
+    }
+  ]
+}

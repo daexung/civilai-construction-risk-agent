@@ -98,7 +98,8 @@
           "rate_codes": {
             "타일공": "1014",
             "보통인부": "1002"
-          }
+          },
+          "column_template": "{trade}"
         },
         "quantity_input": "quantity"
       },
@@ -130,20 +131,22 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "name": "공구손료 및 경장비",
-        "category": "경비",
-        "base": "labor_subtotal",
+        "item": "tooling and light equipment cost",
         "rate": "0.03",
+        "basis": "labor amount",
+        "source": "설명 | ② 본 품에는 먹매김, 규준틀설치, 접착제 비빔, 타일붙임, 줄눈파기 및 마무리작업을 포함한다. ③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다.",
         "cite": {
           "chunk_id": "p643-x14",
-          "quote": "공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
+          "quote": "설명 | ② 본 품에는 먹매김, 규준틀설치, 접착제 비빔, 타일붙임, 줄눈파기 및 마무리작업을 포함한다. ③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
         }
       }
-    ]
+    ],
+    "calc_type": "daily_crew",
+    "calc_type_reason": "The source provides a daily crew and output by tile-size band; the existing daily-crew engine computes total person-days."
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "표에 일당 시공량과 작업조 인원이 주어져 있어, 물량을 시공량으로 나누어 작업일수를 구하고 인원을 곱하는 일당 작업조형 계산이 적합합니다.",
+  "calc_type_reason": "The source provides a daily crew and output by tile-size band; the existing daily-crew engine computes total person-days.",
   "citations": [
     {
       "table_id": "p643-t1",
@@ -183,15 +186,15 @@
     },
     {
       "chunk_id": "p643-x14",
-      "quote": "본 품은 에폭시 접착제를 사용한 타일의 접착 붙이기(벽면) 기준이다."
+      "quote": "설명 | [주] ① 본 품은 에폭시 접착제를 사용한 타일의 접착 붙이기(벽면) 기준이다."
     },
     {
       "chunk_id": "p643-x14",
-      "quote": "특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다."
+      "quote": "설명 | ② 본 품에는 먹매김, 규준틀설치, 접착제 비빔, 타일붙임, 줄눈파기 및 마무리작업을 포함한다. ③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
     },
     {
       "chunk_id": "p643-x14",
-      "quote": "공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
+      "quote": "설명 | ② 본 품에는 먹매김, 규준틀설치, 접착제 비빔, 타일붙임, 줄눈파기 및 마무리작업을 포함한다. ③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
     }
   ],
   "open_questions": [

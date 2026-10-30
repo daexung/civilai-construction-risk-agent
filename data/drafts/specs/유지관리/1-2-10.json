@@ -19,6 +19,18 @@
         "required": true,
         "ask": "제초할 면적은 몇 ㎡입니까?",
         "source": "PDF 863쪽 1-2-10 제초 표 시공량 단위"
+      },
+      {
+        "name": "area_condition",
+        "type": "enum",
+        "allowed_values": [
+          "일반 잔디지역",
+          "지장물 지역"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "제초 대상지는 일반 잔디지역입니까, 지장물 지역입니까?",
+        "source": "PDF 1-2-10 표 시공량 구분 및 [주] ② (지장물 지역 정의)"
       }
     ],
     "tables": [
@@ -28,15 +40,15 @@
         "source": "PDF 863쪽 1-2-10 제초 표",
         "unit": "인, ㎡",
         "values": {
-          "구분(1)": {
-            "단위": "인",
-            "수량": "1",
-            "시공량(㎡) 일반 잔디지역": "1,400"
+          "조경공": {
+            "수량": "1"
           },
-          "구분(2)": {
-            "단위": "인",
-            "수량": "5",
-            "시공량(㎡) 일반 잔디지역": "1,400"
+          "보통인부": {
+            "수량": "5"
+          },
+          "시공량": {
+            "일반 잔디지역": "1400",
+            "지장물 지역": "1000"
           }
         },
         "cite": {
@@ -46,12 +58,35 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "area",
+        "base_output": {
+          "table": "p919-t0",
+          "row": "시공량",
+          "column_input": "area_condition"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p919-t0",
+          "column": "수량",
+          "trades": [
+            "조경공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "조경공": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": []
+      },
       "steps": [
-        "파싱 결과 누락으로 인해 직종별 인원(조경공, 보통인부) 및 지장물 지역 시공량을 알 수 없어 계산 불가"
+        "대상지 구분(일반 잔디지역/지장물 지역)의 일당 시공량(㎡)을 고른다.",
+        "면적 ÷ 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원으로 총 투입량을 구한다."
       ],
-      "source": "PDF 863쪽 1-2-10 제초 표",
+      "source": "PDF 1-2-10 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -68,13 +103,10 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 직종(조경공, 보통인부) 및 지장물 지역 시공량 데이터가 누락되어 계산 모델을 구성할 수 없습니다.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
-    {
-      "table_id": "p919-t0"
-    },
     {
       "chunk_id": "p919-x3",
       "quote": "본 품은 인력으로 잡초를 제거하는 기준이다."
@@ -82,6 +114,12 @@
     {
       "chunk_id": "p919-x3",
       "quote": "상차 및 외부 운반 작업, 폐기물처리비는 별도 계상한다."
+    },
+    {
+      "table_id": "p919-t0",
+      "row": "시공량",
+      "column": "일반 잔디지역",
+      "value": "1400"
     }
   ],
   "open_questions": [

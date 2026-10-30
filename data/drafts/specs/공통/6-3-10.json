@@ -40,7 +40,11 @@
         "unit": "㎜",
         "required": true,
         "ask": "다웰바의 설치 간격은 몇 ㎜입니까? (기준: 150㎜, 다웰바 설치가 아니면 임의의 값 입력)",
-        "source": "PDF 143쪽 1. 다웰바 설치 [주] ②"
+        "source": "PDF 143쪽 1. 다웰바 설치 [주] ②",
+        "when": {
+          "input": "work_type",
+          "equals": "다웰바 설치"
+        }
       },
       {
         "name": "filler_thickness",
@@ -49,7 +53,11 @@
         "unit": "㎜",
         "required": true,
         "ask": "채움재(발포폴리스티렌)의 두께는 몇 ㎜입니까? (기준: 20㎜, 채움재 설치가 아니면 임의의 값 입력)",
-        "source": "PDF 143쪽 2. 채움재 설치 [주] ②"
+        "source": "PDF 143쪽 2. 채움재 설치 [주] ②",
+        "when": {
+          "input": "work_type",
+          "equals": "채움재 설치"
+        }
       }
     ],
     "tables": [
@@ -110,14 +118,32 @@
       "name": "per_unit",
       "params": {
         "unit_rate_table": {
-          "table": "work_type에 따라 p199-t1, p199-t2, p199-t3 중 선택",
-          "row_input": "직종",
-          "column_input": "수량",
+          "table": "p199-t1",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "형틀목공",
-            "보통인부",
-            "방수공"
-          ]
+            "보통인부"
+          ],
+          "table_selector": {
+            "input": "work_type",
+            "values": {
+              "다웰바 설치": "p199-t1",
+              "채움재 설치": "p199-t2",
+              "실링 마감": "p199-t3"
+            }
+          },
+          "quantity_unit_by_table": {
+            "p199-t1": "ea",
+            "p199-t2": "㎡",
+            "p199-t3": "m"
+          },
+          "trades_by_table": {
+            "p199-t3": [
+              "방수공",
+              "보통인부"
+            ]
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
@@ -188,8 +214,14 @@
             "chunk_id": "p199-x16",
             "quote": "③ 공구손료는 인력품의 1%로 계상한다."
           }
-        ]
+        ],
+        "when": {
+          "work_type": "실링 마감"
+        }
       }
+    ],
+    "open_questions": [
+      "공구손료 1%는 실링 마감에만 명시되어 있으나, 조건부 비용 규칙 실행이 확인되기 전에는 비용 합계에 적용하지 않는다."
     ]
   },
   "calc_type": "per_unit",
@@ -272,6 +304,16 @@
     "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.jsonl",
     "chunks_sha256": "2d5ae619c2ccbd649f88bc924600173982e246bdfde6727bb513fc819ff0df56",
     "citation_retry_used": false,
-    "citation_issues_after_retry": []
+    "citation_issues_after_retry": [],
+    "source_cell_review_2026_10_19": {
+      "table_ids": [
+        "p199-t1",
+        "p199-t2",
+        "p199-t3"
+      ],
+      "physical_pdf_page": 199,
+      "printed_page": 143,
+      "method": "visual source PDF review; row labels, units, values independently transcribed"
+    }
   }
 }

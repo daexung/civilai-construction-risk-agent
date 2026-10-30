@@ -74,7 +74,7 @@
         "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
-        "unit": "단위(본, 대, Set 등)",
+        "unit": null,
         "required": true,
         "ask": "설치 수량은 얼마입니까?",
         "source": "기본 물량 입력"
@@ -274,18 +274,487 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p773-t1",
+          "table_selector": {
+            "input": "instrument_item",
+            "values": {
+              "파이프스텐션": "p773-t1",
+              "계기": "p773-t1",
+              "발신기": "p773-t1",
+              "수신기": "p773-t1",
+              "AirSet": "p773-t1",
+              "변환기": "p773-t1",
+              "수동조작기": "p773-t1",
+              "비율설정기": "p773-t1",
+              "기록계": "p773-t1",
+              "현장지시계 | 규격 LG": "p774-t0",
+              "현장지시계 | 규격 LPG, VG": "p774-t0",
+              "현장지시계 | 규격 PG": "p774-t0",
+              "현장지시계 | 규격 TG": "p774-t0",
+              "후로드식액면계": "p774-t0",
+              "측온계": "p774-t0",
+              "분석계 | 규격 적외선식, 자기식": "p774-t0",
+              "MonoMeter": "p774-t0",
+              "Thermocouple": "p774-t0",
+              "Dispressor | 규격 외통식": "p774-t0",
+              "스위치 | 규격 일반각종": "p774-t0",
+              "전자Valve | 규격 소형": "p774-t0",
+              "전자Valve | 규격 대형": "p774-t0",
+              "강압Valve | 규격 소형": "p774-t0",
+              "강압Valve | 규격 대형": "p774-t0",
+              "여과기 | 규격 소형": "p774-t0",
+              "여과기 | 규격 대형": "p774-t0",
+              "조절Valve | 규격 1B": "p774-t0",
+              "조절Valve | 규격 2B": "p774-t0",
+              "조절Valve | 규격 3B": "p774-t0",
+              "조절Valve | 규격 4B": "p774-t0",
+              "ButterflyValve | 규격 200ø": "p774-t0",
+              "ButterflyValve | 규격 300ø": "p774-t0",
+              "ButterflyValve | 규격 400ø": "p774-t0",
+              "ButterflyValve | 규격 500ø": "p774-t0",
+              "Orifice | 규격 200ø 이하": "p774-t0",
+              "Orifice | 규격 201ø∼500ø": "p774-t0",
+              "Orifice | 규격 501ø이상": "p774-t0",
+              "출력Gauge | 규격 공기식": "p774-t0",
+              "CylinderValve": "p774-t0",
+              "탈습장치": "p774-t0",
+              "탁도검출기": "p774-t0",
+              "P - H m e t e r 검출기": "p774-t0",
+              "X-Ray발생장치": "p774-t0",
+              "α-Ray발생장치": "p774-t0",
+              "PowerPack": "p774-t0",
+              "현장조절계 | 규격 일반각종": "p774-t0",
+              "중성자발생장치 | 규격 〃": "p774-t0",
+              "FLAME DETECTOR": "p774-t0"
+            }
+          },
+          "row_input": "instrument_item",
+          "column_input": null,
+          "trades": [
+            "계장공"
+          ],
+          "quantity_input": "quantity",
+          "quantity_unit_selector": {
+            "input": "instrument_item",
+            "values": {
+              "파이프스텐션": "본",
+              "계기": "대",
+              "발신기": "대",
+              "수신기": "대",
+              "AirSet": "대",
+              "변환기": "대",
+              "수동조작기": "대",
+              "비율설정기": "대",
+              "기록계": "대",
+              "현장지시계 | 규격 LG": "대",
+              "현장지시계 | 규격 LPG, VG": "대",
+              "현장지시계 | 규격 PG": "대",
+              "현장지시계 | 규격 TG": "대",
+              "후로드식액면계": "대",
+              "측온계": "대",
+              "분석계 | 규격 적외선식, 자기식": "대",
+              "MonoMeter": "Set",
+              "Thermocouple": "대",
+              "Dispressor | 규격 외통식": "대",
+              "스위치 | 규격 일반각종": "대",
+              "전자Valve | 규격 소형": "대",
+              "전자Valve | 규격 대형": "대",
+              "강압Valve | 규격 소형": "대",
+              "강압Valve | 규격 대형": "대",
+              "여과기 | 규격 소형": "대",
+              "여과기 | 규격 대형": "대",
+              "조절Valve | 규격 1B": "대",
+              "조절Valve | 규격 2B": "대",
+              "조절Valve | 규격 3B": "대",
+              "조절Valve | 규격 4B": "대",
+              "ButterflyValve | 규격 200ø": "대",
+              "ButterflyValve | 규격 300ø": "대",
+              "ButterflyValve | 규격 400ø": "대",
+              "ButterflyValve | 규격 500ø": "대",
+              "Orifice | 규격 200ø 이하": "대",
+              "Orifice | 규격 201ø∼500ø": "대",
+              "Orifice | 규격 501ø이상": "대",
+              "출력Gauge | 규격 공기식": "대",
+              "CylinderValve": "대",
+              "탈습장치": "대",
+              "탁도검출기": "대",
+              "P - H m e t e r 검출기": "대",
+              "X-Ray발생장치": "Set",
+              "α-Ray발생장치": "Set",
+              "PowerPack": "Set",
+              "현장조절계 | 규격 일반각종": "대",
+              "중성자발생장치 | 규격 〃": "대",
+              "FLAME DETECTOR": "Set"
+            },
+            "basis_by_selected_unit": true,
+            "cite_by_value": {
+              "파이프스텐션": {
+                "table_id": "p773-t1",
+                "row": "파이프스텐션",
+                "column": "단위",
+                "value": "본"
+              },
+              "계기": {
+                "table_id": "p773-t1",
+                "row": "계기",
+                "column": "단위",
+                "value": "대"
+              },
+              "발신기": {
+                "table_id": "p773-t1",
+                "row": "발신기",
+                "column": "단위",
+                "value": "대"
+              },
+              "수신기": {
+                "table_id": "p773-t1",
+                "row": "수신기",
+                "column": "단위",
+                "value": "대"
+              },
+              "AirSet": {
+                "table_id": "p773-t1",
+                "row": "AirSet",
+                "column": "단위",
+                "value": "대"
+              },
+              "변환기": {
+                "table_id": "p773-t1",
+                "row": "변환기",
+                "column": "단위",
+                "value": "대"
+              },
+              "수동조작기": {
+                "table_id": "p773-t1",
+                "row": "수동조작기",
+                "column": "단위",
+                "value": "대"
+              },
+              "비율설정기": {
+                "table_id": "p773-t1",
+                "row": "비율설정기",
+                "column": "단위",
+                "value": "대"
+              },
+              "기록계": {
+                "table_id": "p773-t1",
+                "row": "기록계",
+                "column": "단위",
+                "value": "대"
+              },
+              "현장지시계 | 규격 LG": {
+                "table_id": "p774-t0",
+                "row": "현장지시계 | 규격 LG",
+                "column": "단위",
+                "value": "대"
+              },
+              "현장지시계 | 규격 LPG, VG": {
+                "table_id": "p774-t0",
+                "row": "현장지시계 | 규격 LPG, VG",
+                "column": "단위",
+                "value": "〃"
+              },
+              "현장지시계 | 규격 PG": {
+                "table_id": "p774-t0",
+                "row": "현장지시계 | 규격 PG",
+                "column": "단위",
+                "value": "〃"
+              },
+              "현장지시계 | 규격 TG": {
+                "table_id": "p774-t0",
+                "row": "현장지시계 | 규격 TG",
+                "column": "단위",
+                "value": "〃"
+              },
+              "후로드식액면계": {
+                "table_id": "p774-t0",
+                "row": "후로드식액면계",
+                "column": "단위",
+                "value": "대"
+              },
+              "측온계": {
+                "table_id": "p774-t0",
+                "row": "측온계",
+                "column": "단위",
+                "value": "〃"
+              },
+              "분석계 | 규격 적외선식, 자기식": {
+                "table_id": "p774-t0",
+                "row": "분석계 | 규격 적외선식, 자기식",
+                "column": "단위",
+                "value": "〃"
+              },
+              "MonoMeter": {
+                "table_id": "p774-t0",
+                "row": "MonoMeter",
+                "column": "단위",
+                "value": "Set"
+              },
+              "Thermocouple": {
+                "table_id": "p774-t0",
+                "row": "Thermocouple",
+                "column": "단위",
+                "value": "대"
+              },
+              "Dispressor | 규격 외통식": {
+                "table_id": "p774-t0",
+                "row": "Dispressor | 규격 외통식",
+                "column": "단위",
+                "value": "대"
+              },
+              "스위치 | 규격 일반각종": {
+                "table_id": "p774-t0",
+                "row": "스위치 | 규격 일반각종",
+                "column": "단위",
+                "value": "대"
+              },
+              "전자Valve | 규격 소형": {
+                "table_id": "p774-t0",
+                "row": "전자Valve | 규격 소형",
+                "column": "단위",
+                "value": "대"
+              },
+              "전자Valve | 규격 대형": {
+                "table_id": "p774-t0",
+                "row": "전자Valve | 규격 대형",
+                "column": "단위",
+                "value": "〃"
+              },
+              "강압Valve | 규격 소형": {
+                "table_id": "p774-t0",
+                "row": "강압Valve | 규격 소형",
+                "column": "단위",
+                "value": "대"
+              },
+              "강압Valve | 규격 대형": {
+                "table_id": "p774-t0",
+                "row": "강압Valve | 규격 대형",
+                "column": "단위",
+                "value": "〃"
+              },
+              "여과기 | 규격 소형": {
+                "table_id": "p774-t0",
+                "row": "여과기 | 규격 소형",
+                "column": "단위",
+                "value": "대"
+              },
+              "여과기 | 규격 대형": {
+                "table_id": "p774-t0",
+                "row": "여과기 | 규격 대형",
+                "column": "단위",
+                "value": "〃"
+              },
+              "조절Valve | 규격 1B": {
+                "table_id": "p774-t0",
+                "row": "조절Valve | 규격 1B",
+                "column": "단위",
+                "value": "대"
+              },
+              "조절Valve | 규격 2B": {
+                "table_id": "p774-t0",
+                "row": "조절Valve | 규격 2B",
+                "column": "단위",
+                "value": "〃"
+              },
+              "조절Valve | 규격 3B": {
+                "table_id": "p774-t0",
+                "row": "조절Valve | 규격 3B",
+                "column": "단위",
+                "value": "〃"
+              },
+              "조절Valve | 규격 4B": {
+                "table_id": "p774-t0",
+                "row": "조절Valve | 규격 4B",
+                "column": "단위",
+                "value": "〃"
+              },
+              "ButterflyValve | 규격 200ø": {
+                "table_id": "p774-t0",
+                "row": "ButterflyValve | 규격 200ø",
+                "column": "단위",
+                "value": "대"
+              },
+              "ButterflyValve | 규격 300ø": {
+                "table_id": "p774-t0",
+                "row": "ButterflyValve | 규격 300ø",
+                "column": "단위",
+                "value": "〃"
+              },
+              "ButterflyValve | 규격 400ø": {
+                "table_id": "p774-t0",
+                "row": "ButterflyValve | 규격 400ø",
+                "column": "단위",
+                "value": "〃"
+              },
+              "ButterflyValve | 규격 500ø": {
+                "table_id": "p774-t0",
+                "row": "ButterflyValve | 규격 500ø",
+                "column": "단위",
+                "value": "〃"
+              },
+              "Orifice | 규격 200ø 이하": {
+                "table_id": "p774-t0",
+                "row": "Orifice | 규격 200ø 이하",
+                "column": "단위",
+                "value": "대"
+              },
+              "Orifice | 규격 201ø∼500ø": {
+                "table_id": "p774-t0",
+                "row": "Orifice | 규격 201ø∼500ø",
+                "column": "단위",
+                "value": "〃"
+              },
+              "Orifice | 규격 501ø이상": {
+                "table_id": "p774-t0",
+                "row": "Orifice | 규격 501ø이상",
+                "column": "단위",
+                "value": "〃"
+              },
+              "출력Gauge | 규격 공기식": {
+                "table_id": "p774-t0",
+                "row": "출력Gauge | 규격 공기식",
+                "column": "단위",
+                "value": "대"
+              },
+              "CylinderValve": {
+                "table_id": "p774-t0",
+                "row": "CylinderValve",
+                "column": "단위",
+                "value": "대"
+              },
+              "탈습장치": {
+                "table_id": "p774-t0",
+                "row": "탈습장치",
+                "column": "단위",
+                "value": "대"
+              },
+              "탁도검출기": {
+                "table_id": "p774-t0",
+                "row": "탁도검출기",
+                "column": "단위",
+                "value": "대"
+              },
+              "P - H m e t e r 검출기": {
+                "table_id": "p774-t0",
+                "row": "P - H m e t e r 검출기",
+                "column": "단위",
+                "value": "대"
+              },
+              "X-Ray발생장치": {
+                "table_id": "p774-t0",
+                "row": "X-Ray발생장치",
+                "column": "단위",
+                "value": "Set"
+              },
+              "α-Ray발생장치": {
+                "table_id": "p774-t0",
+                "row": "α-Ray발생장치",
+                "column": "단위",
+                "value": "Set"
+              },
+              "PowerPack": {
+                "table_id": "p774-t0",
+                "row": "PowerPack",
+                "column": "단위",
+                "value": "Set"
+              },
+              "현장조절계 | 규격 일반각종": {
+                "table_id": "p774-t0",
+                "row": "현장조절계 | 규격 일반각종",
+                "column": "단위",
+                "value": "대"
+              },
+              "중성자발생장치 | 규격 〃": {
+                "table_id": "p774-t0",
+                "row": "중성자발생장치 | 규격 〃",
+                "column": "단위",
+                "value": "〃"
+              },
+              "FLAME DETECTOR": {
+                "table_id": "p774-t0",
+                "row": "FLAME DETECTOR",
+                "column": "단위",
+                "value": "Set"
+              }
+            }
+          }
+        },
+        "surcharges": [],
+        "note_adjustments": [
+          {
+            "when": {
+              "is_explosion_proof": true
+            },
+            "change": "본 품의 20%를 가산한다.",
+            "source": "PDF 718쪽 p774-t0 비고",
+            "cite": {
+              "table_id": "p774-t0",
+              "row": "비고",
+              "column": "방폭공사 가산률",
+              "value": "20%"
+            }
+          },
+          {
+            "when": {
+              "is_loop_test": true
+            },
+            "change": "본 품의 25%를 가산한다.",
+            "source": "PDF 718쪽 p774-t0 비고",
+            "cite": {
+              "table_id": "p774-t0",
+              "row": "비고",
+              "column": "Loop 시험 가산률",
+              "value": "25%"
+            }
+          }
+        ],
+        "quantity_input": "quantity"
+      },
       "steps": [
-        "선택한 instrument_item에 해당하는 계장공 품을 p773-t1 또는 p774-t0 표에서 찾는다.",
-        "물량(quantity)을 곱하여 기본 품을 구한다.",
-        "방폭공사(is_explosion_proof)인 경우 기본 품에 20%를 가산한다.",
-        "Loop 시험(is_loop_test)인 경우 기본 품에 25%를 가산한다."
+        "instrument_item과 일치하는 원문 행에서 계장공 품을 조회한다.",
+        "원문 단위 열에서 본/대/Set 단위를 선택해 물량과 차원을 맞춘다.",
+        "방폭공사 단독 또는 Loop 시험 단독이면 원문 고정 가산율을 적용한다.",
+        "두 가산조건 동시 적용 방식은 원문에 정해져 있지 않아 그 조합은 계산을 보류한다."
       ],
-      "source": "PDF 717쪽 p773-t1, 718쪽 p774-t0 및 비고",
-      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+      "source": "PDF 717~718쪽 p773-t1/p774-t0 플랜트 계기 설치",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 적용"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "방폭공사와 Loop 시험 동시 적용",
+        "blocked_if_all": [
+          {
+            "input": "is_explosion_proof",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "is_loop_test",
+            "op": "==",
+            "value": true
+          }
+        ],
+        "reason": "원문은 각각 기본 품의 20%, 25% 가산만 제시하고 동시 적용 결합 방식을 정하지 않는다.",
+        "source": "PDF 718쪽 p774-t0 비고",
+        "cite": [
+          {
+            "table_id": "p774-t0",
+            "row": "비고",
+            "column": "방폭공사 가산률",
+            "value": "20%"
+          },
+          {
+            "table_id": "p774-t0",
+            "row": "비고",
+            "column": "Loop 시험 가산률",
+            "value": "25%"
+          }
+        ]
+      }
+    ],
     "not_calculated": [
       {
         "item": "파이프스텐션 기초",
@@ -296,11 +765,14 @@
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": [
+      "방폭공사와 Loop 시험이 동시에 적용될 때 두 고정 가산율의 결합 방식은 원문에서 확인되지 않아 해당 조합을 보류한다."
+    ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "항목이 두 개의 표(p773-t1, p774-t0)에 나뉘어 있고, 일부 항목은 명칭이 중복되어 규격과 조합해야만 고유 식별이 가능하여 단일 표 기반의 per_unit 모델로 완벽히 표현하기 어렵습니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "48개 계기·규격의 원문 단위당 계장공 품과 source unit 셀을 연결하고, 단독으로 적용 가능한 두 고정 할증을 계산합니다.",
   "citations": [
     {
       "table_id": "p773-t1",

@@ -149,8 +149,108 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p101-t3",
+          "row": "시공량",
+          "column_selector": {
+            "input": "height",
+            "value_map": {
+              "3.5m이하": "3.5m이하",
+              "3.5m초과~4.2m이하": "3.5m초과∼4.2m이하"
+            },
+            "contains": [
+              "{value}"
+            ]
+          }
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p101-t3",
+          "trades": [
+            "형틀목공",
+            "보통인부"
+          ],
+          "column": "수량"
+        },
+        "quantity_input": "quantity",
+        "output_adjustments": [
+          {
+            "when": {
+              "spacing": "0.6m이하"
+            },
+            "operation": "multiply_output",
+            "value": "0.83",
+            "cite": {
+              "table_id": "p101-t5",
+              "row": "요율",
+              "column": "0.6m이하",
+              "value": "- 17%"
+            }
+          },
+          {
+            "when": {
+              "spacing": "0.6m초과~0.8m이하"
+            },
+            "operation": "multiply_output",
+            "value": "1",
+            "cite": {
+              "table_id": "p101-t5",
+              "row": "요율",
+              "column": "0.6m초과∼0.8m이하",
+              "value": "-"
+            }
+          },
+          {
+            "when": {
+              "spacing": "0.8m초과"
+            },
+            "operation": "multiply_output",
+            "value": "1.11",
+            "cite": {
+              "table_id": "p101-t5",
+              "row": "요율",
+              "column": "0.8m초과",
+              "value": "+ 11%"
+            }
+          }
+        ],
+        "additional_unit_labor": [
+          {
+            "when": {
+              "horizontal_tie_needed": true
+            },
+            "trade": "형틀목공",
+            "quantity_input": "quantity",
+            "rate": "0.02",
+            "basis": "㎡",
+            "unit": "인/㎡",
+            "cite": {
+              "table_id": "p101-t4",
+              "row": "형틀목공",
+              "column": "수량",
+              "value": "0.02"
+            }
+          },
+          {
+            "when": {
+              "horizontal_tie_needed": true
+            },
+            "trade": "보통인부",
+            "quantity_input": "quantity",
+            "rate": "0.01",
+            "basis": "㎡",
+            "unit": "인/㎡",
+            "cite": {
+              "table_id": "p101-t4",
+              "row": "보통인부",
+              "column": "수량",
+              "value": "0.01"
+            }
+          }
+        ]
+      },
       "steps": [
         "1. p101-t3에서 설치높이에 따른 기준 시공량과 작업조 인원(형틀목공 3인, 보통인부 1인)을 확인합니다.",
         "2. p101-t5에서 설치간격에 따른 시공량 요율을 확인하여 기준 시공량을 조정합니다.",
@@ -193,9 +293,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "일당 작업조 방식의 기본 품과 단위당(㎡) 품이 혼합되어 있고, 시공량 증감 요율(%)이 문자열로 제공되어 단일 수식으로 자동화하기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "?? ?? ?? ???????, ?? ??? ????? ???? ??? ???.",
   "citations": [
     {
       "table_id": "p101-t3",

@@ -50,8 +50,12 @@
         "allowed_values": "0보다 큰 수",
         "unit": "cm",
         "required": true,
-        "ask": "공항포장의 경우 포장두께는 몇 cm입니까? (공항포장이 아니면 0 입력)",
-        "source": "1-6-4 [주] ②"
+        "when": {
+          "input": "pavement_type",
+          "equals": "공항포장"
+        },
+        "ask": "공항포장의 포장두께는 몇 cm입니까?",
+        "source": "PDF 316쪽 1-6-4 [주] ②"
       },
       {
         "name": "frequent_movement",
@@ -62,8 +66,12 @@
         ],
         "unit": null,
         "required": true,
-        "ask": "공항포장에서 집수정, 기초 등 지장물에 의해 이동이 빈번하게 발생하여 연속적인 포설이 불가능합니까?",
-        "source": "p372-t1 비고"
+        "ask": "공항포장에서 집수정, 기초 등 지장물로 이동이 빈번하여 연속 포설이 불가능합니까?",
+        "source": "p372-t1 비고",
+        "when": {
+          "input": "pavement_type",
+          "equals": "공항포장"
+        }
       }
     ],
     "tables": [
@@ -103,36 +111,90 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "volume",
+        "base_output": {
+          "table": "p372-t1",
+          "row": "시공량(㎥)",
+          "column_input": "pavement_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p372-t1",
+          "column": "수량",
+          "trades": [
+            "포장공",
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "포장공": "",
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "콘크리트페이버",
+            "table": "p372-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "굴착기",
+            "table": "p372-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "살수차",
+            "table": "p372-t1",
+            "column": "수량",
+            "unit": "대·일"
+          }
+        ],
+        "output_adjustments": [
+          {
+            "when": {
+              "pavement_type": "공항포장",
+              "frequent_movement": true
+            },
+            "operation": "set_output_percent",
+            "value": "15",
+            "source": "표 비고: 공항포장 지장물로 연속 포설 불가 시 시공량의 15%를 감한다",
+            "cite": {
+              "table_id": "p372-t1"
+            }
+          }
+        ]
+      },
       "steps": [
-        "p372-t1에서 포장 종류에 따른 기준 시공량을 확인한다.",
-        "공항포장이며 지장물로 인해 연속 포설이 불가능한 경우 시공량의 15%를 감산한다.",
-        "물량을 시공량으로 나누어 작업일수를 구한다.",
-        "작업일수에 직종별 인원(포장공 5, 특별인부 2, 보통인부 2)과 장비 대수(콘크리트페이버 1, 굴착기 1, 살수차 0.5)를 곱하여 총 투입량을 산출한다."
+        "p372-t1에서 포장 종류에 따른 일당 시공량을 고른다.",
+        "공항포장이며 지장물로 연속 포설이 불가능하면 시공량의 15%를 감한다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수(콘크리트페이버·굴착기·살수차)로 총 투입량을 구한다."
       ],
-      "source": "1-6-4 콘크리트 표층 기계포설(대형장비) 표 및 [주]",
+      "source": "PDF 316쪽 1-6-4 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
         "condition": "공항포장이며 포장두께가 50cm를 초과하는 경우",
+        "blocked_if_all": [
+          {
+            "input": "pavement_type",
+            "op": "==",
+            "value": "공항포장"
+          },
+          {
+            "input": "pavement_thickness",
+            "op": ">",
+            "value": "50"
+          }
+        ],
         "reason": "공항포장은 포장두께 50cm 이하 포설 기준입니다.",
-        "source": "1-6-4 [주] ②",
-        "cite": {
-          "chunk_id": "p372-x16",
-          "quote": "② 공항포장은 포장두께 50cm이하 포설 기준이다."
-        }
-      },
-      {
-        "condition": "공항포장에서 지장물에 의해 이동이 빈번하여 연속 포설이 불가능한 경우",
-        "blocked_if": {
-          "input": "frequent_movement",
-          "op": "==",
-          "value": true
-        },
-        "reason": "시공량의 15%를 감산해야 하나, 현재 계산 모델에서 시공량 직접 감산을 지원하지 않아 수동 계산이 필요합니다.",
-        "source": "p372-t1 비고",
+        "source": "PDF 316쪽 1-6-4 [주] ②",
         "cite": {
           "table_id": "p372-t1"
         }
@@ -151,9 +213,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "작업조에 여러 장비(콘크리트페이버, 굴착기, 살수차)가 투입되나, 현재 명세 형식의 equipment 파라미터가 단일 장비만 지원하는 것으로 보여 자동 계산을 보류합니다.",
+  "calc_type_reason": "인원·장비 대수와 포장 종류별 일당 시공량이 표에 있고, 장비 목록·15% 감 규칙을 기존 일당 작업조 계산기가 처리한다.",
   "citations": [
     {
       "table_id": "p372-t1",
@@ -177,7 +239,6 @@
     }
   ],
   "open_questions": [
-    "작업조에 여러 장비(콘크리트페이버, 굴착기, 살수차)가 투입되나, 명세 형식의 equipment 파라미터가 단일 객체만 지원하는 것으로 보여 자동 계산(daily_crew)을 보류하고 not_calculable로 분류했습니다. equipment 배열 지원 여부 확인이 필요합니다.",
     "p372-t1 비고의 '시공량 15% 감산' 조건을 adjusted_daily_crew 모델에서 어떻게 처리해야 할지(예: coefficients에 가상의 계수 추가 허용 여부) 명확하지 않아 blocked로 처리했습니다."
   ],
   "questions": [

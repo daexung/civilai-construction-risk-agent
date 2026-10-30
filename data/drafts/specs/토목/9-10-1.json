@@ -141,37 +141,72 @@
       "params": {
         "unit_rate_table": {
           "table": "p594-t0",
-          "row_input": "합계",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "지적기사",
             "지적산업기사",
             "지적기능사"
-          ]
+          ],
+          "trade_in_columns": true,
+          "row_by_trade": {
+            "지적기사": "합계",
+            "지적산업기사": "합계",
+            "지적기능사": "합계"
+          },
+          "basis_cites_by_row": {
+            "합계": {
+              "chunk_id": "p594-x10",
+              "quote": "본 품은 1필지당 토지는 1,500㎡, 임야는 5,000㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고, 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다."
+            }
+          }
         },
         "quantity_input": "parcel_count",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "coefficient_combination": "multiply",
+        "coefficient_rules": [
           {
-            "when": {},
-            "change": "면적계수 적용: land_type에 따라 기준면적(토지 1500, 임야 5000)을 정하고, area가 기준면적 이하이면 1.0, 초과면 n=(area-기준면적)/기준면적을 구하여 p594-t1에 따라 계수 곱함",
-            "source": "PDF 538쪽 [주] ②"
+            "kind": "area_increment",
+            "table": "p594-t1",
+            "row": "계수",
+            "area_input": "area",
+            "land_input": "land_type",
+            "base_area_by_value": {
+              "토지": "1500",
+              "임야": "5000"
+            },
+            "cite": {
+              "chunk_id": "p594-x14",
+              "quote": "※ n은 가산횟수로 (대상면적-기준면적) ÷ 기준면적"
+            }
           },
           {
-            "when": {},
-            "change": "등록계수 적용: land_type에 따라 p594-t2의 계수 곱함",
-            "source": "PDF 538쪽 [주] ③"
+            "table": "p594-t2",
+            "row": "계수",
+            "input": "land_type",
+            "cite": {
+              "chunk_id": "p594-x14",
+              "quote": "지적공부 등록지(토지, 임야)별로 다음의 계수를 곱하여 계상한다."
+            }
           },
           {
-            "when": {},
-            "change": "지역구분계수 적용: region_type에 따라 p594-t3의 계수 곱함",
-            "source": "PDF 538쪽 [주] ④"
+            "table": "p594-t3",
+            "row": "계수",
+            "input": "region_type",
+            "cite": {
+              "chunk_id": "p594-x17",
+              "quote": "본 품은 면지역을 기준으로 하였으며, 행정구역이 다를 경우 다음의 계수를 곱하여 품을 계상한다."
+            }
           }
         ]
       },
       "steps": [
-        "p594-t0에서 합계 품을 찾는다.",
-        "면적계수, 등록계수, 지역구분계수를 각각 구하여 기본 품에 곱한다.",
-        "필지 수(parcel_count)를 곱하여 총 품을 구한다."
+        "p594-t0 합계행에서 직종별 1필지 기본 품을 조회한다.",
+        "토지 1,500㎡ 또는 임야 5,000㎡의 기준에 따라 면적 가산횟수 n과 p594-t1 계수를 구한다.",
+        "등록지 p594-t2와 행정구역 p594-t3의 계수를 조회한다.",
+        "원문에서 각 계수를 곱하여 품을 계상하므로 기본 품에 면적·등록·지역 계수를 모두 곱한다.",
+        "단위당 직종별 품에 필지 수를 반영한다."
       ],
       "source": "PDF 538쪽 [주] ①~④",
       "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"

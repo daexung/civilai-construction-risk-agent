@@ -201,22 +201,37 @@
         "unit_rate_table": {
           "table": "p625-t3",
           "row_input": "기본용접공수 (인･일/t)",
-          "column_input": "환산용접길이(계산값)",
           "trades": [
             "기본용접공수"
+          ],
+          "continuation_tables": [
+            "p626-t0"
+          ],
+          "calculated_column_selector": {
+            "value_input": "weld_length",
+            "factor_table_input": "weld_type",
+            "factor_tables_by_value": {
+              "필릿용접": [
+                "p626-t1"
+              ],
+              "V, K, X용접": [
+                "p626-t2"
+              ]
+            },
+            "factor_row": "환산계수",
+            "factor_column_input": "plate_thickness"
+          },
+          "conditional_rate_multipliers": [
+            {
+              "when": {
+                "member_type": "H형강부재"
+              },
+              "factor": "0.73"
+            }
           ]
         },
         "quantity_input": "quantity",
-        "surcharges": [],
-        "note_adjustments": [
-          {
-            "when": {
-              "member_type": "H형강부재"
-            },
-            "change": "기본용접공수× 0.73으로 산정한다.",
-            "source": "PDF 569쪽 비고 및 p626-t0 비고"
-          }
-        ]
+        "surcharges": []
       },
       "steps": [
         "weld_type과 plate_thickness에 따라 p626-t1 또는 p626-t2에서 환산계수를 찾는다.",

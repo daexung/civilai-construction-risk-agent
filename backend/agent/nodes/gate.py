@@ -2,12 +2,12 @@
 
 from backend.agent.rules.specs import load_specs
 from backend.agent.state import AgentState
-from backend.agent.tools.calc.daily_crew import check_blocked
+from backend.agent.tools.calc.generated import check_registered_blocked
 
 
 def gate(state: AgentState) -> dict:
     spec = load_specs()[state["spec_id"]]
-    blocked = check_blocked(spec, state.get("inputs", {}))
+    blocked = check_registered_blocked(spec, state.get("inputs", {}))
     if blocked:
         return {"status": "BLOCKED", "reason": blocked["reason"], "result": blocked}
     return {"review_status": spec.get("review", "")}

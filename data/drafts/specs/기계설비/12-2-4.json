@@ -49,9 +49,9 @@
         "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
-        "unit": "m 또는 개",
+        "unit": null,
         "required": true,
-        "ask": "설치 물량은 얼마입니까? (배관은 m, Valve는 개)",
+        "ask": "선택한 배관 규격의 기준 단위(m 또는 개)에 해당하는 물량은 얼마입니까?",
         "source": "PDF 720쪽 12-2-4 표 기준 (m당) 및 Valve (개당)"
       },
       {
@@ -162,7 +162,26 @@
           "column_input": "connection_type",
           "trades": [
             "계장공"
-          ]
+          ],
+          "quantity_unit_selector": {
+            "input": "item_spec",
+            "values": {
+              "1/2 B": "m",
+              "3/4B": "m",
+              "1B": "m",
+              "1 1/2B": "m",
+              "2B": "m",
+              "각종": "개"
+            }
+          },
+          "basis_by_row": {
+            "1/2 B": "1m",
+            "3/4B": "1m",
+            "1B": "1m",
+            "1 1/2B": "1m",
+            "2B": "1m",
+            "각종": "1개"
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [

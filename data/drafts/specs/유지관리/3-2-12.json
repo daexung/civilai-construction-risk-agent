@@ -49,13 +49,19 @@
     "tables": [
       {
         "id": "p973-t0",
-        "role": "석면건축자재 해체 품 (파싱 오류로 직종 누락)",
-        "source": "PDF 917쪽 3-2-12 표",
+        "role": "석면건축자재 해체 인력품",
+        "source": "PDF 물리 973쪽 / 인쇄 917쪽; 직종 × 자재유형 교차표",
         "unit": "인/㎡",
         "values": {
-          "구분": {
+          "석면해체공": {
             "내장재": "0.120",
-            "외장재": "0.045"
+            "외장재": "0.045",
+            "뿜칠재": "0.5"
+          },
+          "보통인부": {
+            "내장재": "0.017",
+            "외장재": "0.011",
+            "뿜칠재": "-"
           }
         },
         "cite": {
@@ -65,26 +71,85 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p973-t0",
+          "trades": [
+            "석면해체공",
+            "보통인부"
+          ],
+          "column_input": "material_type",
+          "row_by_trade": {
+            "석면해체공": "석면해체공",
+            "보통인부": "보통인부"
+          },
+          "trade_name_by_trade": {
+            "석면해체공": "석면해체공",
+            "보통인부": "보통인부"
+          },
+          "resource_units_by_row": {
+            "석면해체공": {
+              "석면해체공": "인"
+            },
+            "보통인부": {
+              "보통인부": "인"
+            }
+          },
+          "trades_by_conditions": [
+            {
+              "when": {
+                "material_type": "내장재"
+              },
+              "trades": [
+                "석면해체공",
+                "보통인부"
+              ]
+            },
+            {
+              "when": {
+                "material_type": "외장재"
+              },
+              "trades": [
+                "석면해체공",
+                "보통인부"
+              ]
+            },
+            {
+              "when": {
+                "material_type": "뿜칠재"
+              },
+              "trades": [
+                "석면해체공"
+              ]
+            }
+          ],
+          "base_rate_multipliers": [
+            {
+              "when": {
+                "material_type": "뿜칠재",
+                "spray_surface": "콘크리트면"
+              },
+              "factor": "1.2",
+              "cite": {
+                "chunk_id": "p973-x3",
+                "quote": "콘크리트면에 부착된 석면 뿜칠재의 해체는 본 품의 20%를 할증하여 적용한다."
+              },
+              "source": "p973-x3 [주] ②"
+            }
+          ]
+        },
+        "quantity_input": "quantity"
+      },
       "steps": [
-        "파싱 결과에 직종 이름(석면해체공, 보통인부)과 뿜칠재 열이 누락되어 자동 계산이 불가능합니다."
+        "직종 행과 자재유형 열이 만나는 원문 단가에 해체면적을 곱한다.",
+        "뿜칠재가 콘크리트면에 부착된 경우 원문 지시에 따라 해당 뿜칠재 해체품에 20% 할증한다.",
+        "뿜칠재 표의 보통인부 대시는 수량 없음으로 보고 해당 경로에서만 제외한다."
       ],
-      "source": "PDF 917쪽 3-2-12 표",
+      "source": "PDF 물리 973쪽 / 인쇄 917쪽 표 및 [주] ②",
       "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [
-      {
-        "condition": "파싱 결과 누락",
-        "reason": "파싱 결과에 직종 이름과 뿜칠재 열이 누락되어 계산할 수 없습니다.",
-        "source": "파싱 결과 p973-t0",
-        "cite": [
-          {
-            "table_id": "p973-t0"
-          }
-        ]
-      }
-    ],
+    "blocked": [],
     "not_calculated": [
       {
         "item": "보양막(외장재) 설치 및 해체품",
@@ -112,35 +177,52 @@
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 표의 직종 이름(석면해체공, 보통인부)과 뿜칠재 열이 누락되어 단위당 품을 계산할 수 없습니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "표의 직종·자재유형 교차 단가와 원문 조건부 20% 할증을 직접 적용.",
   "citations": [
     {
       "table_id": "p973-t0",
-      "row": "구분",
+      "row": "석면해체공",
       "column": "내장재",
       "value": "0.120"
     },
     {
       "table_id": "p973-t0",
-      "row": "구분",
+      "row": "석면해체공",
       "column": "외장재",
       "value": "0.045"
     },
     {
-      "chunk_id": "p973-x3",
-      "quote": "보양막(외장재) 설치 및 해체품은\n설명 | 제외되어 있다."
+      "table_id": "p973-t0",
+      "row": "석면해체공",
+      "column": "뿜칠재",
+      "value": "0.5"
+    },
+    {
+      "table_id": "p973-t0",
+      "row": "보통인부",
+      "column": "내장재",
+      "value": "0.017"
+    },
+    {
+      "table_id": "p973-t0",
+      "row": "보통인부",
+      "column": "외장재",
+      "value": "0.011"
+    },
+    {
+      "table_id": "p973-t0",
+      "row": "보통인부",
+      "column": "뿜칠재",
+      "value": "-"
     },
     {
       "chunk_id": "p973-x3",
-      "quote": "석면자재의 해체 작업 시 소요되는 기기경비 및 재료비, 소모품비는 별도 계상한다."
-    },
-    {
-      "chunk_id": "p973-x3",
-      "quote": "실내 고소작업 및 실외 비계설치를 위한 가설재의 설치는 별도 계상한다."
+      "quote": "콘크리트면에 부착된 석면 뿜칠재의 해체는 본 품의 20%를 할증하여 적용한다."
     }
   ],
   "open_questions": [

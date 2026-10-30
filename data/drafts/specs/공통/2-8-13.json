@@ -51,7 +51,7 @@
         "id": "p111-t0",
         "role": "단수별 비계공 품 (10m당)",
         "source": "2-8-13 표",
-        "unit": "인",
+        "unit": "인/10m",
         "values": {
           "비계공": {
             "2단": "0.62",
@@ -89,6 +89,44 @@
           "column_input": "tier",
           "trades": [
             "비계공"
+          ],
+          "base_rate_multipliers": [
+            {
+              "when": {
+                "post_spacing": "1.0m이하"
+              },
+              "factor": "11/10",
+              "cite": {
+                "table_id": "p111-t1",
+                "row": "요율",
+                "column": "1.0m이하",
+                "value": "1.10"
+              }
+            },
+            {
+              "when": {
+                "post_spacing": "1.5m이하"
+              },
+              "factor": "1",
+              "cite": {
+                "table_id": "p111-t1",
+                "row": "요율",
+                "column": "1.5m이하",
+                "value": "1.00"
+              }
+            },
+            {
+              "when": {
+                "post_spacing": "1.5m초과"
+              },
+              "factor": "9/10",
+              "cite": {
+                "table_id": "p111-t1",
+                "row": "요율",
+                "column": "1.5m초과",
+                "value": "0.90"
+              }
+            }
           ]
         },
         "quantity_input": "length",
@@ -99,21 +137,24 @@
               "post_spacing": "1.0m이하"
             },
             "change": "110%",
-            "source": "2-8-13 비고"
+            "source": "2-8-13 비고",
+            "implemented_by": "unit_rate_table.base_rate_multipliers referencing p111-t1"
           },
           {
             "when": {
               "post_spacing": "1.5m이하"
             },
             "change": "100%",
-            "source": "2-8-13 비고"
+            "source": "2-8-13 비고",
+            "implemented_by": "unit_rate_table.base_rate_multipliers referencing p111-t1"
           },
           {
             "when": {
               "post_spacing": "1.5m초과"
             },
             "change": "90%",
-            "source": "2-8-13 비고"
+            "source": "2-8-13 비고",
+            "implemented_by": "unit_rate_table.base_rate_multipliers referencing p111-t1"
           }
         ]
       },

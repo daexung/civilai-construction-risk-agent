@@ -86,9 +86,57 @@
             "위생공",
             "보통인부",
             "계장공"
-          ]
+          ],
+          "quantity_unit_selector": {
+            "input": "work_type",
+            "values": {
+              "오수처리시설": "조",
+              "제어함": "개"
+            }
+          }
         },
-        "quantity_input": "quantity"
+        "quantity_input": "quantity",
+        "excluded_resources": [
+          {
+            "trade": "계장공",
+            "when": {
+              "work_type": "오수처리시설"
+            },
+            "source": "p900-t2 오수처리시설/계장공 원문 셀 대시; 해당 작업행의 적용 직종 아님",
+            "cite": {
+              "table_id": "p900-t2",
+              "row": "오수처리시설",
+              "column": "계장공",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "위생공",
+            "when": {
+              "work_type": "제어함"
+            },
+            "source": "p900-t2 제어함/위생공 원문 셀 대시; 해당 작업행의 적용 직종 아님",
+            "cite": {
+              "table_id": "p900-t2",
+              "row": "제어함",
+              "column": "위생공",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "보통인부",
+            "when": {
+              "work_type": "제어함"
+            },
+            "source": "p900-t2 제어함/보통인부 원문 셀 대시; 해당 작업행의 적용 직종 아님",
+            "cite": {
+              "table_id": "p900-t2",
+              "row": "제어함",
+              "column": "보통인부",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "단위당 품을 표에서 고른다.",

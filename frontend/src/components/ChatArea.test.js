@@ -151,3 +151,40 @@ test('per-unit result shows unit labor and daily output without totals', () => {
   expect(container.textContent).not.toContain('작업조 투입량');
   expect(container.textContent).not.toContain('총 투입량');
 });
+
+test('height adjustment assumption, source and module version are visible in calculation details', () => {
+  const response = { ...demo.response, status: 'PARTIAL', result: { ...demo.response.result,
+    calculation_module: { module_id: 'formwork-adjustments-v1', version: '1.0.0',
+      source_hash: 'cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b',
+      review_status: 'approved_for_runtime' },
+    daily_volume: { ...demo.response.result.daily_volume, value: '10.631060024624333494473',
+      adjustments: [{ operation: 'multiply_output', value: '3543686674874777831491/10000000000000000000000',
+        before: '30', after: '10.631060024624333494473',
+        reason: '시스템 산정 가정: 초과 높이 구간 11개(올림), 구간마다 9%를 순차 적용(복리); 공식 문구는 ‘9%까지’이며 잔여구간·누적 산식은 명시하지 않음',
+        source: '2026 Standard Construction Estimate, common 6-3-1, PDF p.193 (printed p.137)' }] } } };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'height', role: 'assistant', response }]} />));
+  const basis = Array.from(container.querySelectorAll('button')).find(button => button.textContent === '산출근거');
+  act(() => Simulate.click(basis));
+  const text = container.querySelector('.calculation-details').textContent;
+  expect(text).toContain('10.631060024624333494473');
+  expect(text).toContain('시스템 산정 가정');
+  expect(text).toContain('순차 적용(복리)');
+  expect(text).toContain('PDF p.193 (printed p.137)');
+  expect(text).toContain('formwork-adjustments-v1 v1.0.0');
+  expect(text).toContain('cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b');
+});
+
+test('numeric height question shows a number input and submits the typed value with its ref', () => {
+  const questions = [{ name: 'i14_30::height', ask: '수직고는 몇 m입니까?', choices: null, unit: 'm', ref: 'h@1' }];
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null, result: null, questions };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'h1', role: 'assistant', response }]} />));
+  const input = container.querySelector('.question-number input');
+  const apply = container.querySelector('.question-number button');
+  expect(apply.disabled).toBe(true);
+  act(() => Simulate.change(input, { target: { value: '7m' } }));
+  expect(apply.disabled).toBe(true);
+  act(() => Simulate.change(input, { target: { value: '7' } }));
+  act(() => Simulate.submit(container.querySelector('.question-number')));
+  act(() => Simulate.click(container.querySelector('.submit-answers-btn')));
+  expect(props.onSendAnswers).toHaveBeenCalledWith({ 'i14_30::height': '7' }, '7m', { 'i14_30::height': 'h@1' });
+});

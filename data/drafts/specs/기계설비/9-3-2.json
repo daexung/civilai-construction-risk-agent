@@ -217,19 +217,42 @@
         "unit_rate_table": {
           "table": "p759-t2",
           "row_input": "hole_diameter",
-          "column_input": "concrete_thickness",
+          "column_input": {
+            "input": "concrete_thickness",
+            "contains": [
+              "콘크리트 두께 {value}"
+            ],
+            "input_contains": [
+              "structure_type"
+            ]
+          },
           "trades": [
             "착암공",
             "보통인부"
-          ]
+          ],
+          "table_selector": {
+            "input": "hole_diameter",
+            "values": {
+              "25mm": "p759-t2",
+              "50mm": "p759-t2",
+              "75mm": "p759-t2",
+              "100mm": "p759-t2",
+              "150mm": "p760-t0",
+              "200mm": "p760-t0",
+              "250mm": "p760-t0",
+              "300mm": "p760-t0",
+              "350mm": "p760-t0",
+              "400mm": "p760-t0"
+            }
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
         "note_adjustments": []
       },
       "steps": [
-        "구멍 지름(hole_diameter)에 따라 p759-t2(25~100mm) 또는 p760-t0(150~400mm) 표를 선택한다.",
-        "콘크리트 두께(concrete_thickness)와 구조물(structure_type) 조합으로 열을 찾고, 지름과 직종으로 행을 찾아 단위당 품을 구한다.",
+        "hole_diameter에 맞춰 p759-t2 또는 p760-t0 원문 표를 정확히 선택한다.",
+        "콘크리트 두께와 구조 위치(바닥/벽체)에 맞는 단위당 인력 품을 찾는다.",
         "물량(quantity)을 곱해 총 품을 구한다."
       ],
       "source": "PDF 703~704쪽 9-3-2 표",

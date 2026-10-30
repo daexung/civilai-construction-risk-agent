@@ -45,7 +45,7 @@
         "unit_rate_table": {
           "table": "p621-t0",
           "row_input": "합계",
-          "column_input": "직종",
+          "column_input": null,
           "trades": [
             "지적기사",
             "지적산업기사"

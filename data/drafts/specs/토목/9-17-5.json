@@ -69,7 +69,17 @@
           "column_input": "합계 인원수 지적산업기사",
           "trades": [
             "지적산업기사"
-          ]
+          ],
+          "basis_by_row": {
+            "합계": "인/필지"
+          },
+          "parenthetical_value_selector": {
+            "mode": "parenthetical_only",
+            "cite": {
+              "chunk_id": "p618-t0",
+              "quote": "( )는 내업임"
+            }
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],

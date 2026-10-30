@@ -1,0 +1,148 @@
+{
+  "record_version": "2026-10-18.v1",
+  "set_role": "authoring",
+  "calculation_scope": "per_unit labor quantity from underground depth table",
+  "source_pdf": "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf",
+  "source_pdf_sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+  "author": "Luna",
+  "prior_exposure": "Previously inspected existing formwork authoring/final cases and hand-authored formwork candidate; the two newly selected sections were source-inspected before case preparation, but no candidate response for these sections was inspected.",
+  "independent_second_person_review": false,
+  "expected_value_method": "Read table row/column and notes from pinned 2026 PDF; calculate exact rational outputs separately from any candidate; retain source values, formula, unit, and rounding rule per case.",
+  "cases": [
+    {
+      "id": "steel-auth-depth-4",
+      "spec_path": "data/drafts/specs/건축/1-2-2.json",
+      "inputs": {
+        "underground_level": "지하4층 미만",
+        "quantity": "10"
+      },
+      "expected": {
+        "status": "computed",
+        "labor_unit_rates": {
+          "철골공": "203/250",
+          "용접공": "191/500",
+          "특별인부": "171/1000"
+        },
+        "labor_total_by_trade": {
+          "철골공": "203/25",
+          "용접공": "191/50",
+          "특별인부": "171/100"
+        },
+        "quantity": "10",
+        "quantity_unit": "ton"
+      },
+      "calculation_basis": {
+        "table_id": "p628-t5",
+        "table_rows": [
+          "철골공",
+          "용접공",
+          "특별인부"
+        ],
+        "selected_column": "지하4층 미만",
+        "source_rates_person_days_per_ton": {
+          "철골공": "203/250",
+          "용접공": "191/500",
+          "특별인부": "171/1000"
+        },
+        "formula": "each trade total = source rate (person-day/ton) ? measured steel quantity (ton)",
+        "rounding": "Exact rational comparison; totals preserved exactly; quantity is tons."
+      }
+    },
+    {
+      "id": "steel-auth-depth-7",
+      "spec_path": "data/drafts/specs/건축/1-2-2.json",
+      "inputs": {
+        "underground_level": "지하7층 미만",
+        "quantity": "25"
+      },
+      "expected": {
+        "status": "computed",
+        "labor_unit_rates": {
+          "철골공": "439/500",
+          "용접공": "43/125",
+          "특별인부": "26/125"
+        },
+        "labor_total_by_trade": {
+          "철골공": "439/20",
+          "용접공": "43/5",
+          "특별인부": "26/5"
+        },
+        "quantity": "25",
+        "quantity_unit": "ton"
+      },
+      "calculation_basis": {
+        "table_id": "p628-t5",
+        "table_rows": [
+          "철골공",
+          "용접공",
+          "특별인부"
+        ],
+        "selected_column": "지하7층 미만",
+        "source_rates_person_days_per_ton": {
+          "철골공": "439/500",
+          "용접공": "43/125",
+          "특별인부": "26/125"
+        },
+        "formula": "each trade total = source rate (person-day/ton) ? measured steel quantity (ton)",
+        "rounding": "Exact rational comparison; totals preserved exactly; quantity is tons."
+      }
+    },
+    {
+      "id": "steel-auth-depth-10",
+      "spec_path": "data/drafts/specs/건축/1-2-2.json",
+      "inputs": {
+        "underground_level": "지하10층 미만",
+        "quantity": "40"
+      },
+      "expected": {
+        "status": "computed",
+        "labor_unit_rates": {
+          "철골공": "927/1000",
+          "용접공": "153/500",
+          "특별인부": "121/500"
+        },
+        "labor_total_by_trade": {
+          "철골공": "927/25",
+          "용접공": "306/25",
+          "특별인부": "242/25"
+        },
+        "quantity": "40",
+        "quantity_unit": "ton"
+      },
+      "calculation_basis": {
+        "table_id": "p628-t5",
+        "table_rows": [
+          "철골공",
+          "용접공",
+          "특별인부"
+        ],
+        "selected_column": "지하10층 미만",
+        "source_rates_person_days_per_ton": {
+          "철골공": "927/1000",
+          "용접공": "153/500",
+          "특별인부": "121/500"
+        },
+        "formula": "each trade total = source rate (person-day/ton) ? measured steel quantity (ton)",
+        "rounding": "Exact rational comparison; totals preserved exactly; quantity is tons."
+      }
+    }
+  ],
+  "source_locator": {
+    "division": "건축",
+    "section_no": "1-2-2",
+    "pdf_page": 628,
+    "printed_page": 572,
+    "table_id": "p628-t5",
+    "source_bundle_sha256": "ee1dc882084206298e990576d1fad2d8ee1a889b36545acadca284f8b58f0250"
+  },
+  "evaluation_controls": {
+    "frozen_before_new_candidate_generation": true,
+    "same_author": "Luna",
+    "independent_second_person_review": false,
+    "expected_values_from": "pinned source cells plus separately written rational arithmetic; not candidate output",
+    "prompt_exposure": "evaluation inputs/expected values excluded from generation and repair requests",
+    "retirement_rule": "if this evaluation failure is used to change the candidate, retire this set from future withheld performance totals"
+  },
+  "source_spec_path": "data/drafts/specs/건축/1-2-2.json",
+  "source_spec_sha256": "3b56a398aaccc0efab43bb6b09569ee98e34a95addbade34b0a9a3ccd9b5a459"
+}

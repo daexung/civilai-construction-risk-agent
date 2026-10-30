@@ -40,6 +40,15 @@
         }
       },
       {
+        "name": "area_per_location",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "개소별 평균 시공면적은 몇 ㎡입니까?",
+        "source": "PDF 878~879쪽 ⑤ 시공량 할증계수 표"
+      },
+      {
         "name": "total_area",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
@@ -53,23 +62,22 @@
       {
         "id": "p934-t1",
         "role": "작업조 인원 및 장비 대수, 기준 시공량",
-        "source": "PDF 878쪽 기준 (일당) 표",
+        "source": "PDF 878쪽 2-1-9 (일당) 표; 직종 행과 시공량 열을 원문 셀에서 재구성",
         "values": {
-          "포장공 보통인부 (수량 3)": {
-            "A-Type 수량": "3",
-            "A-Type 시공량\n(㎡)": "110",
-            "B-Type 수량": "3",
-            "B-Type 시공량\n(㎡)": "45",
-            "C-Type 수량": "3",
-            "C-Type 시공량\n(㎡)": "20"
+          "시공량": {
+            "A-Type 시공량(㎡)": "110",
+            "B-Type 시공량(㎡)": "45",
+            "C-Type 시공량(㎡)": "20"
           },
-          "포장공 보통인부 (수량 1)": {
+          "포장공": {
+            "A-Type 수량": "3",
+            "B-Type 수량": "3",
+            "C-Type 수량": "3"
+          },
+          "보통인부": {
             "A-Type 수량": "1",
-            "A-Type 시공량\n(㎡)": "110",
             "B-Type 수량": "1",
-            "B-Type 시공량\n(㎡)": "45",
-            "C-Type 수량": "1",
-            "C-Type 시공량\n(㎡)": "20"
+            "C-Type 수량": "1"
           },
           "굴착기": {
             "A-Type 수량": "1",
@@ -80,11 +88,11 @@
             "A-Type 수량": "1",
             "B-Type 수량": "1"
           },
-          "진동롤러( 진동+ 타이어)": {
+          "진동롤러(진동+타이어)": {
             "A-Type 수량": "1",
             "B-Type 수량": "1"
           },
-          "진동롤러( 핸드가이드식)": {
+          "진동롤러(핸드가이드식)": {
             "C-Type 수량": "1"
           },
           "플레이트콤팩터": {
@@ -130,7 +138,7 @@
       {
         "id": "p934-t4",
         "role": "A-Type 시공량 할증계수",
-        "source": "PDF 878쪽 A-Type 시공량 할증계수 표",
+        "source": "PDF 878쪽 2-1-9 ⑤ A-Type 시공량 할증계수 표",
         "values": {
           "시공량 할증계수": {
             "개소별 평균 시공면적 8㎡ 이하": "0.85",
@@ -147,7 +155,7 @@
       {
         "id": "p935-t0",
         "role": "B-Type 시공량 할증계수",
-        "source": "PDF 878쪽 B-Type 시공량 할증계수 표",
+        "source": "PDF 879쪽 2-1-9 ⑤ B-Type 시공량 할증계수 표",
         "values": {
           "시공량 할증계수": {
             "개소별 평균 시공면적 5㎡ 이하": "0.85",
@@ -164,7 +172,7 @@
       {
         "id": "p935-t1",
         "role": "C-Type 시공량 할증계수",
-        "source": "PDF 878쪽 C-Type 시공량 할증계수 표",
+        "source": "PDF 879쪽 2-1-9 ⑤ C-Type 시공량 할증계수 표",
         "values": {
           "시공량 할증계수": {
             "개소별 평균 시공면적 3㎡ 이하": "0.85",
@@ -181,25 +189,228 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p934-t1",
+          "row": "시공량",
+          "column_selector": {
+            "input": "repair_type",
+            "contains": [
+              "{value} 시공량(㎡)"
+            ],
+            "value_map": {
+              "A Type": "A-Type",
+              "B Type": "B-Type",
+              "C Type": "C-Type"
+            }
+          }
+        },
+        "coefficients": [
+          {
+            "table": "p934-t4",
+            "table_selector": {
+              "input": "repair_type",
+              "values": {
+                "A Type": "p934-t4",
+                "B Type": "p935-t0",
+                "C Type": "p935-t1"
+              }
+            },
+            "row": "시공량 할증계수",
+            "input": "area_per_location",
+            "selector_mode": "threshold"
+          }
+        ],
+        "crew": {
+          "table": "p934-t1",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ],
+          "column_selector": {
+            "input": "repair_type",
+            "contains": [
+              "{value} 수량"
+            ],
+            "value_map": {
+              "A Type": "A-Type",
+              "B Type": "B-Type",
+              "C Type": "C-Type"
+            }
+          }
+        },
+        "equipment": [
+          {
+            "table": "p934-t1",
+            "name": "굴착기",
+            "row": "굴착기",
+            "column": "A-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "A Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "로더(타이어)",
+            "row": "로더(타이어)",
+            "column": "A-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "A Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "진동롤러(진동+타이어)",
+            "row": "진동롤러(진동+타이어)",
+            "column": "A-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "A Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "아스팔트스프레이어",
+            "row": "아스팔트스프레이어",
+            "column": "A-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "A Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "트럭",
+            "row": "트럭",
+            "column": "A-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "A Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "굴착기",
+            "row": "굴착기",
+            "column": "B-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "B Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "로더(타이어)",
+            "row": "로더(타이어)",
+            "column": "B-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "B Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "진동롤러(진동+타이어)",
+            "row": "진동롤러(진동+타이어)",
+            "column": "B-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "B Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "아스팔트스프레이어",
+            "row": "아스팔트스프레이어",
+            "column": "B-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "B Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "트럭",
+            "row": "트럭",
+            "column": "B-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "B Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "굴착기",
+            "row": "굴착기",
+            "column": "C-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "C Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "진동롤러(핸드가이드식)",
+            "row": "진동롤러(핸드가이드식)",
+            "column": "C-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "C Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "플레이트콤팩터",
+            "row": "플레이트콤팩터",
+            "column": "C-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "C Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "아스팔트스프레이어",
+            "row": "아스팔트스프레이어",
+            "column": "C-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "C Type"
+            }
+          },
+          {
+            "table": "p934-t1",
+            "name": "트럭",
+            "row": "트럭",
+            "column": "C-Type 수량",
+            "unit": "대·일",
+            "when": {
+              "repair_type": "C Type"
+            }
+          }
+        ],
+        "quantity_input": "total_area"
+      },
       "steps": [
-        "파싱된 표(p934-t1)에서 '포장공'과 '보통인부' 직종이 '포장공 보통인부'로 병합되어 있어 자동 계산이 불가능합니다.",
-        "수동으로 Type별 기준 시공량과 수량을 확인하십시오.",
-        "개소별 평균 시공면적에 따라 해당 Type의 할증계수 표(p934-t4, p935-t0, p935-t1)에서 계수를 찾습니다.",
-        "일당 시공량 = 기준 시공량 × 할증계수",
-        "작업일수 = 총 시공면적 ÷ 일당 시공량",
-        "직종별 인·일 및 장비 대·일 = 작업일수 × 수량"
+        "현장 여건에 해당하는 p934-t3의 A/B/C Type을 선택한다.",
+        "개소별 평균면적으로 해당 Type의 p934-t4, p935-t0 또는 p935-t1 원문 구간을 선택한다.",
+        "보정 일당시공량 = 기준 시공량 × 원문 시공량 할증계수로 계산한다.",
+        "작업일수 = 총 시공면적 ÷ 보정 일당시공량으로 계산하고 원문 Type별 직종 및 장비 수량을 곱한다."
       ],
-      "source": "PDF 878쪽 기준 (일당) 표 및 할증계수 표",
+      "source": "PDF 878~879쪽 2-1-9 기준 (일당) 표, ④~⑦ 주",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
     "not_calculated": [],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": [],
+    "calc_type_reason": "원문 p934-t1의 포장공·보통인부 행을 분리하고 A/B/C별 시공량과 장비 수량을 연결했다. 개소 평균면적 할증표의 정확한 구간 선택을 실행기에 연결했다. 제목 위에 있는 절삭 없는 덧씌우기 주석은 앞 절에 귀속됨을 페이지 위치로 확인해 제외했다."
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
   "calc_type_reason": "파싱된 표(p934-t1)에서 '포장공'과 '보통인부' 직종이 하나의 행 이름('포장공 보통인부')으로 병합되어 있어, 직종별 인원을 정확히 분리하여 자동 계산 모델에 매핑할 수 없습니다.",
   "citations": [
@@ -236,14 +447,10 @@
       "quote": "⑤ 현장별 시공여건에 대한 시공량의 할증은 다음표를 참고하여 적용한다."
     }
   ],
-  "open_questions": [
-    "원문 이미지에는 '⑦ 절삭없이 아스팔트를 덧씌우는 경우에는 포장공 1인, 파쇄기 1대를 제외하고, 시공량은 25%를 증하여 적용한다.'라는 주석이 있으나, 파싱 결과 텍스트에는 누락되어 있어 명세에 반영하지 못했습니다.",
-    "파싱된 표 p934-t1에서 '포장공'과 '보통인부'가 '포장공 보통인부'라는 하나의 행으로 병합되어 두 번 나타납니다. JSON 키 중복을 피하기 위해 임의로 '(수량 3)', '(수량 1)'을 덧붙였으나, 원문은 각각 분리된 행이므로 파싱 수정이 필요합니다."
-  ],
+  "open_questions": [],
   "questions": [
     "소파보수 A Type의 기준 시공량은 얼마인가요?",
-    "개소별 평균 시공면적이 15㎡일 때 B Type의 시공량 할증계수는 얼마를 적용해야 하나요?",
-    "절삭없이 아스팔트를 덧씌우는 경우 품 조정은 어떻게 하나요?"
+    "개소별 평균 시공면적이 15㎡일 때 B Type의 시공량 할증계수는 얼마를 적용해야 하나요?"
   ],
   "meta": {
     "model": "gemini-3.1-pro-preview",

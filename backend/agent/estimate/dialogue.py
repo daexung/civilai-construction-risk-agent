@@ -93,7 +93,7 @@ def _answers_pending(state: DialogueState, message: str) -> bool:
         return False
     changes = _rule_changes(session, message)
     spec = tools._spec(tools._item(session))
-    quantity_field = tools._quantity_field(spec) if spec else None
+    quantity_field = tools._quantity_field(spec, tools._item(session)) if spec else None
     quantity_name = (quantity_field or {}).get("name")
     return bool((pending | {field["name"] for field in (spec or {}).get("inputs", []) if "default" in field})
                 & set(changes.get("values") or {})) or (
@@ -544,13 +544,16 @@ def _start_actions(state: DialogueState, message: str, route: str) -> list[tuple
     return actions + [("estimate_cost", {}) if state["goal"] == "cost" else ("compute_labor", {})]
 
 
-def _request_quantity(session: dict, message: str) -> dict | None:
+def _request_quantity(session: dict, message: str, incoming: dict | None = None) -> dict | None:
     """새 견적 요청의 물량. 공종이 이미 정해졌으면 명세 물량 단위와 같은 물량이 하나일 때만(32m·15cm 같은 조건 값 제외),
     아니면 문장 속 물량이 하나일 때만 고른다. 여럿이면 고르지 않는다(명세의 물량 질문으로 묻는다)."""
     spec = tools._spec(tools._item(session))
-    field = tools._quantity_field(spec) if spec else None
+    item = tools._item(session)
+    field = (tools._quantity_field(spec, values=tools._selector_values(item, spec, incoming)) if spec else None)
     if not field:
         return _rule_quantity(message)
+    if field.get("unit_by") and not field.get("unit"):
+        return None  # 작업 종류를 알기 전에는 물량 단위를 정할 수 없다
     text = unicodedata.normalize("NFKC", message).casefold()
     found = [match for match in tools._QUANTITY.finditer(text) if not text[match.end():].lstrip().startswith("당")
              and tools.unit_key(match.group(2)) == tools.unit_key(field.get("unit"))]
@@ -575,11 +578,12 @@ def _rule_changes(session: dict, message: str) -> dict:
     # Parse quantity against this selected work's quantity unit. A follow-up
     # may mention a sibling quantity solely to preserve it (for example, paint
     # 120㎡ while keeping shutter quantity at 2개).
-    quantity = _request_quantity(session, message)
-    if quantity:
-        changes["quantity"] = quantity
     spec = tools._spec(tools._item(session))
     values = extract_inputs(message, spec)[0] if spec else {}
+    # 같은 문장이 작업 종류와 물량을 함께 바꾸면, 새 작업 종류의 단위로 물량을 읽는다.
+    quantity = _request_quantity(session, message, {name: {"value": value} for name, value in values.items()})
+    if quantity:
+        changes["quantity"] = quantity
     quantity_name = (tools._quantity_field(spec) or {}).get("name") if spec else None
     values.update(tools._extract_common_inputs(message))
     found = {name: {"value": value, "evidence": message} for name, value in values.items() if name != quantity_name}
@@ -607,8 +611,11 @@ def _facts(state: DialogueState, log: list) -> tuple[list[dict], list[str]]:
             # 작업일수는 '약 2.31일'로 보여 준다. 검증은 정확값과 이 반올림 결과(소수 둘째 자리)만 허용한다.
             facts[-1].update(shown=approx(labor["work_days"]), rounded=str(rounded(labor["work_days"])))
         for index, line in enumerate(labor["unit_lines"]):
-            facts.append({"id": f"line{index}", "item": line["name"], "value": line["applied"], "unit": line["unit"],
-                          "kind": "per_unit"})
+            value = line.get("applied", line.get("exact"))
+            if value is None:
+                continue
+            facts.append({"id": f"line{index}", "item": line["name"], "value": value, "unit": line.get("unit") or "",
+                          "kind": "lookup" if line.get("kind") == "lookup" else "per_unit"})
         literals += [labor.get("section") or "", *map(str, (labor.get("conditions") or {}).values())]
     cost = (last.get("estimate_cost") or {}).get("data") or {}
     for name, value in (cost.get("price_conditions") or {}).items():
@@ -631,6 +638,10 @@ def _template(state: DialogueState, log: list, facts: list[dict], notices: list)
     answer = None
     if "contract_amount" in by_id:
         answer = f"도급액(부가세 포함) {reply_check.display(by_id['contract_amount']['value'])}원으로 계산했어요."
+    elif any(key.startswith("line") and fact.get("kind") == "lookup" for key, fact in by_id.items()):
+        lines = ", ".join(f"{fact['item']} {reply_check.display(fact['value'])}{fact['unit']}" for key, fact in by_id.items()
+                          if key.startswith("line") and fact.get("kind") == "lookup")
+        answer = f"원문 조회값: {lines}"
     elif any(key.startswith("line") for key in by_id):
         lines = ", ".join(f"{fact['item']} {reply_check.display(fact['value'])}{fact['unit']}" for key, fact in by_id.items()
                           if key.startswith("line"))
@@ -1076,7 +1087,7 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
     stale_fields = [name for name in answers if name not in current_refs or refs.get(name) != current_refs.get(name)]
     target_item_id = None
     target_message = message
-    pending_answer_items = []
+    pending_answer_items, value_items = [], []
     if message and not request.get("_multi_start"):
         for item_id in session["item_order"]:
             view = copy.deepcopy(session)
@@ -1090,6 +1101,9 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
                                   if question.get("item_id") == item_id and "::" in question["field"]])
             if _answers_pending(child, message):
                 pending_answer_items.append(item_id)
+            spec = tools._spec(session["items"][item_id])
+            if spec and extract_inputs(message, spec)[0]:
+                value_items.append(item_id)  # 이 문장의 조건 값(수직고 10m 등)을 읽을 수 있는 작업
     ambiguous_pending_answer = len(pending_answer_items) > 1
     if answers.get("target_item") is not None:
         choices = working.get("target_choices") or {}
@@ -1137,6 +1151,8 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
             target_item_id = scored[0][1]
         elif len(pending_answer_items) == 1:
             target_item_id = pending_answer_items[0]
+        elif len(value_items) == 1:
+            target_item_id = value_items[0]
         elif ambiguous_pending_answer or is_edit or route == "estimate":
             choices = {f"{i + 1}. {session['items'][item_id].get('request_text', item_id)}": item_id
                        for i, item_id in enumerate(session["item_order"])}

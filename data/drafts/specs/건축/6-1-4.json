@@ -10,14 +10,43 @@
     "source_pages": [
       604
     ],
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "Installation length in meters?",
+        "source": "PDF printed page 604 p660-t0"
+      },
+      {
+        "name": "sheet_or_protection_layer",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Is the pressing metal installed over a sheet or protective layer?",
+        "source": "PDF printed page 604 note"
+      }
+    ],
     "tables": [
       {
         "id": "p660-t0",
-        "role": "방수층 누름철물 설치 품",
+        "role": "Source labor per meter",
         "source": "PDF 604쪽 6-1-4 표",
         "unit": "m당",
-        "values": {},
+        "values": {
+          "방수공": {
+            "수량": "0.011"
+          },
+          "보통인부": {
+            "수량": "0.011"
+          }
+        },
         "cite": {
           "table_id": "p660-t0"
         }
@@ -25,22 +54,55 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p660-t0",
+          "trades": [
+            "방수공",
+            "보통인부"
+          ],
+          "resource_units": {
+            "방수공": "인",
+            "보통인부": "인"
+          }
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
       "steps": [
-        "파싱 결과에 표의 데이터(방수공, 보통인부, 수량 등)가 누락되어 계산할 수 없습니다."
+        "Multiply source labor per meter by the declared installation length."
       ],
-      "source": "PDF 604쪽 6-1-4",
-      "rounding": "단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+      "source": "PDF printed page 604 p660-t0 and note",
+      "rounding": "Source rates preserved exactly."
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "surface differs from sheet and protective layer",
+        "blocked_if": {
+          "input": "sheet_or_protection_layer",
+          "op": "==",
+          "value": false
+        },
+        "reason": "Source basis is pressing metal finish over a sheet and protective layer.",
+        "source": "PDF printed page 604 note",
+        "cite": {
+          "chunk_id": "p660-x2"
+        }
+      }
+    ],
     "not_calculated": [],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": [],
+    "questions": [
+      "Installation length in meters?",
+      "Is the source surface condition met?"
+    ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "per_unit",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 표의 행(방수공, 보통인부)과 수량 데이터가 누락되어 계산 명세를 작성할 수 없습니다.",
   "citations": [
     {
       "table_id": "p660-t0",

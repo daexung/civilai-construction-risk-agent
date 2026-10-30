@@ -51,7 +51,16 @@
             "지적기사",
             "지적산업기사",
             "지적기능사"
-          ]
+          ],
+          "basis_by_row": {
+            "합계": "인/도곽"
+          },
+          "basis_cites_by_row": {
+            "합계": {
+              "chunk_id": "p621-x0",
+              "quote": "본 품은 지적(임야)도 1도곽을 기준한 것이다."
+            }
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],

@@ -4,14 +4,25 @@ from backend.agent.rules.specs import load_specs
 from backend.agent.state import AgentState
 from backend.agent.tools.calc.daily_crew import adjusted_daily_crew
 from backend.agent.tools.calc.per_unit import per_unit
+from backend.agent.tools.calc.adapters import formula_adapter, lookup_adapter
+from backend.agent.tools.calc.generated import (generated_daily_crew, generated_python_daily_crew,
+                                                registered_module_for, registered_python_module_for)
 
-CALCULATORS = {"adjusted_daily_crew": adjusted_daily_crew, "per_unit": per_unit}
+CALCULATORS = {"adjusted_daily_crew": adjusted_daily_crew, "per_unit": per_unit,
+               "lookup_only": lookup_adapter, "formula": formula_adapter}
+def calculator_for(spec: dict):
+    """Reviewed modules override the legacy model only for explicitly registered sections."""
+    if registered_python_module_for(spec):
+        return generated_python_daily_crew
+    if registered_module_for(spec):
+        return generated_daily_crew
+    return CALCULATORS.get(spec["quantity_model"]["name"])
 
 
 def compute(state: AgentState) -> dict:
     spec = load_specs()[state["spec_id"]]
     name = spec["quantity_model"]["name"]
-    calculate = CALCULATORS.get(name)
+    calculate = calculator_for(spec)
     if calculate is None:
         return {"status": "ERROR", "reason": f"등록되지 않은 계산 방식입니다: {name}"}
     spec_inputs = {field["name"] for field in spec["inputs"]}

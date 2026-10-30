@@ -26,8 +26,15 @@
         "id": "p957-t1",
         "role": "목침목 탄성체결장치 철거 품",
         "source": "PDF 1쪽 2-2-16 표",
-        "unit": "인",
-        "values": {},
+        "unit": "인/개소",
+        "values": {
+          "궤도공": {
+            "수량": "0.028"
+          },
+          "보통인부": {
+            "수량": "0.022"
+          }
+        },
         "cite": {
           "table_id": "p957-t1"
         }
@@ -35,12 +42,25 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p957-t1",
+          "row_input": "고정 행이름",
+          "column_input": "수량",
+          "trades": [
+            "궤도공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
       "steps": [
-        "파싱 결과에 표의 직종 및 수치 데이터가 누락되어 계산식을 구성할 수 없습니다."
+        "표의 개소당 품에 철거 개소를 곱한다."
       ],
-      "source": "PDF 1쪽 2-2-16",
+      "source": "PDF 2-2-16 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -48,13 +68,10 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "per_unit",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 표의 직종(궤도공, 보통인부) 및 수치 데이터가 누락되어 단위당 품을 계산식에 포함할 수 없습니다.",
+  "calc_type_reason": "침목 개소당 직종별 품이 표에 직접 있어 단위당 품 계산기로 표현된다.",
   "citations": [
-    {
-      "table_id": "p957-t1"
-    },
     {
       "chunk_id": "p957-x7",
       "quote": "[주] ① 본 품은 목침목에 탄성체결장치를 설치 또는 해체하는 기준이다."

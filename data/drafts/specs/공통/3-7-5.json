@@ -78,7 +78,13 @@
           "보통인부": {
             "수량": "1"
           },
-          "크롤러드릴(공기식) 공기압축기 크레인": {
+          "크롤러드릴(공기식)": {
+            "수량": "1"
+          },
+          "공기압축기": {
+            "수량": "1"
+          },
+          "크레인": {
             "수량": "1"
           }
         },
@@ -131,15 +137,59 @@
       }
     ],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p137-t2",
+          "row_input": "work_type",
+          "column_input": "soil_type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p137-t1",
+          "column": "수량",
+          "trades": [
+            "보링공",
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "보링공": "",
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "크롤러드릴(공기식)",
+            "table": "p137-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "공기압축기",
+            "table": "p137-t1",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "크레인",
+            "table": "p137-t1",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "crane_excluded": false
+            }
+          }
+        ]
+      },
       "steps": [
-        "p137-t2에서 작업 방식과 지반 조건에 따른 일당시공량을 찾는다.",
-        "천공 길이를 일당시공량으로 나누어 작업일수를 구한다.",
-        "p137-t1의 인력 및 장비 편성에 작업일수를 곱하여 총 투입량을 산출한다.",
-        "crane_excluded가 true인 경우 크레인을 제외한다."
+        "작업 방식과 지반 조건으로 p137-t2의 일당시공량(m)을 고른다.",
+        "천공 길이 ÷ 일당시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수로 총 투입량을 구한다(크레인은 제외 조건이면 뺀다)."
       ],
-      "source": "2. 인력 및 장비 편성, 3. 일당시공량",
+      "source": "PDF 3-7-5 2. 인력 및 장비 편성, 3. 일당시공량",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -177,9 +227,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "일당 작업조에 여러 대의 장비가 편성되나 현재 모델은 단일 장비만 지원하며, 파싱 결과에서 여러 장비가 한 행으로 묶여 있어 자동 계산이 어려움.",
+  "calc_type_reason": "인력·장비 편성 표(p137-t1)와 작업방식×지반 일당시공량 표(p137-t2)가 있어 기존 일당 작업조 계산기로 표현된다. 크레인 제외는 원문 [주] ③의 현장 사실 입력으로 처리한다.",
   "citations": [
     {
       "table_id": "p137-t2",

@@ -93,14 +93,28 @@
       }
     ],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "outputs": [
+          {
+            "kind": "table_divisor",
+            "table": "p141-t0",
+            "row_input": "block_size",
+            "column": "시간당작업량(㎡/hr)",
+            "value_input": "quantity",
+            "name": "습지불도저 작업시간",
+            "unit": "hr",
+            "resource_kind": "equipment",
+            "formula": "work area / source hourly productivity"
+          }
+        ]
+      },
       "steps": [
-        "블록크기에 따른 시간당작업량을 표에서 찾는다.",
-        "물량을 시간당작업량으로 나누어 습지불도저(4톤)의 작업시간을 구한다.",
-        "물 가두기 필요 시 보통인부 1인을 추가한다."
+        "Select the source hourly work rate by block-size band.",
+        "Divide the work area by the source area-per-hour rate to obtain dozer hours.",
+        "If water retention is required, block because the source only specifies one additional helper and does not define its time basis."
       ],
-      "source": "PDF 85쪽 3-10-1",
+      "source": "p141-t0",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -123,9 +137,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "시간당 작업량만 제시되어 있고, 물 가두기 시 추가되는 보통인부 1인의 투입 기준(일당인지 전체인지)이 불명확하여 기존의 daily_crew나 per_unit 모델로 자동 계산하기 어렵습니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "The source gives hourly production rates; shared formula calculator converts area ? source area/hour into equipment hours.",
   "citations": [
     {
       "table_id": "p141-t0",

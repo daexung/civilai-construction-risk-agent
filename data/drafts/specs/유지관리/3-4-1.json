@@ -49,14 +49,13 @@
         "unit": "인/일, ㎡/일",
         "values": {
           "지붕잇기공": {
-            "단위": "인",
-            "수량": "4",
-            "시공량(㎡)": "85"
+            "수량": "4"
           },
           "보통인부": {
-            "단위": "인",
-            "수량": "2",
-            "시공량(㎡)": "85"
+            "수량": "2"
+          },
+          "시공량": {
+            "수량": "85"
           }
         },
         "cite": {
@@ -66,34 +65,51 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p975-t0",
+          "row": "시공량",
+          "column": "수량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p975-t0",
+          "column": "수량",
+          "trades": [
+            "지붕잇기공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "지붕잇기공": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [],
+        "output_adjustments": [
+          {
+            "when": {
+              "roof_type": "맞배지붕"
+            },
+            "operation": "multiply_output",
+            "value": "6/5",
+            "source": "표 비고: 맞배지붕은 시공량을 20% 가산하여 적용한다",
+            "cite": {
+              "table_id": "p975-t0"
+            }
+          }
+        ]
+      },
       "steps": [
-        "p975-t0에서 기준 일일시공량(85㎡)과 작업조 인원을 확인한다.",
-        "맞배지붕인 경우 시공량을 20% 가산한다 (85 * 1.2 = 102㎡).",
-        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
-        "직종별 인·일 = 작업일수 × 직종별 인원(수량)으로 구한다."
+        "일당 시공량 85㎡로 물량 ÷ 시공량 = 작업일수를 구한다.",
+        "맞배지붕은 시공량을 20% 가산한다.",
+        "작업일수 × 직종별 인원으로 총 투입량을 구한다."
       ],
-      "source": "PDF 919쪽 3-4-1 표 및 비고",
+      "source": "PDF 3-4-1 표 및 비고",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [
-      {
-        "condition": "맞배지붕인 경우",
-        "blocked_if": {
-          "input": "roof_type",
-          "op": "==",
-          "value": "맞배지붕"
-        },
-        "reason": "맞배지붕은 시공량을 20% 가산해야 하나, 현재 계산 모델(adjusted_daily_crew)에서 비고란의 조건부 가산을 처리할 계수표 구조가 없어 자동 계산 보류",
-        "source": "PDF 919쪽 3-4-1 표 비고",
-        "cite": {
-          "table_id": "p975-t0",
-          "row": "비고",
-          "value": "- 맞배지붕(경사를 짓는 지붕면이 2개소)은 시공량을 20% 가산하여 적용한다."
-        }
-      }
-    ],
+    "blocked": [],
     "not_calculated": [
       {
         "item": "홈통 및 빗물받이 설치",
@@ -126,18 +142,10 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "맞배지붕 시공량 20% 가산 규칙을 adjusted_daily_crew의 계수표 참조 방식으로 표현할 수 없어 자동 계산 모델 적용이 어렵습니다.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다. 비고의 맞배지붕 20% 가산을 출력 보정으로 표현한다.",
   "citations": [
-    {
-      "table_id": "p975-t0"
-    },
-    {
-      "table_id": "p975-t0",
-      "row": "비고",
-      "value": "- 맞배지붕(경사를 짓는 지붕면이 2개소)은 시공량을 20% 가산하여 적용한다."
-    },
     {
       "chunk_id": "p975-x4",
       "quote": "홈통 및 빗물받이 설치는 ‘[건축부문] 7-2 홈통’을 따른다."
@@ -149,6 +157,24 @@
     {
       "chunk_id": "p975-x4",
       "quote": "공구손료 및 경장비(에어콤프, 절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "table_id": "p975-t0",
+      "row": "지붕잇기공",
+      "column": "수량",
+      "value": "4"
+    },
+    {
+      "table_id": "p975-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p975-t0",
+      "row": "시공량",
+      "column": "수량",
+      "value": "85"
     }
   ],
   "open_questions": [

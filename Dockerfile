@@ -10,7 +10,9 @@ COPY deploy/backend-requirements.txt deploy/backend-requirements.txt
 RUN pip install --no-cache-dir -r deploy/backend-requirements.txt \
     && useradd --create-home --uid 10001 appuser
 COPY backend/ backend/
+COPY pipeline/calculation_contract.py pipeline/python_sandbox.py pipeline/
 COPY data/rates/ data/rates/
+COPY data/calculation_modules/approved/ data/calculation_modules/approved/
 COPY data/drafts/executable.json data/drafts/misfiled.json data/drafts/
 COPY data/drafts/specs/ data/drafts/specs/
 COPY data/processed/chunks.all.jsonl data/processed/chunks.jsonl data/processed/page_map.json data/processed/embeddings.all.gemini-embedding-2.parquet data/processed/

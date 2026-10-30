@@ -159,6 +159,22 @@ def unit_price_rows(priced: dict | None) -> list[dict]:
     return rows
 
 
+def lookup_reference_rows(result: dict | None) -> list[dict]:
+    """Keep lookup-only source values visible in the unit Excel sheet, without pricing them."""
+    rows = []
+    for line in (result or {}).get("unit_lines", []):
+        if line.get("kind") not in ("lookup", "reference"):
+            continue
+        value = line.get("exact", line.get("applied"))
+        if value is None:
+            continue
+        rows.append({"category": "조회", "name": line.get("name", "원문 조회"),
+                     "spec": f"원문 조회값: {value}", "unit": line.get("unit") or "",
+                     "quantity": None, "unit_price": None, "amount": None, "status": "조회",
+                     "reason": "조회 값(금액 산정 대상 아님)", "citations": line.get("citations", [])})
+    return rows
+
+
 def rate_rows(priced: dict | None, statement: dict | None,
               conditions: list[dict] | None = None) -> list[dict]:
     """실제 적용한 노임·기계 단가와 관급자재를 정리한다."""
@@ -210,7 +226,7 @@ def rate_rows(priced: dict | None, statement: dict | None,
 
 def add_tables(response: dict) -> dict:
     return {"statement_rows": statement_rows(response.get("statement")), "bill": bill_row(response),
-            "unit_rows": unit_price_rows(response.get("priced")),
+            "unit_rows": unit_price_rows(response.get("priced")) + lookup_reference_rows(response.get("result")),
             "rate_rows": rate_rows(response.get("priced"), response.get("statement"), response.get("conditions"))}
 
 
@@ -832,7 +848,10 @@ def _multi_unit_export_rows(items: list[dict]) -> tuple[list[list], int]:
         rows.append([title, None, None, None, None, _num(priced.get("total")), None,
                      _num(unit_prices.get("노무비")), None, _num(unit_prices.get("재료비")),
                      None, _num(unit_prices.get("경비")), None])
-        for entry in unit_price_rows(priced):
+        references = lookup_reference_rows(item.get("result"))
+        for reference in references:
+            reference["name"] = f"[{item_id}] {reference['name']}"
+        for entry in [*unit_price_rows(priced), *references]:
             status = entry.get("status") or ("산정" if entry.get("amount") is not None else "미산정")
             muted = status in ("제외", "미산정")
             amount = None if muted else _num(entry.get("amount"))
@@ -856,10 +875,34 @@ def _basis_rows(response: dict) -> list[list]:
     priced = response.get("priced") or {}
     basis_unit = ((result.get("unit_basis") or {}).get("per") or "1㎥")[1:]
     basis = []
+    module = result.get("calculation_module") or {}
+    if module:
+        basis.append(["계산 모듈", module.get("module_id"), f"버전 {module.get('version')}",
+                      f"source SHA256 {module.get('source_hash')}"])
     daily = result.get("daily_volume")
     if daily:
         basis.append([f"일일시공량 ({daily['unit']})", _num(daily["value"]), daily["formula"],
                       _citation_source(daily.get("citations")) or "; ".join(daily.get("sources", []))])
+        for adjustment in daily.get("adjustments", []):
+            reason = adjustment.get("reason") or adjustment.get("operation", "")
+            assumption = adjustment.get("system_assumption")
+            if assumption and "System assumption:" not in reason:
+                reason = f"{reason} | System assumption: {assumption}"
+            if adjustment.get("policy_version"):
+                reason += f" | Policy version {adjustment['policy_version']}"
+            if adjustment.get("system_policy_ref"):
+                reason += f" | Policy ID {adjustment['system_policy_ref']}"
+            if adjustment.get("intervals") is not None:
+                reason += f" | Intervals {adjustment['intervals']}"
+            source = adjustment.get("source") or ""
+            official = adjustment.get("official_source") or {}
+            if official:
+                location = (f"PDF p.{official.get('pdf_page')} (printed p.{official.get('printed_page')})")
+                quote = official.get("text")
+                source = "; ".join(part for part in
+                    (source, f"{official.get('edition', '')} official source {location}", quote) if part)
+            basis.append(["일일시공량 보정", _num(adjustment.get("after")),
+                          reason, source])
         for citation in daily.get("citations", []):
             factor = citation.get("row")
             if factor in ("f1", "f2"):

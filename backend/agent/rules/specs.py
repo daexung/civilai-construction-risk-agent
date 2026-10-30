@@ -33,7 +33,7 @@ def load_specs() -> dict[str, dict]:
     reviewed = {(spec["division"], spec["section_no"]) for spec in specs.values()}
     for path in sorted((ROOT / "data/drafts/specs").rglob("*.json")):
         package = json.loads(path.read_text(encoding="utf-8"))
-        if package["calc_type"] not in ("daily_crew", "per_unit"):
+        if package["calc_type"] not in ("daily_crew", "per_unit", "formula", "lookup_only"):
             continue
         spec = package["draft"]
         section = (spec["division"], spec["section_no"])
@@ -48,6 +48,21 @@ def load_specs() -> dict[str, dict]:
                 field["labels"] = {value: clean_label(value) for value in field["allowed_values"]}
         specs[spec["id"]] = spec
         reviewed.add(section)
+    # Reviewed generated modules may declare reusable runtime policy fields.
+    # Candidate files are intentionally outside this path and never affect sessions.
+    module_dir = ROOT / "data" / "calculation_modules" / "approved"
+    if module_dir.is_dir():
+        for module_path in sorted(module_dir.glob("*.json")):
+            module = json.loads(module_path.read_text(encoding="utf-8"))
+            if module.get("review_status") != "approved_for_runtime":
+                continue
+            for spec in specs.values():
+                section = {"division": spec["division"], "section_no": spec["section_no"]}
+                if section not in module.get("sections", []):
+                    continue
+                known = {field["name"] for field in spec["inputs"]}
+                spec["inputs"].extend(field for field in module.get("inputs", [])
+                                      if field.get("name") not in known)
     return specs
 
 

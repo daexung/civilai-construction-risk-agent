@@ -5,7 +5,7 @@
     "division": "토목",
     "section_no": "9-4-3",
     "title": "디지털 도로대장 작성",
-    "work": "MMS측량 자료를 이용하여 작성하는 경우의 투입인원",
+    "work": "MMS측량 자료로 디지털 도로대장을 작성하는 경우의 내업 투입인원",
     "review": "AI 초안 · 검토 전",
     "source_pages": [
       457,
@@ -57,16 +57,35 @@
         "source": "PDF 457쪽 1. MMS측량 자료를 이용하여 작성하는 경우 표",
         "unit": "인/10km",
         "values": {
-          "정리및점검": {
+          "작업계획 및 준비": {
+            "특급기술자": "(0.5)",
+            "고급기술자": "(1.1)"
+          },
+          "객체추출 및 묘사": {
+            "특급기술자": "(1.0)",
+            "고급기술자": "(3.0)",
+            "중급기술자": "(8.0)",
+            "초급기술자": "(8.0)"
+          },
+          "현황측량 및 조사": {
+            "고급기술자": "(1.0)",
+            "중급기술자": "(6.0)",
+            "초급기술자": "(3.0)"
+          },
+          "정위치 편집": {
+            "고급기술자": "(0.8)",
+            "중급기술자": "(1.2)",
+            "초급기술자": "(2.0)"
+          },
+          "구조화 편집": {
+            "고급기술자": "(1.6)",
+            "중급기술자": "(4.0)",
+            "초급기술자": "(2.4)"
+          },
+          "정리 및 점검": {
             "특급기술자": "(0.2)",
             "고급기술자": "(0.8)",
             "중급기술자": "(0.6)"
-          },
-          "계": {
-            "특급기술자": "(1.7)",
-            "고급기술자": "(7.3)",
-            "중급기술자": "(13.8)",
-            "초급기술자": "(12.4)"
           }
         },
         "cite": {
@@ -100,59 +119,900 @@
       "params": {
         "unit_rate_table": {
           "table": "p513-t1",
-          "row_input": "계",
-          "column_input": "기술자등급",
+          "row_input": null,
+          "column_input": null,
           "trades": [
-            "특급기술자",
-            "고급기술자",
-            "중급기술자",
-            "초급기술자"
-          ]
+            "특급기술자"
+          ],
+          "row_by_trade": {
+            "특급기술자": "작업계획 및 준비"
+          },
+          "trade_column_selector": null,
+          "parenthetical_value_selector": {
+            "mode": "parenthetical_only",
+            "cite": {
+              "page_source": {
+                "pdf_page": 513,
+                "section_no": "9-4-3",
+                "section_title": "디지털 도로대장 작성",
+                "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                "printed_page": 457
+              }
+            }
+          }
         },
         "quantity_input": "length",
-        "surcharges": [
+        "additional_unit_rates": [
           {
-            "when": {
-              "terrain_type": "밀집시가지"
+            "table": "p513-t1",
+            "row_by_trade": {
+              "고급기술자": "작업계획 및 준비"
             },
-            "rate": "1.7",
-            "applies_to": [
-              "특급기술자",
-              "고급기술자",
-              "중급기술자",
-              "초급기술자"
+            "column_by_trade": {
+              "고급기술자": "고급기술자"
+            },
+            "trades": [
+              "고급기술자"
             ],
-            "source": "PDF 457쪽 ③ 지형 구분에 따른 계수"
+            "basis_by_trade": {
+              "고급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            }
           },
           {
-            "when": {
-              "terrain_type": "시가지"
+            "table": "p513-t1",
+            "row_by_trade": {
+              "특급기술자": "객체추출 및 묘사"
             },
-            "rate": "1.3",
-            "applies_to": [
-              "특급기술자",
-              "고급기술자",
-              "중급기술자",
+            "column_by_trade": {
+              "특급기술자": "특급기술자"
+            },
+            "trades": [
+              "특급기술자"
+            ],
+            "basis_by_trade": {
+              "특급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "고급기술자": "객체추출 및 묘사"
+            },
+            "column_by_trade": {
+              "고급기술자": "고급기술자"
+            },
+            "trades": [
+              "고급기술자"
+            ],
+            "basis_by_trade": {
+              "고급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "중급기술자": "객체추출 및 묘사"
+            },
+            "column_by_trade": {
+              "중급기술자": "중급기술자"
+            },
+            "trades": [
+              "중급기술자"
+            ],
+            "basis_by_trade": {
+              "중급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "초급기술자": "객체추출 및 묘사"
+            },
+            "column_by_trade": {
+              "초급기술자": "초급기술자"
+            },
+            "trades": [
               "초급기술자"
             ],
-            "source": "PDF 457쪽 ③ 지형 구분에 따른 계수"
+            "basis_by_trade": {
+              "초급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "고급기술자": "현황측량 및 조사"
+            },
+            "column_by_trade": {
+              "고급기술자": "고급기술자"
+            },
+            "trades": [
+              "고급기술자"
+            ],
+            "basis_by_trade": {
+              "고급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "중급기술자": "현황측량 및 조사"
+            },
+            "column_by_trade": {
+              "중급기술자": "중급기술자"
+            },
+            "trades": [
+              "중급기술자"
+            ],
+            "basis_by_trade": {
+              "중급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "초급기술자": "현황측량 및 조사"
+            },
+            "column_by_trade": {
+              "초급기술자": "초급기술자"
+            },
+            "trades": [
+              "초급기술자"
+            ],
+            "basis_by_trade": {
+              "초급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "고급기술자": "정위치 편집"
+            },
+            "column_by_trade": {
+              "고급기술자": "고급기술자"
+            },
+            "trades": [
+              "고급기술자"
+            ],
+            "basis_by_trade": {
+              "고급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "중급기술자": "정위치 편집"
+            },
+            "column_by_trade": {
+              "중급기술자": "중급기술자"
+            },
+            "trades": [
+              "중급기술자"
+            ],
+            "basis_by_trade": {
+              "중급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "초급기술자": "정위치 편집"
+            },
+            "column_by_trade": {
+              "초급기술자": "초급기술자"
+            },
+            "trades": [
+              "초급기술자"
+            ],
+            "basis_by_trade": {
+              "초급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "고급기술자": "구조화 편집"
+            },
+            "column_by_trade": {
+              "고급기술자": "고급기술자"
+            },
+            "trades": [
+              "고급기술자"
+            ],
+            "basis_by_trade": {
+              "고급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "중급기술자": "구조화 편집"
+            },
+            "column_by_trade": {
+              "중급기술자": "중급기술자"
+            },
+            "trades": [
+              "중급기술자"
+            ],
+            "basis_by_trade": {
+              "중급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "초급기술자": "구조화 편집"
+            },
+            "column_by_trade": {
+              "초급기술자": "초급기술자"
+            },
+            "trades": [
+              "초급기술자"
+            ],
+            "basis_by_trade": {
+              "초급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            },
+            "multipliers": [
+              {
+                "when": {
+                  "terrain_type": "밀집시가지"
+                },
+                "factor": "1.7",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "시가지"
+                },
+                "factor": "1.3",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              },
+              {
+                "when": {
+                  "terrain_type": "그 외 지역"
+                },
+                "factor": "1.0",
+                "cite": {
+                  "table_id": "p513-t2"
+                }
+              }
+            ]
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "특급기술자": "정리 및 점검"
+            },
+            "column_by_trade": {
+              "특급기술자": "특급기술자"
+            },
+            "trades": [
+              "특급기술자"
+            ],
+            "basis_by_trade": {
+              "특급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            }
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "고급기술자": "정리 및 점검"
+            },
+            "column_by_trade": {
+              "고급기술자": "고급기술자"
+            },
+            "trades": [
+              "고급기술자"
+            ],
+            "basis_by_trade": {
+              "고급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            }
+          },
+          {
+            "table": "p513-t1",
+            "row_by_trade": {
+              "중급기술자": "정리 및 점검"
+            },
+            "column_by_trade": {
+              "중급기술자": "중급기술자"
+            },
+            "trades": [
+              "중급기술자"
+            ],
+            "basis_by_trade": {
+              "중급기술자": "인/10km"
+            },
+            "quantity_input": "length",
+            "parenthetical_value_selector": {
+              "mode": "parenthetical_only",
+              "cite": {
+                "page_source": {
+                  "pdf_page": 513,
+                  "section_no": "9-4-3",
+                  "section_title": "디지털 도로대장 작성",
+                  "item": "MMS측량 자료를 이용하여 작성하는 경우",
+                  "printed_page": 457
+                }
+              }
+            }
           }
         ],
-        "note_adjustments": [
+        "minimum_quantities": [
           {
-            "when": {
-              "length": "<= 1"
-            },
-            "change": "1km 품으로 적용 (물량을 1km로 고정)",
-            "source": "PDF 458쪽 ⑦ 측량연장이 1km이하인 경우에는 1km 품으로 한다."
+            "input": "length",
+            "minimum": "1",
+            "unit": "km",
+            "cite": {
+              "chunk_id": "p514-x0",
+              "quote": "⑦ 측량연장이 1km이하인 경우에는 1km 품으로 한다."
+            }
           }
         ]
       },
       "steps": [
-        "MMS측량 자료 투입인원 표(p513-t1)에서 '계' 행의 인원을 가져온다.",
-        "지형구분에 따른 증감계수(p513-t2)를 객체추출 및 묘사, 현황측량 및 조사, 정위치편집, 구조화편집 공종에 적용하여 합산한다. (초안에서는 전체 계에 일괄 적용하는 것으로 단순화)",
-        "도로연장(length)을 10으로 나누어 단위 물량을 구한다. 단, 연장이 1km 이하인 경우 1km(0.1 단위)로 계산한다.",
-        "단위 물량에 조정된 투입인원을 곱하여 총 인·일을 산출한다."
+        "MMS측량 자료의 공종별·기술자 등급별 괄호 인원(p513-t1)을 각각 선택한다. 괄호 값은 내업 인원이다.",
+        "지형구분 계수(p513-t2)는 객체추출 및 묘사, 현황측량 및 조사, 정위치 편집, 구조화 편집에만 적용한다. 작업계획 및 준비와 정리 및 점검에는 적용하지 않는다.",
+        "도로연장에 대해 공종별 인원/10km 단가를 적용한다. 연장이 1km 이하이면 원문 ⑦에 따라 최소 1km 품을 적용한다."
       ],
       "source": "PDF 457~458쪽",
       "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -221,7 +1081,8 @@
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": []
   },
   "calc_type": "per_unit",
   "calc_type_raw": "per_unit",

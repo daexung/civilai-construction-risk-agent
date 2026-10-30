@@ -8,8 +8,8 @@
     "work": "공정별 제작품 및 소모자재",
     "review": "AI 초안 · 검토 전",
     "source_pages": [
-      822,
-      823
+      878,
+      879
     ],
     "inputs": [
       {
@@ -25,27 +25,87 @@
     "tables": [
       {
         "id": "p878-t0",
-        "role": "공정별 제작품 (ton당)",
-        "source": "PDF 822쪽 1. 공정별 제작품",
+        "role": "공정별 제작품",
+        "source": "PDF 878쪽 13-6-17 공정별 제작품 (ton당)",
         "unit": "인/ton",
         "values": {
-          "기술관리 재료절단사도 현도 괘서 절단 교정 단재가공괘서 절단 Edge 가 공 용접 교정 Holing 부분조립취부조정 용접 절단 부분조립수정 Grinding 가조립조립 해체 도장준비 도장 운반조작 동력조작 보조 검사": {
-            "기계기사": "1.6",
-            "제도공": "0.5",
-            "현도공": "0.2",
-            "마킹공": "1.3",
-            "절단공": "0.28",
-            "플랜트제관공": "0.5",
-            "산소절단공": "0.14",
-            "플랜트용접공": "1.0",
-            "플랜트기계설치공": "2.5",
-            "플랜용접공": "6.8",
-            "연마공(기계)": "0.13",
-            "도장공": "0.49",
-            "특수비계공": "3.3",
-            "플랜트전공": "0.66",
-            "특별인부": "14.3",
-            "인력품의7%": "7%"
+          "기술관리 · 기계기사": {
+            "수량": "1.6"
+          },
+          "재료절단사도 · 제도공": {
+            "수량": "0.5"
+          },
+          "현도 · 현도공": {
+            "수량": "0.2"
+          },
+          "괘서 · 마킹공": {
+            "수량": "1.3"
+          },
+          "절단 · 절단공": {
+            "수량": "0.28"
+          },
+          "단재가공괘서 · 마킹공": {
+            "수량": "1.3"
+          },
+          "Edge 가공 · 산소절단공": {
+            "수량": "0.14"
+          },
+          "Holing · 플랜트제관공": {
+            "수량": "0.37"
+          },
+          "부분조립취부조정 · 플랜트기계설치공": {
+            "수량": "2.5"
+          },
+          "부분조립수정 · 플랜트제관공": {
+            "수량": "1.75"
+          },
+          "Grinding · 플랜트제관공": {
+            "수량": "1.5"
+          },
+          "Grinding · 연마공(기계)": {
+            "수량": "0.13"
+          },
+          "가조립조립 · 플랜트기계설치공": {
+            "수량": "2.0"
+          },
+          "해체 · 플랜트기계설치공": {
+            "수량": "1.0"
+          },
+          "도장준비 · 플랜트제관공": {
+            "수량": "2.26"
+          },
+          "도장 · 도장공": {
+            "수량": "0.49"
+          },
+          "운반조작 · 특수비계공": {
+            "수량": "3.3"
+          },
+          "동력조작 · 플랜트전공": {
+            "수량": "0.66"
+          },
+          "보조 · 특별인부": {
+            "수량": "14.3"
+          },
+          "검사 · 인력품의 7%": {
+            "수량": "7%"
+          },
+          "교정(1) · 플랜트제관공": {
+            "수량": "0.5"
+          },
+          "교정(2) · 플랜트제관공": {
+            "수량": "0.75"
+          },
+          "용접(1) · 플랜트용접공": {
+            "수량": "1.0"
+          },
+          "용접(2) · 플랜트용접공": {
+            "수량": "6.8"
+          },
+          "절단(1) · 산소절단공": {
+            "수량": "0.14"
+          },
+          "절단(2) · 산소절단공": {
+            "수량": "0.08"
           }
         },
         "cite": {
@@ -56,7 +116,7 @@
         "id": "p878-t1",
         "role": "소모자재 (톤당)",
         "source": "PDF 822쪽 2. 소모자재",
-        "unit": "톤당",
+        "unit": "단위/ton",
         "values": {
           "절단및수정 현도 용접 도장": {
             "품명 산소": "2.2",
@@ -92,45 +152,823 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "quantity_input": "quantity",
+        "unit_rate_table": {
+          "row_input": "기술관리 · 기계기사",
+          "table": "p878-t0",
+          "column_input": "수량",
+          "trades": [
+            "작업품"
+          ],
+          "resource_units": {
+            "작업품": "인"
+          },
+          "trade_name_by_trade": {
+            "작업품": "기계기사"
+          },
+          "citation_overrides": {
+            "작업품": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "기술관리 · 기계기사",
+                "value": "1.6 인/ton",
+                "printed_page": 822
+              }
+            }
+          }
+        },
+        "additional_unit_rates": [
+          {
+            "name": "재료절단사도",
+            "table": "p878-t0",
+            "trades": [
+              "제도공"
+            ],
+            "row_by_trade": {
+              "제도공": "재료절단사도 · 제도공"
+            },
+            "column_by_trade": {
+              "제도공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "제도공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "재료절단사도 · 제도공",
+                "value": "0.5 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "현도",
+            "table": "p878-t0",
+            "trades": [
+              "현도공"
+            ],
+            "row_by_trade": {
+              "현도공": "현도 · 현도공"
+            },
+            "column_by_trade": {
+              "현도공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "현도공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "현도 · 현도공",
+                "value": "0.2 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "괘서",
+            "table": "p878-t0",
+            "trades": [
+              "마킹공"
+            ],
+            "row_by_trade": {
+              "마킹공": "괘서 · 마킹공"
+            },
+            "column_by_trade": {
+              "마킹공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "마킹공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "괘서 · 마킹공",
+                "value": "1.3 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "절단",
+            "table": "p878-t0",
+            "trades": [
+              "절단공"
+            ],
+            "row_by_trade": {
+              "절단공": "절단 · 절단공"
+            },
+            "column_by_trade": {
+              "절단공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "절단공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "절단 · 절단공",
+                "value": "0.28 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "교정",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "교정(1) · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "교정(1) · 플랜트제관공",
+                "value": "0.5 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "단재가공괘서",
+            "table": "p878-t0",
+            "trades": [
+              "마킹공"
+            ],
+            "row_by_trade": {
+              "마킹공": "단재가공괘서 · 마킹공"
+            },
+            "column_by_trade": {
+              "마킹공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "마킹공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "단재가공괘서 · 마킹공",
+                "value": "1.3 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "절단",
+            "table": "p878-t0",
+            "trades": [
+              "산소절단공"
+            ],
+            "row_by_trade": {
+              "산소절단공": "절단(1) · 산소절단공"
+            },
+            "column_by_trade": {
+              "산소절단공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "산소절단공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "절단(1) · 산소절단공",
+                "value": "0.14 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "Edge 가공",
+            "table": "p878-t0",
+            "trades": [
+              "산소절단공"
+            ],
+            "row_by_trade": {
+              "산소절단공": "Edge 가공 · 산소절단공"
+            },
+            "column_by_trade": {
+              "산소절단공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "산소절단공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "Edge 가공 · 산소절단공",
+                "value": "0.14 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "용접",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트용접공"
+            ],
+            "row_by_trade": {
+              "플랜트용접공": "용접(1) · 플랜트용접공"
+            },
+            "column_by_trade": {
+              "플랜트용접공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트용접공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "용접(1) · 플랜트용접공",
+                "value": "1.0 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "교정",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "교정(2) · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "교정(2) · 플랜트제관공",
+                "value": "0.75 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "Holing",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "Holing · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "Holing · 플랜트제관공",
+                "value": "0.37 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "부분조립취부조정",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "row_by_trade": {
+              "플랜트기계설치공": "부분조립취부조정 · 플랜트기계설치공"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트기계설치공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "부분조립취부조정 · 플랜트기계설치공",
+                "value": "2.5 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "용접",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트용접공"
+            ],
+            "row_by_trade": {
+              "플랜트용접공": "용접(2) · 플랜트용접공"
+            },
+            "column_by_trade": {
+              "플랜트용접공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트용접공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "용접(2) · 플랜트용접공",
+                "value": "6.8 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "절단",
+            "table": "p878-t0",
+            "trades": [
+              "산소절단공"
+            ],
+            "row_by_trade": {
+              "산소절단공": "절단(2) · 산소절단공"
+            },
+            "column_by_trade": {
+              "산소절단공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "산소절단공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "절단(2) · 산소절단공",
+                "value": "0.08 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "부분조립수정",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "부분조립수정 · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "부분조립수정 · 플랜트제관공",
+                "value": "1.75 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "Grinding",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "Grinding · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "Grinding · 플랜트제관공",
+                "value": "1.5 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "Grinding",
+            "table": "p878-t0",
+            "trades": [
+              "연마공(기계)"
+            ],
+            "row_by_trade": {
+              "연마공(기계)": "Grinding · 연마공(기계)"
+            },
+            "column_by_trade": {
+              "연마공(기계)": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "연마공(기계)": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "Grinding · 연마공(기계)",
+                "value": "0.13 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "가조립조립",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "row_by_trade": {
+              "플랜트기계설치공": "가조립조립 · 플랜트기계설치공"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트기계설치공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "가조립조립 · 플랜트기계설치공",
+                "value": "2.0 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "해체",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "row_by_trade": {
+              "플랜트기계설치공": "해체 · 플랜트기계설치공"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트기계설치공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "해체 · 플랜트기계설치공",
+                "value": "1.0 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "도장준비",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "도장준비 · 플랜트제관공"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트제관공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "도장준비 · 플랜트제관공",
+                "value": "2.26 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "도장",
+            "table": "p878-t0",
+            "trades": [
+              "도장공"
+            ],
+            "row_by_trade": {
+              "도장공": "도장 · 도장공"
+            },
+            "column_by_trade": {
+              "도장공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "도장공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "도장 · 도장공",
+                "value": "0.49 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "운반조작",
+            "table": "p878-t0",
+            "trades": [
+              "특수비계공"
+            ],
+            "row_by_trade": {
+              "특수비계공": "운반조작 · 특수비계공"
+            },
+            "column_by_trade": {
+              "특수비계공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "특수비계공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "운반조작 · 특수비계공",
+                "value": "3.3 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "동력조작",
+            "table": "p878-t0",
+            "trades": [
+              "플랜트전공"
+            ],
+            "row_by_trade": {
+              "플랜트전공": "동력조작 · 플랜트전공"
+            },
+            "column_by_trade": {
+              "플랜트전공": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "플랜트전공": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "동력조작 · 플랜트전공",
+                "value": "0.66 인/ton",
+                "printed_page": 822
+              }
+            }
+          },
+          {
+            "name": "보조",
+            "table": "p878-t0",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "보조 · 특별인부"
+            },
+            "column_by_trade": {
+              "특별인부": "수량"
+            },
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "quantity_unit": "ton",
+            "resource_units": {
+              "특별인부": "인"
+            },
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "보조 · 특별인부",
+                "value": "14.3 인/ton",
+                "printed_page": 822
+              }
+            }
+          }
+        ],
+        "proportional_resource_additions": [
+          {
+            "resource_name": "검사 인력품",
+            "resource_unit": "인",
+            "base": "labor_rate_total",
+            "factor": "0.07",
+            "source": "PDF 878쪽 13-6-17 표 검사행 인력품의 7%",
+            "cite": {
+              "page_source": {
+                "pdf_page": 878,
+                "section_no": "13-6-17",
+                "section_title": "Tainter Gate Anchorage 제작",
+                "item": "1. 공정별 제작품 (ton당)",
+                "row": "검사 · 인력품의",
+                "value": "7%",
+                "printed_page": 822
+              }
+            }
+          }
+        ],
+        "surcharges": [],
+        "note_adjustments": []
+      },
       "steps": [
-        "단위당 품과 소모자재를 표에서 확인한다.",
-        "물량을 곱하여 총 품과 소모자재를 산출한다.",
-        "파싱 결과의 표 구조가 원문과 크게 달라 자동 계산을 지원하지 않는다."
+        "PDF 878쪽 표의 공정·직종별 ton당 노무품 25개를 원문 행을 유지해 계산한다.",
+        "검사행의 인력품 7%를 명시된 별도 검사 인력품으로 산출한다.",
+        "단위 노무량 합계에 Tainter Gate Anchorage 제작 ton을 곱한다.",
+        "소모자재 표의 물량/규격은 별도 단가·일부 현장 입력이 필요해 노무량 합계와 분리한다."
       ],
-      "source": "PDF 822~823쪽 1. 공정별 제작품 및 2. 소모자재"
+      "source": "PDF 878~879쪽 13-6-17 제작품 및 소모자재",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 원문 값을 그대로 적용"
     },
     "blocked": [],
-    "not_calculated": [],
+    "not_calculated": [
+      {
+        "item": "소모자재 일부 규격·단가 및 소모량",
+        "source": "PDF 878~879쪽 2. 소모자재: 산소, 아세틸렌, 함석, 용접봉, 규사, 연료·전력·Grinding 재료",
+        "cite": [
+          {
+            "table_id": "p878-t1"
+          },
+          {
+            "table_id": "p879-t0"
+          }
+        ]
+      }
+    ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": [
+      "소모자재는 품명별 수량 일부가 원문 표에 있으나 단가 미제공, 중유량은 D/M 입력 기준이 정의되지 않아 자동 금액·일부 물량 산정에서 제외한다."
+    ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 공정별 직종 및 수량 매핑이 훼손되어 동일 직종의 수량을 합산해야 하는지 명확하지 않으며, 소모자재 표의 품명 매핑도 잘못되어 있어 자동 계산을 위한 표 구성이 불가능합니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "PDF 878쪽에서 공정별 제작품 25개 수치와 검사 인력품 7%를 구분해 source-backed per_unit 경로로 연결한다. 일부 소모자재는 금액·수량 기준이 불완전해 별도 범위로 남긴다.",
   "citations": [
     {
-      "table_id": "p878-t0",
-      "row": "기술관리 재료절단사도 현도 괘서 절단 교정 단재가공괘서 절단 Edge 가 공 용접 교정 Holing 부분조립취부조정 용접 절단 부분조립수정 Grinding 가조립조립 해체 도장준비 도장 운반조작 동력조작 보조 검사",
-      "column": "기계기사",
-      "value": "1.6"
+      "table_id": "p878-t0"
     },
     {
-      "table_id": "p878-t1",
-      "row": "절단및수정 현도 용접 도장",
-      "column": "품명 산소",
-      "value": "2.2병"
+      "table_id": "p878-t1"
     },
     {
-      "table_id": "p879-t0",
-      "row": "전력 Grinding",
-      "column": "품명 중유",
-      "value": "0.019D/M"
-    },
-    {
-      "chunk_id": "p879-x6",
-      "quote": "산소량 규격은 대기압상태를 기준하며, 단위 ‘병’은 35℃에서 150기압으로 압축용기에 넣어 사용하는 것을"
+      "table_id": "p879-t0"
     }
   ],
   "open_questions": [

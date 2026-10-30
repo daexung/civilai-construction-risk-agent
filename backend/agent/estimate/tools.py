@@ -23,7 +23,8 @@ from backend.agent.estimate.aggregate import aggregate
 from backend.agent.estimate.state import (COMMON_FIELDS, EstimateItem, EstimateSession, PlanError, choose_work,
                                           new_session, question_version, set_common, set_explicit, set_quantity,
                                           unit_key)
-from backend.agent.nodes.compute import CALCULATORS
+from backend.agent.nodes.compute import CALCULATORS, calculator_for
+from backend.agent.tools.calc.generated import registered_module_for, check_registered_blocked
 from backend.agent.nodes.fill import (_UNIT_ALIASES, _extract_common_inputs, _format_rational, _norm,
                                       _valid_for_field, extract_inputs)
 from backend.agent.nodes.qa_context import build_context
@@ -32,7 +33,9 @@ from backend.agent.nodes.select import select
 from backend.agent.rules.conditions import price_fields, field_active
 from backend.agent.rules.specs import load_specs, specs_by_section
 from backend.agent.tools.calc.adjustments import adjustment_questions
+from backend.agent.rules.quantity_units import resolve_quantity_field
 from backend.agent.tools.calc.daily_crew import check_blocked
+from backend.agent.tools.calc.lookup import source_domain_options
 from backend.agent.tools.calc.price import price_unit, select_rate_version
 
 
@@ -71,9 +74,30 @@ def _spec_for(candidate: dict) -> dict | None:
     return entries[0] if entries else None
 
 
-def _quantity_field(spec: dict) -> dict | None:
+def _quantity_field(spec: dict, item: EstimateItem | None = None, values: dict | None = None) -> dict | None:
+    """물량 입력. `unit_by`가 있으면 항목의 현재 선택(요청문·확정 조건·사용자 값, 또는 넘긴 values)으로 단위를 정한다."""
     name = spec["quantity_model"]["params"].get("quantity_input")
-    return next((field for field in spec["inputs"] if field["name"] == name), None)
+    field = next((field for field in spec["inputs"] if field["name"] == name), None)
+    if field and field.get("unit_by"):
+        if values is None and item is not None:
+            fields = {f["name"]: f for f in spec["inputs"]}
+            values = {**{k: v for k, v in extract_inputs(item["request_text"], spec)[0].items() if k in fields},
+                      **(item.get("conditions") or {}),
+                      **{k: e["value"] for k, e in item["explicit"].items() if k in fields}}
+        return resolve_quantity_field(field, values or {})
+    return field
+
+
+def _selector_values(item: EstimateItem, spec: dict, incoming: dict | None) -> dict:
+    """물량 단위를 정하는 선택 값: 항목의 현재 값에, 같은 호출로 들어오는 값을 덮어 쓴다(작업 종류와 물량을 함께 말한 경우)."""
+    fields = {f["name"]: f for f in spec["inputs"]}
+    current = {**{k: v for k, v in extract_inputs(item["request_text"], spec)[0].items() if k in fields},
+               **(item.get("conditions") or {}),
+               **{k: e["value"] for k, e in item["explicit"].items() if k in fields}}
+    for name, entry in (incoming or {}).items():
+        if isinstance(entry, dict) and name in fields:
+            current[name] = entry.get("value")
+    return current
 
 
 def _quantity_dependent(spec: dict) -> bool:
@@ -105,9 +129,15 @@ def _work_question(item: EstimateItem) -> dict:
                      [candidate["section"] for candidate in item["candidates"]], "work")
 
 
-def _field_question(item: EstimateItem, spec: dict, field: dict, stage: str) -> dict:
+def _field_question(item: EstimateItem, spec: dict, field: dict, stage: str,
+                    values: dict | None = None) -> dict:
     tables = {table["id"]: table for table in spec["tables"]}
-    return _question(item, field["name"], field["ask"], field["allowed_values"], stage,
+    if field.get("unit_by"):
+        field = _quantity_field(spec, item) if _quantity_field(spec)["name"] == field["name"] else field
+    choices = field["allowed_values"]
+    if spec.get("quantity_model", {}).get("name") == "lookup_only" and values is not None:
+        choices = source_domain_options(spec, field["name"], values) or choices
+    return _question(item, field["name"], field["ask"], choices, stage,
                      unit=field.get("unit"), labels=field.get("labels"),
                      decision_table=tables[field["decision_table"]]["values"] if field.get("decision_table") else None)
 
@@ -122,7 +152,8 @@ def _build_conditions(item: EstimateItem, spec: dict) -> tuple[dict, str | None]
     stated, ambiguities = extract_inputs(item["request_text"], spec)
     fields = {field["name"]: field for field in spec["inputs"]}
     conditions = {name: value for name, value in stated.items() if name in fields}
-    quantity_field = _quantity_field(spec)
+    partial = {**conditions, **{name: entry["value"] for name, entry in item["explicit"].items() if name in fields}}
+    quantity_field = _quantity_field(spec, values=partial)
     mismatch = None
     if quantity_field:
         conditions.pop(quantity_field["name"], None)
@@ -135,6 +166,8 @@ def _build_conditions(item: EstimateItem, spec: dict) -> tuple[dict, str | None]
                      if unit and unit == unit_key(quantity_field.get("unit"))}
             if len(found) == 1:
                 quantity = {"value": _format_rational(found.pop()), "unit": quantity_field.get("unit")}
+        if quantity and quantity_field.get("unit_by") and not quantity_field.get("unit"):
+            quantity = None  # 작업 종류를 아직 몰라 단위를 정할 수 없다. 작업 종류를 받은 뒤 같은 단위로 확인한다.
         if quantity:
             if unit_key(quantity["unit"]) and unit_key(quantity["unit"]) == unit_key(quantity_field.get("unit")):
                 conditions[quantity_field["name"]] = quantity["value"]
@@ -169,7 +202,7 @@ def _missing_fields(spec: dict, values: dict, names) -> list[dict]:
             and field_active(field, values, {f["name"]: f for f in spec["inputs"]})]
 
 
-_NUMERIC = {"positive_rational", "positive_currency", "nonnegative_integer"}
+_NUMERIC = {"positive_rational", "positive_currency", "nonnegative_integer", "percentage"}
 _MISSING = object()
 _MULTIPLIER = {"억": 100_000_000, "만": 10_000}
 _UNIT_WORDS = sorted({alias for aliases in _UNIT_ALIASES.values() for alias in aliases}, key=len, reverse=True)
@@ -295,7 +328,7 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
         """근거 구절을 서버 파서로 다시 읽어 보낸 값과 같은지 본다(단위·금액 표기 차이는 허용)."""
         if source == "answer":
             return True
-        if name in COMMON_FIELDS:
+        if name in COMMON_FIELDS and field is None:
             return str(_extract_common_inputs(evidence).get(name)) == str(value)
         if field is None:  # 공종 확정 전: 값이 근거 구절에 그대로 있어야 한다
             return bool(_norm(str(value))) and _norm(str(value)) in _norm(evidence)
@@ -318,7 +351,7 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
             applied["work"] = spec["id"]
     spec = _spec(item)
     fields = {field["name"]: field for field in spec["inputs"]} if spec else {}
-    quantity_field = _quantity_field(spec) if spec else None
+    quantity_field = _quantity_field(spec, values=_selector_values(item, spec, values)) if spec else None
     if quantity is not None:
         if not grounded(quantity):
             rejected["quantity"] = "원문에 근거가 없습니다"
@@ -349,7 +382,7 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
             rejected[name] = _not_allowed(value, field)
         elif not consistent(name, value, entry.get("evidence") or "", field):
             rejected[name] = "값이 근거와 다릅니다"
-        elif name in COMMON_FIELDS:
+        elif name in COMMON_FIELDS and field is None:
             try:
                 set_common(session, name, value)
                 applied[name] = value
@@ -363,7 +396,7 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
                 set_quantity(item, value, quantity_field.get("unit"), source)
                 applied[name] = item["quantity"]["value"]
             else:
-                if field["type"] in ("positive_rational", "positive_currency") and value != "모름":
+                if field["type"] in ("positive_rational", "positive_currency", "percentage") and value != "모름":
                     value = _format_rational(Fraction(str(value).replace(",", "")))
                 set_explicit(item, name, value, source)
                 applied[name] = value
@@ -393,8 +426,19 @@ def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> 
     conditions, mismatch = _build_conditions(item, spec)
     excluded = price_fields(spec)
     labor_names = {field["name"] for field in spec["inputs"]} - excluded
-    missing = [_field_question(item, spec, field, "labor") for field in _missing_fields(spec, conditions, labor_names)]
-    quantity_field = _quantity_field(spec)
+    missing_fields = _missing_fields(spec, conditions, labor_names)
+    if spec.get("quantity_model", {}).get("name") == "lookup_only" and missing_fields:
+        # Lookup table axes can be dependent. Ask only the next source-backed
+        # axis, so the following question can exclude combinations with no cell.
+        first = missing_fields[0]
+        missing = [_field_question(item, spec, first, "labor", conditions)]
+    else:
+        missing = [_field_question(item, spec, field, "labor", conditions) for field in missing_fields]
+    item["conditions"] = conditions
+    quantity_field = _quantity_field(spec, item)
+    if quantity_field and quantity_field.get("unit_by") and not quantity_field.get("unit"):
+        # 작업 종류를 알아야 물량 단위가 정해진다. 작업 종류를 받은 뒤에 물량을 묻는다.
+        missing = [question for question in missing if question["field"] != quantity_field["name"]]
     per_unit_only = bool(allow_per_unit and quantity_field and not mismatch
                          and quantity_field["name"] not in conditions and not _quantity_dependent(spec)
                          and not any(unit == unit_key(quantity_field.get("unit"))
@@ -419,7 +463,7 @@ def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> 
     if per_unit_only:
         key = _digest(key, "per_unit_only")  # 기준 물량 1의 총량 계산과도 분리한다.
     if item.get("labor_key") != key or not item.get("computed_result"):
-        blocked = check_blocked(spec, conditions)
+        blocked = check_registered_blocked(spec, conditions)
         if blocked:
             item.update(status="BLOCKED", reason=blocked["reason"], questions=[])
             return _result("blocked", item, {"reason": blocked["reason"], "citations": blocked.get("citations", [])})
@@ -427,7 +471,14 @@ def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> 
                   if name in {field["name"] for field in spec["inputs"]} or name.startswith("apply_adj_")}
         if per_unit_only:
             inputs[quantity_field["name"]] = "1"  # 계산기만 읽는 기준값. 사용자 조건에는 넣지 않는다.
-        result = CALCULATORS[spec["quantity_model"]["name"]](spec, inputs, labor_only=True)
+        calculate = calculator_for(spec)
+        if calculate is None:
+            return _result("error", item, {"reason": f"등록되지 않은 계산 방식입니다: {spec['quantity_model']['name']}"})
+        registered_module = registered_module_for(spec)
+        if registered_module:
+            spec = copy.deepcopy(spec)
+            spec["quantity_model"].setdefault("params", {})["module_id"] = registered_module["id"]
+        result = calculate(spec, inputs, labor_only=True)
         if result.get("status") == "ask":
             missing = [_question(item, raw["name"], raw["ask"], raw.get("choices") or raw.get("allowed_values"), "labor")
                        for raw in result.get("questions", [])]
@@ -458,6 +509,7 @@ def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> 
         "assumptions": result["assumptions"],
         **{name: result.get(name) for name in ("daily_volume_m3", "work_days", "person_days",
                                                "equipment_days", "equipment_units")},
+        "not_calculated": result.get("not_calculated", []),
         "quantity": conditions.get(quantity_field["name"]) if quantity_field else None,
         "conditions": {name: value for name, value in conditions.items() if name not in excluded}})
 
@@ -483,11 +535,29 @@ def estimate_cost(session: EstimateSession) -> dict:
         common = {name: entry["value"] for name, entry in session["common_conditions"].items()}
         priced = price_unit(spec, item["computed_result"]["unit_lines"], select_rate_version(basis),
                             {**common, **conditions}, basis)
+        module = registered_module_for(spec)
+        for unresolved in (module or {}).get("conditional_unpriced", []):
+            if all(conditions.get(name) == value for name, value in unresolved.get("when", {}).items()):
+                entry = {"name": unresolved["name"], "reason": unresolved["reason"],
+                         "source": unresolved.get("source"), "status": "미산정"}
+                if all(existing.get("name") != entry["name"] for existing in priced.get("unpriced", [])):
+                    priced.setdefault("unpriced", []).append(entry)
+                priced["partial"] = True
+                priced["status"] = "PARTIAL"
         item.update(priced_result=priced, price_key=key, result_revision=item["input_revision"])
     item.update(status="PRICED", questions=[], review_status=spec.get("review", ""))
     priced = item["priced_result"]
     session.update(aggregate(session))
     outcome = session["aggregate_result"]
+    if outcome["status"] == "NO_RESULT" and (item["computed_result"].get("reference_only")
+                                             or item["computed_result"].get("result_kind") == "totals"):
+        # 조회 전용 항목(표에서 찾은 규모·손율)이나 직종 노임 대응이 없는 총량(공수) 결과는 금액을 만들 수 없다.
+        # 계산한 값과 근거는 보여 주고 원가계산서는 만들지 않는다. 합산에서는 사유와 함께 제외된다.
+        item["reason"] = ("조회 전용 항목(금액 산정 대상 아님)" if item["computed_result"].get("reference_only")
+                          else "노임 단가와 대응되는 직종이 없어 금액을 산정하지 못했습니다")
+        session.update(statement=None, statement_key=None)
+        return _result("ok", item, {**labor["data"], "priced": priced, "statement": None, "reference_only": bool(item["computed_result"].get("reference_only")),
+                                    "common": copy.deepcopy(session["common_conditions"]), "price_conditions": {}})
     if outcome["status"] in ("PENDING", "NEEDS_COMMON", "NO_RESULT"):
         session.update(statement=None, statement_key=None)
         return _result("error", item, {"reason": f"원가계산서를 만들 수 없습니다({outcome['status']})",

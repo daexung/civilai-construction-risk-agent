@@ -101,19 +101,27 @@
           },
           "65~80": {
             "유량계 배관공(인)": "0.446",
-            "유량계 보통인부(인)": "0.446"
+            "유량계 보통인부(인)": "0.446",
+            "보호통 배관공(인)": "-",
+            "보호통 보통인부(인)": "-"
           },
           "100~125": {
             "유량계 배관공(인)": "0.533",
-            "유량계 보통인부(인)": "0.533"
+            "유량계 보통인부(인)": "0.533",
+            "보호통 배관공(인)": "-",
+            "보호통 보통인부(인)": "-"
           },
           "150~200": {
             "유량계 배관공(인)": "0.686",
-            "유량계 보통인부(인)": "0.686"
+            "유량계 보통인부(인)": "0.686",
+            "보호통 배관공(인)": "-",
+            "보호통 보통인부(인)": "-"
           },
           "250~300": {
             "유량계 배관공(인)": "0.838",
-            "유량계 보통인부(인)": "0.838"
+            "유량계 보통인부(인)": "0.838",
+            "보호통 배관공(인)": "-",
+            "보호통 보통인부(인)": "-"
           }
         },
         "cite": {
@@ -157,6 +165,120 @@
             "cite": {
               "table_id": "p735-t0",
               "row": "비고"
+            }
+          }
+        ],
+        "excluded_resources": [
+          {
+            "trade": "배관공",
+            "when": {
+              "meter_size": "65~80",
+              "install_item": "보호통"
+            },
+            "source": "PDF printed p.679 (physical p.735), protection columns are explicit dashes",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "65~80",
+              "column": "보호통 배관공(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "보통인부",
+            "when": {
+              "meter_size": "65~80",
+              "install_item": "보호통"
+            },
+            "source": "PDF printed p.679 (physical p.735), protection columns are explicit dashes",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "65~80",
+              "column": "보호통 보통인부(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "배관공",
+            "when": {
+              "meter_size": "100~125",
+              "install_item": "보호통"
+            },
+            "source": "PDF printed p.679 (physical p.735), protection columns are explicit dashes",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "100~125",
+              "column": "보호통 배관공(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "보통인부",
+            "when": {
+              "meter_size": "100~125",
+              "install_item": "보호통"
+            },
+            "source": "PDF printed p.679 (physical p.735), protection columns are explicit dashes",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "100~125",
+              "column": "보호통 보통인부(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "배관공",
+            "when": {
+              "meter_size": "150~200",
+              "install_item": "보호통"
+            },
+            "source": "PDF printed p.679 (physical p.735), protection columns are explicit dashes",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "150~200",
+              "column": "보호통 배관공(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "보통인부",
+            "when": {
+              "meter_size": "150~200",
+              "install_item": "보호통"
+            },
+            "source": "PDF printed p.679 (physical p.735), protection columns are explicit dashes",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "150~200",
+              "column": "보호통 보통인부(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "배관공",
+            "when": {
+              "meter_size": "250~300",
+              "install_item": "보호통"
+            },
+            "source": "PDF printed p.679 (physical p.735), protection columns are explicit dashes",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "250~300",
+              "column": "보호통 배관공(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "보통인부",
+            "when": {
+              "meter_size": "250~300",
+              "install_item": "보호통"
+            },
+            "source": "PDF printed p.679 (physical p.735), protection columns are explicit dashes",
+            "cite": {
+              "table_id": "p735-t0",
+              "row": "250~300",
+              "column": "보호통 보통인부(인)",
+              "value": "-"
             }
           }
         ]

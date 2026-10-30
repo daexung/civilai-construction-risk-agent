@@ -75,16 +75,202 @@
         "source": "PDF 75쪽 3-4-3 [주] ④"
       }
     ],
-    "tables": [],
+    "tables": [
+      {
+        "id": "p131-t2",
+        "role": "?? ????????? ?? ???? ??? ??",
+        "source": "PDF printed p.75, 3-4-3 table; merged axes normalized to composite headers",
+        "unit": "?, ?, ?/?",
+        "values": {
+          "플레이트콤팩터": {
+            "규격": "1.5ton",
+            "단위": "대",
+            "수량": "1",
+            "15cm 토사": "18",
+            "15cm 점토": "11",
+            "30cm 토사": "24",
+            "30cm 점토": "15"
+          },
+          "래머": {
+            "규격": "80kg",
+            "단위": "대",
+            "수량": "1",
+            "15cm 토사": "14",
+            "15cm 점토": "9",
+            "30cm 토사": "20",
+            "30cm 점토": "13"
+          },
+          "특별인부": {
+            "단위": "인",
+            "수량": "1"
+          },
+          "보통인부": {
+            "단위": "인",
+            "수량": "1"
+          }
+        },
+        "cite": {
+          "table_id": "p131-t2"
+        }
+      }
+    ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p131-t2",
+          "row_selector": {
+            "input": "equipment",
+            "value_map": {
+              "플레이트콤팩터": "플레이트콤팩터",
+              "래머": "래머"
+            },
+            "contains": [
+              "{value}"
+            ]
+          },
+          "column_selector": {
+            "input": "compaction_thickness",
+            "input_contains": [
+              "soil_type"
+            ],
+            "contains": [
+              "{value}"
+            ]
+          },
+          "citation_overrides": {
+            "플레이트콤팩터": {
+              "15cm 토사": {
+                "row": "15cm",
+                "column": "시공량(㎥) 토사",
+                "related_citations": [
+                  {
+                    "row": "플레이트콤팩터",
+                    "column": "수량",
+                    "value": "1"
+                  }
+                ]
+              },
+              "15cm 점토": {
+                "row": "15cm",
+                "column": "시공량(㎥) 점토",
+                "related_citations": [
+                  {
+                    "row": "플레이트콤팩터",
+                    "column": "수량",
+                    "value": "1"
+                  }
+                ]
+              },
+              "30cm 토사": {
+                "row": "30cm",
+                "column": "시공량(㎥) 토사",
+                "related_citations": [
+                  {
+                    "row": "플레이트콤팩터",
+                    "column": "수량",
+                    "value": "1"
+                  }
+                ]
+              },
+              "30cm 점토": {
+                "row": "30cm",
+                "column": "시공량(㎥) 점토",
+                "related_citations": [
+                  {
+                    "row": "플레이트콤팩터",
+                    "column": "수량",
+                    "value": "1"
+                  }
+                ]
+              }
+            },
+            "래머": {
+              "15cm 토사": {
+                "row": "15cm",
+                "column": "시공량(㎥) 토사",
+                "related_citations": [
+                  {
+                    "row": "래머",
+                    "column": "수량",
+                    "value": "1"
+                  }
+                ]
+              },
+              "15cm 점토": {
+                "row": "15cm",
+                "column": "시공량(㎥) 점토",
+                "related_citations": [
+                  {
+                    "row": "래머",
+                    "column": "수량",
+                    "value": "1"
+                  }
+                ]
+              },
+              "30cm 토사": {
+                "row": "30cm",
+                "column": "시공량(㎥) 토사",
+                "related_citations": [
+                  {
+                    "row": "래머",
+                    "column": "수량",
+                    "value": "1"
+                  }
+                ]
+              },
+              "30cm 점토": {
+                "row": "30cm",
+                "column": "시공량(㎥) 점토",
+                "related_citations": [
+                  {
+                    "row": "래머",
+                    "column": "수량",
+                    "value": "1"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p131-t2",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "column": "수량"
+        },
+        "equipment": [
+          {
+            "table": "p131-t2",
+            "name": "플레이트콤팩터",
+            "row": "플레이트콤팩터",
+            "column": "수량",
+            "when": {
+              "equipment": "플레이트콤팩터"
+            }
+          },
+          {
+            "table": "p131-t2",
+            "name": "래머",
+            "row": "래머",
+            "column": "수량",
+            "when": {
+              "equipment": "래머"
+            }
+          }
+        ],
+        "quantity_input": "volume"
+      },
       "steps": [
-        "원문 표의 행 병합 구조(장비별, 다짐두께별 인력 구성)가 복잡하여 자동 계산 모델로 매핑하기 어렵습니다.",
-        "다짐두께 15cm일 때 특별인부, 30cm일 때 보통인부가 투입되는 것으로 추정되나 명확한 확인이 필요합니다."
+        "??????????? ?? ? ?? ?? ???? ????.",
+        "??? ?? ????? ??? ????? ????.",
+        "????? ?? ??? ??? ?? ?? ??? ???."
       ],
-      "source": "PDF 75쪽 3-4-3 표",
+      "source": "PDF printed p.75, 3-4-3 table and notes",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -105,16 +291,16 @@
     ],
     "not_calculated": [
       {
-        "item": "살수품",
-        "source": "PDF 75쪽 3-4-3 [주] ⑤",
+        "item": "???",
+        "source": "PDF printed p.75, [?] ?",
         "cite": {
           "chunk_id": "p131-x17",
           "quote": "⑤ 살수품은 물의 운반거리에 따라 별도 가산한다."
         }
       },
       {
-        "item": "기계경비 산정시 조정원",
-        "source": "PDF 75쪽 3-4-3 [주] ③",
+        "item": "?? ???",
+        "source": "PDF printed p.75, [?] ?",
         "cite": {
           "chunk_id": "p131-x17",
           "quote": "③ 플레이트 콤팩터, 래머 기계경비 산정시 조정원은 계상하지 않는다."
@@ -122,31 +308,157 @@
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "citations": [
+      {
+        "table_id": "p131-t2",
+        "row": "15cm",
+        "column": "시공량(㎥) 토사",
+        "value": "18"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "15cm",
+        "column": "시공량(㎥) 점토",
+        "value": "11"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "30cm",
+        "column": "시공량(㎥) 토사",
+        "value": "24"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "30cm",
+        "column": "시공량(㎥) 점토",
+        "value": "15"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "15cm",
+        "column": "시공량(㎥) 토사",
+        "value": "14"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "15cm",
+        "column": "시공량(㎥) 점토",
+        "value": "9"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "30cm",
+        "column": "시공량(㎥) 토사",
+        "value": "20"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "30cm",
+        "column": "시공량(㎥) 점토",
+        "value": "13"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "플레이트콤팩터",
+        "column": "수량",
+        "value": "1"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "래머",
+        "column": "수량",
+        "value": "1"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "특별인부",
+        "column": "수량",
+        "value": "1"
+      },
+      {
+        "table_id": "p131-t2",
+        "row": "보통인부",
+        "column": "수량",
+        "value": "1"
+      }
+    ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "표의 행 구성이 장비와 다짐두께에 따라 투입 직종(특별인부/보통인부)이 교차하는 형태여서 표준 일당 작업조 계산식으로 자동 매핑하기 모호하며, 파싱 결과에 중복된 행 이름이 존재하여 JSON 표 구조로 담기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "?? ???? ??? ???????? ?? ??? ?? ???? ???? ??????? ???.",
   "citations": [
     {
-      "chunk_id": "p131-x17",
-      "quote": "① 본 품은 흐트러진 상태의 흙 두께를 깔아서 다져진 상태의 토량 기준이다."
+      "table_id": "p131-t2",
+      "row": "15cm",
+      "column": "시공량(㎥) 토사",
+      "value": "18"
     },
     {
-      "chunk_id": "p131-x17",
-      "quote": "② 본 품은 흙다지기 및 흙고르기를 포함한다."
+      "table_id": "p131-t2",
+      "row": "15cm",
+      "column": "시공량(㎥) 점토",
+      "value": "11"
     },
     {
-      "chunk_id": "p131-x17",
-      "quote": "③ 플레이트 콤팩터, 래머 기계경비 산정시 조정원은 계상하지 않는다."
+      "table_id": "p131-t2",
+      "row": "30cm",
+      "column": "시공량(㎥) 토사",
+      "value": "24"
     },
     {
-      "chunk_id": "p131-x17",
-      "quote": "④ 모래밭은 적용되지 않는다."
+      "table_id": "p131-t2",
+      "row": "30cm",
+      "column": "시공량(㎥) 점토",
+      "value": "15"
     },
     {
-      "chunk_id": "p131-x17",
-      "quote": "⑤ 살수품은 물의 운반거리에 따라 별도 가산한다."
+      "table_id": "p131-t2",
+      "row": "15cm",
+      "column": "시공량(㎥) 토사",
+      "value": "14"
+    },
+    {
+      "table_id": "p131-t2",
+      "row": "15cm",
+      "column": "시공량(㎥) 점토",
+      "value": "9"
+    },
+    {
+      "table_id": "p131-t2",
+      "row": "30cm",
+      "column": "시공량(㎥) 토사",
+      "value": "20"
+    },
+    {
+      "table_id": "p131-t2",
+      "row": "30cm",
+      "column": "시공량(㎥) 점토",
+      "value": "13"
+    },
+    {
+      "table_id": "p131-t2",
+      "row": "플레이트콤팩터",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p131-t2",
+      "row": "래머",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p131-t2",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p131-t2",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
     }
   ],
   "open_questions": [

@@ -107,6 +107,44 @@
           "column_input": "type_and_tier",
           "trades": [
             "비계공"
+          ],
+          "base_rate_multipliers": [
+            {
+              "when": {
+                "post_spacing": "1.0m이하"
+              },
+              "factor": "11/10",
+              "cite": {
+                "table_id": "p110-t2",
+                "row": "요율",
+                "column": "1.0m이하",
+                "value": "110%"
+              }
+            },
+            {
+              "when": {
+                "post_spacing": "1.5m이하"
+              },
+              "factor": "1",
+              "cite": {
+                "table_id": "p110-t2",
+                "row": "요율",
+                "column": "1.5m이하",
+                "value": "100%"
+              }
+            },
+            {
+              "when": {
+                "post_spacing": "1.5m초과"
+              },
+              "factor": "9/10",
+              "cite": {
+                "table_id": "p110-t2",
+                "row": "요율",
+                "column": "1.5m초과",
+                "value": "90%"
+              }
+            }
           ]
         },
         "quantity_input": "quantity",
@@ -117,21 +155,24 @@
               "post_spacing": "1.0m이하"
             },
             "change": "110% 승수 적용",
-            "source": "비고"
+            "source": "비고",
+            "implemented_by": "unit_rate_table.base_rate_multipliers referencing p110-t2"
           },
           {
             "when": {
               "post_spacing": "1.5m이하"
             },
             "change": "100% 승수 적용",
-            "source": "비고"
+            "source": "비고",
+            "implemented_by": "unit_rate_table.base_rate_multipliers referencing p110-t2"
           },
           {
             "when": {
               "post_spacing": "1.5m초과"
             },
             "change": "90% 승수 적용",
-            "source": "비고"
+            "source": "비고",
+            "implemented_by": "unit_rate_table.base_rate_multipliers referencing p110-t2"
           }
         ]
       },

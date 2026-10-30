@@ -109,8 +109,15 @@ def aggregate(session: EstimateSession) -> EstimateSession:
     included = [item for item in items if item["status"] == "PRICED"
                 and ((item.get("priced_result") or {}).get("reference_amounts") or {}).get("total") is not None]
     failed = [item for item in items if item not in included]
-    excluded_items = [{"item_id": item["item_id"], "request_text": item["request_text"], "status": item["status"],
-                       "reason": item.get("reason") or "계산 결과가 없어요"} for item in failed]
+    excluded_items = []
+    for item in failed:
+        computed = item.get("computed_result") or {}
+        lookup_only = (computed.get("reference_only") or computed.get("result_kind") in ("lookup", "lookup_only")
+                       or any(line.get("kind") in ("lookup", "reference")
+                              for line in computed.get("unit_lines", [])))
+        reason = item.get("reason") or ("조회 전용 항목(금액 산정 대상 아님)" if lookup_only else "계산 결과가 없어요")
+        excluded_items.append({"item_id": item["item_id"], "request_text": item["request_text"],
+                               "status": item["status"], "reason": reason})
     if not included:
         session["aggregate_result"] = {"status": "NO_RESULT", "included": [], "excluded": excluded_items}
         return session

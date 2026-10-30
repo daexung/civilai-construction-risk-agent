@@ -69,7 +69,33 @@
           {
             "when": {},
             "change": "보호망 재료량은 p109-t5를 적용하며, 할증이 포함되어 있고 손율은 1회사용 후 100%로 함",
-            "source": "PDF 1쪽 2-8-9 ※"
+            "source": "PDF 1쪽 2-8-9 ※",
+            "implemented_by": "additional_materials_included_allowance",
+            "material_table_ids": [
+              "p109-t5"
+            ],
+            "cite": {
+              "chunk_id": "p109-x21",
+              "quote": "※ 위 재료량은 할증이 포함되어 있으며, 보호망의 손율은 1회사용 후 100%로 한다."
+            }
+          }
+        ],
+        "additional_materials": [
+          {
+            "name": "보호망",
+            "table": "p109-t5",
+            "row": "보호망",
+            "column": "수량",
+            "quantity_input": "quantity",
+            "quantity_unit": "㎡",
+            "basis": "1㎡",
+            "unit": "㎡",
+            "source": "원문 재료량 표; 할증 포함 수량",
+            "cite": {
+              "table_id": "p109-t5",
+              "row": "보호망",
+              "column": "수량"
+            }
           }
         ]
       },

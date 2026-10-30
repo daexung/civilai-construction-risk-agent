@@ -60,7 +60,11 @@
         "unit": "m",
         "required": true,
         "ask": "줄눈재 설치 길이는 몇 m입니까? (줄눈재 설치가 필요 없는 경우 0 입력)",
-        "source": "PDF 596쪽 5-3-3 표 비고 시공량(m)"
+        "source": "PDF 596쪽 5-3-3 표 비고 시공량(m)",
+        "when": {
+          "input": "joint_required",
+          "equals": true
+        }
       }
     ],
     "tables": [
@@ -107,24 +111,116 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p652-t1",
+          "row_selector": {
+            "input": "panel_type",
+            "contains": [
+              "{value}",
+              "{trade}"
+            ]
+          },
+          "trade": "내장공",
+          "column": "시공량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p652-t1",
+          "row_selector": {
+            "input": "panel_type",
+            "contains": [
+              "{value}"
+            ],
+            "input_contains": [
+              "{trade}"
+            ]
+          },
+          "column": "수량",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ]
+        },
+        "equipment": [
+          {
+            "name": "크레인",
+            "table": "p652-t1",
+            "column": "수량",
+            "unit": "equipment-day",
+            "when": {
+              "panel_type": "지붕"
+            },
+            "row_selector": {
+              "input": "panel_type",
+              "contains": [
+                "{value}"
+              ],
+              "input_contains": [
+                "{trade}"
+              ]
+            },
+            "trade": "크레인"
+          }
+        ],
+        "quantity_input": "area",
+        "additional_work": [
+          {
+            "when": {
+              "joint_required": true
+            },
+            "quantity_input": "joint_length",
+            "base_output": {
+              "table": "p652-t1",
+              "row": "비고 내장공",
+              "column": "시공량"
+            },
+            "crew_table": "p652-t1",
+            "crew_column": "수량",
+            "crew": [
+              "비고 내장공"
+            ],
+            "source": "p652-t1 source row: separate daily output for joint installation",
+            "add_to_trade": "내장공"
+          }
+        ]
+      },
       "steps": [
-        "입력된 panel_type(칸막이벽, 지붕)에 해당하는 행을 p652-t1 표에서 찾는다.",
-        "해당 직종별로 (수량 ÷ 시공량) × area 를 계산하여 총 투입 인·일(또는 대·일)을 구한다.",
-        "joint_required가 true인 경우, p652-t1 표의 '비고 내장공' 행을 찾아 (수량 ÷ 시공량) × joint_length 를 계산하여 내장공 인·일에 더한다."
+        "Select the source row by panel type and trade.",
+        "Calculate panel work days and crew/equipment quantities from area and source daily output.",
+        "When joint installation applies, calculate and add labor from its separate source output and joint length."
       ],
-      "source": "PDF 596쪽 5-3-3 표 및 비고",
+      "source": "PDF printed page 596; p652-t1 table and joint-installation row",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "패널 두께가 50~100mm 범위를 벗어남",
+        "condition": "panel_thickness < 50mm",
         "reason": "본 품은 두께 50~100mm 설치 기준이므로, 범위를 벗어나면 별도 산정이나 할증이 필요할 수 있습니다.",
         "source": "PDF 596쪽 [주] ①",
         "cite": {
           "chunk_id": "p652-x12",
           "quote": "본 품은 샌드위치 패널(두께 50∼100㎜) 설치 기준이다."
+        },
+        "blocked_if": {
+          "input": "panel_thickness",
+          "op": "<",
+          "value": "50"
+        }
+      },
+      {
+        "condition": "panel_thickness > 100mm",
+        "reason": "본 품은 두께 50~100mm 설치 기준이므로, 범위를 벗어나면 별도 산정이나 할증이 필요할 수 있습니다.",
+        "source": "PDF 596쪽 [주] ①",
+        "cite": {
+          "chunk_id": "p652-x12",
+          "quote": "본 품은 샌드위치 패널(두께 50∼100㎜) 설치 기준이다."
+        },
+        "blocked_if": {
+          "input": "panel_thickness",
+          "op": ">",
+          "value": "100"
         }
       }
     ],
@@ -160,7 +256,7 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
   "calc_type_reason": "표가 일당 작업조와 시공량이 혼합된 형태이며, 패널(㎡)과 줄눈재(m)의 단위가 달라 기존 자동 계산 모델(per_unit, adjusted_daily_crew)에 직접 매핑하기 어렵습니다.",
   "citations": [

@@ -84,13 +84,43 @@
       "name": "per_unit",
       "params": {
         "unit_rate_table": {
-          "table": "p580-t0 또는 p580-t1",
+          "table": "p580-t0",
           "row_input": "합계",
-          "column_input": "직종",
+          "column_input": null,
           "trades": [
             "지적기사",
             "지적산업기사"
-          ]
+          ],
+          "table_selector": {
+            "routes": [
+              {
+                "when": {
+                  "point_type": "지적삼각점"
+                },
+                "table": "p580-t0"
+              },
+              {
+                "when": {
+                  "point_type": "지적도근점"
+                },
+                "table": "p580-t1"
+              },
+              {
+                "when": {
+                  "point_type": "지적삼각보조점",
+                  "is_mountainous": true
+                },
+                "table": "p580-t0"
+              },
+              {
+                "when": {
+                  "point_type": "지적삼각보조점",
+                  "is_mountainous": false
+                },
+                "table": "p580-t1"
+              }
+            ]
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
@@ -98,7 +128,8 @@
           {
             "when": {},
             "change": "표의 품은 10점 기준이므로 1/10 적용",
-            "source": "PDF 524쪽 [주] ②"
+            "source": "PDF 524쪽 [주] ②",
+            "implemented_by": "unit_rate_table source denominator 인·일/10점"
           }
         ]
       },

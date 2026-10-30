@@ -10,17 +10,85 @@
     "source_pages": [
       913
     ],
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "work_type",
+        "type": "enum",
+        "allowed_values": [
+          "메쌓기 뒷길이 45∼60㎝",
+          "메쌓기 뒷길이 60∼90㎝",
+          "찰쌓기",
+          "절석 (마름돌) 쌓기"
+        ],
+        "required": true,
+        "ask": "어떤 석축 헐기 작업입니까?",
+        "source": "PDF 913쪽 3-1-5 표 구분"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "작업 구분에 따른 ㎡ 또는 ㎥",
+        "required": true,
+        "ask": "해당 작업의 물량은 얼마입니까? 단위는 작업 구분에 따라 표에서 자동 적용합니다.",
+        "source": "PDF 913쪽 3-1-5 표 단위"
+      },
+      {
+        "name": "height",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "석축의 기준 높이는 몇 m입니까?",
+        "source": "PDF 913쪽 [주] ①"
+      },
+      {
+        "name": "reuse_generated",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "required": true,
+        "ask": "발생품을 재사용합니까?",
+        "source": "PDF 913쪽 [주] ②"
+      },
+      {
+        "name": "in_place_leveling",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "required": true,
+        "ask": "발생품 제자리 고르기를 합니까?",
+        "source": "PDF 913쪽 [주] ②"
+      }
+    ],
     "tables": [
       {
         "id": "p969-t0",
-        "role": "석축 헐기 인력 품 (파싱 누락으로 불완전)",
+        "role": "석축 헐기 인력 품",
         "source": "PDF 913쪽 3-1-5 표",
         "values": {
-          "구분": {
-            "단위 ㎥당": "할석공(인) 0.1"
+          "메쌓기 뒷길이 45∼60㎝": {
+            "할석공(인)": "-",
+            "보통인부(인)": "0.2"
+          },
+          "메쌓기 뒷길이 60∼90㎝": {
+            "할석공(인)": "-",
+            "보통인부(인)": "0.3"
+          },
+          "찰쌓기": {
+            "할석공(인)": "-",
+            "보통인부(인)": "0.6"
+          },
+          "절석 (마름돌) 쌓기": {
+            "할석공(인)": "0.1",
+            "보통인부(인)": "1.1"
           }
         },
+        "unit": null,
         "cite": {
           "table_id": "p969-t0"
         }
@@ -28,10 +96,76 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p969-t0",
+          "row_input": "work_type",
+          "column_input": null,
+          "trade_in_columns": true,
+          "trades": [
+            "할석공",
+            "보통인부"
+          ],
+          "quantity_unit_selector": {
+            "input": "work_type",
+            "values": {
+              "메쌓기 뒷길이 45∼60㎝": "㎡",
+              "메쌓기 뒷길이 60∼90㎝": "㎡",
+              "찰쌓기": "㎡",
+              "절석 (마름돌) 쌓기": "㎥"
+            }
+          }
+        },
+        "excluded_resources": [
+          {
+            "trade": "할석공",
+            "when": {
+              "work_type": "메쌓기 뒷길이 45∼60㎝"
+            },
+            "source": "원문 표의 명시적 대시",
+            "cite": {
+              "table_id": "p969-t0",
+              "row": "메쌓기 뒷길이 45∼60㎝",
+              "column": "할석공(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "할석공",
+            "when": {
+              "work_type": "메쌓기 뒷길이 60∼90㎝"
+            },
+            "source": "원문 표의 명시적 대시",
+            "cite": {
+              "table_id": "p969-t0",
+              "row": "메쌓기 뒷길이 60∼90㎝",
+              "column": "할석공(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "할석공",
+            "when": {
+              "work_type": "찰쌓기"
+            },
+            "source": "원문 표의 명시적 대시",
+            "cite": {
+              "table_id": "p969-t0",
+              "row": "찰쌓기",
+              "column": "할석공(인)",
+              "value": "-"
+            }
+          }
+        ],
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
       "steps": [
-        "파싱 결과 누락으로 계산 불가"
+        "석축 헐기 종류를 선택하고 원문 표의 공종별 단위(㎡당 또는 ㎥당)를 사용해 단위당 인력품을 조회한다.",
+        "원문 대시 셀은 해당 직종을 산출하지 않고 표의 숫자 셀만 물량에 곱한다.",
+        "기준 높이 3.6m 초과, 발생품 재사용 또는 제자리 고르기는 별도 계상 조건으로 계산을 보류한다."
       ],
       "source": "PDF 913쪽",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -39,6 +173,11 @@
     "blocked": [
       {
         "condition": "기준높이 3.6m 초과",
+        "blocked_if": {
+          "input": "height",
+          "op": ">",
+          "value": "3.6"
+        },
         "reason": "작업 안전설비 및 특수 조건에 대한 품은 별도 계상",
         "source": "PDF 913쪽 [주] ①",
         "cite": [
@@ -50,7 +189,28 @@
       },
       {
         "condition": "발생품 재사용 또는 제자리 고르기",
+        "blocked_if": {
+          "input": "reuse_generated",
+          "op": "==",
+          "value": true
+        },
         "reason": "별도 계상",
+        "source": "PDF 913쪽 [주] ②",
+        "cite": [
+          {
+            "chunk_id": "p969-x2",
+            "quote": "② 발생품을 재사용코자 할 때나 제자리 고르기를 할 경우는 별도 계상한다."
+          }
+        ]
+      },
+      {
+        "condition": "발생품 재사용 또는 제자리 고르기",
+        "blocked_if": {
+          "input": "in_place_leveling",
+          "op": "==",
+          "value": true
+        },
+        "reason": "발생품 제자리 고르기는 별도 계상한다.",
         "source": "PDF 913쪽 [주] ②",
         "cite": [
           {
@@ -60,14 +220,11 @@
         ]
       }
     ],
-    "not_calculated": [],
-    "supply_rules": [],
-    "cost_rules": [
+    "not_calculated": [
       {
-        "name": "잡재료",
-        "category": "재료비",
-        "base": "labor_subtotal",
-        "rate": "0.05",
+        "item": "잡재료",
+        "reason": "원문은 인력품의 5% 이내에서 계상한다고만 정해 확정 비율이 없어 자동 적용하지 않는다.",
+        "source": "PDF 913쪽 [주] ④",
         "cite": [
           {
             "chunk_id": "p969-x2",
@@ -75,18 +232,14 @@
           }
         ]
       }
-    ]
+    ],
+    "supply_rules": [],
+    "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "per_unit",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 표의 행(구분)과 보통인부 수치 등 핵심 데이터가 누락되어 계산 명세를 작성할 수 없습니다.",
+  "calc_type_reason": "원문 표의 공종별 인력 단위당 품과 작업 종류별 ㎡/㎥ 분모가 명시되어 있어 기존 per_unit 계산기로 표현한다.",
   "citations": [
-    {
-      "table_id": "p969-t0",
-      "row": "구분",
-      "column": "단위 ㎥당",
-      "value": "할석공(인) 0.1"
-    },
     {
       "chunk_id": "p969-x2",
       "quote": "① 본 품은 기준높이 3.6m일 때의 인력헐기를 기준한 것이며, 그 이상일 때의 작업 안전설비 및 특수\n설명 | 조건에 대한 품은 별도 계상한다."
@@ -98,15 +251,61 @@
     {
       "chunk_id": "p969-x2",
       "quote": "④ 잡재료는 인력품의 5%이내에서 계상한다."
+    },
+    {
+      "table_id": "p969-t0",
+      "row": "메쌓기 뒷길이 45∼60㎝",
+      "column": "할석공(인)",
+      "value": "-"
+    },
+    {
+      "table_id": "p969-t0",
+      "row": "메쌓기 뒷길이 45∼60㎝",
+      "column": "보통인부(인)",
+      "value": "0.2"
+    },
+    {
+      "table_id": "p969-t0",
+      "row": "메쌓기 뒷길이 60∼90㎝",
+      "column": "할석공(인)",
+      "value": "-"
+    },
+    {
+      "table_id": "p969-t0",
+      "row": "메쌓기 뒷길이 60∼90㎝",
+      "column": "보통인부(인)",
+      "value": "0.3"
+    },
+    {
+      "table_id": "p969-t0",
+      "row": "찰쌓기",
+      "column": "할석공(인)",
+      "value": "-"
+    },
+    {
+      "table_id": "p969-t0",
+      "row": "찰쌓기",
+      "column": "보통인부(인)",
+      "value": "0.6"
+    },
+    {
+      "table_id": "p969-t0",
+      "row": "절석 (마름돌) 쌓기",
+      "column": "할석공(인)",
+      "value": "0.1"
+    },
+    {
+      "table_id": "p969-t0",
+      "row": "절석 (마름돌) 쌓기",
+      "column": "보통인부(인)",
+      "value": "1.1"
     }
   ],
   "open_questions": [
-    "파싱 결과 p969-t0에 '메쌓기 뒷길이 45~60㎝', '메쌓기 뒷길이 60~90㎝', '찰 쌓 기', '절 석 ( 마 름 돌 ) 쌓 기' 행과 보통인부 수치가 누락되어 있어 표를 재구성할 수 없습니다."
+    "잡재료는 인력품의 5% 이내로만 제시되어 확정률 없이 적용하지 않고 검토 대상으로 유지한다."
   ],
   "questions": [
-    "석축 헐기 시 기준높이가 4m인 경우 품을 어떻게 계산하나요?",
-    "발생품을 제자리 고르기에 사용할 때 품셈 적용 방법은?",
-    "석축 헐기 물량은 어떻게 입력하나요?"
+    "잡재료를 인력품의 5% 이내에서 적용할 비율은 별도 검토가 필요합니다."
   ],
   "meta": {
     "model": "gemini-3.1-pro-preview",
@@ -119,7 +318,7 @@
     ],
     "prompt_sha256": "c93df8159f8c598f17949ef5a21f51981532c167e12120e368b9a5105ecac729",
     "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
-    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "chunks_sha256": "c648363a518b35f4ea2d3316620fee5f1483a4ebde6877f2d9d84f037eb53dbd",
     "citation_retry_used": true,
     "citation_issues_after_retry": []
   }

@@ -70,7 +70,11 @@
         "unit": null,
         "required": true,
         "ask": "비계를 사용합니까?",
-        "source": "p679-t2 비고"
+        "source": "p679-t2 비고",
+        "when": {
+          "input": "height",
+          "equals": "7.2m 초과"
+        }
       },
       {
         "name": "thickness_under_24mm",
@@ -95,6 +99,20 @@
         "required": true,
         "ask": "사용하는 모르타르의 종류는 무엇입니까?",
         "source": "p680-x0 [주] ④"
+      },
+      {
+        "name": "extra_scaffold_lifts",
+        "type": "nonnegative_integer",
+        "allowed_values": "0 ??? ??",
+        "minimum": 0,
+        "unit": null,
+        "required": true,
+        "ask": "7.2m ?? ???? ?? ?? 3.6m?? ???? ?? ?? ??? ? ????? (?? ?? ??? ??)",
+        "source": "p679-t2 ??? 3.6m?? 3% ??",
+        "when": {
+          "input": "scaffold_used",
+          "equals": true
+        }
       }
     ],
     "tables": [
@@ -107,12 +125,16 @@
           "시공높이 3 . 6 m 이하": {
             "시공량(㎡) 1회": "40",
             "시공량(㎡) 2회": "29",
-            "시공량(㎡) 3회": "20"
+            "시공량(㎡) 3회": "20",
+            "미장공": "2",
+            "보통인부": "1"
           },
           "시공높이 3 . 6 m 초과 ~7.2m이하": {
             "시공량(㎡) 1회": "37",
             "시공량(㎡) 2회": "27",
-            "시공량(㎡) 3회": "19"
+            "시공량(㎡) 3회": "19",
+            "미장공": "2",
+            "보통인부": "2"
           },
           "비고": {
             "비고": "- 바탕의 폭 30㎝이하이거나 원주 바름면일 때에는 시공량의 17%를 감한다. - 비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량(시공높이 3.6m초과 ~7.2m이하)의 3%를 감한다."
@@ -144,14 +166,93 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "area",
+        "base_output": {
+          "table": "p679-t2",
+          "row_selector": {
+            "input": "height",
+            "contains": [
+              "{value}"
+            ],
+            "value_map": {
+              "3.6m 이하": "시공높이 3 . 6 m 이하",
+              "3.6m 초과 ~ 7.2m 이하": "시공높이 3 . 6 m 초과 ~7.2m이하",
+              "7.2m 초과": "시공높이 3 . 6 m 초과 ~7.2m이하"
+            }
+          },
+          "column_selector": {
+            "input": "coats",
+            "value_map": {
+              "1회": "시공량(㎡) 1회",
+              "2회": "시공량(㎡) 2회",
+              "3회": "시공량(㎡) 3회"
+            },
+            "contains": [
+              "{value}"
+            ]
+          }
+        },
+        "crew": {
+          "table": "p679-t2",
+          "row_selector": {
+            "input": "height",
+            "contains": [
+              "{value}"
+            ],
+            "value_map": {
+              "3.6m 이하": "시공높이 3 . 6 m 이하",
+              "3.6m 초과 ~ 7.2m 이하": "시공높이 3 . 6 m 초과 ~7.2m이하",
+              "7.2m 초과": "시공높이 3 . 6 m 초과 ~7.2m이하"
+            }
+          },
+          "column_template": "{trade}",
+          "trades": [
+            "미장공",
+            "보통인부"
+          ]
+        },
+        "coefficients": [],
+        "output_adjustments": [
+          {
+            "when": {
+              "narrow_or_column": true
+            },
+            "operation": "set_output_percent",
+            "value": "17",
+            "cite": {
+              "table_id": "p679-t2",
+              "row": "비고",
+              "column": "비고"
+            }
+          },
+          {
+            "when": {
+              "height": "7.2m 초과",
+              "scaffold_used": true
+            },
+            "operation": "subtract_percent_per_count",
+            "value": "3",
+            "count_input": "extra_scaffold_lifts",
+            "cite": {
+              "table_id": "p679-t2",
+              "row": "비고",
+              "column": "비고"
+            }
+          }
+        ],
+        "equipment": null,
+        "materials": [],
+        "daily_equipment_allowances": []
+      },
       "steps": [
-        "p679-t2에서 시공높이와 바름횟수에 따른 일일시공량과 작업조 인원(미장공, 보통인부)을 확인한다.",
-        "바탕의 폭 30㎝이하이거나 원주 바름면일 경우 시공량의 17%를 감한다.",
-        "비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량(시공높이 3.6m초과 ~7.2m이하)의 3%를 감한다.",
-        "작업일수 = area ÷ 조정된 일일시공량",
-        "직종별 인·일 = 작업일수 × 작업조 인원"
+        "p679-t2? ?? ??? ?? ??? ?? ???? ????.",
+        "???? ??? ???????? ??? ??? ????.",
+        "?? ? 30? ?? ?? ????? ???? 17% ???.",
+        "?? 7.2m ???? ??? ??? ??? ???? ?? ?? ?? 3.6m ??? ???? ?? 3%? ???.",
+        "????? ??? ???? ?????? ????.",
+        "?? 24mm ??, ??? ??, ????????? ???? ????? 9-1-1? ?? ?? ????."
       ],
       "source": "p679-t2",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -186,16 +287,7 @@
         }
       }
     ],
-    "not_calculated": [
-      {
-        "item": "바탕 청소(물뿌리기), 페이스트 바르기, 모르타르 비빔 및 바름, 쇠갈퀴 긁기, 고름질, 쇠흙손마감",
-        "source": "p680-x0 [주] ③",
-        "cite": {
-          "chunk_id": "p680-x0",
-          "quote": "③ 바탕 청소(물뿌리기), 페이스트 바르기, 모르타르 비빔 및 바름, 쇠갈퀴 긁기, 고름질, 쇠흙손마감을"
-        }
-      }
-    ],
+    "not_calculated": [],
     "supply_rules": [],
     "cost_rules": [
       {
@@ -210,9 +302,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "작업조 인원과 일일시공량이 모두 시공높이에 따라 달라지는 다중 인덱스 구조이며, 비계 사용 시 높이에 따른 시공량 감산 등 복잡한 조건이 있어 현재의 adjusted_daily_crew 모델로 자동 계산하기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "?? ?? ???????? ?? ??? ?? daily_crew ???? ??",
   "citations": [
     {
       "table_id": "p679-t2",

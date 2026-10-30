@@ -216,7 +216,29 @@
         "unit_rate_table": {
           "table": "p951-t0",
           "row_input": "track_type",
-          "column_input": "block_time, work_length, rail_weight",
+          "column_input": {
+            "input": "block_time",
+            "contains": [
+              "{value}"
+            ],
+            "input_contains": [
+              "work_length",
+              "rail_weight"
+            ]
+          },
+          "base_rate_multipliers": [
+            {
+              "when": {
+                "exchange_side": "한측"
+              },
+              "factor": "13/20",
+              "source": "PDF 인쇄 895쪽 2-2-4 표 비고: 한측 레일만 교환하는 경우 본 품의 65%를 적용",
+              "cite": {
+                "chunk_id": "p951-t0",
+                "quote": "한측 레일만 교환하는 경우는 본 품의 65%를 적용한다."
+              }
+            }
+          ],
           "trades": [
             "궤도공",
             "보통인부"
@@ -224,15 +246,7 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": [
-          {
-            "when": {
-              "exchange_side": "한측"
-            },
-            "change": "본 품의 65%를 적용한다.",
-            "source": "PDF 895쪽 2-2-4 표 비고"
-          }
-        ]
+        "note_adjustments": []
       },
       "steps": [
         "p951-t0에서 track_type과 직종(궤도공, 보통인부)을 결합하여 행을 찾는다.",

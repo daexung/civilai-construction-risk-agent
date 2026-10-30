@@ -1,0 +1,146 @@
+[
+  {
+    "id": "eval-height-7",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "7",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "30"
+    }
+  },
+  {
+    "id": "eval-height-7.001",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "7.001",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "27.3"
+    }
+  },
+  {
+    "id": "eval-height-10",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "10",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "27.3"
+    }
+  },
+  {
+    "id": "eval-height-13",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "13",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "24.843"
+    }
+  },
+  {
+    "id": "eval-height-40",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "40",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "10.631060024624333494473"
+    }
+  },
+  {
+    "id": "eval-height-40.001",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "40.001",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "9.67426462240814347997043"
+    }
+  },
+  {
+    "id": "eval-general-lifting",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "40.001",
+      "is_roof_slab": false,
+      "crane_used": false,
+      "lifting_equipment_used": true
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "30"
+    }
+  },
+  {
+    "id": "eval-continuous-crane",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "40.001",
+      "is_roof_slab": false,
+      "crane_used": true,
+      "lifting_equipment_used": false
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "30"
+    }
+  },
+  {
+    "id": "eval-roof-and-height",
+    "spec_path": "data/drafts/specs/\uacf5\ud1b5/6-3-1.json",
+    "inputs": {
+      "volume": "100",
+      "complexity": "\ubcf5\uc7a1",
+      "height": "7.001",
+      "is_roof_slab": true,
+      "crane_used": false,
+      "lifting_equipment_used": false
+    },
+    "expected": {
+      "status": "computed",
+      "daily_volume_m3": "22.659"
+    }
+  }
+]

@@ -17,8 +17,8 @@
         "allowed_values": "0보다 큰 수",
         "unit": "일",
         "required": true,
-        "ask": "공사기간은 며칠입니까?",
-        "source": "기술관리 공정의 단위가 인/일"
+        "ask": "Cooling Tower 기술관리 기간은 며칠입니까?",
+        "source": "p906-t1 기술관리 행 (공사기간중), 인/일"
       },
       {
         "name": "base_area",
@@ -26,8 +26,8 @@
         "allowed_values": "0보다 큰 수",
         "unit": "㎡",
         "required": true,
-        "ask": "기초 Check 및 Chipping, Grouting 면적은 몇 ㎡입니까?",
-        "source": "기초 Check, Chipping 및 Grouting 공정의 단위가 인/㎡"
+        "ask": "기초 Check 및 Chipping·Grouting 면적은 몇 ㎡입니까?",
+        "source": "p906-t1 기초 Check·Chipping 행, 인/㎡"
       },
       {
         "name": "surface_area",
@@ -35,8 +35,8 @@
         "allowed_values": "0보다 큰 수",
         "unit": "㎡",
         "required": true,
-        "ask": "표면손질(Eliminator 및 구동부) 면적은 몇 ㎡입니까?",
-        "source": "표면손질 공정의 단위가 인/㎡"
+        "ask": "Eliminator 및 구동부 표면손질 면적은 몇 ㎡입니까?",
+        "source": "p906-t1 표면손질 행, 인/㎡"
       },
       {
         "name": "weight",
@@ -44,8 +44,8 @@
         "allowed_values": "0보다 큰 수",
         "unit": "ton",
         "required": true,
-        "ask": "본체설치 중량은 몇 ton입니까?",
-        "source": "본체설치 공정의 단위가 인/ton"
+        "ask": "본체 설치 중량은 몇 ton입니까?",
+        "source": "p906-t1 본체설치 행, 인/ton"
       },
       {
         "name": "eliminator_area",
@@ -54,7 +54,7 @@
         "unit": "㎡",
         "required": true,
         "ask": "Drift-Eliminator 설치 면적은 몇 ㎡입니까?",
-        "source": "Drift-Eliminator 설치 공정의 단위가 인/㎡"
+        "source": "p906-t1 Drift-Eliminator 설치 행, 인/㎡"
       },
       {
         "name": "slate_area",
@@ -62,8 +62,8 @@
         "allowed_values": "0보다 큰 수",
         "unit": "㎡",
         "required": true,
-        "ask": "스레이트 잇기 면적은 몇 ㎡입니까?",
-        "source": "스레이트 잇기 공정의 단위가 인/㎡"
+        "ask": "Louver 측 스레이트 잇기 면적은 몇 ㎡입니까?",
+        "source": "p906-t1 스레이트 잇기 행, 인/㎡"
       },
       {
         "name": "filler_volume",
@@ -71,15 +71,15 @@
         "allowed_values": "0보다 큰 수",
         "unit": "㎥",
         "required": true,
-        "ask": "충전물충전 체적은 몇 ㎥입니까?",
-        "source": "충전물충전 공정의 단위가 인/㎥"
+        "ask": "충전물 충전 부피는 몇 ㎥입니까?",
+        "source": "p906-t1 충전물충전 행, 인/㎥"
       }
     ],
     "tables": [
       {
         "id": "p906-t1",
-        "role": "Cooling Tower 설치 공정별 품",
-        "source": "PDF 850쪽 13-11-2 Cooling Tower 설치 표",
+        "role": "Cooling Tower 공정·직종별 다중 단위 설치품",
+        "source": "PDF 물리 906쪽 / 인쇄 850쪽, 13-11-2 (기당)",
         "unit": "인/일, 인/㎡, 인/ton, 인/㎥",
         "values": {
           "기술관리 : 공사기간중": {
@@ -94,7 +94,7 @@
           },
           "Chipping 및 Grouting": {
             "직종": "특별인부",
-            "단위": "〃",
+            "단위": "인/㎡",
             "수량": "0.595"
           },
           "표면손질 : Eliminator 및 구동부": {
@@ -102,50 +102,45 @@
             "단위": "인/㎡",
             "수량": "0.2"
           },
-          "본체설치 : Distribution box,": {
+          "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 철골공": {
             "직종": "철골공",
             "단위": "인/ton",
             "수량": "4.18"
           },
-          "Distributor, Louver Post 등의": {
+          "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 비계공": {
             "직종": "비계공",
-            "단위": "〃",
+            "단위": "인/ton",
             "수량": "3.0"
           },
-          "조립설치": {
+          "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 특별인부": {
             "직종": "특별인부",
-            "단위": "〃",
+            "단위": "인/ton",
             "수량": "0.3"
           },
-          "Drift-Eliminator 설치 : 판재로": {
+          "Drift-Eliminator 설치 / 건축목공": {
             "직종": "건축목공",
             "단위": "인/㎡",
             "수량": "3.1"
           },
-          "된 Eliminator를 조립 설치함.": {
+          "Drift-Eliminator 설치 / 보통인부": {
             "직종": "보통인부",
-            "단위": "〃",
+            "단위": "인/㎡",
             "수량": "0.698"
           },
-          "스레이트 잇기 : Louver": {
+          "스레이트 잇기 / 스레이트공": {
             "직종": "스레이트공",
             "단위": "인/㎡",
             "수량": "0.05"
           },
-          "side에 스레이트 잇기": {
+          "스레이트 잇기 / 보통인부": {
             "직종": "보통인부",
-            "단위": "〃",
+            "단위": "인/㎡",
             "수량": "0.04"
           },
           "충전물충전 : 충전물을 규격별 순서로 충전 작업함": {
             "직종": "보통인부",
             "단위": "인/㎥",
             "수량": "0.6"
-          },
-          "검사 및 교정": {
-            "직종": "기술관리를 제외한 전 품의 10%",
-            "단위": "",
-            "수량": ""
           }
         },
         "cite": {
@@ -155,32 +150,247 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p906-t1",
+          "trades": [
+            "기계설비공"
+          ],
+          "row_input": "기초 Check : 기초 check",
+          "column_input": "수량",
+          "row_by_trade": {
+            "기계설비공": "기초 Check : 기초 check"
+          },
+          "basis_by_row": {
+            "기술관리 : 공사기간중": "인/일",
+            "기초 Check : 기초 check": "인/㎡",
+            "Chipping 및 Grouting": "인/㎡",
+            "표면손질 : Eliminator 및 구동부": "인/㎡",
+            "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 철골공": "인/ton",
+            "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 비계공": "인/ton",
+            "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 특별인부": "인/ton",
+            "Drift-Eliminator 설치 / 건축목공": "인/㎡",
+            "Drift-Eliminator 설치 / 보통인부": "인/㎡",
+            "스레이트 잇기 / 스레이트공": "인/㎡",
+            "스레이트 잇기 / 보통인부": "인/㎡",
+            "충전물충전 : 충전물을 규격별 순서로 충전 작업함": "인/㎥"
+          },
+          "resource_units": {
+            "기계산업기사": "인",
+            "기계설비공": "인",
+            "특별인부": "인",
+            "철골공": "인",
+            "비계공": "인",
+            "건축목공": "인",
+            "보통인부": "인",
+            "스레이트공": "인"
+          }
+        },
+        "quantity_input": "base_area",
+        "additional_unit_rates": [
+          {
+            "table": "p906-t1",
+            "trades": [
+              "기계산업기사"
+            ],
+            "quantity_input": "duration",
+            "basis_by_trade": {
+              "기계산업기사": "인/일"
+            },
+            "row_by_trade": {
+              "기계산업기사": "기술관리 : 공사기간중"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "base_area",
+            "basis_by_trade": {
+              "특별인부": "인/㎡"
+            },
+            "row_by_trade": {
+              "특별인부": "Chipping 및 Grouting"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "surface_area",
+            "basis_by_trade": {
+              "특별인부": "인/㎡"
+            },
+            "row_by_trade": {
+              "특별인부": "표면손질 : Eliminator 및 구동부"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "철골공"
+            ],
+            "quantity_input": "weight",
+            "basis_by_trade": {
+              "철골공": "인/ton"
+            },
+            "row_by_trade": {
+              "철골공": "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 철골공"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "비계공"
+            ],
+            "quantity_input": "weight",
+            "basis_by_trade": {
+              "비계공": "인/ton"
+            },
+            "row_by_trade": {
+              "비계공": "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 비계공"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "weight",
+            "basis_by_trade": {
+              "특별인부": "인/ton"
+            },
+            "row_by_trade": {
+              "특별인부": "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 특별인부"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "건축목공"
+            ],
+            "quantity_input": "eliminator_area",
+            "basis_by_trade": {
+              "건축목공": "인/㎡"
+            },
+            "row_by_trade": {
+              "건축목공": "Drift-Eliminator 설치 / 건축목공"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "보통인부"
+            ],
+            "quantity_input": "eliminator_area",
+            "basis_by_trade": {
+              "보통인부": "인/㎡"
+            },
+            "row_by_trade": {
+              "보통인부": "Drift-Eliminator 설치 / 보통인부"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "스레이트공"
+            ],
+            "quantity_input": "slate_area",
+            "basis_by_trade": {
+              "스레이트공": "인/㎡"
+            },
+            "row_by_trade": {
+              "스레이트공": "스레이트 잇기 / 스레이트공"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "보통인부"
+            ],
+            "quantity_input": "slate_area",
+            "basis_by_trade": {
+              "보통인부": "인/㎡"
+            },
+            "row_by_trade": {
+              "보통인부": "스레이트 잇기 / 보통인부"
+            },
+            "column": "수량"
+          },
+          {
+            "table": "p906-t1",
+            "trades": [
+              "보통인부"
+            ],
+            "quantity_input": "filler_volume",
+            "basis_by_trade": {
+              "보통인부": "인/㎥"
+            },
+            "row_by_trade": {
+              "보통인부": "충전물충전 : 충전물을 규격별 순서로 충전 작업함"
+            },
+            "column": "수량"
+          }
+        ],
+        "proportional_resource_additions": [
+          {
+            "when": {},
+            "base": "each_labor_line_rate",
+            "factor": "0.1",
+            "exclude_trades": [
+              "기계산업기사"
+            ],
+            "resource_name": "검사 및 교정",
+            "resource_unit": "인",
+            "source": "p906-t1 검사 및 교정 행: 기술관리를 제외한 전 품의 10%",
+            "cite": {
+              "chunk_id": "p906-t1",
+              "quote": "검사 및 교정 | 기술관리를 제외한 전 품의 10%"
+            }
+          }
+        ],
+        "surcharges": [],
+        "note_adjustments": []
+      },
       "steps": [
-        "각 공정별로 해당하는 물량(일, ㎡, ton, ㎥)을 입력받아 표의 수량과 곱하여 품을 산출한다.",
-        "검사 및 교정 품은 기술관리를 제외한 나머지 모든 공정 품의 합계에 10%를 곱하여 산출한다."
+        "각 공정별 측정 물량에 원문 행의 직종별 품과 해당 분모(일·㎡·ton·㎥)를 각각 적용한다.",
+        "Chipping 및 Grouting의 단위 〃는 직전 기초 Check 행의 인/㎡를 그대로 뜻한다.",
+        "기술관리를 제외한 각 공정 품에 10%를 적용하여 검사 및 교정 인력을 별도 행으로 더한다.",
+        "목재 Drift-Eliminator 가공품은 원문 주에 따라 별도 자재로 유지한다."
       ],
-      "source": "PDF 850쪽 13-11-2 Cooling Tower 설치 표",
-      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+      "source": "PDF 물리 906쪽 / 인쇄 850쪽 13-11-2 Cooling Tower 설치 표 및 주 ②",
+      "rounding": "원문 단위품을 정확한 유리수로 적용; 단위별 물량은 가격·집계 단계에서 각각 반영"
     },
     "blocked": [],
     "not_calculated": [
       {
-        "item": "가공된 목재 Eliminator의 가공품",
-        "source": "PDF 850쪽 [주] ②",
+        "item": "가공 목재 Drift-Eliminator 자재",
+        "source": "PDF 물리 906쪽 / 인쇄 850쪽 주 ②",
         "cite": {
           "chunk_id": "p906-x24",
-          "quote": "가공품은 제외되었다."
+          "quote": "Drift-Eliminator 설치는 가공된 목재 Eliminator를 설치하는 품으로 가공품은 제외되었다."
         }
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "공정별로 단위(일, ㎡, ton, ㎥)가 달라 각각의 물량을 입력받아 합산해야 하며, 검사 및 교정은 기술관리를 제외한 전 품의 10%로 계산하는 복합적인 구조이므로 단일 per_unit 모델로 자동 계산하기 어렵습니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "원문 행별 분모가 명시되어 다중 물량 단위별 보조 요율과 source-scoped 10% 검사 인력을 연결함.",
   "citations": [
     {
       "table_id": "p906-t1",
@@ -208,43 +418,43 @@
     },
     {
       "table_id": "p906-t1",
-      "row": "본체설치 : Distribution box,",
+      "row": "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 철골공",
       "column": "수량",
       "value": "4.18"
     },
     {
       "table_id": "p906-t1",
-      "row": "Distributor, Louver Post 등의",
+      "row": "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 비계공",
       "column": "수량",
       "value": "3.0"
     },
     {
       "table_id": "p906-t1",
-      "row": "조립설치",
+      "row": "본체설치 / Distribution box, Distributor, Louver Post 등의 조립설치 / 특별인부",
       "column": "수량",
       "value": "0.3"
     },
     {
       "table_id": "p906-t1",
-      "row": "Drift-Eliminator 설치 : 판재로",
+      "row": "Drift-Eliminator 설치 / 건축목공",
       "column": "수량",
       "value": "3.1"
     },
     {
       "table_id": "p906-t1",
-      "row": "된 Eliminator를 조립 설치함.",
+      "row": "Drift-Eliminator 설치 / 보통인부",
       "column": "수량",
       "value": "0.698"
     },
     {
       "table_id": "p906-t1",
-      "row": "스레이트 잇기 : Louver",
+      "row": "스레이트 잇기 / 스레이트공",
       "column": "수량",
       "value": "0.05"
     },
     {
       "table_id": "p906-t1",
-      "row": "side에 스레이트 잇기",
+      "row": "스레이트 잇기 / 보통인부",
       "column": "수량",
       "value": "0.04"
     },
@@ -255,23 +465,11 @@
       "value": "0.6"
     },
     {
-      "table_id": "p906-t1",
-      "row": "검사 및 교정",
-      "column": "직종",
-      "value": "기술관리를 제외한 전 품의 10%"
-    },
-    {
-      "chunk_id": "p906-x24",
-      "quote": "본 품은 강재공냉식 Cooling tower를 기초 Tank 위에 조립 설치하는 품이다."
-    },
-    {
-      "chunk_id": "p906-x24",
-      "quote": "Drift-Eliminator 설치는 가공된 목재 Eliminator를 설치하는 품으로 가공품은 제외되었다."
+      "chunk_id": "p906-t1",
+      "quote": "검사 및 교정 | 기술관리를 제외한 전 품의 10%"
     }
   ],
-  "open_questions": [
-    "본체설치, Drift-Eliminator 설치, 스레이트 잇기 공정의 행 이름이 파싱 결과에서 여러 줄로 나뉘어 있어, 각 직종별 수량이 어느 공정에 속하는지 매핑하는 로직이 필요합니다."
-  ],
+  "open_questions": [],
   "questions": [
     "Cooling Tower 설치 시 공정별 물량(기초 면적, 본체 중량 등)은 어떻게 산정하나요?",
     "검사 및 교정 품은 어떻게 계산하나요?",

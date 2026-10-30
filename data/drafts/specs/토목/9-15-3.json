@@ -150,21 +150,28 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": [
+        "coefficient_combination": "multiply",
+        "coefficient_rules": [
           {
-            "when": {},
-            "change": "면적계수 곱하기: land_type에 따라 기준면적(토지 1,500㎡, 임야 5,000㎡)을 정하고, area_per_parcel이 기준면적 이하이면 1.0, 초과 시 가산횟수 n = (area_per_parcel - 기준면적) / 기준면적을 구하여 p611-t0의 계수를 적용",
-            "source": "PDF 555쪽 [주] ①"
+            "kind": "area_increment",
+            "table": "p611-t0",
+            "area_input": "area_per_parcel",
+            "land_input": "land_type",
+            "base_area_by_value": {
+              "토지": "1500",
+              "임야": "5000"
+            },
+            "source": "PDF 555쪽 [주] ① 면적계수 표"
           },
           {
-            "when": {},
-            "change": "등록계수 곱하기: land_type에 따라 p611-t1의 계수를 적용",
-            "source": "PDF 555쪽 [주] ②"
+            "table": "p611-t1",
+            "input": "land_type",
+            "source": "PDF 555쪽 [주] ② 등록계수 표"
           },
           {
-            "when": {},
-            "change": "지역구분계수 곱하기: region_type에 따라 p611-t2의 계수를 적용",
-            "source": "PDF 555쪽 [주] ③"
+            "table": "p611-t2",
+            "input": "region_type",
+            "source": "PDF 555쪽 [주] ③ 지역구분계수 표"
           }
         ]
       },

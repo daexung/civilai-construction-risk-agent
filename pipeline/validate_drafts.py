@@ -56,13 +56,24 @@ def _normalize(text: str) -> str:
     return re.sub(r"\s+", "", text).replace(",", "")
 
 
+def _strip_line_marker(text: str) -> str:
+    return re.sub(r"(?m)^설명 \| ", "", text)
+
+
+def _chunk_body(chunk: dict) -> str:
+    """청크 텍스트에서 파서가 줄머리에 붙인 '설명 | ' 표지를 뺀다. 원문(PDF)에 없는 표지이므로
+    문장이 줄을 넘어갈 때 인용문이 표지 때문에 불일치로 판정되는 것을 막는다(그 밖의 글자는 그대로 비교한다).
+    인용문 쪽도 같은 표지를 빼서, 표지까지 복사해 둔 기존 인용문이 새로 실패하지 않게 한다."""
+    return _strip_line_marker(chunk.get("text", ""))
+
+
 def check_table_citation(chunks_by_id: dict, citation: dict) -> str | None:
     """None이면 일치, 아니면 불일치 사유 문자열."""
     table_id = citation.get("table_id")
     chunk = chunks_by_id.get(table_id)
     if chunk is None:
         return f"table_id 없음: {table_id}"
-    text = _normalize(chunk.get("text", ""))
+    text = _normalize(_chunk_body(chunk))
     row = citation.get("row")
     column = citation.get("column")
     value = citation.get("value")
@@ -81,7 +92,7 @@ def check_text_citation(chunks_by_id: dict, citation: dict) -> str | None:
     if chunk is None:
         return f"chunk_id 없음: {chunk_id}"
     quote = citation.get("quote")
-    if quote and _normalize(str(quote)) not in _normalize(chunk.get("text", "")):
+    if quote and _normalize(_strip_line_marker(str(quote))) not in _normalize(_chunk_body(chunk)):
         return f"quote가 {chunk_id} 조각 텍스트에 없음"
     return None
 

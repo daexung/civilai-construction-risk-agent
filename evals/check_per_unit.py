@@ -80,6 +80,9 @@ def main() -> int:
                    and direct_lines["아세틸렌"]["applied"] == "133"
                    and direct_lines["산소"]["applied"] == "744"))
     checks.append(("초안 정수 하한", _values(mechanical["inputs"][1]) == ["35"]))
+    checks.append(("합성 입력이 정수 상한 안에 머묾",
+                   _values({"name": "pump_count_per_location", "type": "nonnegative_integer",
+                            "allowed_values": "1 이상 5 이하의 정수"}) == ["1"]))
     checks.append(("표 음수 퍼센트·장비 대수", parse_table_number("- 17%") == Fraction(-17, 100)
                    and parse_table_number("-30%") == Fraction(-3, 10)
                    and parse_table_number("1대(80㎥/hr 이상)") == 1))
@@ -124,6 +127,65 @@ def main() -> int:
     checks.append(("일당 작업조 직종 열 하나 선택", adjusted_daily_crew(crew_spec, {
         "placement_method": "인력운반 타설", "structure": "철근구조물", "volume": "100",
         "scattered_small_volume": False, "concrete_supply": "관급"})["status"] == "computed"))
+    fireproof = json.loads((ROOT / "data/drafts/specs/건축/1-4-3.json").read_text(encoding="utf-8"))["draft"]
+    fireproof_result = per_unit(fireproof, {"area": "100", "thickness": "2",
+                                            "is_vermiculite_wet": True})
+    fireproof_lines = {line["name"]: line for line in fireproof_result.get("unit_lines", [])}
+    checks.append(("원문 1-4-3 복합 단위 분모·수량 대조", fireproof_result["status"] == "computed"
+                   and fireproof_lines["도장공"]["exact"] == "31/50000"
+                   and fireproof_lines["도장공"]["unit"] == "인/㎡·㎜"
+                   and fireproof_lines["그라우팅믹서"]["exact"] == "9/5000"
+                   and fireproof_result["provenance"]["quantity"] == {"area": "100", "thickness": "2"}))
+    glass = json.loads((ROOT / "data/drafts/specs/건축/10-3-1.json").read_text(encoding="utf-8"))["draft"]
+    glass_result = per_unit(glass, {"glass_type": "판유리", "thickness": "3mm이하",
+                                    "quantity": "100", "is_special_glass": False})
+    glass_lines = {line["name"]: line for line in glass_result.get("unit_lines", [])}
+    checks.append(("원문 10-3-1 그룹 열의 직종별 기준값", glass_result["status"] == "computed"
+                   and glass_lines["유리공"]["exact"] == "9/125"
+                   and glass_lines["보통인부"]["exact"] == "11/1000"
+                   and all(line["citations"][0]["value"] in ("0.072", "0.011")
+                           for line in glass_result.get("unit_lines", []))))
+    pump = json.loads((ROOT / "data/drafts/specs/공통/8-2-27.json").read_text(encoding="utf-8"))["draft"]
+    pump["quantity_model"]["params"]["quantity_input"] = ["locations", "operating_days"]
+    pump_result = per_unit(pump, {"operation_condition": "작업시배수 상용전원",
+                                  "locations": "2", "operating_days": "3",
+                                  "pump_count_per_location": "1"})
+    checks.append(("원문 인/개소·일 분모와 개소·일 수량 스키마", pump_result["status"] == "computed"
+                   and pump_result["unit_lines"][0]["exact"] == "3/25"
+                   and pump_result["unit_lines"][0]["source"].startswith("p273-t0")
+                   and pump_result["unit_lines"][0]["citations"][0]["value"] == "0.12"
+                   and pump_result["provenance"]["quantity"] == {"locations": "2", "operating_days": "3"}))
+    glass_out_of_table = per_unit(glass, {"glass_type": "판유리", "thickness": "16mm이하",
+                                          "quantity": "100", "is_special_glass": False})
+    checks.append(("원문 무기재 유리 조합의 정상 보류", glass_out_of_table["status"] == "blocked"
+                   and glass_out_of_table.get("citations", [{}])[0].get("internal_id") == "p688-t2"))
+    equipment_only = json.loads((ROOT / "data/drafts/specs/공통/3-6-1.json").read_text(encoding="utf-8"))["draft"]
+    equipment_result = adjusted_daily_crew(equipment_only, {"volume": "100",
+                                                            "soil_type": "점토, 점질토, 모래, 사질토"})
+    checks.append(("원문 3-6-1 장비 전용 일당 산출", equipment_result["status"] == "computed"
+                   and equipment_result["work_days"] == "5/53"
+                   and equipment_result["equipment_days"]["굴착기"] == "5/53"
+                   and equipment_result["unit_lines"][0]["exact"] == "2/265"))
+    no_surcharge = json.loads((ROOT / "data/drafts/specs/유지관리/2-4-8.json").read_text(encoding="utf-8"))["draft"]
+    no_surcharge_result = adjusted_daily_crew(no_surcharge,
+                                               {"volume": "100", "site_condition": "해당 없음"})
+    checks.append(("원문 무할증 열을 단위 인자로 조회", no_surcharge_result["status"] == "computed"
+                   and no_surcharge_result["daily_volume_m3"] == "9.8"))
+    one_surcharge = adjusted_daily_crew(no_surcharge,
+        {"volume": "100", "site_condition": "하수도 내부의 준설토가 굳어져 있거나, 준설토 외에 폐기물 등이 존재하는 경우"})
+    checks.append(("원문 -15% 시공량 조정", one_surcharge["status"] == "computed"
+                   and one_surcharge["daily_volume_m3"] == "8.33"))
+    both_surcharges = adjusted_daily_crew(no_surcharge,
+        {"volume": "100", "site_condition": "둘 다 해당"})
+    checks.append(("복수 감산 결합 미명시 보류", both_surcharges["status"] == "blocked"
+                   and "원문에 명시되어 있지 않아" in both_surcharges["reason"]))
+    missing_model = copy.deepcopy(json.loads((ROOT / "data/drafts/specs/기계설비/13-5-5.json").read_text(encoding="utf-8"))["draft"])
+    # 13-5-5 now has a valid routed model; remove it in the fixture to keep
+    # this assertion focused on the runner's missing-model guard.
+    missing_model["quantity_model"]["params"].pop("unit_rate_table", None)
+    missing_model_result = per_unit(missing_model, {field["name"]: "1" for field in missing_model["inputs"]})
+    checks.append(("실행기 미선언 명세는 구조 결함으로 분류", missing_model_result["status"] == "unresolvable"
+                   and "unit_rate_table" in missing_model_result["reason"]))
     for name, ok in checks:
         print(f"{'PASS' if ok else 'FAIL'} {name}")
     print(f"통과 {sum(ok for _, ok in checks)} / 전체 {len(checks)}")

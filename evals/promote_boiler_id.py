@@ -1,0 +1,18 @@
+import json
+from pathlib import Path
+p=Path('data/drafts/executable.json');idx=json.loads(p.read_text(encoding='utf-8'))
+evidence=json.loads(Path('evals/runtime_validation/targeted-execution-subset-2026-10-19.json').read_text(encoding='utf-8'))
+ident='2026-정오표1차/기계설비/8-3-1/보일러설치'
+proof=next(x for x in evidence['results'] if x['id']==ident)
+assert proof['basic_executable'] and proof['samples_checked']==64,proof
+failure=next(x for x in idx['failed'] if x['id']==ident)
+idx['failed']=[x for x in idx['failed'] if x['id']!=ident];idx['executable']=sorted(set(idx['executable'])|{ident})
+idx['summary']['executable']=len(idx['executable']);idx['summary']['failed']=len(idx['failed']);idx['summary']['by_calc_type']['per_unit']['executable']+=1;idx['summary']['by_scope']['기타']['executable']+=1
+counts={}
+for item in idx['failed']:
+ r=item['reason'];key=r.split(':',1)[0] if r.startswith('기본 조합 ') else r;counts[key]=counts.get(key,0)+1
+idx['summary']['failure_reasons_top10']=sorted(counts.items(),key=lambda x:(-x[1],x[0]))[:10]
+p.write_text(json.dumps(idx,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+out={'previous_counts':{'executable':816,'failed':70,'unsupported':170,'excluded':2},'current_counts':{'executable':len(idx['executable']),'failed':len(idx['failed']),'unsupported':idx['summary']['skipped_without_compatible_calculator'],'excluded':idx['summary']['excluded_from_execution']},'promoted_id':ident,'previous_failure_reason':failure['reason'],'verification':proof}
+Path('evals/runtime_validation/targeted-index-update-boiler-2026-10-19.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({k:out[k] for k in ('previous_counts','current_counts','promoted_id')},ensure_ascii=False))

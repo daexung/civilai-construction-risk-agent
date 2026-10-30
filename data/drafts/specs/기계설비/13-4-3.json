@@ -43,7 +43,11 @@
         "unit": null,
         "required": true,
         "ask": "철판규격은 무엇입니까? (Rolling 및 Edge 가공 시)",
-        "source": "PDF 765쪽 p821-t2"
+        "source": "PDF 765쪽 p821-t2",
+        "when": {
+          "input": "work_type",
+          "equals": "Rolling 및 Edge 가공"
+        }
       },
       {
         "name": "tank_capacity",
@@ -62,7 +66,11 @@
         "unit": "㎥",
         "required": true,
         "ask": "탱크 용량은 얼마입니까? (탱크조립설치 시)",
-        "source": "PDF 766쪽 p822-t2"
+        "source": "PDF 766쪽 p822-t2",
+        "when": {
+          "input": "work_type",
+          "equals": "탱크조립설치"
+        }
       },
       {
         "name": "is_special_material",
@@ -74,7 +82,11 @@
         "unit": null,
         "required": true,
         "ask": "스테인리스 등 특수재질로 제작합니까? (운반조작 시)",
-        "source": "PDF 766쪽 p822-t1 비고"
+        "source": "PDF 766쪽 p822-t1 비고",
+        "when": {
+          "input": "work_type",
+          "equals": "운반조작"
+        }
       },
       {
         "name": "quantity",
@@ -83,7 +95,32 @@
         "unit": "매 또는 ton",
         "required": true,
         "ask": "작업 물량은 얼마입니까? (Rolling 및 Edge 가공은 매당, 나머지는 ton당)",
-        "source": "PDF 765~766쪽 각 표의 기준 단위"
+        "source": "PDF 765~766쪽 각 표의 기준 단위",
+        "unit_by": {
+          "input": "work_type",
+          "values": {
+            "Rolling 및 Edge 가공": "매",
+            "금긋기 및 절단가공": "ton",
+            "운반조작": "ton",
+            "탱크조립설치": "ton"
+          }
+        }
+      },
+      {
+        "name": "welding_length_change",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "탱크 용접장 길이가 기준 대비 달라 별도 조정이 필요합니까?",
+        "source": "PDF 766쪽 탱크조립설치 [주] ⑦",
+        "when": {
+          "input": "work_type",
+          "equals": "탱크조립설치"
+        }
       }
     ],
     "tables": [
@@ -161,7 +198,8 @@
           "작업구분": {
             "현도": "0.437",
             "괘서": "1.161",
-            "절단": "0.318"
+            "절단": "0.318",
+            "계": "1.916"
           }
         },
         "cite": {
@@ -293,28 +331,188 @@
       "name": "per_unit",
       "params": {
         "unit_rate_table": {
-          "table": "p822-t2",
-          "row_input": "고정 행이름 아님, 직종별",
-          "column_input": "tank_capacity",
+          "table": "p821-t2",
+          "row_input": "plate_size",
+          "column_input": null,
           "trades": [
-            "건설기계운전공",
-            "비계공",
-            "특별인부",
-            "(플랜트제관공)",
-            "(플랜트용접공)",
-            "인력운반공",
-            "보통인부",
-            "배관공"
-          ]
+            "일반기계운전사\n(윈치운전)",
+            "플랜트\n제관공",
+            "특별인부"
+          ],
+          "table_selector": {
+            "routes": [
+              {
+                "when": {
+                  "work_type": "Rolling 및 Edge 가공"
+                },
+                "table": "p821-t2"
+              },
+              {
+                "when": {
+                  "work_type": "금긋기 및 절단가공"
+                },
+                "table": "p822-t0"
+              },
+              {
+                "when": {
+                  "work_type": "운반조작"
+                },
+                "table": "p822-t1"
+              },
+              {
+                "when": {
+                  "work_type": "탱크조립설치"
+                },
+                "table": "p822-t2"
+              }
+            ]
+          },
+          "trades_by_table": {
+            "p821-t2": [
+              "일반기계운전사\n(윈치운전)",
+              "플랜트\n제관공",
+              "특별인부"
+            ],
+            "p822-t0": [],
+            "p822-t1": [
+              "비계공",
+              "건설기계운전(조/대)",
+              "특별인부"
+            ],
+            "p822-t2": [
+              "건설기계운전공",
+              "비계공",
+              "특별인부",
+              "(플랜트제관공)",
+              "(플랜트용접공)",
+              "인력운반공",
+              "보통인부",
+              "배관공"
+            ]
+          },
+          "row_input_by_table": {
+            "p821-t2": "plate_size",
+            "p822-t0": null,
+            "p822-t1": "work_type",
+            "p822-t2": null
+          },
+          "row_by_trade": {
+            "비계공": "공량",
+            "건설기계운전(조/대)": "공량",
+            "특별인부": "공량"
+          },
+          "column_input_by_table": {
+            "p821-t2": null,
+            "p822-t0": null,
+            "p822-t1": null,
+            "p822-t2": "tank_capacity"
+          },
+          "quantity_unit_selector": {
+            "input": "work_type",
+            "values": {
+              "Rolling 및 Edge 가공": "매",
+              "금긋기 및 절단가공": "ton",
+              "운반조작": "ton",
+              "탱크조립설치": "ton"
+            },
+            "basis_by_selected_unit": true
+          },
+          "trade_in_columns_by_table": {
+            "p821-t2": true,
+            "p822-t0": false,
+            "p822-t1": true,
+            "p822-t2": false
+          },
+          "trade_column_selector": {
+            "input": "work_type",
+            "contains": [
+              "{trade}"
+            ]
+          },
+          "row_value_map_by_table": {
+            "p822-t1": {
+              "운반조작": "공량"
+            }
+          },
+          "row_by_trade_by_table": {
+            "p822-t2": {
+              "건설기계운전공": "건설기계운전공",
+              "비계공": "비계공",
+              "특별인부": "특별인부",
+              "(플랜트제관공)": "(플랜트제관공)",
+              "(플랜트용접공)": "(플랜트용접공)",
+              "인력운반공": "인력운반공",
+              "보통인부": "보통인부",
+              "배관공": "배관공"
+            }
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "additional_unit_rates": [
+          {
+            "table": "p822-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "작업구분"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "현도"
+            },
+            "quantity_input": "quantity",
+            "basis": "인/ton",
+            "when": {
+              "work_type": "금긋기 및 절단가공"
+            },
+            "quantity_unit": "ton"
+          },
+          {
+            "table": "p822-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "작업구분"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "괘서"
+            },
+            "quantity_input": "quantity",
+            "basis": "인/ton",
+            "when": {
+              "work_type": "금긋기 및 절단가공"
+            },
+            "quantity_unit": "ton"
+          },
+          {
+            "table": "p822-t0",
+            "trades": [
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "작업구분"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "절단"
+            },
+            "quantity_input": "quantity",
+            "basis": "인/ton",
+            "when": {
+              "work_type": "금긋기 및 절단가공"
+            },
+            "quantity_unit": "ton"
+          }
+        ]
       },
       "steps": [
-        "작업 종류(work_type)에 따라 적용할 표를 선택한다. (Rolling 및 Edge 가공: p821-t2, 금긋기 및 절단가공: p822-t0, 운반조작: p822-t1, 탱크조립설치: p822-t2)",
-        "선택한 표에서 입력된 규격 또는 용량에 해당하는 단위당 품을 찾는다.",
-        "물량(quantity)을 곱하여 총 품을 구한다."
+        "work_type에 따라 원문 표를 정확히 선택한다.",
+        "Rolling 및 Edge 가공은 철판 규격별 인/매, 나머지는 각 공정별 인/ton 원문 분모를 적용한다.",
+        "탱크조립설치는 탱크 용량에 따른 직종별 품을 적용한다.",
+        "운반조작의 특수재질 40~50% 범위는 적용률이 미확정이므로 자동 선택하지 않는다.",
+        "탱크 용접장 증감 조정이 필요하면 원문 산식·계수가 없어 기본품 적용을 보류한다."
       ],
       "source": "PDF 765~766쪽",
       "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -340,6 +538,36 @@
         "condition": "용접공 품 조정 필요 시",
         "reason": "용접공은 용접장의 증감에 따라 조정한다고 명시되어 있으나, 구체적인 산식이나 기준이 없어 자동 계산이 불가합니다.",
         "source": "PDF 766쪽 2. 탱크조립설치 [주] ⑦",
+        "cite": {
+          "chunk_id": "p822-x18",
+          "quote": "⑦ 용접공은 용접장의 증감에 따라 조정한다."
+        }
+      },
+      {
+        "condition": "운반조작에서 스테인리스 등 특수재질 적용",
+        "blocked_if": {
+          "input": "is_special_material",
+          "op": "==",
+          "value": true
+        },
+        "reason": "원문 할증은 40~50% 범위이며 적용률 미확정",
+        "source": "PDF 766쪽 p822-t1 비고",
+        "cite": {
+          "table_id": "p822-t1",
+          "row": "비고",
+          "column": "- 스테인리스 등 특수재질의 제작인 경우는 40∼50%를 가산한다.",
+          "value": "- 스테인리스 등 특수재질의 제작인 경우는 40∼50%를 가산한다."
+        }
+      },
+      {
+        "condition": "탱크 용접장 증감에 따른 품 조정",
+        "blocked_if": {
+          "input": "welding_length_change",
+          "op": "==",
+          "value": true
+        },
+        "reason": "원문은 용접장 증감에 따른 조정만 명시하고 산식·계수는 제시하지 않아 자동 계산을 보류",
+        "source": "PDF 766쪽 탱크조립설치 [주] ⑦",
         "cite": {
           "chunk_id": "p822-x18",
           "quote": "⑦ 용접공은 용접장의 증감에 따라 조정한다."

@@ -181,6 +181,10 @@
       },
       {
         "condition": "판유리이면서 두께가 16mm이하 이상인 경우",
+        "blocked_if_all": [
+          {"input": "glass_type", "op": "==", "value": "판유리"},
+          {"input": "thickness", "op": "in", "value": ["16mm이하", "18mm이하", "22mm이하", "24mm이하", "28mm이하", "30mm이하", "36mm이하", "40mm이하", "44mm이하", "52mm이하"]}
+        ],
         "reason": "표에 해당 규격의 품이 없음",
         "source": "PDF 632쪽 10-3-1 표",
         "cite": {
@@ -189,6 +193,10 @@
       },
       {
         "condition": "복층유리이면서 두께가 9mm이하 이하인 경우",
+        "blocked_if_all": [
+          {"input": "glass_type", "op": "==", "value": "복층유리"},
+          {"input": "thickness", "op": "in", "value": ["3mm이하", "5mm이하", "9mm이하"]}
+        ],
         "reason": "표에 해당 규격의 품이 없음",
         "source": "PDF 632쪽 10-3-1 표",
         "cite": {

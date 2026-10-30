@@ -54,7 +54,8 @@
             "수량 공용부위": "0.017"
           },
           "보통인부": {
-            "수량 공용부위": "0.006"
+            "수량 공용부위": "0.006",
+            "수량 세대내": "-"
           }
         },
         "cite": {
@@ -68,7 +69,7 @@
       "params": {
         "unit_rate_table": {
           "table": "p724-t2",
-          "row_input": "고정 행이름",
+          "row_input": null,
           "column_input": "location",
           "trades": [
             "기계설비공",
@@ -77,7 +78,22 @@
         },
         "quantity_input": "length",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "보통인부",
+            "when": {
+              "location": "수량 세대내"
+            },
+            "source": "p724-t2 원문 대시 셀",
+            "cite": {
+              "table_id": "p724-t2",
+              "row": "보통인부",
+              "column": "수량 세대내",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p724-t2에서 설치 위치에 따른 기계설비공, 보통인부의 단위당 품을 고른다.",

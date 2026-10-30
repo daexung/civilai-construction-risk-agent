@@ -36,19 +36,35 @@
         "role": "배관누수 검사 일당 작업조 (파싱 누락 있음)",
         "source": "PDF 926쪽 4-3-3 표",
         "values": {
-          "구분": {
-            "수량": "2"
+          "배관공": {
+            "수량": "2",
+            "시공량(회)": "2.8"
           }
         },
         "cite": {
           "table_id": "p982-t1"
-        }
+        },
+        "unit": "회/일"
       }
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "inspection_count",
+        "base_output": {
+          "table": "p982-t1",
+          "row": "배관공",
+          "column": "시공량(회)"
+        },
+        "crew": {
+          "table": "p982-t1",
+          "trades": [
+            "배관공"
+          ],
+          "column": "수량"
+        }
+      },
       "steps": [
         "파싱 결과에 직종명(배관공)과 시공량(2.8회)이 누락되어 자동 계산 모델을 구성할 수 없습니다.",
         "원문 기준으로는 배관공 2인/일, 시공량 2.8회/일 이므로, (검사 횟수 ÷ 2.8) × 2 로 배관공 인·일을 산출합니다."
@@ -58,17 +74,17 @@
     },
     "blocked": [
       {
-        "condition": "배관 규격이 50mm 초과",
+        "condition": "pipe size exceeds source scope",
         "blocked_if": {
           "input": "pipe_size",
           "op": ">",
-          "value": 50
+          "value": "50"
         },
-        "reason": "본 품은 ∅50mm 이하의 옥내배관 누수보수를 위한 검사 기준임",
-        "source": "PDF 926쪽 4-3-3 [주] ①",
+        "reason": "Source schedule applies to interior pipe at or below 50mm.",
+        "source": "PDF p.926 [Note] ?",
         "cite": {
           "chunk_id": "p982-x7",
-          "quote": "본 품은 급수용, 급탕용, 난방용 옥내배관(∅50mm이하)의 누수보수를 위해 배관을 검사하는 기준이다."
+          "quote": "설명 | [주] ① 본 품은 급수용, 급탕용, 난방용 옥내배관(∅50mm이하)의 누수보수를 위해 배관을 검사하는 기준이다."
         }
       }
     ],
@@ -85,20 +101,22 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "name": "공구손료 및 경장비",
-        "category": "경비",
-        "base": "labor_subtotal",
+        "item": "tooling and light equipment cost",
         "rate": "0.03",
+        "basis": "labor amount",
+        "source": "설명 | 포함한다. ③ 누수부위에 대한 해체 및 복구, 누수배관 교체 작업은 별도 계상한다. ④ 공구손료 및 경장비(공기압축기, 압력계 등)의 기계경비는 인력품의 3%로 계상한다.",
         "cite": {
           "chunk_id": "p982-x7",
-          "quote": "공구손료 및 경장비(공기압축기, 압력계 등)의 기계경비는 인력품의 3%로 계상한다."
+          "quote": "설명 | 포함한다. ③ 누수부위에 대한 해체 및 복구, 누수배관 교체 작업은 별도 계상한다. ④ 공구손료 및 경장비(공기압축기, 압력계 등)의 기계경비는 인력품의 3%로 계상한다."
         }
       }
-    ]
+    ],
+    "calc_type": "daily_crew",
+    "calc_type_reason": "Source states two pipefitters per day and a daily output of 2.8 inspections; total crew days follow from inspection count."
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 직종명(배관공)과 시공량(2.8회)이 누락되어 일당 작업조 계산식을 구성할 수 없습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "Source states two pipefitters per day and a daily output of 2.8 inspections; total crew days follow from inspection count.",
   "citations": [
     {
       "table_id": "p982-t1",
@@ -117,6 +135,9 @@
     {
       "chunk_id": "p982-x7",
       "quote": "공구손료 및 경장비(공기압축기, 압력계 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
+      "table_id": "p982-t1"
     }
   ],
   "open_questions": [

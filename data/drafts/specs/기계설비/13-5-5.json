@@ -175,10 +175,234 @@
     "crew_rules": [],
     "quantity_model": {
       "name": "per_unit",
-      "params": {},
+      "params": {
+        "unit_rate_table": {
+          "table": "p831-t2",
+          "row_input": "기술관리 공사기간중",
+          "column_input": null,
+          "trades": [
+            "기계산업기사"
+          ],
+          "basis_by_row": {
+            "기술관리 공사기간중": "인/일"
+          }
+        },
+        "quantity_input": "duration",
+        "additional_unit_rates": [
+          {
+            "table": "p831-t2",
+            "quantity_input": "volume_wood",
+            "trades": [
+              "목공",
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "목공": "포장해체 수송을 위해 포장된 목재를 해체하고 정위치에 정리",
+              "특별인부": "포장해체 수송을 위해 포장된 목재를 해체하고 정위치에 정리"
+            },
+            "column_by_trade": {
+              "목공": "목공",
+              "특별인부": "특별인부"
+            },
+            "basis_by_trade": {
+              "목공": "인/㎥",
+              "특별인부": "인/㎥"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p831-t2",
+            "quantity_input": "weight_transport",
+            "trades": [
+              "건설기계운전조"
+            ],
+            "row_by_trade": {
+              "건설기계운전조": "소운반 및 조양"
+            },
+            "column_by_trade": {
+              "건설기계운전조": "건설기계운전조"
+            },
+            "basis_by_trade": {
+              "건설기계운전조": "인/ton"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p831-t2",
+            "quantity_input": "weight_transport",
+            "trades": [
+              "비계공"
+            ],
+            "row_by_trade": {
+              "비계공": "적재장에서부터 설치장소까지 운반,"
+            },
+            "column_by_trade": {
+              "비계공": "비계공"
+            },
+            "basis_by_trade": {
+              "비계공": "인/ton"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p831-t2",
+            "quantity_input": "weight_transport",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "조양함"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부"
+            },
+            "basis_by_trade": {
+              "특별인부": "인/ton"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p832-t0",
+            "quantity_input": "area_surface",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "표면손질"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부"
+            },
+            "basis_by_trade": {
+              "특별인부": "인/㎡"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p832-t0",
+            "quantity_input": "weight_casing",
+            "trades": [
+              "플랜트기계설치공",
+              "플랜트용접공",
+              "플랜트제관공",
+              "특별인부",
+              "비계공",
+              "Crane운전조"
+            ],
+            "row_by_trade": {
+              "플랜트기계설치공": "casing 조립 설치 Support Structure, Rotor inner casing, Outer Casing 등 Heating Element를 제외한 모든 부분의 조립설치",
+              "플랜트용접공": "casing 조립 설치 Support Structure, Rotor inner casing, Outer Casing 등 Heating Element를 제외한 모든 부분의 조립설치",
+              "플랜트제관공": "casing 조립 설치 Support Structure, Rotor inner casing, Outer Casing 등 Heating Element를 제외한 모든 부분의 조립설치",
+              "특별인부": "casing 조립 설치 Support Structure, Rotor inner casing, Outer Casing 등 Heating Element를 제외한 모든 부분의 조립설치",
+              "비계공": "casing 조립 설치 Support Structure, Rotor inner casing, Outer Casing 등 Heating Element를 제외한 모든 부분의 조립설치",
+              "Crane운전조": "casing 조립 설치 Support Structure, Rotor inner casing, Outer Casing 등 Heating Element를 제외한 모든 부분의 조립설치"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공",
+              "플랜트용접공": "플랜트용접공",
+              "플랜트제관공": "플랜트제관공",
+              "특별인부": "특별인부",
+              "비계공": "비계공",
+              "Crane운전조": "Crane운전조"
+            },
+            "basis_by_trade": {
+              "플랜트기계설치공": "인/ton",
+              "플랜트용접공": "인/ton",
+              "플랜트제관공": "인/ton",
+              "특별인부": "인/ton",
+              "비계공": "인/ton",
+              "Crane운전조": "조/ton"
+            },
+            "resource_units": {
+              "Crane운전조": "조"
+            }
+          },
+          {
+            "table": "p832-t0",
+            "quantity_input": "weight_heating_element",
+            "trades": [
+              "플랜트기계설치공",
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "플랜트기계설치공": "Heating Element 삽입 Hot busket, Interbusker, Cold busket의 삽입",
+              "특별인부": "Heating Element 삽입 Hot busket, Interbusker, Cold busket의 삽입"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공",
+              "특별인부": "특별인부"
+            },
+            "basis_by_trade": {
+              "플랜트기계설치공": "인/ton",
+              "특별인부": "인/ton"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p832-t0",
+            "quantity_input": "weight_sealing",
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "row_by_trade": {
+              "플랜트기계설치공": "Sealing Plate 및 Packing ring"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공"
+            },
+            "basis_by_trade": {
+              "플랜트기계설치공": "인/ton"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p832-t0",
+            "quantity_input": "weight_sealing",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "조립 설치"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부"
+            },
+            "basis_by_trade": {
+              "특별인부": "인/ton"
+            },
+            "resource_units": {}
+          }
+        ],
+        "note_adjustments": [],
+        "input_rate_adjustments": [
+          {
+            "name": "검사 및 교정",
+            "operation": "add_source_percent",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "exclude_quantity_inputs": [
+              "duration",
+              "wood_volume"
+            ],
+            "cite": {
+              "table_id": "p832-t0",
+              "row": "검사 및 교정",
+              "column": "기술관리, 포장해체를 제외한 모든 품의 10%",
+              "value": "",
+              "exclude_trades": [
+                "기계산업기사"
+              ]
+            }
+          }
+        ]
+      },
       "steps": [
-        "각 작업 구분별로 해당하는 물량(duration, volume_wood, weight_transport, area_surface, weight_casing, weight_heating_element, weight_sealing)을 표의 단위당 품에 곱하여 직종별 인·일을 구한다.",
-        "검사 및 교정은 기술관리와 포장해체를 제외한 모든 품(소운반 및 조양, 표면손질, casing 조립 설치, Heating Element 삽입, Sealing Plate 및 Packing ring 조립 설치)의 합계에 10%를 곱하여 산출한다."
+        "기술관리는 인/일, 포장해체는 인/㎥, 표면손질은 인/㎡, 운반·설치 공정은 원문에 표기된 ton 기준으로 각각 산출한다.",
+        "각 공정의 직종별 품을 해당하는 물량 입력에 곱하고, 동 단위 조립운전조는 조/ton으로 보존한다.",
+        "검사 및 교정은 기술관리와 포장해체를 제외한 모든 품의 10%로 더한다.",
+        "참고 사용장비 표는 장비 규격과 대수를 보여 주며, 장비 사용시간·단가 자료가 필요한 가격 합계와 분리한다."
       ],
       "source": "p831-t2, p832-t0",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"

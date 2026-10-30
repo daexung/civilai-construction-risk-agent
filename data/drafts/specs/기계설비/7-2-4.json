@@ -46,8 +46,8 @@
       "params": {
         "unit_rate_table": {
           "table": "p742-t0",
-          "row_input": "고정",
-          "column_input": "고정",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "위생공",
             "보통인부"

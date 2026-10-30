@@ -34,7 +34,8 @@
           "소규모"
         ],
         "unit": null,
-        "required": true,
+        "required": false,
+        "required_when": {"input": "soil_type", "in": ["보통토사", "혼합토사"]},
         "ask": "공사규모는 대규모, 중규모, 소규모 중 무엇입니까?",
         "decision_table": "p124-t1",
         "source": "PDF 68쪽 3. 공사규모의 구분"
@@ -49,7 +50,8 @@
           "경암"
         ],
         "unit": null,
-        "required": true,
+        "required": false,
+        "required_when": {"input": "soil_type", "equals": "암"},
         "ask": "암 분류는 무엇입니까? (토질이 암인 경우)",
         "source": "PDF 69쪽 다. 암"
       },
@@ -70,7 +72,8 @@
           false
         ],
         "unit": null,
-        "required": true,
+        "required": false,
+        "required_when": {"input": "soil_type", "equals": "암"},
         "ask": "집토 작업을 별도로 수행합니까? (토질이 암인 경우)",
         "source": "PDF 69쪽 다. 암 [주] ①"
       },
@@ -82,7 +85,8 @@
           false
         ],
         "unit": null,
-        "required": true,
+        "required": false,
+        "required_when": {"input": "soil_type", "equals": "혼합토사"},
         "ask": "유압식 리퍼 작업이 병행 시공됩니까? (혼합토사인 경우)",
         "source": "PDF 69쪽 [주] ① ㉮ 및 ②"
       }
@@ -110,13 +114,14 @@
         "source": "PDF 68쪽 가. 보통토사",
         "unit": "㎥/일",
         "values": {
-          "불도저": {
-            "대규모 시공량(㎥)": "930",
-            "중규모 시공량(㎥)": "560",
-            "소규모 시공량(㎥)": "310"
+          "불도저 | 규격 32ton": {
+            "대규모 시공량(㎥)": "930"
           },
-          "굴착기": {
-            "소규모 수량 1": "1"
+          "불도저 | 규격 19ton": {
+            "중규모 시공량(㎥)": "560"
+          },
+          "굴착기 | 규격 1.0㎥": {
+            "소규모 시공량(㎥)": "310"
           }
         },
         "cite": {
@@ -129,9 +134,13 @@
         "source": "PDF 68쪽 나. 혼합토사",
         "unit": "㎥/일",
         "values": {
-          "불도저": {
-            "대규모 시공량(㎥)": "640",
-            "중규모 시공량(㎥)": "390",
+          "불도저 | 규격 32ton": {
+            "대규모 시공량(㎥)": "640"
+          },
+          "불도저 | 규격 19ton": {
+            "중규모 시공량(㎥)": "390"
+          },
+          "굴착기 | 규격 1.0㎥": {
             "소규모 시공량(㎥)": "230"
           }
         },
@@ -146,10 +155,10 @@
         "unit": "㎥/일",
         "values": {
           "굴착기 대형브레이커": {
-            "시공량(㎥) 풍화암": "65",
-            "시공량(㎥) 연암": "50",
-            "시공량(㎥) 보통암": "30",
-            "시공량(㎥) 경암": "25"
+            "풍화암": "65",
+            "연암": "50",
+            "보통암": "30",
+            "경암": "25"
           }
         },
         "cite": {
@@ -163,10 +172,10 @@
         "unit": "㎥/일",
         "values": {
           "불도저": {
-            "시공량(㎥) 풍화암": "550",
-            "시공량(㎥) 연암": "520",
-            "시공량(㎥) 보통암": "450",
-            "시공량(㎥) 경암": "450"
+            "풍화암": "550",
+            "연암": "520",
+            "보통암": "450",
+            "경암": "450"
           }
         },
         "cite": {
@@ -193,33 +202,29 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "outputs": [
+          {"kind": "table_divisor", "table": "p124-t2", "row": "불도저 | 규격 32ton", "column": "대규모 시공량(㎥)", "value_input": "volume", "name": "32ton 불도저", "unit": "대·일", "when": {"soil_type": "보통토사", "scale": "대규모"}},
+          {"kind": "table_divisor", "table": "p124-t2", "row": "불도저 | 규격 19ton", "column": "중규모 시공량(㎥)", "value_input": "volume", "name": "19ton 불도저", "unit": "대·일", "when": {"soil_type": "보통토사", "scale": "중규모"}},
+          {"kind": "table_divisor", "table": "p124-t2", "row": "굴착기 | 규격 1.0㎥", "column": "소규모 시공량(㎥)", "value_input": "volume", "name": "1.0㎥ 굴착기", "unit": "대·일", "when": {"soil_type": "보통토사", "scale": "소규모"}},
+          {"kind": "table_divisor", "table": "p124-t3", "row": "불도저 | 규격 32ton", "column": "대규모 시공량(㎥)", "value_input": "volume", "name": "32ton 불도저", "unit": "대·일", "when": {"soil_type": "혼합토사", "scale": "대규모"}},
+          {"kind": "table_divisor", "table": "p124-t3", "row": "불도저 | 규격 19ton", "column": "중규모 시공량(㎥)", "value_input": "volume", "name": "19ton 불도저", "unit": "대·일", "when": {"soil_type": "혼합토사", "scale": "중규모"}},
+          {"kind": "table_divisor", "table": "p124-t3", "row": "굴착기 | 규격 1.0㎥", "column": "소규모 시공량(㎥)", "value_input": "volume", "name": "1.0㎥ 굴착기", "unit": "대·일", "when": {"soil_type": "혼합토사", "scale": "소규모"}},
+          {"kind": "table_divisor", "table": "p125-t0", "row": "굴착기 대형브레이커", "column_input": "rock_type", "value_input": "volume", "name": "1.0㎥ 굴착기", "unit": "대·일", "when": {"soil_type": "암"}},
+          {"kind": "table_divisor", "table": "p125-t0", "row": "굴착기 대형브레이커", "column_input": "rock_type", "value_input": "volume", "name": "1.0㎥ 대형브레이커", "unit": "대·일", "when": {"soil_type": "암"}},
+          {"kind": "table_divisor", "table": "p125-t1", "row": "불도저", "column_input": "rock_type", "value_input": "volume", "name": "32ton 불도저(집토)", "unit": "대·일", "when": {"soil_type": "암", "separate_gathering": true}}
+        ]
+      },
       "steps": [
-        "토질, 공사규모, 암 분류에 따라 해당 표에서 장비의 일당 시공량을 찾는다.",
-        "물량을 일당 시공량으로 나누어 장비의 투입 대·일을 구한다.",
-        "혼합토사에서 유압식 리퍼 사용 시, 또는 암 굴착 시 치즐 소모재료비는 기계경비에 요율을 곱하여 별도 계상한다."
+        "원문 표의 토질 및 공사규모 조합으로 지정된 장비와 일당 시공량을 선택한다. 규모 판정은 공사수량과 작업공간을 고려한 현장 분류 입력을 사용한다.",
+        "자연상태 토량을 선택한 장비의 원문 일당 시공량으로 나누어 장비별 대·일을 계산한다.",
+        "암 굴착 때 집토를 별도 수행하면 원문 p125-t1의 불도저 대·일을 추가한다."
       ],
       "source": "PDF 68~69쪽 3-2-3 흙깎기(기계)",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [
-      {
-        "condition": "유압식 리퍼 경비 및 소모재료(치즐) 비용 산정",
-        "reason": "기계경비(재료비, 노무비, 경비)를 기준으로 요율을 적용해야 하나, 현재 cost_rules는 labor_subtotal(노무비 합계) 기준만 지원하므로 자동 계산 불가",
-        "source": "PDF 69쪽 [주] ② 및 다. 암 [주] ②",
-        "cite": [
-          {
-            "chunk_id": "p125-x0",
-            "quote": "② 유압식 리퍼의 경비는 깎기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다."
-          },
-          {
-            "chunk_id": "p125-x6",
-            "quote": "② 소모재료(치즐)는 깎기장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다."
-          }
-        ]
-      }
-    ],
+    "blocked": [],
     "not_calculated": [
       {
         "item": "흙의 외부 반출을 위한 적재 및 운반 작업",
@@ -228,14 +233,24 @@
           "chunk_id": "p124-x11",
           "quote": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다."
         }
+      },
+      {
+        "item": "혼합토사 유압식 리퍼 기계경비 가산 (리퍼 사용 시)",
+        "source": "PDF 69쪽 [주] ②",
+        "cite": {"chunk_id": "p125-x0", "quote": "② 유압식 리퍼의 경비는 깎기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다."}
+      },
+      {
+        "item": "암 굴착 치즐 소모재료 비용",
+        "source": "PDF 69쪽 다. 암 [주] ②",
+        "cite": {"chunk_id": "p125-x6", "quote": "② 소모재료(치즐)는 깎기장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다."}
       }
     ],
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "인력 투입 없이 장비의 일당 시공량만 제시되어 있어 현재 지원하는 adjusted_daily_crew 모델(인력+장비)에 정확히 부합하지 않으며, 파싱 결과 누락이 많아 자동 계산이 어렵습니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "원문 일당 시공량으로 장비별 투입 대·일을 산출하는 source-backed table-divisor formula입니다.",
   "citations": [
     {
       "table_id": "p124-t1",
@@ -245,26 +260,26 @@
     },
     {
       "table_id": "p124-t2",
-      "row": "불도저",
+      "row": "불도저 | 규격 32ton",
       "column": "대규모 시공량(㎥)",
       "value": "930"
     },
     {
       "table_id": "p124-t3",
-      "row": "불도저",
+      "row": "불도저 | 규격 32ton",
       "column": "대규모 시공량(㎥)",
       "value": "640"
     },
     {
       "table_id": "p125-t0",
       "row": "굴착기 대형브레이커",
-      "column": "시공량(㎥) 풍화암",
+      "column": "풍화암",
       "value": "65"
     },
     {
       "table_id": "p125-t1",
       "row": "불도저",
-      "column": "시공량(㎥) 풍화암",
+      "column": "풍화암",
       "value": "550"
     },
     {
@@ -283,9 +298,7 @@
     }
   ],
   "open_questions": [
-    "파싱 결과 p124-t2에서 중규모 19ton 불도저의 시공량과 소규모 1.0㎥ 굴착기의 시공량이 누락되어 있어 표에 반영하지 못했습니다.",
-    "파싱 결과 p124-t3에서 중규모 19ton 불도저의 시공량과 소규모 1.0㎥ 굴착기의 시공량이 누락되어 있어 표에 반영하지 못했습니다.",
-    "유압식 리퍼 경비와 소모재료(치즐) 비용이 '기계경비'를 기준으로 산정되나, 현재 cost_rules는 labor_subtotal만 지원하여 반영할 수 없습니다."
+    "장비 대·일 수량은 계산할 수 있지만, 유압식 리퍼 2%와 치즐 1~7% 비용을 적용할 기준인 장비 기계경비(재료비·노무비·경비) 가격 입력/집계 경로가 아직 연결되지 않았습니다. 비용은 임의 산정하지 않고 별도 계상 대상으로 유지합니다."
   ],
   "questions": [
     "보통토사 대규모 공사에서 32ton 불도저의 일당 시공량은 얼마인가요?",

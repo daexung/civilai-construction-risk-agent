@@ -41,11 +41,15 @@
         "source": "PDF 918쪽 3-3-2 표",
         "unit": "인, ㎡",
         "values": {
-          "도장공 보통인부": {
-            "단위": "인",
-            "수량": "2",
-            "시공량(㎡) A급": "20",
-            "시공량(㎡) B급": "60"
+          "도장공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "시공량": {
+            "A급": "20",
+            "B급": "60"
           }
         },
         "cite": {
@@ -71,14 +75,35 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p974-t1",
+          "row": "시공량",
+          "column_input": "surface_condition"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p974-t1",
+          "column": "수량",
+          "trades": [
+            "도장공",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "도장공": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": []
+      },
       "steps": [
-        "대상면의 상태(A급, B급)에 따라 일당 시공량을 결정한다.",
-        "물량을 일당 시공량으로 나누어 작업일수를 구한다.",
-        "작업일수에 도장공 2인, 보통인부 1인을 곱하여 직종별 인·일을 산출한다."
+        "표에서 일당 시공량을 고른다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수로 총 투입량을 구한다."
       ],
-      "source": "PDF 918쪽 3-3-2 표",
+      "source": "PDF 3-3-2 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -96,22 +121,10 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 p974-t1 표의 직종(도장공, 보통인부)이 하나의 행 이름으로 병합되어 직종별 투입 인원을 기계적으로 구분할 수 없습니다.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
-    {
-      "table_id": "p974-t1",
-      "row": "도장공 보통인부",
-      "column": "시공량(㎡) A급",
-      "value": "20"
-    },
-    {
-      "table_id": "p974-t1",
-      "row": "도장공 보통인부",
-      "column": "시공량(㎡) B급",
-      "value": "60"
-    },
     {
       "table_id": "p974-t2",
       "row": "A급",
@@ -131,6 +144,30 @@
     {
       "chunk_id": "p974-x9",
       "quote": "본 품은 철재면 재도장 시 바탕처리하는 기준이다."
+    },
+    {
+      "table_id": "p974-t1",
+      "row": "도장공",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p974-t1",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "1"
+    },
+    {
+      "table_id": "p974-t1",
+      "row": "시공량",
+      "column": "A급",
+      "value": "20"
+    },
+    {
+      "table_id": "p974-t1",
+      "row": "시공량",
+      "column": "B급",
+      "value": "60"
     }
   ],
   "open_questions": [

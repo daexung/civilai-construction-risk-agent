@@ -71,14 +71,47 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p376-t1",
+          "row_input": "work_type",
+          "column": "시공량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p376-t1",
+          "row_input": "work_type",
+          "column_template": "{trade}",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "크레인",
+            "table": "p376-t1",
+            "row_selector": "work_type",
+            "column": "크레인",
+            "unit": "대·일",
+            "when": {
+              "work_type": "지주"
+            }
+          }
+        ]
+      },
       "steps": [
-        "입력된 작업 종류(지주 또는 표지판)에 따라 p376-t1에서 해당 작업조 인원/장비 수량과 시공량을 찾는다.",
-        "작업일수 = quantity ÷ 시공량으로 구한다.",
-        "직종별 인·일 및 장비 대·일 = 작업일수 × 수량으로 구한다."
+        "설치 대상(지주/표지판) 행의 일당 시공량(개소)을 고른다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원을 구하고 지주는 크레인 1대를 곱한다."
       ],
-      "source": "PDF 320쪽 p376-t1",
+      "source": "PDF 320쪽 1-8-1 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -121,9 +154,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "하나의 표에 지주 설치와 표지판 설치라는 두 개의 독립적인 작업조와 일일시공량이 행으로 나뉘어 혼재되어 있어, 현재의 adjusted_daily_crew 파라미터 구조로 매핑하기 어렵습니다.",
+  "calc_type_reason": "지주/표지판 행별 인원·크레인·일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p376-t1",

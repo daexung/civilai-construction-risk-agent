@@ -83,6 +83,24 @@
         "source": "PDF 892쪽 2-1-32 표",
         "unit": "시공량: m/일, 인원: 인/작업조, 장비: 대/작업조",
         "values": {
+          "특별인부": {
+            "A-Type": "2",
+            "B-Type": "2"
+          },
+          "보통인부": {
+            "A-Type": "1",
+            "B-Type": "1"
+          },
+          "굴착기 0.4㎥": {
+            "A-Type": "1"
+          },
+          "굴착기 0.2㎥": {
+            "B-Type": "1"
+          },
+          "트럭 2.5ton": {
+            "A-Type": "1",
+            "B-Type": "1"
+          },
           "300미만": {
             "A-Type": "500",
             "B-Type": "400"
@@ -102,24 +120,6 @@
           "500이상": {
             "A-Type": "170",
             "B-Type": "130"
-          },
-          "특별인부": {
-            "A-Type": "2",
-            "B-Type": "2"
-          },
-          "보통인부": {
-            "A-Type": "1",
-            "B-Type": "1"
-          },
-          "굴착기(0.4㎥)": {
-            "A-Type": "1"
-          },
-          "굴착기(0.2㎥)": {
-            "B-Type": "1"
-          },
-          "트럭(2.5ton)": {
-            "A-Type": "1",
-            "B-Type": "1"
           }
         },
         "cite": {
@@ -145,6 +145,7 @@
     "quantity_model": {
       "name": "adjusted_daily_crew",
       "params": {
+        "quantity_input": "quantity",
         "base_output": {
           "table": "p948-t0",
           "row_input": "size",
@@ -159,42 +160,43 @@
             "보통인부"
           ],
           "rate_codes": {
-            "특별인부": "1003",
-            "보통인부": "1002"
+            "특별인부": "",
+            "보통인부": ""
           }
         },
         "equipment": [
           {
-            "name": "굴착기(0.4㎥)",
+            "name": "굴착기 0.4㎥",
             "table": "p948-t0",
-            "column_input": "type",
+            "column": "A-Type",
             "unit": "대·일",
-            "operator_rate_code": "1048"
+            "when": {
+              "type": "A-Type"
+            }
           },
           {
-            "name": "굴착기(0.2㎥)",
+            "name": "굴착기 0.2㎥",
             "table": "p948-t0",
-            "column_input": "type",
+            "column": "B-Type",
             "unit": "대·일",
-            "operator_rate_code": "1048"
+            "when": {
+              "type": "B-Type"
+            }
           },
           {
-            "name": "트럭(2.5ton)",
+            "name": "트럭 2.5ton",
             "table": "p948-t0",
             "column_input": "type",
-            "unit": "대·일",
-            "operator_rate_code": "1048"
+            "unit": "대·일"
           }
-        ],
-        "quantity_input": "quantity"
+        ]
       },
       "steps": [
-        "p948-t0에서 type과 size에 따른 기준 일일시공량을 고른다.",
-        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
-        "p948-t0에서 type에 따른 직종별 인원과 장비 대수를 고른다.",
-        "직종별 인·일 = 작업일수 × 직종별 인원, 장비 대·일 = 작업일수 × 장비 대수로 구한다."
+        "Type와 경계블록 규격(아래폭+높이)의 일당 시공량(m)을 고른다.",
+        "철거 물량 ÷ 시공량으로 작업일수를 구한다.",
+        "Type별 직종 인원·굴착기·트럭 대수를 작업일수에 곱한다."
       ],
-      "source": "PDF 892쪽 p948-t0",
+      "source": "PDF 892쪽 2-1-32 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -229,20 +231,8 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "일당 작업조(인원 및 장비)와 일일시공량이 표에 제시되어 있어, 물량을 일일시공량으로 나누어 작업일수를 구하고 인·일을 산출하는 방식이 적합합니다.",
+  "calc_type_reason": "Type별 인원·장비 대수와 규격별 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
-    {
-      "table_id": "p948-t0",
-      "row": "300미만",
-      "column": "A-Type",
-      "value": "500"
-    },
-    {
-      "table_id": "p948-t0",
-      "row": "특별인부",
-      "column": "A-Type",
-      "value": "2"
-    },
     {
       "table_id": "p948-t1",
       "row": "적용기준",
@@ -264,6 +254,78 @@
     {
       "chunk_id": "p948-x15",
       "quote": "‘[공통부문] 1-4-4 지세/지형 2.도심지’ 할증을 적용하지 않는다."
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "특별인부",
+      "column": "A-Type",
+      "value": "2"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "특별인부",
+      "column": "B-Type",
+      "value": "2"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "300미만",
+      "column": "A-Type",
+      "value": "500"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "300미만",
+      "column": "B-Type",
+      "value": "400"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "350미만",
+      "column": "A-Type",
+      "value": "420"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "350미만",
+      "column": "B-Type",
+      "value": "335"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "400미만",
+      "column": "A-Type",
+      "value": "390"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "400미만",
+      "column": "B-Type",
+      "value": "310"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "500미만",
+      "column": "A-Type",
+      "value": "270"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "500미만",
+      "column": "B-Type",
+      "value": "215"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "500이상",
+      "column": "A-Type",
+      "value": "170"
+    },
+    {
+      "table_id": "p948-t0",
+      "row": "500이상",
+      "column": "B-Type",
+      "value": "130"
     }
   ],
   "open_questions": [

@@ -113,41 +113,59 @@
       "params": {
         "unit_rate_table": {
           "table": "p587-t0",
-          "row_input": "합계",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "지적기사",
             "지적산업기사",
             "지적기능사"
-          ]
+          ],
+          "trade_in_columns": true,
+          "row_by_trade": {
+            "지적기사": "합계",
+            "지적산업기사": "합계",
+            "지적기능사": "합계"
+          },
+          "basis_cites_by_row": {
+            "합계": {
+              "chunk_id": "p587-x13",
+              "quote": "본 품은 1필지당 1,500㎡를 기준으로 하였으며, 기준면적 이하는 기준면적을 적용하고 기준면적을 초과할 때에는 다음의 계수를 곱하여 계상한다."
+            }
+          }
         },
         "quantity_input": "parcel_count",
-        "surcharges": [
+        "surcharges": [],
+        "note_adjustments": [],
+        "coefficient_combination": "additive_deltas",
+        "coefficient_rules": [
           {
-            "when": {},
-            "rate": "면적계수 및 지역구분계수에 따른 할증",
-            "applies_to": [
-              "지적기사",
-              "지적산업기사",
-              "지적기능사"
-            ],
-            "source": "PDF 531쪽 [주] ②, PDF 532쪽 ③ 및 [계산예]"
-          }
-        ],
-        "note_adjustments": [
+            "kind": "area_increment",
+            "table": "p587-t1",
+            "row": "계수",
+            "area_input": "area_per_parcel",
+            "base_area": "1500",
+            "cite": {
+              "chunk_id": "p587-x17",
+              "quote": "※ n은 가산횟수로 (대상면적-기준면적)÷기준면적"
+            }
+          },
           {
-            "when": {},
-            "change": "총 계수 = 1.00 + (면적계수 - 1.00) + (지역구분계수 - 1.00)",
-            "source": "PDF 532쪽 [계산예] 합계 : 2.00 = (㉠+㉡+㉢+㉣)"
+            "table": "p588-t0",
+            "row": "계수",
+            "input": "region",
+            "cite": {
+              "chunk_id": "p588-x0",
+              "quote": "본 품은 면지역을 기준으로 하였으며, 행정구역이 다를 경우 다음의 계수를 곱하여 품을 계상한다."
+            }
           }
         ]
       },
       "steps": [
-        "p587-t0에서 합계 행의 직종별 기본 품을 찾는다.",
-        "1필지당 면적(area_per_parcel)을 기준으로 가산횟수 n = 올림((area_per_parcel - 1500) / 1500)을 구한다.",
-        "n에 따라 p587-t1의 면적계수를 구한다 (n<=0: 1.0, n=1: 1.3, n>=2: 1.2+0.10*n).",
-        "region에 따라 p588-t0의 지역구분계수를 구한다.",
-        "총 계수 = 1.00 + (면적계수 - 1.00) + (지역구분계수 - 1.00)을 계산한다.",
-        "직종별 품 = 기본 품 × 총 계수 × parcel_count 로 총 품을 구한다."
+        "p587-t0에서 직종별 1필지 기본 품을 조회한다.",
+        "1,500㎡ 기준으로 면적 가산횟수 n을 계산해 p587-t1의 정확한 계수를 적용한다.",
+        "행정구역별 계수를 p588-t0에서 조회한다.",
+        "원문 계산예에 따라 기본 1.00에 면적계수와 지역계수의 초과분을 각각 더해 총 계수를 구한다.",
+        "직종별 단위당 품에 필지 수를 곱한다."
       ],
       "source": "PDF 531~532쪽",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"

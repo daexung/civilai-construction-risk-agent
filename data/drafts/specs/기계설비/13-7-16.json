@@ -12,15 +12,6 @@
     ],
     "inputs": [
       {
-        "name": "quantity_unit",
-        "type": "positive_rational",
-        "allowed_values": "0보다 큰 수",
-        "unit": "기",
-        "required": true,
-        "ask": "설치할 기기의 수량은 몇 기입니까?",
-        "source": "PDF 830쪽 표 우측 상단 '(기당)' 및 기술관리 품 산정 기준"
-      },
-      {
         "name": "quantity_ton",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
@@ -40,6 +31,15 @@
         "required": true,
         "ask": "지하 10m 설치 기준에 해당합니까?",
         "source": "PDF 830쪽 표 비고 '지하 10m 설치기준'"
+      },
+      {
+        "name": "quantity_day",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "일",
+        "required": true,
+        "ask": "기술관리 작업일수는 며칠입니까?",
+        "source": "PDF 인쇄 830쪽 기술관리 행의 인/일 기준"
       }
     ],
     "tables": [
@@ -92,46 +92,77 @@
           "row_input": "고정 행이름",
           "column_input": "수량",
           "trades": [
-            "기계기사",
             "플랜트기계설치공",
             "철골공",
             "비계공",
             "특별인부"
-          ]
+          ],
+          "basis_by_row": {
+            "고정 행이름": "인/ton"
+          }
         },
-        "quantity_input": "quantity_unit 및 quantity_ton",
+        "quantity_input": "quantity_ton",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "additional_unit_rates": [
           {
-            "when": {},
-            "change": "조립설치 품(플랜트기계설치공, 철골공, 비계공, 특별인부)의 10%를 검사 및 교정 품으로 가산",
-            "source": "PDF 830쪽 표 '검사 및 교정' 행"
+            "table": "p886-t1",
+            "quantity_input": "quantity_day",
+            "trades": [
+              "기계기사"
+            ],
+            "row_by_trade": {
+              "기계기사": "기계기사"
+            },
+            "column": "수량",
+            "basis_by_trade": {
+              "기계기사": "인/일"
+            }
+          }
+        ],
+        "input_rate_adjustments": [
+          {
+            "name": "검사 및 교정",
+            "operation": "add_source_percent",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "exclude_trades": [
+              "기계기사"
+            ],
+            "cite": {
+              "table_id": "p886-t1",
+              "row": "검사및교정",
+              "column": "직종",
+              "value": "기술관리를 제외한 본 품의 10%"
+            }
           }
         ]
       },
       "steps": [
-        "p886-t1에서 기계기사의 수량에 quantity_unit(기)을 곱하여 기술관리 품을 구한다.",
-        "p886-t1에서 플랜트기계설치공, 철골공, 비계공, 특별인부의 수량에 quantity_ton(ton)을 곱하여 조립설치 품을 구한다.",
-        "조립설치 품의 10%를 계산하여 검사 및 교정 품으로 각 직종별로 가산한다.",
-        "기술관리 품과 조립설치(검사 및 교정 포함) 품을 합산한다."
+        "기술관리 기계기사는 원문 기준 인/일이므로 quantity_day로 별도 산출한다.",
+        "플랜트기계설치공, 철골공, 비계공, 특별인부는 원문 기준 인/ton으로 quantity_ton을 적용한다.",
+        "검사 및 교정은 기술관리를 제외한 본 품의 10%를 원문대로 가산한다.",
+        "원문 기준인 지하 10m 설치가 아니면 다른 요율이 없어 계산을 보류한다."
       ],
       "source": "PDF 830쪽 13-7-16 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "지하 10m 설치 기준이 아닌 경우",
         "blocked_if": {
           "input": "is_underground_10m",
           "op": "==",
           "value": false
         },
-        "reason": "원문 표 비고에 '지하 10m 설치기준'으로 명시되어 있으나, 다른 깊이나 지상 설치에 대한 보정 계수가 제시되어 있지 않음",
-        "source": "PDF 830쪽 표 비고",
+        "reason": "원문 표는 지하 10m 설치기준만 제시하며 다른 설치깊이의 요율이 없어 계산을 보류합니다.",
+        "source": "PDF 인쇄 830쪽 표 비고",
         "cite": {
           "table_id": "p886-t1",
-          "row": "기계기사",
-          "column": "비고"
+          "row": "플랜트기계설치공",
+          "column": "비고",
+          "value": "지하 10m 설치기준"
         }
       }
     ],

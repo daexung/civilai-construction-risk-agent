@@ -48,7 +48,6 @@
       "params": {
         "unit_rate_table": {
           "table": "p631-t2",
-          "row_input": "고정 행이름 없음",
           "column_input": "수량",
           "trades": [
             "철골공",

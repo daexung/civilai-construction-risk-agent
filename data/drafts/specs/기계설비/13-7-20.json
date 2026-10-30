@@ -49,6 +49,15 @@
         "required": true,
         "ask": "표면손질 면적은 몇 ㎡입니까?",
         "source": "PDF 832쪽 13-7-20 표 표면손질 단위 (인/㎡)"
+      },
+      {
+        "name": "tech_management_days",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "일",
+        "required": true,
+        "ask": "기술관리(설치공사 기간중) 일수는 며칠입니까?",
+        "source": "PDF 832쪽 13-7-20 표 기술관리 행 (인/일)"
       }
     ],
     "tables": [
@@ -94,30 +103,121 @@
       "params": {
         "unit_rate_table": {
           "table": "p888-t1",
-          "row_input": "작업구분",
-          "column_input": "직종",
+          "row_input": "기술관리",
+          "column_input": null,
+          "row_by_trade": {
+            "기계기사": "기술관리"
+          },
           "trades": [
-            "기계기사",
-            "특별인부",
-            "플랜트기계설치공",
-            "비계공"
-          ]
+            "기계기사"
+          ],
+          "basis_by_row": {
+            "기술관리": "인/일"
+          }
         },
-        "quantity_input": "quantity",
+        "quantity_input": "tech_management_days",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "additional_unit_rates": [
           {
-            "when": {},
-            "change": "검사 및 교정은 기술관리를 제외한 본 품의 10% 가산",
-            "source": "PDF 832쪽 13-7-20 표 검사 및 교정"
+            "table": "p888-t1",
+            "row_by_trade": {
+              "특별인부": "표면손질"
+            },
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "surface_area",
+            "basis": "인/㎡",
+            "column": "특별인부"
+          },
+          {
+            "table": "p888-t1",
+            "row_by_trade": {
+              "플랜트기계설치공": "가조립및해체"
+            },
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "quantity_input": "quantity",
+            "basis": "인/ton",
+            "column": "플랜트기계설치공"
+          },
+          {
+            "table": "p888-t1",
+            "row_by_trade": {
+              "특별인부": "조립설치_특별인부_가조립"
+            },
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "quantity",
+            "basis": "인/ton",
+            "column": "특별인부"
+          },
+          {
+            "table": "p888-t1",
+            "row_by_trade": {
+              "플랜트기계설치공": "조립설치_플랜트기계설치공"
+            },
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "quantity_input": "quantity",
+            "basis": "인/ton",
+            "column": "플랜트기계설치공"
+          },
+          {
+            "table": "p888-t1",
+            "row_by_trade": {
+              "비계공": "조립설치_비계공"
+            },
+            "trades": [
+              "비계공"
+            ],
+            "quantity_input": "quantity",
+            "basis": "인/ton",
+            "column": "비계공"
+          },
+          {
+            "table": "p888-t1",
+            "row_by_trade": {
+              "특별인부": "조립설치_특별인부"
+            },
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "quantity",
+            "basis": "인/ton",
+            "column": "특별인부"
+          }
+        ],
+        "input_rate_adjustments": [
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "exclude_trades": [
+              "기계기사"
+            ],
+            "cite": {
+              "table_id": "p888-t1",
+              "row": "검사및교정",
+              "column": "수량",
+              "value": "기술관리를 제외한 본 품의 10%"
+            }
           }
         ]
       },
       "steps": [
-        "표에서 작업구분별 직종과 수량을 확인한다.",
-        "표면손질 품은 표면적(surface_area)을 곱하여 산출한다.",
-        "나머지 작업(기술관리, 가조립 및 해체, 조립설치) 품은 중량(quantity)을 곱하여 산출한다.",
-        "검사 및 교정 품은 산출된 전체 품에서 기술관리 품을 제외한 값의 10%로 계산하여 더한다."
+        "기술관리 일수에는 기술관리(인/일) 품을 적용한다.",
+        "표면손질 면적에는 특별인부(인/㎡) 품을 적용한다.",
+        "가조립·해체 및 조립·설치 중량에는 각 원문 행의 인/ton 품을 적용한다.",
+        "검사 및 교정은 기술관리를 제외한 전공량의 10%를 더한다.",
+        "포장해체, 소운반, Foundation chipping, marking, centering, 전기 배선공사 및 현장가공 품은 이 표에서 별도 계상 대상이다."
       ],
       "source": "PDF 832쪽 13-7-20 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"

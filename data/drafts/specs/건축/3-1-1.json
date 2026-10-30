@@ -49,9 +49,13 @@
         "source": "3-1-1 바탕 고르기 표",
         "unit": "인, ㎡",
         "values": {
-          "미장공 보통인부": {
-            "단위": "인",
-            "수량": "2, 1",
+          "미장공": {
+            "수량": "2",
+            "시공량(㎡) 벽": "45",
+            "시공량(㎡) 바닥": "62"
+          },
+          "보통인부": {
+            "수량": "1",
             "시공량(㎡) 벽": "45",
             "시공량(㎡) 바닥": "62"
           }
@@ -63,8 +67,23 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "area",
+        "base_output": {
+          "table": "p641-t0",
+          "row": "미장공",
+          "column_selector": "surface_type"
+        },
+        "crew": {
+          "table": "p641-t0",
+          "trades": [
+            "미장공",
+            "보통인부"
+          ],
+          "column": "수량"
+        }
+      },
       "steps": [
         "표에서 시공 부위(벽/바닥)에 따른 일당 시공량을 확인한다.",
         "면적을 일당 시공량으로 나누어 작업일수를 구한다.",
@@ -75,17 +94,17 @@
     },
     "blocked": [
       {
-        "condition": "두께가 24mm를 초과하는 경우",
+        "condition": "application thickness above 24mm",
         "blocked_if": {
           "input": "thickness",
           "op": ">",
-          "value": 24
+          "value": "24"
         },
-        "reason": "본 품은 타일공사 전 두께 24mm이하(2회 바름)로 모르타르를 바르는 기준임",
-        "source": "p641-x2 [주] ①",
+        "reason": "Source scope is two mortar applications totaling no more than 24mm.",
+        "source": "PDF p.585 note ?",
         "cite": {
-          "section_no": "3-1-1",
-          "marker": "①"
+          "chunk_id": "p641-x2",
+          "quote": "설명 | [주] ① 본 품은 타일공사 전 두께 24mm이하(2회 바름)로 모르타르를 바르는 기준이다."
         }
       }
     ],
@@ -102,20 +121,22 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "name": "공구손료 및 경장비",
-        "category": "경비",
-        "base": "labor_subtotal",
+        "item": "tooling and light equipment cost",
         "rate": "0.02",
+        "basis": "labor amount",
+        "source": "설명 | 경우 ‘[건축부문] 9-1-1 모르타르 배합’을 따른다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 2%로 계상한다.",
         "cite": {
-          "section_no": "3-1-1",
-          "marker": "④"
+          "chunk_id": "p641-x2",
+          "quote": "설명 | 경우 ‘[건축부문] 9-1-1 모르타르 배합’을 따른다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 2%로 계상한다."
         }
       }
-    ]
+    ],
+    "calc_type": "daily_crew",
+    "calc_type_reason": "Source table provides daily area output for wall/floor and staffing counts; thickness is checked against the stated 24mm scope."
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 미장공과 보통인부의 행 이름이 '미장공 보통인부'로 병합되어 직종별 인원을 기계적으로 구분할 수 없습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "Source table provides daily area output for wall/floor and staffing counts; thickness is checked against the stated 24mm scope.",
   "citations": [
     {
       "table_id": "p641-t0"

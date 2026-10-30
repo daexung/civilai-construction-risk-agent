@@ -12,7 +12,7 @@
     ],
     "inputs": [
       {
-        "name": "duration",
+        "name": "use_duration",
         "type": "enum",
         "allowed_values": [
           "3개월",

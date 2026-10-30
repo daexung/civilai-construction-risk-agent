@@ -182,6 +182,7 @@
           "table": "p977-t0",
           "row_input": "pipe_size",
           "column_input": "pipe_type",
+          "trade_in_columns": true,
           "trades": [
             "배관공",
             "보통인부"

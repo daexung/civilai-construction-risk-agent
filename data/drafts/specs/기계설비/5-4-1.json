@@ -123,7 +123,35 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "보통인부(인)",
+            "when": {
+              "size": "ø15 ∼ 25"
+            },
+            "source": "PDF 677쪽 5-4-1 표의 보통인부 셀이 대시로 표시됨 (ø15 ∼ 25)",
+            "cite": {
+              "table_id": "p733-t0",
+              "row": "ø15 ∼ 25",
+              "column": "보통인부(인)",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "보통인부(인)",
+            "when": {
+              "size": "32 ∼ 50"
+            },
+            "source": "PDF 677쪽 5-4-1 표의 보통인부 셀이 대시로 표시됨 (32 ∼ 50)",
+            "cite": {
+              "table_id": "p733-t0",
+              "row": "32 ∼ 50",
+              "column": "보통인부(인)",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p733-t0 표에서 규격(size)에 해당하는 배관공과 보통인부의 단위당 품을 찾는다.",
@@ -180,6 +208,18 @@
     {
       "chunk_id": "p733-x7",
       "quote": "④ 공구손료 및 경장비(전기드릴 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
+    {
+      "table_id": "p733-t0",
+      "row": "ø15 ∼ 25",
+      "column": "보통인부(인)",
+      "value": "-"
+    },
+    {
+      "table_id": "p733-t0",
+      "row": "32 ∼ 50",
+      "column": "보통인부(인)",
+      "value": "-"
     }
   ],
   "open_questions": [

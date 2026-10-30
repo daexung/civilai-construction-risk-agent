@@ -27,9 +27,6 @@
         "name": "pipe_diameter",
         "type": "enum",
         "allowed_values": [
-          "80",
-          "100",
-          "125",
           "125이하",
           "150",
           "200",
@@ -54,7 +51,11 @@
         "unit": "㎜",
         "required": true,
         "ask": "부설할 강관의 관경(㎜)은 얼마입니까?",
-        "source": "PDF 366쪽 6-3-1 표 및 비고 표의 관경(㎜) 열"
+        "source": "PDF 366쪽 6-3-1 표 및 비고 표의 관경(㎜) 열",
+        "when": {
+          "input": "installation_method",
+          "equals": "장비 부설"
+        }
       },
       {
         "name": "quantity",
@@ -64,6 +65,26 @@
         "required": true,
         "ask": "부설할 강관의 총 물량은 몇 본입니까?",
         "source": "PDF 366쪽 6-3-1 표의 시공량(본) 단위"
+      },
+      {
+        "name": "manual_pipe_diameter",
+        "type": "enum",
+        "allowed_values": [
+          "80",
+          "100",
+          "125",
+          "150",
+          "200",
+          "250"
+        ],
+        "unit": "㎜",
+        "required": true,
+        "ask": "부설할 강관의 관경(㎜)은 얼마입니까?",
+        "source": "PDF 366쪽 6-3-1 비고(인력 부설) 표",
+        "when": {
+          "input": "installation_method",
+          "equals": "인력 부설"
+        }
       }
     ],
     "tables": [
@@ -242,14 +263,65 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table_selector": {
+            "input": "installation_method",
+            "values": {
+              "장비 부설": "p422-t0",
+              "인력 부설": "p422-t1"
+            }
+          },
+          "row_input": [
+            "pipe_diameter",
+            "manual_pipe_diameter"
+          ],
+          "column": "시공량(본)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table_selector": {
+            "input": "installation_method",
+            "values": {
+              "장비 부설": "p422-t0",
+              "인력 부설": "p422-t1"
+            }
+          },
+          "row_input": [
+            "pipe_diameter",
+            "manual_pipe_diameter"
+          ],
+          "column_template": "{trade}",
+          "trades": [
+            "배관공(수도)",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "배관공(수도)": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "양중장비",
+            "table": "p422-t0",
+            "row_selector": "pipe_diameter",
+            "column": "양중장비",
+            "unit": "대·일",
+            "when": {
+              "installation_method": "장비 부설"
+            }
+          }
+        ]
+      },
       "steps": [
-        "부설 방법(장비/인력)에 따라 해당 표(p422-t0 또는 p422-t1)를 선택합니다.",
-        "관경에 해당하는 일당 작업조 인원(배관공, 보통인부) 및 장비(양중장비) 대수와 기준 시공량을 확인합니다.",
-        "물량을 기준 시공량으로 나누어 작업일수를 구하고, 이를 작업조 인원 및 장비 대수에 곱하여 총 투입량을 산출합니다."
+        "부설 방법으로 장비 부설표(p422-t0) 또는 인력 부설표(p422-t1)를 고른다.",
+        "관경 행의 일당 시공량(본)을 읽고 물량 ÷ 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, 장비 부설이면 × 양중장비 대수로 총 투입량을 구한다."
       ],
-      "source": "PDF 366쪽 6-3-1 표 및 비고",
+      "source": "PDF 366쪽 6-3-1 표 및 비고(인력 부설)",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -259,16 +331,16 @@
         "source": "PDF 366쪽 6-3-1 [주] ③",
         "cite": {
           "chunk_id": "p422-x29",
-          "quote": "③ 양중장비의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율(적정하중, 작업반경 등)을 고려하여 적합한 규격을 적용한다."
+          "quote": "③ 양중장비의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율(적정하중, 작업반경 등)을 고려하여"
         }
       }
     ],
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "장비 부설과 인력 부설에 따라 참조하는 표가 다르고, 기준 일일시공량 표가 1차원(관경별)이어서 현재의 2차원 기반 adjusted_daily_crew 모델에 바로 적용하기 어렵습니다.",
+  "calc_type_reason": "부설 방법별 표(장비/인력)에서 관경 행의 인원·양중장비·일당 시공량(본)을 읽는 일당 작업조 구조다.",
   "citations": [
     {
       "table_id": "p422-t0",
@@ -284,7 +356,7 @@
     },
     {
       "chunk_id": "p422-x29",
-      "quote": "③ 양중장비의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율(적정하중, 작업반경 등)을 고려하여 적합한 규격을 적용한다."
+      "quote": "③ 양중장비의 규격은 작업여건(시공높이, 시공위치 등) 및 안전율(적정하중, 작업반경 등)을 고려하여"
     }
   ],
   "open_questions": [

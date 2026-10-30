@@ -129,19 +129,25 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "coefficient_combination": "multiply",
+        "coefficient_rules": [
           {
-            "when": {},
-            "change": "p404-t1에서 rail_weight와 turnout_type에 해당하는 할증률을 찾아 전체 품에 곱함",
-            "source": "4-4-1 분기기 부설 비고"
+            "table": "p404-t1",
+            "row_input": "rail_weight",
+            "column_input": "turnout_type",
+            "cite": {
+              "chunk_id": "p404-t0",
+              "quote": "분기기 종류에 따라 다음의 할증을 적용한다."
+            }
           }
         ]
       },
       "steps": [
-        "p404-t0에서 기본 단위당 품을 가져온다.",
-        "p404-t1에서 레일 규격과 분기기 종류에 맞는 할증률을 찾는다.",
-        "기본 품에 할증률을 곱하여 조정된 단위당 품을 구한다.",
-        "조정된 단위당 품에 물량을 곱하여 총 투입량을 계산한다."
+        "p404-t0에서 직종·장비별 틀당 기본 품을 확인한다.",
+        "p404-t1에서 rail_weight 행과 turnout_type 열이 교차하는 원문 할증계수를 정확히 조회한다.",
+        "기본 단위당 품 전부에 표의 계수를 곱한다.",
+        "조정된 단위당 품에 quantity(틀)를 곱한다."
       ],
       "source": "4-4-1 분기기 부설 표 및 비고",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"

@@ -35,9 +35,13 @@
           "경암"
         ],
         "unit": null,
-        "required": true,
+        "required": false,
         "ask": "암분류는 무엇입니까? (토질이 암인 경우)",
-        "source": "PDF 126쪽 p126-t1"
+        "source": "PDF 126쪽 p126-t1",
+        "required_when": {
+          "input": "soil_type",
+          "equals": "암"
+        }
       },
       {
         "name": "type_class",
@@ -73,9 +77,16 @@
           false
         ],
         "unit": null,
-        "required": true,
+        "required": false,
         "ask": "굴착 깊이가 5m를 초과합니까?",
-        "source": "PDF 125쪽 p125-t4 비고"
+        "source": "PDF 125쪽 p125-t4 비고",
+        "required_when": {
+          "input": "soil_type",
+          "in": [
+            "보통토사",
+            "혼합토사"
+          ]
+        }
       },
       {
         "name": "volume",
@@ -94,9 +105,13 @@
           false
         ],
         "unit": null,
-        "required": true,
+        "required": false,
         "ask": "토질이 견고하여 리퍼 작업이 병행 시공됩니까? (혼합토사인 경우)",
-        "source": "PDF 126쪽 [주] ① ㉮"
+        "source": "PDF 126쪽 [주] ① ㉮",
+        "required_when": {
+          "input": "soil_type",
+          "equals": "혼합토사"
+        }
       },
       {
         "name": "urban_narrow",
@@ -137,13 +152,12 @@
         "source": "PDF 125쪽 가. 보통토사",
         "unit": "㎥/일",
         "values": {
-          "굴착기 1.0㎥": {
+          "굴착기 | 규격 1.0㎥": {
             "TypeⅠ 시공량(㎥)": "560",
-            "TypeⅡ 시공량(㎥)": "420",
-            "TypeⅢ 시공량(㎥)": "190"
+            "TypeⅡ 시공량(㎥)": "420"
           },
-          "굴착기 0.6㎥": {
-            "TypeⅢ 시공량(㎥)": "1"
+          "굴착기 | 규격 0.6㎥": {
+            "TypeⅢ 시공량(㎥)": "190"
           }
         },
         "cite": {
@@ -156,13 +170,12 @@
         "source": "PDF 126쪽 나. 혼합토사",
         "unit": "㎥/일",
         "values": {
-          "굴착기 1.0㎥": {
+          "굴착기 | 규격 1.0㎥": {
             "TypeⅠ 시공량(㎥)": "390",
-            "TypeⅡ 시공량(㎥)": "300",
-            "TypeⅢ 시공량(㎥)": "150"
+            "TypeⅡ 시공량(㎥)": "300"
           },
-          "굴착기 0.6㎥": {
-            "TypeⅢ 시공량(㎥)": "1"
+          "굴착기 | 규격 0.6㎥": {
+            "TypeⅢ 시공량(㎥)": "150"
           }
         },
         "cite": {
@@ -176,20 +189,20 @@
         "unit": "㎥/일",
         "values": {
           "풍화암": {
-            "시공량(㎥) TypeⅠ": "38",
-            "시공량(㎥) TypeⅡ": "35"
+            "TypeⅠ": "38",
+            "TypeⅡ": "35"
           },
           "연암": {
-            "시공량(㎥) TypeⅠ": "30",
-            "시공량(㎥) TypeⅡ": "28"
+            "TypeⅠ": "30",
+            "TypeⅡ": "28"
           },
           "보통암": {
-            "시공량(㎥) TypeⅠ": "22",
-            "시공량(㎥) TypeⅡ": "19"
+            "TypeⅠ": "22",
+            "TypeⅡ": "19"
           },
           "경암": {
-            "시공량(㎥) TypeⅠ": "16",
-            "시공량(㎥) TypeⅡ": "14"
+            "TypeⅠ": "16",
+            "TypeⅡ": "14"
           }
         },
         "cite": {
@@ -216,55 +229,1161 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "outputs": [
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅠ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅠ",
+              "water_issue": false,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅠ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅠ",
+              "water_issue": true,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅠ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅠ",
+              "water_issue": false,
+              "depth_over_5m": true
+            },
+            "rate_multiplier": "0.91",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p125-t4",
+                "quote": "비고 | - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅡ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅡ",
+              "water_issue": false,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅡ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅡ",
+              "water_issue": true,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅡ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅡ",
+              "water_issue": false,
+              "depth_over_5m": true
+            },
+            "rate_multiplier": "0.91",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p125-t4",
+                "quote": "비고 | - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 0.6㎥",
+            "column": "TypeⅢ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "0.6㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅢ",
+              "water_issue": false,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 0.6㎥",
+            "column": "TypeⅢ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "0.6㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅢ",
+              "water_issue": true,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p125-t4",
+            "row": "굴착기 | 규격 0.6㎥",
+            "column": "TypeⅢ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "0.6㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "보통토사",
+              "type_class": "TypeⅢ",
+              "water_issue": false,
+              "depth_over_5m": true
+            },
+            "rate_multiplier": "0.91",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p125-t4",
+                "quote": "비고 | - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅠ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅠ",
+              "water_issue": false,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅠ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅠ",
+              "water_issue": true,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅠ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅠ",
+              "water_issue": false,
+              "depth_over_5m": true
+            },
+            "rate_multiplier": "0.91",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p125-t4",
+                "quote": "비고 | - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅡ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅡ",
+              "water_issue": false,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅡ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅡ",
+              "water_issue": true,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 1.0㎥",
+            "column": "TypeⅡ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅡ",
+              "water_issue": false,
+              "depth_over_5m": true
+            },
+            "rate_multiplier": "0.91",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p125-t4",
+                "quote": "비고 | - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 0.6㎥",
+            "column": "TypeⅢ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "0.6㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅢ",
+              "water_issue": false,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 0.6㎥",
+            "column": "TypeⅢ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "0.6㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅢ",
+              "water_issue": true,
+              "depth_over_5m": false
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t0",
+            "row": "굴착기 | 규격 0.6㎥",
+            "column": "TypeⅢ 시공량(㎥)",
+            "value_input": "volume",
+            "name": "0.6㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "혼합토사",
+              "type_class": "TypeⅢ",
+              "water_issue": false,
+              "depth_over_5m": true
+            },
+            "rate_multiplier": "0.91",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(조건별 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p125-t4",
+                "quote": "비고 | - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "풍화암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "풍화암",
+              "type_class": "TypeⅠ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "풍화암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "풍화암",
+              "type_class": "TypeⅠ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "풍화암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "풍화암",
+              "type_class": "TypeⅠ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "풍화암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "풍화암",
+              "type_class": "TypeⅠ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "풍화암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "풍화암",
+              "type_class": "TypeⅡ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "풍화암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "풍화암",
+              "type_class": "TypeⅡ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "풍화암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "풍화암",
+              "type_class": "TypeⅡ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "풍화암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "풍화암",
+              "type_class": "TypeⅡ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "연암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "연암",
+              "type_class": "TypeⅠ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "연암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "연암",
+              "type_class": "TypeⅠ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "연암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "연암",
+              "type_class": "TypeⅠ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "연암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "연암",
+              "type_class": "TypeⅠ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "연암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "연암",
+              "type_class": "TypeⅡ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "연암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "연암",
+              "type_class": "TypeⅡ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "연암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "연암",
+              "type_class": "TypeⅡ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "연암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "연암",
+              "type_class": "TypeⅡ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "보통암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "보통암",
+              "type_class": "TypeⅠ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "보통암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "보통암",
+              "type_class": "TypeⅠ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "보통암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "보통암",
+              "type_class": "TypeⅠ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "보통암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "보통암",
+              "type_class": "TypeⅠ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "보통암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "보통암",
+              "type_class": "TypeⅡ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "보통암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "보통암",
+              "type_class": "TypeⅡ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "보통암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "보통암",
+              "type_class": "TypeⅡ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "보통암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "보통암",
+              "type_class": "TypeⅡ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "경암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "경암",
+              "type_class": "TypeⅠ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "경암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "경암",
+              "type_class": "TypeⅠ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "경암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "경암",
+              "type_class": "TypeⅠ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "경암",
+            "column": "TypeⅠ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "경암",
+              "type_class": "TypeⅠ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "경암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "경암",
+              "type_class": "TypeⅡ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "경암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "경암",
+              "type_class": "TypeⅡ",
+              "water_issue": false
+            },
+            "rate_multiplier": "1",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)"
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "경암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 굴착기",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "경암",
+              "type_class": "TypeⅡ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          },
+          {
+            "kind": "table_divisor",
+            "table": "p126-t1",
+            "row": "경암",
+            "column": "TypeⅡ",
+            "value_input": "volume",
+            "name": "1.0㎥ 대형브레이커",
+            "unit": "대·일",
+            "when": {
+              "soil_type": "암",
+              "rock_type": "경암",
+              "type_class": "TypeⅡ",
+              "water_issue": true
+            },
+            "rate_multiplier": "0.75",
+            "formula": "자연상태 물량 ÷ 원문 일당 시공량(용수 감산 반영)",
+            "cite": [
+              {
+                "chunk_id": "p126-t1",
+                "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+              }
+            ]
+          }
+        ]
+      },
       "steps": [
-        "토질(보통토사, 혼합토사, 암)에 따라 참조해야 할 시공량 표가 다릅니다.",
-        "해당 표에서 규격 구분(Type) 및 암분류에 따른 일일 시공량을 찾습니다.",
-        "용수 발생 시 시공량을 25% 감산하고, 굴착 깊이 5m 초과 시 시공량을 9% 감산합니다.",
-        "물량을 일일 시공량으로 나누어 장비 대·일을 산출합니다."
+        "토질과 원문에 따라 정한 Type 조합에서 장비별 시공량을 선택한다. 도심지/주택가에서 작업이 현저히 저하되면 공통 8-2-3을 적용한다.",
+        "자연상태 물량을 원문 일당 시공량으로 나누어 장비별 대·일을 산출한다.",
+        "용수 발생 시 시공량을 25% 줄이고, 흙/혼합토의 굴착 깊이가 5m를 초과하면 9% 줄인다. 두 조건 동시 발생은 결합 방식이 원문에 없어 보류한다.",
+        "혼합토사 리퍼 및 암 굴착 치즐 요율은 장비 기계경비 가격 기준으로 별도 계상하며 현재 품량 결과에 임의 반영하지 않는다."
       ],
       "source": "PDF 125~126쪽",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "도심지/주택가 지역에서 작업장소가 협소하고 지하매설물 등으로 인하여 작업이 현저하게 저하되는 경우",
+        "condition": "도심지/주택가에서 협소한 작업장소와 지하매설물로 작업효율이 현저히 저하",
         "blocked_if": {
           "input": "urban_narrow",
           "op": "==",
           "value": true
         },
-        "reason": "'[공통부문] 8-2-3 굴착기'를 적용하여 산정해야 함",
-        "source": "PDF 125쪽 ※도심지/주택가 지역에서...",
+        "reason": "공통부문 8-2-3 굴착기를 적용해야 함",
+        "source": "PDF 69쪽 ※ 도심지/주택가 지역",
         "cite": {
           "chunk_id": "p125-x12",
           "quote": "작업이 현저하게 저하되는 경우에는 ‘[공통부문] 8-2-3 굴착기’를 적용하여 산정한다."
         }
+      },
+      {
+        "condition": "암에서 TypeⅢ 적용",
+        "blocked_if_all": [
+          {
+            "input": "soil_type",
+            "op": "==",
+            "value": "암"
+          },
+          {
+            "input": "type_class",
+            "op": "==",
+            "value": "TypeⅢ"
+          }
+        ],
+        "reason": "암 표에는 TypeⅠ·TypeⅡ 시공량만 수록되어 있음",
+        "source": "PDF 70쪽 다. 암 p126-t1",
+        "cite": {
+          "table_id": "p126-t1",
+          "row": "풍화암",
+          "column": "TypeⅠ",
+          "value": "38"
+        }
+      },
+      {
+        "condition": "보통토사에서 용수와 5m 초과 굴착이 동시 적용",
+        "blocked_if_all": [
+          {
+            "input": "soil_type",
+            "op": "==",
+            "value": "보통토사"
+          },
+          {
+            "input": "water_issue",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "depth_over_5m",
+            "op": "==",
+            "value": true
+          }
+        ],
+        "reason": "원문은 25%와 9%의 각 감산을 말하지만 두 감산의 결합 순서/기준을 정하지 않아 계산 보류",
+        "source": "PDF 69쪽 p125-t4 비고",
+        "cite": [
+          {
+            "chunk_id": "p126-t1",
+            "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+          },
+          {
+            "chunk_id": "p125-t4",
+            "quote": "비고 | - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
+          }
+        ]
+      },
+      {
+        "condition": "혼합토사에서 용수와 5m 초과 굴착이 동시 적용",
+        "blocked_if_all": [
+          {
+            "input": "soil_type",
+            "op": "==",
+            "value": "혼합토사"
+          },
+          {
+            "input": "water_issue",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "depth_over_5m",
+            "op": "==",
+            "value": true
+          }
+        ],
+        "reason": "원문은 25%와 9%의 각 감산을 말하지만 두 감산의 결합 순서/기준을 정하지 않아 계산 보류",
+        "source": "PDF 69쪽 p125-t4 비고",
+        "cite": [
+          {
+            "chunk_id": "p126-t1",
+            "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
+          },
+          {
+            "chunk_id": "p125-t4",
+            "quote": "비고 | - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
+          }
+        ]
       }
     ],
     "not_calculated": [
       {
-        "item": "흙의 외부 반출을 위한 적재 및 운반 작업",
-        "source": "PDF 125쪽 2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다.",
+        "item": "흙의 외부 반출 적재 및 운반",
+        "source": "PDF 69쪽 2. 외부 반출 작업 제외",
         "cite": {
-          "table_id": "p125-t3",
-          "row": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다.",
-          "column": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다.",
-          "value": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다."
+          "chunk_id": "p125-x12",
+          "quote": "2. 흙의 외부 반출을 위한 적재 및 운반 작업은 제외되어 있다."
         }
       },
       {
-        "item": "유압식 리퍼 경비 (터파기장비 기계경비의 2%)",
-        "source": "PDF 126쪽 [주] ② 유압식 리퍼의 경비는 터파기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다.",
+        "item": "혼합토사에서 리퍼 병행 시 장비 기계경비의 2%",
+        "source": "PDF 70쪽 p126-x2",
         "cite": {
           "chunk_id": "p126-x2",
           "quote": "② 유압식 리퍼의 경비는 터파기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다."
         }
       },
       {
-        "item": "소모재료(치즐) 비용 (터파기 장비 기계경비의 1~7%)",
-        "source": "PDF 126쪽 [주] 소모재료(치즐)는 터파기 장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다.",
+        "item": "암 굴착 치즐 소모재료 비용 (기계경비의 1~7%)",
+        "source": "PDF 70쪽 p126-x10",
         "cite": {
           "chunk_id": "p126-x10",
           "quote": "[주] 소모재료(치즐)는 터파기 장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다."
@@ -272,53 +1391,71 @@
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": [
+      "용수 25% 감산과 굴착 깊이 5m 초과 9% 감산이 동시에 적용될 때 원문에 결합 방식이 없어 해당 조합은 차단한다.",
+      "리퍼/치즐 비용 산정의 기준인 장비 기계경비(재료비·노무비·경비) 가격 입력·집계 경로는 별도 연결이 필요하다."
+    ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "토질(보통토사, 혼합토사, 암)에 따라 기준 시공량 표가 3개로 나뉘어 있어 현재의 adjusted_daily_crew 단일 표 참조 구조로 자동 계산하기 어렵습니다. 또한 기계경비 기준의 요율 적용이 필요합니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "원문 일당 시공량을 선택하고 source-backed 감산 요인을 반영하여 장비별 대·일을 산출하는 bounded formula.",
   "citations": [
     {
-      "table_id": "p125-t3",
-      "row": "TypeⅠ",
-      "column": "적용기준",
-      "value": "- 지반 및 현장조건이 일반적인 경우"
-    },
-    {
       "table_id": "p125-t4",
-      "row": "굴착기",
+      "row": "굴착기 | 규격 1.0㎥",
       "column": "TypeⅠ 시공량(㎥)",
       "value": "560"
     },
     {
+      "table_id": "p125-t4",
+      "row": "굴착기 | 규격 1.0㎥",
+      "column": "TypeⅡ 시공량(㎥)",
+      "value": "420"
+    },
+    {
+      "table_id": "p125-t4",
+      "row": "굴착기 | 규격 0.6㎥",
+      "column": "TypeⅢ 시공량(㎥)",
+      "value": "190"
+    },
+    {
       "table_id": "p126-t0",
-      "row": "굴착기",
+      "row": "굴착기 | 규격 1.0㎥",
       "column": "TypeⅠ 시공량(㎥)",
       "value": "390"
     },
     {
+      "table_id": "p126-t0",
+      "row": "굴착기 | 규격 1.0㎥",
+      "column": "TypeⅡ 시공량(㎥)",
+      "value": "300"
+    },
+    {
+      "table_id": "p126-t0",
+      "row": "굴착기 | 규격 0.6㎥",
+      "column": "TypeⅢ 시공량(㎥)",
+      "value": "150"
+    },
+    {
       "table_id": "p126-t1",
-      "row": "굴착기 대형브레이커",
-      "column": "시공량(㎥) TypeⅠ",
+      "row": "풍화암",
+      "column": "TypeⅠ",
       "value": "38"
     },
     {
-      "table_id": "p126-t2",
-      "row": "요율",
-      "column": "풍화암",
-      "value": "1%"
+      "table_id": "p126-t1",
+      "row": "풍화암",
+      "column": "TypeⅡ",
+      "value": "35"
     },
     {
-      "chunk_id": "p125-x12",
-      "quote": "작업이 현저하게 저하되는 경우에는 ‘[공통부문] 8-2-3 굴착기’를 적용하여 산정한다."
+      "chunk_id": "p125-t4",
+      "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다. - 굴착 깊이가 5m를 초과하는 경우 시공량을 9% 감하여 적용한다."
     },
     {
-      "chunk_id": "p126-x2",
-      "quote": "② 유압식 리퍼의 경비는 터파기장비 기계경비(재료비, 노무비, 경비)의 2%로 계상한다."
-    },
-    {
-      "chunk_id": "p126-x10",
-      "quote": "[주] 소모재료(치즐)는 터파기 장비(굴착기) 기계경비(재료비, 노무비, 경비)에 다음 요율을 적용한다."
+      "chunk_id": "p126-t1",
+      "quote": "비고 | - 용수 발생으로 인해 터파기 작업에 지장이 발생하는 경우 시공량을 25% 감하여 적용한다."
     }
   ],
   "open_questions": [

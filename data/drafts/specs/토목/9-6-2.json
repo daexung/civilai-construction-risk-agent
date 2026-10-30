@@ -39,7 +39,7 @@
         "id": "p578-t1",
         "role": "지적도근점측량 인원수 (50점 기준)",
         "source": "PDF 522쪽 9-6-2 지적도근점측량 표",
-        "unit": "인",
+        "unit": "인/50점",
         "values": {
           "합계": {
             "합계 지적\n기사": "4.20",
@@ -83,31 +83,28 @@
             "지적산업기사",
             "지적기능사",
             "인부"
+          ],
+          "column_input_by_table": {
+            "p578-t1": null
+          },
+          "base_rate_multipliers": [
+            {
+              "when": {
+                "survey_method": "배각법"
+              },
+              "factor": "1.37",
+              "cite": {
+                "table_id": "p579-t0",
+                "row": "배각법",
+                "column": "계수",
+                "value": "1.37"
+              }
+            }
           ]
         },
         "quantity_input": "quantity",
-        "surcharges": [
-          {
-            "when": {
-              "survey_method": "배각법"
-            },
-            "rate": "0.37",
-            "applies_to": [
-              "지적기사",
-              "지적산업기사",
-              "지적기능사",
-              "인부"
-            ],
-            "source": "PDF 523쪽 ② 가산계수"
-          }
-        ],
-        "note_adjustments": [
-          {
-            "when": {},
-            "change": "도근점 50점을 기준으로 한 것이므로 50으로 나눔",
-            "source": "PDF 523쪽 ④ 기타사항 ㉮"
-          }
-        ]
+        "surcharges": [],
+        "note_adjustments": []
       },
       "steps": [
         "p578-t1에서 50점 기준 합계 인원을 가져온다.",
@@ -125,7 +122,7 @@
         "source": "PDF 523쪽 ④ 기타사항 ㉯",
         "cite": {
           "chunk_id": "p579-x5",
-          "quote": "㉯ 본 품에는 지적도근점측량을 위한 지적삼각측량 품이 포함되지 않았으므로 지적삼각측량비를 별도\n계상한다."
+          "quote": "지적삼각측량비를 별도"
         }
       },
       {

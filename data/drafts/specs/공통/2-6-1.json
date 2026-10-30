@@ -101,7 +101,11 @@
           {
             "table": "p101-t2",
             "row": "요율",
-            "input": "spacing"
+            "input": "spacing",
+            "interpretation": "signed_percentage_change",
+            "skip_values": [
+              "0.6m초과∼0.8m이하"
+            ]
           }
         ],
         "crew": {
@@ -115,7 +119,8 @@
             "형틀목공": "1007",
             "보통인부": "1002"
           }
-        }
+        },
+        "quantity_input": "volume"
       },
       "steps": [
         "p101-t0에서 설치높이(height)에 해당하는 기준 일일시공량을 찾는다.",

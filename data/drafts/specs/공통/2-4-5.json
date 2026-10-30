@@ -49,17 +49,39 @@
     "tables": [
       {
         "id": "p99-t0",
-        "role": "가로형 가설방음판 설치 및 해체 기준 (일당)",
+        "role": "Daily crew, equipment and output by height and operation",
         "source": "2-4-5 가로형 가설방음판 설치 및 해체",
         "unit": "인, 대, m",
         "values": {
-          "비계공 보통인부": {
-            "단위": "인",
-            "수량": "1",
-            "시공량(m) 설치높이 3m이하 설치": "50",
-            "시공량(m) 해체": "90",
-            "시공량(m) 설치높이 6m이하 설치": "40",
-            "시공량(m) 설치높이 10m이하 설치": "35"
+          "3m이하 | 설치": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "50"
+          },
+          "3m이하 | 해체": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "120"
+          },
+          "6m이하 | 설치": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "40"
+          },
+          "6m이하 | 해체": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "105"
+          },
+          "10m이하 | 설치": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "35"
+          },
+          "10m이하 | 해체": {
+            "비계공": "3",
+            "보통인부": "1",
+            "시공량(m)": "90"
           },
           "크레인": {
             "단위": "대",
@@ -73,12 +95,65 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p99-t0",
+          "row_selector": {
+            "input": "height",
+            "value_map": {
+              "3m이하": "3m이하",
+              "6m이하": "6m이하",
+              "10m이하": "10m이하"
+            },
+            "contains": [
+              "{value}"
+            ],
+            "input_contains": [
+              "work_type"
+            ]
+          },
+          "column_input": "시공량(m)"
+        },
+        "crew": {
+          "table": "p99-t0",
+          "row_selector": {
+            "input": "height",
+            "value_map": {
+              "3m이하": "3m이하",
+              "6m이하": "6m이하",
+              "10m이하": "10m이하"
+            },
+            "contains": [
+              "{value}"
+            ],
+            "input_contains": [
+              "work_type"
+            ]
+          },
+          "column_template": "{trade}",
+          "trades": [
+            "비계공",
+            "보통인부"
+          ]
+        },
+        "coefficients": [],
+        "output_adjustments": [],
+        "equipment": {
+          "table": "p99-t0",
+          "row": "크레인",
+          "column": "수량",
+          "name": "크레인",
+          "unit": "대"
+        },
+        "materials": [],
+        "daily_equipment_allowances": []
+      },
       "steps": [
-        "파싱 결과의 표에서 행 이름과 열 이름이 중복되어 정확한 값을 추출할 수 없습니다.",
-        "원문 표를 참조하여 작업조(비계공 3, 보통인부 1, 크레인 1)와 일일시공량을 확인해야 합니다.",
-        "물량을 일일시공량으로 나누어 작업일수를 구하고, 작업조 인원/장비에 곱하여 산출합니다."
+        "Select the source daily output and crew by height and installation or dismantling.",
+        "Calculate workdays from length divided by daily output.",
+        "Multiply workdays by the source crew and crane count, where listed."
       ],
       "source": "p99-t0",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -86,20 +161,9 @@
     "blocked": [],
     "not_calculated": [
       {
-        "item": "문양이나 도색 등이 필요한 경우",
-        "source": "p99-x6 [주] ②",
-        "cite": {
-          "chunk_id": "p99-x6",
-          "quote": "② H-bar 설치 및 해체를 포함하며, 문양이나 도색 등이 필요한 경우에 별도 계상한다."
-        }
-      },
-      {
-        "item": "고소작업차 기계경비",
-        "source": "p99-x6 [주] ④",
-        "cite": {
-          "chunk_id": "p99-x6",
-          "quote": "④ 현장여건에 따라 고소작업차가 필요할 경우 기계경비는 별도 계상한다."
-        }
+        "item": "Optional self-propelled lift cost",
+        "source": "p99-t0 source note",
+        "reason": "The source states that a lift, if required by site conditions, is accounted for separately; this item does not state its rate."
       }
     ],
     "supply_rules": [],
@@ -116,9 +180,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 행 이름('비계공 보통인부')과 열 이름('시공량(m) 해체')이 중복되어 데이터 손실이 발생하며, 기계적인 자동 계산 모델을 구성하기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "The source provides a daily crew and production quantity for every height and operation combination; shared daily_crew calculates days, labor, and listed crane.",
   "citations": [
     {
       "table_id": "p99-t0",

@@ -117,7 +117,6 @@
         "coefficients": [],
         "crew": {
           "table": "p371-t1",
-          "column": "수량",
           "trades": [
             "포장공",
             "보통인부"
@@ -125,7 +124,9 @@
           "rate_codes": {
             "포장공": "1014",
             "보통인부": "1002"
-          }
+          },
+          "row_selector": "수량",
+          "column_template": "{trade}"
         },
         "equipment": null,
         "quantity_input": "volume"
@@ -184,7 +185,7 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "일당 작업조 인원과 일일시공량이 주어져 있어 작업일수를 구한 뒤 인원을 곱하는 방식이므로 daily_crew를 선택함.",
+  "calc_type_reason": "인원 대수가 '수량' 행에 직종별 열로 있어 열 지정만 보완하면 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p371-t1",

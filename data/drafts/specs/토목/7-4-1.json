@@ -61,15 +61,6 @@
         "source": "표 p449-t1 비고"
       },
       {
-        "name": "removal_discount_rate",
-        "type": "positive_rational",
-        "allowed_values": "0에서 30 사이의 수",
-        "unit": "%",
-        "required": true,
-        "ask": "철거 작업인 경우, 품(인력+장비)을 몇 % 감산하여 적용합니까? (0~30%)",
-        "source": "표 p449-t1 비고 '30%까지 감하여 적용한다'"
-      },
-      {
         "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
@@ -207,15 +198,7 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": [
-          {
-            "when": {
-              "work_type": "철거"
-            },
-            "change": "본 품(인력+장비)을 removal_discount_rate(최대 30%)만큼 감하여 적용한다.",
-            "source": "표 p449-t1 비고"
-          }
-        ]
+        "note_adjustments": []
       },
       "steps": [
         "p449-t1에서 관경에 따른 배관공, 보통인부 품을 찾는다.",
@@ -234,6 +217,19 @@
         "cite": {
           "chunk_id": "p449-x26",
           "quote": "⑥ 체결부 절단이 필요한 경우 절단비용은 별도 계상한다."
+        }
+      },
+      {
+        "condition": "work_type == '철거'",
+        "blocked_if": {
+          "input": "work_type",
+          "op": "==",
+          "value": "철거"
+        },
+        "reason": "원문은 인력과 장비 품을 최대 30%까지 감산한다고만 규정하며 구체적 감산률은 정하지 않는다. 임의 요율을 받지 않고 철거 계산을 보류한다.",
+        "source": "PDF 393쪽 7-4-1 비고",
+        "cite": {
+          "table_id": "p449-t1"
         }
       }
     ],

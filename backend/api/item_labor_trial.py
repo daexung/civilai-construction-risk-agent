@@ -244,10 +244,10 @@ def _as_public_item(item: dict[str, Any]) -> dict[str, Any]:
     if quantity is None and item.get("last_result"):
         computed_quantity = (item["last_result"].get("data") or {}).get("quantity")
         if computed_quantity is not None:
-            quantity = {"value": computed_quantity, "unit": (spec and tools._quantity_field(spec) or {}).get("unit"),
+            quantity = {"value": computed_quantity, "unit": (spec and tools._quantity_field(spec, state_item) or {}).get("unit"),
                         "source": "confirmed_request"}
     if quantity is None and spec and state_item:
-        quantity_field = tools._quantity_field(spec)
+        quantity_field = tools._quantity_field(spec, state_item)
         if quantity_field and state_item.get("conditions", {}).get(quantity_field["name"]) is not None:
             quantity = {"value": state_item["conditions"][quantity_field["name"]],
                         "unit": quantity_field.get("unit"), "source": "confirmed_request"}
@@ -437,6 +437,9 @@ def answer_item(request: Request, trial_id: str, item_id: str, payload: AnswerRe
             field = next((field for field in spec["inputs"] if field["name"] == question["field"]), None) if spec else None
             if field is None:
                 raise HTTPException(status_code=409, detail="현재 명세에서 질문 조건을 찾을 수 없습니다")
+            resolved = tools._quantity_field(spec, tools._item(session))
+            if resolved and resolved["name"] == field["name"]:
+                field = resolved  # 작업 종류에 따라 단위가 달라지는 물량은 현재 선택의 단위로 검사한다
             expected_unit = field.get("unit")
             if expected_unit:
                 submitted_unit = payload.unit or expected_unit
@@ -457,7 +460,7 @@ def answer_item(request: Request, trial_id: str, item_id: str, payload: AnswerRe
                     raise HTTPException(status_code=422, detail="참/거짓 조건은 true 또는 false로 답해 주세요")
             elif not isinstance(answer, str):
                 answer = str(answer)
-            quantity_field = tools._quantity_field(spec)
+            quantity_field = tools._quantity_field(spec, tools._item(session))
             if quantity_field and question["field"] == quantity_field["name"]:
                 changed = tools.set_conditions(session, str(answer), quantity={"value": answer,
                                                 "unit": submitted_unit or quantity_field.get("unit")}, source="answer")

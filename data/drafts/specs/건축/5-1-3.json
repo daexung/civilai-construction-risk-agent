@@ -30,14 +30,13 @@
         "unit": "인, ㎡",
         "values": {
           "내장공": {
-            "단위": "인",
-            "수량": "2",
-            "시공량(㎡)": "50"
+            "수량": "2"
           },
           "보통인부": {
-            "단위": "인",
-            "수량": "1",
-            "시공량(㎡)": "50"
+            "수량": "1"
+          },
+          "시공량": {
+            "수량": "50"
           }
         },
         "cite": {
@@ -47,26 +46,35 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "per_unit",
+      "name": "adjusted_daily_crew",
       "params": {
-        "unit_rate_table": {
+        "quantity_input": "volume",
+        "base_output": {
           "table": "p649-t4",
-          "row_input": "고정",
-          "column_input": "고정",
+          "row": "시공량",
+          "column": "수량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p649-t4",
+          "column": "수량",
           "trades": [
             "내장공",
             "보통인부"
-          ]
+          ],
+          "rate_codes": {
+            "내장공": "",
+            "보통인부": ""
+          }
         },
-        "quantity_input": "volume",
-        "surcharges": [],
-        "note_adjustments": []
+        "equipment": []
       },
       "steps": [
-        "표 p649-t4에서 직종별 수량을 시공량(50)으로 나누어 단위(㎡)당 품을 구한다.",
-        "물량을 곱해 총 품을 구한다."
+        "표에서 일당 시공량을 고른다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수로 총 투입량을 구한다."
       ],
-      "source": "PDF 593쪽 5-1-3 표",
+      "source": "PDF 5-1-3 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -85,10 +93,14 @@
       }
     ]
   },
-  "calc_type": "per_unit",
+  "calc_type": "daily_crew",
   "calc_type_raw": "per_unit",
-  "calc_type_reason": "일당 시공량(50㎡)과 그에 따른 작업조 인원이 고정값으로 제시되어 있어, (인원/시공량)을 통해 단위당 품을 산출하는 방식이 적합합니다.",
+  "calc_type_reason": "표에 인원과 일당 시공량(㎡)이 함께 있는 일당 작업조 표라 단위당 품 계산이 아니라 일당 작업조로 표현한다.",
   "citations": [
+    {
+      "chunk_id": "p650-x0",
+      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
+    },
     {
       "table_id": "p649-t4",
       "row": "내장공",
@@ -103,13 +115,9 @@
     },
     {
       "table_id": "p649-t4",
-      "row": "내장공",
-      "column": "시공량(㎡)",
+      "row": "시공량",
+      "column": "수량",
       "value": "50"
-    },
-    {
-      "chunk_id": "p650-x0",
-      "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 2%로 계상한다."
     }
   ],
   "open_questions": [],

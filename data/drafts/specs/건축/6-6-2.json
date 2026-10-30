@@ -10,47 +10,151 @@
     "source_pages": [
       609
     ],
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "Quantity in meters?",
+        "source": "PDF printed page 609 p665-t0"
+      },
+      {
+        "name": "roof_protection_concrete",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Is this roof protective concrete?",
+        "source": "p665-x3 note ?"
+      },
+      {
+        "name": "cutter_width",
+        "type": "positive_rational",
+        "allowed_values": "320~400",
+        "unit": "mm",
+        "required": true,
+        "ask": "Cutter width in mm?",
+        "source": "p665-t0 cutter specification"
+      }
+    ],
     "tables": [
       {
         "id": "p665-t0",
-        "role": "줄눈 절단 단위당 품 (파싱 누락)",
+        "role": "Source labor and machine hours per meter",
         "source": "6-6-2 줄눈 절단 표",
-        "values": {},
+        "values": {
+          "방수공": {
+            "수량": "0.005"
+          },
+          "보통인부": {
+            "수량": "0.001"
+          },
+          "커터": {
+            "수량": "0.017"
+          }
+        },
+        "cite": {
+          "table_id": "p665-t0"
+        },
+        "unit": "m당"
+      }
+    ],
+    "crew_rules": [],
+    "quantity_model": {
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p665-t0",
+          "trades": [
+            "방수공",
+            "보통인부",
+            "커터"
+          ],
+          "resource_units": {
+            "방수공": "인",
+            "보통인부": "인",
+            "커터": "hr"
+          }
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
+      "steps": [
+        "Select source per-meter labor and equipment rates.",
+        "Multiply the declared quantity in meters by each source rate."
+      ],
+      "source": "PDF printed page 609 p665-t0; original rows and rates",
+      "rounding": "Source per-unit quantities preserve exact fractions."
+    },
+    "blocked": [
+      {
+        "condition": "surface outside source scope",
+        "blocked_if": {
+          "input": "roof_protection_concrete",
+          "op": "==",
+          "value": false
+        },
+        "reason": "Source basis is roof protective concrete only.",
+        "source": "PDF printed page 609 note ?",
+        "cite": {
+          "chunk_id": "p665-x3"
+        }
+      },
+      {
+        "condition": "cutter width below source range",
+        "blocked_if": {
+          "input": "cutter_width",
+          "op": "<",
+          "value": "320"
+        },
+        "reason": "Source specifies cutter width 320~400mm.",
+        "source": "PDF printed page 609 p665-t0",
+        "cite": {
+          "table_id": "p665-t0"
+        }
+      },
+      {
+        "condition": "cutter width above source range",
+        "blocked_if": {
+          "input": "cutter_width",
+          "op": ">",
+          "value": "400"
+        },
+        "reason": "Source specifies cutter width 320~400mm.",
+        "source": "PDF printed page 609 p665-t0",
         "cite": {
           "table_id": "p665-t0"
         }
       }
     ],
-    "crew_rules": [],
-    "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
-      "steps": [
-        "파싱된 표 데이터에 직종 및 수량 정보가 누락되어 계산식을 구성할 수 없습니다."
-      ],
-      "source": "p665-t0",
-      "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
-    },
-    "blocked": [],
     "not_calculated": [],
     "supply_rules": [],
     "cost_rules": [
       {
-        "name": "공구손료 및 경장비",
-        "category": "경비",
+        "name": "tools and light equipment",
+        "category": "equipment cost",
         "base": "labor_subtotal",
         "rate": "0.02",
         "cite": {
-          "chunk_id": "p665-x3",
-          "quote": "③ 공구손료 및 경장비(청소기 등) 기계경비는 인력품의 2%로 계상한다."
+          "chunk_id": "p665-x3"
         }
       }
-    ]
+    ],
+    "questions": [
+      "Quantity in meters?",
+      "Cutter width in millimeters?",
+      "Is this roof protective concrete?"
+    ],
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "per_unit",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱된 표 데이터(p665-t0)에 직종(방수공, 보통인부, 커터) 및 수량 정보가 완전히 누락되어 있어 단위당 품 계산을 수행할 수 없습니다.",
   "citations": [
     {
       "table_id": "p665-t0"

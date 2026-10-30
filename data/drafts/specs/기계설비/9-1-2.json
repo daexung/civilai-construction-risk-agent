@@ -13,7 +13,7 @@
     ],
     "inputs": [
       {
-        "name": "work_category",
+        "name": "steel_work_kind",
         "type": "enum",
         "allowed_values": [
           "제품 설치 일반철재",
@@ -132,7 +132,7 @@
       "params": {
         "unit_rate_table": {
           "table": "p757-t1",
-          "column_input": "work_category",
+          "column_input": "steel_work_kind",
           "trades": [
             "철공",
             "용접공",

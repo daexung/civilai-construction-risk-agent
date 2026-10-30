@@ -28,16 +28,16 @@
         "name": "spec",
         "type": "enum",
         "allowed_values": [
-          "60㎥/h",
-          "90㎥/h",
-          "120㎥/h",
-          "150㎥/h",
-          "180㎥/h",
-          "210㎥/h"
+          "60㎥/h (96㎾)",
+          "90㎥/h (144㎾)",
+          "120㎥/h (160㎾)",
+          "150㎥/h (177㎾)",
+          "180㎥/h (213㎾)",
+          "210㎥/h (233㎾)"
         ],
         "unit": null,
         "required": true,
-        "ask": "배치플랜트의 규격은 무엇입니까?",
+        "ask": "배치플랜트 규격은 시간당 용량과 동력 조합 중 무엇입니까?",
         "source": "PDF 195쪽 1. 믹서의 실용량(q) 표"
       },
       {
@@ -76,9 +76,13 @@
           false
         ],
         "unit": null,
-        "required": true,
+        "required": false,
         "ask": "터널 숏크리트용 배치플랜트로 적용합니까?",
-        "source": "PDF 194쪽 산정식 [주] 및 195쪽 2. 작업효율(E) [주] ②"
+        "source": "PDF 194쪽 산정식 [주] 및 195쪽 2. 작업효율(E) [주] ②",
+        "required_when": {
+          "input": "work_type",
+          "equals": "터널"
+        }
       },
       {
         "name": "mix_steel_fiber",
@@ -88,9 +92,22 @@
           false
         ],
         "unit": null,
-        "required": true,
+        "required": false,
         "ask": "강섬유를 혼합합니까? (터널 숏크리트용인 경우)",
-        "source": "PDF 194쪽 산정식 [주]"
+        "source": "PDF 194쪽 산정식 [주]",
+        "required_when": {
+          "input": "is_tunnel_shotcrete",
+          "equals": true
+        }
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "처리할 콘크리트 물량은 몇 ㎥입니까?",
+        "source": "PDF 194~195쪽 시간당 작업량 Q에서 총 작업시간으로 환산할 물량"
       }
     ],
     "tables": [
@@ -101,20 +118,20 @@
         "unit": "㎥",
         "values": {
           "5㎝이상": {
-            "60㎥/ h\n(96㎾)": "1.0",
-            "90㎥/ h\n(144㎾)": "1.5",
-            "120㎥/ h\n(160㎾)": "2",
-            "150㎥/ h\n(177㎾))": "2.5",
-            "180㎥/ h\n(213㎾))": "3.0",
-            "210㎥/ h\n(233㎾))": "3.5"
+            "60㎥/h (96㎾)": "1.0",
+            "90㎥/h (144㎾)": "1.5",
+            "120㎥/h (160㎾)": "2",
+            "150㎥/h (177㎾)": "2.5",
+            "180㎥/h (213㎾)": "3.0",
+            "210㎥/h (233㎾)": "3.5"
           },
           "5㎝미만": {
-            "60㎥/ h\n(96㎾)": "0.75",
-            "90㎥/ h\n(144㎾)": "1.13",
-            "120㎥/ h\n(160㎾)": "1.5",
-            "150㎥/ h\n(177㎾))": "1.88",
-            "180㎥/ h\n(213㎾))": "2.25",
-            "210㎥/ h\n(233㎾))": "2.63"
+            "60㎥/h (96㎾)": "0.75",
+            "90㎥/h (144㎾)": "1.13",
+            "120㎥/h (160㎾)": "1.5",
+            "150㎥/h (177㎾)": "1.88",
+            "180㎥/h (213㎾)": "2.25",
+            "210㎥/h (233㎾)": "2.63"
           }
         },
         "cite": {
@@ -153,57 +170,323 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "derived": [
+          {
+            "name": "mixer_volume",
+            "kind": "table_cell",
+            "unit": "㎥",
+            "table": "p251-t0",
+            "cases": [
+              {
+                "when": {},
+                "table": "p251-t0",
+                "row_input": "slump",
+                "column_input": "spec"
+              }
+            ]
+          },
+          {
+            "name": "efficiency",
+            "kind": "table_cell",
+            "unit": "무차원",
+            "cases": [
+              {
+                "when": {
+                  "site_condition": "양호"
+                },
+                "table": "p251-t1",
+                "row": "양호",
+                "column_input": "work_type"
+              },
+              {
+                "when": {
+                  "site_condition": "보통"
+                },
+                "table": "p251-t1",
+                "row": "보통",
+                "column_input": "work_type"
+              },
+              {
+                "when": {
+                  "site_condition": "불량"
+                },
+                "table": "p251-t1",
+                "row": "불량",
+                "column_input": "work_type"
+              },
+              {
+                "when": {
+                  "site_condition": "매우 불량",
+                  "is_tunnel_shotcrete": true
+                },
+                "value": "0.40",
+                "cite": {
+                  "chunk_id": "p251-x8",
+                  "quote": "② 터널 숏크리트용 배치플랜트의 경우 현장조건이 매우 불량한 경우에는 작업효율을 0.40으로 적용할 수 있다."
+                },
+                "source": "PDF 195쪽 [주] ②"
+              }
+            ]
+          },
+          {
+            "name": "cycle_min",
+            "kind": "table_cell",
+            "unit": "분",
+            "cases": [
+              {
+                "when": {
+                  "work_type": "터널",
+                  "is_tunnel_shotcrete": true,
+                  "mix_steel_fiber": true
+                },
+                "value": "2.5",
+                "cite": {
+                  "chunk_id": "p250-x13",
+                  "quote": "[주] 본 품을 터널 숏크리트용 배치플랜트로 적용시 cm은, 강섬유를 혼합할 경우에는 2.5분"
+                }
+              },
+              {
+                "when": {
+                  "work_type": "터널",
+                  "is_tunnel_shotcrete": true,
+                  "mix_steel_fiber": false
+                },
+                "value": "1.5",
+                "cite": [
+                  {
+                    "chunk_id": "p250-x13",
+                    "quote": "cm : 1회 싸이클시간(1.5분)"
+                  },
+                  {
+                    "chunk_id": "p251-x0",
+                    "quote": "1.5분을 적용한다."
+                  }
+                ]
+              },
+              {
+                "when": {
+                  "work_type": "터널",
+                  "is_tunnel_shotcrete": false
+                },
+                "value": "1.5",
+                "cite": {
+                  "chunk_id": "p250-x13",
+                  "quote": "cm : 1회 싸이클시간(1.5분)"
+                }
+              },
+              {
+                "when": {
+                  "work_type": "도로포장"
+                },
+                "value": "1.5",
+                "cite": {
+                  "chunk_id": "p250-x13",
+                  "quote": "cm : 1회 싸이클시간(1.5분)"
+                }
+              },
+              {
+                "when": {
+                  "work_type": "교량"
+                },
+                "value": "1.5",
+                "cite": {
+                  "chunk_id": "p250-x13",
+                  "quote": "cm : 1회 싸이클시간(1.5분)"
+                }
+              },
+              {
+                "when": {
+                  "work_type": "사방"
+                },
+                "value": "1.5",
+                "cite": {
+                  "chunk_id": "p250-x13",
+                  "quote": "cm : 1회 싸이클시간(1.5분)"
+                }
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "kind": "formula",
+            "name": "콘크리트 배치플랜트 가동시간",
+            "resource_kind": "equipment",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "input": "quantity"
+                    },
+                    {
+                      "input": "cycle_min"
+                    }
+                  ]
+                },
+                {
+                  "mul": [
+                    {
+                      "number": "60"
+                    },
+                    {
+                      "input": "mixer_volume"
+                    },
+                    {
+                      "input": "efficiency"
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "hr",
+            "formula": "총 콘크리트 물량 × 1회 싸이클시간(분) ÷ (60 × 믹서 실용량 × 작업효율)",
+            "source": "PDF 194~195쪽 Q = 60 × q × E / cm"
+          }
+        ]
+      },
       "steps": [
-        "입력된 슬럼프와 규격에 따라 p251-t0에서 믹서의 실용량(q)을 찾는다.",
-        "입력된 공종과 현장조건에 따라 p251-t1에서 작업효율(E)을 찾는다. 단, 터널 숏크리트용이면서 현장조건이 매우 불량한 경우 E=0.40을 적용한다.",
-        "1회 싸이클시간(cm)은 기본 1.5분이며, 터널 숏크리트용이면서 강섬유를 혼합할 경우 2.5분을 적용한다.",
-        "시간당 작업량 Q = 60 * q * E / cm 공식을 통해 계산한다."
+        "슬럼프와 정확한 배치플랜트 규격/동력 조합으로 p251-t0 믹서 실용량(q)을 조회한다.",
+        "공종과 현장조건에 따라 p251-t1 작업효율(E)을 조회한다. 터널 숏크리트용이며 현장조건이 매우 불량하면 원문 주석의 E=0.40을 적용한다.",
+        "원문 식 Q=60×q×E/cm로 시간당 생산량을 계산하고, 총 물량에 대해 가동시간=물량×cm/(60×q×E)를 산출한다.",
+        "터널 숏크리트는 강섬유 혼합 시 cm=2.5분, 미혼합 시 cm=1.5분이며 그 외는 원문 기본 1.5분을 적용한다."
       ],
       "source": "PDF 194쪽 산정식 및 195쪽 표",
       "rounding": "기본 자릿수 적용"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "도로포장에서 현장조건이 매우 불량",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "도로포장"
+          },
+          {
+            "input": "site_condition",
+            "op": "==",
+            "value": "매우 불량"
+          }
+        ],
+        "reason": "원문 표는 양호·보통·불량만 수록하고 매우 불량 E=0.40은 터널 숏크리트용에만 허용한다.",
+        "source": "PDF 195쪽 p251-t1 및 [주] ②",
+        "cite": {
+          "chunk_id": "p251-x8",
+          "quote": "② 터널 숏크리트용 배치플랜트의 경우 현장조건이 매우 불량한 경우에는 작업효율을 0.40으로 적용할 수 있다."
+        }
+      },
+      {
+        "condition": "교량에서 현장조건이 매우 불량",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "교량"
+          },
+          {
+            "input": "site_condition",
+            "op": "==",
+            "value": "매우 불량"
+          }
+        ],
+        "reason": "원문 표는 양호·보통·불량만 수록하고 매우 불량 E=0.40은 터널 숏크리트용에만 허용한다.",
+        "source": "PDF 195쪽 p251-t1 및 [주] ②",
+        "cite": {
+          "chunk_id": "p251-x8",
+          "quote": "② 터널 숏크리트용 배치플랜트의 경우 현장조건이 매우 불량한 경우에는 작업효율을 0.40으로 적용할 수 있다."
+        }
+      },
+      {
+        "condition": "사방에서 현장조건이 매우 불량",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "사방"
+          },
+          {
+            "input": "site_condition",
+            "op": "==",
+            "value": "매우 불량"
+          }
+        ],
+        "reason": "원문 표는 양호·보통·불량만 수록하고 매우 불량 E=0.40은 터널 숏크리트용에만 허용한다.",
+        "source": "PDF 195쪽 p251-t1 및 [주] ②",
+        "cite": {
+          "chunk_id": "p251-x8",
+          "quote": "② 터널 숏크리트용 배치플랜트의 경우 현장조건이 매우 불량한 경우에는 작업효율을 0.40으로 적용할 수 있다."
+        }
+      },
+      {
+        "condition": "터널에서 현장조건이 매우 불량하고 터널 숏크리트용이 아님",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "터널"
+          },
+          {
+            "input": "site_condition",
+            "op": "==",
+            "value": "매우 불량"
+          },
+          {
+            "input": "is_tunnel_shotcrete",
+            "op": "==",
+            "value": false
+          }
+        ],
+        "reason": "원문 E=0.40 예외는 터널 숏크리트용 배치플랜트에만 적용된다.",
+        "source": "PDF 195쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p251-x8",
+          "quote": "② 터널 숏크리트용 배치플랜트의 경우 현장조건이 매우 불량한 경우에는 작업효율을 0.40으로 적용할 수 있다."
+        }
+      }
+    ],
     "not_calculated": [],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "이 절은 인·일이나 대·일을 산출하는 것이 아니라 장비의 시간당 작업량(Q)을 구하는 산정식만 제공하므로 자동 계산 명세에서 제외합니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "원문 믹서 실용량·작업효율 표와 명시된 싸이클시간 식으로 시간당 생산량 및 주어진 물량의 장비 가동시간을 계산.",
   "citations": [
-    {
-      "chunk_id": "p250-x13",
-      "quote": "Q =  cm ⋅q⋅E"
-    },
-    {
-      "chunk_id": "p250-x13",
-      "quote": "cm : 1회 싸이클시간(1.5분)"
-    },
-    {
-      "chunk_id": "p250-x13",
-      "quote": "터널 숏크리트용 배치플랜트로 적용시 cm은, 강섬유를 혼합할 경우에는 2.5분, 혼합치 않을 경우에는"
-    },
-    {
-      "chunk_id": "p251-x0",
-      "quote": "1.5분을 적용한다."
-    },
-    {
-      "chunk_id": "p251-x8",
-      "quote": "터널 숏크리트용 배치플랜트의 경우 현장조건이 매우 불량한 경우에는 작업효율을 0.40으로 적용할"
-    },
     {
       "table_id": "p251-t0",
       "row": "5㎝이상",
-      "column": "60㎥/ h\n(96㎾)",
-      "value": "1.0㎥"
+      "column": "60㎥/h (96㎾)",
+      "value": "1.0"
+    },
+    {
+      "table_id": "p251-t0",
+      "row": "5㎝미만",
+      "column": "210㎥/h (233㎾)",
+      "value": "2.63"
     },
     {
       "table_id": "p251-t1",
       "row": "양호",
-      "column": "도로포장",
-      "value": "0.90"
+      "column": "터널",
+      "value": "0.75"
+    },
+    {
+      "table_id": "p251-t1",
+      "row": "불량",
+      "column": "교량",
+      "value": "0.40"
+    },
+    {
+      "chunk_id": "p250-x13",
+      "quote": "Q : 시간당 작업량(㎥/ hr) q : 믹서의 실용량 E : 작업효율 cm : 1회 싸이클시간(1.5분)"
+    },
+    {
+      "chunk_id": "p251-x8",
+      "quote": "② 터널 숏크리트용 배치플랜트의 경우 현장조건이 매우 불량한 경우에는 작업효율을 0.40으로 적용할 수 있다."
     }
   ],
   "open_questions": [

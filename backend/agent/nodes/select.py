@@ -53,10 +53,15 @@ def decide(hits: list[dict], specs: dict[tuple[str, str], list[dict]], margin: f
     best_scores = {}
     for hit in hits:
         section_no = hit.get("section_no")
-        if not section_no or section_no.count("-") != 2:
+        if not section_no:
             continue
         division = hit.get("division", "공통")  # Old saved 6장 hits predate this field.
         key = (division, section_no)
+        # Most estimate sections use a three-part number. Machine items (for
+        # example 2104-0010) and source catalog entries (2402) use other exact
+        # identifiers; accept those only when an executable spec exists.
+        if section_no.count("-") != 2 and not specs.get(key):
+            continue
         group = by_section.setdefault(key, {
             "division": division, "section_no": section_no,
             "section": (f"{division} {section_no} {specs[key][0]['title']}" if specs.get(key)

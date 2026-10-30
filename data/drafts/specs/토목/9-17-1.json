@@ -139,11 +139,21 @@
         "unit_rate_table": {
           "table": "p615-t0",
           "row_input": "합계",
-          "column_input": "인원수 합계 지적기사, 인원수 지적산업기사",
           "trades": [
             "지적기사",
             "지적산업기사"
-          ]
+          ],
+          "basis_by_row": {
+            "합계": "1매"
+          },
+          "parenthetical_value_selector": {
+            "mode": "parenthetical_only",
+            "source": "PDF printed p.559 table note: parenthesized workdays indicate office work; this table's total cells are parenthetical values.",
+            "cite": {
+              "chunk_id": "p615-t0",
+              "quote": "( )는 내업임"
+            }
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [
@@ -156,7 +166,17 @@
               "지적기사",
               "지적산업기사"
             ],
-            "source": "PDF 559쪽 [주] ① 등록계수"
+            "source": "PDF 559쪽 [주] ① 등록계수",
+            "operation": "multiply",
+            "rate_table": {
+              "id": "p615-t1",
+              "row": "계수",
+              "column": "임야"
+            },
+            "application_cite": {
+              "chunk_id": "p615-x10",
+              "quote": "지적공부 등록지(토지, 임야)별로 다음의 계수를 곱하여 계상한다."
+            }
           }
         ],
         "note_adjustments": [

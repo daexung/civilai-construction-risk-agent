@@ -417,7 +417,7 @@
         "unit_rate_table": {
           "table": "p841-t0",
           "row_input": "capacity_1",
-          "column_input": "직종",
+          "column_input": null,
           "trades": [
             "목공",
             "플랜트기계\n설치공",
@@ -425,7 +425,52 @@
             "특별인부",
             "비계공",
             "건설기계\n운전"
-          ]
+          ],
+          "table_selector": {
+            "input": "pump_type",
+            "values": {
+              "원심펌프(2단)": "p841-t0",
+              "원심펌프(2단 대용량)": "p841-t1",
+              "Rotary Pump, Centrifugal pump(3,4 stage)": "p842-t0"
+            }
+          },
+          "row_input_by_table": {
+            "p841-t0": "capacity_1",
+            "p841-t1": "capacity_2",
+            "p842-t0": "capacity_3"
+          },
+          "trades_by_table": {
+            "p841-t0": [
+              "목공",
+              "플랜트기계\n설치공",
+              "인력운반공",
+              "특별인부"
+            ],
+            "p841-t1": [
+              "목공",
+              "플랜트기계\n설치공",
+              "특별인부",
+              "비계공",
+              "건설기계\n운전"
+            ],
+            "p842-t0": [
+              "목공",
+              "플랜트기계\n설치공",
+              "인력운반공",
+              "특별인부"
+            ]
+          },
+          "ignored_columns_by_table": {
+            "p841-t0": [
+              "계"
+            ],
+            "p841-t1": [
+              "계"
+            ],
+            "p842-t0": [
+              "계"
+            ]
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],

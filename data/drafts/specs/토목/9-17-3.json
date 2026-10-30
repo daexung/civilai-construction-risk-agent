@@ -140,22 +140,47 @@
         "unit_rate_table": {
           "table": "p617-t0",
           "row_input": "합계",
-          "column_input": "합계",
           "trades": [
             "지적기사",
             "지적산업기사"
-          ]
+          ],
+          "basis_by_row": {
+            "합계": "1매"
+          },
+          "parenthetical_value_selector": {
+            "mode": "parenthetical_only",
+            "source": "PDF table note: parenthesized values indicate office work; table rates are parenthetical-only.",
+            "cite": {
+              "chunk_id": "p617-t0",
+              "quote": "( )는 내업임"
+            }
+          }
         },
         "quantity_input": "quantity",
-        "surcharges": [],
-        "note_adjustments": [
+        "surcharges": [
           {
             "when": {
               "land_type": "임야"
             },
-            "change": "1.28배 승수 적용",
-            "source": "PDF 561쪽 [주] ① 등록계수"
-          },
+            "rate": "1.28",
+            "applies_to": [
+              "지적기사",
+              "지적산업기사"
+            ],
+            "operation": "multiply",
+            "rate_table": {
+              "id": "p617-t1",
+              "row": "계수",
+              "column": "임야"
+            },
+            "application_cite": {
+              "chunk_id": "p617-x4",
+              "quote": "지적공부 등록지(토지, 임야)별로 다음의 계수를 곱하여 계상한다."
+            },
+            "source": "PDF source factor table p617-t1: 토지 1.00, 임야 1.28"
+          }
+        ],
+        "note_adjustments": [
           {
             "when": {
               "is_half_size": true

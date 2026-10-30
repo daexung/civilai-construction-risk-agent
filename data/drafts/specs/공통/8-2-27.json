@@ -151,7 +151,7 @@
             "수중펌프"
           ]
         },
-        "quantity_input": "operating_days",
+        "quantity_input": ["locations", "operating_days"],
         "surcharges": [],
         "note_adjustments": []
       },

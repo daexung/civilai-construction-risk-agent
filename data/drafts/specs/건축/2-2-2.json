@@ -82,6 +82,28 @@
         "required": true,
         "ask": "시공 물량은 몇 ㎡입니까?",
         "source": "p638-t2 표 시공량 단위"
+      },
+      {
+        "name": "scaffold_used",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "Is scaffolding used?",
+        "source": "PDF 582? 2-2-2 ??"
+      },
+      {
+        "name": "extra_scaffold_lifts",
+        "type": "nonnegative_integer",
+        "minimum": 0,
+        "allowed_values": "0이상의 정수",
+        "unit": "회",
+        "required": true,
+        "ask": "7.2m ?? ??? ??? ?? 3.6m ?? ??? ? ????? ???? ??? 0???.",
+        "source": "PDF 582? 2-2-2 ??: 3.6m?? ??? 3% ??"
       }
     ],
     "tables": [
@@ -93,32 +115,38 @@
           "시공높이 3 . 6 m 이하_390x190x190": {
             "조적공": "3",
             "시공량(㎡) 한면마감": "18",
-            "시공량(㎡) 양면마감": "17"
+            "시공량(㎡) 양면마감": "17",
+            "보통인부": "1"
           },
           "시공높이 3 . 6 m 이하_390x190x150": {
             "조적공": "3",
             "시공량(㎡) 한면마감": "22",
-            "시공량(㎡) 양면마감": "21"
+            "시공량(㎡) 양면마감": "21",
+            "보통인부": "1"
           },
           "시공높이 3 . 6 m 이하_390x190x100": {
             "조적공": "3",
             "시공량(㎡) 한면마감": "26",
-            "시공량(㎡) 양면마감": "25"
+            "시공량(㎡) 양면마감": "25",
+            "보통인부": "1"
           },
           "시공높이 3 . 6 m 초과 ~7.2m이하_390x190x190": {
             "조적공": "3",
             "시공량(㎡) 한면마감": "17",
-            "시공량(㎡) 양면마감": "16"
+            "시공량(㎡) 양면마감": "16",
+            "보통인부": "2"
           },
           "시공높이 3 . 6 m 초과 ~7.2m이하_390x190x150": {
             "조적공": "3",
             "시공량(㎡) 한면마감": "20",
-            "시공량(㎡) 양면마감": "19"
+            "시공량(㎡) 양면마감": "19",
+            "보통인부": "2"
           },
           "시공높이 3 . 6 m 초과 ~7.2m이하_390x190x100": {
             "조적공": "3",
             "시공량(㎡) 한면마감": "24",
-            "시공량(㎡) 양면마감": "23"
+            "시공량(㎡) 양면마감": "23",
+            "보통인부": "2"
           },
           "비고": {
             "내용": "- 블록 매장마다(간격 400mm) 사춤을 하는 경우 시공량의 5%를 감한다. - 비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량(시공높이 3.6m초과 ~7.2m이하)의 3%를 감한다. - 지게차를 사용하는 경우 보통인부 1인을 제외하고, 지게차 2.5hr을 반영한다."
@@ -163,32 +191,163 @@
       }
     ],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p638-t2",
+          "row_selector": {
+            "input": "height",
+            "contains": [
+              "{value}"
+            ],
+            "exact_input_contains": [
+              "block_size"
+            ],
+            "value_map": {
+              "7.2m 초과": "시공높이 3 . 6 m 초과 ~7.2m이하"
+            }
+          },
+          "column_input": "finish"
+        },
+        "coefficients": [],
+        "output_adjustments": [
+          {
+            "when": {
+              "sachum_400mm": true
+            },
+            "operation": "set_output_percent",
+            "value": "5",
+            "cite": {
+              "table_id": "p638-t2"
+            }
+          },
+          {
+            "when": {
+              "height": "7.2m 초과",
+              "scaffold_used": true
+            },
+            "operation": "subtract_percent_per_count",
+            "value": "3",
+            "count_input": "extra_scaffold_lifts",
+            "cite": {
+              "table_id": "p638-t2"
+            }
+          }
+        ],
+        "crew": {
+          "table": "p638-t2",
+          "row_selector": {
+            "input": "height",
+            "contains": [
+              "{value}"
+            ],
+            "exact_input_contains": [
+              "block_size"
+            ],
+            "value_map": {
+              "7.2m 초과": "시공높이 3 . 6 m 초과 ~7.2m이하"
+            }
+          },
+          "column_template": "{trade}",
+          "trades": [
+            "조적공",
+            "보통인부"
+          ]
+        },
+        "equipment": null,
+        "quantity_input": "quantity",
+        "daily_equipment_allowances": [
+          {
+            "name": "지게차",
+            "hours_per_day": "2.5",
+            "when": {
+              "forklift_used": true
+            },
+            "source": "PDF 582? 2-2-2 ??",
+            "table": "p638-t2",
+            "row": "비고",
+            "column": "??",
+            "cite": {
+              "table_id": "p638-t2"
+            }
+          }
+        ],
+        "materials": [
+          {
+            "name": "모르타르",
+            "table": "p639-t0",
+            "row": "모르타르",
+            "column_selector": "block_size",
+            "unit": "㎥"
+          }
+        ]
+      },
       "steps": [
-        "입력된 시공높이, 블록규격, 마감면에 따라 p638-t2에서 일당 시공량을 찾는다.",
-        "블록 매장마다(간격 400mm) 사춤을 하는 경우 시공량의 5%를 감한다.",
-        "물량을 일당 시공량으로 나누어 작업일수를 구한다.",
-        "작업일수에 작업조 인원(조적공 3인, 보통인부)을 곱하여 총 투입 인·일을 산출한다.",
-        "지게차 사용 시 보통인부 1인을 제외하고 지게차 2.5hr/일을 반영한다.",
-        "p639-t0에서 블록규격에 따른 모르타르 단위당 재료량을 찾아 물량을 곱해 총 재료량을 산출한다."
+        "Select daily output by source height band, block size and finish face.",
+        "Apply 5% output reduction when each block course is grouted at 400mm spacing.",
+        "For scaffolded work above 7.2m, use the 3.6m-to-7.2m source base rate and subtract 3% per declared additional 3.6m scaffold interval.",
+        "Calculate crew workdays and labor/equipment quantities; forklift use removes one helper and adds 2.5 equipment hours per workday.",
+        "Calculate source mortar quantity by block size and work area."
       ],
-      "source": "p638-t2, p639-t0",
+      "source": "PDF 582? 2-2-2 ????, 583? ??? ?",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "비계사용 시 높이 7.2m 초과",
-        "blocked_if": {
-          "input": "height",
-          "op": "==",
-          "value": "7.2m 초과"
-        },
-        "reason": "3.6m마다 시공량 3% 감산이 누적 적용되는 방식이 명확하지 않아 수동 계산 필요",
-        "source": "p638-t2 비고",
-        "cite": {
-          "table_id": "p638-t2"
-        }
+        "condition": "scaffold intervals can only apply above 7.2m",
+        "blocked_if_all": [
+          {
+            "input": "extra_scaffold_lifts",
+            "op": ">",
+            "value": "0"
+          },
+          {
+            "input": "height",
+            "op": "!=",
+            "value": "7.2m 초과"
+          }
+        ],
+        "reason": "The source interval reduction applies only above 7.2m.",
+        "source": "PDF 582? 2-2-2 ??"
+      },
+      {
+        "condition": "scaffold intervals require scaffolding",
+        "blocked_if_all": [
+          {
+            "input": "extra_scaffold_lifts",
+            "op": ">",
+            "value": "0"
+          },
+          {
+            "input": "scaffold_used",
+            "op": "==",
+            "value": false
+          }
+        ],
+        "reason": "3% per 3.6m reduction is conditional on scaffold use.",
+        "source": "PDF 582? 2-2-2 ??"
+      },
+      {
+        "condition": "declare intervals for scaffolded work over 7.2m",
+        "blocked_if_all": [
+          {
+            "input": "height",
+            "op": "==",
+            "value": "7.2m 초과"
+          },
+          {
+            "input": "scaffold_used",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "extra_scaffold_lifts",
+            "op": "==",
+            "value": "0"
+          }
+        ],
+        "reason": "The source requires the number of additional 3.6m scaffold intervals to apply the reduction.",
+        "source": "PDF 582? 2-2-2 ??"
       }
     ],
     "not_calculated": [
@@ -213,11 +372,13 @@
           "quote": "⑤ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
         }
       }
-    ]
+    ],
+    "open_questions": [],
+    "questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "시공높이, 블록규격, 마감면에 따른 3차원 시공량 표이며, 파싱 결과에 보통인부 인원 정보가 누락되어 자동 계산 모델링이 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "Source tables fully define under-7.2m crew/output/material rates; scaffold reduction uses a declared number of 3.6m intervals.",
   "citations": [
     {
       "table_id": "p638-t2"
@@ -234,15 +395,8 @@
       "quote": "⑤ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
     }
   ],
-  "open_questions": [
-    "파싱 결과 텍스트에 '보통인부' 인원 정보가 누락되어 있어, 원문 이미지에 있는 보통인부 1인(또는 2인)을 명세에 직접 포함하지 못했습니다.",
-    "비계사용 시 높이 7.2m 초과 시 3.6m마다 시공량 3% 감산 규칙이 여러 번 겹칠 때 누적 방식(단리/복리 등)이 원문에 명시되지 않았습니다."
-  ],
-  "questions": [
-    "블록 보강쌓기 시공 시 지게차를 사용하면 품이 어떻게 조정되나요?",
-    "비계사용 시 높이가 10m일 경우 시공량 감산은 어떻게 계산하나요?",
-    "블록 매장마다 400mm 간격으로 사춤을 하는 경우 시공량 할증(감산)은 어떻게 적용하나요?"
-  ],
+  "open_questions": [],
+  "questions": [],
   "meta": {
     "model": "gemini-3.1-pro-preview",
     "created_at": "2026-09-28T18:00:42.293908+00:00",

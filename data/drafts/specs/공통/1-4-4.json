@@ -14,6 +14,54 @@
     ],
     "inputs": [
       {
+        "name": "lookup_type",
+        "type": "enum",
+        "allowed_values": [
+          "지세",
+          "도심지"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 기준표를 선택해주세요.",
+        "source": "PDF 25~27쪽의 1. 지세 / 2. 도심지 표",
+        "source_table_map": {
+          "지세": "p81-t1",
+          "도심지": "p83-t0"
+        }
+      },
+      {
+        "name": "lookup_type",
+        "type": "enum",
+        "allowed_values": [
+          "지세",
+          "도심지"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 기준표를 선택해주세요.",
+        "source": "PDF 25~27쪽의 1. 지세 / 2. 도심지 표",
+        "source_table_map": {
+          "지세": "p81-t1",
+          "도심지": "p83-t0"
+        }
+      },
+      {
+        "name": "lookup_type",
+        "type": "enum",
+        "allowed_values": [
+          "지세",
+          "도심지"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 기준표를 선택해주세요.",
+        "source": "PDF 25~27쪽의 1. 지세 / 2. 도심지 표",
+        "source_table_map": {
+          "지세": "p81-t1",
+          "도심지": "p83-t0"
+        }
+      },
+      {
         "name": "terrain_type",
         "type": "enum",
         "allowed_values": [
@@ -29,7 +77,11 @@
         "required": true,
         "ask": "지세 조건은 무엇입니까? (산지 A/B/C, 경사지 A/B, 습지/해안지, 해당없음)",
         "source": "PDF 25쪽 1. 지세 표",
-        "decision_table": "p81-t1"
+        "decision_table": "p81-t1",
+        "when": {
+          "input": "lookup_type",
+          "equals": "지세"
+        }
       },
       {
         "name": "urban_type",
@@ -51,7 +103,11 @@
         "required": true,
         "ask": "도심지 조건은 무엇입니까?",
         "source": "PDF 27쪽 2. 도심지 표",
-        "decision_table": "p83-t0"
+        "decision_table": "p83-t0",
+        "when": {
+          "input": "lookup_type",
+          "equals": "도심지"
+        }
       }
     ],
     "tables": [

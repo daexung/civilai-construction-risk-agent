@@ -277,23 +277,78 @@ RequestFn = Callable[[str, bytes, str, int], tuple[str, int, int]]
 """(model, pdf_bytes, instructions_text, max_output_tokens) -> (response_text, input_tokens, output_tokens)"""
 
 
-def make_vertex_request_fn(api_key: str) -> RequestFn:
+def make_vertex_request_fn(api_key: str, *, thinking_level: str | None = None,
+                          response_json_schema: dict | None = None) -> RequestFn:
     from google import genai
     from google.genai import types
 
-    client = genai.Client(vertexai=True, api_key=api_key)
+    # Disable SDK retries: each billable generation attempt must pass through the
+    # caller's explicit call/token/USD reservation.
+    client = genai.Client(vertexai=True, api_key=api_key,
+                          http_options=types.HttpOptions(retry_options=types.HttpRetryOptions(attempts=1)))
 
     def request_fn(model: str, pdf_bytes: bytes, instructions_text: str, max_output_tokens: int) -> tuple[str, int, int]:
-        parts = [types.Part.from_bytes(data=pdf_bytes, mime_type="application/pdf"),
-                 types.Part(text=instructions_text)]
+        parts = ([types.Part.from_bytes(data=pdf_bytes, mime_type="application/pdf")]
+                 if pdf_bytes else [])
+        parts.append(types.Part(text=instructions_text))
+        thinking_config = None
+        if thinking_level:
+            allowed_levels = {"LOW", "MEDIUM", "HIGH"}
+            if thinking_level not in allowed_levels:
+                raise ValueError(f"unsupported thinking level for configured Gemini 3 model: {thinking_level}")
+            thinking_config = types.ThinkingConfig(
+                thinking_level=getattr(types.ThinkingLevel, thinking_level),
+            )
         config = types.GenerateContentConfig(
             temperature=0, response_mime_type="application/json", max_output_tokens=max_output_tokens,
+            thinking_config=thinking_config,
+            response_json_schema=response_json_schema,
         )
         response = client.models.generate_content(model=model, contents=parts, config=config)
         usage = response.usage_metadata
         input_tokens = getattr(usage, "prompt_token_count", 0) or 0
-        output_tokens = getattr(usage, "candidates_token_count", 0) or 0
+        answer_tokens = getattr(usage, "candidates_token_count", 0) or 0
+        reasoning_tokens = getattr(usage, "thoughts_token_count", 0) or 0
+        # Gemini 3 reasoning tokens are billed at the output rate too.
+        output_tokens = answer_tokens + reasoning_tokens
+        candidates = getattr(response, "candidates", None) or []
+        candidate = candidates[0] if candidates else None
+        finish_reason = getattr(candidate, "finish_reason", None) if candidate else None
+        block_reason = getattr(getattr(response, "prompt_feedback", None), "block_reason", None)
+        def enum_name(value):
+            return (getattr(value, "name", None) or str(value)) if value is not None else None
+        request_fn.last_response_metadata = {
+            "model": model,
+            "model_version": getattr(response, "model_version", None),
+            "response_id": getattr(response, "response_id", None),
+            "finish_reason": enum_name(finish_reason),
+            "prompt_block_reason": enum_name(block_reason),
+            "prompt_tokens": input_tokens,
+            "answer_tokens": answer_tokens,
+            "reasoning_tokens": reasoning_tokens,
+            "output_tokens_billed": output_tokens,
+            "total_tokens": getattr(usage, "total_token_count", None),
+            "max_output_tokens": max_output_tokens,
+            "thinking_level": thinking_level,
+            "response_mime_type": "application/json",
+            "temperature": 0,
+            "sdk_retries": 0,
+            # Preserve the SDK response object separately from response.text so that
+            # finish metadata and provider usage can be audited after the run.
+            "raw_response": (response.model_dump(mode="json")
+                             if hasattr(response, "model_dump") else None),
+        }
         return (response.text or ""), input_tokens, output_tokens
+
+    def count_input_tokens(model: str, pdf_bytes: bytes, instructions_text: str) -> int:
+        parts = ([types.Part.from_bytes(data=pdf_bytes, mime_type="application/pdf")]
+                 if pdf_bytes else [])
+        parts.append(types.Part(text=instructions_text))
+        count = client.models.count_tokens(model=model, contents=parts)
+        return int(getattr(count, "total_tokens", 0) or 0)
+
+    request_fn.count_input_tokens = count_input_tokens
+    request_fn.last_response_metadata = None
 
     return request_fn
 

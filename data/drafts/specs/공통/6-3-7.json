@@ -12,6 +12,18 @@
     ],
     "inputs": [
       {
+        "name": "is_rc_wall_structure",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "해당 공사가 철근콘크리트 벽식구조의 일반 알루미늄폼 조립·해체에 해당합니까?",
+        "source": "6-3-7 알루미늄폼 설치 및 해체('08년 신설, '17, '24년 보완)\n설명 | 1. 적용범위 - 본 품은 철근콘크리트 벽식구조에서 일반 알루미늄폼의 조립·해체하는 기준이다 - 본 품에는 조립, 해체, 청소, 보수작업이 포함되어 있으며, 동바리 설치 및 해체는 별도 계상한다. - 알루미늄 판넬은 150회 사용을 기준한다. - 재료 및 기계경비는 별도 계상한다. - 알루미늄폼의 품 적용은 다음을 참조한다."
+      },
+      {
         "name": "layer_type",
         "type": "enum",
         "allowed_values": [
@@ -96,8 +108,24 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "area",
+        "base_output": {
+          "table": "p197-t1",
+          "row_input": "layer_type",
+          "column": "시공량(㎡)"
+        },
+        "crew": {
+          "table": "p197-t1",
+          "trades": [
+            "형틀목공",
+            "보통인부"
+          ],
+          "row_input": "layer_type",
+          "column_template": "{trade}"
+        }
+      },
       "steps": [
         "입력받은 layer_type에 따라 p197-t1에서 일당 시공량과 직종별 인원(형틀목공 4인, 보통인부 1인)을 확인한다.",
         "작업일수 = area ÷ 일당 시공량으로 계산한다.",
@@ -108,44 +136,50 @@
     },
     "blocked": [
       {
-        "condition": "단면의 형태 및 크기에 변화가 발생하는 경우",
+        "condition": "not source scope",
+        "blocked_if": {
+          "input": "is_rc_wall_structure",
+          "op": "==",
+          "value": false
+        },
+        "reason": "원문의 적용 범위는 철근콘크리트 벽식구조의 일반 알루미늄폼입니다.",
+        "source": "p197-x0 scope note",
+        "cite": {
+          "chunk_id": "p197-x0",
+          "quote": "6-3-7 알루미늄폼 설치 및 해체('08년 신설, '17, '24년 보완)\n설명 | 1. 적용범위 - 본 품은 철근콘크리트 벽식구조에서 일반 알루미늄폼의 조립·해체하는 기준이다 - 본 품에는 조립, 해체, 청소, 보수작업이 포함되어 있으며, 동바리 설치 및 해체는 별도 계상한다. - 알루미늄 판넬은 150회 사용을 기준한다. - 재료 및 기계경비는 별도 계상한다. - 알루미늄폼의 품 적용은 다음을 참조한다."
+        }
+      },
+      {
+        "condition": "section cross-section changes",
         "blocked_if": {
           "input": "section_change",
           "op": "==",
           "value": true
         },
-        "reason": "단면 변화 발생 시 현장 여건에 따라 '셋팅층 및 마감층의 설치 및 해체'를 조정하여 별도 계상해야 함",
-        "source": "PDF 141쪽 1. 적용범위 하단",
+        "reason": "단면 형태나 크기가 변하면 셋팅층과 마감층의 품을 별도 조정해야 하므로 보류합니다.",
+        "source": "p197-x4 applicability note",
         "cite": {
           "chunk_id": "p197-x4",
-          "quote": "본 품은 단면에 변화가 없는 기준이며, 단면의 형태 및 크기에 변화가 발생되는 경우 현장 여건에\n설명 | 따라 ‘셋팅층 및 마감층의 설치 및 해체’를 조정하여 별도 계상한다."
+          "quote": "6-3-7 알루미늄폼 설치 및 해체('08년 신설, '17, '24년 보완)\n1. 적용범위\n설명 | - 본 품은 단면에 변화가 없는 기준이며, 단면의 형태 및 크기에 변화가 발생되는 경우 현장 여건에\n설명 | 따라 ‘셋팅층 및 마감층의 설치 및 해체’를 조정하여 별도 계상한다."
         }
       }
     ],
     "not_calculated": [
       {
-        "item": "동바리 설치 및 해체",
-        "source": "PDF 141쪽 1. 적용범위",
+        "item": "동바리 설치·해체, 재료비 및 기계경비",
+        "source": "p197-x0 scope note",
         "cite": {
           "chunk_id": "p197-x0",
-          "quote": "동바리 설치 및 해체는 별도 계상한다."
-        }
-      },
-      {
-        "item": "재료 및 기계경비",
-        "source": "PDF 141쪽 1. 적용범위",
-        "cite": {
-          "chunk_id": "p197-x0",
-          "quote": "재료 및 기계경비는 별도 계상한다."
+          "quote": "6-3-7 알루미늄폼 설치 및 해체('08년 신설, '17, '24년 보완)\n설명 | 1. 적용범위 - 본 품은 철근콘크리트 벽식구조에서 일반 알루미늄폼의 조립·해체하는 기준이다 - 본 품에는 조립, 해체, 청소, 보수작업이 포함되어 있으며, 동바리 설치 및 해체는 별도 계상한다. - 알루미늄 판넬은 150회 사용을 기준한다. - 재료 및 기계경비는 별도 계상한다. - 알루미늄폼의 품 적용은 다음을 참조한다."
         }
       }
     ],
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "일당 작업조와 시공량이 층별로 제시되어 있으나, 표 구조가 직종과 시공량이 혼합된 형태여서 현재의 adjusted_daily_crew 파라미터(row_input, column_input)로 자동 매핑하기 어렵습니다.",
+  "calc_type_reason": "The existing daily-crew calculator uses the source layer rows, labor columns and daily output; explicit source scope checks remain fail-closed.",
   "citations": [
     {
       "table_id": "p197-t0",

@@ -78,57 +78,62 @@
         },
         "quantity_input": "weight",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "additional_materials": [
           {
-            "when": {},
-            "change": "강판 설계중량에 의한 재료 손실량 6% 이내 가산",
-            "source": "PDF 358쪽 강판 비고 7",
+            "name": "용접봉",
+            "table": "p414-t1",
+            "row": "용접봉",
+            "column": "수량",
+            "quantity_input": "weight",
+            "quantity_unit": "ton",
+            "basis": "1ton",
+            "unit": "kg",
+            "source": "PDF 358쪽 기타재료 소요량 표",
             "cite": {
-              "table_id": "p414-t0"
+              "table_id": "p414-t1",
+              "row": "용접봉",
+              "column": "수량"
             }
           },
           {
-            "when": {},
-            "change": "앵커바 러그, 스터드 및 다월 등의 예비품수는 설계수량의 3.5% 가산",
-            "source": "PDF 358쪽 앵커바 비고",
+            "name": "산소",
+            "table": "p414-t1",
+            "row": "산소",
+            "column": "수량",
+            "quantity_input": "weight",
+            "quantity_unit": "ton",
+            "basis": "1ton",
+            "unit": "m³",
+            "source": "PDF 358쪽 기타재료 소요량 표",
             "cite": {
-              "table_id": "p414-t0"
+              "table_id": "p414-t1",
+              "row": "산소",
+              "column": "수량"
             }
           },
           {
-            "when": {},
-            "change": "잡품·기타는 용접 재료비의 5% 이내로 계상",
-            "source": "PDF 358쪽 기타재료 소요량 [주] ②",
+            "name": "LPG가스",
+            "table": "p414-t1",
+            "row": "LPG가스",
+            "column": "수량",
+            "quantity_input": "weight",
+            "quantity_unit": "ton",
+            "basis": "1ton",
+            "unit": "kg",
+            "source": "PDF 358쪽 기타재료 소요량 표",
             "cite": {
-              "table_id": "p414-t0"
-            }
-          },
-          {
-            "when": {
-              "girder_type": "박스거더/플레이트거더"
-            },
-            "change": "제작도 작성 비용: 중급숙련기술자 0.4인/톤 적용",
-            "source": "PDF 358쪽 하단 [주] ①",
-            "cite": {
-              "chunk_id": "p414-x29"
-            }
-          },
-          {
-            "when": {
-              "girder_type": "기타"
-            },
-            "change": "제작도 작성 비용: 중급숙련기술자 0.56인/톤 적용",
-            "source": "PDF 358쪽 하단 [주] ①",
-            "cite": {
-              "chunk_id": "p414-x29"
+              "table_id": "p414-t1",
+              "row": "LPG가스",
+              "column": "수량"
             }
           }
         ]
       },
       "steps": [
-        "p414-t1에서 ton당 기타재료 소요량을 확인한다.",
-        "물량(weight)을 곱해 총 소요량을 구한다.",
-        "강판 손실량, 앵커바 예비품수, 잡품 비율, 제작도 작성 인력을 note_adjustments에 따라 적용한다."
+        "강교 중량(ton)에 따라 용접봉·산소·LPG의 원문 ton당 소요량을 계산한다.",
+        "강판 손실량 6% 이내 및 잡품 비용 5% 이내는 원문이 상한으로만 제시하므로 임의율을 적용하지 않고 별도 미산정 항목으로 표시한다.",
+        "앵커류 예비품은 설계수량, 제작도 비용은 별도 계상 대상이며 해당 입력·가격 경로가 없어 별도 표시한다."
       ],
       "source": "PDF 358쪽 5-1-3 재료비",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -147,6 +152,38 @@
         "source": "PDF 358쪽 하단 [주] ②",
         "cite": {
           "chunk_id": "p414-x29"
+        }
+      },
+      {
+        "item": "강판 설계중량의 재료 손실은 6% 이내로 산출; 원문이 상한만 제시해 임의 비율 미적용",
+        "source": "PDF 358쪽 강판 비고 ⑦",
+        "cite": {
+          "chunk_id": "p414-x29",
+          "quote": "설계중량에 의한 재료 손실량은 6% 이내로 한다."
+        }
+      },
+      {
+        "item": "앵커바·러그·스터드·다월 예비품 및 잡품·기타 비용; 설계수량 3.5% 및 용접재료비 5% 이내 규칙의 적용 수량/율 미확정",
+        "source": "PDF 358쪽 앵커바 및 기타재료 비고",
+        "cite": {
+          "chunk_id": "p414-x29",
+          "quote": "앵커바, 러그, 스터드 및 다월 등의 예비품수는 설계수량의 3.5%로 한다."
+        }
+      },
+      {
+        "item": "고장력 볼트 조임품(표준품에서 제외됨)",
+        "source": "PDF 358쪽 하단 [주] ②",
+        "cite": {
+          "chunk_id": "p414-x29",
+          "quote": "본 품은 고장력 볼트 조임품이 제외된 것이다."
+        }
+      },
+      {
+        "item": "제작도 작성비는 별도 계상(거더 형식에 따라 0.4 또는 0.56 인/ton)",
+        "source": "PDF 358쪽 하단 [주] ①",
+        "cite": {
+          "chunk_id": "p414-x29",
+          "quote": "제작도(Shop drawing) 작성 비용은 별도 계상하되, 박스거더, 플레이트거더의 역우 0.4인/톤, 박스거더, 플레이트거더 이외의 경우 0.56인/톤을 적용할 수 있으며"
         }
       }
     ],

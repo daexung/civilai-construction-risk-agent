@@ -46,63 +46,137 @@
         "required": true,
         "ask": "타일 붙임 물량은 몇 ㎡입니까?",
         "source": "일반적인 타일공사 물량 단위"
+      },
+      {
+        "name": "special_reduction",
+        "type": "positive_rational",
+        "allowed_values": "26~33",
+        "unit": "%",
+        "required": true,
+        "when": {
+          "input": "tile_type",
+          "equals": "특수타일"
+        },
+        "ask": "???? ???? ?? 26~33% ???? ??? ???.",
+        "source": "PDF 587? 3-2-3 ??"
       }
     ],
     "tables": [
       {
         "id": "p643-t0",
-        "role": "타일규격별 인원 (시공량 및 보통인부 누락)",
-        "source": "PDF 1쪽 3-2-3 표",
+        "role": "Source daily output by tile size and crew rates reconstructed from original table",
+        "source": "PDF 587? 3-2-3 ?",
         "values": {
           "수량": {
             "0.04~0.10이하": "2",
             "0.11~0.20이하": "2",
             "0.21~0.40이하": "2"
+          },
+          "타일공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
+          },
+          "시공량(㎡)": {
+            "0.04~0.10이하": "25",
+            "0.11~0.20이하": "26",
+            "0.21~0.40이하": "28"
           }
         },
         "cite": {
           "table_id": "p643-t0"
-        }
+        },
+        "unit": "?/???, ?/?"
       }
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "base_output": {
+          "table": "p643-t0",
+          "row": "시공량(㎡)",
+          "column_input": "tile_size"
+        },
+        "coefficients": [],
+        "output_adjustments": [
+          {
+            "when": {
+              "tile_type": "모자이크(유니트형) 타일"
+            },
+            "operation": "set_output_percent",
+            "value": "20",
+            "cite": {
+              "chunk_id": "p643-x4",
+              "quote": "설명 | - 모자이크(유니트형) 타일 붙임은 시공량의 20%를 감한다. - 특수타일(유도타일, 축광타일, 문양을 내기위해 비규칙적으로 절단하여 시공되는"
+            }
+          },
+          {
+            "when": {
+              "tile_type": "특수타일"
+            },
+            "operation": "set_output_percent",
+            "value_input": "special_reduction",
+            "cite": {
+              "chunk_id": "p643-x4",
+              "quote": "설명 | 이형타일 등) 붙임은 시공량의 26~33%를 감한다."
+            }
+          }
+        ],
+        "crew": {
+          "table": "p643-t0",
+          "column": "수량",
+          "trades": [
+            "타일공",
+            "보통인부"
+          ]
+        },
+        "equipment": null,
+        "quantity_input": "quantity"
+      },
       "steps": [
-        "파싱 결과에 시공량과 보통인부 수량이 누락되어 자동 계산식을 구성할 수 없습니다."
+        "Select wall tile output by source tile-size range.",
+        "Apply the source 20% mosaic reduction; for special tile collect an explicit reduction in the source 26?33% interval.",
+        "Calculate workdays and source crew person-days."
       ],
-      "source": "파싱 결과 p643-t0",
+      "source": "PDF 587? 3-2-3 ? ? ???[?]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "tile_type == 특수타일",
-        "blocked_if": {
-          "input": "tile_type",
-          "op": "==",
-          "value": "특수타일"
-        },
-        "reason": "특수타일 붙임은 시공량의 26~33%를 감산하도록 되어 있어, 단일 비율로 자동 계산할 수 없습니다.",
-        "source": "파싱 결과 p643-x4 비고",
-        "cite": {
-          "chunk_id": "p643-x4",
-          "quote": "이형타일 등) 붙임은 시공량의 26~33%를 감한다."
-        }
-      },
-      {
-        "condition": "tile_type == 특정 모양으로 형상화된 타일",
+        "condition": "separately accounted shaped tile",
         "blocked_if": {
           "input": "tile_type",
           "op": "==",
           "value": "특정 모양으로 형상화된 타일"
         },
-        "reason": "특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상합니다.",
-        "source": "파싱 결과 p643-x4 [주] ③",
+        "reason": "Source note ? requires separate accounting for relief or mural tiles.",
+        "source": "PDF 587? [?] ?",
         "cite": {
           "chunk_id": "p643-x4",
-          "quote": "③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다."
+          "quote": "설명 | ② 본 품에는 먹매김, 규준틀설치, 접착제 비빔, 타일붙임, 줄눈파기 및 마무리작업을 포함한다. ③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
         }
+      },
+      {
+        "condition": "special reduction below source range",
+        "blocked_if": {
+          "input": "special_reduction",
+          "op": "<",
+          "value": "26"
+        },
+        "reason": "Special tile reduction must be within source 26?33% interval.",
+        "source": "PDF 587? 3-2-3 ??"
+      },
+      {
+        "condition": "special reduction above source range",
+        "blocked_if": {
+          "input": "special_reduction",
+          "op": ">",
+          "value": "33"
+        },
+        "reason": "Special tile reduction must be within source 26?33% interval.",
+        "source": "PDF 587? 3-2-3 ??"
       }
     ],
     "not_calculated": [],
@@ -115,59 +189,39 @@
         "rate": "0.03",
         "cite": {
           "chunk_id": "p643-x4",
-          "quote": "④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
+          "quote": "설명 | 이형타일 등) 붙임은 시공량의 26~33%를 감한다."
         }
       }
-    ]
+    ],
+    "open_questions": [],
+    "questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과 표에 시공량과 보통인부 수량이 누락되어 일당 작업조 계산식을 구성할 수 없습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "Source daily output, crew and adjustment rules restored from PDF p.587.",
   "citations": [
     {
-      "table_id": "p643-t0",
-      "row": "수량",
-      "column": "0.04~0.10이하",
-      "value": "2"
-    },
-    {
-      "table_id": "p643-t0",
-      "row": "수량",
-      "column": "0.11~0.20이하",
-      "value": "2"
-    },
-    {
-      "table_id": "p643-t0",
-      "row": "수량",
-      "column": "0.21~0.40이하",
-      "value": "2"
+      "table_id": "p643-t0"
     },
     {
       "chunk_id": "p643-x4",
-      "quote": "- 모자이크(유니트형) 타일 붙임은 시공량의 20%를 감한다."
+      "quote": "설명 | - 모자이크(유니트형) 타일 붙임은 시공량의 20%를 감한다. - 특수타일(유도타일, 축광타일, 문양을 내기위해 비규칙적으로 절단하여 시공되는"
     },
     {
       "chunk_id": "p643-x4",
-      "quote": "이형타일 등) 붙임은 시공량의 26~33%를 감한다."
+      "quote": "설명 | 이형타일 등) 붙임은 시공량의 26~33%를 감한다."
     },
     {
       "chunk_id": "p643-x4",
-      "quote": "③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다."
+      "quote": "설명 | ② 본 품에는 먹매김, 규준틀설치, 접착제 비빔, 타일붙임, 줄눈파기 및 마무리작업을 포함한다. ③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
     },
     {
       "chunk_id": "p643-x4",
-      "quote": "④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
+      "quote": "설명 | 이형타일 등) 붙임은 시공량의 26~33%를 감한다."
     }
   ],
-  "open_questions": [
-    "파싱 결과(p643-t0)에 시공량(25, 26, 28)과 보통인부(1인) 데이터가 누락되어 있어 자동 계산식을 구성할 수 없습니다.",
-    "특수타일 붙임 시 시공량 감산 비율이 26~33%로 범위로 제시되어 있어 정확한 계산이 불가능합니다."
-  ],
-  "questions": [
-    "타일 규격이 0.15㎡일 때 적용되는 기준은 무엇인가요?",
-    "특수타일 시공 시 감산 비율 26~33% 중 어떤 값을 적용해야 하나요?",
-    "타일 붙임 물량(㎡)은 얼마입니까?"
-  ],
+  "open_questions": [],
+  "questions": [],
   "meta": {
     "model": "gemini-3.1-pro-preview",
     "created_at": "2026-09-28T18:01:09.618299+00:00",

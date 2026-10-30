@@ -74,7 +74,33 @@
         },
         "quantity_input": "area",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "특별인부",
+            "when": {
+              "work_type": "복토"
+            },
+            "cite": {
+              "table_id": "p390-t2",
+              "row": "특별인부",
+              "column": "복토",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "굴삭기",
+            "when": {
+              "work_type": "식생매트설치"
+            },
+            "cite": {
+              "table_id": "p390-t2",
+              "row": "굴삭기",
+              "column": "식생매트설치",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p390-t2에서 작업 종류(work_type)에 해당하는 단위당 품을 고른다.",

@@ -15,6 +15,7 @@ export interface AgentQuestion {
   ask: string;
   choices?: ChoiceValue[] | null;
   labels?: Record<string, string> | null;
+  unit?: string | null;  // 선택지 없이 숫자를 직접 입력하는 질문(예: 수직고 m)
   hint?: QuestionHint | null;
   default?: string | null;
   decision_table?: Record<string, DecisionRow> | null;
@@ -100,7 +101,10 @@ export interface UnitLine {
 export interface ComputedResult {
   per_unit_only?: boolean;
   assumptions?: string;
-  daily_volume: { value: string; unit: string; formula: string; sources: string[]; citations: Citation[] } | null;
+  calculation_module?: { module_id: string; version: string; source_hash: string;
+    review_status: string; executor?: string } | null;
+  daily_volume: { value: string; unit: string; formula: string; sources: string[]; citations: Citation[];
+    adjustments?: { operation: string; value: string; before: string; after: string; reason: string; source: string }[] } | null;
   work_days: { value: string; formula: string; display?: string } | null;
   lines: ResultLine[];
   unit_lines: UnitLine[];

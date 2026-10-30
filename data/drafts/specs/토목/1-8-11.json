@@ -46,7 +46,11 @@
         "unit": null,
         "required": true,
         "ask": "판 설치의 경우 2W와 3W 중 무엇입니까?",
-        "source": "2. 판 설치 표의 시공량 구분"
+        "source": "2. 판 설치 표의 시공량 구분",
+        "when": {
+          "input": "work_type",
+          "equals": "판 설치"
+        }
       },
       {
         "name": "quantity",
@@ -75,7 +79,7 @@
             "지주간격 2m": "260",
             "지주간격 4m": "520"
           },
-          "굴착기+ 대형브레이커": {
+          "굴착기+대형브레이커": {
             "수량": "1"
           },
           "크롤러드릴(공기식)": {
@@ -111,6 +115,9 @@
             "지주간격 2m 3W": "220",
             "지주간격 4m 2W": "340",
             "지주간격 4m 3W": "280"
+          },
+          "트럭": {
+            "수량": "1"
           }
         },
         "cite": {
@@ -120,15 +127,102 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table_selector": {
+            "input": "work_type",
+            "values": {
+              "지주 설치": "p381-t2",
+              "판 설치": "p382-t0"
+            }
+          },
+          "row": "특별인부",
+          "column_selector": {
+            "input": "post_spacing",
+            "contains": [
+              "지주간격{value}"
+            ],
+            "optional_input_contains": [
+              "plate_type"
+            ]
+          }
+        },
+        "coefficients": [],
+        "crew": {
+          "table_selector": {
+            "input": "work_type",
+            "values": {
+              "지주 설치": "p381-t2",
+              "판 설치": "p382-t0"
+            }
+          },
+          "column": "수량",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "굴착기+대형브레이커",
+            "table": "p381-t2",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "work_type": "지주 설치"
+            }
+          },
+          {
+            "name": "크롤러드릴(공기식)",
+            "table": "p381-t2",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "work_type": "지주 설치"
+            }
+          },
+          {
+            "name": "공기압축기",
+            "table": "p381-t2",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "work_type": "지주 설치"
+            }
+          },
+          {
+            "name": "트럭",
+            "table": "p381-t2",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "work_type": "지주 설치"
+            }
+          },
+          {
+            "name": "트럭",
+            "table": "p382-t0",
+            "column": "수량",
+            "unit": "대·일",
+            "when": {
+              "work_type": "판 설치"
+            }
+          }
+        ]
+      },
       "steps": [
-        "작업 종류(지주 설치, 판 설치)에 따라 해당 표를 선택한다.",
-        "지주간격 및 판 종류(2W, 3W)에 따른 일당 시공량을 확인한다.",
-        "물량을 일당 시공량으로 나누어 작업일수를 구한다.",
-        "작업일수에 표의 인원 및 장비 수량을 곱하여 총 투입량을 산출한다."
+        "작업 종류로 지주 설치표 또는 판 설치표를 고른다.",
+        "지주간격(및 판 설치는 2W/3W)으로 일당 시공량(m)을 고른다.",
+        "설치 물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수로 총 투입량을 구한다."
       ],
-      "source": "1. 지주 설치 표, 2. 판 설치 표",
+      "source": "PDF 원문 1. 지주 설치 / 2. 판 설치 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -149,9 +243,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "지주 설치와 판 설치가 별도의 표로 구성되어 있고, 인원/장비 수량과 시공량이 하나의 표에 통합되어 있어 현재의 adjusted_daily_crew 모델 구조(base_output과 crew 분리)에 맞지 않아 자동 계산 명세로 작성하기 어렵습니다.",
+  "calc_type_reason": "지주 설치/판 설치 두 표를 작업 종류로 골라 일당 시공량·인원·장비 대수를 읽는 일당 작업조 구조다.",
   "citations": [
     {
       "table_id": "p381-t2",

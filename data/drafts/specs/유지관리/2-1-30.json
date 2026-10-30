@@ -77,11 +77,9 @@
             "B-Type": "1"
           },
           "굴착기 0.4㎥": {
-            "A-Type": "1",
-            "B-Type": "0"
+            "A-Type": "1"
           },
           "굴착기 0.2㎥": {
-            "A-Type": "0",
             "B-Type": "1"
           },
           "플레이트콤팩터 1.5ton": {
@@ -107,38 +105,155 @@
         "when": {
           "precision_cut": false
         },
-        "when_text": "precision_cut = false",
+        "when_text": "블록 정밀절단(전동절단기)에 의한 시공이 아닌 경우",
         "change": {
           "특별인부": "-1"
         },
-        "source": "PDF 890쪽 p946-t2 비고",
+        "source": "표 비고",
         "cite": {
-          "table_id": "p946-t2",
-          "row": "비고",
-          "column": "비고"
+          "table_id": "p946-t2"
         }
       }
     ],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "volume",
+        "base_output": {
+          "table": "p946-t2",
+          "row": "시공량",
+          "column_input": "type"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p946-t2",
+          "column_input": "type",
+          "trades": [
+            "포장공",
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "포장공": "",
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "굴착기 0.4㎥",
+            "table": "p946-t2",
+            "column": "A-Type",
+            "unit": "대·일",
+            "when": {
+              "type": "A-Type"
+            }
+          },
+          {
+            "name": "굴착기 0.2㎥",
+            "table": "p946-t2",
+            "column": "B-Type",
+            "unit": "대·일",
+            "when": {
+              "type": "B-Type"
+            }
+          },
+          {
+            "name": "플레이트콤팩터 1.5ton",
+            "table": "p946-t2",
+            "column": "A-Type",
+            "unit": "대·일",
+            "when": {
+              "type": "A-Type"
+            }
+          },
+          {
+            "name": "플레이트콤팩터 1.5ton",
+            "table": "p946-t2",
+            "column": "B-Type",
+            "unit": "대·일",
+            "when": {
+              "type": "B-Type"
+            }
+          },
+          {
+            "name": "트럭 2.5ton",
+            "table": "p946-t2",
+            "column": "A-Type",
+            "unit": "대·일",
+            "when": {
+              "type": "A-Type"
+            }
+          },
+          {
+            "name": "트럭 2.5ton",
+            "table": "p946-t2",
+            "column": "B-Type",
+            "unit": "대·일",
+            "when": {
+              "type": "B-Type"
+            }
+          }
+        ],
+        "output_adjustments": [
+          {
+            "when": {
+              "tactile_block": true
+            },
+            "operation": "set_output_percent",
+            "value": "10",
+            "source": "표 비고: 유도·점자블록을 설치하는 경우 시공량의 10%를 감하여 적용한다",
+            "cite": {
+              "table_id": "p946-t2"
+            }
+          }
+        ]
+      },
       "steps": [
-        "p946-t2에서 type에 따른 기준 시공량과 직종별 인원, 장비 대수를 찾는다.",
-        "tactile_block이 true이면 기준 시공량의 10%를 감산하여 최종 일당 시공량을 구한다.",
-        "precision_cut이 false이면 특별인부 1인을 감산한다.",
-        "물량을 최종 일당 시공량으로 나누어 작업일수를 구하고, 인원과 장비 대수에 곱해 총 투입량을 산출한다."
+        "Type 열의 일당 시공량을 고른다.",
+        "유도·점자블록이면 시공량의 10%를 감한다.",
+        "정밀절단이 아니면 특별인부 1인을 감한다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구하고 인원·장비 대수를 곱한다.",
+        "공구손료·경장비는 인력품의 5%(정밀절단) 또는 2%(정밀절단 아님)."
       ],
-      "source": "PDF 890쪽 p946-t2 및 비고",
+      "source": "PDF 890쪽 2-1-30 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
     "not_calculated": [],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비(정밀절단 시공)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.05",
+        "when": {
+          "precision_cut": true
+        },
+        "cite": {
+          "chunk_id": "p947-x3",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 5%, 블록 정밀절단(전동절단기)에 의한"
+        }
+      },
+      {
+        "name": "공구손료 및 경장비(정밀절단 아님)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.02",
+        "when": {
+          "precision_cut": false
+        },
+        "cite": {
+          "chunk_id": "p947-x3",
+          "quote": "공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 5%, 블록 정밀절단(전동절단기)에 의한"
+        }
+      }
+    ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "투입 장비가 굴착기, 플레이트콤팩터, 트럭 등 여러 종류이나 현재 adjusted_daily_crew 모델은 단일 장비만 지원하며, 시공량 10% 감산 규칙을 계수표 없이 수식으로 적용해야 하므로 자동 계산 모델에 맞지 않습니다.",
+  "calc_type_reason": "Type별 인원·장비·일당 시공량이 표에 있고 비고의 시공량 10% 감·특별인부 1인 감·조건부 경비율을 기존 필드와 조건부 비용 규칙(cost_rules.when)으로 표현한다. 원문 '-'(해당 Type에 없는 장비)는 0으로 바꾸지 않는다.",
   "citations": [
     {
       "table_id": "p946-t2",

@@ -120,25 +120,74 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "outputs": [
+          {
+            "kind": "table_multiplier",
+            "name": "용접공수",
+            "table": "p626-t3",
+            "row": "보정계수",
+            "selector_input": "total_steel_weight",
+            "value_input": "base_welding_labor",
+            "unit": "인·일",
+            "cite": {
+              "table_id": "p626-t3"
+            },
+            "selector_mode": "threshold"
+          },
+          {
+            "kind": "table_rates",
+            "table": "p626-t4",
+            "column_input": "welding_method",
+            "quantity_input": "welding_length",
+            "rows": [
+              "용접봉",
+              "CO2 와이어",
+              "탄산가스",
+              "잠호용접와이어",
+              "FLUX"
+            ],
+            "source_dash_means_excluded": true,
+            "units": {
+              "용접봉": "㎏",
+              "CO2 와이어": "㎏",
+              "탄산가스": "㎏",
+              "잠호용접와이어": "㎏",
+              "FLUX": "㎏"
+            },
+            "resource_kind": "material"
+          }
+        ]
+      },
       "steps": [
-        "강재총사용량(total_steel_weight)에 따라 p626-t3에서 보정계수를 찾는다.",
-        "용접공수 = 기본용접공수(base_welding_labor) × 보정계수로 계산한다.",
-        "용접 방식(welding_method)에 따라 p626-t4에서 m당 소요 용접재료량을 찾는다.",
-        "총 소요 용접재료량 = m당 소요 용접재료량 × 환산용접길이(welding_length)로 계산한다."
+        "??????(1-1-3 ???)? ?? ???? ????? ???.",
+        "?? ??? ?? ??? ???? ???? ???? ??????? ???.",
+        "?? ??? ?? ?? ????? ?? ??? ??? ?? ??? ????."
       ],
-      "source": "PDF 570쪽 1-1-4",
+      "source": "PDF 570? 1-1-4 ???? ? ?? ????? ?; ??????? 1-1-3 ??? ??",
       "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
     "not_calculated": [],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [
+      {
+        "name": "공장제작에 따른 제경비",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.60",
+        "cite": {
+          "chunk_id": "p626-x2",
+          "quote": "② 공장제작에 따른 제경비는 기본용접공수의 60%이며, 기본용접공수에 포함되지 않았다."
+        }
+      }
+    ],
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "용접공수 산정식과 재료량 산출이 혼합되어 있으며, 기존의 일당 작업조형이나 단위당 품 계산 함수로 바로 적용하기 어렵습니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "?? ????? ????? ?? ??? ?? ???? ??",
   "citations": [
     {
       "table_id": "p626-t3",

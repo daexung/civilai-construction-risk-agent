@@ -1,7 +1,12 @@
 {
   "model": "gemini-3.1-pro-preview",
-  "input_usd_per_million": 4.0,
-  "output_usd_per_million": 18.0,
+  "calculation_authoring_thinking_level": "LOW",
+  "calculation_authoring_max_output_tokens": 7000,
+  "input_usd_per_million": 2.0,
+  "output_usd_per_million": 12.0,
   "max_output_tokens": 32768,
-  "note": "input_usd_per_million/output_usd_per_million은 검토자가 실제 단가로 채운다. 비어 있으면 draft_specs.py가 실행을 거부한다."
+  "pricing_source": "https://cloud.google.com/vertex-ai/generative-ai/pricing",
+  "pricing_checked": "2026-10-18",
+  "pricing_tier": "standard-global-up-to-200k",
+  "note": "공개 표준 글로벌 단가 기준이다. 유료 실행 직전 실제 Vertex endpoint/region/tier의 SKU를 재확인한다. 요청 입력은 Vertex countTokens로 사전 계수하고 응답 출력은 candidates+thoughts 토큰을 사용한다."
 }

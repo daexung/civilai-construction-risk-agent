@@ -45,9 +45,9 @@
         "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
-        "unit": "개 또는 ㎡",
+        "unit": null,
         "required": true,
-        "ask": "설치 물량은 얼마입니까? (후드의 경우 투영면적 ㎡, 그 외는 개수)",
+        "ask": "선택한 흡입구 규격의 기준 단위(개 또는 ㎡)에 해당하는 물량은 얼마입니까?",
         "source": "p718-t1"
       }
     ],
@@ -56,7 +56,7 @@
         "id": "p718-t1",
         "role": "흡입구 설치 덕트공 품",
         "source": "2-2-2 흡입구 설치 표",
-        "unit": "인",
+        "unit": "인/개",
         "values": {
           "그릴(도어그릴)": {
             "규격 흡입구 | 규격 1m미만": "0.525",
@@ -87,7 +87,20 @@
           "column_input": "spec",
           "trades": [
             "덕트공"
-          ]
+          ],
+          "quantity_unit_selector": {
+            "input": "spec",
+            "values": {
+              "규격 흡입구 | 규격 1m미만": "개",
+              "규격 장변길이 | 규격 1m이상": "개",
+              "규격 300㎜×300㎜ 이하": "개",
+              "규격 일반 | 규격 투영면적 ㎡당": "㎡",
+              "규격 2중 | 규격 ″ ㎡당": "㎡",
+              "규격 그리스필터 | 규격 ″ ㎡당": "㎡",
+              "규격 2중 그리스필터 | 규격 ″ ㎡당": "㎡"
+            },
+            "basis_by_selected_unit": true
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
@@ -100,7 +113,288 @@
       "source": "2-2-2 흡입구 설치 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "그릴(도어그릴) with 규격 300㎜×300㎜ 이하 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "그릴(도어그릴)"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 300㎜×300㎜ 이하"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "그릴(도어그릴) with 규격 일반 | 규격 투영면적 ㎡당 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "그릴(도어그릴)"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 일반 | 규격 투영면적 ㎡당"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "그릴(도어그릴) with 규격 2중 | 규격 ″ ㎡당 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "그릴(도어그릴)"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 2중 | 규격 ″ ㎡당"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "그릴(도어그릴) with 규격 그리스필터 | 규격 ″ ㎡당 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "그릴(도어그릴)"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 그리스필터 | 규격 ″ ㎡당"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "그릴(도어그릴) with 규격 2중 그리스필터 | 규격 ″ ㎡당 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "그릴(도어그릴)"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 2중 그리스필터 | 규격 ″ ㎡당"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "점검구 with 규격 흡입구 | 규격 1m미만 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "점검구"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 흡입구 | 규격 1m미만"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "점검구 with 규격 장변길이 | 규격 1m이상 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "점검구"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 장변길이 | 규격 1m이상"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "점검구 with 규격 일반 | 규격 투영면적 ㎡당 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "점검구"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 일반 | 규격 투영면적 ㎡당"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "점검구 with 규격 2중 | 규격 ″ ㎡당 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "점검구"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 2중 | 규격 ″ ㎡당"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "점검구 with 규격 그리스필터 | 규격 ″ ㎡당 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "점검구"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 그리스필터 | 규격 ″ ㎡당"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "점검구 with 규격 2중 그리스필터 | 규격 ″ ㎡당 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "점검구"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 2중 그리스필터 | 규격 ″ ㎡당"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "후드 with 규격 흡입구 | 규격 1m미만 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "후드"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 흡입구 | 규격 1m미만"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "후드 with 규격 장변길이 | 규격 1m이상 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "후드"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 장변길이 | 규격 1m이상"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      },
+      {
+        "condition": "후드 with 규격 300㎜×300㎜ 이하 has no source cell",
+        "blocked_if_all": [
+          {
+            "input": "item_type",
+            "op": "==",
+            "value": "후드"
+          },
+          {
+            "input": "spec",
+            "op": "==",
+            "value": "규격 300㎜×300㎜ 이하"
+          }
+        ],
+        "reason": "원문 표에 해당 구분·규격 교차 셀이 없어 적용 품을 추정하지 않음",
+        "source": "PDF 662쪽 p718-t1 exact source-cell structure",
+        "cite": {
+          "table_id": "p718-t1"
+        }
+      }
+    ],
     "not_calculated": [],
     "supply_rules": [],
     "cost_rules": []

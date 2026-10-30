@@ -53,11 +53,14 @@
         "unit": "인/㎡",
         "values": {
           "건축목공": {
+            "부직포 깔기": "-",
+            "보양지 붙이기": "-",
             "목재 붙이기": "0.03"
           },
           "보통인부": {
             "부직포 깔기": "0.003",
-            "보양지 붙이기": "0.01"
+            "보양지 붙이기": "0.01",
+            "목재 붙이기": "-"
           }
         },
         "cite": {
@@ -71,19 +74,19 @@
         "unit": "㎡, kg, ㎥",
         "values": {
           "부직포": {
-            "부직포깔기": "1.10"
+            "부직포 깔기": "1.10"
           },
           "하드롱지": {
-            "보양지붙이기": "1.20"
+            "보양지 붙이기": "1.20"
           },
           "풀": {
-            "보양지붙이기": "0.06"
+            "보양지 붙이기": "0.06"
           },
           "목재": {
-            "목재붙이기": "0.007"
+            "목재 붙이기": "0.007"
           },
           "못": {
-            "목재붙이기": "0.02"
+            "목재 붙이기": "0.02"
           }
         },
         "cite": {
@@ -97,7 +100,6 @@
       "params": {
         "unit_rate_table": {
           "table": "p117-t0",
-          "row_input": "고정 행이름",
           "column_input": "protection_type",
           "trades": [
             "건축목공",
@@ -106,12 +108,142 @@
         },
         "quantity_input": "area",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "건축목공",
+            "when": {
+              "protection_type": "부직포 깔기"
+            },
+            "source": "p117-t0 source dash cell",
+            "cite": {
+              "table_id": "p117-t0",
+              "row": "건축목공",
+              "column": "부직포 깔기",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "건축목공",
+            "when": {
+              "protection_type": "보양지 붙이기"
+            },
+            "source": "p117-t0 source dash cell",
+            "cite": {
+              "table_id": "p117-t0",
+              "row": "건축목공",
+              "column": "보양지 붙이기",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "보통인부",
+            "when": {
+              "protection_type": "목재 붙이기"
+            },
+            "source": "p117-t0 source dash cell",
+            "cite": {
+              "table_id": "p117-t0",
+              "row": "보통인부",
+              "column": "목재 붙이기",
+              "value": "-"
+            }
+          }
+        ],
+        "additional_materials": [
+          {
+            "table": "p117-t1",
+            "row": "부직포",
+            "column_input": "protection_type",
+            "name": "부직포",
+            "unit": "㎡",
+            "quantity_input": "area",
+            "basis": "㎡",
+            "when": {
+              "protection_type": "부직포 깔기"
+            },
+            "cite": {
+              "table_id": "p117-t1",
+              "row": "부직포",
+              "column": "부직포 깔기"
+            }
+          },
+          {
+            "table": "p117-t1",
+            "row": "하드롱지",
+            "column_input": "protection_type",
+            "name": "하드롱지",
+            "unit": "㎡",
+            "quantity_input": "area",
+            "basis": "㎡",
+            "when": {
+              "protection_type": "보양지 붙이기"
+            },
+            "cite": {
+              "table_id": "p117-t1",
+              "row": "하드롱지",
+              "column": "보양지 붙이기"
+            }
+          },
+          {
+            "table": "p117-t1",
+            "row": "풀",
+            "column_input": "protection_type",
+            "name": "풀",
+            "unit": "kg",
+            "quantity_input": "area",
+            "basis": "㎡",
+            "when": {
+              "protection_type": "보양지 붙이기"
+            },
+            "cite": {
+              "table_id": "p117-t1",
+              "row": "풀",
+              "column": "보양지 붙이기"
+            }
+          },
+          {
+            "table": "p117-t1",
+            "row": "목재",
+            "column_input": "protection_type",
+            "name": "목재",
+            "unit": "m³",
+            "quantity_input": "area",
+            "basis": "㎡",
+            "when": {
+              "protection_type": "목재 붙이기"
+            },
+            "cite": {
+              "table_id": "p117-t1",
+              "row": "목재",
+              "column": "목재 붙이기"
+            }
+          },
+          {
+            "table": "p117-t1",
+            "row": "못",
+            "column_input": "protection_type",
+            "name": "못",
+            "unit": "kg",
+            "quantity_input": "area",
+            "basis": "㎡",
+            "when": {
+              "protection_type": "목재 붙이기"
+            },
+            "cite": {
+              "table_id": "p117-t1",
+              "row": "못",
+              "column": "목재 붙이기"
+            }
+          }
+        ],
+        "materials": []
       },
       "steps": [
         "p117-t0에서 protection_type에 해당하는 직종별 단위당 노무량을 찾는다.",
         "p117-t1에서 protection_type에 해당하는 단위당 재료량을 찾는다.",
-        "area(보양면적)를 곱하여 총 노무량과 총 재료량을 구한다."
+        "area(보양면적)를 곱하여 총 노무량과 총 재료량을 구한다.",
+        "The source specifies new protection materials and a 100% material loss rate; apply the displayed source quantities without an additional inferred factor."
       ],
       "source": "PDF 61쪽 2-11-1 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -123,7 +255,7 @@
   },
   "calc_type": "per_unit",
   "calc_type_raw": "per_unit",
-  "calc_type_reason": "단위 면적(㎡)당 노무량과 재료량이 표에 직접 제시되어 있어 물량을 곱하는 방식으로 계산 가능합니다.",
+  "calc_type_reason": "The source gives per-area labor and material quantities by protection type; the shared calculator maps resource rows and preserves source dash cells as exclusions.",
   "citations": [
     {
       "table_id": "p117-t0",
@@ -180,6 +312,10 @@
     {
       "chunk_id": "p117-x6",
       "quote": "보양재는 신품을 기준하며, 재료의 손율은 100%를 적용한다."
+    },
+    {
+      "chunk_id": "p117-x6",
+      "quote": "② 부직포 깔기는 보양재를 바닥에 깔기하는 작업 기준이다. ③ 보양지 붙이기는 천막지 및 골판지 등 보양지를 절단하여 테이프로 붙이는 작업 기준이다. ④ 목재 붙이기는 판재·각재로 주위를 보호하는 기준이다. ⑤ 보양재는 신품을 기준하며, 재료의 손율은 100%를 적용한다. ⑥ 재료량은 다음을 참고하여 적용한다."
     }
   ],
   "open_questions": [

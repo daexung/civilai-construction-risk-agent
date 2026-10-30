@@ -10,13 +10,17 @@ SOURCE_PDF = ROOT / 'data/raw/standard_estimation/2026_건설공사표준품셈_
 PACKAGED_PDF = 'data/raw/standard_estimation/standard-estimation-2026.pdf'
 files = {ROOT / item for item in [
     'Dockerfile', '.dockerignore', '.gcloudignore', 'deploy/run_api.py', 'deploy/backend-requirements.txt', 'deploy/cloud-shell-build.sh',
-    'pipeline/requirements-rag.txt', 'data/drafts/executable.json', 'data/drafts/misfiled.json',
+    'pipeline/requirements-rag.txt', 'pipeline/calculation_contract.py', 'pipeline/python_sandbox.py',
+    'deploy/calculation_sandbox/app.py', 'deploy/calculation_sandbox/Dockerfile',
+    'deploy/calculation_sandbox/requirements.txt',
+    'data/drafts/executable.json', 'data/drafts/misfiled.json',
     'data/processed/chunks.all.jsonl', 'data/processed/chunks.jsonl', 'data/processed/page_map.json',
     'data/processed/embeddings.all.gemini-embedding-2.parquet',
 ]}
 files.add(SOURCE_PDF)
 for folder, extensions in [('backend', {'.py', '.json', '.md', '.txt'}),
-                            ('data/rates', {'.json'}), ('data/drafts/specs', {'.json'})]:
+                            ('data/rates', {'.json'}), ('data/drafts/specs', {'.json'}),
+                            ('data/calculation_modules/approved', {'.json', '.py'})]:
     files.update(path for path in (ROOT / folder).rglob('*') if path.is_file()
                  and path.suffix in extensions and '__pycache__' not in path.parts
                  and not path.name.startswith('.env'))
@@ -36,6 +40,8 @@ with zipfile.ZipFile(OUTPUT) as bundle:
     assert not any(Path(name).name.startswith('.env') or name.startswith(('frontend/', '.git/', '.venv/', 'tmp/')) for name in names)
     assert 'data/processed/embeddings.all.gemini-embedding-2.parquet' in names
     assert PACKAGED_PDF in names
+    assert 'data/calculation_modules/approved/python-registry.json' in names
+    assert 'data/calculation_modules/approved/formwork-adjustments-v1.json' in names
     assert PACKAGED_PDF.isascii(), 'Deployment PDF path must use ASCII'
 print(f'Prepared {len(files)} files, {OUTPUT.stat().st_size / 1024**2:.1f} MiB; no environment files or frontend included.')
 print(OUTPUT)

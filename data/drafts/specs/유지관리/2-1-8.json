@@ -233,15 +233,155 @@
       }
     ],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "area",
+        "base_output": {
+          "table": "p933-t0",
+          "row": "포장공",
+          "column_selector": {
+            "input": "site_type",
+            "contains": [
+              "{value} 시공량"
+            ],
+            "value_map": {
+              "A-Type": "A-Type",
+              "B-Type": "B-Type",
+              "C-Type": "C-Type"
+            }
+          }
+        },
+        "coefficients": [
+          {
+            "table": "p933-t3",
+            "table_selector": {
+              "input": "site_type",
+              "values": {
+                "A-Type": "p933-t3",
+                "B-Type": "p933-t4",
+                "C-Type": "p934-t0"
+              }
+            },
+            "row": "시공량 할증계수",
+            "input": "avg_area_per_spot",
+            "selector_mode": "threshold"
+          }
+        ],
+        "crew": {
+          "table": "p933-t0",
+          "trades": [
+            "포장공",
+            "보통인부"
+          ],
+          "column_selector": {
+            "input": "site_type",
+            "contains": [
+              "{value} 수량"
+            ],
+            "value_map": {
+              "A-Type": "A-Type",
+              "B-Type": "B-Type",
+              "C-Type": "C-Type"
+            }
+          }
+        },
+        "equipment": [
+          {
+            "table": "p933-t0",
+            "row": "로더(타이어)+소형노면파쇄기",
+            "name": "로더(타이어)+소형노면파쇄기",
+            "column_input": {
+              "input": "site_type",
+              "contains": [
+                "{value} 수량"
+              ],
+              "value_map": {
+                "A-Type": "A-Type",
+                "B-Type": "B-Type",
+                "C-Type": "C-Type"
+              }
+            },
+            "unit": "대·일"
+          },
+          {
+            "table": "p933-t0",
+            "row": "로더(타이어)",
+            "name": "로더(타이어)",
+            "column_input": {
+              "input": "site_type",
+              "contains": [
+                "{value} 수량"
+              ],
+              "value_map": {
+                "A-Type": "A-Type",
+                "B-Type": "B-Type",
+                "C-Type": "C-Type"
+              }
+            },
+            "unit": "대·일"
+          },
+          {
+            "table": "p933-t0",
+            "row": "진동롤러(진동+타이어)",
+            "name": "진동롤러(진동+타이어)",
+            "column_input": {
+              "input": "site_type",
+              "contains": [
+                "{value} 수량"
+              ],
+              "value_map": {
+                "A-Type": "A-Type",
+                "B-Type": "B-Type",
+                "C-Type": "C-Type"
+              }
+            },
+            "unit": "대·일"
+          },
+          {
+            "table": "p933-t0",
+            "row": "아스팔트스프레이어",
+            "name": "아스팔트스프레이어",
+            "column_input": {
+              "input": "site_type",
+              "contains": [
+                "{value} 수량"
+              ],
+              "value_map": {
+                "A-Type": "A-Type",
+                "B-Type": "B-Type",
+                "C-Type": "C-Type"
+              }
+            },
+            "unit": "대·일"
+          },
+          {
+            "table": "p933-t0",
+            "row": "트럭",
+            "name": "트럭",
+            "column_input": {
+              "input": "site_type",
+              "contains": [
+                "{value} 수량"
+              ],
+              "value_map": {
+                "A-Type": "A-Type",
+                "B-Type": "B-Type",
+                "C-Type": "C-Type"
+              }
+            },
+            "unit": "대·일"
+          }
+        ],
+        "equipment_table": "p933-t0"
+      },
       "steps": [
-        "1. 현장 여건(A/B/C Type)에 따라 p933-t0에서 기준 일일시공량과 작업조(인원, 장비)를 결정한다.",
-        "2. 개소별 평균 시공면적에 따라 해당 Type의 할증계수 표(p933-t3, p933-t4, p934-t0)에서 할증계수를 찾아 기준 시공량에 곱한다.",
-        "3. 절삭없이 덧씌우는 경우 시공량을 25% 증가시키고, 포장공 1인과 파쇄기 1대를 작업조에서 제외한다.",
-        "4. 총 시공면적을 최종 일일시공량으로 나누어 작업일수를 구하고, 작업조에 곱해 총 투입량을 산출한다."
+        "p933-t2 현장기준에 따라 A/B/C Type을 선택한다.",
+        "p933-t0에서 Type별 기준 시공량, 작업조 인원 및 장비 대수를 찾는다.",
+        "개소별 평균 시공면적에 대응하는 Type별 p933-t3/p933-t4/p934-t0 계수를 시공량에 곱한다.",
+        "총 시공면적을 조정된 일일 시공량으로 나누어 작업일수와 직종별 인·일, 장비 대·일을 산출한다.",
+        "절삭 없는 덧씌우기는 원문 장비 행에 로더와 소형노면파쇄기가 결합되어 있어 파쇄기만 제외하는 장비 조합을 확정할 수 없으므로 차단한다."
       ],
-      "source": "p933-t0, p933-t3, p933-t4, p934-t0, p934-x1",
+      "source": "PDF 인쇄 877~878쪽 (PDF 933~934쪽) 2-1-8 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -252,11 +392,11 @@
           "op": "==",
           "value": true
         },
-        "reason": "절삭없이 덧씌우는 경우 시공량을 25% 증가시켜야 하나, 현재 계산 모델에서 시공량 동적 증가를 지원하지 않음",
-        "source": "p934-x1 ⑦",
+        "reason": "원문은 포장공 1인과 파쇄기 1대를 제외하라고 하나, 기본표의 장비 행이 \"로더(타이어)+소형노면파쇄기\"로 결합되어 있어 파쇄기만 제외한 장비 수량을 안전하게 분리할 수 없다. 인력 제외와 25% 시공량 증가만 부분 적용하면 원문 적용이 완전하지 않아 계산을 차단한다.",
+        "source": "PDF 인쇄 878쪽 [주] ⑦ 및 877쪽 장비표",
         "cite": {
           "chunk_id": "p934-x1",
-          "quote": "시공량은 25%를 증하여"
+          "quote": "절삭없이 아스팔트를 덧씌우는 경우에는 포장공 1인, 파쇄기 1대를 제외하고, 시공량은 25%를 증하여 적용한다."
         }
       }
     ],
@@ -272,9 +412,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "장비가 여러 종류 투입되고, Type별로 시공량 할증계수 표가 분리되어 있으며, 덧씌우기 시 시공량 25% 증가 등 복합적인 계산 규칙이 있어 현재의 adjusted_daily_crew 단일 스키마로 표현하기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "Type별 표와 시공량 계수표의 정확 경로를 연결해 일당 작업조를 계산한다. 덧씌우기는 파쇄기 제외를 결합 장비행에서 분리할 수 없어 조건부 차단한다.",
   "citations": [
     {
       "table_id": "p933-t0",
@@ -300,9 +440,7 @@
     }
   ],
   "open_questions": [
-    "Type별로 시공량 할증계수 표가 3개로 분리되어 있어, 단일 입력으로 열을 매칭하기 까다로움",
-    "장비가 5종류 투입되는데 adjusted_daily_crew 모델이 다중 장비를 지원하는지 불명확함",
-    "덧씌우기 시 시공량 25% 증가를 adjusted_daily_crew 모델에 어떻게 반영할지 불명확함"
+    "덧씌우기 시 원문은 포장공 1인과 파쇄기 1대를 제외하고 시공량을 25% 늘리도록 규정하지만, 기본 장비표는 로더와 소형노면파쇄기를 한 행으로 묶어 제시합니다. 파쇄기만 제외한 장비 조합은 확인 전까지 차단합니다."
   ],
   "questions": [
     "A-Type, B-Type, C-Type은 어떻게 구분하나요?",
@@ -321,7 +459,7 @@
     ],
     "prompt_sha256": "874a7ec575a2471860804a7629b3682dea9ba6f22cb0185f92d72c47d9780494",
     "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
-    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "chunks_sha256": "dceee820f2d75ad23f54ee510c2ac745b6b2265132f680df53b06523b1a58e55",
     "citation_retry_used": false,
     "citation_issues_after_retry": []
   }

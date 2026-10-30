@@ -62,25 +62,27 @@
     "tables": [
       {
         "id": "p656-t3",
-        "role": "단열두께별 일당 시공량 및 인원",
-        "source": "PDF 600쪽 5-4-6 표",
-        "unit": "인/작업조, ㎡/일",
+        "role": "Source daily outputs by insulation thickness and reconstructed crew rows",
+        "source": "PDF 600? 5-4-6 ?",
+        "unit": "?/???, ?/?",
         "values": {
           "50이하": {
-            "내장공 보통인부": "2",
             "시공량(㎡)": "75"
           },
           "100이하": {
-            "내장공 보통인부": "2",
             "시공량(㎡)": "70"
           },
           "200이하": {
-            "내장공 보통인부": "2",
             "시공량(㎡)": "65"
           },
           "300이하": {
-            "내장공 보통인부": "2",
             "시공량(㎡)": "60"
+          },
+          "내장공": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
           }
         },
         "cite": {
@@ -104,15 +106,40 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p656-t3",
+          "row_input": "thickness",
+          "column": "시공량(㎡)"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p656-t3",
+          "column": "수량",
+          "trades": [
+            "내장공",
+            "보통인부"
+          ]
+        },
+        "equipment": null,
+        "materials": [
+          {
+            "name": "insulation material",
+            "table": "p657-t0",
+            "row": "단열재",
+            "column": "수량",
+            "unit": "m2"
+          }
+        ]
+      },
       "steps": [
-        "단열두께에 따른 일당 시공량을 p656-t3에서 확인한다.",
-        "작업일수 = 시공 면적 ÷ 일당 시공량으로 계산한다.",
-        "직종별 인·일 = 작업일수 × 직종별 인원(원문 기준 내장공 2인, 보통인부 1인)으로 계산한다.",
-        "재료량은 시공 면적 × 1.1㎡(p657-t0)로 계산한다."
+        "Select source daily output by insulation thickness.",
+        "Calculate workdays and crew person-days from the source 2+1 crew.",
+        "Calculate insulation material as area times source coefficient 1.1."
       ],
-      "source": "PDF 600쪽 p656-t3, p657-t0",
+      "source": "PDF 600? 5-4-6 ?, 601? ??? ? ? [?]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -164,54 +191,23 @@
           }
         ]
       }
-    ]
+    ],
+    "open_questions": [],
+    "questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과(p656-t3)에서 직종별 인원(내장공 2인, 보통인부 1인)이 '내장공 보통인부 | 수량 2'로 병합되어 보통인부 인원이 누락되었으므로 자동 계산 모델(daily_crew)을 적용할 수 없습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "Source tables define daily outputs, crew composition, material coefficient and applicability conditions.",
   "citations": [
     {
-      "table_id": "p656-t3",
-      "row": "50이하",
-      "column": "시공량(㎡)",
-      "value": "75"
+      "table_id": "p656-t3"
     },
     {
-      "table_id": "p657-t0",
-      "row": "단열재",
-      "column": "수량",
-      "value": "1.1"
-    },
-    {
-      "chunk_id": "p656-x23",
-      "quote": "① 본 품은 거푸집면(벽, 바닥)에 단열재를 설치하는 기준이다."
-    },
-    {
-      "chunk_id": "p656-x23",
-      "quote": "② 본 품은 발포폴리스티렌(비드법, 압출법), 패놀폼(PF) 단열재의 1겹 붙임 기준이다."
-    },
-    {
-      "chunk_id": "p657-x0",
-      "quote": "③ 본 품은 단열재 절단 및 설치, 이음부 마감(우레탄폼 충전 등) 작업을 포함한다."
-    },
-    {
-      "chunk_id": "p657-x0",
-      "quote": "④ 공구손료 및 경장비(타정기 등)의 기계경비는 인력품의 2%로 계상한다."
-    },
-    {
-      "chunk_id": "p657-x2",
-      "quote": "※ 위 재료량은 할증이 포함된 것이다."
+      "table_id": "p657-t0"
     }
   ],
-  "open_questions": [
-    "파싱 결과(p656-t3)에서 직종별 인원(내장공 2인, 보통인부 1인)이 '내장공 보통인부 | 수량 2'로 병합되어 보통인부 인원이 누락되었습니다. 이로 인해 자동 계산 모델(daily_crew)을 적용하지 못하고 not_calculable로 분류했습니다.",
-    "재료량 표(p657-t0)의 단열재 수량 1.1㎡를 일당 작업조 계산에 어떻게 통합할지 명세 형식이 명확하지 않아 steps에만 명시했습니다."
-  ],
-  "questions": [
-    "공구손료는 어떻게 계상하나요?",
-    "단열두께가 150mm인 경우 시공량은 어떻게 적용하나요?",
-    "단열재를 2겹으로 시공할 때 품은 어떻게 계산하나요?"
-  ],
+  "open_questions": [],
+  "questions": [],
   "meta": {
     "model": "gemini-3.1-pro-preview",
     "created_at": "2026-09-28T18:02:51.426915+00:00",

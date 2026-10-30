@@ -117,6 +117,9 @@ function QuestionCard({
   disabled: boolean;
 }) {
   const isWork = question.name === 'work';
+  const [typed, setTyped] = useState('');
+  const numeric = !Array.isArray(question.choices) && !!question.unit;
+  const typedValid = /^\d+(?:\.\d+)?$/.test(typed.trim()) && Number(typed) > 0;
   return (
     <div className="question-card">
       <div className="question-ask">{question.ask}</div>
@@ -147,6 +150,19 @@ function QuestionCard({
             );
           })}
         </div>
+      )}
+      {numeric && (
+        <form className="question-number" onSubmit={(event) => {
+          event.preventDefault();
+          if (typedValid) onSelect(typed.trim(), `${typed.trim()}${question.unit}`);
+        }}>
+          <input type="text" inputMode="decimal" aria-label={question.ask} value={typed} disabled={disabled}
+            onChange={(event) => setTyped(event.target.value)} />
+          <span>{question.unit}</span>
+          <button type="submit" className={`choice-btn${selectedLabel ? ' selected' : ''}`} disabled={disabled || !typedValid}>
+            입력
+          </button>
+        </form>
       )}
       {question.decision_table && <DecisionTable table={question.decision_table} />}
       {question.citations && question.citations.length > 0 && <CitationList citations={question.citations} />}
@@ -415,6 +431,15 @@ function ComputedCard({ work, inputs, result, priced, tables, response }: {
         {result.daily_volume && <div className="formula-row"><span className="formula-label">일당시공량</span>
           <strong>{result.daily_volume.value} {result.daily_volume.unit}</strong>
           <span className="formula-text">{result.daily_volume.formula}</span></div>}
+        {result.daily_volume?.adjustments?.map((adjustment, index) => <div className="unit-note" key={`${adjustment.operation}-${index}`}>
+          <strong>적용 보정: {adjustment.before} → {adjustment.after}</strong>
+          <div>{adjustment.reason}</div>
+          <div>출처: {adjustment.source}</div>
+        </div>)}
+        {result.calculation_module && <div className="unit-note">
+          계산 모듈: {result.calculation_module.module_id} v{result.calculation_module.version}
+          {result.calculation_module.source_hash && <div>원문 해시: {result.calculation_module.source_hash}</div>}
+        </div>}
         {result.work_days && <><div className="formula-row"><span className="formula-label">작업조 투입량</span>
           <strong>{result.work_days.display ?? result.work_days.value} 작업조·일</strong>
           <span className="formula-text">{result.work_days.formula}</span></div>

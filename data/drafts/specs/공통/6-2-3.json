@@ -154,6 +154,10 @@
         "crew": {
           "table": "p190-t0",
           "row_input": "work_type",
+          "column_selector_by_trade": {
+            "인력(인) 철근공": "인력(인) 철근공",
+            "인력(인) 보통인부": "인력(인) 보통인부"
+          },
           "trades": [
             "인력(인) 철근공",
             "인력(인) 보통인부"

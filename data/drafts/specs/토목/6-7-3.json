@@ -304,11 +304,54 @@
             "배관공(수도)",
             "보통인부",
             "크레인"
-          ]
+          ],
+          "column_match_mode": "token"
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "크레인",
+            "when": {
+              "pipe_diameter": "150"
+            },
+            "cite": [
+              {
+                "table_id": "p432-t0",
+                "row": "150",
+                "column": "크레인(hr) 비압력관",
+                "value": "-"
+              },
+              {
+                "table_id": "p432-t0",
+                "row": "150",
+                "column": "크레인(hr) 압력관",
+                "value": "-"
+              }
+            ]
+          },
+          {
+            "trade": "크레인",
+            "when": {
+              "pipe_diameter": "200"
+            },
+            "cite": [
+              {
+                "table_id": "p432-t0",
+                "row": "200",
+                "column": "크레인(hr) 비압력관",
+                "value": "-"
+              },
+              {
+                "table_id": "p432-t0",
+                "row": "200",
+                "column": "크레인(hr) 압력관",
+                "value": "-"
+              }
+            ]
+          }
+        ]
       },
       "steps": [
         "p432-t0에서 관경(pipe_diameter)과 관 종류(pipe_type)에 해당하는 배관공, 보통인부, 크레인의 단위당 품을 찾는다.",

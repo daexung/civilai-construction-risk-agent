@@ -77,28 +77,33 @@
           "trades": [
             "배관공(수도)",
             "보통인부"
-          ]
+          ],
+          "column": "수량"
         },
         "equipment": [
           {
             "name": "크레인",
             "table": "p964-t0",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           },
           {
             "name": "트럭",
             "table": "p964-t0",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           },
           {
             "name": "수중펌프",
             "table": "p964-t0",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           },
           {
             "name": "발전기",
             "table": "p964-t0",
-            "unit": "대·일"
+            "unit": "대·일",
+            "column": "수량"
           }
         ],
         "quantity_input": "volume"
@@ -130,7 +135,7 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "일당 작업조의 인원/장비 수량과 기준 일일시공량이 표에 명시되어 있어, 물량을 시공량으로 나누어 작업일수를 구하는 전형적인 일당 작업조형 계산입니다.",
+  "calc_type_reason": "인원·장비 대수가 표의 '수량' 열에 있어 열 지정만 보완하면 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
     {
       "table_id": "p964-t0",

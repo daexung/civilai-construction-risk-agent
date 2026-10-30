@@ -58,7 +58,23 @@
           {
             "when": {},
             "change": "누설 Check용 가루비누는 ㎥당 0.04㎏ 계상한다.",
-            "source": "PDF 834쪽 [주] ④"
+            "source": "PDF 834쪽 [주] ④",
+            "implemented_by": "unit_rate_table.additional_materials note-based source_rate"
+          }
+        ],
+        "additional_materials": [
+          {
+            "name": "가루비누",
+            "source_rate": "0.04",
+            "basis": "kg/㎥",
+            "quantity_input": "volume",
+            "quantity_unit": "㎥",
+            "unit": "kg",
+            "source": "PDF 834쪽 [주] ④",
+            "cite": {
+              "chunk_id": "p890-x4",
+              "quote": "④ 누설 Check용 가루비누는 ㎥당 0.04㎏ 계상한다."
+            }
           }
         ]
       },
@@ -122,7 +138,8 @@
     }
   ],
   "open_questions": [
-    "파싱 결과에 13-8 쓰레기소각 기계설비의 내용이 일부 섞여 있어 해당 부분은 제외하고 작성했습니다."
+    "가루비누의 사용량은 산출하나, 현장 재료단가가 없어 재료비 금액은 미산정합니다.",
+    "원문 추출에 다음 절의 내용이 섞인 사항은 이미 관련되지 않은 범위로 제외되어 있습니다."
   ],
   "questions": [
     "노 기밀 시험 물량이 100㎥일 때 기계기사 품은 얼마인가요?",

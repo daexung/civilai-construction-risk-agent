@@ -73,14 +73,53 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p218-t1",
+          "row": "용접공",
+          "column_input": "panel_area"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p218-t1",
+          "column": "수량",
+          "trades": [
+            "용접공",
+            "철공"
+          ],
+          "rate_codes": {
+            "용접공": "",
+            "철공": ""
+          }
+        },
+        "equipment": [],
+        "additional_work": [
+          {
+            "quantity_input": "quantity",
+            "base_output": {
+              "table": "p218-t1",
+              "row": "석공",
+              "column_input": "panel_area"
+            },
+            "crew_table": "p218-t1",
+            "crew_column": "수량",
+            "crew": [
+              "석공",
+              "줄눈공",
+              "보통인부"
+            ],
+            "source": "7-4-3 석재판 붙임: 하지철물 설치와 별도 시공량"
+          }
+        ]
+      },
       "steps": [
-        "p218-t1에서 석재판 면적에 따른 하지철물 설치(용접공, 철공) 및 석재판 붙임(석공, 줄눈공, 보통인부)의 시공량을 각각 확인한다.",
-        "각 직종별 수량(인원)을 해당 작업의 시공량으로 나누어 ㎡당 품을 산출한다.",
-        "산출된 ㎡당 품에 물량을 곱하여 총 투입 인·일을 구한다."
+        "석재판 면적 구간으로 하지철물 설치(용접공·철공)의 일당 시공량을 고르고 작업일수를 구한다.",
+        "같은 구간의 석재판 붙임(석공·줄눈공·보통인부) 일당 시공량으로 별도 작업일수를 구한다.",
+        "각 작업일수 × 직종별 인원으로 인·일을 구하고 공구손료는 원문 비고의 3%를 비용 규칙으로 둔다."
       ],
-      "source": "p218-t1",
+      "source": "PDF 162쪽 7-4-3 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -99,9 +138,9 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "하지철물 설치와 석재판 붙임 작업의 일일시공량이 서로 달라 단일 기준시공량을 사용하는 작업조 모델을 적용할 수 없으며, 각 직종별 인원을 해당 작업의 시공량으로 나누어 단위당 품을 산출해야 합니다.",
+  "calc_type_reason": "두 작업이 각자 일당 시공량을 갖지만 같은 물량 기준이라 기존 additional_work(작업별 별도 시공량)로 표현된다.",
   "citations": [
     {
       "table_id": "p218-t1",

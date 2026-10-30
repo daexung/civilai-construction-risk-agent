@@ -1,0 +1,136 @@
+{
+  "record_version": "2026-10-18.v1",
+  "set_role": "authoring",
+  "calculation_scope": "adjusted_daily_crew labor and excavator deployment",
+  "source_pdf": "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf",
+  "source_pdf_sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+  "author": "Luna",
+  "prior_exposure": "Previously inspected existing formwork authoring/final cases and hand-authored formwork candidate; the two newly selected sections were source-inspected before case preparation, but no candidate response for these sections was inspected.",
+  "independent_second_person_review": false,
+  "expected_value_method": "Read table row/column and notes from pinned 2026 PDF; calculate exact rational outputs separately from any candidate; retain source values, formula, unit, and rounding rule per case.",
+  "cases": [
+    {
+      "id": "post-auth-4m-install-q100",
+      "spec_path": "data/drafts/specs/공통/2-4-1.json",
+      "inputs": {
+        "condition": "지주높이 4m이하 설치",
+        "quantity": "100",
+        "h_pile_spacing": "2"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_output": "100",
+        "work_days": "1",
+        "person_days": {
+          "비계공": "3",
+          "보통인부": "1"
+        },
+        "equipment_days": {
+          "굴착기": "1/2"
+        }
+      },
+      "calculation_basis": {
+        "table_id": "p97-t2",
+        "selected_work_output_column": "지주높이 4m이하 설치",
+        "output_row": "비계공",
+        "source_daily_output_m_per_day": "100",
+        "crew_rows": {
+          "비계공": "3",
+          "보통인부": "1"
+        },
+        "equipment_row": "굴착기",
+        "equipment_quantity_per_workgroup": "0.5",
+        "formula": "work days = measured metres / source metres per day; each labor/equipment days = work days ? source work-group count",
+        "rounding": "Exact rational comparison; displayed quantities follow the project 1-2-8 and 1-2-1 rounding rules."
+      }
+    },
+    {
+      "id": "post-auth-4m-remove-q250",
+      "spec_path": "data/drafts/specs/공통/2-4-1.json",
+      "inputs": {
+        "condition": "지주높이 4m이하 해체",
+        "quantity": "250",
+        "h_pile_spacing": "2"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_output": "250",
+        "work_days": "1",
+        "person_days": {
+          "비계공": "3",
+          "보통인부": "1"
+        },
+        "equipment_days": {
+          "굴착기": "1/2"
+        }
+      },
+      "calculation_basis": {
+        "table_id": "p97-t2",
+        "selected_work_output_column": "지주높이 4m이하 해체",
+        "output_row": "비계공",
+        "source_daily_output_m_per_day": "250",
+        "crew_rows": {
+          "비계공": "3",
+          "보통인부": "1"
+        },
+        "equipment_row": "굴착기",
+        "equipment_quantity_per_workgroup": "0.5",
+        "formula": "work days = measured metres / source metres per day; each labor/equipment days = work days ? source work-group count",
+        "rounding": "Exact rational comparison; displayed quantities follow the project 1-2-8 and 1-2-1 rounding rules."
+      }
+    },
+    {
+      "id": "post-auth-7m-install-q140",
+      "spec_path": "data/drafts/specs/공통/2-4-1.json",
+      "inputs": {
+        "condition": "지주높이 7m이하 설치",
+        "quantity": "140",
+        "h_pile_spacing": "2"
+      },
+      "expected": {
+        "status": "computed",
+        "daily_output": "70",
+        "work_days": "2",
+        "person_days": {
+          "비계공": "6",
+          "보통인부": "2"
+        },
+        "equipment_days": {
+          "굴착기": "1"
+        }
+      },
+      "calculation_basis": {
+        "table_id": "p97-t2",
+        "selected_work_output_column": "지주높이 7m이하 설치",
+        "output_row": "비계공",
+        "source_daily_output_m_per_day": "70",
+        "crew_rows": {
+          "비계공": "3",
+          "보통인부": "1"
+        },
+        "equipment_row": "굴착기",
+        "equipment_quantity_per_workgroup": "0.5",
+        "formula": "work days = measured metres / source metres per day; each labor/equipment days = work days ? source work-group count",
+        "rounding": "Exact rational comparison; displayed quantities follow the project 1-2-8 and 1-2-1 rounding rules."
+      }
+    }
+  ],
+  "source_spec_path": "data/drafts/specs/공통/2-4-1.json",
+  "source_spec_sha256": "31cb65962fa554f48949a4ad2ea32ca530734206ad139d4bf58e0866f550ddaf",
+  "source_locator": {
+    "division": "공통",
+    "section_no": "2-4-1",
+    "pdf_page": 97,
+    "printed_page": 41,
+    "table_id": "p97-t2",
+    "source_bundle_sha256": "de64be904e55960d43db6e0a5cbc94f40d7bb37a2807503859e3ad359de973f8"
+  },
+  "evaluation_controls": {
+    "frozen_before_new_candidate_generation": true,
+    "same_author": "Luna",
+    "independent_second_person_review": false,
+    "expected_values_from": "pinned source cells plus separately written rational arithmetic; not candidate output",
+    "prompt_exposure": "evaluation inputs/expected values excluded from generation and repair requests",
+    "retirement_rule": "if this evaluation failure is used to change the candidate, retire this set from future withheld performance totals"
+  }
+}

@@ -26,6 +26,15 @@
         "source": "PDF 41쪽 2-4-1 표"
       },
       {
+        "name": "h_pile_spacing",
+        "type": "positive_rational",
+        "allowed_values": "greater than 0",
+        "unit": "m",
+        "required": true,
+        "ask": "H pile spacing in m?",
+        "source": "PDF p97, 2-4-1 note 1: the listed basis is 2.0 m spacing."
+      },
+      {
         "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
@@ -108,7 +117,22 @@
       "source": "PDF 41쪽 2-4-1 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "H-pile spacing differs from the published 2.0 m basis",
+        "blocked_if": {
+          "input": "h_pile_spacing",
+          "op": "!=",
+          "value": "2"
+        },
+        "reason": "This published workgroup applies to H-pile spacing 2.0 m; another spacing has no source-supported adjustment in this item.",
+        "source": "PDF p97, 2-4-1 note 1",
+        "cite": {
+          "chunk_id": "p97-x16",
+          "quote": "본 품은 강관을 사용한 지주(지주간격 2.0m)의 설치 및 해체 작업 기준이다."
+        }
+      }
+    ],
     "not_calculated": [
       {
         "item": "콘크리트 기초, 출입구문, 방진망 작업",

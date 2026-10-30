@@ -14,24 +14,6 @@
     ],
     "inputs": [
       {
-        "name": "bucket_capacity",
-        "type": "positive_rational",
-        "allowed_values": "0보다 큰 수",
-        "unit": "㎥",
-        "required": true,
-        "ask": "굴착기의 버킷용량(q)은 몇 ㎥입니까?",
-        "source": "PDF 172쪽 Q 산정 공식"
-      },
-      {
-        "name": "volume_conversion_factor",
-        "type": "positive_rational",
-        "allowed_values": "0보다 큰 수",
-        "unit": null,
-        "required": true,
-        "ask": "체적환산계수(f)는 얼마입니까?",
-        "source": "PDF 172쪽 Q 산정 공식"
-      },
-      {
         "name": "bucket_condition",
         "type": "enum",
         "allowed_values": [
@@ -123,21 +105,6 @@
         "source": "PDF 173쪽 2. 작업효율(E) ⑦"
       },
       {
-        "name": "excavator_capacity",
-        "type": "enum",
-        "allowed_values": [
-          "0.12∼0.4",
-          "0.6∼0.8",
-          "1.0∼1.2",
-          "2.0"
-        ],
-        "unit": "㎥",
-        "required": true,
-        "ask": "굴착기의 규격은 얼마입니까?",
-        "decision_table": "p229-t1",
-        "source": "PDF 173쪽 3. 1회 싸이클시간(㎝)"
-      },
-      {
         "name": "swing_angle",
         "type": "enum",
         "allowed_values": [
@@ -151,6 +118,79 @@
         "ask": "굴착기의 회전 각도는 몇 도입니까?",
         "decision_table": "p229-t1",
         "source": "PDF 173쪽 3. 1회 싸이클시간(㎝)"
+      },
+      {
+        "name": "machine_spec",
+        "type": "enum",
+        "unit": "㎥",
+        "required": true,
+        "allowed_values": [
+          "0.12㎥",
+          "0.20㎥",
+          "0.40㎥",
+          "0.60㎥",
+          "0.70㎥",
+          "0.80㎥",
+          "1.00㎥",
+          "1.20㎥",
+          "2.00㎥"
+        ],
+        "ask": "굴착기의 규격(버킷용량)은 무엇입니까?",
+        "machine_codes": {
+          "0.12㎥": "0201-0012",
+          "0.20㎥": "0201-0020",
+          "0.40㎥": "0201-0040",
+          "0.60㎥": "0201-0060",
+          "0.70㎥": "0201-0070",
+          "0.80㎥": "0201-0080",
+          "1.00㎥": "0201-0100",
+          "1.20㎥": "0201-0120",
+          "2.00㎥": "0201-0200"
+        },
+        "source": "2026년도 건설기계 경비산출표 굴착기(무한궤도)"
+      },
+      {
+        "name": "volume_basis",
+        "type": "enum",
+        "allowed_values": [
+          "자연상태",
+          "흐트러진 상태"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 물량은 자연상태 기준입니까, 흐트러진 상태 기준입니까?",
+        "source": "PDF 1-2-3 체적환산계수 표"
+      },
+      {
+        "name": "L",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": null,
+        "required": false,
+        "required_when": {
+          "input": "volume_basis",
+          "equals": "자연상태"
+        },
+        "ask": "토량변화율 L(흐트러진 상태 체적/자연상태 체적)은 얼마입니까? (현장 시험값)",
+        "source": "PDF 1-2-3 체적환산계수 표"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "작업할 토량은 몇 ㎥입니까?",
+        "source": "현장 물량"
+      },
+      {
+        "name": "fuel_price",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "원/ℓ",
+        "required": true,
+        "ask": "경유(주연료) 단가는 ℓ당 몇 원입니까? (해당 지역 가격, 품셈 8-1-7)",
+        "source": "품셈 8-1-7 유류가격은 해당지역의 가격"
       }
     ],
     "tables": [
@@ -200,7 +240,6 @@
             "흐트러진 상태 불량": "0.50"
           },
           "파쇄암": {
-            "자연상태 불량": "0.45",
             "흐트러진 상태 보통": "0.45",
             "흐트러진 상태 불량": "0.35"
           }
@@ -266,8 +305,690 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "derived": [
+          {
+            "name": "q",
+            "kind": "table_cell",
+            "unit": "㎥",
+            "source": "장비 규격 = 버킷용량 q",
+            "cases": [
+              {
+                "when": {
+                  "machine_spec": "0.12㎥"
+                },
+                "value": "0.12",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "machine_spec": "0.20㎥"
+                },
+                "value": "0.20",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "machine_spec": "0.40㎥"
+                },
+                "value": "0.40",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "machine_spec": "0.60㎥"
+                },
+                "value": "0.60",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "machine_spec": "0.70㎥"
+                },
+                "value": "0.70",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "machine_spec": "0.80㎥"
+                },
+                "value": "0.80",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "machine_spec": "1.00㎥"
+                },
+                "value": "1.00",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "machine_spec": "1.20㎥"
+                },
+                "value": "1.20",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              },
+              {
+                "when": {
+                  "machine_spec": "2.00㎥"
+                },
+                "value": "2.00",
+                "cite": {
+                  "chunk_id": "p228-x0",
+                  "quote": "q : 버킷용량(㎥)"
+                }
+              }
+            ]
+          },
+          {
+            "name": "L_eff",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "1-2-3 체적환산계수",
+            "cases": [
+              {
+                "when": {
+                  "volume_basis": "자연상태"
+                },
+                "input_value": "L",
+                "cite": {
+                  "table_id": "p65-t1",
+                  "row": "흐트러진상태의체적",
+                  "column": "자연상태의체적",
+                  "value": "1/L"
+                }
+              },
+              {
+                "when": {
+                  "volume_basis": "흐트러진 상태"
+                },
+                "value": "1",
+                "cite": {
+                  "table_id": "p65-t1",
+                  "row": "흐트러진상태의체적",
+                  "column": "자연상태의체적",
+                  "value": "1/L"
+                }
+              }
+            ]
+          },
+          {
+            "name": "f",
+            "kind": "expression",
+            "unit": "",
+            "source": "f = 1/L (자연상태 환산), 흐트러진 상태 1",
+            "expression": {
+              "div": [
+                {
+                  "number": "1"
+                },
+                {
+                  "input": "L_eff"
+                }
+              ]
+            }
+          },
+          {
+            "name": "K",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "PDF 172쪽 1. 버킷계수(K)",
+            "cases": [
+              {
+                "when": {
+                  "bucket_condition": "용이하게 굴착할 수 있는 연한 토질로서 버킷에 산적으로 가득찰 때가 많은 조건이 좋은 모래, 보통토인 경우"
+                },
+                "table": "p228-t0",
+                "row": "용이하게 굴착할 수 있는 연한 토질로서 버킷에 산적으로 가득찰 때가 많은 조건이 좋은 모래, 보통토인 경우",
+                "column": "K"
+              },
+              {
+                "when": {
+                  "bucket_condition": "위의 토질보다 약간 단단한 토질로서 버킷에 거의 가득 채울 수 있는 모래, 보통토 및 조건이 좋은 점토인 경우"
+                },
+                "table": "p228-t0",
+                "row": "위의 토질보다 약간 단단한 토질로서 버킷에 거의 가득 채울 수 있는 모래, 보통토 및 조건이 좋은 점토인 경우",
+                "column": "K"
+              },
+              {
+                "when": {
+                  "bucket_condition": "버킷에 가득 채우기가 어렵거나 가벼운 발파를 필요로 하는 것으로서 단단한 점토질, 점토, 역토질인 경우"
+                },
+                "table": "p228-t0",
+                "row": "버킷에 가득 채우기가 어렵거나 가벼운 발파를 필요로 하는 것으로서 단단한 점토질, 점토, 역토질인 경우",
+                "column": "K"
+              },
+              {
+                "when": {
+                  "bucket_condition": "버킷에 넣기 어렵고 불규칙한 공극이 생기는 것으로서 발파 또는 리퍼작업 등에 의하여 얻어진 암과 파쇄암, 호박돌, 역 등인 경우"
+                },
+                "table": "p228-t0",
+                "row": "버킷에 넣기 어렵고 불규칙한 공극이 생기는 것으로서 발파 또는 리퍼작업 등에 의하여 얻어진 암과 파쇄암, 호박돌, 역 등인 경우",
+                "column": "K"
+              }
+            ]
+          },
+          {
+            "name": "E_table",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "PDF 172~173쪽 2. 작업효율(E) [주] ③⑦",
+            "cases": [
+              {
+                "when": {
+                  "is_residential_area": true,
+                  "is_underwater": false,
+                  "soil_state": "자연상태"
+                },
+                "table": "p229-t0",
+                "row_input": "soil_type",
+                "column_join": [
+                  "soil_state",
+                  "site_condition"
+                ]
+              },
+              {
+                "when": {
+                  "is_residential_area": true,
+                  "is_underwater": true,
+                  "soil_state": "자연상태"
+                },
+                "table": "p229-t0",
+                "row_input": "soil_type",
+                "column": "자연상태 불량"
+              },
+              {
+                "when": {
+                  "is_residential_area": false,
+                  "is_underwater": false
+                },
+                "table": "p228-t1",
+                "row_input": "soil_type",
+                "column_join": [
+                  "soil_state",
+                  "site_condition"
+                ]
+              },
+              {
+                "when": {
+                  "is_residential_area": false,
+                  "is_underwater": true,
+                  "soil_state": "자연상태"
+                },
+                "table": "p228-t1",
+                "row_input": "soil_type",
+                "column": "자연상태 불량"
+              },
+              {
+                "when": {
+                  "is_residential_area": false,
+                  "is_underwater": true,
+                  "soil_state": "흐트러진 상태"
+                },
+                "table": "p228-t1",
+                "row_input": "soil_type",
+                "column": "흐트러진 상태 불량"
+              }
+            ]
+          },
+          {
+            "name": "E_deduction",
+            "kind": "sum_terms",
+            "source": "PDF 172쪽 2. 작업효율(E) [주] ④ 터파기 0.05를 뺀다",
+            "terms": [
+              {
+                "when": {
+                  "is_trenching": true
+                },
+                "value": "1/20"
+              }
+            ]
+          },
+          {
+            "name": "E",
+            "kind": "expression",
+            "unit": "",
+            "expression": {
+              "sub": [
+                {
+                  "input": "E_table"
+                },
+                {
+                  "input": "E_deduction"
+                }
+              ]
+            }
+          },
+          {
+            "name": "cm",
+            "kind": "table_cell",
+            "unit": "초",
+            "source": "PDF 173쪽 3. 1회 싸이클시간(cm)",
+            "cases": [
+              {
+                "when": {
+                  "machine_spec": "0.12㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.12㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.12㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.12㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 180"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.20㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.20㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.20㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.20㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 180"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.40㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.40㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.40㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.40㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "0.12∼0.4",
+                "column": "싸이클시간(Sec) 180"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.60㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.60㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.60㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.60㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 180"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.70㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.70㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.70㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.70㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 180"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.80㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.80㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.80㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "0.80㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "0.6∼0.8",
+                "column": "싸이클시간(Sec) 180"
+              },
+              {
+                "when": {
+                  "machine_spec": "1.00㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "1.0∼1.2",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "1.00㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "1.0∼1.2",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "1.00㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "1.0∼1.2",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "1.00㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "1.0∼1.2",
+                "column": "싸이클시간(Sec) 180"
+              },
+              {
+                "when": {
+                  "machine_spec": "1.20㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "1.0∼1.2",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "1.20㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "1.0∼1.2",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "1.20㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "1.0∼1.2",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "1.20㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "1.0∼1.2",
+                "column": "싸이클시간(Sec) 180"
+              },
+              {
+                "when": {
+                  "machine_spec": "2.00㎥",
+                  "swing_angle": "45"
+                },
+                "table": "p229-t1",
+                "row": "2.0",
+                "column": "싸이클시간(Sec) 45"
+              },
+              {
+                "when": {
+                  "machine_spec": "2.00㎥",
+                  "swing_angle": "90"
+                },
+                "table": "p229-t1",
+                "row": "2.0",
+                "column": "싸이클시간(Sec) 90"
+              },
+              {
+                "when": {
+                  "machine_spec": "2.00㎥",
+                  "swing_angle": "135"
+                },
+                "table": "p229-t1",
+                "row": "2.0",
+                "column": "싸이클시간(Sec) 135"
+              },
+              {
+                "when": {
+                  "machine_spec": "2.00㎥",
+                  "swing_angle": "180"
+                },
+                "table": "p229-t1",
+                "row": "2.0",
+                "column": "싸이클시간(Sec) 180"
+              }
+            ]
+          },
+          {
+            "name": "Q",
+            "kind": "expression",
+            "unit": "㎥/hr",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "number": "3600"
+                    },
+                    {
+                      "input": "q"
+                    },
+                    {
+                      "input": "K"
+                    },
+                    {
+                      "input": "f"
+                    },
+                    {
+                      "input": "E"
+                    }
+                  ]
+                },
+                {
+                  "input": "cm"
+                }
+              ]
+            },
+            "source": "Q = 3,600 × q × K × f × E / cm"
+          }
+        ],
+        "outputs": [
+          {
+            "kind": "formula",
+            "name": "시간당 작업량 Q",
+            "resource_kind": "reference",
+            "unit": "㎥/hr",
+            "expression": {
+              "input": "Q"
+            },
+            "formula": "Q = 3,600 × q × K × f × E / cm"
+          },
+          {
+            "kind": "formula",
+            "name": "굴착기",
+            "resource_kind": "equipment",
+            "unit": "hr",
+            "expression": {
+              "div": [
+                {
+                  "number": "1"
+                },
+                {
+                  "input": "Q"
+                }
+              ]
+            },
+            "formula": "장비 가동시간(기준 물량 1㎥당) = 1 ÷ 시간당 작업량 Q (Q와 물량은 같은 토량 기준)",
+            "source": "PDF 8-2 시간당 작업량 Q의 정의(㎥/hr)"
+          }
+        ],
+        "equipment": {
+          "line_name": "굴착기",
+          "label": "굴착기",
+          "machine_code_input": "machine_spec",
+          "operator_rate_code": "1048",
+          "fuel_price_input": "fuel_price"
+        },
+        "quantity_input": "quantity"
+      },
       "steps": [
         "버킷용량(q)과 체적환산계수(f)를 입력받는다.",
         "현장 조건에 따라 p228-t0에서 버킷계수(K)를 찾는다.",
@@ -277,7 +998,7 @@
         "공식 Q = 3,600 * q * K * f * E / cm 을 계산하여 시간당 작업량을 구한다."
       ],
       "source": "PDF 172쪽 Q 산정 공식",
-      "rounding": "기본 자릿수 적용"
+      "rounding": "총 투입량은 정확한 유리수로 보존"
     },
     "blocked": [
       {
@@ -288,15 +1009,32 @@
           "chunk_id": "p229-x0",
           "quote": "⑥ 굴착작업시 지하매설물(각종 매설관 등)로 인하여 작업이 현저하게 저하하는 경우는 작업효율을 별도로 정한다."
         }
+      },
+      {
+        "condition": "주택가지역 작업효율(⑦)과 터파기 감산(④)이 함께 적용되는 경우",
+        "blocked_if_all": [
+          {
+            "input": "is_residential_area",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "is_trenching",
+            "op": "==",
+            "value": true
+          }
+        ],
+        "reason": "⑦의 작업효율 표에 터파기 0.05 감산을 함께 적용하는지 원문이 정하지 않는다.",
+        "source": "PDF 172~173쪽 2. 작업효율(E) [주] ④⑦"
       }
     ],
     "not_calculated": [],
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "formula",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "장비의 시간당 작업량(Q)을 구하는 공식 기반 계산으로, 현재 지원하는 일당 작업조형이나 단위당 품 계산 모델에 맞지 않습니다.",
+  "calc_type_reason": "원문 K·E·cm 표와 Q 산정식으로 시간당 작업량(참조값)을 선언형 formula로 계산. 파쇄암 E 칸 위치는 원문 이미지로 교정.",
   "citations": [
     {
       "table_id": "p228-t0",

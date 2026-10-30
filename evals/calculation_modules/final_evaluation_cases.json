@@ -1,0 +1,8 @@
+[
+  {"id":"heldout-height-40m","kind":"boundary","section":"common/6-3-1","source":{"pdf_page":193,"printed_page":137,"status":"source method unresolved"},"policy":"formwork-6-3-1-height-started-interval-compound-v1","expected":{"height_m":"40","intervals":11,"daily_output":"10.631060024624333494473"}},
+  {"id":"heldout-height-40.001m","kind":"boundary","section":"common/6-3-1","source":{"pdf_page":193,"printed_page":137,"status":"source method unresolved"},"policy":"formwork-6-3-1-height-started-interval-compound-v1","expected":{"height_m":"40.001","intervals":12,"daily_output":"9.67426462240814347997043"}},
+  {"id":"heldout-height-roof-interaction","kind":"interaction","section":"common/6-3-1","expected":{"height_m":"7.001","roof":true,"daily_output":"22.659","base_output":"30","quantity_unchanged":true}},
+  {"id":"heldout-crew-equipment","kind":"crew_and_equipment","section":"common/6-1-4","source":{"pdf_page":186,"printed_page":130,"table":"p186-t1"},"expected":{"daily_output":"218.4","volume_m3":"100","work_days":"125/273","pump_equipment_days":"125/273","pipe_special_crew_increment":1}},
+  {"id":"heldout-output-plus-minus","kind":"output_delta","section":"civil/5-3-2","expected":{"base_output":4,"increased_output":5,"decreased_output":3}},
+  {"id":"heldout-cost-aggregate","kind":"cost_combination","section":"common/6-1-4","source":{"pdf_pages":[186,187],"markers":["②","③"]},"expected":{"tool_expense_rate":"0.05","residual_material_rate":"0.05","full_estimate_contract_amount":10032436}}
+]

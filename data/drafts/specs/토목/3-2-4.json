@@ -12,6 +12,37 @@
     ],
     "inputs": [
       {
+        "name": "lookup_type",
+        "type": "enum",
+        "allowed_values": [
+          "A·B·C군 표준 장비조합",
+          "소형터널 장비조합"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 원문 장비조합 표를 선택해주세요.",
+        "source": "PDF 341쪽 A·B·C군 표 / 소형터널 표",
+        "source_table_map": {
+          "A·B·C군 표준 장비조합": "p397-t0",
+          "소형터널 장비조합": "p397-t2"
+        }
+      },
+      {
+        "name": "equipment_role",
+        "type": "enum",
+        "allowed_values": [
+          "발파천공및 록볼트 천공장비",
+          "버력상차장비",
+          "버력운반장비",
+          "발파천공천공장비"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 장비 역할은 무엇입니까?",
+        "source": "PDF 341쪽 선택한 장비조합 표의 행 구분",
+        "source_row_key": true
+      },
+      {
         "name": "tunnel_class",
         "type": "enum",
         "allowed_values": [

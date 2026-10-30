@@ -21,7 +21,11 @@
         "unit": null,
         "required": true,
         "ask": "준설선의 종류는 무엇입니까?",
-        "source": "PDF 388쪽 1. 펌프준설선, 2. 그래브 준설선"
+        "source": "PDF 388쪽 1. 펌프준설선, 2. 그래브 준설선",
+        "source_table_map": {
+          "펌프준설선": "p444-t0",
+          "그래브 준설선": "p444-t1"
+        }
       },
       {
         "name": "pump_dredger_spec",
@@ -36,13 +40,22 @@
           "2,462",
           "2,984",
           "3,282",
-          "4,476~8,952",
+          "4,476∼8,952",
           "14,920"
         ],
         "unit": "㎾",
         "required": true,
         "ask": "펌프준설선의 규격은 얼마입니까?",
-        "source": "PDF 388쪽 1. 펌프준설선 표"
+        "source": "PDF 388쪽 1. 펌프준설선 표",
+        "when": {
+          "input": "dredger_type",
+          "equals": "펌프준설선"
+        },
+        "synonyms": {
+          "4,476∼8,952": [
+            "4,476~8,952"
+          ]
+        }
       },
       {
         "name": "grab_dredger_spec",
@@ -60,7 +73,11 @@
         "unit": "㎥",
         "required": true,
         "ask": "그래브 준설선의 규격은 얼마입니까?",
-        "source": "PDF 388쪽 2. 그래브 준설선 표"
+        "source": "PDF 388쪽 2. 그래브 준설선 표",
+        "when": {
+          "input": "dredger_type",
+          "equals": "그래브 준설선"
+        }
       }
     ],
     "tables": [

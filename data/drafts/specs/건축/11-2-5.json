@@ -86,23 +86,30 @@
         "unit_rate_table": {
           "table": "p694-t1",
           "row_input": "surface_type",
-          "column_input": "직종",
           "trades": [
             "도장공",
             "보통인부"
           ]
         },
         "quantity_input": "quantity",
-        "surcharges": [],
-        "note_adjustments": [
+        "surcharges": [
           {
             "when": {
               "is_ceiling": true
             },
-            "change": "본 품의 20%를 가산한다.",
-            "source": "PDF 638쪽 11-2-5 표 비고"
+            "rate": "0.2",
+            "applies_to": [
+              "도장공",
+              "보통인부"
+            ],
+            "source": "- 천장은 본 품의 20%를 가산한다.",
+            "cite": {
+              "chunk_id": "p694-t1",
+              "quote": "- 천장은 본 품의 20%를 가산한다."
+            }
           }
-        ]
+        ],
+        "note_adjustments": []
       },
       "steps": [
         "p694-t1에서 바탕면별 단위당 품을 고른다.",
@@ -137,6 +144,11 @@
           "section_no": "11-2-5",
           "marker": "⑥"
         }
+      },
+      {
+        "item": "Scaffold and height-based surcharge",
+        "source": "11-1-1 cross-reference on source page",
+        "reason": "This paint rate is calculated from the applicable base table and ceiling rule. Height-based scaffold additions require the 11-1-1 height and scaffold inputs, which this spec does not yet collect."
       }
     ],
     "supply_rules": [],
@@ -155,7 +167,7 @@
   },
   "calc_type": "per_unit",
   "calc_type_raw": "per_unit",
-  "calc_type_reason": "단위(㎡)당 직종별 인·일 품이 표에 직접 제시되어 있으므로 per_unit으로 분류합니다.",
+  "calc_type_reason": "Source unit-rate table selected by surface and trade; shared per_unit calculator applies the stated ceiling rate.",
   "citations": [
     {
       "table_id": "p694-t1",

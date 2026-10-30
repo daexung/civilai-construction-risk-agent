@@ -23,7 +23,43 @@
         "unit": null,
         "required": true,
         "ask": "어떤 가설시설물의 손율을 산정합니까?",
-        "source": "PDF 38~39쪽 2-2-3 가설시설물 항목 분류"
+        "source": "PDF 38~39쪽 2-2-3 가설시설물 항목 분류",
+        "source_table_map": {
+          "철제조립식 가설건축물": "p94-t1",
+          "콘테이너형 가설건축물": "p95-t1",
+          "가설울타리 및 가설방음벽": "p95-t2"
+        }
+      },
+      {
+        "name": "rate_basis",
+        "type": "enum",
+        "allowed_values": [
+          "손율(%)",
+          "부자재율 (%) 사무실",
+          "부자재율 (%) 창고"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철제조립식 가설건축물에서 어느 비율을 조회합니까? (손율 또는 사무실/창고 부자재율)",
+        "source": "PDF 38쪽 1. 철제조립식 가설건축물 표의 행 구분",
+        "source_row_key": true,
+        "synonyms": {
+          "손율(%)": [
+            "손율"
+          ],
+          "부자재율 (%) 사무실": [
+            "부자재율 사무실",
+            "사무실 부자재율"
+          ],
+          "부자재율 (%) 창고": [
+            "부자재율 창고",
+            "창고 부자재율"
+          ]
+        },
+        "when": {
+          "input": "facility_category",
+          "equals": "철제조립식 가설건축물"
+        }
       },
       {
         "name": "duration_prefab",
@@ -40,19 +76,11 @@
         "unit": null,
         "required": true,
         "ask": "철제조립식 가설건축물의 사용기간은 얼마입니까?",
-        "source": "PDF 38쪽 p94-t1 표의 기간"
-      },
-      {
-        "name": "building_type",
-        "type": "enum",
-        "allowed_values": [
-          "사무실",
-          "창고"
-        ],
-        "unit": null,
-        "required": true,
-        "ask": "철제조립식 가설건축물의 용도는 무엇입니까? (부자재율 산정용)",
-        "source": "PDF 38쪽 p94-t1 표의 부자재율 구분"
+        "source": "PDF 38쪽 p94-t1 표의 기간",
+        "when": {
+          "input": "facility_category",
+          "equals": "철제조립식 가설건축물"
+        }
       },
       {
         "name": "duration_container",
@@ -68,20 +96,39 @@
         "unit": null,
         "required": true,
         "ask": "콘테이너형 가설건축물의 사용기간은 얼마입니까?",
-        "source": "PDF 39쪽 p95-t1 표의 기간"
+        "source": "PDF 39쪽 p95-t1 표의 기간",
+        "when": {
+          "input": "facility_category",
+          "equals": "콘테이너형 가설건축물"
+        }
       },
       {
         "name": "fence_material",
         "type": "enum",
         "allowed_values": [
-          "전기아연도금강판",
-          "재생플라스틱방음판",
-          "스틸방음판"
+          "손 율 (%) 전기아연도금강판",
+          "손 율 (%) 재생플라스틱방음판",
+          "손 율 (%) 스틸방음판"
         ],
         "unit": null,
         "required": true,
         "ask": "가설울타리 및 가설방음벽의 재료는 무엇입니까?",
-        "source": "PDF 39쪽 p95-t2 표의 재료 구분"
+        "source": "PDF 39쪽 p95-t2 표의 재료 구분",
+        "when": {
+          "input": "facility_category",
+          "equals": "가설울타리 및 가설방음벽"
+        },
+        "synonyms": {
+          "손 율 (%) 전기아연도금강판": [
+            "전기아연도금강판"
+          ],
+          "손 율 (%) 재생플라스틱방음판": [
+            "재생플라스틱방음판"
+          ],
+          "손 율 (%) 스틸방음판": [
+            "스틸방음판"
+          ]
+        }
       },
       {
         "name": "duration_fence",
@@ -97,7 +144,11 @@
         "unit": null,
         "required": true,
         "ask": "가설울타리 및 가설방음벽의 사용기간은 얼마입니까?",
-        "source": "PDF 39쪽 p95-t2 표의 사용시간"
+        "source": "PDF 39쪽 p95-t2 표의 사용시간",
+        "when": {
+          "input": "facility_category",
+          "equals": "가설울타리 및 가설방음벽"
+        }
       }
     ],
     "tables": [

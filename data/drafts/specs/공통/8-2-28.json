@@ -60,6 +60,27 @@
         "required": true,
         "ask": "작업효율 조건은 양호, 보통, 불량 중 무엇입니까? (암질, 파쇄층, 석영분 함유량, 굴진 연장에 따라 결정)",
         "source": "PDF 218쪽 3. 작업효율(E) 및 [주] ①~④"
+      },
+      {
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "굴착할 자연상태 토량은 몇 ㎥입니까?",
+        "source": "PDF 217쪽 Q: 1시간당 작업량에서 대상 물량의 장비시간으로 환산"
+      },
+      {
+        "name": "composition_varies",
+        "type": "boolean",
+        "allowed_values": [
+          true,
+          false
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "철분·석영분 함유량이 달라 실적치를 참조한 별도 계상이 필요합니까?",
+        "source": "PDF 218쪽 4. 1회 싸이클 시간 [주] ②"
       }
     ],
     "tables": [
@@ -82,21 +103,184 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "derived": [
+          {
+            "name": "excavation_area",
+            "kind": "expression",
+            "unit": "㎡",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "pi": true
+                    },
+                    {
+                      "pow": [
+                        {
+                          "input": "excavation_diameter"
+                        },
+                        {
+                          "number": 2
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "number": 4
+                }
+              ]
+            },
+            "source": "PDF 218쪽 1. 굴착면적(A)",
+            "cite": {
+              "chunk_id": "p274-x2",
+              "quote": "1. 굴착면적(A) :   D  D=굴착직경(m)"
+            }
+          },
+          {
+            "name": "stroke_time_min",
+            "kind": "expression",
+            "unit": "분",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "input": "stroke_length"
+                    },
+                    {
+                      "number": 100
+                    }
+                  ]
+                },
+                {
+                  "mul": [
+                    {
+                      "input": "rotation_speed"
+                    },
+                    {
+                      "input": "penetration_depth"
+                    }
+                  ]
+                }
+              ]
+            },
+            "source": "PDF 218쪽 4. 1회 싸이클 시간",
+            "cite": {
+              "chunk_id": "p274-x10",
+              "quote": "T1 = 1스트록 시간 T2 = 정치시간(10분) T1 =  R×Pe  ×"
+            }
+          },
+          {
+            "name": "cycle_time_min",
+            "kind": "expression",
+            "unit": "분",
+            "expression": {
+              "add": [
+                {
+                  "input": "stroke_time_min"
+                },
+                {
+                  "number": 10
+                }
+              ]
+            },
+            "source": "PDF 218쪽 4. 1회 싸이클 시간",
+            "cite": {
+              "chunk_id": "p274-x10",
+              "quote": "cm = T1 + T2 T1 = 1스트록 시간 T2 = 정치시간(10분)"
+            }
+          },
+          {
+            "name": "efficiency_E",
+            "kind": "table_cell",
+            "unit": "무차원",
+            "cases": [
+              {
+                "when": {},
+                "table": "p274-t0",
+                "row": "작업효율",
+                "column_input": "efficiency_condition"
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "kind": "formula",
+            "name": "터널전단면 굴착기 작업시간",
+            "resource_kind": "equipment",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "input": "quantity"
+                    },
+                    {
+                      "input": "cycle_time_min"
+                    }
+                  ]
+                },
+                {
+                  "mul": [
+                    {
+                      "number": 60
+                    },
+                    {
+                      "input": "excavation_area"
+                    },
+                    {
+                      "input": "stroke_length"
+                    },
+                    {
+                      "input": "efficiency_E"
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "hr",
+            "formula": "총 굴착량 × cm ÷ (60 × A × ℓ × E)",
+            "source": "PDF 217쪽 Q = 60 × A × ℓ × E / cm",
+            "cite": [
+              {
+                "chunk_id": "p273-x17",
+                "quote": "Q =  cm ⋅A⋅⋅E"
+              },
+              {
+                "chunk_id": "p274-x3",
+                "quote": "2. 1회의 작업거리(ℓ) 장비 성능에 따라 결정(ø4.5m 경우 1.2m)"
+              },
+              {
+                "chunk_id": "p274-x6",
+                "quote": "작업효율(E) [주]"
+              }
+            ]
+          }
+        ]
+      },
       "steps": [
-        "1. 굴착면적(A) = (π * D^2) / 4 를 계산한다.",
-        "2. 1스트록 시간(T1) = (ℓ / (R * Pe)) * 100 을 계산한다.",
-        "3. 1회 싸이클 시간(cm) = T1 + 정치시간(10분) 을 계산한다.",
-        "4. 1시간당 작업량(Q) = (60 * A * ℓ * E) / cm 을 계산한다."
+        "굴착면적 A=πD²/4를 계산한다.",
+        "1스트록 시간 T1=ℓ/(R×Pe)×100분, 싸이클시간 cm=T1+정치시간 10분을 계산한다.",
+        "작업효율 E를 원문 표에서 조회한다. 철분·석영분 등 함유량이 상이해 실적치가 필요한 경우는 자동 계산을 보류한다.",
+        "시간당 작업량 Q=60×A×ℓ×E/cm에 따라 시간당 생산량과 요청 물량에 필요한 장비 가동시간을 산출한다."
       ],
       "source": "PDF 217~218쪽 8-2-28 본문",
       "rounding": "해당 없음"
     },
     "blocked": [
       {
-        "condition": "철분, 석영분 등 함유량이 상이한 경우",
-        "reason": "실적치를 참조하여 별도 계상해야 함",
+        "condition": "철분·석영분 함유량이 상이해 실적치를 참조한 별도 계상이 필요한 경우",
+        "blocked_if": {
+          "input": "composition_varies",
+          "op": "==",
+          "value": true
+        },
+        "reason": "원문이 실적치 별도 계상을 명시하고 이 명세에 실적치 산정식이 없어 계산하지 않는다.",
         "source": "PDF 218쪽 4. 1회 싸이클 시간 [주] ②",
         "cite": {
           "chunk_id": "p274-x10",
@@ -106,33 +290,46 @@
     ],
     "not_calculated": [],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "이 절은 TBM 장비의 시간당 작업량(Q)을 산출하는 공식만을 제공하며, 직접적인 품(인·일, 대·일)을 산출하는 기준이 아니므로 자동 계산 명세로 적합하지 않습니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "원문 TBM 생산량·스트록·정치시간 및 효율표를 source-cited formula로 연결하여 지정 물량의 장비시간을 산출.",
   "citations": [
+    {
+      "table_id": "p274-t0",
+      "row": "작업효율",
+      "column": "양호",
+      "value": "0.75"
+    },
+    {
+      "table_id": "p274-t0",
+      "row": "작업효율",
+      "column": "보통",
+      "value": "0.65"
+    },
+    {
+      "table_id": "p274-t0",
+      "row": "작업효율",
+      "column": "불량",
+      "value": "0.55"
+    },
     {
       "chunk_id": "p273-x17",
       "quote": "Q =  cm ⋅A⋅⋅E"
     },
     {
       "chunk_id": "p274-x2",
-      "quote": "1. 굴착면적(A) :   D "
+      "quote": "1. 굴착면적(A) :   D  D=굴착직경(m)"
     },
     {
       "chunk_id": "p274-x10",
-      "quote": "cm = T1 + T2"
+      "quote": "cm = T1 + T2 T1 = 1스트록 시간 T2 = 정치시간(10분)"
     },
     {
       "chunk_id": "p274-x10",
-      "quote": "T1 =  R×Pe"
-    },
-    {
-      "table_id": "p274-t0",
-      "row": "작업효율",
-      "column": "양호",
-      "value": "0.75"
+      "quote": "② 철분, 석영분 등 함유량이 상이한 경우 실적치를 참조하여 별도 계상한다."
     }
   ],
   "open_questions": [

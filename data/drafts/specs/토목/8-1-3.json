@@ -153,32 +153,72 @@
             "연암 BX": "0.025",
             "보통암 BX": "0.025",
             "경암 BX": "0.04",
-            "극경암 BX": "0.05"
+            "극경암 BX": "0.05",
+            "풍화암 NX": "0.02",
+            "연암 NX": "0.025",
+            "보통암 NX": "0.025",
+            "경암 NX": "0.04",
+            "극경암 NX": "0.05"
           },
           "메탈크라운비트": {
             "풍화암 BX": "0.8",
             "연암 BX": "1.0",
-            "보통암 BX": "1.0"
+            "보통암 BX": "1.0",
+            "풍화암 NX": "0.8",
+            "연암 NX": "1.0",
+            "보통암 NX": "1.0",
+            "경암 NX": "-",
+            "경암 BX": "-",
+            "극경암 NX": "-",
+            "극경암 BX": "-"
           },
           "다이아몬드비트": {
             "경암 BX": "0.1",
-            "극경암 BX": "0.12"
+            "극경암 BX": "0.12",
+            "풍화암 NX": "-",
+            "풍화암 BX": "-",
+            "연암 NX": "-",
+            "연암 BX": "-",
+            "보통암 NX": "-",
+            "보통암 BX": "-",
+            "경암 NX": "0.1",
+            "극경암 NX": "0.12"
           },
           "메탈리밍쉘": {
             "풍화암 BX": "0.02",
             "연암 BX": "0.025",
-            "보통암 BX": "0.025"
+            "보통암 BX": "0.025",
+            "풍화암 NX": "0.02",
+            "연암 NX": "0.025",
+            "보통암 NX": "0.025",
+            "경암 NX": "-",
+            "경암 BX": "-",
+            "극경암 NX": "-",
+            "극경암 BX": "-"
           },
           "다이아몬드리밍쉘": {
             "경암 BX": "0.03",
-            "극경암 BX": "0.04"
+            "극경암 BX": "0.04",
+            "풍화암 NX": "-",
+            "풍화암 BX": "-",
+            "연암 NX": "-",
+            "연암 BX": "-",
+            "보통암 NX": "-",
+            "보통암 BX": "-",
+            "경암 NX": "0.03",
+            "극경암 NX": "0.04"
           },
           "코아리프터": {
             "풍화암 BX": "0.1",
             "연암 BX": "0.1",
             "보통암 BX": "0.1",
             "경암 BX": "0.1",
-            "극경암 BX": "0.1"
+            "극경암 BX": "0.1",
+            "풍화암 NX": "0.1",
+            "연암 NX": "0.1",
+            "보통암 NX": "0.1",
+            "경암 NX": "0.1",
+            "극경암 NX": "0.1"
           }
         },
         "cite": {
@@ -193,11 +233,30 @@
         "unit_rate_table": {
           "table": "p453-t2",
           "row_input": "직종",
-          "column_input": "rock_type + ' ' + hole_size",
+          "column_input": {
+            "input": "rock_type",
+            "exact_component_inputs": [
+              "rock_type"
+            ],
+            "input_contains": [
+              "hole_size"
+            ]
+          },
           "trades": [
             "중급기술자",
             "보링공"
-          ]
+          ],
+          "row_input_by_table": {
+            "p453-t2": null
+          },
+          "row_by_trade": {
+            "중급기술자": "중급기술자",
+            "보링공": "보링공"
+          },
+          "resource_units": {
+            "중급기술자": "인",
+            "보링공": "인"
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
@@ -209,10 +268,195 @@
             "change": "깊이 10m 증가마다 인력품을 5% 범위 내에서 가산",
             "source": "PDF 398쪽 [주] ①"
           }
+        ],
+        "additional_materials": [
+          {
+            "table": "p454-t0",
+            "row": "더블코아바렐",
+            "name": "더블코아바렐",
+            "unit": "개",
+            "basis": "m",
+            "quantity_input": "quantity",
+            "column_selector": {
+              "input": "rock_type",
+              "exact_component_inputs": [
+                "rock_type"
+              ],
+              "input_contains": [
+                "hole_size"
+              ]
+            },
+            "citation_column_map": {
+              "풍화암 NX": "풍화암 BX",
+              "연암 NX": "연암 BX",
+              "보통암 NX": "보통암 BX",
+              "경암 NX": "경암 BX",
+              "극경암 NX": "극경암 BX"
+            },
+            "dash_policy": "source_exclusion",
+            "source": "PDF printed p.398, 8-1-3 table: dashes are preserved as explicit not-applicable resource cells"
+          },
+          {
+            "table": "p454-t0",
+            "row": "메탈크라운비트",
+            "name": "메탈크라운비트",
+            "unit": "개",
+            "basis": "m",
+            "quantity_input": "quantity",
+            "column_selector": {
+              "input": "rock_type",
+              "exact_component_inputs": [
+                "rock_type"
+              ],
+              "input_contains": [
+                "hole_size"
+              ]
+            },
+            "citation_column_map": {
+              "풍화암 NX": "풍화암 BX",
+              "연암 NX": "연암 BX",
+              "보통암 NX": "보통암 BX",
+              "경암 NX": "경암 BX",
+              "극경암 NX": "극경암 BX"
+            },
+            "dash_policy": "source_exclusion",
+            "source": "PDF printed p.398, 8-1-3 table: dashes are preserved as explicit not-applicable resource cells"
+          },
+          {
+            "table": "p454-t0",
+            "row": "다이아몬드비트",
+            "name": "다이아몬드비트",
+            "unit": "개",
+            "basis": "m",
+            "quantity_input": "quantity",
+            "column_selector": {
+              "input": "rock_type",
+              "exact_component_inputs": [
+                "rock_type"
+              ],
+              "input_contains": [
+                "hole_size"
+              ]
+            },
+            "citation_column_map": {
+              "풍화암 NX": "풍화암 BX",
+              "연암 NX": "연암 BX",
+              "보통암 NX": "보통암 BX",
+              "경암 NX": "경암 BX",
+              "극경암 NX": "극경암 BX"
+            },
+            "dash_policy": "source_exclusion",
+            "source": "PDF printed p.398, 8-1-3 table: dashes are preserved as explicit not-applicable resource cells"
+          },
+          {
+            "table": "p454-t0",
+            "row": "메탈리밍쉘",
+            "name": "메탈리밍쉘",
+            "unit": "개",
+            "basis": "m",
+            "quantity_input": "quantity",
+            "column_selector": {
+              "input": "rock_type",
+              "exact_component_inputs": [
+                "rock_type"
+              ],
+              "input_contains": [
+                "hole_size"
+              ]
+            },
+            "citation_column_map": {
+              "풍화암 NX": "풍화암 BX",
+              "연암 NX": "연암 BX",
+              "보통암 NX": "보통암 BX",
+              "경암 NX": "경암 BX",
+              "극경암 NX": "극경암 BX"
+            },
+            "dash_policy": "source_exclusion",
+            "source": "PDF printed p.398, 8-1-3 table: dashes are preserved as explicit not-applicable resource cells"
+          },
+          {
+            "table": "p454-t0",
+            "row": "다이아몬드리밍쉘",
+            "name": "다이아몬드리밍쉘",
+            "unit": "개",
+            "basis": "m",
+            "quantity_input": "quantity",
+            "column_selector": {
+              "input": "rock_type",
+              "exact_component_inputs": [
+                "rock_type"
+              ],
+              "input_contains": [
+                "hole_size"
+              ]
+            },
+            "citation_column_map": {
+              "풍화암 NX": "풍화암 BX",
+              "연암 NX": "연암 BX",
+              "보통암 NX": "보통암 BX",
+              "경암 NX": "경암 BX",
+              "극경암 NX": "극경암 BX"
+            },
+            "dash_policy": "source_exclusion",
+            "source": "PDF printed p.398, 8-1-3 table: dashes are preserved as explicit not-applicable resource cells"
+          },
+          {
+            "table": "p454-t0",
+            "row": "코아리프터",
+            "name": "코아리프터",
+            "unit": "개",
+            "basis": "m",
+            "quantity_input": "quantity",
+            "column_selector": {
+              "input": "rock_type",
+              "exact_component_inputs": [
+                "rock_type"
+              ],
+              "input_contains": [
+                "hole_size"
+              ]
+            },
+            "citation_column_map": {
+              "풍화암 NX": "풍화암 BX",
+              "연암 NX": "연암 BX",
+              "보통암 NX": "보통암 BX",
+              "경암 NX": "경암 BX",
+              "극경암 NX": "극경암 BX"
+            },
+            "dash_policy": "source_exclusion",
+            "source": "PDF printed p.398, 8-1-3 table: dashes are preserved as explicit not-applicable resource cells"
+          }
+        ],
+        "additional_unit_rates": [
+          {
+            "table": "p454-t0",
+            "basis": "m",
+            "quantity_input": "quantity",
+            "trades": [
+              "특별인부",
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "특별인부",
+              "보통인부": "보통인부"
+            },
+            "column_selector": {
+              "input": "rock_type",
+              "exact_component_inputs": [
+                "rock_type"
+              ],
+              "input_contains": [
+                "hole_size"
+              ]
+            },
+            "source": "PDF printed p.398, continuation labor rows in the exact rock/hole columns"
+          }
         ]
       },
       "steps": [
         "rock_type과 hole_size를 띄어쓰기로 조합하여(예: '풍화암 BX') p453-t2에서 중급기술자, 보링공의 단위당 품을 찾는다.",
+        "p454-t0 표에서 특별인부와 보통인부를 각각 정확한 암종·BX/NX 열로 조회한다.",
+        "p454-t0 표에서 특별인부와 보통인부를 각각 정확한 암종·BX/NX 열로 조회한다.",
         "동일한 조합으로 p454-t0에서 특별인부, 보통인부의 단위당 품을 찾는다.",
         "재료(더블코아바렐 등)는 p454-t0에서 찾되, 파싱 결과에 NX 열이 없으므로 hole_size에 관계없이 'rock_type + BX' 열의 값을 참조한다.",
         "찾은 단위당 품에 quantity를 곱하여 총 품을 구한다.",
@@ -234,6 +478,20 @@
         "cite": {
           "section_no": "8-1-3",
           "marker": "⑥"
+        }
+      },
+      {
+        "condition": "depth > 20m",
+        "blocked_if": {
+          "input": "depth",
+          "op": ">",
+          "value": "20"
+        },
+        "reason": "원문은 깊이 10m 증가마다 인력품을 5% 범위 내에서 가산한다고 하나 적용 비율을 특정하지 않아 자동 계산하지 않음",
+        "source": "PDF printed p.398, 8-1-3 [주] ①",
+        "cite": {
+          "section_no": "8-1-3",
+          "marker": "①"
         }
       }
     ],
@@ -260,6 +518,14 @@
         "cite": {
           "section_no": "8-1-3",
           "marker": "⑤"
+        }
+      },
+      {
+        "item": "경사시추의 경우 롯드의 승강 및 슬라임 제거",
+        "source": "PDF 398쪽 8-1-3 [주] ⑥",
+        "cite": {
+          "section_no": "8-1-3",
+          "marker": "⑥"
         }
       }
     ],

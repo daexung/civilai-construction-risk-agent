@@ -38,7 +38,7 @@
         "allowed_values": "0보다 큰 수",
         "unit": null,
         "required": true,
-        "ask": "물량은 얼마입니까? (설치, 점검·시험은 Point 수, 통신상태점검은 DDC 수)",
+        "ask": "선택 공정의 기준 단위(Point 또는 DDC)에 해당하는 수량은 얼마입니까?",
         "source": "PDF 721쪽 p777-t1 단위"
       },
       {
@@ -120,31 +120,92 @@
           "trades": [
             "기사",
             "계장공"
-          ]
+          ],
+          "quantity_unit_selector": {
+            "input": "process",
+            "values": {
+              "설치": "Point",
+              "통신상태점검": "DDC",
+              "점검･시험": "Point"
+            }
+          },
+          "trades_by_conditions": [
+            {
+              "when": {
+                "process": "설치"
+              },
+              "trades": [
+                "기사",
+                "계장공"
+              ]
+            },
+            {
+              "when": {
+                "process": "통신상태점검"
+              },
+              "trades": [
+                "계장공"
+              ]
+            },
+            {
+              "when": {
+                "process": "점검･시험"
+              },
+              "trades": [
+                "기사",
+                "계장공"
+              ]
+            }
+          ],
+          "basis_by_row": {
+            "설치": "1Point",
+            "통신상태점검": "1DDC",
+            "점검･시험": "1Point"
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [
           {
             "when": {
-              "support_period": "3개월"
+              "support_period": "3개월",
+              "process": "점검･시험"
             },
             "rate": "0.15",
             "applies_to": [
               "기사",
               "계장공"
             ],
-            "source": "PDF 722쪽 ⑥ 및 p778-t0"
+            "source": "PDF 722쪽 ⑥ 및 p778-t0",
+            "rate_table": {
+              "id": "p778-t0",
+              "row": "가산율",
+              "column": "3개월"
+            },
+            "application_cite": {
+              "chunk_id": "p778-x0",
+              "quote": "⑥시설물 준공후, 시스템 운영･관리에 지원이 필요한 경우 다음기준에 따라 별도 가산한다."
+            }
           },
           {
             "when": {
-              "support_period": "6개월"
+              "support_period": "6개월",
+              "process": "점검･시험"
             },
             "rate": "0.30",
             "applies_to": [
               "기사",
               "계장공"
             ],
-            "source": "PDF 722쪽 ⑥ 및 p778-t0"
+            "source": "PDF 722쪽 ⑥ 및 p778-t0",
+            "rate_table": {
+              "id": "p778-t0",
+              "row": "가산율",
+              "column": "6개월"
+            },
+            "application_cite": {
+              "chunk_id": "p778-x0",
+              "quote": "⑥시설물 준공후, 시스템 운영･관리에 지원이 필요한 경우 다음기준에 따라 별도 가산한다."
+            }
           }
         ],
         "note_adjustments": []

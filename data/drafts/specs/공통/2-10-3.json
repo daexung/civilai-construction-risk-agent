@@ -91,11 +91,59 @@
             "보통인부",
             "크레인 50ton",
             "크레인 10ton"
-          ]
+          ],
+          "resource_units": {
+            "철공": "인",
+            "용접공": "인",
+            "보통인부": "인",
+            "크레인 50ton": "hr",
+            "크레인 10ton": "hr"
+          },
+          "citation_overrides": {
+            "크레인 50ton": {
+              "row": "크레인",
+              "column_map": {
+                "설치": "설치",
+                "해체": "해체"
+              },
+              "cite": {
+                "table_id": "p115-t4",
+                "row": "크레인",
+                "column": "50ton"
+              }
+            },
+            "크레인 10ton": {
+              "row": "크레인",
+              "column_map": {
+                "설치": "설치",
+                "해체": "해체"
+              },
+              "cite": {
+                "table_id": "p115-t4",
+                "row": "크레인",
+                "column": "10ton"
+              }
+            }
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "용접공",
+            "when": {
+              "work_type": "해체"
+            },
+            "source": "PDF 59? p115-t4 marks the welding-worker dismantling cell as - (not specified as a numeric zero).",
+            "cite": {
+              "table_id": "p115-t4",
+              "row": "용접공",
+              "column": "해체",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p115-t4에서 작업 종류(설치/해체)에 따른 단위당 품을 고른다.",
@@ -151,56 +199,86 @@
     {
       "table_id": "p115-t4",
       "row": "철공",
-      "column": "수량 설치",
+      "column": "설치",
       "value": "2.81"
     },
     {
       "table_id": "p115-t4",
       "row": "철공",
-      "column": "수량 해체",
+      "column": "해체",
       "value": "2.53"
     },
     {
       "table_id": "p115-t4",
       "row": "용접공",
-      "column": "수량 설치",
+      "column": "설치",
+      "value": "1.13"
+    },
+    {
+      "table_id": "p115-t4",
+      "row": "용접공",
+      "column": "해체",
+      "value": "-"
+    },
+    {
+      "table_id": "p115-t4",
+      "row": "보통인부",
+      "column": "설치",
       "value": "1.13"
     },
     {
       "table_id": "p115-t4",
       "row": "보통인부",
-      "column": "수량 설치",
-      "value": "1.13"
-    },
-    {
-      "table_id": "p115-t4",
-      "row": "보통인부",
-      "column": "수량 해체",
+      "column": "해체",
       "value": "1.02"
     },
     {
       "table_id": "p115-t4",
       "row": "크레인",
-      "column": "수량 설치",
+      "column": "50ton",
       "value": "8.0"
     },
     {
       "table_id": "p115-t4",
       "row": "크레인",
-      "column": "수량 해체",
+      "column": "설치",
+      "value": "8.0"
+    },
+    {
+      "table_id": "p115-t4",
+      "row": "크레인",
+      "column": "50ton",
       "value": "5.6"
     },
     {
-      "chunk_id": "p115-x19",
-      "quote": "① 본 품은 제작된 터널방음문(3차로 이하)을 부위별로 반입하여 현장에서 조립설치･해체하는 기준이다."
+      "table_id": "p115-t4",
+      "row": "크레인",
+      "column": "해체",
+      "value": "5.6"
     },
     {
-      "chunk_id": "p115-x19",
-      "quote": "③ 기초 콘크리트, 환기설비에 대한 재료 및 품은 별도 계상한다."
+      "table_id": "p115-t4",
+      "row": "크레인",
+      "column": "10ton",
+      "value": "8.0"
     },
     {
-      "chunk_id": "p115-x19",
-      "quote": "④ 공구손료 및 경장비(용접기 등)의 기계경비는 인력품의 2%로 계상한다."
+      "table_id": "p115-t4",
+      "row": "크레인",
+      "column": "설치",
+      "value": "8.0"
+    },
+    {
+      "table_id": "p115-t4",
+      "row": "크레인",
+      "column": "10ton",
+      "value": "5.6"
+    },
+    {
+      "table_id": "p115-t4",
+      "row": "크레인",
+      "column": "해체",
+      "value": "5.6"
     }
   ],
   "open_questions": [

@@ -13,6 +13,7 @@ import time
 from decimal import Decimal
 
 from backend.agent.nodes.fill import _common_fields
+from backend.agent.rules.quantity_units import resolve_quantity_field
 from backend.agent.rules.specs import load_specs
 from backend.agent.state import AgentState
 from backend.agent.tools.llm import client as llm_client
@@ -215,8 +216,10 @@ def build_facts(state: AgentState) -> dict:
         facts["input_count"] = len(facts["inputs"])
         quantity_input = (spec or {}).get("quantity_model", {}).get("params", {}).get("quantity_input")
         facts["quantity"] = inputs.get(quantity_input) if quantity_input else None
-        unit = next((field["unit"] for field in spec["inputs"]
-                     if field["name"] == spec["quantity_model"]["params"]["quantity_input"]), "㎥") if spec else "㎥"
+        quantity_name = spec["quantity_model"]["params"]["quantity_input"] if spec else None
+        quantity_field = (next((field for field in spec["inputs"] if field["name"] == quantity_name), None)
+                          if spec else None)
+        unit = (resolve_quantity_field(quantity_field, inputs) or {}).get("unit", "㎥") if spec else "㎥"
         facts["unit"] = unit
         facts["priced"] = _priced_facts(priced, unit)
         facts["statement"] = _statement_facts(state.get("statement"))

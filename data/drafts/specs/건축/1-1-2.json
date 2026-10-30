@@ -12,13 +12,20 @@
     ],
     "inputs": [
       {
-        "name": "base_labor",
-        "type": "positive_rational",
-        "allowed_values": "0보다 큰 수",
-        "unit": "인·일/t",
+        "name": "total_steel_usage_band",
+        "type": "enum",
+        "allowed_values": [
+          "60미만",
+          "60이상",
+          "100이상",
+          "300이상",
+          "1,000이상",
+          "2,000이상"
+        ],
+        "unit": "t",
         "required": true,
-        "ask": "1-1-1에서 산정된 기본철골공수는 얼마입니까?",
-        "source": "1-1-2 철골공수 산정식"
+        "ask": "강재 총사용량(t)은 어느 구간에 해당합니까?",
+        "source": "1-1-1 p569-t0 steel usage band; selects the referenced base labor rate"
       },
       {
         "name": "structure_type",
@@ -54,7 +61,7 @@
         "required": true,
         "ask": "부재 종류는 무엇입니까?",
         "decision_table": "p625-t2",
-        "source": "소요 부자재량 표"
+        "source": "p625-t2 material-rate column and 1-1-1 member-type adjustment input"
       },
       {
         "name": "quantity",
@@ -117,8 +124,116 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "conditional_ranges": [
+          {
+            "input": "difficulty_factor",
+            "when": {
+              "structure_type": "조립공장, 창고 등으로 가공부재종류가 적은 구조"
+            },
+            "minimum": "0.8",
+            "maximum": "0.95",
+            "source": "1-1-2 <작업난이도> 표",
+            "cite": {
+              "table_id": "p625-t1",
+              "row": "난이도",
+              "column": "조립공장, 창고 등으로 가공부재종류가 적은 구조",
+              "value": "0.8∼0.95"
+            }
+          },
+          {
+            "input": "difficulty_factor",
+            "when": {
+              "structure_type": "사무청사 등 표준라멘구조"
+            },
+            "minimum": "1.0",
+            "maximum": "1.0",
+            "source": "1-1-2 <작업난이도> 표",
+            "cite": {
+              "table_id": "p625-t1",
+              "row": "난이도",
+              "column": "사무청사 등 표준라멘구조",
+              "value": "1.0"
+            }
+          },
+          {
+            "input": "difficulty_factor",
+            "when": {
+              "structure_type": "기타 가공부재 종류가 많은 구조"
+            },
+            "minimum": "1.05",
+            "maximum": "1.2",
+            "source": "1-1-2 <작업난이도> 표",
+            "cite": {
+              "table_id": "p625-t1",
+              "row": "난이도",
+              "column": "기타 가공부재 종류가 많은 구조",
+              "value": "1.05∼1.2"
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "kind": "formula",
+            "name": "철골공수",
+            "resource_kind": "labor",
+            "unit": "인·일",
+            "expression": {
+              "mul": [
+                {
+                  "input": "base_labor"
+                },
+                {
+                  "input": "difficulty_factor"
+                },
+                {
+                  "input": "quantity"
+                }
+              ]
+            },
+            "formula": "철골공수=기본철골공수×작업난이도",
+            "source": "p625-x4",
+            "cite": {
+              "chunk_id": "p625-x4",
+              "quote": "철골공수=기본철골공수×작업난이도"
+            }
+          },
+          {
+            "kind": "table_rates",
+            "table": "p625-t2",
+            "rows": [
+              "산소",
+              "L.P.G",
+              "서비스볼트",
+              "보조강재"
+            ],
+            "column_input": "material_type",
+            "quantity_input": "quantity",
+            "unit_column": "단위",
+            "resource_kind": "material"
+          }
+        ],
+        "references": [
+          {
+            "output_input": "base_labor",
+            "section_id": "2026-정오표1차/건축/1-1-1/기본철골공수",
+            "resource_name": "철골공",
+            "expected_unit": "인/t",
+            "inputs": {
+              "total_steel_usage_band": {
+                "input": "total_steel_usage_band"
+              },
+              "member_type": {
+                "input": "material_type"
+              },
+              "quantity": {
+                "value": "1"
+              }
+            }
+          }
+        ]
+      },
       "steps": [
         "입력받은 기본철골공수에 사용자가 선택한 작업난이도를 곱하여 철골공수를 산정한다.",
         "철골 물량(ton)에 p625-t2 표의 부재 종류별 소요 부자재량을 곱하여 총 부자재량을 산정한다."
@@ -155,9 +270,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
+  "calc_type": "formula",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "작업난이도가 단일 값이 아닌 범위(0.8~0.95 등)로 제시되어 있어, 사용자의 판단 없이 자동 계산하기 어렵습니다.",
+  "calc_type_reason": "The base steel labor rate is computed through existing section 1-1-1 per-unit rules, then the source formula and p625-t2 material rates are evaluated.",
   "citations": [
     {
       "chunk_id": "p625-x4",

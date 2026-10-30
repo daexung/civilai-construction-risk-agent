@@ -235,23 +235,34 @@
       "params": {
         "unit_rate_table": {
           "table": "p903-t2",
-          "row_input": "직종",
-          "column_input": "수량",
+          "row_input": null,
+          "column_input": null,
           "trades": [
             "기계산업기사",
             "비계공",
             "플랜트기계설치공",
             "특별인부",
-            "제관공",
-            "용접공",
-            "측량사",
-            "도장공",
-            "시험및조정"
+            "제관공"
           ]
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "additional_unit_rates": [
+          {
+            "table": "p904-t0",
+            "basis": "인/ton",
+            "quantity_input": "quantity",
+            "row_template": "{trade}",
+            "column": "수량",
+            "trades": [
+              "용접공",
+              "측량사",
+              "도장공",
+              "시험및조정"
+            ]
+          }
+        ]
       },
       "steps": [
         "단위당 품을 표에서 고른다.",

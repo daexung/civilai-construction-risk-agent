@@ -1,0 +1,113 @@
+{
+  "record_version": "2026-10-18.v1",
+  "set_role": "final_evaluation",
+  "calculation_scope": "formwork base table selection and roof note; height policy branch excluded",
+  "source_pdf": "data/raw/standard_estimation/2026_건설공사표준품셈_원문_정오표1차_반영.pdf",
+  "source_pdf_sha256": "cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b",
+  "author": "Luna",
+  "prior_exposure": "Author has inspected the existing v3 9-case regression and a hand-authored formwork candidate. The cases below were selected from the source table and calculated directly before any new candidate generation. Same operator authored and source-checked; no second-person review is claimed.",
+  "independent_second_person_review": false,
+  "pre_candidate_hash_policy": "This file must be hashed before each candidate is generated. If a final failure is used to modify a candidate, retire this set from subsequent withheld-performance totals.",
+  "prompt_policy": "Inputs and expected outputs are evaluator-only. CLI loads this file after candidate authoring and executes it with no model callback.",
+  "overlap_check_against": "formwork_final_evaluation_cases.v3.json",
+  "cases": [
+    {
+      "id": "form-final-v4-base-finish",
+      "spec_path": "data/drafts/specs/공통/6-3-1.json",
+      "inputs": {
+        "volume": "40",
+        "complexity": "제물치장",
+        "height": "7",
+        "is_roof_slab": false,
+        "crane_used": false,
+        "lifting_equipment_used": false
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "20",
+        "work_days": "2"
+      },
+      "calculation_basis": {
+        "table_id": "p193-t0",
+        "row": "시공량",
+        "column": "제물치장",
+        "source_daily_output_m2_per_day": "20",
+        "source_roof_note": "roof rule inapplicable",
+        "height_condition": "height is exactly 7 m, so the source rule for height exceeding 7 m does not apply",
+        "formula": "daily output = source column value ? 83/100 only when roof condition applies; work days = area / daily output",
+        "rounding": "Exact rational expected value; display rounding remains downstream."
+      }
+    },
+    {
+      "id": "form-final-v4-roof-normal",
+      "spec_path": "data/drafts/specs/공통/6-3-1.json",
+      "inputs": {
+        "volume": "80",
+        "complexity": "보통",
+        "height": "7",
+        "is_roof_slab": true,
+        "crane_used": false,
+        "lifting_equipment_used": false
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "747/20",
+        "work_days": "1600/747"
+      },
+      "calculation_basis": {
+        "table_id": "p193-t0",
+        "row": "시공량",
+        "column": "보통",
+        "source_daily_output_m2_per_day": "45",
+        "source_roof_note": "17 percent deduction for roof slab under 20 degrees",
+        "height_condition": "height is exactly 7 m, so the source rule for height exceeding 7 m does not apply",
+        "formula": "daily output = source column value ? 83/100 only when roof condition applies; work days = area / daily output",
+        "rounding": "Exact rational expected value; display rounding remains downstream."
+      }
+    },
+    {
+      "id": "form-final-v4-simple-boundary",
+      "spec_path": "data/drafts/specs/공통/6-3-1.json",
+      "inputs": {
+        "volume": "125",
+        "complexity": "간단",
+        "height": "7",
+        "is_roof_slab": false,
+        "crane_used": false,
+        "lifting_equipment_used": false
+      },
+      "expected": {
+        "status": "computed",
+        "daily_volume_m3": "50",
+        "work_days": "5/2"
+      },
+      "calculation_basis": {
+        "table_id": "p193-t0",
+        "row": "시공량",
+        "column": "간단",
+        "source_daily_output_m2_per_day": "50",
+        "source_roof_note": "roof rule inapplicable",
+        "height_condition": "height is exactly 7 m, so the source rule for height exceeding 7 m does not apply",
+        "formula": "daily output = source column value ? 83/100 only when roof condition applies; work days = area / daily output",
+        "rounding": "Exact rational expected value; display rounding remains downstream."
+      }
+    }
+  ],
+  "expected_value_method": "Pinned 2026 source table cells on PDF p193/printed p137; exact arithmetic separately calculated from those cells, not candidate output.",
+  "source_locator": {
+    "division": "??",
+    "section_no": "6-3-1",
+    "pdf_page": 193,
+    "printed_page": 137,
+    "table_id": "p193-t0",
+    "source_evidence_id": "evidence-b29a23168b16a5da70306d2a"
+  },
+  "evaluation_controls": {
+    "frozen_before_new_candidate_generation": true,
+    "same_author": "Luna",
+    "independent_second_person_review": false,
+    "prior_exposure": "v3 9-case regression and previously inspected manual formwork candidate; v3 stays exposed regression only",
+    "generation_and_repair_prompt_contains_final_data": false,
+    "retirement_rule": "if a v4 final-evaluation failure is used to modify the same candidate, retire v4 from subsequent withheld-performance totals"
+  }
+}

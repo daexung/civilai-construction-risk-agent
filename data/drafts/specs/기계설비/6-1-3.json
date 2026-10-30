@@ -12,22 +12,66 @@
     ],
     "inputs": [
       {
+        "name": "meter_diameter_class",
+        "type": "enum",
+        "allowed_values": [
+          "32mm 이하",
+          "32mm 초과"
+        ],
+        "unit": "mm",
+        "required": true,
+        "ask": "보호 대상 유량계 지름은 32mm 이하입니까?",
+        "source": "p736-x2 [주] ①",
+        "synonyms": {
+          "32mm 이하": [
+            "ø32 이하",
+            "32mm 이하",
+            "32mm"
+          ],
+          "32mm 초과": [
+            "32mm 초과",
+            "ø40",
+            "40mm"
+          ]
+        }
+      },
+      {
+        "name": "box_tier",
+        "type": "enum",
+        "allowed_values": [
+          "2단 이하",
+          "3단 이상"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "계량기함은 2단 이하입니까?",
+        "source": "p736-x2 [주] ①"
+      },
+      {
         "name": "quantity",
-        "type": "positive_rational",
-        "allowed_values": "0보다 큰 수",
+        "type": "nonnegative_integer",
+        "minimum": 1,
+        "allowed_values": "1 이상의 정수",
         "unit": "개소",
         "required": true,
-        "ask": "설치할 세대용 계량기함은 몇 개소입니까?",
-        "source": "개소당 기준"
+        "ask": "설치할 계량기함은 몇 개소입니까?",
+        "source": "p736-t0 기준 (개소당)"
       }
     ],
     "tables": [
       {
         "id": "p736-t0",
-        "role": "세대용 계량기함 설치 품",
-        "source": "680쪽 6-1-3 표",
-        "unit": "개소당",
-        "values": {},
+        "role": "세대용 계량기함 개소당 설치 인력품",
+        "source": "PDF 물리쪽 736 / 인쇄 680 원문 표 이미지",
+        "unit": "인/개소",
+        "values": {
+          "배관공": {
+            "수량": "0.086"
+          },
+          "보통인부": {
+            "수량": "0.086"
+          }
+        },
         "cite": {
           "table_id": "p736-t0"
         }
@@ -35,19 +79,62 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p736-t0",
+          "trades": [
+            "배관공",
+            "보통인부"
+          ]
+        },
+        "quantity_input": "quantity",
+        "surcharges": [],
+        "note_adjustments": []
+      },
       "steps": [
-        "파싱 결과에 직종별 인원 수량이 누락되어 계산할 수 없습니다."
+        "유량계 지름 32mm 이하 및 계량기함 2단 이하의 적용 조건을 확인한다.",
+        "p736-t0의 배관공·보통인부 개소당 품 0.086인을 각각 조회한다.",
+        "설치 개소 수를 곱해 직종별 총 인량을 계산한다.",
+        "연결배관·밸브·계량기 설치는 별도 계상하고, 공구손료 및 경장비는 노무비 소계의 2%로 별도 계산한다."
       ],
-      "source": "680쪽 6-1-3 표",
-      "rounding": "단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+      "source": "PDF 인쇄 680쪽 6-1-3 표 및 [주] ①~④",
+      "rounding": "원문 계수 그대로 보존; 총 인량은 exact rational"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "유량계 지름이 32mm 초과",
+        "blocked_if": {
+          "input": "meter_diameter_class",
+          "op": "==",
+          "value": "32mm 초과"
+        },
+        "reason": "원문 품은 ø32mm 이하 유량계 보호용 계량기함 기준이다.",
+        "source": "p736-x2 [주] ①",
+        "cite": {
+          "chunk_id": "p736-x2",
+          "quote": "본 품은 유량계(ø32mm이하) 보호를 위한 거치대 계량기함(2단 이하)의 설치 기준이다."
+        }
+      },
+      {
+        "condition": "계량기함이 2단 초과",
+        "blocked_if": {
+          "input": "box_tier",
+          "op": "==",
+          "value": "3단 이상"
+        },
+        "reason": "원문 품은 2단 이하 계량기함 기준이다.",
+        "source": "p736-x2 [주] ①",
+        "cite": {
+          "chunk_id": "p736-x2",
+          "quote": "본 품은 유량계(ø32mm이하) 보호를 위한 거치대 계량기함(2단 이하)의 설치 기준이다."
+        }
+      }
+    ],
     "not_calculated": [
       {
-        "item": "연결배관 및 밸브, 계량기 설치 작업",
-        "source": "680쪽 [주] ③",
+        "item": "연결배관·밸브·계량기 설치",
+        "source": "p736-x2 [주] ③",
         "cite": {
           "chunk_id": "p736-x2",
           "quote": "연결배관 및 밸브, 계량기 설치 작업은 별도 계상한다."
@@ -57,7 +144,7 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "name": "공구손료 및 경장비",
+        "name": "공구손료 및 경장비(드릴 등)",
         "category": "경비",
         "base": "labor_subtotal",
         "rate": "0.02",
@@ -66,19 +153,24 @@
           "quote": "공구손료 및 경장비의 기계경비(드릴 등)는 인력품의 2%로 계상한다."
         }
       }
-    ]
+    ],
+    "open_questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 직종별 인원 수량이 누락되어 계산식을 구성할 수 없습니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "PDF 물리쪽 736(인쇄 680) 원문 이미지는 배관공 및 보통인부 각 0.086인/개소를 명시한다. ø32mm 이하·2단 이하 조건은 원문 근거로 확인 입력 후 초과 조건을 차단한다.",
   "citations": [
     {
-      "chunk_id": "p736-x2",
-      "quote": "연결배관 및 밸브, 계량기 설치 작업은 별도 계상한다."
+      "table_id": "p736-t0",
+      "row": "배관공",
+      "column": "수량",
+      "value": "0.086"
     },
     {
-      "chunk_id": "p736-x2",
-      "quote": "공구손료 및 경장비의 기계경비(드릴 등)는 인력품의 2%로 계상한다."
+      "table_id": "p736-t0",
+      "row": "보통인부",
+      "column": "수량",
+      "value": "0.086"
     }
   ],
   "open_questions": [

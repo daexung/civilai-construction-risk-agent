@@ -131,24 +131,162 @@
           "table": "p571-t0",
           "row_input": "work_type",
           "column_input": null,
-          "trades": []
+          "trades": [
+            "고급기술자",
+            "초급기술자",
+            "중급기능사(지도제작)"
+          ],
+          "trade_in_columns": true,
+          "table_selector": {
+            "input": "work_type",
+            "values": {
+              "현지조사": "p571-t0",
+              "편집": "p571-t2",
+              "제도": "p571-t2"
+            }
+          },
+          "row_input_by_table": {
+            "p571-t0": "work_type",
+            "p571-t2": "work_type"
+          },
+          "trades_by_table": {
+            "p571-t0": [
+              "고급기술자",
+              "초급기술자",
+              "중급기능사(지도제작)"
+            ],
+            "p571-t2": [
+              "사진식자공",
+              "사진제판공",
+              "옵셋인쇄공",
+              "중급기능사(지도제작)",
+              "중급기술자",
+              "초급기능사(지도제작)",
+              "초급기술자"
+            ]
+          },
+          "trades_by_row": {
+            "편집": [
+              "중급기술자",
+              "초급기술자",
+              "중급기능사(지도제작)",
+              "사진제판공"
+            ],
+            "제도": [
+              "중급기술자",
+              "초급기술자",
+              "중급기능사(지도제작)",
+              "초급기능사(지도제작)",
+              "사진제판공",
+              "사진식자공",
+              "옵셋인쇄공"
+            ]
+          },
+          "trade_in_columns_by_table": {
+            "p571-t0": true,
+            "p571-t2": true
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
         "note_adjustments": [
           {
             "when": {
-              "work_type": "현지조사"
+              "work_type": "현지조사",
+              "terrain": "시가지"
             },
-            "change": "지형(terrain)에 따라 p571-t1의 계수를 곱함",
+            "rate": "1.5",
+            "operation": "multiply",
+            "rate_table": {
+              "id": "p571-t1",
+              "row": "계수",
+              "column": "시가지"
+            },
+            "application_cite": {
+              "chunk_id": "p571-x7",
+              "quote": "지형이 다를 때에는 다음 계수를 곱하여 계상한다."
+            },
+            "source": "PDF 515쪽 1. 지리조사 [주] ③"
+          },
+          {
+            "when": {
+              "work_type": "현지조사",
+              "terrain": "교외지"
+            },
+            "rate": "1.3",
+            "operation": "multiply",
+            "rate_table": {
+              "id": "p571-t1",
+              "row": "계수",
+              "column": "교외지"
+            },
+            "application_cite": {
+              "chunk_id": "p571-x7",
+              "quote": "지형이 다를 때에는 다음 계수를 곱하여 계상한다."
+            },
+            "source": "PDF 515쪽 1. 지리조사 [주] ③"
+          },
+          {
+            "when": {
+              "work_type": "현지조사",
+              "terrain": "농경지"
+            },
+            "rate": "1.0",
+            "operation": "multiply",
+            "rate_table": {
+              "id": "p571-t1",
+              "row": "계수",
+              "column": "농경지"
+            },
+            "application_cite": {
+              "chunk_id": "p571-x7",
+              "quote": "지형이 다를 때에는 다음 계수를 곱하여 계상한다."
+            },
+            "source": "PDF 515쪽 1. 지리조사 [주] ③"
+          },
+          {
+            "when": {
+              "work_type": "현지조사",
+              "terrain": "구릉지"
+            },
+            "rate": "0.9",
+            "operation": "multiply",
+            "rate_table": {
+              "id": "p571-t1",
+              "row": "계수",
+              "column": "구릉지"
+            },
+            "application_cite": {
+              "chunk_id": "p571-x7",
+              "quote": "지형이 다를 때에는 다음 계수를 곱하여 계상한다."
+            },
+            "source": "PDF 515쪽 1. 지리조사 [주] ③"
+          },
+          {
+            "when": {
+              "work_type": "현지조사",
+              "terrain": "산악지"
+            },
+            "rate": "0.85",
+            "operation": "multiply",
+            "rate_table": {
+              "id": "p571-t1",
+              "row": "계수",
+              "column": "산악지"
+            },
+            "application_cite": {
+              "chunk_id": "p571-x7",
+              "quote": "지형이 다를 때에는 다음 계수를 곱하여 계상한다."
+            },
             "source": "PDF 515쪽 1. 지리조사 [주] ③"
           }
         ]
       },
       "steps": [
-        "작업 종류(work_type)가 '현지조사'인 경우 p571-t0에서, '편집' 또는 '제도'인 경우 p571-t2에서 단위당 품을 찾는다.",
-        "현지조사인 경우, 지형(terrain)에 따라 p571-t1의 계수를 단위당 품에 곱한다.",
-        "물량(quantity)을 곱하여 총 품을 구한다."
+        "work_type에 따라 현지조사(p571-t0), 편집 또는 제도(p571-t2) 표를 정확히 선택한다.",
+        "현지조사에만 지형별 계수(p571-t1)를 원문에 따라 곱한다. 편집 및 제도는 이 계수를 적용하지 않는다.",
+        "선택한 1:25,000 도엽당 직종별 품에 입력 도엽 수를 곱한다.",
+        "축척이 1:25,000과 다른 편집·제작은 원문이 참조하는 9-5-6 계수가 필요하므로 계산을 차단한다."
       ],
       "source": "PDF 515쪽 1. 지리조사 및 2. 편집 및 제작",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"

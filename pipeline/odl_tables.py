@@ -92,7 +92,11 @@ def find_tables(node, depth: int = 0, found: list | None = None) -> list[tuple[d
 # 줄마다의 좌표는 없으므로 문단 bbox를 줄 수로 나눠 각 줄의 세로 위치를 추정한다.
 
 # 행 기준선이 되는 값: 숫자, 괄호 숫자, 범위, 백분율, 이하·이상, 분류번호(0301-0057), '-', '〃'
-VALUE_RE = re.compile(r"^(?:[-–〃]|\(?\d[\d.,\-]*\)?(?:[~∼]\d[\d.,]*)?(?:%|이하|이상|미만|초과)?)$")
+VALUE_RE = re.compile(
+    r"^(?:[-–〃]|\(?\d[\d.,\-]*\)?(?:[~∼]\d[\d.,]*)?"
+    r"\s*(?:%|이하|이상|미만|초과|㎏|kg|g|㎜|mm|㎝|cm|m|㎡|㎥|ℓ|L|개|병|매|대|인|주|본|회|ton|t)*)$",
+    re.IGNORECASE,
+)
 # 앞 줄에 딸린 설명·보충 줄
 CONTINUATION_PREFIXES = ("-", "(", "※")
 
@@ -201,21 +205,40 @@ def split_row(cells: list[dict], group_first_col: bool = False) -> tuple[int, di
             # - 줄 수가 기준선 수와 같으면 행 라벨(106쪽 '비계공/보통인부')인지 줄바꿈된 조건
             #   (188쪽 '신구-콘크리트/접착제바르기')인지 좌표로 가릴 수 없다. 이 행은 나누지 않고 현행 조립에 맡긴다.
             if not group_first_col and len(joined) == len(centers):
-                return None
+                # An unruled table can still expose one paragraph per row in
+                # its first cell. Split it only when every label's vertical
+                # center aligns with the independently detected value rows;
+                # otherwise retain the ambiguity and refuse to split.
+                aligned = all(abs(y - centers[i]) <= tol for i, (y, _) in enumerate(joined))
+                if not aligned:
+                    return None
+                plan[id(c)] = [text for _, text in joined]
+                continue
             plan[id(c)] = None
             continue
         # 그 밖의 글자 열: 기준선에서 벗어난 줄은 앞 줄에 이어 붙인다(줄바꿈된 직종명 등)
         current = None
+        aligned_count = 0
+        valid = True
         for y, text in joined:
             i = nearest(y, centers)
-            if abs(centers[i] - y) > tol and current is not None:
-                slots[current] = f"{slots[current]} {text}"
-                continue
+            if abs(centers[i] - y) > tol:
+                if current is not None:
+                    slots[current] = f"{slots[current]} {text}"
+                    continue
+                valid = False
+                break
             if slots[i]:
                 current = None
+                valid = False
                 break
             slots[i], current = text, i
-        plan[id(c)] = slots if current is not None and all(slots) else None
+            aligned_count += 1
+        # A sparse column is still safely alignable when every visible cell
+        # line lands on a distinct independently detected row center. Leaving
+        # empty slots preserves the source blanks instead of copying the
+        # visible values onto every row during assembly.
+        plan[id(c)] = slots if valid and aligned_count > 0 else None
     # 행별로 나뉘는 칸이 하나뿐이면 여러 행이 쌓인 것이 아니라 한 칸이 줄바꿈된 것이다
     # (334쪽 규격 '15/(0.38)': 용량과 괄호 보충이 한 행)
     if sum(1 for v in plan.values() if v is not None) < 2:

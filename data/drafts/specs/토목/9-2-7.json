@@ -64,11 +64,16 @@
         "source": "PDF 430쪽 9-2-7 표",
         "unit": "인",
         "values": {
-          "계": {
-            "합계 특급\n기술자 (1.0) 2.0": "2.0",
-            "합계 고급\n기술자 (1.2) 3.6": "3.6",
-            "합계 중급\n기술자 3.1": "3.1",
-            "합계 초급\n기술자 9.3": "9.3"
+          "계_외업": {
+            "특급기술자": "2.0",
+            "고급기술자": "3.6",
+            "중급기술자": "3.1",
+            "초급기술자": "9.3"
+          },
+          "계_내업": {
+            "특급기술자": "3.7",
+            "고급기술자": "3.7",
+            "중급기술자": "3.0"
           }
         },
         "cite": {
@@ -82,13 +87,13 @@
         "unit": "무차원",
         "values": {
           "평지": {
-            "계수(K) 1.00": "1.00"
+            "계수(K)": "1.00"
           },
           "산지": {
-            "계수(K) 1.10": "1.10"
+            "계수(K)": "1.10"
           },
           "산악지": {
-            "계수(K) 1.20": "1.20"
+            "계수(K)": "1.20"
           }
         },
         "cite": {
@@ -98,43 +103,341 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "per_unit",
+      "name": "formula",
       "params": {
-        "unit_rate_table": {
-          "table": "p486-t1",
-          "row_input": "계",
-          "column_input": "직종",
-          "trades": [
-            "특급기술자",
-            "고급기술자",
-            "중급기술자",
-            "초급기술자"
-          ]
-        },
-        "quantity_input": "표준작업량",
-        "surcharges": [
+        "derived": [
           {
-            "when": {},
-            "rate": "terrain_type에 따른 계수(K)",
-            "applies_to": [
-              "특급기술자",
-              "고급기술자",
-              "중급기술자",
-              "초급기술자"
-            ],
-            "source": "PDF 430쪽 [주] ③"
+            "kind": "table_cell",
+            "name": "K",
+            "cases": [
+              {
+                "table": "p486-t2",
+                "row_input": "terrain_type",
+                "column": "계수(K)"
+              }
+            ]
+          },
+          {
+            "kind": "table_cell",
+            "name": "특급기술자_external",
+            "cases": [
+              {
+                "table": "p486-t1",
+                "row": "계_외업",
+                "column": "특급기술자"
+              }
+            ]
+          },
+          {
+            "kind": "table_cell",
+            "name": "특급기술자_internal",
+            "cases": [
+              {
+                "table": "p486-t1",
+                "row": "계_내업",
+                "column": "특급기술자"
+              }
+            ]
+          },
+          {
+            "kind": "expression",
+            "name": "특급기술자_work_unit",
+            "expression": {
+              "add": [
+                {
+                  "input": "특급기술자_external"
+                },
+                {
+                  "input": "특급기술자_internal"
+                }
+              ]
+            },
+            "unit": "인"
+          },
+          {
+            "kind": "table_cell",
+            "name": "고급기술자_external",
+            "cases": [
+              {
+                "table": "p486-t1",
+                "row": "계_외업",
+                "column": "고급기술자"
+              }
+            ]
+          },
+          {
+            "kind": "table_cell",
+            "name": "고급기술자_internal",
+            "cases": [
+              {
+                "table": "p486-t1",
+                "row": "계_내업",
+                "column": "고급기술자"
+              }
+            ]
+          },
+          {
+            "kind": "expression",
+            "name": "고급기술자_work_unit",
+            "expression": {
+              "add": [
+                {
+                  "input": "고급기술자_external"
+                },
+                {
+                  "input": "고급기술자_internal"
+                }
+              ]
+            },
+            "unit": "인"
+          },
+          {
+            "kind": "table_cell",
+            "name": "중급기술자_external",
+            "cases": [
+              {
+                "table": "p486-t1",
+                "row": "계_외업",
+                "column": "중급기술자"
+              }
+            ]
+          },
+          {
+            "kind": "table_cell",
+            "name": "중급기술자_internal",
+            "cases": [
+              {
+                "table": "p486-t1",
+                "row": "계_내업",
+                "column": "중급기술자"
+              }
+            ]
+          },
+          {
+            "kind": "expression",
+            "name": "중급기술자_work_unit",
+            "expression": {
+              "add": [
+                {
+                  "input": "중급기술자_external"
+                },
+                {
+                  "input": "중급기술자_internal"
+                }
+              ]
+            },
+            "unit": "인"
+          },
+          {
+            "kind": "table_cell",
+            "name": "초급기술자_external",
+            "cases": [
+              {
+                "table": "p486-t1",
+                "row": "계_외업",
+                "column": "초급기술자"
+              }
+            ]
+          },
+          {
+            "kind": "expression",
+            "name": "초급기술자_work_unit",
+            "expression": {
+              "input": "초급기술자_external"
+            },
+            "unit": "인"
           }
         ],
-        "note_adjustments": []
+        "outputs": [
+          {
+            "kind": "formula",
+            "name": "특급기술자",
+            "resource_kind": "labor",
+            "unit": "인",
+            "expression": {
+              "mul": [
+                {
+                  "input": "특급기술자_work_unit"
+                },
+                {
+                  "div": [
+                    {
+                      "add": [
+                        {
+                          "input": "points_to_find"
+                        },
+                        {
+                          "input": "points_given"
+                        }
+                      ]
+                    },
+                    {
+                      "number": "15"
+                    }
+                  ]
+                },
+                {
+                  "input": "K"
+                }
+              ]
+            },
+            "formula": "(2.0+3.7) × (points_to_find+points_given)/15 × K",
+            "cite": {
+              "chunk_id": "p487-x12",
+              "quote": "수량(T) 산정식은 다음과 같다. T = 4급 GNSS 높이측량 인원수 × 표준작업량 × K"
+            }
+          },
+          {
+            "kind": "formula",
+            "name": "고급기술자",
+            "resource_kind": "labor",
+            "unit": "인",
+            "expression": {
+              "mul": [
+                {
+                  "input": "고급기술자_work_unit"
+                },
+                {
+                  "div": [
+                    {
+                      "add": [
+                        {
+                          "input": "points_to_find"
+                        },
+                        {
+                          "input": "points_given"
+                        }
+                      ]
+                    },
+                    {
+                      "number": "15"
+                    }
+                  ]
+                },
+                {
+                  "input": "K"
+                }
+              ]
+            },
+            "formula": "(3.6+3.7) × (points_to_find+points_given)/15 × K",
+            "cite": {
+              "chunk_id": "p487-x12",
+              "quote": "수량(T) 산정식은 다음과 같다. T = 4급 GNSS 높이측량 인원수 × 표준작업량 × K"
+            }
+          },
+          {
+            "kind": "formula",
+            "name": "중급기술자",
+            "resource_kind": "labor",
+            "unit": "인",
+            "expression": {
+              "mul": [
+                {
+                  "input": "중급기술자_work_unit"
+                },
+                {
+                  "div": [
+                    {
+                      "add": [
+                        {
+                          "input": "points_to_find"
+                        },
+                        {
+                          "input": "points_given"
+                        }
+                      ]
+                    },
+                    {
+                      "number": "15"
+                    }
+                  ]
+                },
+                {
+                  "input": "K"
+                }
+              ]
+            },
+            "formula": "(3.1+3.0) × (points_to_find+points_given)/15 × K",
+            "cite": {
+              "chunk_id": "p487-x12",
+              "quote": "수량(T) 산정식은 다음과 같다. T = 4급 GNSS 높이측량 인원수 × 표준작업량 × K"
+            }
+          },
+          {
+            "kind": "formula",
+            "name": "초급기술자",
+            "resource_kind": "labor",
+            "unit": "인",
+            "expression": {
+              "mul": [
+                {
+                  "input": "초급기술자_work_unit"
+                },
+                {
+                  "div": [
+                    {
+                      "add": [
+                        {
+                          "input": "points_to_find"
+                        },
+                        {
+                          "input": "points_given"
+                        }
+                      ]
+                    },
+                    {
+                      "number": "15"
+                    }
+                  ]
+                },
+                {
+                  "input": "K"
+                }
+              ]
+            },
+            "formula": "(9.3) × (points_to_find+points_given)/15 × K",
+            "cite": {
+              "chunk_id": "p487-x12",
+              "quote": "수량(T) 산정식은 다음과 같다. T = 4급 GNSS 높이측량 인원수 × 표준작업량 × K"
+            }
+          }
+        ],
+        "blocked_conditions": [
+          {
+            "when_expr": {
+              "gt": [
+                {
+                  "add": [
+                    {
+                      "input": "points_to_find"
+                    },
+                    {
+                      "input": "points_given"
+                    }
+                  ]
+                },
+                {
+                  "number": "15"
+                }
+              ]
+            },
+            "reason": "총 점수가 15점을 초과하면 원문이 1작업단위 초과의 분할·반복 방식을 정하지 않아 계산을 보류합니다.",
+            "source": "9-2-7 [주] ⑤",
+            "cite": {
+              "chunk_id": "p486-x23",
+              "quote": "본 품의 작업은 구하는 점 10점, 주어진 점 5점 또는 주어진 점과 구하는 점을 합한 최대 15점을 1작업단위로 한다."
+            }
+          }
+        ],
+        "remove_tables": []
       },
       "steps": [
-        "p486-t1에서 직종별 합계 인원을 고른다.",
-        "표준작업량 = (구하는 점 + 주어진 점) / 15 로 계산한다.",
-        "p486-t2에서 지형구분에 따른 계수 K를 찾는다.",
-        "수량(T) = 인원수 × 표준작업량 × K 로 총 품을 구한다."
+        "구하는 점과 주어진 점의 합을 원문 1작업단위 점수로 나눈다.",
+        "직종별 원문 합계(괄호 값은 내업)를 적용하고, 원문 지형계수 K를 곱한다.",
+        "최대 1작업단위 초과는 분할 방식이 규정되지 않아 보류한다."
       ],
-      "source": "PDF 430쪽 9-2-7 표 및 [주] ③, ⑤, PDF 431쪽 수량(T) 산정식",
-      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+      "source": "9-2-7 원문 표 및 수량계산 예",
+      "rounding": "정확한 유리수 보존 후 공통 1-2-8·1-2-1 자리수 규칙 적용"
     },
     "blocked": [
       {
@@ -206,9 +509,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "per_unit",
-  "calc_type_raw": "per_unit",
-  "calc_type_reason": "15점 기준의 인원이 표로 주어지고, 점수 비율(표준작업량)과 지형 계수를 곱하여 단위당 품을 산정하는 방식이므로 per_unit으로 분류합니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "원문 수량계산 예의 점수비례식 × 지형계수",
   "citations": [
     {
       "chunk_id": "p486-x23",

@@ -90,7 +90,7 @@
             "특별인부": "2.5"
           },
           "검사": {
-            "인력품의7%": "7"
+            "인력품의 7%": ""
           }
         },
         "cite": {
@@ -104,32 +104,361 @@
       "params": {
         "unit_rate_table": {
           "table": "p873-t1",
-          "row_input": "고정 행이름",
-          "column_input": "고정 열이름",
+          "row_input": null,
+          "column_input": null,
           "trades": [
-            "기계기사",
-            "제도공",
-            "현도공",
-            "마킹공",
-            "절단공",
-            "산소절단공",
-            "플랜트기계설치공",
-            "플랜트용접공",
-            "플랜트제관공",
-            "기계설비공",
-            "특수비계공",
-            "플랜트전공",
-            "특별인부"
-          ]
+            "기계기사"
+          ],
+          "row_by_trade": {
+            "기계기사": "기술관리"
+          },
+          "resource_units": {}
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "additional_unit_rates": [
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "제도공": "재료절단사도"
+            },
+            "column_by_trade": {
+              "제도공": "제도공"
+            },
+            "trades": [
+              "제도공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "제도공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "현도공": "현도"
+            },
+            "column_by_trade": {
+              "현도공": "현도공"
+            },
+            "trades": [
+              "현도공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "현도공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "마킹공": "괘서"
+            },
+            "column_by_trade": {
+              "마킹공": "마킹공"
+            },
+            "trades": [
+              "마킹공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "마킹공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "절단공": "재료절단"
+            },
+            "column_by_trade": {
+              "절단공": "절단공"
+            },
+            "trades": [
+              "절단공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "절단공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "마킹공": "단재가공괘서"
+            },
+            "column_by_trade": {
+              "마킹공": "마킹공"
+            },
+            "trades": [
+              "마킹공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "마킹공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "산소절단공": "절단"
+            },
+            "column_by_trade": {
+              "산소절단공": "산소절단공"
+            },
+            "trades": [
+              "산소절단공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "산소절단공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트기계설치공": "절단"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공"
+            },
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트기계설치공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "산소절단공": "Edge"
+            },
+            "column_by_trade": {
+              "산소절단공": "산소절단공"
+            },
+            "trades": [
+              "산소절단공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "산소절단공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트용접공": "용접"
+            },
+            "column_by_trade": {
+              "플랜트용접공": "플랜트용접공"
+            },
+            "trades": [
+              "플랜트용접공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트용접공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트제관공": "교정"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "플랜트제관공"
+            },
+            "trades": [
+              "플랜트제관공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트제관공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트제관공": "Holing"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "플랜트제관공"
+            },
+            "trades": [
+              "플랜트제관공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트제관공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트기계설치공": "부분조립취부조정"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공"
+            },
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트기계설치공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트용접공": "용접 "
+            },
+            "column_by_trade": {
+              "플랜트용접공": "플랜트용접공"
+            },
+            "trades": [
+              "플랜트용접공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트용접공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트제관공": "교정 "
+            },
+            "column_by_trade": {
+              "플랜트제관공": "플랜트제관공"
+            },
+            "trades": [
+              "플랜트제관공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트제관공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "기계설비공": "기계가공"
+            },
+            "column_by_trade": {
+              "기계설비공": "기계설비공"
+            },
+            "trades": [
+              "기계설비공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "기계설비공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트기계설치공": "가조립조립"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공"
+            },
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트기계설치공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트기계설치공": "해체"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공"
+            },
+            "trades": [
+              "플랜트기계설치공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트기계설치공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "특수비계공": "운반조작"
+            },
+            "column_by_trade": {
+              "특수비계공": "특수비계공"
+            },
+            "trades": [
+              "특수비계공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "특수비계공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "플랜트전공": "동력조작"
+            },
+            "column_by_trade": {
+              "플랜트전공": "플랜트전공"
+            },
+            "trades": [
+              "플랜트전공"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "플랜트전공": "인/ton"
+            }
+          },
+          {
+            "table": "p873-t1",
+            "row_by_trade": {
+              "특별인부": "보조"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부"
+            },
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "quantity",
+            "basis_by_trade": {
+              "특별인부": "인/ton"
+            }
+          }
+        ],
+        "input_rate_adjustments": [
+          {
+            "operation": "add_source_percent",
+            "name": "검사",
+            "percent": "7",
+            "kinds": [
+              "labor"
+            ],
+            "cite": {
+              "table_id": "p873-t1",
+              "row": "검사",
+              "column": "인력품의 7%"
+            }
+          }
+        ]
       },
       "steps": [
-        "p873-t1 표에서 각 직종별 단위당 품을 모두 합산한다.",
-        "물량(ton)을 곱해 직종별 총 품을 구한다.",
-        "검사 품은 전체 인력품의 7%로 별도 산정한다."
+        "Tainter Gate Guide Metal 제작의 각 공정별 원문 행과 직종 셀의 인/ton 품을 합산한다.",
+        "원문 검사 행의 인력품의 7%를 모든 공정 인력품에 가산한다.",
+        "합산한 ton당 품에 제작 ton 물량을 곱한다."
       ],
       "source": "PDF 1쪽 1. 공정별 제작품",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"

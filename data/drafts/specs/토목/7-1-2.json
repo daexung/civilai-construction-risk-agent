@@ -36,7 +36,11 @@
         "unit": "㎾",
         "required": true,
         "ask": "펌프준설선의 출력은 어느 범위에 해당합니까?",
-        "source": "PDF 387쪽 7-1-2 예인선 조합 표"
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표",
+        "when": {
+          "input": "towed_vessel_type",
+          "equals": "펌프준설선"
+        }
       },
       {
         "name": "grab_dredger_power",
@@ -47,7 +51,11 @@
         "unit": "㎾",
         "required": true,
         "ask": "그래브준설선의 출력은 어느 범위에 해당합니까?",
-        "source": "PDF 387쪽 7-1-2 예인선 조합 표"
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표",
+        "when": {
+          "input": "towed_vessel_type",
+          "equals": "그래브준설선"
+        }
       },
       {
         "name": "barge_capacity",
@@ -59,7 +67,11 @@
         "unit": "㎥",
         "required": true,
         "ask": "토운선의 용량은 어느 범위에 해당합니까?",
-        "source": "PDF 387쪽 7-1-2 예인선 조합 표"
+        "source": "PDF 387쪽 7-1-2 예인선 조합 표",
+        "when": {
+          "input": "towed_vessel_type",
+          "equals": "토운선"
+        }
       }
     ],
     "tables": [

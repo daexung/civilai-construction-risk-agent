@@ -29,18 +29,30 @@
         "name": "cross_section_width",
         "type": "enum",
         "allowed_values": [
+          "해당없음",
           "1,000m",
           "700m",
           "400m",
           "200m",
           "100m",
-          "50m",
-          "해당없음"
+          "50m"
         ],
         "unit": null,
         "required": true,
         "ask": "횡단측량인 경우 폭은 얼마입니까? (종단측량인 경우 '해당없음' 선택)",
         "source": "PDF 439쪽 1. 진행기준 및 2. 작업별 인원편성"
+      },
+      {
+        "name": "survey_phase",
+        "type": "enum",
+        "allowed_values": [
+          "외업",
+          "내업"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "측량 공정이 외업입니까, 내업입니까?",
+        "source": "PDF 440쪽 9-3-2 작업별 인원편성 표"
       },
       {
         "name": "quantity",
@@ -213,6 +225,250 @@
             "초급기능사(측량)",
             "인부",
             "선박 및 인부"
+          ],
+          "row_input_by_table": {
+            "p496-t0": "survey_phase"
+          },
+          "column_input_by_table": {
+            "p496-t0": null
+          },
+          "row_selector_by_table": {
+            "p496-t0": {
+              "inputs": [
+                "survey_type",
+                "cross_section_width",
+                "survey_phase"
+              ],
+              "routes": [
+                {
+                  "when": {
+                    "survey_type": "종단측량",
+                    "cross_section_width": "해당없음",
+                    "survey_phase": "외업"
+                  },
+                  "row": "10㎞양안왕복_외업"
+                },
+                {
+                  "when": {
+                    "survey_type": "종단측량",
+                    "cross_section_width": "해당없음",
+                    "survey_phase": "내업"
+                  },
+                  "row": "10㎞양안왕복_내업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "1,000m",
+                    "survey_phase": "외업"
+                  },
+                  "row": "1,000m_외업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "1,000m",
+                    "survey_phase": "내업"
+                  },
+                  "row": "1,000m_내업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "700m",
+                    "survey_phase": "외업"
+                  },
+                  "row": "700m_외업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "700m",
+                    "survey_phase": "내업"
+                  },
+                  "row": "700m_내업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "400m",
+                    "survey_phase": "외업"
+                  },
+                  "row": "400m_외업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "400m",
+                    "survey_phase": "내업"
+                  },
+                  "row": "400m_내업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "200m",
+                    "survey_phase": "외업"
+                  },
+                  "row": "200m_외업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "200m",
+                    "survey_phase": "내업"
+                  },
+                  "row": "200m_내업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "100m",
+                    "survey_phase": "외업"
+                  },
+                  "row": "100m_외업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "100m",
+                    "survey_phase": "내업"
+                  },
+                  "row": "100m_내업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "50m",
+                    "survey_phase": "외업"
+                  },
+                  "row": "50m_외업"
+                },
+                {
+                  "when": {
+                    "survey_type": "횡단측량",
+                    "cross_section_width": "50m",
+                    "survey_phase": "내업"
+                  },
+                  "row": "50m_내업"
+                }
+              ]
+            }
+          },
+          "trades_by_row": {
+            "10㎞양안왕복_외업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)",
+              "인부"
+            ],
+            "10㎞양안왕복_내업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자"
+            ],
+            "1,000m_외업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)",
+              "인부",
+              "선박 및 인부"
+            ],
+            "1,000m_내업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)"
+            ],
+            "700m_외업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)",
+              "인부",
+              "선박 및 인부"
+            ],
+            "700m_내업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)"
+            ],
+            "400m_외업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)",
+              "인부",
+              "선박 및 인부"
+            ],
+            "400m_내업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)"
+            ],
+            "200m_외업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)",
+              "인부",
+              "선박 및 인부"
+            ],
+            "200m_내업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)"
+            ],
+            "100m_외업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)",
+              "인부",
+              "선박 및 인부"
+            ],
+            "100m_내업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)"
+            ],
+            "50m_외업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)",
+              "인부"
+            ],
+            "50m_내업": [
+              "고급기술자",
+              "중급기술자",
+              "초급기술자",
+              "초급기능사(측량)"
+            ]
+          },
+          "ignored_columns_by_table": {
+            "p496-t0": [
+              "비고"
+            ]
+          },
+          "excluded_resources": [
+            {
+              "trade": "선박 및 인부",
+              "when": {
+                "need_ship": false
+              },
+              "source": "PDF 440쪽 [주] ③ 선박 및 선부는 필요한 경우에만 계상한다.",
+              "cite": {
+                "chunk_id": "p496-x14",
+                "quote": "선박 및 선부는 필요한 경우에만 계상한다."
+              }
+            }
           ]
         },
         "quantity_input": "quantity",
@@ -220,26 +476,43 @@
         "note_adjustments": [
           {
             "when": {
-              "survey_type": "종단측량"
-            },
-            "change": "우회 작업할 경우에는 그 거리만큼 품을 가산한다. (quantity에 detour_distance 합산)",
-            "source": "PDF 440쪽 [주] ④"
-          },
-          {
-            "when": {
               "need_ship": false
             },
             "change": "선박 및 선부는 필요한 경우에만 계상하므로 제외",
             "source": "PDF 440쪽 [주] ③"
           }
+        ],
+        "quantity_additions": [
+          {
+            "input": "detour_distance",
+            "when": {
+              "survey_type": "종단측량"
+            },
+            "cite": {
+              "chunk_id": "p496-x14",
+              "quote": "우회 작업할 경우에는 그 거리만큼 품을 가산한다."
+            }
+          }
+        ],
+        "excluded_resources": [
+          {
+            "trade": "선박 및 인부",
+            "when": {
+              "need_ship": false
+            },
+            "source": "PDF 440쪽 [주] ③ 선박 및 선부는 필요한 경우에만 계상한다.",
+            "cite": {
+              "chunk_id": "p496-x14",
+              "quote": "선박 및 선부는 필요한 경우에만 계상한다."
+            }
+          }
         ]
       },
       "steps": [
-        "survey_type과 cross_section_width에 따라 p496-t0에서 외업과 내업 행을 찾는다.",
-        "종단측량인 경우 quantity에 detour_distance를 더하여 총 물량을 구한다.",
-        "총 물량을 10으로 나누어 10km 단위 물량 계수를 구한다.",
-        "외업과 내업의 각 직종별 인원에 물량 계수를 곱하여 합산한다.",
-        "need_ship이 false이면 선박 및 인부 항목은 0으로 처리한다."
+        "p496-t0에서 종단측량은 양안왕복 행을, 횡단측량은 선택한 폭 행을 고른다.",
+        "외업·내업 중 선택한 원문 행의 직종별 품을 10km 기준으로 환산한다.",
+        "종단측량은 원문 [주] ④에 따라 우회 거리를 별도 물량으로 같은 품에 더한다.",
+        "선박 및 선부는 필요하지 않으면 제외한다."
       ],
       "source": "PDF 440쪽 2. 작업별 인원편성 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -279,6 +552,146 @@
         "cite": {
           "chunk_id": "p496-x14",
           "quote": "⑧ 지형 상황에 따라 측량작업이 극히 곤란할 경우에는 그 실정에 따라 증가할 수 있다."
+        }
+      },
+      {
+        "condition": "횡단측량에 해당없음 폭을 선택",
+        "blocked_if_all": [
+          {
+            "input": "survey_type",
+            "op": "==",
+            "value": "횡단측량"
+          },
+          {
+            "input": "cross_section_width",
+            "op": "==",
+            "value": "해당없음"
+          }
+        ],
+        "reason": "원문은 횡단측량의 폭별 행만 제공하므로 실제 폭이 확인되어야 합니다.",
+        "source": "PDF 440쪽 p496-t0 횡단측량 폭 행",
+        "cite": {
+          "table_id": "p496-t0"
+        }
+      },
+      {
+        "condition": "종단측량에 횡단 폭을 선택",
+        "blocked_if_all": [
+          {
+            "input": "survey_type",
+            "op": "==",
+            "value": "종단측량"
+          },
+          {
+            "input": "cross_section_width",
+            "op": "==",
+            "value": "1,000m"
+          }
+        ],
+        "reason": "종단측량은 원문의 10km 양안왕복 행을 사용하며 횡단측량 폭은 적용하지 않습니다.",
+        "source": "PDF 440쪽 p496-t0 종단측량 행",
+        "cite": {
+          "table_id": "p496-t0"
+        }
+      },
+      {
+        "condition": "종단측량에 횡단 폭을 선택",
+        "blocked_if_all": [
+          {
+            "input": "survey_type",
+            "op": "==",
+            "value": "종단측량"
+          },
+          {
+            "input": "cross_section_width",
+            "op": "==",
+            "value": "700m"
+          }
+        ],
+        "reason": "종단측량은 원문의 10km 양안왕복 행을 사용하며 횡단측량 폭은 적용하지 않습니다.",
+        "source": "PDF 440쪽 p496-t0 종단측량 행",
+        "cite": {
+          "table_id": "p496-t0"
+        }
+      },
+      {
+        "condition": "종단측량에 횡단 폭을 선택",
+        "blocked_if_all": [
+          {
+            "input": "survey_type",
+            "op": "==",
+            "value": "종단측량"
+          },
+          {
+            "input": "cross_section_width",
+            "op": "==",
+            "value": "400m"
+          }
+        ],
+        "reason": "종단측량은 원문의 10km 양안왕복 행을 사용하며 횡단측량 폭은 적용하지 않습니다.",
+        "source": "PDF 440쪽 p496-t0 종단측량 행",
+        "cite": {
+          "table_id": "p496-t0"
+        }
+      },
+      {
+        "condition": "종단측량에 횡단 폭을 선택",
+        "blocked_if_all": [
+          {
+            "input": "survey_type",
+            "op": "==",
+            "value": "종단측량"
+          },
+          {
+            "input": "cross_section_width",
+            "op": "==",
+            "value": "200m"
+          }
+        ],
+        "reason": "종단측량은 원문의 10km 양안왕복 행을 사용하며 횡단측량 폭은 적용하지 않습니다.",
+        "source": "PDF 440쪽 p496-t0 종단측량 행",
+        "cite": {
+          "table_id": "p496-t0"
+        }
+      },
+      {
+        "condition": "종단측량에 횡단 폭을 선택",
+        "blocked_if_all": [
+          {
+            "input": "survey_type",
+            "op": "==",
+            "value": "종단측량"
+          },
+          {
+            "input": "cross_section_width",
+            "op": "==",
+            "value": "100m"
+          }
+        ],
+        "reason": "종단측량은 원문의 10km 양안왕복 행을 사용하며 횡단측량 폭은 적용하지 않습니다.",
+        "source": "PDF 440쪽 p496-t0 종단측량 행",
+        "cite": {
+          "table_id": "p496-t0"
+        }
+      },
+      {
+        "condition": "종단측량에 횡단 폭을 선택",
+        "blocked_if_all": [
+          {
+            "input": "survey_type",
+            "op": "==",
+            "value": "종단측량"
+          },
+          {
+            "input": "cross_section_width",
+            "op": "==",
+            "value": "50m"
+          }
+        ],
+        "reason": "종단측량은 원문의 10km 양안왕복 행을 사용하며 횡단측량 폭은 적용하지 않습니다.",
+        "source": "PDF 440쪽 p496-t0 종단측량 행",
+        "cite": {
+          "table_id": "p496-t0"
         }
       }
     ],

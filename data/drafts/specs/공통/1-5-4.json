@@ -88,72 +88,82 @@
         "source": "1-5-4 환경관리비 표",
         "unit": "TON/㎡",
         "values": {
-          "신축_주거_단독주택": {
+          "신축 | 주거 | 단독주택": {
             "폐\n콘크리트류": "0.03200",
+            "폐\n금속류": "-",
             "폐\n보드류": "0.00051",
             "폐\n목재류": "0.00300",
             "폐합성\n수지류": "0.00174",
             "혼합\n폐기물": "0.00653"
           },
-          "신축_용_아파트": {
+          "신축 | 용 | 아파트": {
             "폐\n콘크리트류": "0.03561",
+            "폐\n금속류": "-",
             "폐\n보드류": "0.00066",
             "폐\n목재류": "0.00416",
             "폐합성\n수지류": "0.00233",
             "혼합\n폐기물": "0.00874"
           },
-          "신축_비주_철근콘크리트조": {
+          "신축 | 비주 | 철근콘크리트조": {
             "폐\n콘크리트류": "0.04888",
+            "폐\n금속류": "-",
             "폐\n보드류": "0.00117",
             "폐\n목재류": "0.00141",
             "폐합성\n수지류": "0.00445",
             "혼합\n폐기물": "0.00664"
           },
-          "신축_비주_철골조": {
+          "신축 | 비주 | 철골조": {
             "폐\n콘크리트류": "0.02920",
+            "폐\n금속류": "-",
             "폐\n보드류": "0.00117",
             "폐\n목재류": "0.00071",
             "폐합성\n수지류": "0.00167",
             "혼합\n폐기물": "0.00353"
           },
-          "신축_비주_철골철근콘크리트조": {
+          "신축 | 비주 | 철골철근콘크리트조": {
             "폐\n콘크리트류": "0.04087",
+            "폐\n금속류": "-",
             "폐\n보드류": "0.00117",
             "폐\n목재류": "0.00128",
             "폐합성\n수지류": "0.00167",
             "혼합\n폐기물": "0.00418"
           },
-          "해체_주거_단독주택": {
+          "해체 | 주거 | 단독주택": {
             "폐\n콘크리트류": "1.3321",
             "폐\n금속류": "0.0010",
+            "폐\n보드류": "-",
             "폐\n목재류": "0.0968",
             "폐합성\n수지류": "0.0263",
             "혼합\n폐기물": "0.2030"
           },
-          "해체_용_아파트": {
+          "해체 | 용 | 아파트": {
             "폐\n콘크리트류": "1.4770",
             "폐\n금속류": "0.0655",
+            "폐\n보드류": "-",
             "폐\n목재류": "0.0150",
             "폐합성\n수지류": "0.0261",
             "혼합\n폐기물": "0.1637"
           },
-          "해체_비주_철근콘크리트조": {
+          "해체 | 비주 | 철근콘크리트조": {
             "폐\n콘크리트류": "1.4028",
             "폐\n금속류": "0.0170",
+            "폐\n보드류": "-",
             "폐\n목재류": "0.0638",
             "폐합성\n수지류": "0.0215",
             "혼합\n폐기물": "0.1348"
           },
-          "해체_비주_철골조": {
+          "해체 | 비주 | 철골조": {
             "폐\n콘크리트류": "0.9167",
             "폐\n금속류": "0.0550",
+            "폐\n보드류": "-",
             "폐\n목재류": "0.0194",
             "폐합성\n수지류": "0.0261",
             "혼합\n폐기물": "0.1348"
           },
-          "해체_비주_철골철근콘크리트조": {
+          "해체 | 비주 | 철골철근콘크리트조": {
             "폐\n콘크리트류": "1.5861",
             "폐\n금속류": "0.1220",
+            "폐\n보드류": "-",
             "폐\n목재류": "0.0018",
             "폐합성\n수지류": "0.0245",
             "혼합\n폐기물": "0.1452"
@@ -166,11 +176,128 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "rate",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "outputs": [
+          {
+            "kind": "table_row_rates",
+            "table": "p88-t0",
+            "quantity_input": "area",
+            "row_selector": {
+              "inputs": [
+                "work_type",
+                "building_use",
+                "structure_type"
+              ],
+              "value_map": [
+                {
+                  "when": {
+                    "work_type": "신축",
+                    "building_use": "주거용",
+                    "structure_type": "단독주택"
+                  },
+                  "row": "신축 | 주거 | 단독주택"
+                },
+                {
+                  "when": {
+                    "work_type": "신축",
+                    "building_use": "주거용",
+                    "structure_type": "아파트"
+                  },
+                  "row": "신축 | 용 | 아파트"
+                },
+                {
+                  "when": {
+                    "work_type": "신축",
+                    "building_use": "비주거용",
+                    "structure_type": "철근콘크리트조"
+                  },
+                  "row": "신축 | 비주 | 철근콘크리트조"
+                },
+                {
+                  "when": {
+                    "work_type": "신축",
+                    "building_use": "비주거용",
+                    "structure_type": "철골조"
+                  },
+                  "row": "신축 | 비주 | 철골조"
+                },
+                {
+                  "when": {
+                    "work_type": "신축",
+                    "building_use": "비주거용",
+                    "structure_type": "철골철근콘크리트조"
+                  },
+                  "row": "신축 | 비주 | 철골철근콘크리트조"
+                },
+                {
+                  "when": {
+                    "work_type": "해체",
+                    "building_use": "주거용",
+                    "structure_type": "단독주택"
+                  },
+                  "row": "해체 | 주거 | 단독주택"
+                },
+                {
+                  "when": {
+                    "work_type": "해체",
+                    "building_use": "주거용",
+                    "structure_type": "아파트"
+                  },
+                  "row": "해체 | 용 | 아파트"
+                },
+                {
+                  "when": {
+                    "work_type": "해체",
+                    "building_use": "비주거용",
+                    "structure_type": "철근콘크리트조"
+                  },
+                  "row": "해체 | 비주 | 철근콘크리트조"
+                },
+                {
+                  "when": {
+                    "work_type": "해체",
+                    "building_use": "비주거용",
+                    "structure_type": "철골조"
+                  },
+                  "row": "해체 | 비주 | 철골조"
+                },
+                {
+                  "when": {
+                    "work_type": "해체",
+                    "building_use": "비주거용",
+                    "structure_type": "철골철근콘크리트조"
+                  },
+                  "row": "해체 | 비주 | 철골철근콘크리트조"
+                }
+              ]
+            },
+            "columns": [
+              "폐\n콘크리트류",
+              "폐\n금속류",
+              "폐\n보드류",
+              "폐\n목재류",
+              "폐합성\n수지류",
+              "혼합\n폐기물"
+            ],
+            "source_dash_means_excluded": true,
+            "unit": "ton",
+            "resource_kind": "material",
+            "names": {
+              "폐\n콘크리트류": "폐콘크리트류",
+              "폐\n금속류": "폐금속류",
+              "폐\n보드류": "폐보드류",
+              "폐\n목재류": "폐목재류",
+              "폐합성\n수지류": "폐합성수지류",
+              "혼합\n폐기물": "혼합폐기물"
+            }
+          }
+        ]
+      },
       "steps": [
-        "입력된 공사 종류, 용도, 구조에 따라 표에서 단위면적당 폐기물 발생량을 찾는다.",
-        "찾은 발생량에 면적을 곱하여 총 폐기물 발생량(TON)을 산출한다."
+        "??, ??? ??, ??? ?? ?? ?? ????.",
+        "??? ??? ????? ???? ???? ?? ? ????(ton)? ????.",
+        "?? ???? ?? ??? ?? ?? ???? ???? 0?? ???? ???."
       ],
       "source": "1-5-4 환경관리비",
       "rounding": "총 투입량은 정확한 유리수로 보존"
@@ -217,19 +344,269 @@
           "chunk_id": "p88-x11",
           "quote": "④ 폐기물관리법 및 건설기술진흥법에 따른 공사현장 환경시설 중 진출입로에 세륜 시설을 설치할 경우\n설명 | 개소당 3% 이내에서 폐콘크리트의 수량을 증가 할 수 있다."
         }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "신축"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "철근콘크리트조"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "신축"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "철골조"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "신축"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "철골철근콘크리트조"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "신축"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "비주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "단독주택"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "신축"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "비주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "아파트"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "해체"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "철근콘크리트조"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "해체"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "철골조"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "해체"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "철골철근콘크리트조"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "해체"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "비주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "단독주택"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
+      },
+      {
+        "condition": "?? ??? ?? ? ? ??",
+        "blocked_if_all": [
+          {
+            "input": "work_type",
+            "op": "==",
+            "value": "해체"
+          },
+          {
+            "input": "building_use",
+            "op": "==",
+            "value": "비주거용"
+          },
+          {
+            "input": "structure_type",
+            "op": "==",
+            "value": "아파트"
+          }
+        ],
+        "reason": "?? ????? ??? ?? ???? ?? ?? ??.",
+        "source": "p88-t0",
+        "cite": {
+          "table_id": "p88-t0"
+        }
       }
     ],
     "not_calculated": [],
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "rate",
-  "calc_type_raw": "rate",
-  "calc_type_reason": "단위면적당 폐기물 발생량(TON/㎡)을 표에서 찾아 면적(㎡)에 곱하여 물량을 산출하는 기준이므로 rate로 분류합니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "? ?? ??? ??? ????? ??? ?? ?? ??",
   "citations": [
     {
       "table_id": "p88-t0",
-      "row": "신축_주거_단독주택",
+      "row": "신축 | 주거 | 단독주택",
       "column": "폐\n콘크리트류",
       "value": "0.03200"
     },

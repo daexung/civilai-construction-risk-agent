@@ -22,7 +22,11 @@
         "unit": null,
         "required": true,
         "ask": "조회할 해상장비의 종류는 무엇입니까?",
-        "source": "PDF 270쪽 (9010) 펌프 준설선, (9020) 그래브 준설선"
+        "source": "PDF 270쪽 (9010) 펌프 준설선, (9020) 그래브 준설선",
+        "source_table_map": {
+          "펌프 준설선": "p326-t1",
+          "그래브 준설선": "p326-t2"
+        }
       },
       {
         "name": "pump_spec",
@@ -45,7 +49,12 @@
         "unit": "㎾",
         "required": true,
         "ask": "펌프 준설선의 출력(㎾) 규격은 무엇입니까?",
-        "source": "PDF 270쪽 p326-t1 표의 출력(㎾) 열"
+        "source": "PDF 270쪽 p326-t1 표의 출력(㎾) 열",
+        "source_row_key": true,
+        "when": {
+          "input": "equipment_type",
+          "equals": "펌프 준설선"
+        }
       },
       {
         "name": "grab_spec",
@@ -58,7 +67,12 @@
         "unit": "㎥",
         "required": true,
         "ask": "그래브 준설선의 형식(㎥) 규격은 무엇입니까?",
-        "source": "PDF 270쪽 p326-t2 표의 형식 열 (파싱된 범위 내)"
+        "source": "PDF 270쪽 p326-t2 표의 형식 열 (파싱된 범위 내)",
+        "source_row_key": true,
+        "when": {
+          "input": "equipment_type",
+          "equals": "그래브 준설선"
+        }
       }
     ],
     "tables": [

@@ -51,8 +51,8 @@
       {
         "id": "p758-t1",
         "role": "바탕만들기 방법별 자재 및 인력 품",
-        "source": "PDF 702쪽 9-2-1 바탕만들기 표",
-        "unit": "자재: ㎏, ㎥, 개, ℓ / 인력: 인",
+        "source": "PDF 702쪽 p758-t1, 표 제목 (㎡당); 자재는 각 규격별 단위 병기",
+        "unit": "인/㎡",
         "values": {
           "Shot Blast": {
             "steel shot": "0.215",
@@ -67,12 +67,14 @@
           },
           "Power Tool": {
             "동력 Brush": "0.03",
-            "도장공": "0.1"
+            "도장공": "0.1",
+            "보통인부": "-"
           },
           "Wire Brush": {
             "Gasolin": "0.05",
             "Wire Brush": "0.016",
-            "보통인부": "0.05"
+            "보통인부": "0.05",
+            "도장공": "-"
           }
         },
         "cite": {
@@ -91,7 +93,29 @@
             "도장공",
             "보통인부",
             "모래분사공"
-          ]
+          ],
+          "trades_by_row": {
+            "Shot Blast": [
+              "도장공",
+              "보통인부"
+            ],
+            "Sand Blast": [
+              "모래분사공",
+              "보통인부"
+            ],
+            "Power Tool": [
+              "도장공",
+              "보통인부"
+            ],
+            "Wire Brush": [
+              "도장공",
+              "보통인부"
+            ]
+          },
+          "trade_in_columns": true,
+          "trade_column_selector": {
+            "input": "method"
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
@@ -102,6 +126,108 @@
             },
             "change": "50% 가산",
             "source": "PDF 702쪽 [주] ⑤"
+          }
+        ],
+        "excluded_resources": [
+          {
+            "trade": "보통인부",
+            "when": {
+              "method": "Power Tool"
+            },
+            "source": "PDF 702쪽 p758-t1: Power Tool/보통인부 원문 대시 셀",
+            "cite": {
+              "table_id": "p758-t1",
+              "row": "Power Tool",
+              "column": "보통인부",
+              "value": "-"
+            }
+          },
+          {
+            "trade": "도장공",
+            "when": {
+              "method": "Wire Brush"
+            },
+            "source": "PDF 702쪽 p758-t1: Wire Brush/도장공 원문 대시 셀",
+            "cite": {
+              "table_id": "p758-t1",
+              "row": "Wire Brush",
+              "column": "도장공",
+              "value": "-"
+            }
+          }
+        ],
+        "additional_materials": [
+          {
+            "name": "steel shot",
+            "table": "p758-t1",
+            "row": "Shot Blast",
+            "column": "steel shot",
+            "basis": "1㎡",
+            "quantity_unit": "㎡",
+            "unit": "kg",
+            "when": {
+              "method": "Shot Blast"
+            }
+          },
+          {
+            "name": "ø1㎜ 기준",
+            "table": "p758-t1",
+            "row": "Shot Blast",
+            "column": "ø1㎜ 기준",
+            "basis": "1㎡",
+            "quantity_unit": "㎡",
+            "unit": "kg",
+            "when": {
+              "method": "Shot Blast"
+            }
+          },
+          {
+            "name": "규사함유량 80%",
+            "table": "p758-t1",
+            "row": "Sand Blast",
+            "column": "규사함유량 80%",
+            "basis": "1㎡",
+            "quantity_unit": "㎡",
+            "unit": "㎥",
+            "when": {
+              "method": "Sand Blast"
+            }
+          },
+          {
+            "name": "동력 Brush",
+            "table": "p758-t1",
+            "row": "Power Tool",
+            "column": "동력 Brush",
+            "basis": "1㎡",
+            "quantity_unit": "㎡",
+            "unit": "개",
+            "when": {
+              "method": "Power Tool"
+            }
+          },
+          {
+            "name": "Gasolin",
+            "table": "p758-t1",
+            "row": "Wire Brush",
+            "column": "Gasolin",
+            "basis": "1㎡",
+            "quantity_unit": "㎡",
+            "unit": "ℓ",
+            "when": {
+              "method": "Wire Brush"
+            }
+          },
+          {
+            "name": "Wire Brush",
+            "table": "p758-t1",
+            "row": "Wire Brush",
+            "column": "Wire Brush",
+            "basis": "1㎡",
+            "quantity_unit": "㎡",
+            "unit": "개",
+            "when": {
+              "method": "Wire Brush"
+            }
           }
         ]
       },

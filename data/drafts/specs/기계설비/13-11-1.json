@@ -114,79 +114,183 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "input_rate_adjustments": [
           {
+            "operation": "add_source_percent",
+            "percent": "50",
             "when": {
               "partial_assembly": true
             },
-            "change": "본 품의 50%를 가산한다.",
             "source": "13-11-1 표 비고",
             "cite": {
               "table_id": "p906-t0",
               "row": "비고",
               "column": "수량"
-            }
+            },
+            "kinds": [
+              "labor"
+            ],
+            "trades": [
+              "기계설비공",
+              "비계공",
+              "용접공",
+              "특별인부"
+            ]
           },
           {
+            "operation": "add_source_percent",
+            "percent": "20",
             "when": {
               "weight_category": "0.5ton 미만"
             },
-            "change": "20% 가산한다.",
             "source": "13-11-1 표 비고",
             "cite": {
               "table_id": "p906-t0",
               "row": "비고",
               "column": "수량"
-            }
+            },
+            "kinds": [
+              "labor"
+            ],
+            "trades": [
+              "기계설비공",
+              "비계공",
+              "용접공",
+              "특별인부"
+            ]
           },
           {
+            "operation": "add_source_percent",
+            "percent": "10",
             "when": {
               "weight_category": "0.5ton~1ton 미만"
             },
-            "change": "10% 가산한다.",
             "source": "13-11-1 표 비고",
             "cite": {
               "table_id": "p906-t0",
               "row": "비고",
               "column": "수량"
-            }
+            },
+            "kinds": [
+              "labor"
+            ],
+            "trades": [
+              "기계설비공",
+              "비계공",
+              "용접공",
+              "특별인부"
+            ]
           },
           {
+            "operation": "subtract_source_percent",
+            "percent": "15",
             "when": {
               "weight_category": "5ton 이상"
             },
-            "change": "15% 감한다.",
             "source": "13-11-1 표 비고",
             "cite": {
               "table_id": "p906-t0",
               "row": "비고",
               "column": "수량"
-            }
-          },
+            },
+            "kinds": [
+              "labor"
+            ],
+            "trades": [
+              "기계설비공",
+              "비계공",
+              "용접공",
+              "특별인부"
+            ]
+          }
+        ],
+        "proportional_resource_additions": [
           {
-            "when": {},
-            "change": "검사 및 교정: 기술관리를 제외한 본 품의 10%",
-            "source": "13-11-1 표 검사및교정",
+            "base": "labor_rate_total",
+            "factor": "0.10",
+            "resource_name": "검사 및 교정",
+            "resource_unit": "인",
+            "exclude_trades": [
+              "기계산업기사"
+            ],
             "cite": {
               "table_id": "p906-t0",
               "row": "검사및교정",
               "column": "수량"
-            }
+            },
+            "source": "13-11-1 표 검사 및 교정"
           }
         ]
       },
       "steps": [
-        "단위당 품을 표에서 고른다.",
-        "물량을 곱해 총 품을 구한다.",
-        "surcharges/note_adjustments를 원문 순서대로 적용한다."
+        "기기 중량별 기본 품을 원문 표에서 선택한다.",
+        "부분조립과 기기중량 조정은 각 단독 적용 때 원문 비고의 비율을 적용한다. 두 조정률이 동시에 발생하는 조합은 산정 순서 불명으로 보류한다.",
+        "검사 및 교정은 기계산업기사를 제외한 기본 인력품 합계의 10%로 별도 산출한다."
       ],
       "source": "13-11-1 일반기기 설치 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "부분조립작업 가산과 설치 중량 가감산이 동시에 발생할 때",
-        "reason": "원문에 여러 가감산 조건이 겹칠 때 합산(+, -)인지 곱연산인지 누적 방식이 명시되어 있지 않음",
+        "condition": "부분조립과 중량 할증/감산이 동시 적용되는 조합",
+        "blocked_if_all": [
+          {
+            "input": "partial_assembly",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "weight_category",
+            "op": "==",
+            "value": "0.5ton 미만"
+          }
+        ],
+        "reason": "원문은 두 조정률을 각각 명시하지만 동시 적용 시 합산 또는 곱연산 순서를 정하지 않으므로 계산 보류",
+        "source": "13-11-1 표 비고",
+        "cite": {
+          "table_id": "p906-t0",
+          "row": "비고",
+          "column": "수량"
+        }
+      },
+      {
+        "condition": "부분조립과 중량 할증/감산이 동시 적용되는 조합",
+        "blocked_if_all": [
+          {
+            "input": "partial_assembly",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "weight_category",
+            "op": "==",
+            "value": "0.5ton~1ton 미만"
+          }
+        ],
+        "reason": "원문은 두 조정률을 각각 명시하지만 동시 적용 시 합산 또는 곱연산 순서를 정하지 않으므로 계산 보류",
+        "source": "13-11-1 표 비고",
+        "cite": {
+          "table_id": "p906-t0",
+          "row": "비고",
+          "column": "수량"
+        }
+      },
+      {
+        "condition": "부분조립과 중량 할증/감산이 동시 적용되는 조합",
+        "blocked_if_all": [
+          {
+            "input": "partial_assembly",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "weight_category",
+            "op": "==",
+            "value": "5ton 이상"
+          }
+        ],
+        "reason": "원문은 두 조정률을 각각 명시하지만 동시 적용 시 합산 또는 곱연산 순서를 정하지 않으므로 계산 보류",
         "source": "13-11-1 표 비고",
         "cite": {
           "table_id": "p906-t0",

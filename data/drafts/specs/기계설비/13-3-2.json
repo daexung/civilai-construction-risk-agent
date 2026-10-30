@@ -253,13 +253,33 @@
         "unit_rate_table": {
           "table": "p819-t1",
           "row_input": "thickness_boiler",
-          "column_input": "직종",
+          "column_input": null,
           "trades": [
             "용접공",
             "보온공",
             "함석공",
             "특별인부"
-          ]
+          ],
+          "table_selector": {
+            "input": "equipment_type",
+            "values": {
+              "Boiler 본체": "p819-t1",
+              "Duct": "p820-t0",
+              "일반기기": "p820-t0"
+            }
+          },
+          "row_input_by_table": {
+            "p819-t1": "thickness_boiler",
+            "p820-t0": "thickness_duct"
+          },
+          "ignored_columns_by_table": {
+            "p819-t1": [
+              "계"
+            ],
+            "p820-t0": [
+              "계"
+            ]
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [
@@ -311,13 +331,34 @@
             "source": "PDF 819쪽 비고"
           }
         ],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "absolute_resource_adjustments": [
           {
             "when": {
-              "lagging_sheet_used": false
+              "equipment_type": "Boiler 본체",
+              "lagging_sheet_used": false,
+              "material_shape": "Blanket",
+              "lagging_sheet_made_on_site": false,
+              "finishing_work_required": false,
+              "insulation_layers": "<3"
             },
-            "change": "함석공 0.173인, 특별인부 0.008인 감산",
-            "source": "PDF 819쪽 비고"
+            "resources": [
+              {
+                "name": "함석공",
+                "amount": "0.173",
+                "unit": "인"
+              },
+              {
+                "name": "특별인부",
+                "amount": "0.008",
+                "unit": "인"
+              }
+            ],
+            "cite": {
+              "chunk_id": "p819-t1",
+              "quote": "보일러 본체 보온중 Lagging Sheet를 사용하지 않는 경우 함석공 0.173인 특별인부 0.008인을 감한다."
+            },
+            "source": "PDF 819쪽 13-3-2 비고: 보일러 본체의 Lagging Sheet 미사용 시 두 직종의 명시량을 각각 감산"
           }
         ]
       },
@@ -358,6 +399,106 @@
         "cite": {
           "chunk_id": "p819-x20",
           "quote": "② 옥외형 보일러 외벽 보온작업 시 위험할증을 적용한다."
+        }
+      },
+      {
+        "blocked_if_all": [
+          {
+            "input": "equipment_type",
+            "op": "==",
+            "value": "Boiler 본체"
+          },
+          {
+            "input": "lagging_sheet_used",
+            "op": "==",
+            "value": false
+          },
+          {
+            "input": "material_shape",
+            "op": "==",
+            "value": "Block"
+          }
+        ],
+        "reason": "블록 할증과 함석판 미사용 감산의 결합 순서가 원문에 없어 자동 산정 보류",
+        "source": "13-3-2 비고: 할증과 감산의 조합 순서 미기재",
+        "cite": {
+          "chunk_id": "p819-t1",
+          "quote": "보일러 본체 보온중 Lagging Sheet를 사용하지 않는 경우 함석공 0.173인 특별인부 0.008인을 감한다."
+        }
+      },
+      {
+        "blocked_if_all": [
+          {
+            "input": "equipment_type",
+            "op": "==",
+            "value": "Boiler 본체"
+          },
+          {
+            "input": "lagging_sheet_used",
+            "op": "==",
+            "value": false
+          },
+          {
+            "input": "lagging_sheet_made_on_site",
+            "op": "==",
+            "value": true
+          }
+        ],
+        "reason": "현장제작 할증과 함석판 미사용 감산의 결합 순서가 원문에 없어 자동 산정 보류",
+        "source": "13-3-2 비고: 할증과 감산의 조합 순서 미기재",
+        "cite": {
+          "chunk_id": "p819-t1",
+          "quote": "보일러 본체 보온중 Lagging Sheet를 사용하지 않는 경우 함석공 0.173인 특별인부 0.008인을 감한다."
+        }
+      },
+      {
+        "blocked_if_all": [
+          {
+            "input": "equipment_type",
+            "op": "==",
+            "value": "Boiler 본체"
+          },
+          {
+            "input": "lagging_sheet_used",
+            "op": "==",
+            "value": false
+          },
+          {
+            "input": "finishing_work_required",
+            "op": "==",
+            "value": true
+          }
+        ],
+        "reason": "마감작업 할증과 함석판 미사용 감산의 결합 순서가 원문에 없어 자동 산정 보류",
+        "source": "13-3-2 비고: 할증과 감산의 조합 순서 미기재",
+        "cite": {
+          "chunk_id": "p819-t1",
+          "quote": "보일러 본체 보온중 Lagging Sheet를 사용하지 않는 경우 함석공 0.173인 특별인부 0.008인을 감한다."
+        }
+      },
+      {
+        "blocked_if_all": [
+          {
+            "input": "equipment_type",
+            "op": "==",
+            "value": "Boiler 본체"
+          },
+          {
+            "input": "lagging_sheet_used",
+            "op": "==",
+            "value": false
+          },
+          {
+            "input": "insulation_layers",
+            "op": ">=",
+            "value": "3"
+          }
+        ],
+        "reason": "3겹 이상 가산과 함석판 미사용 감산의 결합 순서가 원문에 없어 자동 산정 보류",
+        "source": "13-3-2 비고: 할증과 감산의 조합 순서 미기재",
+        "cite": {
+          "chunk_id": "p819-t1",
+          "quote": "보일러 본체 보온중 Lagging Sheet를 사용하지 않는 경우 함석공 0.173인 특별인부 0.008인을 감한다."
         }
       }
     ],

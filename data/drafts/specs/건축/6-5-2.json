@@ -37,7 +37,7 @@
       {
         "name": "floor_level",
         "type": "nonnegative_integer",
-        "allowed_values": "1 이상의 정수",
+        "allowed_values": "1층 이상 정수",
         "unit": "층",
         "required": true,
         "ask": "외벽의 층수는 몇 층입니까? (층 구분을 할 수 없는 건축물은 1개층의 층고를 3.6m로 기준하여 층수를 환산하여 입력)",
@@ -114,23 +114,82 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "input_rate_adjustments": [
           {
-            "when": {},
-            "change": "외벽은 높이에 따라 p663-t3의 할증률에 의한 품을 가산하며, 19층 이상은 매 3층 증가마다 4%씩 가산한다. (층 구분을 할 수 없는 건축물은 1개층의 층고를 3.6m로 기준하여 층수를 환산한다.)",
-            "source": "PDF 607쪽 [주] ②, ※"
+            "operation": "source_table_percent_by_range",
+            "table": "p663-t3",
+            "row": "인력품",
+            "value_input": "floor_level",
+            "ranges": [
+              {
+                "minimum": 1,
+                "maximum": 3,
+                "column": "1,2,3층"
+              },
+              {
+                "minimum": 4,
+                "maximum": 6,
+                "column": "4,5,6층"
+              },
+              {
+                "minimum": 7,
+                "maximum": 9,
+                "column": "7,8,9층"
+              },
+              {
+                "minimum": 10,
+                "maximum": 12,
+                "column": "10,11,12층"
+              },
+              {
+                "minimum": 13,
+                "maximum": 15,
+                "column": "13,14,15층"
+              },
+              {
+                "minimum": 16,
+                "maximum": 18,
+                "column": "16,17,18층"
+              }
+            ],
+            "kinds": [
+              "labor"
+            ],
+            "cite": [
+              {
+                "chunk_id": "p663-x14",
+                "quote": "외벽은 높이에 따라 다음 할증률에 의한 품을 가산할 수 있으며 19층 이상은 매 3층 증가마다 4%씩 가산한다."
+              }
+            ]
           }
         ]
       },
       "steps": [
-        "p663-t2에서 시공 방법 및 층수에 따른 단위당 품을 고른다.",
-        "물량을 곱해 총 품을 구한다.",
-        "외벽 층수에 따른 할증률을 적용하여 품을 가산한다."
+        "원문 표에서 공법·도포 횟수에 맞는 기본 인력품을 선택한다.",
+        "외벽 높이 1~18층은 원문 층별 할증표의 정확한 구간을 선택하여 기본 인력품에 가산한다.",
+        "19층 이상은 원문 문구의 구간 해석을 확정할 수 없어 계산을 보류한다.",
+        "재료비와 크레인 기계경비는 별도 계상한다."
       ],
-      "source": "PDF 607쪽 6-5-2",
+      "source": "PDF 607쪽 6-5-2 표 및 [주] ②",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "19층 이상 외벽 높이 할증",
+        "blocked_if": {
+          "input": "floor_level",
+          "op": ">=",
+          "value": 19
+        },
+        "reason": "원문은 19층 이상 매 3층 증가마다 4%라고 하나, 최초 적용 구간과 이후 증가 구간의 산정 기준이 불명확하여 임의 계산하지 않음",
+        "source": "PDF 607쪽 [주] ②",
+        "cite": {
+          "chunk_id": "p663-x14",
+          "quote": "19층 이상은 매 3층 증가마다 4%씩 가산한다."
+        }
+      }
+    ],
     "not_calculated": [
       {
         "item": "재료량 (발수제 등)",

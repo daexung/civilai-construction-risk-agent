@@ -72,7 +72,49 @@
           {
             "when": {},
             "change": "위 재료량은 할증이 포함되어 있으며, 방진망의 손율은 1회사용 후 100%로 한다.",
-            "source": "PDF 59쪽 ※"
+            "source": "PDF 59쪽 ※",
+            "implemented_by": "additional_materials_included_allowance",
+            "material_table_ids": [
+              "p115-t3"
+            ],
+            "cite": {
+              "chunk_id": "p115-x12",
+              "quote": "※ 위 재료량은 할증이 포함되어 있으며, 방진망의 손율은 1회사용 후 100%로 한다."
+            }
+          }
+        ],
+        "additional_materials": [
+          {
+            "name": "방진망",
+            "table": "p115-t3",
+            "row": "방진망",
+            "column": "수량",
+            "quantity_input": "quantity",
+            "quantity_unit": "㎡",
+            "basis": "1㎡",
+            "unit": "㎡",
+            "source": "원문 재료량 표; 할증 포함 수량",
+            "cite": {
+              "table_id": "p115-t3",
+              "row": "방진망",
+              "column": "수량"
+            }
+          },
+          {
+            "name": "철선",
+            "table": "p115-t3",
+            "row": "철선",
+            "column": "수량",
+            "quantity_input": "quantity",
+            "quantity_unit": "㎡",
+            "basis": "1㎡",
+            "unit": "kg",
+            "source": "원문 재료량 표; 할증 포함 수량",
+            "cite": {
+              "table_id": "p115-t3",
+              "row": "철선",
+              "column": "수량"
+            }
           }
         ]
       },

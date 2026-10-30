@@ -12,6 +12,18 @@
     ],
     "inputs": [
       {
+        "name": "operation",
+        "type": "enum",
+        "allowed_values": [
+          "쌓기",
+          "놓기"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "?? ??? ?????.",
+        "source": "PDF 153? 4-4-1 ?? ??"
+      },
+      {
         "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
@@ -22,12 +34,14 @@
       },
       {
         "name": "difficulty_surcharge",
-        "type": "positive_rational",
-        "allowed_values": "0에서 20 사이의 수",
+        "type": "percentage",
+        "allowed_values": "0 ?? 20 ??",
         "unit": "%",
         "required": true,
         "ask": "지형 등 작업의 난이도에 따른 가산율(%)은 얼마입니까? (0~20% 범위 내)",
-        "source": "PDF 153쪽 [주] ③"
+        "source": "PDF 153쪽 [주] ③",
+        "minimum": 0,
+        "maximum": 20
       }
     ],
     "tables": [
@@ -39,13 +53,15 @@
         "values": {
           "조경공": {
             "수량 쌓기 20ton 미만": "1.212",
-            "수량 20ton 이상": "1.040",
-            "수량 놓기 20ton 미만": "0.968"
+            "수량 놓기 20ton 미만": "0.968",
+            "수량 놓기 20ton 이상": "0.836",
+            "수량 쌓기 20ton 이상": "1.040"
           },
           "굴착기": {
             "수량 쌓기 20ton 미만": "0.657",
-            "수량 20ton 이상": "0.684",
-            "수량 놓기 20ton 미만": "0.657"
+            "수량 놓기 20ton 미만": "0.657",
+            "수량 놓기 20ton 이상": "0.684",
+            "수량 쌓기 20ton 이상": "0.684"
           }
         },
         "cite": {
@@ -55,15 +71,59 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "quantity_input": "quantity",
+        "unit_rate_table": {
+          "table": "p153-t0",
+          "trades": [
+            "조경공",
+            "굴착기"
+          ],
+          "column_input": {
+            "input": "quantity",
+            "input_contains": [
+              "operation"
+            ],
+            "ranges": [
+              {
+                "max": "20",
+                "max_inclusive": false,
+                "contains": "20ton 미만"
+              },
+              {
+                "min": "20",
+                "contains": "20ton 이상"
+              }
+            ]
+          },
+          "resource_units": {
+            "굴착기": "hr"
+          }
+        },
+        "input_rate_adjustments": [
+          {
+            "value_input": "difficulty_surcharge",
+            "operation": "add_percent",
+            "maximum": "20",
+            "kinds": [
+              "labor",
+              "equipment"
+            ],
+            "cite": {
+              "chunk_id": "p153-x3",
+              "quote": "③ 지형 등 작업의 난이도에 따라 20% 범위 내에서 가산하여 적용한다."
+            }
+          }
+        ]
+      },
       "steps": [
         "표에서 작업 종류(쌓기/놓기) 및 규격(20ton 미만/이상)에 따른 조경공과 굴착기 품을 찾는다.",
         "물량(ton)을 곱하여 기본 품을 구한다.",
         "지형 등 작업의 난이도에 따라 최대 20%까지 할증을 적용한다."
       ],
       "source": "PDF 153쪽 4-4-1 표 및 [주]",
-      "rounding": "동일 원칙(1-2-8·1-2-1)"
+      "rounding": "? ??? ?? ??? ???, ?? ?? ?? ? ???? ????."
     },
     "blocked": [],
     "not_calculated": [
@@ -88,11 +148,25 @@
           "quote": "④ 공구손료는 인력품의 3%로 계상한다."
         }
       }
+    ],
+    "citations": [
+      {
+        "table_id": "p153-t0",
+        "row": "조경공",
+        "column": "수량 놓기 20ton 이상",
+        "value": "0.836"
+      },
+      {
+        "table_id": "p153-t0",
+        "row": "굴착기",
+        "column": "수량 놓기 20ton 이상",
+        "value": "0.684"
+      }
     ]
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 '수량 20ton 이상'이라는 열 이름이 쌓기와 놓기 양쪽에서 중복 발생하여, 고유한 열 이름으로 단가를 식별할 수 없어 자동 계산 모델을 구성하기 어렵습니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "?? ton? ?????? ?? ?? ?? ??? ?? ???? ??? ???.",
   "citations": [
     {
       "table_id": "p153-t0",

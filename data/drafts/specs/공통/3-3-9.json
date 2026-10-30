@@ -117,9 +117,51 @@
           "row_input": "고정 행이름",
           "column_input": "blast_type",
           "trades": [
+            "폭약",
+            "뇌관",
+            "비트",
             "화약취급공",
             "착암공",
             "보통인부",
+            "잠수부",
+            "소형브레이커",
+            "공기압축기"
+          ],
+          "parenthetical_value_selector": {
+            "input": "drilling_method",
+            "values": {
+              "일반 천공": "primary",
+              "잠수부 천공": "parenthetical"
+            },
+            "source": "PDF printed p.74 [주] ①: values in parentheses are for diver drilling",
+            "cite": {
+              "chunk_id": "p130-x10",
+              "quote": "( )내는 잠수부 천공시의 품이다."
+            }
+          },
+          "resource_units": {
+            "폭약": "kg",
+            "뇌관": "개",
+            "비트": "개",
+            "화약취급공": "인",
+            "착암공": "인",
+            "보통인부": "인",
+            "잠수부": "조",
+            "소형브레이커": "hr",
+            "공기압축기": "hr"
+          },
+          "resource_kinds": {
+            "폭약": "material",
+            "뇌관": "material",
+            "비트": "material",
+            "화약취급공": "labor",
+            "착암공": "labor",
+            "보통인부": "labor",
+            "잠수부": "labor",
+            "소형브레이커": "equipment",
+            "공기압축기": "equipment"
+          },
+          "preserve_labor_source_unit": [
             "잠수부"
           ]
         },
@@ -169,6 +211,7 @@
         ]
       },
       "steps": [
+        "표에서 blast_type 열의 값을 선택하고, 착암공·잠수부의 괄호 수치는 drilling_method에 따라 일반 또는 잠수부 천공 값으로 읽는다.",
         "p130-t0에서 발파 유형에 따른 단위당 품을 고른다.",
         "잠수부 천공인 경우 착암공과 잠수부의 품은 괄호 안의 수치를 적용한다.",
         "수심에 따라 재료비(폭약, 뇌관)를 제외한 품에 할증 또는 할인을 적용한다.",

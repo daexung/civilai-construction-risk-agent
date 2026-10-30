@@ -79,7 +79,22 @@
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "보통인부(인)",
+            "when": {
+              "size": "ø 100"
+            },
+            "source": "원문 인쇄 708쪽 표의 해당 직종 셀이 대시",
+            "cite": {
+              "table_id": "p764-t1",
+              "row": "ø 100",
+              "column": "보통인부(인)",
+              "value": "-"
+            }
+          }
+        ]
       },
       "steps": [
         "p764-t1 표에서 규격(size)에 해당하는 배관공과 보통인부의 단위당 품을 찾는다.",
@@ -139,6 +154,12 @@
     {
       "chunk_id": "p764-x10",
       "quote": "템퍼스위치결선, 종단저항설치, 주위배관 및 보온은 별도 계상한다."
+    },
+    {
+      "table_id": "p764-t1",
+      "row": "ø 100",
+      "column": "보통인부(인)",
+      "value": "-"
     }
   ],
   "open_questions": [],

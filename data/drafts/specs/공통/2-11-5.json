@@ -51,32 +51,45 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p118-t1",
+          "trades": [
+            "물탱크(살수차)"
+          ],
+          "resource_units": {
+            "물탱크(살수차)": "hr"
+          }
+        },
+        "quantity_input": "spray_area",
+        "surcharges": [],
+        "note_adjustments": [],
+        "materials": [],
+        "additional_materials": []
+      },
       "steps": [
-        "파싱 결과에 표의 수량(0.008)이 누락되어 있어 자동 계산 명세를 작성하지 않습니다.",
-        "총 살수면적을 100으로 나눈 후 표의 수량을 곱하여 살수차 사용 시간을 산출합니다."
+        "Use the source spray area, already calculated from width ? length ? spray frequency ? spray days.",
+        "Apply the source tanker rate 0.008 hours per 100?.",
+        "Keep water supply installation or utility costs outside this rate, as stated by the source."
       ],
-      "source": "PDF 62쪽 2-11-5 표 및 [주] ③",
+      "source": "p118-t1 and p118-x8",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
     "not_calculated": [
       {
-        "item": "급수시설 설치 또는 상수도 이용 비용",
-        "source": "PDF 62쪽 [주] ④",
-        "cite": {
-          "chunk_id": "p118-x8",
-          "quote": "살수에 필요한 물을 현장에서 구득하기 어려워 급수시설을 설치하거나 상수도 등을 이용해야 할 경우에는\n설명 | 그 비용을 별도 계상한다."
-        }
+        "item": "Water supply facility or utility charges when site water is unavailable",
+        "source": "p118-x8 [?] ?",
+        "reason": "The source directs separate cost accounting and provides no rate in this item."
       }
     ],
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 표의 수량(0.008)과 항목명(물탱크(살수차))이 누락되어 있어 정확한 인용 및 자동 계산 명세 작성이 불가능합니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "Source explicitly gives 0.008 equipment-hours per 100?; shared per_unit calculator uses the cumulative spray-area input.",
   "citations": [
     {
       "table_id": "p118-t1"

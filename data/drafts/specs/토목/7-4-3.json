@@ -183,7 +183,27 @@
           "trades": [
             "보통인부\n(인)",
             "크레인\n(hr)"
-          ]
+          ],
+          "table_selector": {
+            "input": "pipe_diameter",
+            "values": {
+              "200": "p450-t2",
+              "250": "p450-t2",
+              "300": "p450-t2",
+              "350": "p450-t2",
+              "400": "p450-t2",
+              "510": "p450-t2",
+              "560": "p450-t2",
+              "610": "p450-t2",
+              "630": "p451-t0",
+              "660": "p451-t0",
+              "685": "p451-t0",
+              "710": "p451-t0",
+              "760": "p451-t0",
+              "840": "p451-t0",
+              "860": "p451-t0"
+            }
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
@@ -279,6 +299,21 @@
     "citation_retry_used": true,
     "citation_issues_after_retry": [
       "quote가 p451-x11 조각 텍스트에 없음"
-    ]
+    ],
+    "source_table_route_review_2026_10_19": {
+      "tables": [
+        "p450-t2",
+        "p451-t0"
+      ],
+      "physical_pdf_pages": [
+        450,
+        451
+      ],
+      "printed_pages": [
+        394,
+        395
+      ],
+      "basis": "Exact diameter continuation: 200–610 maps to p450-t2; 630–860 maps to p451-t0."
+    }
   }
 }

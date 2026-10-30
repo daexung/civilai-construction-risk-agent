@@ -13,6 +13,16 @@
     ],
     "inputs": [
       {
+        "name": "parcel_count",
+        "type": "nonnegative_integer",
+        "minimum": 1,
+        "allowed_values": "1 or more whole parcels",
+        "unit": "필지",
+        "required": true,
+        "ask": "지적현황측량에 포함된 필지는 몇 필지입니까?",
+        "source": "p609-t0 source rates are per parcel"
+      },
+      {
         "name": "area",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
@@ -129,29 +139,52 @@
         "unit_rate_table": {
           "table": "p609-t0",
           "row_input": "합계",
-          "column_input": "직종",
+          "column_input": null,
           "trades": [
             "지적기사",
             "지적산업기사",
             "지적기능사"
           ]
         },
-        "quantity_input": "필지 수 (명세 범위 외)",
-        "surcharges": [],
-        "note_adjustments": [
+        "quantity_input": "parcel_count",
+        "surcharges": [
           {
             "when": {
-              "division_display": "인가·허가 면적 등"
+              "division_display": "????? ?? ?"
             },
-            "change": "측량비의 40% 가산",
-            "source": "PDF 609쪽 ⑤ 기타사항 ㉯"
+            "rate": "0.40",
+            "applies_to": [
+              "????",
+              "??????",
+              "?????"
+            ],
+            "source": "PDF 610? ? ???? ?"
           },
           {
             "when": {
-              "division_display": "지정분할"
+              "division_display": "????"
             },
-            "change": "측량비의 30% 가산",
-            "source": "PDF 609쪽 ⑤ 기타사항 ㉰"
+            "rate": "0.30",
+            "applies_to": [
+              "????",
+              "??????",
+              "?????"
+            ],
+            "source": "PDF 610? ? ???? ?"
+          }
+        ],
+        "coefficient_rules": [
+          {
+            "kind": "area_increment",
+            "table": "p609-t1",
+            "area_input": "area",
+            "base_area": "1500",
+            "source": "PDF 609쪽 ② 면적계수 표"
+          },
+          {
+            "table": "p609-t2",
+            "input": "region",
+            "source": "PDF 609쪽 ③ 지역구분계수 표"
           }
         ]
       },

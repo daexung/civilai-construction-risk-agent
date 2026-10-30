@@ -13,6 +13,60 @@
     ],
     "inputs": [
       {
+        "name": "lookup_type",
+        "type": "enum",
+        "allowed_values": [
+          "현장조건",
+          "열차의 운행빈도",
+          "건물 층수"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 기준표를 선택해주세요.",
+        "source": "PDF 24~25쪽의 1. 현장조건 / 2. 열차의 운행빈도 / 3. 건물 층수 표",
+        "source_table_map": {
+          "현장조건": "p80-t0",
+          "열차의 운행빈도": "p80-t1",
+          "건물 층수": "p81-t0"
+        }
+      },
+      {
+        "name": "lookup_type",
+        "type": "enum",
+        "allowed_values": [
+          "현장조건",
+          "열차의 운행빈도",
+          "건물 층수"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 기준표를 선택해주세요.",
+        "source": "PDF 24~25쪽의 1. 현장조건 / 2. 열차의 운행빈도 / 3. 건물 층수 표",
+        "source_table_map": {
+          "현장조건": "p80-t0",
+          "열차의 운행빈도": "p80-t1",
+          "건물 층수": "p81-t0"
+        }
+      },
+      {
+        "name": "lookup_type",
+        "type": "enum",
+        "allowed_values": [
+          "현장조건",
+          "열차의 운행빈도",
+          "건물 층수"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "조회할 기준표를 선택해주세요.",
+        "source": "PDF 24~25쪽의 1. 현장조건 / 2. 열차의 운행빈도 / 3. 건물 층수 표",
+        "source_table_map": {
+          "현장조건": "p80-t0",
+          "열차의 운행빈도": "p80-t1",
+          "건물 층수": "p81-t0"
+        }
+      },
+      {
         "name": "site_condition",
         "type": "enum",
         "allowed_values": [
@@ -25,7 +79,11 @@
         "unit": null,
         "required": true,
         "ask": "현장조건은 어디에 해당합니까?",
-        "source": "PDF 24쪽 1. 현장조건 표"
+        "source": "PDF 24쪽 1. 현장조건 표",
+        "when": {
+          "input": "lookup_type",
+          "equals": "현장조건"
+        }
       },
       {
         "name": "train_work_type",
@@ -38,7 +96,11 @@
         "unit": null,
         "required": true,
         "ask": "열차의 운행빈도와 관련하여 어떤 작업에 해당합니까?",
-        "source": "PDF 24쪽 2. 열차의 운행빈도 표"
+        "source": "PDF 24쪽 2. 열차의 운행빈도 표",
+        "when": {
+          "input": "lookup_type",
+          "equals": "열차의 운행빈도"
+        }
       },
       {
         "name": "train_frequency",
@@ -52,7 +114,11 @@
         "unit": null,
         "required": true,
         "ask": "열차운행횟수(8시간)는 어떻게 됩니까?",
-        "source": "PDF 24쪽 2. 열차의 운행빈도 표"
+        "source": "PDF 24쪽 2. 열차의 운행빈도 표",
+        "when": {
+          "input": "lookup_type",
+          "equals": "열차의 운행빈도"
+        }
       },
       {
         "name": "building_floor_type",
@@ -65,7 +131,11 @@
         "unit": null,
         "required": true,
         "ask": "건물 층수 할증을 적용할 경우, 지상층입니까 지하층입니까?",
-        "source": "PDF 25쪽 3. 건물 층수 표"
+        "source": "PDF 25쪽 3. 건물 층수 표",
+        "when": {
+          "input": "lookup_type",
+          "equals": "건물 층수"
+        }
       },
       {
         "name": "above_ground_floor",
@@ -83,7 +153,11 @@
         "unit": null,
         "required": true,
         "ask": "지상층인 경우 몇 층에 해당합니까?",
-        "source": "PDF 25쪽 3. 건물 층수 표"
+        "source": "PDF 25쪽 3. 건물 층수 표",
+        "when": {
+          "input": "building_floor_type",
+          "equals": "지상층"
+        }
       },
       {
         "name": "underground_floor",
@@ -97,7 +171,11 @@
         "unit": null,
         "required": true,
         "ask": "지하층인 경우 몇 층에 해당합니까?",
-        "source": "PDF 25쪽 3. 건물 층수 표"
+        "source": "PDF 25쪽 3. 건물 층수 표",
+        "when": {
+          "input": "building_floor_type",
+          "equals": "지하층"
+        }
       }
     ],
     "tables": [
@@ -135,14 +213,14 @@
         "unit": "%",
         "values": {
           "본선상작업": {
-            "적용조건 - 열차운행횟수(8시간) 13회 이하": "14%",
-            "적용조건 - 열차운행횟수(8시간) 14~18회 이하": "25%",
-            "적용조건 - 열차운행횟수(8시간) 19회 이상": "37%"
+            "13회 이하": "14%",
+            "14~18회 이하": "25%",
+            "19회 이상": "37%"
           },
           "열차운행선 인접작업": {
-            "적용조건 - 열차운행횟수(8시간) 13회 이하": "3%",
-            "적용조건 - 열차운행횟수(8시간) 14~18회 이하": "5%",
-            "적용조건 - 열차운행횟수(8시간) 19회 이상": "7%"
+            "13회 이하": "3%",
+            "14~18회 이하": "5%",
+            "19회 이상": "7%"
           }
         },
         "cite": {
@@ -156,18 +234,18 @@
         "unit": "%",
         "values": {
           "지상층": {
-            "적용조건 2~5층": "1%",
-            "적용조건 10층 이하": "3%",
-            "적용조건 15층 이하": "4%",
-            "적용조건 20층 이하": "5%",
-            "적용조건 25층 이하": "6%",
-            "적용조건 30층 이하": "7%",
-            "적용조건 30층 초과": "5층마다 1%씩 가산"
+            "2~5층": "1%",
+            "10층 이하": "3%",
+            "15층 이하": "4%",
+            "20층 이하": "5%",
+            "25층 이하": "6%",
+            "30층 이하": "7%",
+            "30층 초과": "5층마다 1%씩 가산"
           },
           "지하층": {
-            "적용조건 지하 1층": "1%",
-            "적용조건 지하 2층": "2%",
-            "적용조건 지하 2층 초과": "1층마다 1%씩 가산"
+            "지하 1층": "1%",
+            "지하 2층": "2%",
+            "지하 2층 초과": "1층마다 1%씩 가산"
           }
         },
         "cite": {
@@ -203,6 +281,19 @@
           "input": "above_ground_floor",
           "op": "==",
           "value": "30층 초과"
+        },
+        "reason": "층마다 1%씩 가산하는 계산이 필요하나, 현재 lookup_only 모델에서는 직접 계산하지 않음",
+        "source": "PDF 25쪽 3. 건물 층수 표",
+        "cite": {
+          "table_id": "p81-t0"
+        }
+      },
+      {
+        "condition": "지상 30층 초과 또는 지하 2층 초과",
+        "blocked_if": {
+          "input": "underground_floor",
+          "op": "==",
+          "value": "지하 2층 초과"
         },
         "reason": "층마다 1%씩 가산하는 계산이 필요하나, 현재 lookup_only 모델에서는 직접 계산하지 않음",
         "source": "PDF 25쪽 3. 건물 층수 표",

@@ -179,31 +179,67 @@
           "row_input": "pipe_size",
           "column_input": "construction_method",
           "trades": [
-            "배관공(인)",
-            "보통인부(인)",
+            "배관공",
+            "보통인부",
             "크레인(hr)"
           ]
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "excluded_resources": [
+          {
+            "trade": "크레인(hr)",
+            "when": {
+              "construction_method": "인력시공"
+            },
+            "source": "p769-t1: 인력시공에는 배관공·보통인부만 열로 제시되고 크레인 품은 없음",
+            "cite": {
+              "table_id": "p769-t1"
+            }
+          }
+        ]
       },
       "steps": [
         "p769-t1에서 규격(pipe_size)과 시공방법(construction_method)에 해당하는 단위당 품을 찾는다.",
         "물량(quantity)을 곱해 총 품을 구한다.",
-        "크레인의 규격은 10톤급 트럭탑재형 크레인을 기준으로 한다."
+        "크레인의 규격은 10톤급 트럭탑재형 크레인을 기준으로 한다.",
+        "선택한 시공방법에 해당하는 [주] ⑤의 공구손료·경장비 경비 요율을 계산된 노무비 소계에 적용한다. 기계시공 크레인 시간은 단가 자료가 없으면 시간량만 표시한다."
       ],
       "source": "PDF 713쪽 11-1-2 표 및 PDF 714쪽 [주] ④",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "규격이 150 미만인데 기계시공을 선택한 경우",
-        "reason": "표에 150 미만 규격의 기계시공 품이 없음",
-        "source": "PDF 713쪽 11-1-2 표",
+        "condition": "150㎜ 미만 규격은 기계시공 품이 표에 없음",
+        "reason": "해당 규격의 기계시공(배관공·보통인부·크레인) 품은 원문 표에 대시로 표시되어 적용할 수 없음",
+        "source": "p769-t1",
         "cite": {
           "table_id": "p769-t1"
-        }
+        },
+        "blocked_if_all": [
+          {
+            "input": "construction_method",
+            "op": "==",
+            "value": "기계시공"
+          },
+          {
+            "input": "pipe_size",
+            "op": "in",
+            "value": [
+              "ø15",
+              "20",
+              "25",
+              "32",
+              "40",
+              "50",
+              "65",
+              "80",
+              "100",
+              "125"
+            ]
+          }
+        ]
       }
     ],
     "not_calculated": [
@@ -225,7 +261,38 @@
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [
+      {
+        "category": "경비",
+        "name": "공구손료 및 경장비(용접기 등) 기계경비",
+        "base": "labor_subtotal",
+        "rate": "0.01",
+        "when": {
+          "construction_method": "인력시공"
+        },
+        "source": "p770-t0; [주] ⑤",
+        "cite": {
+          "table_id": "p770-t0",
+          "column": "인력시공",
+          "value": "1%"
+        }
+      },
+      {
+        "category": "경비",
+        "name": "공구손료 및 경장비(용접기 등) 기계경비",
+        "base": "labor_subtotal",
+        "rate": "0.03",
+        "when": {
+          "construction_method": "기계시공"
+        },
+        "source": "p770-t0; [주] ⑤",
+        "cite": {
+          "table_id": "p770-t0",
+          "column": "기계시공",
+          "value": "3%"
+        }
+      }
+    ]
   },
   "calc_type": "per_unit",
   "calc_type_raw": "per_unit",
@@ -257,7 +324,6 @@
     },
     {
       "table_id": "p770-t0",
-      "row": "요율",
       "column": "인력시공",
       "value": "1%"
     },

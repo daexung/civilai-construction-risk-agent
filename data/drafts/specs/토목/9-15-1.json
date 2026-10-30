@@ -13,6 +13,16 @@
     ],
     "inputs": [
       {
+        "name": "parcel_count",
+        "type": "nonnegative_integer",
+        "minimum": 1,
+        "allowed_values": "1 or more whole parcels",
+        "unit": "필지",
+        "required": true,
+        "ask": "지적현황측량에 포함된 필지는 몇 필지입니까?",
+        "source": "p607-t1 source rates are per parcel"
+      },
+      {
         "name": "land_type",
         "type": "enum",
         "allowed_values": [
@@ -169,14 +179,14 @@
         "unit_rate_table": {
           "table": "p607-t1",
           "row_input": "합계",
-          "column_input": "직종",
+          "column_input": null,
           "trades": [
             "지적기사",
             "지적산업기사",
             "지적기능사"
           ]
         },
-        "quantity_input": "필지 수 (현재 명세는 1필지 기준)",
+        "quantity_input": "parcel_count",
         "surcharges": [
           {
             "when": {
@@ -203,21 +213,27 @@
             "source": "PDF 608쪽 ⑥ 기타사항 ㉰"
           }
         ],
-        "note_adjustments": [
+        "coefficient_rules": [
           {
-            "when": {},
-            "change": "기준면적(토지 1,500㎡, 임야 5,000㎡) 초과 시 가산횟수 n = (대상면적-기준면적)÷기준면적을 구하여 p608-t0의 면적계수를 곱함",
-            "source": "PDF 607쪽 [주] ② 및 608쪽 ※"
+            "kind": "area_increment",
+            "table": "p608-t0",
+            "area_input": "area",
+            "land_input": "land_type",
+            "base_area_by_value": {
+              "토지": "1500",
+              "임야": "5000"
+            },
+            "source": "PDF 608쪽 ② 면적계수 표"
           },
           {
-            "when": {},
-            "change": "p608-t1의 등록계수를 곱함",
-            "source": "PDF 608쪽 ③ 등록계수"
+            "table": "p608-t1",
+            "input": "land_type",
+            "source": "PDF 608쪽 ③ 등록계수 표"
           },
           {
-            "when": {},
-            "change": "p608-t2의 지역구분계수를 곱함",
-            "source": "PDF 608쪽 ④ 지역구분계수"
+            "table": "p608-t2",
+            "input": "region_type",
+            "source": "PDF 608쪽 ④ 지역구분계수 표"
           }
         ]
       },

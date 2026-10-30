@@ -215,6 +215,7 @@ def _questions_out(questions: list[dict]) -> list[dict]:
             # 수치 입력 칸의 allowed_values는 "0보다 큰 수" 같은 설명 문자열이라 선택지가 아니다.
             "choices": question.get("choices") if isinstance(question.get("choices"), list) else None,
             "labels": question.get("labels"),
+            "unit": question.get("unit"),
             "hint": question.get("hint"),
             "default": question.get("default"),
             "decision_table": question.get("decision_table"),
@@ -318,16 +319,41 @@ def _citations_out(citations: list[dict]) -> list[dict]:
             for citation in citations]
 
 
+def _scaled_value(line: dict, quantity) -> str:
+    """단위당 값 × 물량. 조회 값처럼 숫자가 아닌 원문 값(예: '4%')은 그대로 보여 준다."""
+    from fractions import Fraction
+    from backend.agent.tools.calc.daily_crew import _exact_text
+    try:
+        return _exact_text(Fraction(line["exact"]) * quantity)
+    except (ValueError, ZeroDivisionError, TypeError):
+        return str(line["exact"])
+
+
+def _line_unit(line: dict) -> str:
+    """결과 줄의 표시 단위. 총량(formula·lookup) 줄은 계산기가 준 단위를 그대로 쓴다."""
+    if line["kind"] == "labor":
+        return "인·일"
+    if line["kind"] == "material":
+        return line["unit"].split("/", 1)[0]
+    if line["kind"] in ("lookup", "reference") or (line["kind"] == "equipment" and line["unit"].split("/", 1)[0] == "hr"):
+        return line["unit"].split("/", 1)[0] if line["kind"] == "equipment" else (line.get("unit") or "")
+    return "대·일"
+
+
 def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
     if "daily_volume_m3" not in raw:
         from fractions import Fraction
         from backend.agent.tools.calc.daily_crew import _exact_text
 
-        quantity = Fraction(raw["provenance"].get("quantity", "0"))
+        # per_unit records every declared quantity by input name; the first one is the primary quantity.
+        provenance_quantity = raw["provenance"].get("quantity", "0")
+        if isinstance(provenance_quantity, dict):
+            primary = (raw["provenance"].get("quantity_input") or list(provenance_quantity))[0]
+            provenance_quantity = provenance_quantity.get(primary, "0")
+        quantity = Fraction(provenance_quantity)
         lines = [{"kind": line["kind"], "name": line["name"],
-                  "value": _exact_text(Fraction(line["exact"]) * quantity),
-                  "unit": ("인·일" if line["kind"] == "labor" else
-                           line["unit"].split("/", 1)[0] if line["kind"] == "material" else "대·일"),
+                  "value": _scaled_value(line, quantity),
+                  "unit": _line_unit(line),
                   "crew": None, "rules": [], "source": line["source"],
                   "citations": _citations_out(line["citations"])}
                  for line in raw["unit_lines"] if not raw.get("per_unit_only")]
@@ -340,13 +366,15 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
                                    for item in raw["not_calculated"]],
                 "review_status": review_status, "adjustment_memos": raw.get("adjustment_memos", [])}
     tables = {table["id"]: table for table in spec["tables"]}
-    base_table = spec["quantity_model"]["params"]["base_output"]["table"]
     daily_provenance = raw["provenance"]["daily_volume_m3"]
     base_source = daily_provenance["base_output"]
+    # The table actually read (a spec may route to one of several tables via table_selector).
+    base_table = base_source.get("table") or spec["quantity_model"]["params"]["base_output"]["table"]
     coefficient_sources = daily_provenance["coefficients"]
     formula = " × ".join(
         [f"기준 {base_source['value']}"] + [f"{c['row']} {c['value']}" for c in coefficient_sources]
     )
+    output_adjustments = daily_provenance.get("output_adjustments", [])
     sources = [f"{base_source['table']} {base_source['source']}"]
     sources += [f"{c['table']} {c['source']}" for c in coefficient_sources]
 
@@ -377,6 +405,11 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
 
     return {
         "assumptions": raw.get("assumptions", ""),
+        "calculation_module": {
+            key: raw.get("provenance", {}).get("generated_module", {}).get(key)
+            for key in ("module_id", "version", "source_hash", "review_status", "executor")
+            if raw.get("provenance", {}).get("generated_module", {}).get(key) is not None
+        } or None,
         "per_unit_only": raw.get("per_unit_only", False),
         "daily_volume": {
             "value": raw["daily_volume_m3"],
@@ -384,6 +417,16 @@ def _computed_result_out(raw: dict, spec: dict, review_status: str) -> dict:
             "formula": formula,
             "sources": sources,
             "citations": _citations_out(daily_provenance["citations"]),
+            "adjustments": [{
+                **{key: adjustment.get(key) for key in
+                   ("operation", "value", "before", "after", "source", "system_policy_ref",
+                    "system_assumption", "policy_version", "official_source", "intervals")},
+                # Keep the assumption visible to existing clients that render only `reason`.
+                "reason": (f"{adjustment.get('reason') or adjustment.get('operation', '')}"
+                           + (f" | System assumption: {adjustment['system_assumption']}"
+                              if adjustment.get("system_assumption") else "")),
+                "rule_reason": adjustment.get("reason"),
+            } for adjustment in output_adjustments],
         },
         "work_days": {
             "value": raw["work_days"],
@@ -544,6 +587,15 @@ def _change_conditions(payload: ChatRequest, graph=None) -> dict:
     graph = graph or GRAPH
     values = _finished_state(payload.thread_id, graph)
     fields = {field["name"]: field for field in _common_fields()}
+    spec = load_specs().get(values.get("spec_id"))
+    if spec:
+        fields.update({field["name"]: field for field in spec.get("inputs", [])})
+        # Reviewed modules may expose typed site inputs that are not duplicated in the
+        # legacy spec. Keep the API edit contract aligned with the active calculator.
+        from backend.agent.tools.calc.generated import registered_module_for
+        module = registered_module_for(spec)
+        if module:
+            fields.update({field["name"]: field for field in module.get("inputs", [])})
     changes = dict(payload.conditions)
     group = changes.pop("group", None)
     if group is not None and "work_category" not in changes:
@@ -558,8 +610,9 @@ def _change_conditions(payload: ChatRequest, graph=None) -> dict:
                                      for name, value in changes.items()}}
     sources = {**values.get("input_sources", {}), **{name: "선택" for name in changes}}
     config = {"configurable": {"thread_id": payload.thread_id}}
-    # price 다음 노드(statement)부터 다시 돌려 원가계산서와 설명 문장만 새로 만든다.
-    graph.update_state(config, {"inputs": inputs, "input_sources": sources}, as_node="price")
+    # Re-run gate and compute so changing quantity or a calculation input updates
+    # crew, workdays, pricing, aggregate totals, and export from one consistent state.
+    graph.update_state(config, {"inputs": inputs, "input_sources": sources}, as_node="gate")
     return _build_response(payload.thread_id, graph.invoke(None, config))
 
 

@@ -85,13 +85,160 @@
         "source": "PDF 404쪽 [주] ② 표"
       },
       {
-        "name": "additional_work_quantity",
+        "name": "additional_work_quantity_casing",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
-        "unit": "m 또는 시간",
+        "unit": "m",
         "required": true,
-        "ask": "추가 작업의 물량(m 또는 시간)은 얼마입니까?",
-        "source": "PDF 404쪽 [주] ② 표 단위"
+        "ask": "케이싱설치 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 케이싱설치 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "케이싱설치"
+        }
+      },
+      {
+        "name": "additional_work_quantity_air_surge",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "에어써징 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 에어써징 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "에어써징"
+        }
+      },
+      {
+        "name": "additional_work_quantity_well",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "우물설치 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 우물설치 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "우물설치"
+        }
+      },
+      {
+        "name": "additional_work_quantity_pumping",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "시간",
+        "required": true,
+        "ask": "양수시험 물량은 몇 시간입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 양수시험 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "양수시험"
+        }
+      },
+      {
+        "name": "additional_work_quantity_casing",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "케이싱설치 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 케이싱설치 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "케이싱설치"
+        }
+      },
+      {
+        "name": "additional_work_quantity_air_surge",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "에어써징 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 에어써징 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "에어써징"
+        }
+      },
+      {
+        "name": "additional_work_quantity_well",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "우물설치 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 우물설치 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "우물설치"
+        }
+      },
+      {
+        "name": "additional_work_quantity_pumping",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "시간",
+        "required": true,
+        "ask": "양수시험 물량은 몇 시간입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 양수시험 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "양수시험"
+        }
+      },
+      {
+        "name": "additional_work_quantity_casing",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "케이싱설치 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 케이싱설치 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "케이싱설치"
+        }
+      },
+      {
+        "name": "additional_work_quantity_air_surge",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "에어써징 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 에어써징 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "에어써징"
+        }
+      },
+      {
+        "name": "additional_work_quantity_well",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "우물설치 물량은 몇 m입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 우물설치 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "우물설치"
+        }
+      },
+      {
+        "name": "additional_work_quantity_pumping",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "시간",
+        "required": true,
+        "ask": "양수시험 물량은 몇 시간입니까?",
+        "source": "PDF 404쪽 [주] ② p460-t2의 양수시험 단위",
+        "when": {
+          "input": "additional_work",
+          "equals": "양수시험"
+        }
       }
     ],
     "tables": [
@@ -488,25 +635,458 @@
       "params": {
         "unit_rate_table": {
           "table": "p459-t1",
-          "row_input": "rock_type",
-          "column_input": "diameter",
+          "row_input": null,
+          "column_input": {
+            "input": "diameter",
+            "exact_input_contains": [
+              "diameter"
+            ],
+            "input_contains": [
+              "rock_type"
+            ],
+            "exact_component_inputs": [
+              "rock_type"
+            ]
+          },
           "trades": [
             "중급기술자",
             "중급숙련기술자",
             "보링공",
             "특별인부",
             "보통인부"
-          ]
+          ],
+          "table_selector": {
+            "routes": [
+              {
+                "when": {
+                  "rock_type": "풍화암"
+                },
+                "table": "p459-t1"
+              },
+              {
+                "when": {
+                  "rock_type": "연암"
+                },
+                "table": "p459-t2"
+              },
+              {
+                "when": {
+                  "rock_type": "보통암"
+                },
+                "table": "p460-t0"
+              },
+              {
+                "when": {
+                  "rock_type": "경암"
+                },
+                "table": "p460-t1"
+              }
+            ]
+          },
+          "trades_by_table": {
+            "풍화암": [
+              "중급기술자",
+              "중급숙련기술자",
+              "보링공",
+              "특별인부",
+              "보통인부",
+              "고성능착정기",
+              "윙비트",
+              "벤토나이트"
+            ],
+            "연암": [
+              "중급기술자",
+              "중급숙련기술자",
+              "보링공",
+              "특별인부",
+              "보통인부",
+              "고성능착정기",
+              "기포제",
+              "에어해머",
+              "버튼(Button)비트"
+            ],
+            "보통암": [
+              "중급기술자",
+              "중급숙련기술자",
+              "보링공",
+              "특별인부",
+              "보통인부",
+              "고성능착정기",
+              "기포제",
+              "에어해머",
+              "버튼(Button)비트"
+            ],
+            "경암": [
+              "중급기술자",
+              "중급숙련기술자",
+              "보링공",
+              "특별인부",
+              "보통인부",
+              "고성능착정기",
+              "기포제",
+              "에어해머",
+              "버튼(Button)비트"
+            ]
+          },
+          "resource_kinds": {
+            "중급기술자": "labor",
+            "중급숙련기술자": "labor",
+            "보링공": "labor",
+            "특별인부": "labor",
+            "보통인부": "labor",
+            "고성능착정기": "equipment",
+            "윙비트": "material",
+            "벤토나이트": "material",
+            "기포제": "material",
+            "에어해머": "material",
+            "버튼(Button)비트": "material"
+          },
+          "resource_units": {
+            "중급기술자": "인",
+            "중급숙련기술자": "인",
+            "보링공": "인",
+            "특별인부": "인",
+            "보통인부": "인",
+            "고성능착정기": "hr",
+            "윙비트": "개",
+            "벤토나이트": "kg",
+            "기포제": "ℓ",
+            "에어해머": "개",
+            "버튼(Button)비트": "개"
+          }
         },
         "quantity_input": "quantity",
         "surcharges": [],
-        "note_adjustments": []
+        "note_adjustments": [],
+        "additional_unit_rates": [
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_casing",
+            "trades": [
+              "중급기술자"
+            ],
+            "row_by_trade": {
+              "중급기술자": "케이싱설치"
+            },
+            "column": "인력품 중급\n기술자",
+            "when": {
+              "additional_work": "케이싱설치"
+            },
+            "source": "PDF 404쪽 [주] ② 케이싱설치 행 / 중급기술자 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_casing",
+            "trades": [
+              "중급숙련기술자"
+            ],
+            "row_by_trade": {
+              "중급숙련기술자": "케이싱설치"
+            },
+            "column": "인력품 중급숙련\n기술자",
+            "when": {
+              "additional_work": "케이싱설치"
+            },
+            "source": "PDF 404쪽 [주] ② 케이싱설치 행 / 중급숙련기술자 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_casing",
+            "trades": [
+              "보링공"
+            ],
+            "row_by_trade": {
+              "보링공": "케이싱설치"
+            },
+            "column": "인력품 보링공",
+            "when": {
+              "additional_work": "케이싱설치"
+            },
+            "source": "PDF 404쪽 [주] ② 케이싱설치 행 / 보링공 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_casing",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "케이싱설치"
+            },
+            "column": "인력품 특별\n인부",
+            "when": {
+              "additional_work": "케이싱설치"
+            },
+            "source": "PDF 404쪽 [주] ② 케이싱설치 행 / 특별인부 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_casing",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "케이싱설치"
+            },
+            "column": "인력품 보통\n인부",
+            "when": {
+              "additional_work": "케이싱설치"
+            },
+            "source": "PDF 404쪽 [주] ② 케이싱설치 행 / 보통인부 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_air_surge",
+            "trades": [
+              "중급기술자"
+            ],
+            "row_by_trade": {
+              "중급기술자": "에어써징"
+            },
+            "column": "인력품 중급\n기술자",
+            "when": {
+              "additional_work": "에어써징"
+            },
+            "source": "PDF 404쪽 [주] ② 에어써징 행 / 중급기술자 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_air_surge",
+            "trades": [
+              "중급숙련기술자"
+            ],
+            "row_by_trade": {
+              "중급숙련기술자": "에어써징"
+            },
+            "column": "인력품 중급숙련\n기술자",
+            "when": {
+              "additional_work": "에어써징"
+            },
+            "source": "PDF 404쪽 [주] ② 에어써징 행 / 중급숙련기술자 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_air_surge",
+            "trades": [
+              "보링공"
+            ],
+            "row_by_trade": {
+              "보링공": "에어써징"
+            },
+            "column": "인력품 보링공",
+            "when": {
+              "additional_work": "에어써징"
+            },
+            "source": "PDF 404쪽 [주] ② 에어써징 행 / 보링공 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_air_surge",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "에어써징"
+            },
+            "column": "인력품 특별\n인부",
+            "when": {
+              "additional_work": "에어써징"
+            },
+            "source": "PDF 404쪽 [주] ② 에어써징 행 / 특별인부 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_air_surge",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "에어써징"
+            },
+            "column": "인력품 보통\n인부",
+            "when": {
+              "additional_work": "에어써징"
+            },
+            "source": "PDF 404쪽 [주] ② 에어써징 행 / 보통인부 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_well",
+            "trades": [
+              "중급기술자"
+            ],
+            "row_by_trade": {
+              "중급기술자": "우물설치"
+            },
+            "column": "인력품 중급\n기술자",
+            "when": {
+              "additional_work": "우물설치"
+            },
+            "source": "PDF 404쪽 [주] ② 우물설치 행 / 중급기술자 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_well",
+            "trades": [
+              "중급숙련기술자"
+            ],
+            "row_by_trade": {
+              "중급숙련기술자": "우물설치"
+            },
+            "column": "인력품 중급숙련\n기술자",
+            "when": {
+              "additional_work": "우물설치"
+            },
+            "source": "PDF 404쪽 [주] ② 우물설치 행 / 중급숙련기술자 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_well",
+            "trades": [
+              "보링공"
+            ],
+            "row_by_trade": {
+              "보링공": "우물설치"
+            },
+            "column": "인력품 보링공",
+            "when": {
+              "additional_work": "우물설치"
+            },
+            "source": "PDF 404쪽 [주] ② 우물설치 행 / 보링공 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_well",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "우물설치"
+            },
+            "column": "인력품 특별\n인부",
+            "when": {
+              "additional_work": "우물설치"
+            },
+            "source": "PDF 404쪽 [주] ② 우물설치 행 / 특별인부 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "m",
+            "quantity_input": "additional_work_quantity_well",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "우물설치"
+            },
+            "column": "인력품 보통\n인부",
+            "when": {
+              "additional_work": "우물설치"
+            },
+            "source": "PDF 404쪽 [주] ② 우물설치 행 / 보통인부 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "1/시간",
+            "quantity_input": "additional_work_quantity_pumping",
+            "trades": [
+              "중급기술자"
+            ],
+            "row_by_trade": {
+              "중급기술자": "양수시험"
+            },
+            "column": "인력품 중급\n기술자",
+            "when": {
+              "additional_work": "양수시험"
+            },
+            "source": "PDF 404쪽 [주] ② 양수시험 행 / 중급기술자 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "1/시간",
+            "quantity_input": "additional_work_quantity_pumping",
+            "trades": [
+              "중급숙련기술자"
+            ],
+            "row_by_trade": {
+              "중급숙련기술자": "양수시험"
+            },
+            "column": "인력품 중급숙련\n기술자",
+            "when": {
+              "additional_work": "양수시험"
+            },
+            "source": "PDF 404쪽 [주] ② 양수시험 행 / 중급숙련기술자 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "1/시간",
+            "quantity_input": "additional_work_quantity_pumping",
+            "trades": [
+              "보링공"
+            ],
+            "row_by_trade": {
+              "보링공": "양수시험"
+            },
+            "column": "인력품 보링공",
+            "when": {
+              "additional_work": "양수시험"
+            },
+            "source": "PDF 404쪽 [주] ② 양수시험 행 / 보링공 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "1/시간",
+            "quantity_input": "additional_work_quantity_pumping",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "양수시험"
+            },
+            "column": "인력품 특별\n인부",
+            "when": {
+              "additional_work": "양수시험"
+            },
+            "source": "PDF 404쪽 [주] ② 양수시험 행 / 특별인부 열"
+          },
+          {
+            "table": "p460-t2",
+            "basis": "1/시간",
+            "quantity_input": "additional_work_quantity_pumping",
+            "trades": [
+              "보통인부"
+            ],
+            "row_by_trade": {
+              "보통인부": "양수시험"
+            },
+            "column": "인력품 보통\n인부",
+            "when": {
+              "additional_work": "양수시험"
+            },
+            "source": "PDF 404쪽 [주] ② 양수시험 행 / 보통인부 열"
+          }
+        ]
       },
       "steps": [
-        "지층(rock_type)에 따라 해당 표(p459-t1, p459-t2, p460-t0, p460-t1)를 선택한다.",
-        "선택한 표에서 규격(diameter)에 해당하는 단위당 품을 찾는다.",
-        "단위당 품에 물량(quantity)을 곱하여 총 품을 구한다.",
-        "추가 작업(additional_work)이 있는 경우, p460-t2 표에서 해당 작업의 단위당 품을 찾고 물량(additional_work_quantity)을 곱하여 더한다."
+        "암종(rock_type)에 해당하는 p459-t1, p459-t2, p460-t0, p460-t1 표를 선택한다.",
+        "표에서 직종·장비·재료 행과 암종·직경 열을 정확히 조회한다.",
+        "단위당 품에 천공 길이(quantity)를 곱한다.",
+        "추가 작업이 있으면 p460-t2의 해당 작업 행과 직종 열을 조회하고, 원문 단위(m 또는 시간)의 해당 물량을 곱해 노무량에 더한다.",
+        "장비경비는 원문의 별도 계상 지시를 따른다."
       ],
       "source": "PDF 403~404쪽 표 및 [주] ②",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -596,8 +1176,8 @@
     }
   ],
   "open_questions": [
-    "추가 작업(케이싱설치 등)의 물량 단위가 m와 시간으로 혼재되어 있는데, 이를 어떻게 입력받고 처리할지 명확한 기준이 필요합니다.",
-    "호박돌층 표가 원문 이미지에는 있으나 파싱 결과에는 누락되어 있습니다. 파싱 결과를 수정하여 호박돌층 표를 추가해야 합니다."
+    "윙비트·벤토나이트·기포제·에어해머·버튼비트의 물량은 계산하나 재료 단가 자료가 없어 금액은 미산정합니다.",
+    "추가 작업 표는 원문 지시대로 인력만 산출합니다. 장비 경비는 별도 계상입니다."
   ],
   "questions": [
     "연암 지층에서 직경 200mm로 50m 천공할 때 필요한 보링공 인력은 얼마인가요?",

@@ -117,12 +117,191 @@
     "crew_rules": [],
     "quantity_model": {
       "name": "per_unit",
-      "params": {},
+      "params": {
+        "unit_rate_table": {
+          "table": "p831-t0",
+          "row_input": "기술관리 공사기간중",
+          "column_input": null,
+          "trades": [
+            "기계산업기사"
+          ],
+          "basis_by_row": {
+            "기술관리 공사기간중": "인/일"
+          }
+        },
+        "quantity_input": "duration",
+        "additional_unit_rates": [
+          {
+            "table": "p831-t0",
+            "quantity_input": "surface_area",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "표면손질"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부"
+            },
+            "basis_by_trade": {
+              "특별인부": "인/㎡"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p831-t0",
+            "quantity_input": "wood_volume",
+            "trades": [
+              "목공",
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "목공": "포장해체 수송을 위한 포장된 목재를 해체하고 해체된 목재를 소정의 위치에 정돈함",
+              "특별인부": "포장해체 수송을 위한 포장된 목재를 해체하고 해체된 목재를 소정의 위치에 정돈함"
+            },
+            "column_by_trade": {
+              "목공": "목공",
+              "특별인부": "특별인부"
+            },
+            "basis_by_trade": {
+              "목공": "인/㎥",
+              "특별인부": "인/㎥"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p831-t0",
+            "quantity_input": "duct_weight",
+            "trades": [
+              "제관공"
+            ],
+            "row_by_trade": {
+              "제관공": "현장교정"
+            },
+            "column_by_trade": {
+              "제관공": "제관공"
+            },
+            "basis_by_trade": {
+              "제관공": "인/ton"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p831-t0",
+            "quantity_input": "duct_weight",
+            "trades": [
+              "특별인부"
+            ],
+            "row_by_trade": {
+              "특별인부": "수송도중 변형된 것을 바로 잡기"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부"
+            },
+            "basis_by_trade": {
+              "특별인부": "인/ton"
+            },
+            "resource_units": {}
+          },
+          {
+            "table": "p831-t0",
+            "quantity_input": "duct_weight",
+            "trades": [
+              "플랜트제관공",
+              "플랜트용접공",
+              "특별인부",
+              "건설기계운전조"
+            ],
+            "row_by_trade": {
+              "플랜트제관공": "DUCT 조립 조각으로 분리된 DUCT의 소재를 성형 용접함",
+              "플랜트용접공": "DUCT 조립 조각으로 분리된 DUCT의 소재를 성형 용접함",
+              "특별인부": "DUCT 조립 조각으로 분리된 DUCT의 소재를 성형 용접함",
+              "건설기계운전조": "DUCT 조립 조각으로 분리된 DUCT의 소재를 성형 용접함"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "플랜트제관공",
+              "플랜트용접공": "플랜트용접공",
+              "특별인부": "특별인부",
+              "건설기계운전조": "건설기계운전조"
+            },
+            "basis_by_trade": {
+              "플랜트제관공": "인/ton",
+              "플랜트용접공": "인/ton",
+              "특별인부": "인/ton",
+              "건설기계운전조": "조/ton"
+            },
+            "resource_units": {
+              "건설기계운전조": "조"
+            }
+          },
+          {
+            "table": "p831-t0",
+            "quantity_input": "duct_weight",
+            "trades": [
+              "일반기계운전사",
+              "(윈치운전)",
+              "비계공",
+              "특별인부",
+              "플랜트용접공",
+              "플랜트제관공"
+            ],
+            "row_by_trade": {
+              "일반기계운전사": "DUCT 설치 성형된 duct를 운반조양 alignment후 bolting 및 hangering",
+              "(윈치운전)": "DUCT 설치 성형된 duct를 운반조양 alignment후 bolting 및 hangering",
+              "비계공": "DUCT 설치 성형된 duct를 운반조양 alignment후 bolting 및 hangering",
+              "특별인부": "DUCT 설치 성형된 duct를 운반조양 alignment후 bolting 및 hangering",
+              "플랜트용접공": "DUCT 설치 성형된 duct를 운반조양 alignment후 bolting 및 hangering",
+              "플랜트제관공": "DUCT 설치 성형된 duct를 운반조양 alignment후 bolting 및 hangering"
+            },
+            "column_by_trade": {
+              "일반기계운전사": "일반기계운전사",
+              "(윈치운전)": "(윈치운전)",
+              "비계공": "비계공",
+              "특별인부": "특별인부",
+              "플랜트용접공": "플랜트용접공",
+              "플랜트제관공": "플랜트제관공"
+            },
+            "basis_by_trade": {
+              "일반기계운전사": "인/ton",
+              "(윈치운전)": "인/ton",
+              "비계공": "인/ton",
+              "특별인부": "인/ton",
+              "플랜트용접공": "인/ton",
+              "플랜트제관공": "인/ton"
+            },
+            "resource_units": {}
+          }
+        ],
+        "note_adjustments": [],
+        "input_rate_adjustments": [
+          {
+            "name": "검사 및 교정",
+            "operation": "add_source_percent",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "exclude_quantity_inputs": [
+              "duration",
+              "wood_volume"
+            ],
+            "cite": {
+              "table_id": "p831-t0",
+              "row": "검사 및 교정 외관검사 및 Leak test",
+              "column": "직종",
+              "value": "기술관리, 포장해체를 제외한 모든 품의 10%",
+              "exclude_trades": [
+                "기계산업기사"
+              ]
+            }
+          }
+        ]
+      },
       "steps": [
-        "각 작업 구분별로 해당하는 물량(공사기간, 면적, 체적, 중량)을 입력받는다.",
-        "입력된 물량에 표 p831-t0의 단위당 품을 곱하여 직종별 소요 인력을 산출한다.",
-        "검사 및 교정 품은 산출된 전체 품에서 기술관리와 포장해체 품을 제외한 나머지 품의 10%를 가산한다.",
-        "사용장비는 p831-t1을 참고하여 별도 계상한다."
+        "기술관리는 인/일, 표면손질은 인/㎡, 포장해체는 인/㎥, 현장교정과 덕트 조립·설치는 인/ton(해당 원문 행의 조/ton 포함) 기준으로 따로 산출한다.",
+        "각 원문 작업 행의 직종별 품을 대응하는 현장 물량에 곱한다.",
+        "검사 및 교정은 기술관리와 포장해체를 제외한 모든 품의 10%로 더한다.",
+        "사용장비는 원문 참고표의 대수로 별도 확인한다."
       ],
       "source": "PDF 775쪽 13-5-4 덕트 설치 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"

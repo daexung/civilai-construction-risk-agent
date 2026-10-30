@@ -145,11 +145,64 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "rate",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "outputs": [
+          {
+            "kind": "table_multiplier",
+            "name": "철거 및 이설품",
+            "table": "p979-t2",
+            "row_input": "equipment_type",
+            "selector_input": "work_type",
+            "column_value_map": {
+              "철거(재사용 고려)": "철거 재사용을\n고려할 경우",
+              "철거(재사용 안함)": "철거 재사용을\n고려 안할 경우",
+              "이설(동일구내)": "동일구내\n(인접장소)\n이설",
+              "타장소 재설치": "철거 재사용을\n고려할 경우"
+            },
+            "value_input": "base_labor",
+            "add_value_input": "base_labor",
+            "when": {
+              "is_item_6": false
+            },
+            "unit": "인",
+            "cite": {
+              "chunk_id": "p980-x0",
+              "quote": "⑤ 철거한 설비를 동일구내 또한 인접한 장소가 아닌 곳에 재 설치할 경우에는 설치품+철거품(재사용을 고려할 경우)으로"
+            },
+            "add_value_when_values": [
+              "타장소 재설치"
+            ]
+          },
+          {
+            "kind": "formula",
+            "name": "철거품",
+            "expression": {
+              "mul": [
+                {
+                  "input": "base_labor"
+                },
+                {
+                  "number": "1/2"
+                }
+              ]
+            },
+            "unit": "인",
+            "when": {
+              "is_item_6": true,
+              "work_type": "철거(재사용 안함)"
+            },
+            "cite": {
+              "chunk_id": "p980-x0",
+              "quote": "⑥ 다음 항목의 철거는 신설의 50%(재사용을 고려치 않을 경우)로"
+            }
+          }
+        ]
+      },
       "steps": [
-        "입력된 base_labor(설치품)에 표 p979-t2의 비율(%)을 곱하여 철거 및 이설 품을 산정한다.",
-        "타장소 재설치의 경우, 설치품(100%) + 철거품(재사용 고려 비율)으로 산정한다."
+        "?? ??? ?? ??? ?? p979-t2? ?? ??? ????.",
+        "???(base_labor)? ??? ????. ??? ???? ??? 100%? ??? ?? ???? ???.",
+        "[?] ?? ?? ??? ???? ???? ?? ??? ??? ???? 50%? ????."
       ],
       "source": "p979-t2 및 p980-x0",
       "rounding": "공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -184,17 +237,24 @@
         }
       },
       {
-        "condition": "is_item_6 == true",
-        "blocked_if": {
-          "input": "is_item_6",
-          "op": "==",
-          "value": true
-        },
-        "reason": "주기 ⑥항에 명시된 항목의 철거는 신설의 50%(재사용을 고려치 않을 경우)로 계상한다.",
-        "source": "p980-x0 ⑥",
+        "condition": "?? ?? ???? ??(??? ??)? ??",
+        "blocked_if_all": [
+          {
+            "input": "is_item_6",
+            "op": "==",
+            "value": true
+          },
+          {
+            "input": "work_type",
+            "op": "!=",
+            "value": "철거(재사용 안함)"
+          }
+        ],
+        "reason": "?? ??? ?? ??? ??? ??? ???? 50%? ???, ?? ?? ??? ??? ???? ???.",
+        "source": "p980-x0 ?",
         "cite": {
           "chunk_id": "p980-x0",
-          "quote": "⑥ 다음 항목의 철거는 신설의 50%(재사용을 고려치 않을 경우)로 계상한다."
+          "quote": "⑥ 다음 항목의 철거는 신설의 50%(재사용을 고려치 않을 경우)로"
         }
       }
     ],
@@ -211,9 +271,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "rate",
-  "calc_type_raw": "rate",
-  "calc_type_reason": "설치품을 기준으로 표에 제시된 비율(%)을 곱하여 철거 및 이설 품을 산정하는 방식이므로 rate가 적합합니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "?? ??? ????? ????? ?? ??",
   "citations": [
     {
       "table_id": "p979-t2",

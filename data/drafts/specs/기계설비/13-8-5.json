@@ -213,33 +213,287 @@
       "name": "per_unit",
       "params": {
         "unit_rate_table": {
-          "table": "p895-t2, p896-t0",
-          "row_input": "각 공정",
-          "column_input": "직종",
+          "table": "p895-t2",
+          "row_input": "◦ 기술관리 - 설치공사 기간중",
+          "column_input": null,
+          "row_by_trade": {
+            "기계기사": "◦ 기술관리 - 설치공사 기간중"
+          },
           "trades": [
-            "기계기사",
-            "목공",
-            "특별인부",
-            "건설기계운전조",
-            "플랜트기계설치공",
-            "플랜트제관공",
-            "플랜트용접공",
-            "비계공"
-          ]
+            "기계기사"
+          ],
+          "basis_by_row": {
+            "◦ 기술관리 - 설치공사 기간중": "인/일"
+          }
         },
-        "quantity_input": "각 공정별 물량 입력",
+        "quantity_input": "tech_management_days",
         "surcharges": [],
-        "note_adjustments": [
+        "note_adjustments": [],
+        "additional_unit_rates": [
           {
-            "when": {},
-            "change": "검사 및 교정 품은 기술관리, 포장해체를 제외한 전공량의 10% 가산",
-            "source": "PDF 840쪽 p896-t0 ◦ 검사 및 교정"
+            "table": "p895-t2",
+            "row_by_trade": {
+              "목공": "◦ 포장해체 - 수송을 위해 포장된 목재를 해체하고 목재를 정리함",
+              "특별인부": "◦ 포장해체 - 수송을 위해 포장된 목재를 해체하고 목재를 정리함"
+            },
+            "column_by_trade": {
+              "목공": "목공",
+              "특별인부": "특별인부"
+            },
+            "trades": [
+              "목공",
+              "특별인부"
+            ],
+            "quantity_input": "unpacking_vol",
+            "basis": "인/㎥",
+            "basis_by_trade": {},
+            "resource_units": {}
+          },
+          {
+            "table": "p895-t2",
+            "row_by_trade": {
+              "특별인부": "◦ 표면손질"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부"
+            },
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "surface_prep_area",
+            "basis": "인/㎡",
+            "basis_by_trade": {},
+            "resource_units": {}
+          },
+          {
+            "table": "p895-t2",
+            "row_by_trade": {
+              "특별인부": "◦ 소운반"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부"
+            },
+            "trades": [
+              "특별인부"
+            ],
+            "quantity_input": "transport_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {},
+            "resource_units": {}
+          },
+          {
+            "table": "p895-t2",
+            "row_by_trade": {
+              "건설기계운전조": "- 작업위치까지 필요한 자재를 운반"
+            },
+            "column_by_trade": {
+              "건설기계운전조": "건설기계운전조"
+            },
+            "trades": [
+              "건설기계운전조"
+            ],
+            "quantity_input": "transport_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {
+              "건설기계운전조": "조/ton"
+            },
+            "resource_units": {
+              "건설기계운전조": "조"
+            }
+          },
+          {
+            "table": "p895-t2",
+            "row_by_trade": {
+              "플랜트기계설치공": "◦ 기초작업 - Chipping 및 Grouting",
+              "특별인부": "◦ 기초작업 - Chipping 및 Grouting"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공",
+              "특별인부": "특별인부"
+            },
+            "trades": [
+              "플랜트기계설치공",
+              "특별인부"
+            ],
+            "quantity_input": "foundation_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {},
+            "resource_units": {}
+          },
+          {
+            "table": "p896-t0",
+            "row_by_trade": {
+              "특별인부": "◦ 현장교정 - 수송도중 변형된 것을 바로 잡기",
+              "플랜트기계설치공": "◦ 현장교정 - 수송도중 변형된 것을 바로 잡기"
+            },
+            "column_by_trade": {
+              "특별인부": "특별인부",
+              "플랜트기계설치공": "플랜트기계설치공"
+            },
+            "trades": [
+              "특별인부",
+              "플랜트기계설치공"
+            ],
+            "quantity_input": "calibration_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {},
+            "resource_units": {}
+          },
+          {
+            "table": "p896-t0",
+            "row_by_trade": {
+              "플랜트제관공": "◦ 본체조립 - 분리 운반된 Body 조립 포함",
+              "플랜트용접공": "◦ 본체조립 - 분리 운반된 Body 조립 포함",
+              "특별인부": "◦ 본체조립 - 분리 운반된 Body 조립 포함",
+              "건설기계운전조": "◦ 본체조립 - 분리 운반된 Body 조립 포함"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "플랜트제관공",
+              "플랜트용접공": "플랜트용접공",
+              "특별인부": "특별인부",
+              "건설기계운전조": "건설기계운전조"
+            },
+            "trades": [
+              "플랜트제관공",
+              "플랜트용접공",
+              "특별인부",
+              "건설기계운전조"
+            ],
+            "quantity_input": "body_assembly_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {
+              "건설기계운전조": "조/ton"
+            },
+            "resource_units": {
+              "건설기계운전조": "조"
+            }
+          },
+          {
+            "table": "p896-t0",
+            "row_by_trade": {
+              "플랜트제관공": "◦ Inner Plate 및 Hanger 조립 - Suspention Device 조립 포함",
+              "플랜트용접공": "◦ Inner Plate 및 Hanger 조립 - Suspention Device 조립 포함",
+              "특별인부": "◦ Inner Plate 및 Hanger 조립 - Suspention Device 조립 포함"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "플랜트제관공",
+              "플랜트용접공": "플랜트용접공",
+              "특별인부": "특별인부"
+            },
+            "trades": [
+              "플랜트제관공",
+              "플랜트용접공",
+              "특별인부"
+            ],
+            "quantity_input": "inner_plate_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {},
+            "resource_units": {}
+          },
+          {
+            "table": "p896-t0",
+            "row_by_trade": {
+              "플랜트제관공": "◦ 용접손질 - 용접 Joint부위 용접효율을 높이기 위함",
+              "특별인부": "◦ 용접손질 - 용접 Joint부위 용접효율을 높이기 위함"
+            },
+            "column_by_trade": {
+              "플랜트제관공": "플랜트제관공",
+              "특별인부": "특별인부"
+            },
+            "trades": [
+              "플랜트제관공",
+              "특별인부"
+            ],
+            "quantity_input": "weld_prep_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {},
+            "resource_units": {}
+          },
+          {
+            "table": "p896-t0",
+            "row_by_trade": {
+              "플랜트기계설치공": "◦ 본체 설치 - Reactor 설치 포함",
+              "플랜트제관공": "◦ 본체 설치 - Reactor 설치 포함",
+              "비계공": "◦ 본체 설치 - Reactor 설치 포함",
+              "특별인부": "◦ 본체 설치 - Reactor 설치 포함",
+              "플랜트용접공": "◦ 본체 설치 - Reactor 설치 포함",
+              "건설기계운전조": "◦ 본체 설치 - Reactor 설치 포함"
+            },
+            "column_by_trade": {
+              "플랜트기계설치공": "플랜트기계설치공",
+              "플랜트제관공": "플랜트제관공",
+              "비계공": "비계공",
+              "특별인부": "특별인부",
+              "플랜트용접공": "플랜트용접공",
+              "건설기계운전조": "건설기계운전조"
+            },
+            "trades": [
+              "플랜트기계설치공",
+              "플랜트제관공",
+              "비계공",
+              "특별인부",
+              "플랜트용접공",
+              "건설기계운전조"
+            ],
+            "quantity_input": "body_install_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {
+              "건설기계운전조": "조/ton"
+            },
+            "resource_units": {
+              "건설기계운전조": "조"
+            }
+          },
+          {
+            "table": "p896-t0",
+            "row_by_trade": {
+              "플랜트용접공": "◦ Sealing 용접 - 용접용 Support설치 및 운반포함",
+              "플랜트제관공": "◦ Sealing 용접 - 용접용 Support설치 및 운반포함",
+              "특별인부": "◦ Sealing 용접 - 용접용 Support설치 및 운반포함"
+            },
+            "column_by_trade": {
+              "플랜트용접공": "플랜트용접공",
+              "플랜트제관공": "플랜트제관공",
+              "특별인부": "특별인부"
+            },
+            "trades": [
+              "플랜트용접공",
+              "플랜트제관공",
+              "특별인부"
+            ],
+            "quantity_input": "sealing_weld_weight",
+            "basis": "인/ton",
+            "basis_by_trade": {},
+            "resource_units": {}
+          }
+        ],
+        "input_rate_adjustments": [
+          {
+            "operation": "add_source_percent",
+            "name": "검사 및 교정",
+            "percent": "10",
+            "kinds": [
+              "labor"
+            ],
+            "exclude_trades": [
+              "기계기사"
+            ],
+            "exclude_quantity_inputs": [
+              "unpacking_vol"
+            ],
+            "cite": {
+              "table_id": "p896-t0",
+              "row": "◦ 검사 및 교정 - Gas Leak Test 포함",
+              "column": "기술관리, 포장해체를 제외한 전공량의 10%"
+            }
           }
         ]
       },
       "steps": [
-        "각 공정별로 입력된 물량에 표의 단위당 품을 곱하여 직종별 품을 구한다.",
-        "검사 및 교정 품은 기술관리와 포장해체를 제외한 나머지 공정의 총 품의 10%로 계산하여 합산한다."
+        "각 작업별로 입력한 물량에 대응하는 원문의 작업 행 및 단위(일·㎥·㎡·ton)를 적용한다.",
+        "건설기계운전조 행은 조/ton 단위를 그대로 보존한다.",
+        "검사 및 교정은 기술관리와 포장해체를 제외한 전공량의 10%를 더한다.",
+        "보온 및 도장작업과 추가 장비는 별도 계상한다. 건설기계운전조 편성은 현장 작업조건과 설치물량을 고려해야 한다."
       ],
       "source": "PDF 839~840쪽 1. 공정별 설치",
       "rounding": "동일 원칙(1-2-8·1-2-1)"
@@ -261,6 +515,38 @@
           "chunk_id": "p896-x27",
           "quote": "본 장비 이외에 필요한 장비가 있을 경우 별도 계상한다."
         }
+      },
+      {
+        "item": "건설기계운전조 편성의 현장조건 조정",
+        "source": "PDF 840쪽 1. 공정별 설치 [주] ④",
+        "cite": {
+          "chunk_id": "p896-x21",
+          "quote": "④ 건설기계운전조는 작업조건 및 설치물량 등을 감안하여 편성한다."
+        }
+      },
+      {
+        "item": "기본 사용장비 경비 및 선택",
+        "source": "PDF 840쪽 2. 사용장비",
+        "cite": [
+          {
+            "table_id": "p896-t1",
+            "row": "크레인",
+            "column": "200톤",
+            "value": "1"
+          },
+          {
+            "table_id": "p896-t1",
+            "row": "지게차",
+            "column": "5톤",
+            "value": "1"
+          },
+          {
+            "table_id": "p896-t1",
+            "row": "용접기",
+            "column": "15KVA",
+            "value": "2"
+          }
+        ]
       }
     ],
     "supply_rules": [],

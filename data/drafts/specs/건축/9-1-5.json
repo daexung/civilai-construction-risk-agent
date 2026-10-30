@@ -10,14 +10,28 @@
     "source_pages": [
       625
     ],
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "area",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎡",
+        "required": true,
+        "ask": "라스 붙임 면적은 몇 ㎡입니까?",
+        "source": "9-1-5 source area basis"
+      }
+    ],
     "tables": [
       {
         "id": "p681-t0",
-        "role": "라스 붙임 단위당 품",
-        "source": "PDF 625쪽 9-1-5 표",
-        "unit": "10㎡당",
-        "values": {},
+        "role": "labor per 10 square meters",
+        "source": "9-1-5 source area basis",
+        "unit": "인/10㎡",
+        "values": {
+          "미장공": {
+            "수량": "0.14"
+          }
+        },
         "cite": {
           "table_id": "p681-t0"
         }
@@ -25,12 +39,25 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "per_unit",
+      "params": {
+        "unit_rate_table": {
+          "table": "p681-t0",
+          "column_input": "수량",
+          "trades": [
+            "미장공"
+          ]
+        },
+        "quantity_input": "area",
+        "surcharges": [],
+        "note_adjustments": [],
+        "materials": []
+      },
       "steps": [
-        "파싱 결과에 표의 데이터(미장공, 0.14 등)가 누락되어 계산할 수 없음."
+        "p681-t0?? ?? ??? ??? ???? ????.",
+        "?? ??(?)? 10? ??? ???? ??? ? ???? ????."
       ],
-      "source": "PDF 625쪽 9-1-5",
+      "source": "PDF 625? 9-1-5 ?",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -38,9 +65,9 @@
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에 표의 핵심 데이터(미장공 인원 등)가 누락되어 계산식을 구성할 수 없습니다.",
+  "calc_type": "per_unit",
+  "calc_type_raw": "per_unit",
+  "calc_type_reason": "??? ??? ??? ??? ???? per_unit ?? ???? ??",
   "citations": [
     {
       "table_id": "p681-t0"

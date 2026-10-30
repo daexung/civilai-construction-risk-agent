@@ -10,6 +10,7 @@ from pathlib import Path
 
 from backend.agent.rules.specs import load_specs
 from backend.agent.rules.conditions import field_active
+from backend.agent.rules.quantity_units import resolve_quantity_field
 from backend.agent.state import AgentState
 from backend.agent.tools.calc.adjustments import adjustment_questions
 
@@ -159,7 +160,7 @@ _UNIT_ALIASES = {
     "m": ("m", "미터"),
     "km": ("km", "킬로미터"),
     "kg": ("kg", "킬로그램"),
-    "개소": ("개소",), "개": ("개",), "본": ("본",), "대": ("대",), "층": ("층",),
+    "개소": ("개소",), "개": ("개",), "매": ("매",), "본": ("본",), "대": ("대",), "면": ("면",), "조": ("조",), "층": ("층",), "점": ("점",),
 }
 
 
@@ -236,6 +237,8 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
     quantity_name = spec["quantity_model"]["params"].get("quantity_input")
     for field in spec["inputs"]:
         name = field["name"]
+        effective_field = (resolve_quantity_field(field, values)
+                           if name == quantity_name and field.get("unit_by") else field)
         if field.get("text_pattern"):
             hits = {int(m.group(1)) for m in re.finditer(field["text_pattern"], query)}
             if len(hits) == 1:
@@ -260,10 +263,16 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
             elif reason:
                 ambiguities[name] = reason
         elif field["type"] == "positive_rational":
-            if name == quantity_name and _norm(field.get("unit", "")) not in ("m3", "루베", "세제곱미터"):
-                value, reason = _quantity(normalized, field.get("unit", ""))
-            else:
+            if name == quantity_name and _norm(effective_field.get("unit") or "") not in ("m3", "루베", "세제곱미터"):
+                value, reason = _quantity(normalized, effective_field.get("unit") or "")
+            elif name != quantity_name and (unit := _norm(field.get("unit") or "")) and unit not in ("m3", "루베", "세제곱미터"):
+                # 높이 같은 조건 값: 같은 단위를 쓰는 수치 칸이 하나뿐일 때만 문장에서 읽는다(7m, 7미터).
+                same_unit = [f for f in spec["inputs"] if f["type"] == "positive_rational" and _norm(f.get("unit") or "") == unit]
+                value, reason = _quantity(normalized, unit) if len(same_unit) == 1 else (None, None)
+            elif name == quantity_name or _norm(field.get("unit") or "") in ("m3", "루베", "세제곱미터"):
                 value, reason = _volume(normalized)
+            else:  # 단위 없는 무차원 조건(토량변화율 L 등)은 문장의 ㎥ 물량을 읽지 않는다
+                value, reason = None, None
             if value is not None:
                 values[name] = value
             elif reason:
@@ -357,6 +366,13 @@ def _valid_for_field(value: object, field: dict) -> bool:
         return type(value) is bool
     if kind == "positive_rational":
         return _valid_positive_rational(value)
+    if kind == "percentage":
+        try:
+            return Fraction(str(value)) >= 0 and Fraction(str(value)) < 100
+        except (ValueError, ZeroDivisionError):
+            return False
+    if kind == "source_reference":
+        return isinstance(value, str) and 0 < len(value.strip()) <= 300
     if kind == "positive_currency":
         return value == "모름" or _valid_positive_rational(value)
     if kind == "nonnegative_integer":

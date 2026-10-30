@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import itertools
+import argparse
 import json
 import re
 import sys
 from collections import Counter, defaultdict
+from fractions import Fraction
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,16 +16,20 @@ sys.path.insert(0, str(ROOT))
 
 from backend.agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 from backend.agent.tools.calc.per_unit import per_unit  # noqa: E402
+from backend.agent.tools.calc.lookup import lookup  # noqa: E402
+from backend.agent.tools.calc.formula import formula_quantity  # noqa: E402
 from backend.agent.tools.calc.adjustments import classify_adjustment  # noqa: E402
 from backend.agent.rules.misfiled import misfiled_ids  # noqa: E402
 
-CALCULATORS = {"daily_crew": adjusted_daily_crew, "per_unit": per_unit}
+CALCULATORS = {"daily_crew": adjusted_daily_crew, "per_unit": per_unit,
+               "lookup_only": lookup, "formula": formula_quantity}
 OUTPUT = ROOT / "data/drafts/executable.json"
 CHUNKS = ROOT / "data/processed/chunks.all.jsonl"
 
 
 def _values(field: dict, blocked: list[dict] | None = None,
-            adjustments: list[dict] | None = None) -> list:
+            adjustments: list[dict] | None = None,
+            source_numeric_values: list[str] | None = None) -> list:
     blocked = blocked or []
     adjustments = adjustments or []
     kind = field["type"]
@@ -36,8 +42,71 @@ def _values(field: dict, blocked: list[dict] | None = None,
                                   for item in blocked) else [False, True])
     if kind == "positive_currency":
         return ["100"]
-    if kind in ("positive_rational", "nonnegative_integer"):
+    if kind in ("positive_rational", "nonnegative_integer", "percentage"):
+        if source_numeric_values:
+            # Table-backed numeric selectors must be sampled from the exact
+            # source axis. A generic 100-unit sample may be outside that axis
+            # and turn a correctly rejected input into a false spec failure.
+            return source_numeric_values
+        declared_range = re.search(r"(\d+)\s*이상\s*(\d+)\s*이하", str(field.get("allowed_values", "")))
+        declared_minimum = (field.get("minimum") if field.get("minimum") is not None
+                            else declared_range.group(1) if declared_range else None)
+        declared_maximum = field.get("maximum") if field.get("maximum") is not None else (
+            declared_range.group(2) if declared_range else None)
+        numeric_rules = [item for item in blocked if item.get("op") in (">", ">=", "<", "<=", "==", "!=")]
+        thresholds = []
+        for item in numeric_rules:
+            try:
+                thresholds.append(Fraction(str(item["value"])))
+            except (KeyError, ValueError, ZeroDivisionError):
+                continue
+        if thresholds:
+            if kind == "positive_rational":
+                minimum = Fraction(1, 1000)
+            elif kind == "percentage":
+                minimum = Fraction(str(declared_minimum)) if declared_minimum is not None else Fraction(0)
+            else:
+                if declared_minimum is None:
+                    minimum_match = re.search(r"(\d+)\s*이상의\s*정수",
+                                              str(field.get("allowed_values", "")))
+                    declared_minimum = minimum_match.group(1) if minimum_match else 0
+                minimum = Fraction(str(declared_minimum))
+            maximum = Fraction(str(declared_maximum)) if declared_maximum is not None else None
+            candidates = {Fraction(100), minimum, *thresholds}
+            if maximum is not None:
+                candidates.update((maximum, maximum + 1))
+            for threshold in thresholds:
+                candidates.update((threshold - 1, threshold + 1,
+                                   threshold - Fraction(1, 100), threshold + Fraction(1, 100)))
+            operations = {">": lambda a, b: a > b, ">=": lambda a, b: a >= b,
+                          "<": lambda a, b: a < b, "<=": lambda a, b: a <= b,
+                          "==": lambda a, b: a == b, "!=": lambda a, b: a != b}
+            def allowed(candidate):
+                if (candidate < minimum or (maximum is not None and candidate > maximum)
+                        or (kind == "percentage" and candidate >= 100)
+                        or (kind == "nonnegative_integer" and candidate.denominator != 1)):
+                    return False
+                for item in numeric_rules:
+                    try:
+                        bound = Fraction(str(item["value"]))
+                    except (KeyError, ValueError, ZeroDivisionError):
+                        continue
+                    if operations[item["op"]](candidate, bound):
+                        return False
+                return True
+            valid_candidates = sorted((v for v in candidates if allowed(v)),
+                                      key=lambda v: (abs(v - 100), v))
+            blocked_candidates = sorted((v for v in candidates if v >= minimum
+                                         and (maximum is None or v <= maximum)
+                                         and (kind != "percentage" or v < 100)
+                                         and (kind != "nonnegative_integer" or v.denominator == 1)
+                                         and not allowed(v)))
+            ordered = valid_candidates + blocked_candidates
+            return list(dict.fromkeys(str(v.numerator) if v.denominator == 1
+                                      else f"{v.numerator}/{v.denominator}" for v in ordered))
         lower = re.search(r"(\d+)\s*이상의\s*정수", str(field.get("allowed_values", "")))
+        if kind == "nonnegative_integer" and declared_range:
+            return [declared_range.group(1)]
         if lower:
             values = [lower.group(1)]
             for item in adjustments:
@@ -50,14 +119,42 @@ def _values(field: dict, blocked: list[dict] | None = None,
         exact = next((item["value"] for item in blocked if item.get("op") == "!="), None)
         if exact is not None:
             return [str(exact)]
+        if kind == "percentage":
+            return [str(min(Fraction(10), Fraction(str(declared_maximum))))]
         if blocked:
             return ["0" if kind == "nonnegative_integer" else "1"]
         return ["100"]
     return []
 
 
-def evaluate() -> dict:
-    report = json.loads((ROOT / "data/drafts/report.json").read_text(encoding="utf-8"))
+def _source_numeric_values(spec: dict, field_name: str) -> list[str]:
+    """Return one valid sample from an explicitly declared table factor axis."""
+    rate = spec.get("quantity_model", {}).get("params", {}).get("unit_rate_table", {})
+    selector = rate.get("calculated_column_selector", {})
+    if selector.get("factor_column_input") != field_name:
+        return []
+    tables = {table["id"]: table for table in spec.get("tables", [])}
+    factor_ids = {table_id for ids in selector.get("factor_tables_by_value", {}).values()
+                  for table_id in ids}
+    values = set()
+    for table_id in factor_ids:
+        table = tables.get(table_id, {})
+        for raw in table.get("values", {}).get(selector.get("factor_row"), {}):
+            try:
+                value = Fraction(str(raw).replace(",", ""))
+            except (ValueError, ZeroDivisionError):
+                continue
+            if value > 0:
+                values.add(value)
+    if not values:
+        return []
+    value = min(values)
+    return [str(value.numerator) if value.denominator == 1 else f"{value.numerator}/{value.denominator}"]
+
+
+def evaluate(report_path: Path | None = None) -> dict:
+    report_path = report_path or (ROOT / "data/drafts/report.json")
+    report = json.loads(report_path.read_text(encoding="utf-8"))
     valid = {Path(item["path"]).name + "/" + item["division"] + "/" + item["section_no"]
              for item in report["results"] if item["ok"]}
     attempts = Counter()
@@ -65,6 +162,9 @@ def evaluate() -> dict:
     reasons = Counter()
     executable = []
     failed = []
+    skipped = []
+    inventory_total = 0
+    excluded_count = 0
     chapter = defaultdict(lambda: Counter())
     adjustment_counts = Counter()
     excluded = misfiled_ids()
@@ -82,7 +182,11 @@ def evaluate() -> dict:
     for path in sorted((ROOT / "data/drafts/specs").rglob("*.json")):
         package = json.loads(path.read_text(encoding="utf-8"))
         spec = package["draft"]
+        inventory_total += 1
         if spec["id"] in excluded:
+            excluded_count += 1
+            skipped.append({"id": spec["id"], "calc_type": package.get("calc_type"),
+                            "stage": "inventory_exclusion", "reason": "listed in data/drafts/misfiled.json"})
             continue
         kind = package["calc_type"]
         scope = "공통/6장" if spec["division"] == "공통" and spec["section_no"].startswith("6-") else "기타"
@@ -90,10 +194,14 @@ def evaluate() -> dict:
         cited = referenced_ids(spec)
         broken = sorted(cited & label_shift_ids)
         if broken:
-            failed.append({"id": spec["id"], "reason": "표 이름 줄 밀림 — 원문 재확인 필요", "tables": broken})
+            failed.append({"id": spec["id"], "stage": "source_preflight",
+                           "reason": "표 이름 줄 밀림 — 원문 재확인 필요", "tables": broken})
             reasons["표 이름 줄 밀림 — 원문 재확인 필요"] += 1
             continue
         if kind not in CALCULATORS:
+            skipped.append({"id": spec["id"], "calc_type": kind,
+                            "stage": "calculator_selection",
+                            "reason": "no compatible existing calculator in this runner"})
             continue
         for item in (spec["quantity_model"]["params"].get("surcharges", [])
                      + spec["quantity_model"]["params"].get("note_adjustments", [])):
@@ -112,7 +220,8 @@ def evaluate() -> dict:
                     blocked_by_field[condition["input"]].append(condition)
             adjustments = (spec["quantity_model"]["params"].get("surcharges", [])
                            + spec["quantity_model"]["params"].get("note_adjustments", []))
-            choices = [_values(field, blocked_by_field[field["name"]], adjustments) for field in fields]
+            choices = [_values(field, blocked_by_field[field["name"]], adjustments,
+                               _source_numeric_values(spec, field["name"])) for field in fields]
             if any(not options for options in choices):
                 reason = "입력 타입 미지원"
             else:
@@ -120,6 +229,14 @@ def evaluate() -> dict:
                 base_computed = False
                 for index, values in enumerate(itertools.islice(itertools.product(*choices), 64)):
                     inputs = dict(zip((field["name"] for field in fields), values))
+                    for rule in spec["quantity_model"].get("params", {}).get("conditional_ranges", []):
+                        when = rule.get("when", {})
+                        if (when and all(inputs.get(name) == expected for name, expected in when.items())
+                                and rule.get("input") in inputs):
+                            lower, upper = Fraction(str(rule["minimum"])), Fraction(str(rule["maximum"]))
+                            midpoint = (lower + upper) / 2
+                            inputs[rule["input"]] = (str(midpoint.numerator) if midpoint.denominator == 1
+                                                      else f"{midpoint.numerator}/{midpoint.denominator}")
                     try:
                         result = CALCULATORS[kind](spec, inputs)
                         status = result.get("status")
@@ -149,7 +266,9 @@ def evaluate() -> dict:
                         reason = f"{type(exc).__name__}: {exc}"
                         break
         if reason:
-            failed.append({"id": spec["id"], "reason": reason})
+            failed.append({"id": spec["id"], "stage": "format_or_input_preflight" if key not in valid
+                           or "입력 타입 미지원" in reason else "calculator_execution_or_rule_gate",
+                           "reason": reason})
             reasons[reason.split(":", 1)[0]] += 1
         else:
             executable.append(spec["id"])
@@ -163,8 +282,13 @@ def evaluate() -> dict:
             continue
         if package["draft"]["id"] in executable and referenced_ids(package["draft"]) & uncertain_ids:
             executable_uncertain += 1
-    return {"executable": sorted(executable), "failed": failed,
+    return {"executable": sorted(executable), "failed": failed, "skipped": skipped,
             "summary": {"total": sum(value["total"] for value in chapter.values()),
+                        "inventory_total": inventory_total, "excluded_from_execution": excluded_count,
+                        "skipped_without_compatible_calculator": sum(
+                            item["stage"] == "calculator_selection" for item in skipped),
+                        "skipped_misfiled": excluded_count,
+                        "source_preflight_failures": sum(item.get("stage") == "source_preflight" for item in failed),
                         "by_calc_type": {kind: {"attempted": attempts[kind], "executable": success[kind]}
                                          for kind in CALCULATORS},
                         "failure_reasons_top10": reasons.most_common(10),
@@ -175,7 +299,11 @@ def evaluate() -> dict:
 
 
 def main() -> int:
-    result = evaluate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--report", type=Path, default=ROOT / "data/drafts/report.json",
+                        help="validation report to use without overwriting the saved baseline")
+    args = parser.parse_args()
+    result = evaluate(args.report)
     OUTPUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result["summary"], ensure_ascii=False, indent=2))
     print(f"실행 가능 {len(result['executable'])} / 시도 {len(result['executable']) + len(result['failed'])}")

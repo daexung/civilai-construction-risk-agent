@@ -119,18 +119,7 @@
             "시공량(개) 설치높이 20m이하": "6.0",
             "시공량(개) 설치높이 40m이하": "5.0",
             "시공량(개) 설치높이 40m초과": "4.0"
-          }
-        },
-        "cite": {
-          "table_id": "p206-t1"
-        }
-      },
-      {
-        "id": "p207-t0",
-        "role": "교량받침 중량 0.5ton 이상 작업조 인원, 장비 대수 및 일일시공량",
-        "source": "PDF 151쪽 6-6-1 표 하단",
-        "unit": "인/작업조; 대/작업조; 개/일",
-        "values": {
+          },
           "교량받침 1기당 중량 0.5ton이하": {
             "특별인부": "3",
             "보통인부": "1",
@@ -173,7 +162,7 @@
           }
         },
         "cite": {
-          "table_id": "p207-t0"
+          "table_id": "p206-t1"
         }
       }
     ],
@@ -181,6 +170,7 @@
     "quantity_model": {
       "name": "adjusted_daily_crew",
       "params": {
+        "quantity_input": "quantity",
         "base_output": {
           "table": "p206-t1",
           "row_input": "weight",
@@ -190,32 +180,41 @@
         "crew": {
           "table": "p206-t1",
           "row_input": "weight",
+          "column_template": "{trade}",
           "trades": [
             "특별인부",
             "보통인부",
             "용접공"
           ],
           "rate_codes": {
-            "특별인부": "1003",
-            "보통인부": "1002",
-            "용접공": "1016"
+            "특별인부": "",
+            "보통인부": "",
+            "용접공": ""
           }
         },
-        "equipment": {
-          "name": "크레인",
-          "table": "p206-t1",
-          "unit": "대·일",
-          "machine_code_input": "weight",
-          "operator_rate_code": "1048"
-        },
-        "quantity_input": "quantity"
+        "equipment": [
+          {
+            "name": "크레인",
+            "table": "p206-t1",
+            "row_selector": "weight",
+            "column": "크레인",
+            "unit": "대·일"
+          },
+          {
+            "name": "고소작업차",
+            "table": "p206-t1",
+            "row_selector": "weight",
+            "column": "고소작업차",
+            "unit": "대·일"
+          }
+        ]
       },
       "steps": [
-        "입력된 중량(weight)과 설치높이(height)에 따라 표에서 기준 일일시공량을 찾는다.",
-        "작업일수 = quantity ÷ 일당시공량으로 구한다.",
-        "직종별 인·일 = 작업일수 × 표의 직종별 인원, 장비 대·일 = 작업일수 × 표의 장비 대수로 구한다."
+        "중량 블록과 설치높이로 일당 시공량(개)을 고른다.",
+        "설치 수량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 해당 중량 블록의 직종별 인원, × 장비 대수(크레인·고소작업차)로 총 투입량을 구한다."
       ],
-      "source": "PDF 150~151쪽 6-6-1 표",
+      "source": "PDF 150~151쪽 6-6-1 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -253,14 +252,8 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "표에 직종별 인원, 장비 대수와 일일시공량이 명시되어 있어 일당 작업조형 계산이 적합합니다.",
+  "calc_type_reason": "교량받침 중량 블록별 인원·장비 대수와 설치높이별 일당 시공량이 반복되는 정규 구조라 기존 일당 작업조 계산기로 표현된다.",
   "citations": [
-    {
-      "table_id": "p206-t1",
-      "row": "교량받침 1기당 중량 0.2ton이하",
-      "column": "시공량(개) 설치높이 20m이하",
-      "value": "8.5"
-    },
     {
       "table_id": "p207-t0",
       "row": "교량받침 1기당 중량 0.5ton이하",
@@ -278,6 +271,102 @@
     {
       "chunk_id": "p207-x17",
       "quote": "⑥ 교량받침 설치를 위한 소모재료(무수축 모르타르 등)는 설계수량에 따른다."
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.2ton이하",
+      "column": "특별인부",
+      "value": "2"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.2ton이하",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.2ton이하",
+      "column": "용접공",
+      "value": "1"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.2ton이하",
+      "column": "크레인",
+      "value": "1"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.2ton이하",
+      "column": "고소작업차",
+      "value": "1"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.2ton이하",
+      "column": "시공량(개) 설치높이 20m이하",
+      "value": "8.5"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.2ton이하",
+      "column": "시공량(개) 설치높이 40m이하",
+      "value": "7.0"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.2ton이하",
+      "column": "시공량(개) 설치높이 40m초과",
+      "value": "5.5"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.3ton이하",
+      "column": "특별인부",
+      "value": "2"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.3ton이하",
+      "column": "보통인부",
+      "value": "1"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.3ton이하",
+      "column": "용접공",
+      "value": "1"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.3ton이하",
+      "column": "크레인",
+      "value": "1"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.3ton이하",
+      "column": "고소작업차",
+      "value": "1"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.3ton이하",
+      "column": "시공량(개) 설치높이 20m이하",
+      "value": "6.0"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.3ton이하",
+      "column": "시공량(개) 설치높이 40m이하",
+      "value": "5.0"
+    },
+    {
+      "table_id": "p206-t1",
+      "row": "교량받침 1기당 중량 0.3ton이하",
+      "column": "시공량(개) 설치높이 40m초과",
+      "value": "4.0"
     }
   ],
   "open_questions": [

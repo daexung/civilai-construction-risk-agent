@@ -19,42 +19,6 @@
         "required": true,
         "ask": "설치할 맨홀추락방지망의 수량은 몇 개소입니까?",
         "source": "PDF 881쪽 시공량(개소)"
-      },
-      {
-        "name": "internal_plastering",
-        "type": "boolean",
-        "allowed_values": [
-          true,
-          false
-        ],
-        "unit": null,
-        "required": true,
-        "ask": "내부미장을 수행합니까?",
-        "source": "PDF 881쪽 [주] ④"
-      },
-      {
-        "name": "waste_disposal",
-        "type": "boolean",
-        "allowed_values": [
-          true,
-          false
-        ],
-        "unit": null,
-        "required": true,
-        "ask": "폐자재 및 잔토 처리가 필요합니까?",
-        "source": "PDF 881쪽 [주] ⑤"
-      },
-      {
-        "name": "other_cutter",
-        "type": "boolean",
-        "allowed_values": [
-          true,
-          false
-        ],
-        "unit": null,
-        "required": true,
-        "ask": "커터(콘크리트 및 아스팔트용) 이외의 아스팔트 절단을 위한 장비를 투입합니까?",
-        "source": "PDF 881쪽 [주] ③"
       }
     ],
     "tables": [
@@ -64,33 +28,32 @@
         "source": "PDF 881쪽 2-1-12 표",
         "unit": "인, 대, 개소",
         "values": {
-          "포장공 특별인부 보통인부": {
-            "수량": "2",
-            "시공량(개소)": "8"
+          "포장공": {
+            "수량": "2"
           },
-          "포장공 특별인부 보통인부 ": {
-            "수량": "1",
-            "시공량(개소)": "8"
+          "특별인부": {
+            "수량": "2"
+          },
+          "보통인부": {
+            "수량": "1"
           },
           "굴착기": {
-            "수량": "1",
-            "시공량(개소)": "8"
+            "수량": "1"
           },
           "커터(콘크리트 및 아스팔트용)": {
-            "수량": "1",
-            "시공량(개소)": "8"
+            "수량": "1"
           },
           "소형브레이커(전기식)": {
-            "수량": "1",
-            "시공량(개소)": "8"
+            "수량": "1"
           },
           "플레이트콤팩터": {
-            "수량": "1",
-            "시공량(개소)": "8"
+            "수량": "1"
           },
           "덤프트럭": {
-            "수량": "3",
-            "시공량(개소)": "8"
+            "수량": "3"
+          },
+          "시공량": {
+            "수량": "8"
           }
         },
         "cite": {
@@ -100,60 +63,71 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p937-t0",
+          "row": "시공량",
+          "column": "수량"
+        },
+        "coefficients": [],
+        "crew": {
+          "table": "p937-t0",
+          "column": "수량",
+          "trades": [
+            "포장공",
+            "특별인부",
+            "보통인부"
+          ],
+          "rate_codes": {
+            "포장공": "",
+            "특별인부": "",
+            "보통인부": ""
+          }
+        },
+        "equipment": [
+          {
+            "name": "굴착기",
+            "table": "p937-t0",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "커터(콘크리트 및 아스팔트용)",
+            "table": "p937-t0",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "소형브레이커(전기식)",
+            "table": "p937-t0",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "플레이트콤팩터",
+            "table": "p937-t0",
+            "column": "수량",
+            "unit": "대·일"
+          },
+          {
+            "name": "덤프트럭",
+            "table": "p937-t0",
+            "column": "수량",
+            "unit": "대·일"
+          }
+        ]
+      },
       "steps": [
-        "표에서 일당 투입 인원 및 장비를 확인한다.",
-        "시공량(8개소)으로 나누어 개소당 품을 구한다.",
-        "물량을 곱하여 총 투입량을 계산한다."
+        "표에서 일당 시공량을 고른다.",
+        "물량 ÷ 일당 시공량으로 작업일수를 구한다.",
+        "작업일수 × 직종별 인원, × 장비 대수로 총 투입량을 구한다."
       ],
-      "source": "PDF 881쪽 2-1-12 표",
+      "source": "PDF 2-1-12 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [
-      {
-        "condition": "internal_plastering == true",
-        "blocked_if": {
-          "input": "internal_plastering",
-          "op": "==",
-          "value": true
-        },
-        "reason": "내부미장을 할 경우 품을 별도 계상해야 함",
-        "source": "PDF 881쪽 [주] ④",
-        "cite": {
-          "chunk_id": "p937-x8",
-          "quote": "④ 내부미장을 할 경우 품을 별도 계상한다."
-        }
-      },
-      {
-        "condition": "waste_disposal == true",
-        "blocked_if": {
-          "input": "waste_disposal",
-          "op": "==",
-          "value": true
-        },
-        "reason": "폐자재 및 잔토 처리비용은 별도 계상해야 함",
-        "source": "PDF 881쪽 [주] ⑤",
-        "cite": {
-          "chunk_id": "p937-x8",
-          "quote": "⑤ 폐자재 및 잔토 처리비용은 볕도 계상한다."
-        }
-      },
-      {
-        "condition": "other_cutter == true",
-        "blocked_if": {
-          "input": "other_cutter",
-          "op": "==",
-          "value": true
-        },
-        "reason": "커터(콘크리트 및 아스팔트용) 이외의 아스팔트 절단을 위한 장비를 투입할 경우는 별도 계상해야 함",
-        "source": "PDF 881쪽 [주] ③",
-        "cite": {
-          "chunk_id": "p937-x8",
-          "quote": "③ 커터(콘크리트 및 아스팔트용) 이외의 아스팔트 절단을 위한 장비를 투입할 경우는 별도 계상한다."
-        }
-      }
-    ],
+    "blocked": [],
     "not_calculated": [
       {
         "item": "내부미장 품",
@@ -194,19 +168,41 @@
       }
     ]
   },
-  "calc_type": "not_calculable",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
-  "calc_type_reason": "파싱 결과에서 직종별(포장공, 특별인부, 보통인부) 행 이름이 명확히 분리되지 않고 뭉쳐 있어, 자동 계산 모델(daily_crew)에 직종을 매핑하기 어렵습니다.",
+  "calc_type_reason": "인원·장비 대수와 일당 시공량이 표에 있어 기존 일당 작업조 계산기로 표현된다. 내부미장·폐자재 처리·다른 절단장비는 원문이 별도 계상하라는 항목이라 미산정으로 둔다.",
   "citations": [
     {
+      "chunk_id": "p937-x8",
+      "quote": "④ 내부미장을 할 경우 품을 별도 계상한다."
+    },
+    {
+      "chunk_id": "p937-x8",
+      "quote": "⑤ 폐자재 및 잔토 처리비용은 볕도 계상한다."
+    },
+    {
+      "chunk_id": "p937-x8",
+      "quote": "③ 커터(콘크리트 및 아스팔트용) 이외의 아스팔트 절단을 위한 장비를 투입할 경우는 별도 계상한다."
+    },
+    {
+      "chunk_id": "p937-x8",
+      "quote": "⑥ 공구손료 및 경장비(발전기, 전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+    },
+    {
       "table_id": "p937-t0",
-      "row": "포장공 특별인부 보통인부",
+      "row": "포장공",
       "column": "수량",
       "value": "2"
     },
     {
       "table_id": "p937-t0",
-      "row": "포장공 특별인부 보통인부 ",
+      "row": "특별인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p937-t0",
+      "row": "보통인부",
       "column": "수량",
       "value": "1"
     },
@@ -241,20 +237,10 @@
       "value": "3"
     },
     {
-      "chunk_id": "p937-x8",
-      "quote": "④ 내부미장을 할 경우 품을 별도 계상한다."
-    },
-    {
-      "chunk_id": "p937-x8",
-      "quote": "⑤ 폐자재 및 잔토 처리비용은 볕도 계상한다."
-    },
-    {
-      "chunk_id": "p937-x8",
-      "quote": "③ 커터(콘크리트 및 아스팔트용) 이외의 아스팔트 절단을 위한 장비를 투입할 경우는 별도 계상한다."
-    },
-    {
-      "chunk_id": "p937-x8",
-      "quote": "⑥ 공구손료 및 경장비(발전기, 전동드릴 등)의 기계경비는 인력품의 3%로 계상한다."
+      "table_id": "p937-t0",
+      "row": "시공량",
+      "column": "수량",
+      "value": "8"
     }
   ],
   "open_questions": [

@@ -103,7 +103,10 @@
           {
             "table": "p963-t1",
             "row": "시공량 할증계수",
-            "input": "site_condition"
+            "input": "site_condition",
+            "skip_values": ["해당 없음"],
+            "unsupported_values": ["둘 다 해당"],
+            "interpretation": "signed_percentage_change"
           }
         ],
         "crew": {

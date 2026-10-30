@@ -1,4 +1,4 @@
-"""4504 원문 추출과 펌프차 구성 금액을 손계산으로 검사한다."""
+"""원문 요율·펌프차 계산·API 응답 변환 검사. HTTP·인증·DB는 호출하지 않는다."""
 
 from __future__ import annotations
 
@@ -7,17 +7,21 @@ import os
 import sys
 from decimal import Decimal, ROUND_DOWN
 from pathlib import Path
-from fastapi.testclient import TestClient
 
 os.environ["AGENT_OFFLINE"] = "1"
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from backend.agent.nodes.fill import extract_inputs, fill  # noqa: E402
+from backend.agent.nodes.compute import compute  # noqa: E402
+from backend.agent.nodes.price import price  # noqa: E402
+from backend.agent.nodes.statement import statement  # noqa: E402
+from backend.agent.state import new_state  # noqa: E402
 from backend.agent.tools.calc.daily_crew import adjusted_daily_crew  # noqa: E402
 from backend.agent.tools.calc.price import price_unit, select_equipment_version, select_rate_version  # noqa: E402
 from pipeline.equipment_rates import build  # noqa: E402
-from backend.api.main import app  # noqa: E402
+from pipeline.equipment_rates_general import REGISTERED, parse_pages  # noqa: E402
+from backend.api.main import _build_response  # noqa: E402
 
 
 def main() -> int:
@@ -25,7 +29,10 @@ def main() -> int:
     data = build()
     saved = json.loads((ROOT / "data/rates/equipment_rates.json").read_text(encoding="utf-8"))
     machines = data["machines"]
-    checks.append(("E1 PDF 재추출", data == saved and len(machines) == 8))
+    saved_pumps = {code: entry for code, entry in saved["machines"].items()
+                   if code.startswith("4504-")}
+    checks.append(("E1 펌프차 8규격 PDF 재추출", data == {**saved, "machines": saved_pumps}
+                   and len(machines) == len(saved_pumps) == 8))
     checks.append(("E2 32m", tuple(machines["4504-0032"][key] for key in (
         "price_thousand_won", "hourly_depreciation", "fuel_l_per_hr",
         "misc_pct_of_fuel", "operator_per_day")) == (275000, 72600, "17.3", 35, 1)))
@@ -70,16 +77,18 @@ def main() -> int:
     checks.append(("E13 근거", all(row["citations"] for row in priced_a["equipment_lines"])
                    and any(citation["section_no"] == "8-1-6" for citation in a_rows["펌프차 운전원"]["citations"])
                    and any(citation["section_no"] == "1-2-2" for citation in a_rows["펌프차 기계손료"]["citations"])))
-    client = TestClient(app)
-    start = client.post("/api/chat", json={"message": "철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용",
-                                            "basis_date": "2026-10-01"}).json()
-    computed = client.post("/api/chat", json={"thread_id": start["thread_id"], "answers": {
-        "slump_band": "15㎝", "facility_type": "Type-Ⅱ", "site_type": "Type-Ⅱ",
-        "placement": "붐", "vibrator_used": True, "reset_status": "없음", "concrete_supply": "관급",
-        "work_category": "기타 토목공사", "duration": "1~6개월", "contractor_type": "종합건설업",
-        "project_scale": "이 견적만",
-    }}).json()
-    checks.append(("E14 API 구성 금액", computed["status"] == "PARTIAL"
+    # 원문 사례를 실제 compute→price→statement→API 응답 변환에 통과시킨다.
+    # HTTP 인증·사용량 DB 검사는 별도이며 이 오프라인 장비 회귀의 대상이 아니다.
+    api_state = new_state("철근콘크리트 벽체 260㎥ 32m 펌프차로 타설 비용", "2026-10-01")
+    api_state.update(spec_id=spec["id"], selection={"confirmed": True},
+                     inputs=a | {"work_category": "기타 토목공사", "duration": "1~6개월",
+                                 "contractor_type": "종합건설업", "project_scale": "이 견적만"})
+    api_state.update(compute(api_state))
+    assert api_state["status"] == "COMPUTED", api_state.get("reason")
+    api_state.update(price(api_state))
+    api_state.update(statement(api_state))
+    computed = _build_response("equipment-regression", api_state)
+    checks.append(("E14 계산→API 응답 변환 구성 금액", computed["status"] == "PARTIAL"
                    and [row["amount"] for row in computed["priced"]["equipment_lines"]]
                    == ["4464.9", "2178.0", None]
                    and computed["priced"]["equipment_rate_version"]["version"] == "2026"
@@ -99,6 +108,29 @@ def main() -> int:
                    and select_equipment_version("2027-01-01") is None
                    and all(row["amount"] is None for row in
                            price_unit(spec, units_a, None, a, "2027-01-01")["equipment_lines"])))
+    extracted = {code: entry for code, entry in parse_pages(range(4, 12)).items()
+                 if code[:4] in REGISTERED}
+    saved_additions = {code: entry for code, entry in saved["machines"].items()
+                       if code[:4] in REGISTERED}
+    checks.append(("E19 신규 장비 규격 누락·추가 없음", set(extracted) == set(saved_additions)
+                   and {prefix: sum(code.startswith(prefix + "-") for code in extracted)
+                        for prefix in REGISTERED} == {"0201": 9, "0301": 8, "0302": 9}))
+    def matches_source(code: str, source: dict) -> bool:
+        stored = saved_additions[code]
+        integer = lambda value: int(value.replace(",", ""))
+        optional = lambda value: None if value == "-" else integer(value)
+        expected = {"name": REGISTERED[code[:4]], "section_no": code[:4],
+                    "spec": source["spec"], "pdf_page": source["pdf_page"],
+                    "price_thousand_won": integer(source["price"]),
+                    "hourly_depreciation": integer(source["depr"]), "fuel_type": "경유",
+                    "fuel_l_per_hr": source["fuel"], "misc_pct_of_fuel": integer(source["misc"]),
+                    "operator_per_day": integer(source["operator"]),
+                    "assistant_per_day": optional(source["assistant"]),
+                    "foreman_per_day": optional(source["foreman"])}
+        return stored == expected
+    checks.append(("E20 신규 장비 26규격 원문 요율·규격·쪽수 일치", bool(extracted)
+                   and set(extracted) == set(saved_additions)
+                   and all(matches_source(code, source) for code, source in extracted.items())))
     for name, passed in checks:
         print(f"{'PASS' if passed else 'FAIL'} {name}")
     print(f"통과 {sum(passed for _, passed in checks)} / 전체 {len(checks)}")

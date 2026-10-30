@@ -13,6 +13,7 @@
     ],
     "inputs": [
       {
+        "ask": "시공 방법은 무엇입니까? 원문 기준으로 블록 50kg 미만이고 평균 비탈길이 15m 이하이면 인력, 그 외는 기계입니다.",
         "name": "method",
         "type": "enum",
         "allowed_values": [
@@ -21,8 +22,7 @@
         ],
         "unit": null,
         "required": true,
-        "ask": "시공 방법은 인력입니까, 기계입니까? (블록중량 50kg 미만이고 평균 비탈길이 15m 이하이면 인력, 그 외는 기계 적용)",
-        "source": "PDF 134쪽 [주] ②, ③"
+        "source": "PDF 물리 134쪽 [주] ②, ③"
       },
       {
         "name": "slope",
@@ -78,44 +78,57 @@
         "required": true,
         "ask": "속채움이 필요합니까?",
         "source": "PDF 135쪽 [주] ⑤"
+      },
+      {
+        "name": "block_weight",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "kg",
+        "required": true,
+        "ask": "프리캐스트 블록 1개의 중량은 몇 kg입니까?",
+        "source": "PDF 물리 134쪽 [주] ②, ③"
+      },
+      {
+        "name": "avg_slope_length",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "m",
+        "required": true,
+        "ask": "평균 비탈길이는 몇 m입니까?",
+        "source": "PDF 물리 134쪽 [주] ②, ③"
       }
     ],
     "tables": [
       {
         "id": "p134-t2",
-        "role": "시공방법 및 비탈경사별 일당 시공량과 작업조 인원",
-        "source": "PDF 134쪽 3-7-1 표",
+        "role": "시공방법·직종별 일일 작업조, 비탈경사별 시공량 및 유항 기준",
+        "source": "PDF 물리 134쪽 / 인쇄 78쪽 3-7-1 원문표 및 비고",
         "unit": "인/작업조, 대/작업조, ㎡/일",
         "values": {
           "인력 | 특별인부": {
-            "수량": "2",
-            "시공량(㎡) 비탈경사\n1:1.5 이상": "27",
-            "시공량(㎡) 비탈경사\n1:1.0이상∼\n1:1.5 미만": "24",
-            "시공량(㎡) 비탈경사\n1:1.0 미만": "22"
+            "수량": "2"
           },
           "인력 | 보통인부": {
-            "수량": "3",
-            "시공량(㎡) 비탈경사\n1:1.5 이상": "27",
-            "시공량(㎡) 비탈경사\n1:1.0이상∼\n1:1.5 미만": "24",
-            "시공량(㎡) 비탈경사\n1:1.0 미만": "22"
+            "수량": "3"
+          },
+          "인력 | 일일시공량": {
+            "시공량(㎡) 비탈경사 1:1.5 이상": "27",
+            "시공량(㎡) 비탈경사 1:1.0이상∼1:1.5 미만": "24",
+            "시공량(㎡) 비탈경사 1:1.0 미만": "22"
           },
           "기계 | 특별인부": {
-            "수량": "2",
-            "시공량(㎡) 비탈경사\n1:1.5 이상": "41",
-            "시공량(㎡) 비탈경사\n1:1.0이상∼\n1:1.5 미만": "38",
-            "시공량(㎡) 비탈경사\n1:1.0 미만": "35"
+            "수량": "2"
           },
           "기계 | 보통인부": {
-            "수량": "2",
-            "시공량(㎡) 비탈경사\n1:1.5 이상": "41",
-            "시공량(㎡) 비탈경사\n1:1.0이상∼\n1:1.5 미만": "38",
-            "시공량(㎡) 비탈경사\n1:1.0 미만": "35"
+            "수량": "2"
+          },
+          "기계 | 일일시공량": {
+            "시공량(㎡) 비탈경사 1:1.5 이상": "41",
+            "시공량(㎡) 비탈경사 1:1.0이상∼1:1.5 미만": "38",
+            "시공량(㎡) 비탈경사 1:1.0 미만": "35"
           },
           "기계 | 크레인": {
-            "수량": "1",
-            "시공량(㎡) 비탈경사\n1:1.5 이상": "-",
-            "시공량(㎡) 비탈경사\n1:1.0이상∼\n1:1.5 미만": "-",
-            "시공량(㎡) 비탈경사\n1:1.0 미만": "-"
+            "수량": "1"
           }
         },
         "cite": {
@@ -125,18 +138,217 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "quantity",
+        "base_output": {
+          "table": "p134-t2",
+          "row_selector": {
+            "input": "method",
+            "contains": [
+              "{value}",
+              "일일시공량"
+            ]
+          },
+          "column_selector": {
+            "input": "slope",
+            "contains": [
+              "{value}"
+            ]
+          }
+        },
+        "crew": {
+          "table": "p134-t2",
+          "trades": [
+            "특별인부",
+            "보통인부"
+          ],
+          "row_selector": {
+            "input": "method",
+            "contains": [
+              "{value}"
+            ],
+            "input_contains": [
+              "{trade}"
+            ]
+          },
+          "column": "수량"
+        },
+        "equipment": [
+          {
+            "table": "p134-t2",
+            "row": "기계 | 크레인",
+            "column": "수량",
+            "name": "크레인",
+            "unit": "대·일",
+            "when": {
+              "method": "기계"
+            }
+          }
+        ],
+        "additional_unit_labor": [
+          {
+            "trade": "보통인부",
+            "quantity_input": "yuhang_quantity",
+            "rate": "0.4",
+            "basis": "인/10본",
+            "unit": "인/본",
+            "source": "PDF 물리 134쪽 / 인쇄 78쪽 p134-t2 비고",
+            "cite": {
+              "chunk_id": "p134-t2",
+              "quote": "0.4인/10본당을 계상한다."
+            },
+            "formula": "0.4인 ÷ 10본 × 유항 수량(본)"
+          }
+        ]
+      },
       "steps": [
-        "1. 선택한 시공 방법(인력/기계)과 비탈경사에 따라 p134-t2 표에서 일당 시공량(㎡)과 작업조 인원(특별인부, 보통인부, 크레인)을 찾는다.",
-        "2. 작업일수 = 시공량(quantity) ÷ 일당 시공량으로 계산한다.",
-        "3. 기본 직종별 인·일 = 작업일수 × 작업조 인원으로 계산한다.",
-        "4. 유항(留杭) 설치 수량(yuhang_quantity)이 0보다 크면, 보통인부 인·일에 (0.4 × yuhang_quantity ÷ 10)을 추가로 더한다."
+        "블록 중량과 평균 비탈길이로 인력/기계 적용 조건을 확인하고 해당 방법을 선택한다.",
+        "p134-t2에서 선택한 방법의 일일 시공량(비탈경사별)과 직종별 작업조 인원, 해당 시 크레인 대수를 찾는다.",
+        "총 면적을 일일 시공량으로 나누어 작업일수와 작업조 투입량을 계산한다.",
+        "유항 설치가 있으면 보통인부 0.4인/10본을 유항 수량에 곱해 추가한다.",
+        "수직고 20m 초과는 적용범위 밖이며, 속채움은 별도 계상으로 산출에 포함되지 않는다."
       ],
-      "source": "PDF 134쪽 p134-t2 및 비고",
+      "source": "PDF 물리 134쪽 / 인쇄 78쪽 p134-t2 및 [주] ①~⑤",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
+      {
+        "condition": "인력 방법이나 블록이 50kg 이상",
+        "blocked_if_all": [
+          {
+            "input": "method",
+            "op": "==",
+            "value": "인력"
+          },
+          {
+            "input": "block_weight",
+            "op": ">=",
+            "value": "50"
+          }
+        ],
+        "reason": "원문은 블록 50kg/개 이상이면 기계 적용으로 정한다.",
+        "source": "PDF 물리 134쪽 [주] ②~③",
+        "cite": {
+          "chunk_id": "p134-x18",
+          "quote": "기계는 블록중량이 50㎏/개 이상인 경우"
+        }
+      },
+      {
+        "condition": "인력 방법이나 평균 비탈길이가 15m 초과",
+        "blocked_if_all": [
+          {
+            "input": "method",
+            "op": "==",
+            "value": "인력"
+          },
+          {
+            "input": "avg_slope_length",
+            "op": ">",
+            "value": "15"
+          }
+        ],
+        "reason": "원문은 50kg 미만이어도 평균 비탈길이가 15m를 초과하면 기계 적용으로 정한다.",
+        "source": "PDF 물리 134쪽 [주] ②~③",
+        "cite": {
+          "chunk_id": "p134-x18",
+          "quote": "평균 비탈길이가 15m를 초과하는"
+        }
+      },
+      {
+        "condition": "기계 방법이나 50kg 미만·평균 비탈길이 15m 이하",
+        "blocked_if_all": [
+          {
+            "input": "method",
+            "op": "==",
+            "value": "기계"
+          },
+          {
+            "input": "block_weight",
+            "op": "<",
+            "value": "50"
+          },
+          {
+            "input": "avg_slope_length",
+            "op": "<=",
+            "value": "15"
+          }
+        ],
+        "reason": "원문 적용 조건에 따르면 이 조합은 인력 시공 범위다.",
+        "source": "PDF 물리 134쪽 [주] ②~③",
+        "cite": {
+          "chunk_id": "p134-x18",
+          "quote": "인력은 블록중량이 50㎏/개 미만으로서 평균 비탈길이가 15m이하인 경우에 적용한다."
+        }
+      },
+      {
+        "condition": "인력 방법이나 블록이 50kg 이상",
+        "blocked_if_all": [
+          {
+            "input": "method",
+            "op": "==",
+            "value": "인력"
+          },
+          {
+            "input": "block_weight",
+            "op": ">=",
+            "value": "50"
+          }
+        ],
+        "reason": "원문은 블록 50kg/개 이상이면 기계 적용으로 정한다.",
+        "source": "PDF 물리 134쪽 [주] ②~③",
+        "cite": {
+          "chunk_id": "p134-x18",
+          "quote": "기계는 블록중량이 50㎏/개 이상인 경우"
+        }
+      },
+      {
+        "condition": "인력 방법이나 평균 비탈길이가 15m 초과",
+        "blocked_if_all": [
+          {
+            "input": "method",
+            "op": "==",
+            "value": "인력"
+          },
+          {
+            "input": "avg_slope_length",
+            "op": ">",
+            "value": "15"
+          }
+        ],
+        "reason": "원문은 50kg 미만이어도 평균 비탈길이가 15m를 초과하면 기계 적용으로 정한다.",
+        "source": "PDF 물리 134쪽 [주] ②~③",
+        "cite": {
+          "chunk_id": "p134-x18",
+          "quote": "평균 비탈길이가 15m를 초과하는"
+        }
+      },
+      {
+        "condition": "기계 방법이나 50kg 미만·평균 비탈길이 15m 이하",
+        "blocked_if_all": [
+          {
+            "input": "method",
+            "op": "==",
+            "value": "기계"
+          },
+          {
+            "input": "block_weight",
+            "op": "<",
+            "value": "50"
+          },
+          {
+            "input": "avg_slope_length",
+            "op": "<=",
+            "value": "15"
+          }
+        ],
+        "reason": "원문 적용 조건에 따르면 이 조합은 인력 시공 범위다.",
+        "source": "PDF 물리 134쪽 [주] ②~③",
+        "cite": {
+          "chunk_id": "p134-x18",
+          "quote": "인력은 블록중량이 50㎏/개 미만으로서 평균 비탈길이가 15m이하인 경우에 적용한다."
+        }
+      },
       {
         "condition": "수직고 20m 초과",
         "blocked_if": {
@@ -144,60 +356,104 @@
           "op": "==",
           "value": true
         },
-        "reason": "시공범위는 수직고 20m 이하 기준이므로 20m 초과 시 적용할 수 없습니다.",
-        "source": "PDF 134쪽 [주] ①",
+        "reason": "원문 시공범위는 수직고 20m 이하 기준이다.",
+        "source": "PDF 물리 134쪽 [주] ①",
         "cite": {
           "chunk_id": "p134-x18",
           "quote": "시공범위는 수직고 20m이하 기준이다."
         }
-      },
+      }
+    ],
+    "not_calculated": [
       {
-        "condition": "속채움 필요",
-        "blocked_if": {
-          "input": "fill_required",
-          "op": "==",
-          "value": true
-        },
-        "reason": "속채움이 필요한 경우 품은 별도 계상해야 합니다.",
-        "source": "PDF 135쪽 [주] ⑤",
+        "item": "속채움 작업 품 (필요 시 별도 계상)",
+        "source": "PDF 물리 135쪽 [주] ⑤",
         "cite": {
           "chunk_id": "p135-x0",
           "quote": "속채움이 필요한 경우 품은 별도 계상한다."
         }
       }
     ],
-    "not_calculated": [
-      {
-        "item": "면고르기, 보호블록 설치를 위한 터파기 및 되메우기, 블록설치 및 고정",
-        "source": "PDF 134쪽 [주] ④ (본 품에 포함됨)",
-        "cite": {
-          "chunk_id": "p134-x18",
-          "quote": "본 품은 면고르기, 보호블록 설치를 위한 터파기 및 되메우기, 블록설치 및 고정을 포함한다."
-        }
-      }
-    ],
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "표의 행이 시공방법(인력/기계)과 직종으로 계층화되어 있고, 유항 설치에 따른 물량 비례 인원 추가(0.4인/10본)가 있어 현재의 adjusted_daily_crew 모델로 자동 계산하기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "원문 일당 작업조와 경사별 시공량을 기존 adjusted_daily_crew에 연결했다. 유항 추가 인부는 별도 원문 계수로 반영하고, 공법 적용범위 밖 조건은 차단한다.",
   "citations": [
     {
       "table_id": "p134-t2",
       "row": "인력 | 특별인부",
-      "column": "시공량(㎡) 비탈경사\n1:1.5 이상",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "인력 | 보통인부",
+      "column": "수량",
+      "value": "3"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "인력 | 일일시공량",
+      "column": "시공량(㎡) 비탈경사 1:1.5 이상",
       "value": "27"
     },
     {
       "table_id": "p134-t2",
-      "row": "비고",
-      "column": "비고",
-      "value": "- 비탈틀을 고정하기 위한 유항(留杭)을 설치하는 경우는 보통인부 0.4인/10본당을 계상한다."
+      "row": "인력 | 일일시공량",
+      "column": "시공량(㎡) 비탈경사 1:1.0이상∼1:1.5 미만",
+      "value": "24"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "인력 | 일일시공량",
+      "column": "시공량(㎡) 비탈경사 1:1.0 미만",
+      "value": "22"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "기계 | 특별인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "기계 | 보통인부",
+      "column": "수량",
+      "value": "2"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "기계 | 일일시공량",
+      "column": "시공량(㎡) 비탈경사 1:1.5 이상",
+      "value": "41"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "기계 | 일일시공량",
+      "column": "시공량(㎡) 비탈경사 1:1.0이상∼1:1.5 미만",
+      "value": "38"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "기계 | 일일시공량",
+      "column": "시공량(㎡) 비탈경사 1:1.0 미만",
+      "value": "35"
+    },
+    {
+      "table_id": "p134-t2",
+      "row": "기계 | 크레인",
+      "column": "수량",
+      "value": "1"
     },
     {
       "chunk_id": "p134-x18",
-      "quote": "시공범위는 수직고 20m이하 기준이다."
+      "quote": "기계는 블록중량이 50㎏/개 이상인 경우"
+    },
+    {
+      "chunk_id": "p134-x18",
+      "quote": "평균 비탈길이가 15m를 초과하는"
     },
     {
       "chunk_id": "p134-x18",
@@ -205,21 +461,30 @@
     },
     {
       "chunk_id": "p134-x18",
-      "quote": "기계는 블록중량이 50㎏/개 이상인 경우 또는 50㎏/개 미만에도 평균 비탈길이가 15m를 초과하는\n경우에 적용한다."
+      "quote": "기계는 블록중량이 50㎏/개 이상인 경우"
     },
     {
       "chunk_id": "p134-x18",
-      "quote": "본 품은 면고르기, 보호블록 설치를 위한 터파기 및 되메우기, 블록설치 및 고정을 포함한다."
+      "quote": "평균 비탈길이가 15m를 초과하는"
+    },
+    {
+      "chunk_id": "p134-x18",
+      "quote": "인력은 블록중량이 50㎏/개 미만으로서 평균 비탈길이가 15m이하인 경우에 적용한다."
+    },
+    {
+      "chunk_id": "p134-x18",
+      "quote": "시공범위는 수직고 20m이하 기준이다."
+    },
+    {
+      "chunk_id": "p134-t2",
+      "quote": "0.4인/10본당을 계상한다."
     },
     {
       "chunk_id": "p135-x0",
       "quote": "속채움이 필요한 경우 품은 별도 계상한다."
     }
   ],
-  "open_questions": [
-    "표의 행 이름이 '인력 | 특별인부'처럼 계층적으로 되어 있어, adjusted_daily_crew 모델의 crew와 base_output 파라미터로 분리 매핑하기 어렵습니다.",
-    "유항 설치 시 보통인부 0.4인/10본당 추가하는 규칙은 물량에 비례하여 인원을 가산하는 방식이므로, 고정 인원을 가감하는 crew_rules로 표현할 수 없어 not_calculable로 처리했습니다."
-  ],
+  "open_questions": [],
   "questions": [
     "프리캐스트 콘크리트 블록설치 시 인력과 기계 시공의 기준은 무엇인가요?",
     "비탈틀 고정용 유항을 25본 설치할 때 보통인부 품은 어떻게 계산하나요?",
@@ -237,7 +502,7 @@
     ],
     "prompt_sha256": "8b0c37109b176f7a8e37847718b96e60a9d51641e9cb44b8410e64a46d79252c",
     "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
-    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "chunks_sha256": "16b11fd7c78e69d132d9c7a9aea39425b6944dbced632e8162042e9f359848bb",
     "citation_retry_used": true,
     "citation_issues_after_retry": [
       "quote가 p134-x18 조각 텍스트에 없음"

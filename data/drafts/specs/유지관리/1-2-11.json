@@ -100,7 +100,8 @@
         "source": "PDF 1쪽 1-2-11 [주] ④ 표",
         "values": {
           "요율": {
-            "배부식 기계": "8%"
+            "배부식 기계": "8%",
+            "핸드가이드식 기계": "7%"
           }
         },
         "cite": {
@@ -137,7 +138,11 @@
           {
             "table": "p919-t1",
             "row": "시공량 할증율",
-            "input": "annual_frequency"
+            "input": "annual_frequency",
+            "interpretation": "signed_percentage_change",
+            "skip_values": [
+              "연3회 이상"
+            ]
           }
         ],
         "crew": {
@@ -182,18 +187,41 @@
           "chunk_id": "p919-x12",
           "quote": "상차 및 외부 운반 작업, 폐기물처리비는 별도 계상한다."
         }
-      },
-      {
-        "item": "공구손료 및 경장비의 기계경비",
-        "source": "PDF 1쪽 1-2-11 [주] ④",
-        "cite": {
-          "chunk_id": "p919-x12",
-          "quote": "공구손료 및 경장비의 기계경비는 인력품에 다음 요율을 적용한다."
-        }
       }
     ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [
+      {
+        "name": "공구손료 및 경장비 기계경비 (배부식 기계)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.08",
+        "when": {
+          "machine_type": "배부식"
+        },
+        "cite": {
+          "table_id": "p919-t2",
+          "row": "요율",
+          "column": "배부식 기계",
+          "value": "8%"
+        }
+      },
+      {
+        "name": "공구손료 및 경장비 기계경비 (핸드가이드식 기계)",
+        "category": "경비",
+        "base": "labor_subtotal",
+        "rate": "0.07",
+        "when": {
+          "machine_type": "핸드가이드식"
+        },
+        "cite": {
+          "table_id": "p919-t2",
+          "row": "요율",
+          "column": "핸드가이드식 기계",
+          "value": "7%"
+        }
+      }
+    ]
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",

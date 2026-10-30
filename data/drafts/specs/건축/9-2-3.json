@@ -12,19 +12,6 @@
     ],
     "inputs": [
       {
-        "name": "height_band",
-        "type": "enum",
-        "allowed_values": [
-          "3.6m이하",
-          "3.6m초과 ~7.2m이하",
-          "7.2m초과"
-        ],
-        "unit": null,
-        "required": true,
-        "ask": "시공높이는 어느 범위에 해당합니까?",
-        "source": "p682-t0"
-      },
-      {
         "name": "is_ceiling",
         "type": "boolean",
         "allowed_values": [
@@ -83,6 +70,12 @@
             "미장공": "2",
             "보통인부": "2",
             "시공량(㎡)": "115"
+          },
+          "??": {
+            "??": "- 천장은 시공량의 17%를 감한다. - 비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량(시공높이 3.6m초과 ~7.2m이하)의 3%를 감한다."
+          },
+          "비고": {
+            "- 천장은 시공량의 17%를 감한다. - 비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량(시공높이 3.6m초과 ~7.2m이하)의 3%를 감한다.": "- 천장은 시공량의 17%를 감한다. - 비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량(시공높이 3.6m초과 ~7.2m이하)의 3%를 감한다."
           }
         },
         "cite": {
@@ -109,41 +102,106 @@
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "adjusted_daily_crew",
+      "params": {
+        "quantity_input": "area",
+        "base_output": {
+          "table": "p682-t0",
+          "row_selector": {
+            "input": "height_m",
+            "ranges": [
+              {
+                "max": "3.6",
+                "contains": "시공높이 3.6m이하"
+              },
+              {
+                "min": "3.6",
+                "min_inclusive": false,
+                "max": "7.2",
+                "contains": "시공높이 3.6m초과 ~7.2m이하"
+              }
+            ]
+          },
+          "column_input": "시공량(㎡)"
+        },
+        "crew": {
+          "table": "p682-t0",
+          "row_selector": {
+            "input": "height_m",
+            "ranges": [
+              {
+                "max": "3.6",
+                "contains": "시공높이 3.6m이하"
+              },
+              {
+                "min": "3.6",
+                "min_inclusive": false,
+                "max": "7.2",
+                "contains": "시공높이 3.6m초과 ~7.2m이하"
+              }
+            ]
+          },
+          "column_template": "{trade}",
+          "trades": [
+            "미장공",
+            "보통인부"
+          ]
+        },
+        "coefficients": [],
+        "output_adjustments": [
+          {
+            "when": {
+              "is_ceiling": true
+            },
+            "operation": "set_output_percent",
+            "value": "17",
+            "cite": {
+              "chunk_id": "p682-t0",
+              "quote": "- 천장은 시공량의 17%를 감한다. - 비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량(시공높이 3.6m초과 ~7.2m이하)의 3%를 감한다."
+            }
+          }
+        ],
+        "equipment": null,
+        "materials": [],
+        "daily_equipment_allowances": []
+      },
       "steps": [
-        "p682-t0에서 시공높이에 따른 미장공, 보통인부 인원과 기준 시공량(㎡)을 찾는다.",
-        "천장인 경우 기준 시공량의 17%를 감산한다.",
-        "비계사용 시 높이가 7.2m를 초과하는 경우, 3.6m마다 '시공높이 3.6m초과 ~7.2m이하'의 시공량의 3%를 추가로 감산한다.",
-        "작업일수 = area ÷ 보정된 시공량으로 구한다.",
-        "직종별 인·일 = 작업일수 × 표의 직종별 인원으로 구한다.",
-        "재료량은 p682-t1을 참고하여 별도 계상한다."
+        "Select daily crew and output by measured height from the source table.",
+        "Reduce output by 17% for ceiling work under the source note.",
+        "Calculate work days and labor from area, adjusted daily output, and source crew."
       ],
-      "source": "p682-t0 비고",
+      "source": "p682-t0",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
-        "condition": "height_band == '7.2m초과'",
+        "condition": "height above 7.2m",
         "blocked_if": {
-          "input": "height_band",
-          "op": "==",
-          "value": "7.2m초과"
+          "input": "height_m",
+          "op": ">",
+          "value": "7.2"
         },
-        "reason": "7.2m 초과 시 3.6m마다 시공량의 3%를 감산하는 규칙은 현재 수식 모델로 자동화하기 복잡하여 수동 계산이 필요함",
-        "source": "p682-t0 비고",
+        "reason": "The source provides no general productivity above 7.2m. Its scaffold note describes only a 3% deduction per 3.6m based on the 3.6m?7.2m production rate.",
+        "source": "p682-t0 source note",
         "cite": {
-          "table_id": "p682-t0"
+          "chunk_id": "p682-t0",
+          "quote": "- 천장은 시공량의 17%를 감한다. - 비계사용 시 높이 7.2m초과하는 경우 3.6m마다 시공량(시공높이 3.6m초과 ~7.2m이하)의 3%를 감한다."
         }
       }
     ],
-    "not_calculated": [],
+    "not_calculated": [
+      {
+        "item": "Reference material quantities (cement 14.3 kg; admixture 22.7 g)",
+        "source": "p682-t1 / printed page 626 source reference table",
+        "reason": "The source reference table has no stated work-quantity denominator; labor calculation proceeds, but material totals cannot be derived without an original basis."
+      }
+    ],
     "supply_rules": [],
     "cost_rules": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "천장 시공 시 17% 감산 및 7.2m 초과 시 3.6m마다 3% 감산 등 시공량 보정 규칙이 줄글로 되어 있어, 현재의 표 기반 adjusted_daily_crew 모델로 자동 계산하기 어렵습니다.",
+  "calc_type": "daily_crew",
+  "calc_type_raw": "daily_crew",
+  "calc_type_reason": "The source provides measured-height daily crew/output rates; shared daily_crew supports the daily-output adjustment. The separate material reference has no stated denominator.",
   "citations": [
     {
       "table_id": "p682-t0",
