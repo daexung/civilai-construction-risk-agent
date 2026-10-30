@@ -7,7 +7,8 @@ COPY backend/api/requirements.txt backend/api/requirements.txt
 COPY backend/agent/requirements.txt backend/agent/requirements.txt
 COPY pipeline/requirements-rag.txt pipeline/requirements-rag.txt
 COPY deploy/backend-requirements.txt deploy/backend-requirements.txt
-RUN pip install --no-cache-dir -r deploy/backend-requirements.txt \
+RUN python -m pip install --no-cache-dir --upgrade pip==26.2.2 \
+    && pip install --no-cache-dir -r deploy/backend-requirements.txt \
     && useradd --create-home --uid 10001 appuser
 COPY backend/ backend/
 COPY pipeline/calculation_contract.py pipeline/python_sandbox.py pipeline/

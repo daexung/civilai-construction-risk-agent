@@ -1,2 +1,4 @@
-langgraph==1.2.12
-langgraph-checkpoint==4.2.0
+langgraph==1.2.14
+langgraph-sdk==0.4.6
+langgraph-checkpoint==4.3.0
+certifi==2026.10.19
