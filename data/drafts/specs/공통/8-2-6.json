@@ -102,22 +102,67 @@
         "source": "3. 1회 싸이클시간(㎝)"
       },
       {
-        "name": "q_capacity",
+        "name": "machine_spec",
+        "type": "enum",
+        "allowed_values": [
+          "5.4",
+          "11.5",
+          "16.1",
+          "20.6"
+        ],
+        "unit": "㎥",
+        "required": true,
+        "ask": "모터 스크레이퍼의 적재함 용량은 몇 ㎥입니까?",
+        "source": "2026년도 건설기계 경비산출표 PDF 6쪽 0406 스크레이퍼 규격",
+        "machine_codes": {
+          "5.4": "0406-0054",
+          "11.5": "0406-0115",
+          "16.1": "0406-0161",
+          "20.6": "0406-0206"
+        }
+      },
+      {
+        "name": "volume_basis",
+        "type": "enum",
+        "allowed_values": [
+          "자연상태",
+          "흐트러진 상태"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "견적 토량은 자연상태와 흐트러진 상태 중 어느 기준입니까?",
+        "source": "공통 1-2-3 p65-t1 체적환산계수(f)"
+      },
+      {
+        "name": "L",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": null,
+        "required": false,
+        "required_when": {
+          "input": "volume_basis",
+          "equals": "자연상태"
+        },
+        "ask": "현장 실측 토량변화율 L(흐트러진 상태 체적/자연상태 체적)은 얼마입니까?",
+        "source": "공통 1-2-3 p64~65, 현장 시험값"
+      },
+      {
+        "name": "quantity",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
         "unit": "㎥",
         "required": true,
-        "ask": "적재함용적은 몇 ㎥입니까?",
-        "source": "Q 산출 공식"
+        "ask": "견적 작업량은 몇 ㎥입니까?",
+        "source": "현장 물량"
       },
       {
-        "name": "f_factor",
+        "name": "fuel_price",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
-        "unit": null,
+        "unit": "원/ℓ",
         "required": true,
-        "ask": "체적환산계수(f)는 얼마입니까?",
-        "source": "Q 산출 공식"
+        "ask": "해당 지역 경유 단가는 ℓ당 몇 원입니까?",
+        "source": "공통 8-1-7 유류가격은 해당지역의 가격"
       }
     ],
     "tables": [
@@ -181,20 +226,345 @@
         "cite": {
           "table_id": "p233-t1"
         }
+      },
+      {
+        "id": "p65-t1",
+        "role": "체적환산계수(f)",
+        "source": "공통 1-2-3 printed 65쪽 3. 체적환산계수(f) 표",
+        "unit": "무차원",
+        "values": {
+          "자연상태의체적": {
+            "자연상태의\n체적": "1",
+            "흐트러진상태의\n체적": "L",
+            "다져진후의\n체적": "C"
+          },
+          "흐트러진상태의체적": {
+            "자연상태의\n체적": "1/L",
+            "흐트러진상태의\n체적": "1",
+            "다져진후의\n체적": "C/L"
+          }
+        },
+        "cite": {
+          "table_id": "p65-t1"
+        }
       }
     ],
     "crew_rules": [],
     "quantity_model": {
-      "name": "not_calculable",
-      "params": {},
+      "name": "formula",
+      "params": {
+        "derived": [
+          {
+            "name": "K",
+            "kind": "table_cell",
+            "unit": "무차원",
+            "source": "PDF printed 176쪽 1. 적재계수(K)",
+            "cases": [
+              {
+                "table": "p232-t0",
+                "row_input": "soil_condition",
+                "column": "적재계수"
+              }
+            ]
+          },
+          {
+            "name": "E",
+            "kind": "table_cell",
+            "unit": "무차원",
+            "source": "PDF printed 177쪽 p233-x1 작업효율(E) 원문 행별 값",
+            "cases": [
+              {
+                "when": {
+                  "site_condition": "작업현장이 넓으며 지형과 토질조건이 좋고 어느 정도 모여 있으므로 작업이 순조롭게 될 때"
+                },
+                "value": "0.85",
+                "cite": {
+                  "chunk_id": "p233-x1",
+                  "quote": "작업이 순조롭게 될 때 0.85"
+                }
+              },
+              {
+                "when": {
+                  "site_condition": "작업현장이 넓으나 함수비로 토질의 변화가 일어나기 쉬운 때 등으로 작업이 보통으로 진행될 때"
+                },
+                "value": "0.80",
+                "cite": {
+                  "chunk_id": "p233-x1",
+                  "quote": "작업이 보통으로 진행될 때 0.80"
+                }
+              },
+              {
+                "when": {
+                  "site_condition": "작업현장이 넓지 않고 다른 작업기계와의 교차가 많고 토질조건도 좋지 않으므로 작업이 순조롭지 못할 때"
+                },
+                "value": "0.70",
+                "cite": {
+                  "chunk_id": "p233-x1",
+                  "quote": "작업이 순조롭지 못할 때 0.70"
+                }
+              },
+              {
+                "when": {
+                  "site_condition": "작업현장이 좁고 작업이 복잡할 때, 또는 토질조건이 나쁘므로 작업진행이 불량할 때"
+                },
+                "value": "0.60",
+                "cite": {
+                  "chunk_id": "p233-x1",
+                  "quote": "작업진행이 불량할 때 0.60"
+                }
+              }
+            ]
+          },
+          {
+            "name": "V1",
+            "kind": "table_cell",
+            "unit": "m/분",
+            "source": "PDF printed 177쪽 4. V1 및 V2의 값",
+            "cases": [
+              {
+                "table": "p233-t1",
+                "row_input": "road_condition",
+                "column": "적재시주행\n속도(m/분)"
+              }
+            ]
+          },
+          {
+            "name": "V2",
+            "kind": "table_cell",
+            "unit": "m/분",
+            "source": "PDF printed 177쪽 4. V1 및 V2의 값",
+            "cases": [
+              {
+                "table": "p233-t1",
+                "row_input": "road_condition",
+                "column": "공차시주행\n속도(m/분)"
+              }
+            ]
+          },
+          {
+            "name": "t",
+            "kind": "table_cell",
+            "unit": "분",
+            "source": "PDF printed 177쪽 3. 1회 싸이클시간(cm)",
+            "cases": [
+              {
+                "when": {
+                  "push_dozer_used": true
+                },
+                "value": "1.6",
+                "cite": {
+                  "chunk_id": "p233-x6",
+                  "quote": "푸쉬도우저를 사용할 때 1.6분, 사용하지 않을 때 2.8분"
+                }
+              },
+              {
+                "when": {
+                  "push_dozer_used": false
+                },
+                "value": "2.8",
+                "cite": {
+                  "chunk_id": "p233-x6",
+                  "quote": "푸쉬도우저를 사용할 때 1.6분, 사용하지 않을 때 2.8분"
+                }
+              }
+            ]
+          },
+          {
+            "name": "q",
+            "kind": "expression",
+            "unit": "㎥",
+            "source": "PDF printed 176쪽 8-2-6: q=적재함용적×적재계수(K)",
+            "expression": {
+              "mul": [
+                {
+                  "input": "machine_spec"
+                },
+                {
+                  "input": "K"
+                }
+              ]
+            },
+            "cite": {
+              "chunk_id": "p232-x2",
+              "quote": "q : 적재함용적×적재계수(K)"
+            }
+          },
+          {
+            "name": "L_eff",
+            "kind": "table_cell",
+            "unit": "무차원",
+            "source": "공통 1-2-3 p65-t1: 자연상태 물량은 현장 실측 L, 흐트러진 상태 물량은 1",
+            "cases": [
+              {
+                "when": {
+                  "volume_basis": "자연상태"
+                },
+                "input_value": "L",
+                "cite": {
+                  "table_id": "p65-t1",
+                  "row": "흐트러진상태의체적",
+                  "column": "자연상태의\n체적",
+                  "value": "1/L"
+                }
+              },
+              {
+                "when": {
+                  "volume_basis": "흐트러진 상태"
+                },
+                "value": "1",
+                "cite": {
+                  "table_id": "p65-t1",
+                  "row": "흐트러진상태의체적",
+                  "column": "흐트러진상태의\n체적",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          {
+            "name": "f",
+            "kind": "expression",
+            "unit": "무차원",
+            "source": "f=1/L_eff; 1-2-3 p65-t1 체적환산계수",
+            "expression": {
+              "div": [
+                {
+                  "number": "1"
+                },
+                {
+                  "input": "L_eff"
+                }
+              ]
+            },
+            "cite": {
+              "table_id": "p65-t1"
+            }
+          },
+          {
+            "name": "cm",
+            "kind": "expression",
+            "unit": "분",
+            "source": "PDF printed 177쪽 3. 1회 싸이클시간(cm)",
+            "expression": {
+              "add": [
+                {
+                  "div": [
+                    {
+                      "input": "L1"
+                    },
+                    {
+                      "input": "V1"
+                    }
+                  ]
+                },
+                {
+                  "div": [
+                    {
+                      "input": "L2"
+                    },
+                    {
+                      "input": "V2"
+                    }
+                  ]
+                },
+                {
+                  "input": "t"
+                }
+              ]
+            },
+            "cite": {
+              "chunk_id": "p233-x6",
+              "quote": "cm = L1/V1 + L2/V2 + t"
+            }
+          },
+          {
+            "name": "Q",
+            "kind": "expression",
+            "unit": "㎥/hr",
+            "source": "PDF printed 176쪽 8-2-6 시간당 작업량 식",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "number": "60"
+                    },
+                    {
+                      "input": "q"
+                    },
+                    {
+                      "input": "f"
+                    },
+                    {
+                      "input": "E"
+                    }
+                  ]
+                },
+                {
+                  "input": "cm"
+                }
+              ]
+            },
+            "cite": {
+              "chunk_id": "p232-x0",
+              "quote": "Q = 60×q×f×E/cm"
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "kind": "formula",
+            "name": "시간당 작업량 Q",
+            "resource_kind": "reference",
+            "unit": "㎥/hr",
+            "expression": {
+              "input": "Q"
+            },
+            "formula": "Q = 60 × q × f × E / cm",
+            "source": "PDF printed 176쪽 8-2-6",
+            "cite": {
+              "chunk_id": "p232-x2",
+              "quote": "Q = 60×q×f×E/cm"
+            }
+          },
+          {
+            "kind": "formula",
+            "name": "모터 스크레이퍼",
+            "resource_kind": "equipment",
+            "unit": "hr",
+            "expression": {
+              "div": [
+                {
+                  "number": "1"
+                },
+                {
+                  "input": "Q"
+                }
+              ]
+            },
+            "formula": "장비 가동시간/㎥ = 1 ÷ 시간당 작업량 Q",
+            "source": "PDF printed 176쪽 Q(㎥/hr)에서 단위물량당 장비시간으로 환산"
+          }
+        ],
+        "quantity_input": "quantity",
+        "equipment": {
+          "line_name": "모터 스크레이퍼",
+          "label": "모터 스크레이퍼",
+          "machine_code_input": "machine_spec",
+          "operator_rate_code": "1048",
+          "fuel_price_input": "fuel_price"
+        }
+      },
       "steps": [
-        "입력된 조건에 따라 적재계수(K), 작업효율(E), 주행속도(V1, V2)를 구한다.",
-        "푸쉬도우저 사용 여부에 따라 기어변속시간(t)을 결정한다.",
-        "1회 싸이클시간(cm) = L1/V1 + L2/V2 + t 를 계산한다.",
-        "시간당 작업량(Q) = (60 * q * f * E) / cm 를 계산한다."
+        "토질 조건에서 적재계수 K, 현장조건에서 작업효율 E를 조회한다.",
+        "기계 규격으로 적재함 용적을 정하고 q=적재함용적×K를 계산한다.",
+        "현장 도로상태에서 적재·공차 주행속도 V1,V2를 조회하고, 푸쉬도우저 사용 여부로 기어변속시간 t(1.6분/2.8분)를 정한다.",
+        "cm=L1/V1+L2/V2+t를 계산한다.",
+        "현장 토량 기준과 실측 L에서 체적환산계수 f를 구분하여 결정한다.",
+        "Q=60×q×f×E/cm를 계산하고, 요청 물량×1/Q로 장비 가동시간을 산출한다."
       ],
-      "source": "PDF 176~177쪽",
-      "rounding": "해당 없음"
+      "source": "2026 건설공사 표준품셈 공통부문 8-2-6 printed 176~177쪽; 1-2-3 체적환산계수 p65",
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
       {
@@ -212,13 +582,28 @@
         }
       }
     ],
-    "not_calculated": [],
+    "not_calculated": [
+      {
+        "item": "푸쉬도우저 별도 투입·운전경비",
+        "when": {
+          "push_dozer_used": true
+        },
+        "reason": "원문은 푸쉬도우저 사용 시 1회 사이클 시간 t=1.6분을 규정하지만, 별도 장비시간·규격·경비량은 제시하지 않습니다. 스크레이퍼 Q와 시간은 산출하고 추가 장비 비용은 미산정으로 둡니다.",
+        "source": "PDF printed 177쪽 3. 1회 싸이클시간(cm)",
+        "cite": {
+          "chunk_id": "p233-x6",
+          "quote": "푸쉬도우저를 사용할 때 1.6분, 사용하지 않을 때 2.8분"
+        }
+      }
+    ],
     "supply_rules": [],
-    "cost_rules": []
+    "cost_rules": [],
+    "open_questions": [],
+    "questions": []
   },
-  "calc_type": "not_calculable",
-  "calc_type_raw": "not_calculable",
-  "calc_type_reason": "기계의 시간당 작업량(Q)을 산출하는 공식으로, 현재 지원하는 일당 작업조형이나 단위당 품 계산 모델에 해당하지 않습니다.",
+  "calc_type": "formula",
+  "calc_type_raw": "formula",
+  "calc_type_reason": "PDF 8-2-6의 원문 표·사이클 식·생산량 식을 통해 시간당 생산량 및 단위물량당 장비시간 산출.",
   "citations": [
     {
       "table_id": "p232-t0",
@@ -245,14 +630,8 @@
       "quote": "푸쉬도우저를 사용할 때 1.6분, 사용하지 않을 때 2.8분"
     }
   ],
-  "open_questions": [
-    "작업효율(E)이 표가 아닌 텍스트로 파싱되어 있어, 별도의 표로 구성하지 않고 입력값의 선택지로 처리했습니다."
-  ],
-  "questions": [
-    "모터 스크레이퍼의 시간당 작업량은 어떻게 계산하나요?",
-    "푸쉬도우저를 사용할 때와 안 할 때 1회 싸이클시간 계산 시 기어변속시간(t)은 어떻게 적용하나요?",
-    "적재함용적과 체적환산계수는 어디서 확인하나요?"
-  ],
+  "open_questions": [],
+  "questions": [],
   "meta": {
     "model": "gemini-3.1-pro-preview",
     "created_at": "2026-09-28T18:22:03.821997+00:00",
@@ -265,7 +644,7 @@
     ],
     "prompt_sha256": "cc9078ada637ad8a111226633e83770ac9603e51dc8fec4889fa01f66ad0969b",
     "chunks_path": "C:\\Users\\daeseong\\Desktop\\PROJECTS\\civilai-construction-risk-agent\\data\\processed\\chunks.all.jsonl",
-    "chunks_sha256": "631d83f534f97e3cbfed9dbee0e3c869b33e8ccce3872fe69ebbcf49db23741b",
+    "chunks_sha256": "bb50c471e323c7a52c3a2a9e01f467ec8c61f0d7c10c9373ba18737b376efd8c",
     "citation_retry_used": false,
     "citation_issues_after_retry": []
   }

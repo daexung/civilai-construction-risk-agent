@@ -23,7 +23,7 @@ EXPECTED = {
 def main() -> None:
     package = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
     spec = package["draft"]
-    assert package["calc_type"] == "adjusted_daily_crew"
+    assert package["calc_type"] == "daily_crew"
     assert spec["quantity_model"]["name"] == "adjusted_daily_crew"
 
     pdf = fitz.open(PDF)

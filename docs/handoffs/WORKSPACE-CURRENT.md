@@ -1,6 +1,16 @@
 # 현재 작업 기준
 
-기준일: 2026-10-31
+기준일: 2026-11-01
+
+## 최신 브랜치 정리 및 핫픽스 분리
+
+계산 확대 변경은 `codex/expand-equipment-estimates-20261101`에 로컬 체크포인트 커밋으로 보존한다. 이후 원본 작업 폴더는 최신 `origin/main`(확인한 기준 43a3b4a)에서 만든 `codex/hotfix-conversation-20261101`을 사용한다. 핫픽스에 미배포 계산 확대 변경을 섞지 않는다. 체크포인트 커밋은 배포·머지 승인이 아니며 푸시하지 않는다.
+
+종료된 병렬 작업 브랜치 3개는 모두 같은 43a3b4a에서 갈라졌고 자체 커밋은 없다. 각 worktree의 미커밋·미추적·캐시를 제외한 로컬 산출물은 원본 `tmp/branch-cleanup-20261101/`의 ZIP·manifest·binary diff로 보존한 뒤 worktree와 해당 임시 브랜치를 정리한다. `tmp/parallel-execution-20261101/`의 공통 기준선·통합 결과·검사 로그는 계속 유지한다. 정리 실행 결과의 커밋·최종 브랜치는 Git과 `tmp/branch-cleanup-20261101/result.json`을 확인한다.
+
+개발 기준 체크리스트는 `docs/plans/FOLLOW-UP-CHECKLIST.md`, 첫 병렬 통합 결과는 `docs/reviews/calculation-parallel-2026-11-01.md`다. 저장 증분 집계는 928/6/122/2이며 전체 정확성이나 견적 완성률은 아니다. 실제 배포 상태는 이번 정리로 바뀌지 않는다. 아래 내용은 이전 정리 이력이다.
+
+## 이전 정리 이력 (2026-10-31)
 
 정리 완료 후 실제 작업 위치는 C:/Users/user/Desktop/PROJECTS/civilai-construction-risk-agent, 브랜치는 main이다. 이전 tmp/integration-main-168d80a의 계산 확장 작업을 이 위치의 main에 통합한다. 옛 작업 폴더로 돌아가 구현하지 않는다.
 

@@ -316,6 +316,7 @@
     "2026-정오표1차/공통/5-1-4/H-Beam해체_띠장",
     "2026-정오표1차/공통/5-1-5/H-Beam해체",
     "2026-정오표1차/공통/5-1-6/흙막이판_설치_해체",
+    "2026-정오표1차/공통/5-1-8/복공판설치철거",
     "2026-정오표1차/공통/5-2-1/매트부설",
     "2026-정오표1차/공통/5-3-3/말뚝두부정리(강관)",
     "2026-정오표1차/공통/5-3-4/말뚝두부정리(콘크리트)",
@@ -374,6 +375,7 @@
     "2026-정오표1차/공통/8-2-28/터널전단면_굴착기",
     "2026-정오표1차/공통/8-2-3/굴착기",
     "2026-정오표1차/공통/8-2-5/로더",
+    "2026-정오표1차/공통/8-2-6/모터스크레이퍼",
     "2026-정오표1차/공통/8-3-1/토공기계",
     "2026-정오표1차/공통/8-3-10/해상장비",
     "2026-정오표1차/공통/8-3-2/[10]다짐기계",
@@ -1087,12 +1089,6 @@
       "reason": "no compatible existing calculator in this runner"
     },
     {
-      "id": "2026-정오표1차/공통/5-1-8/복공판설치철거",
-      "calc_type": "not_calculable",
-      "stage": "calculator_selection",
-      "reason": "no compatible existing calculator in this runner"
-    },
-    {
       "id": "2026-정오표1차/공통/5-1-9/주열식현장벽체공법",
       "calc_type": "not_calculable",
       "stage": "calculator_selection",
@@ -1292,12 +1288,6 @@
     },
     {
       "id": "2026-정오표1차/공통/8-2-4/트랜처",
-      "calc_type": "not_calculable",
-      "stage": "calculator_selection",
-      "reason": "no compatible existing calculator in this runner"
-    },
-    {
-      "id": "2026-정오표1차/공통/8-2-6/모터스크레이퍼",
       "calc_type": "not_calculable",
       "stage": "calculator_selection",
       "reason": "no compatible existing calculator in this runner"
@@ -1721,25 +1711,25 @@
     "total": 1056,
     "inventory_total": 1058,
     "excluded_from_execution": 2,
-    "skipped_without_compatible_calculator": 124,
+    "skipped_without_compatible_calculator": 122,
     "skipped_misfiled": 2,
     "source_preflight_failures": 0,
     "by_calc_type": {
       "daily_crew": {
-        "attempted": 325,
-        "executable": 325
+        "attempted": 327,
+        "executable": 327
       },
-      "per_unit": {
-        "attempted": 527,
-        "executable": 521
+      "formula": {
+        "attempted": 18,
+        "executable": 18
       },
       "lookup_only": {
         "attempted": 62,
         "executable": 62
       },
-      "formula": {
-        "attempted": 17,
-        "executable": 17
+      "per_unit": {
+        "attempted": 527,
+        "executable": 521
       }
     },
     "failure_reasons_top10": [
@@ -1771,8 +1761,8 @@
     "by_scope": {
       "기타": {
         "total": 1015,
-        "attempted": 894,
-        "executable": 889
+        "attempted": 896,
+        "executable": 891
       },
       "공통/6장": {
         "total": 41,
@@ -1794,7 +1784,23 @@
       "p495-t1",
       "p514-t0"
     ],
-    "executable": 926,
+    "executable": 928,
     "failed": 6
+  },
+  "_incremental_validation": {
+    "date": "2026-11-01",
+    "promoted_ids": [
+      "2026-정오표1차/공통/5-1-8/복공판설치철거",
+      "2026-정오표1차/공통/8-2-6/모터스크레이퍼"
+    ],
+    "method": "source-validated candidate plus offline calc/price and actual-file dialogue/edit/restore/XLSX; no full inventory replay",
+    "price_limits": {
+      "2026-정오표1차/공통/5-1-8/복공판설치철거": "PARTIAL: crane rate and separate source scope unpriced",
+      "2026-정오표1차/공통/8-2-6/모터스크레이퍼": "Push dozer additional cost PARTIAL; no pusher full scraper price verified"
+    },
+    "legacy_selector_restored": [
+      "2026-정오표1차/기계설비/1-1-2/용접배관"
+    ],
+    "source_review": "source-final-review.json"
   }
 }

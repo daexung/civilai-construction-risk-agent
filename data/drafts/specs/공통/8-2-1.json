@@ -43,7 +43,21 @@
         "unit": "ton",
         "required": true,
         "ask": "불도저의 규격(ton)은 무엇입니까?",
-        "source": "PDF 169쪽 p225-t0 급수"
+        "source": "PDF 169쪽 p225-t0 급수",
+        "machine_codes": {
+          "무한궤도": {
+            "7": "0101-0007",
+            "10": "0101-0010",
+            "12": "0101-0012",
+            "19": "0101-0019",
+            "32": "0101-0032"
+          },
+          "타이어": {
+            "15": "0102-0015",
+            "28": "0102-0028",
+            "33": "0102-0033"
+          }
+        }
       },
       {
         "name": "transport_distance",
@@ -134,13 +148,47 @@
         "source": "PDF 169~170쪽 2. 1회 싸이클 시간 [주]"
       },
       {
-        "name": "f_coefficient",
+        "name": "quantity",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "㎥",
+        "required": true,
+        "ask": "불도저로 작업할 토량은 몇 ㎥입니까?",
+        "source": "현장 입력 물량"
+      },
+      {
+        "name": "fuel_price",
+        "type": "positive_rational",
+        "allowed_values": "0보다 큰 수",
+        "unit": "원/ℓ",
+        "required": true,
+        "ask": "현장 적용 경유 가격은 얼마입니까?",
+        "source": "사용자 계약·현장 단가"
+      },
+      {
+        "name": "volume_basis",
+        "type": "enum",
+        "allowed_values": [
+          "자연상태",
+          "흐트러진 상태"
+        ],
+        "unit": null,
+        "required": true,
+        "ask": "작업 물량은 자연상태 기준입니까, 흐트러진 상태 기준입니까?",
+        "source": "PDF 1-2-3 체적환산계수 표"
+      },
+      {
+        "name": "L",
         "type": "positive_rational",
         "allowed_values": "0보다 큰 수",
         "unit": null,
-        "required": true,
-        "ask": "체적환산계수(f)는 얼마입니까?",
-        "source": "PDF 168쪽 8-2-1 산정식 f"
+        "required": false,
+        "required_when": {
+          "input": "volume_basis",
+          "equals": "자연상태"
+        },
+        "ask": "토량변화율 L(흐트러진 상태 체적/자연상태 체적)은 얼마입니까? (현장 시험값)",
+        "source": "PDF 1-2-3 체적환산계수 표"
       }
     ],
     "tables": [
@@ -663,6 +711,83 @@
                 }
               ]
             }
+          },
+          {
+            "name": "L_eff",
+            "kind": "table_cell",
+            "unit": "",
+            "source": "1-2-3 체적환산계수",
+            "cases": [
+              {
+                "when": {
+                  "volume_basis": "자연상태"
+                },
+                "input_value": "L",
+                "cite": {
+                  "table_id": "p65-t1",
+                  "row": "흐트러진상태의체적",
+                  "column": "자연상태의체적",
+                  "value": "1/L"
+                }
+              },
+              {
+                "when": {
+                  "volume_basis": "흐트러진 상태"
+                },
+                "value": "1",
+                "cite": {
+                  "table_id": "p65-t1",
+                  "row": "흐트러진상태의체적",
+                  "column": "자연상태의체적",
+                  "value": "1/L"
+                }
+              }
+            ]
+          },
+          {
+            "name": "f",
+            "kind": "expression",
+            "unit": "",
+            "source": "f = 1/L (자연상태 환산), 흐트러진 상태 1",
+            "expression": {
+              "div": [
+                {
+                  "number": "1"
+                },
+                {
+                  "input": "L_eff"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Q_value",
+            "kind": "expression",
+            "source": "PDF 168쪽 8-2-1 산정식",
+            "unit": "㎥/hr",
+            "expression": {
+              "div": [
+                {
+                  "mul": [
+                    {
+                      "number": "60"
+                    },
+                    {
+                      "input": "q"
+                    },
+                    {
+                      "input": "f"
+                    },
+                    {
+                      "input": "E"
+                    }
+                  ]
+                },
+                {
+                  "input": "cm"
+                }
+              ]
+            }
           }
         ],
         "outputs": [
@@ -683,32 +808,47 @@
             "resource_kind": "reference",
             "unit": "㎥/hr",
             "expression": {
+              "input": "Q_value"
+            },
+            "formula": "Q = 60 × q × f × E / cm",
+            "source": "PDF 168쪽 8-2-1 산정식",
+            "cite": {
+              "chunk_id": "p224-x5",
+              "quote": "Q = 60·q·f·E/cm; f : 체적환산계수"
+            }
+          },
+          {
+            "kind": "formula",
+            "name": "불도저",
+            "resource_kind": "equipment",
+            "unit": "hr/㎥",
+            "expression": {
               "div": [
                 {
-                  "mul": [
-                    {
-                      "number": "60"
-                    },
-                    {
-                      "input": "q"
-                    },
-                    {
-                      "input": "f_coefficient"
-                    },
-                    {
-                      "input": "E"
-                    }
-                  ]
+                  "number": "1"
                 },
                 {
-                  "input": "cm"
+                  "input": "Q_value"
                 }
               ]
             },
-            "formula": "Q = 60 × q × f × E / cm",
-            "source": "PDF 168쪽 8-2-1 산정식"
+            "formula": "불도저 가동시간/㎥ = 1 ÷ 시간당 작업량 Q",
+            "source": "PDF 168쪽 Q와 작업량 단위당 시간 환산",
+            "cite": {
+              "chunk_id": "p224-x5",
+              "quote": "Q = 60·q·f·E/cm; f : 체적환산계수"
+            }
           }
-        ]
+        ],
+        "quantity_input": "quantity",
+        "equipment": {
+          "line_name": "불도저",
+          "label": "불도저",
+          "machine_code_input": "bulldozer_capacity",
+          "machine_type_input": "bulldozer_type",
+          "operator_rate_code": "1048",
+          "fuel_price_input": "fuel_price"
+        }
       },
       "steps": [
         "qﾟ·e·E 표에서 값을 고르고 정지·터파기면 E에서 0.1·0.05를 뺀다.",
@@ -716,7 +856,8 @@
         "cm = L/V1 + L/V2 + 0.25, q = qﾟ×e, Q = 60×q×f×E/cm를 계산한다."
       ],
       "source": "PDF 168~170쪽 8-2-1 산정식",
-      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
+      "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용",
+      "not_calculated": []
     },
     "blocked": [
       {
@@ -1203,16 +1344,7 @@
         }
       }
     ],
-    "not_calculated": [
-      {
-        "item": "체적환산계수(f)",
-        "source": "PDF 168쪽 8-2-1 산정식",
-        "cite": {
-          "chunk_id": "p224-x5",
-          "quote": "f : 체적환산계수"
-        }
-      }
-    ],
+    "not_calculated": [],
     "supply_rules": [],
     "cost_rules": []
   },
