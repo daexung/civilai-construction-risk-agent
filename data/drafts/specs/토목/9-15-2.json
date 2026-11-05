@@ -150,27 +150,27 @@
         "surcharges": [
           {
             "when": {
-              "division_display": "????? ?? ?"
+              "division_display": "인가·허가 면적 등"
             },
             "rate": "0.40",
             "applies_to": [
-              "????",
-              "??????",
-              "?????"
+              "지적기사",
+              "지적산업기사",
+              "지적기능사"
             ],
-            "source": "PDF 610? ? ???? ?"
+            "source": "PDF 609쪽 ⑤ 기타사항 ㉯"
           },
           {
             "when": {
-              "division_display": "????"
+              "division_display": "지정분할"
             },
             "rate": "0.30",
             "applies_to": [
-              "????",
-              "??????",
-              "?????"
+              "지적기사",
+              "지적산업기사",
+              "지적기능사"
             ],
-            "source": "PDF 610? ? ???? ?"
+            "source": "PDF 609쪽 ⑤ 기타사항 ㉰"
           }
         ],
         "coefficient_rules": [

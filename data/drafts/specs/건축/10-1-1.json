@@ -167,13 +167,13 @@
             "row_template": "문선 {trade}",
             "column": "수량",
             "quantity_input": "architrave_length",
-            "basis": "?/m",
+            "basis": "인/m",
             "when": {
               "has_architrave": true
             },
             "cite": {
               "table_id": "p685-t0",
-              "row": "??",
+              "row": "문선",
               "value": "0.010"
             }
           }

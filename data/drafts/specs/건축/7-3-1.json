@@ -27,7 +27,7 @@
         "unit": "mm",
         "required": true,
         "ask": "Loop drain diameter in mm?",
-        "source": "PDF printed page 615 note ?"
+        "source": "PDF printed page 615 note ①"
       }
     ],
     "tables": [
@@ -72,7 +72,7 @@
         "Read source labor per loop drain location.",
         "Multiply the declared number of locations by each source labor rate."
       ],
-      "source": "PDF printed page 615 p671-t0; note ? scope, notes ? and ?",
+      "source": "PDF printed page 615 p671-t0; note ① scope, notes ② and ③",
       "rounding": "Exact source rates preserved."
     },
     "blocked": [
@@ -84,10 +84,10 @@
           "value": "100"
         },
         "reason": "Source basis covers 100-150mm loop drains.",
-        "source": "PDF printed page 615 note ?",
+        "source": "PDF printed page 615 note ①",
         "cite": {
           "chunk_id": "p671-x4",
-          "quote": "? ? ?? ????? ?? ?100??150?? ?? ????."
+          "quote": "① 본 품은 루프드레인 규격 ø100㎜∼150㎜의 설치 기준이다."
         }
       },
       {
@@ -98,20 +98,20 @@
           "value": "150"
         },
         "reason": "Source basis covers 100-150mm loop drains.",
-        "source": "PDF printed page 615 note ?",
+        "source": "PDF printed page 615 note ①",
         "cite": {
           "chunk_id": "p671-x4",
-          "quote": "? ? ?? ????? ?? ?100??150?? ?? ????."
+          "quote": "① 본 품은 루프드레인 규격 ø100㎜∼150㎜의 설치 기준이다."
         }
       }
     ],
     "not_calculated": [
       {
         "item": "Lift equipment machine cost when required",
-        "source": "PDF printed page 615 note ?",
+        "source": "PDF printed page 615 [주]",
         "cite": {
           "chunk_id": "p671-x4",
-          "quote": "? ??(????? ?)? ??? ?? ????? ?? ????."
+          "quote": "③ 장비(고소작업차 등)가 필요할 경우 기계경비는 별도 계상한다."
         }
       }
     ],
@@ -124,7 +124,7 @@
         "rate": "0.02",
         "cite": {
           "chunk_id": "p671-x4",
-          "quote": "? ??? ? ????(????? ?)? ????? 2%? ????."
+          "quote": "③ 잡재료 및 소모재료(방수시멘트 등)는 주재료비의 2%로 계상한다."
         }
       }
     ],

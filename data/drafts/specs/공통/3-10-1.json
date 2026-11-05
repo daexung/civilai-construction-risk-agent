@@ -139,7 +139,7 @@
   },
   "calc_type": "formula",
   "calc_type_raw": "formula",
-  "calc_type_reason": "The source gives hourly production rates; shared formula calculator converts area ? source area/hour into equipment hours.",
+  "calc_type_reason": "The source gives hourly production rates; shared formula calculator converts area ÷ source area/hour into equipment hours.",
   "citations": [
     {
       "table_id": "p141-t0",

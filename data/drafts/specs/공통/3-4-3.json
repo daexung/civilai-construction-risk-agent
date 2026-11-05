@@ -78,9 +78,9 @@
     "tables": [
       {
         "id": "p131-t2",
-        "role": "?? ????????? ?? ???? ??? ??",
+        "role": "다짐장비·다짐두께·토질별 일당 작업조와 시공량",
         "source": "PDF printed p.75, 3-4-3 table; merged axes normalized to composite headers",
-        "unit": "?, ?, ?/?",
+        "unit": "인, 대, ㎥/일",
         "values": {
           "플레이트콤팩터": {
             "규격": "1.5ton",
@@ -266,9 +266,9 @@
         "quantity_input": "volume"
       },
       "steps": [
-        "??????????? ?? ? ?? ?? ???? ????.",
-        "??? ?? ????? ??? ????? ????.",
-        "????? ?? ??? ??? ?? ?? ??? ???."
+        "다짐장비·다짐두께·토질에 맞는 일일 시공량을 고른다.",
+        "작업일수 = 토량 ÷ 일일 시공량으로 구한다.",
+        "작업일수에 작업조 인원과 장비 대수를 곱해 투입량을 구한다."
       ],
       "source": "PDF printed p.75, 3-4-3 table and notes",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -291,16 +291,16 @@
     ],
     "not_calculated": [
       {
-        "item": "???",
-        "source": "PDF printed p.75, [?] ?",
+        "item": "살수품",
+        "source": "PDF printed p.75, [주] ⑤",
         "cite": {
           "chunk_id": "p131-x17",
           "quote": "⑤ 살수품은 물의 운반거리에 따라 별도 가산한다."
         }
       },
       {
-        "item": "?? ???",
-        "source": "PDF printed p.75, [?] ?",
+        "item": "살수 물 운반",
+        "source": "PDF printed p.75, [주] ⑤",
         "cite": {
           "chunk_id": "p131-x17",
           "quote": "③ 플레이트 콤팩터, 래머 기계경비 산정시 조정원은 계상하지 않는다."
@@ -386,7 +386,7 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "?? ???? ??? ???????? ?? ??? ?? ???? ???? ??????? ???.",
+  "calc_type_reason": "장비별 일당 작업조와 다짐두께·토질별 시공량이 표에 있어 일당 작업조 방식이 적합하다.",
   "citations": [
     {
       "table_id": "p131-t2",

@@ -30,7 +30,7 @@
         "unit": null,
         "required": true,
         "ask": "Is this roof protective concrete?",
-        "source": "p665-x7 note ?"
+        "source": "p665-x7 note ①"
       }
     ],
     "tables": [
@@ -87,7 +87,7 @@
           "value": false
         },
         "reason": "Source basis is roof protective concrete only.",
-        "source": "PDF printed page 609 note ?",
+        "source": "PDF printed page 609 note ①",
         "cite": {
           "chunk_id": "p665-x7"
         }
