@@ -1,0 +1,43 @@
+{
+ "data/drafts/specs/건축/11-2-9.json": [
+  "비용 분류 '경비 및 재료비' 는 재료비·노무비·경비가 아님(가격 계산 오류)"
+ ],
+ "data/drafts/specs/건축/2-1-2.json": [
+  "비용 규칙에 base·category·name 없음(가격 계산 오류)"
+ ],
+ "data/drafts/specs/건축/2-3-1.json": [
+  "비용 규칙에 base·category·name 없음(가격 계산 오류)"
+ ],
+ "data/drafts/specs/건축/2-3-2.json": [
+  "비용 규칙에 base·category·name 없음(가격 계산 오류)"
+ ],
+ "data/drafts/specs/건축/3-1-1.json": [
+  "비용 규칙에 base·category·name 없음(가격 계산 오류)"
+ ],
+ "data/drafts/specs/건축/3-2-4.json": [
+  "비용 규칙에 base·category·name 없음(가격 계산 오류)"
+ ],
+ "data/drafts/specs/건축/6-6-2.json": [
+  "비용 분류 'equipment cost' 는 재료비·노무비·경비가 아님(가격 계산 오류)"
+ ],
+ "data/drafts/specs/건축/7-3-1.json": [
+  "비용 규칙 기준 'material_subtotal' 는 계산기가 지원하지 않음(가격 계산 오류)",
+  "비용 분류 'material cost' 는 재료비·노무비·경비가 아님(가격 계산 오류)"
+ ],
+ "data/drafts/specs/공통/6-3-6.json": [
+  "조건 'work_type' = '해체' 는 선택지에 없음"
+ ],
+ "data/drafts/specs/기계설비/13-1-1.json": [
+  "할증 대상 '특별인부' ≠ 직종 '특별 인부'(띄어쓰기)"
+ ],
+ "data/drafts/specs/유지관리/4-3-3.json": [
+  "비용 규칙에 base·category·name 없음(가격 계산 오류)"
+ ],
+ "data/drafts/specs/토목/9-5-9.json": [
+  "할증 대상 'MMS 표준자료 제작' 은 카드의 직종·장비가 아님",
+  "할증 대상 'MMS자료수집' 은 카드의 직종·장비가 아님",
+  "할증 대상 '객체추출및묘사' 은 카드의 직종·장비가 아님",
+  "할증 대상 '구조화편집' 은 카드의 직종·장비가 아님",
+  "할증 대상 '이미지처리 (보안처리)' 은 카드의 직종·장비가 아님"
+ ]
+}
