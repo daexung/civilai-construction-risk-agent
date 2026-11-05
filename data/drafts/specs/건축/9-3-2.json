@@ -58,10 +58,10 @@
         "materials": []
       },
       "steps": [
-        "p683-t0?? ?? ??? ??? ???? ????.",
-        "?? ??(m)? 10m ??? ???? ??? ? ???? ????."
+        "p683-t0에서 10m당 직종별 품을 가져온다.",
+        "충전 길이(m)를 10m 단위로 환산해 단위당 품에 곱한다."
       ],
-      "source": "PDF 627? 9-3-2 ?",
+      "source": "PDF 627쪽 9-3-2 표",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [],
@@ -80,7 +80,7 @@
   },
   "calc_type": "per_unit",
   "calc_type_raw": "per_unit",
-  "calc_type_reason": "??? ??? ??? ??? ???? per_unit ?? ???? ??",
+  "calc_type_reason": "10m당 직종별 품이 제시되어 per_unit 방식이 적합하다.",
   "citations": [
     {
       "chunk_id": "p683-x2",

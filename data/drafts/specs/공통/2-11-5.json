@@ -69,8 +69,8 @@
         "additional_materials": []
       },
       "steps": [
-        "Use the source spray area, already calculated from width ? length ? spray frequency ? spray days.",
-        "Apply the source tanker rate 0.008 hours per 100?.",
+        "Use the source spray area, already calculated from width × length × spray frequency × spray days.",
+        "Apply the source tanker rate 0.008 hours per 100㎡.",
         "Keep water supply installation or utility costs outside this rate, as stated by the source."
       ],
       "source": "p118-t1 and p118-x8",
@@ -80,7 +80,7 @@
     "not_calculated": [
       {
         "item": "Water supply facility or utility charges when site water is unavailable",
-        "source": "p118-x8 [?] ?",
+        "source": "p118-x8 [주] ④",
         "reason": "The source directs separate cost accounting and provides no rate in this item."
       }
     ],
@@ -89,7 +89,7 @@
   },
   "calc_type": "per_unit",
   "calc_type_raw": "per_unit",
-  "calc_type_reason": "Source explicitly gives 0.008 equipment-hours per 100?; shared per_unit calculator uses the cumulative spray-area input.",
+  "calc_type_reason": "Source explicitly gives 0.008 equipment-hours per 100㎡; shared per_unit calculator uses the cumulative spray-area input.",
   "citations": [
     {
       "table_id": "p118-t1"

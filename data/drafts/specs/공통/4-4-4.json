@@ -29,8 +29,8 @@
         ],
         "unit": null,
         "required": true,
-        "ask": "?? ?? ? ??? ?????.",
-        "source": "PDF printed p.98, 4-4-4 ??? column groups"
+        "ask": "매트 포장 폭 구간을 선택하세요.",
+        "source": "PDF printed p.98, 4-4-4 시공량 column groups"
       }
     ],
     "tables": [
@@ -55,7 +55,7 @@
         "cite": {
           "table_id": "p154-t0"
         },
-        "unit": "?, ?/?"
+        "unit": "인, ㎡/일"
       }
     ],
     "crew_rules": [],
@@ -79,9 +79,9 @@
         "quantity_input": "area"
       },
       "steps": [
-        "?? ?? ? ??? ?? ?? ???? ????.",
-        "?? ??? ?? ????? ??? ????? ???.",
-        "????? ??? ? ???? ??? ??? ???."
+        "포장 폭 구간에 맞는 일일 시공량을 고른다.",
+        "작업일수 = 포장 면적 ÷ 일일 시공량으로 구한다.",
+        "작업일수에 작업조 인원을 곱해 직종별 인·일을 구한다."
       ],
       "source": "PDF printed p.98, 4-4-4 table",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
@@ -89,8 +89,8 @@
     "blocked": [],
     "not_calculated": [
       {
-        "item": "???? ????",
-        "source": "PDF printed p.98, [?] ?",
+        "item": "설치위치 토공작업",
+        "source": "PDF printed p.98, [주] ③",
         "cite": {
           "chunk_id": "p154-x3",
           "quote": "③ 설치위치의 토공작업은 필요시 별도"
@@ -122,7 +122,7 @@
   },
   "calc_type": "daily_crew",
   "calc_type_raw": "daily_crew",
-  "calc_type_reason": "PDF ?? ?? ?? ???? ???? ???? ?? ??? ???? ???.",
+  "calc_type_reason": "PDF 표에 일당 작업조 인원과 폭별 시공량이 있어 일당 작업조 방식으로 산출한다.",
   "citations": [
     {
       "table_id": "p154-t0"

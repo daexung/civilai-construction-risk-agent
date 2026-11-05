@@ -57,15 +57,15 @@
           "input": "tile_type",
           "equals": "특수타일"
         },
-        "ask": "???? ???? ?? 26~33% ???? ??? ???.",
-        "source": "PDF 587? 3-2-3 ??"
+        "ask": "특수타일의 시공량 감소율은 원문 범위 26~33% 중 몇 %를 적용합니까?",
+        "source": "PDF 587쪽 3-2-3 비고"
       }
     ],
     "tables": [
       {
         "id": "p643-t0",
         "role": "Source daily output by tile size and crew rates reconstructed from original table",
-        "source": "PDF 587? 3-2-3 ?",
+        "source": "PDF 587쪽 3-2-3 표",
         "values": {
           "수량": {
             "0.04~0.10이하": "2",
@@ -87,7 +87,7 @@
         "cite": {
           "table_id": "p643-t0"
         },
-        "unit": "?/???, ?/?"
+        "unit": "인/작업조, ㎡/일"
       }
     ],
     "crew_rules": [],
@@ -137,10 +137,10 @@
       },
       "steps": [
         "Select wall tile output by source tile-size range.",
-        "Apply the source 20% mosaic reduction; for special tile collect an explicit reduction in the source 26?33% interval.",
+        "Apply the source 20% mosaic reduction; for special tile collect an explicit reduction in the source 26~33% interval.",
         "Calculate workdays and source crew person-days."
       ],
-      "source": "PDF 587? 3-2-3 ? ? ???[?]",
+      "source": "PDF 587쪽 3-2-3 표, 비고, [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -151,8 +151,8 @@
           "op": "==",
           "value": "특정 모양으로 형상화된 타일"
         },
-        "reason": "Source note ? requires separate accounting for relief or mural tiles.",
-        "source": "PDF 587? [?] ?",
+        "reason": "Source note ③ requires separate accounting for relief or mural tiles.",
+        "source": "PDF 587쪽 [주] ③",
         "cite": {
           "chunk_id": "p643-x4",
           "quote": "설명 | ② 본 품에는 먹매김, 규준틀설치, 접착제 비빔, 타일붙임, 줄눈파기 및 마무리작업을 포함한다. ③ 특정 모양으로 형상화된 타일(부조타일, 벽화타일)을 붙이는 경우 별도 계상한다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다."
@@ -165,8 +165,8 @@
           "op": "<",
           "value": "26"
         },
-        "reason": "Special tile reduction must be within source 26?33% interval.",
-        "source": "PDF 587? 3-2-3 ??"
+        "reason": "Special tile reduction must be within source 26~33% interval.",
+        "source": "PDF 587쪽 3-2-3 비고"
       },
       {
         "condition": "special reduction above source range",
@@ -175,8 +175,8 @@
           "op": ">",
           "value": "33"
         },
-        "reason": "Special tile reduction must be within source 26?33% interval.",
-        "source": "PDF 587? 3-2-3 ??"
+        "reason": "Special tile reduction must be within source 26~33% interval.",
+        "source": "PDF 587쪽 3-2-3 비고"
       }
     ],
     "not_calculated": [],

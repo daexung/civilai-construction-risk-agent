@@ -43,7 +43,7 @@
         "unit": "mm",
         "required": true,
         "ask": "Select the source thickness band.",
-        "source": "PDF 602? 5-4-9 ? ????(mm)"
+        "source": "PDF 602쪽 5-4-9 표 단열두께(mm)"
       },
       {
         "name": "floor_count",
@@ -53,7 +53,7 @@
         "unit": "층",
         "required": true,
         "ask": "How many stories?",
-        "source": "PDF 602? [?] ?"
+        "source": "PDF 602쪽 [주] ①"
       },
       {
         "name": "fire_spread_prevention_structure",
@@ -65,14 +65,14 @@
         "unit": null,
         "required": true,
         "ask": "Is this mechanically fastened fire-spread-prevention insulation?",
-        "source": "PDF 602? [?] ?"
+        "source": "PDF 602쪽 [주] ①"
       }
     ],
     "tables": [
       {
         "id": "p658-t0",
         "role": "Source thickness-specific exterior-wall labor coefficients",
-        "source": "PDF 602? 5-4-9 ?",
+        "source": "PDF 602쪽 5-4-9 표",
         "unit": "인/㎡",
         "values": {
           "내장공": {
@@ -95,7 +95,7 @@
       {
         "id": "p658-t1",
         "role": "하부 충격보강작업 품",
-        "source": "PDF 602? ?? ?????? ?",
+        "source": "PDF 602쪽 하부 충격보강작업 표",
         "unit": "인/㎡",
         "values": {
           "미장공": {
@@ -112,7 +112,7 @@
       {
         "id": "p658-t2",
         "role": "외벽단열공법 재료량",
-        "source": "PDF 602? [????] ?????? ??? (???? 50? ??)",
+        "source": "PDF 602쪽 [참고자료] 외벽단열공법 재료량 (단열두께 50㎜ 기준)",
         "unit": "㎡당",
         "values": {
           "단열판": {
@@ -250,7 +250,7 @@
         "When lower impact reinforcement is needed, add source rates for plasterer and helper.",
         "Calculate exterior insulation and lower-reinforcement materials from the separate source table."
       ],
-      "source": "PDF 602? 5-4-9 ?, ?? ?? ? ? ??? ?",
+      "source": "PDF 602쪽 5-4-9 표, 하부 충격보강 품 및 재료량 표",
       "rounding": "Source coefficients preserved exactly."
     },
     "blocked": [
@@ -262,7 +262,7 @@
           "value": "4"
         },
         "reason": "원문은 4층 이하 건축물에 적용한다.",
-        "source": "PDF 602? [?] ?",
+        "source": "PDF 602쪽 [주] ①",
         "cite": {
           "chunk_id": "p658-x8",
           "quote": "설명 | [주] ① 본 품의 4층 이하의 건축물 외벽에 타정 부착하여 단열재를 설치(화재확산 방지구조)하는 기준이다."
@@ -276,7 +276,7 @@
           "value": false
         },
         "reason": "타정 부착하여 화재확산 방지구조로 시공하는 경우에 한한다.",
-        "source": "PDF 602? [?] ?",
+        "source": "PDF 602쪽 [주] ①",
         "cite": {
           "chunk_id": "p658-x8",
           "quote": "설명 | [주] ① 본 품의 4층 이하의 건축물 외벽에 타정 부착하여 단열재를 설치(화재확산 방지구조)하는 기준이다."
@@ -286,7 +286,7 @@
     "not_calculated": [
       {
         "item": "마감재(도장, 스타코 등) 시공",
-        "source": "PDF 602? [?] ?",
+        "source": "PDF 602쪽 [주] ③",
         "cite": {
           "chunk_id": "p658-x8",
           "quote": "설명 | 포함한다. ③ 마감재(도장, 스타코 등) 시공은 별도 계상한다. ④ 공구손료 및 경장비(드릴, 접착제 비빔기 등)의 기계경비는 인력품의 1%로 계상한다."

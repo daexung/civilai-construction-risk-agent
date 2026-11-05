@@ -63,8 +63,8 @@
       {
         "id": "p656-t3",
         "role": "Source daily outputs by insulation thickness and reconstructed crew rows",
-        "source": "PDF 600? 5-4-6 ?",
-        "unit": "?/???, ?/?",
+        "source": "PDF 600쪽 5-4-6 표",
+        "unit": "인/작업조, ㎡/일",
         "values": {
           "50이하": {
             "시공량(㎡)": "75"
@@ -139,7 +139,7 @@
         "Calculate workdays and crew person-days from the source 2+1 crew.",
         "Calculate insulation material as area times source coefficient 1.1."
       ],
-      "source": "PDF 600? 5-4-6 ?, 601? ??? ? ? [?]",
+      "source": "PDF 600쪽 5-4-6 표, 601쪽 재료량 표 및 [주]",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [

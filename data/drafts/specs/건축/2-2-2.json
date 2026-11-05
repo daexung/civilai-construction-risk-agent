@@ -93,7 +93,7 @@
         "unit": null,
         "required": true,
         "ask": "Is scaffolding used?",
-        "source": "PDF 582? 2-2-2 ??"
+        "source": "PDF 582쪽 2-2-2 비고"
       },
       {
         "name": "extra_scaffold_lifts",
@@ -102,8 +102,8 @@
         "allowed_values": "0이상의 정수",
         "unit": "회",
         "required": true,
-        "ask": "7.2m ?? ??? ??? ?? 3.6m ?? ??? ? ????? ???? ??? 0???.",
-        "source": "PDF 582? 2-2-2 ??: 3.6m?? ??? 3% ??"
+        "ask": "7.2m 초과 높이에서 비계를 사용할 때 3.6m마다 추가되는 구간은 몇 회입니까? 없으면 0입니다.",
+        "source": "PDF 582쪽 2-2-2 비고: 3.6m마다 시공량 3% 감"
       }
     ],
     "tables": [
@@ -263,10 +263,10 @@
             "when": {
               "forklift_used": true
             },
-            "source": "PDF 582? 2-2-2 ??",
+            "source": "PDF 582쪽 2-2-2 비고",
             "table": "p638-t2",
             "row": "비고",
-            "column": "??",
+            "column": "내용",
             "cite": {
               "table_id": "p638-t2"
             }
@@ -289,7 +289,7 @@
         "Calculate crew workdays and labor/equipment quantities; forklift use removes one helper and adds 2.5 equipment hours per workday.",
         "Calculate source mortar quantity by block size and work area."
       ],
-      "source": "PDF 582? 2-2-2 ????, 583? ??? ?",
+      "source": "PDF 582쪽 2-2-2 기준표·비고, 583쪽 [주] ⑤",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
     "blocked": [
@@ -308,7 +308,7 @@
           }
         ],
         "reason": "The source interval reduction applies only above 7.2m.",
-        "source": "PDF 582? 2-2-2 ??"
+        "source": "PDF 582쪽 2-2-2 비고"
       },
       {
         "condition": "scaffold intervals require scaffolding",
@@ -325,7 +325,7 @@
           }
         ],
         "reason": "3% per 3.6m reduction is conditional on scaffold use.",
-        "source": "PDF 582? 2-2-2 ??"
+        "source": "PDF 582쪽 2-2-2 비고"
       },
       {
         "condition": "declare intervals for scaffolded work over 7.2m",
@@ -347,7 +347,7 @@
           }
         ],
         "reason": "The source requires the number of additional 3.6m scaffold intervals to apply the reduction.",
-        "source": "PDF 582? 2-2-2 ??"
+        "source": "PDF 582쪽 2-2-2 비고"
       }
     ],
     "not_calculated": [
