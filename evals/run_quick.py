@@ -19,7 +19,7 @@ QUICK_CHECKS = [
     "check_equipment", "check_supply", "check_spec_cases", "check_citation", "check_overhead_rates",
     "check_cost_statement", "check_embedding_config", "check_chunk_ids",
     "check_per_unit", "check_adjustments", "check_estimate_tools",
-    "check_scope_inputs", "check_page_divisions",
+    "check_scope_inputs", "check_page_divisions", "check_test_accounts",
 ]
 
 SUMMARY_PATTERN = re.compile(r"통과 (\d+) / 전체 (\d+)")
