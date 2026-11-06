@@ -137,13 +137,15 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "name": "tools and light equipment",
-        "category": "equipment cost",
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
         "base": "labor_subtotal",
         "rate": "0.02",
         "cite": {
-          "chunk_id": "p665-x3"
-        }
+          "chunk_id": "p665-x3",
+          "quote": "③ 공구손료 및 경장비(청소기 등) 기계경비는 인력품의 2%로 계상한다."
+        },
+        "source": "공구손료 및 경장비(청소기 등) 기계경비는 인력품의 2%로 계상한다."
       }
     ],
     "questions": [

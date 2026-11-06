@@ -294,9 +294,10 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "item": "tooling and light equipment cost",
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
         "rate": "0.03",
-        "basis": "labor amount",
         "source": "설명 | 경우 ‘[건축부문] 9-1-1 모르타르 배합’을 따른다. ④ 인방보 설치가 필요한 경우 ‘[건축부문] 2-1-5 인방보 설치’를 따른다. ⑤ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 3%로 계상한다.",
         "cite": {
           "chunk_id": "p639-x17",

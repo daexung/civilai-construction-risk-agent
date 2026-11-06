@@ -81,21 +81,18 @@
           "chunk_id": "p695-x14",
           "quote": "재료량(페인트 등)은 도료 종류에 따라 시방서 및 제조사에서 제시하고 있는 수량을 적용한다."
         }
-      }
-    ],
-    "supply_rules": [],
-    "cost_rules": [
+      },
       {
-        "name": "공구손료 및 잡재료비",
-        "category": "경비 및 재료비",
-        "base": "labor_subtotal",
-        "rate": "0.03",
+        "item": "공구손료 및 잡재료비(연마지 등)",
+        "source": "인력품의 3%이나 경비와 재료비를 함께 포함하여 분류 불가",
         "cite": {
           "chunk_id": "p695-x14",
           "quote": "공구손료 및 잡재료비(연마지 등)는 인력품의 3%로 계상한다."
         }
       }
-    ]
+    ],
+    "supply_rules": [],
+    "cost_rules": []
   },
   "calc_type": "per_unit",
   "calc_type_raw": "per_unit",
