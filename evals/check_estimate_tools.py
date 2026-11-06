@@ -176,8 +176,9 @@ def check_per_unit_without_quantity(checks):
     excluded = [spec for spec in specs.values() if tools._quantity_dependent(spec)]
     # 115 = 물량 입력을 선언하지 않은 카드 77개 + 선언했지만 조건·표에서 물량을 참조하는 카드 38개.
     # 목록형 quantity_input(8-2-27)을 고치기 전과 나머지 카드의 판정은 같다.
-    checks.append(("U1 현행 925개 명세 전수: 물량 의존 카드 115개 분류, 13-6-9 포함",
-                   len(specs) == 925 and len(excluded) == 115
+    # 장비 작업(2026-11-01)으로 1-1-2·5-1-8·8-2-6이 실행 목록에 들어와 928개, 8-2-1은 물량 입력을 갖춰 114개.
+    checks.append(("U1 현행 928개 명세 전수: 물량 의존 카드 114개 분류, 13-6-9 포함",
+                   len(specs) == 928 and len(excluded) == 114
                    and any(spec["section_no"] == "13-6-9" for spec in excluded)))
     for section in ("6-1-4", "6-1-1", "10-1-7"):
         spec = next(s for s in specs.values() if s["section_no"] == section

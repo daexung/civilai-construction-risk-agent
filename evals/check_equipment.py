@@ -114,7 +114,7 @@ def main() -> int:
                        if code[:4] in REGISTERED}
     checks.append(("E19 신규 장비 규격 누락·추가 없음", set(extracted) == set(saved_additions)
                    and {prefix: sum(code.startswith(prefix + "-") for code in extracted)
-                        for prefix in REGISTERED} == {"0201": 9, "0301": 8, "0302": 9}))
+                        for prefix in REGISTERED} == {"0101": 5, "0102": 3, "0201": 9, "0301": 8, "0302": 9}))
     def matches_source(code: str, source: dict) -> bool:
         stored = saved_additions[code]
         integer = lambda value: int(value.replace(",", ""))

@@ -28,16 +28,17 @@ from backend.api import dialogue_service, tables  # noqa: E402
 SPECS = {s["id"]: s for s in load_specs().values()}
 LOADER = SPECS["2026-정오표1차/공통/8-2-5/로더"]
 EXC = SPECS["2026-정오표1차/공통/8-2-3/굴착기"]
-TEXT = "로더 상차 1000㎥ + 굴착기 굴착 500㎥ 비용 견적"
+DOZ = SPECS["2026-정오표1차/공통/8-2-1/불도저_시간당작업량"]
+TEXT = "로더 상차 1000㎥ + 굴착기 굴착 500㎥ + 불도저 굴착 100㎥ 비용 견적"
 ANS = {"loader_type": "타이어식", "machine_spec": "0.95㎥", "volume_basis": "자연상태", "L": "1.25",
        "t1_condition": "보통인경우", "t1_method": "산적상태에서 담을 때", "e_soil_type": "모래, 사질토",
        "e_state": "자연상태", "e_condition": "보통", "is_trench": False, "l": "8", "fuel_price": "1500",
-       "quantity": "1000", "soil_type": "모래,사질토", "soil_state": "자연상태", "site_condition": "보통",
+       "quantity": "1000", "bulldozer_type": "무한궤도", "bulldozer_capacity": "7", "transport_distance": "10", "work_type": "굴착/굴착운반/발근/석재류집적", "volume_basis": "자연상태", "L": "1.25", "soil_type": "모래,사질토", "soil_state": "자연상태", "site_condition": "보통",
        "is_trenching": False, "is_underwater": False, "is_residential_area": False, "swing_angle": "90"}
 
 
 def hit(query: str) -> dict:
-    spec = LOADER if "로더" in query else EXC
+    spec = DOZ if "불도저" in query else (LOADER if "로더" in query else EXC)
     return {"rank": 1, "section_no": spec["section_no"], "division": spec["division"],
             "section": f"{spec['section_no']} {spec['title']}", "page": 193, "table_id": None,
             "text": spec["title"], "chunk_id": "mock", "ref": spec["id"]}
@@ -49,6 +50,10 @@ def answer_value(q: dict, spec_id: str | None):
         value = ANS[name]
         if name == "quantity" and spec_id == EXC["id"]:
             value = "500"
+        if name == "quantity" and spec_id == DOZ["id"]:
+            value = "100"
+        if name == "site_condition" and spec_id == DOZ["id"]:
+            value = "양호"
         if q.get("choices") and value not in q["choices"]:
             value = next((c for c in q["choices"] if str(c).replace(" ", "") == str(value).replace(" ", "")),
                          q["choices"][0])
@@ -94,8 +99,10 @@ def main() -> None:
     q_loader = 3600 * F("0.95") * F("1.2") * (1 / F("1.25")) * F("0.55") / cm_loader
     # 굴착기 0.12㎥ · 구분 0.12~0.4 · 90도 cm=15 · K=1.10 · E 모래 자연상태 보통 0.70 · L=1.25
     q_exc = 3600 * F("0.12") * F("1.10") * (1 / F("1.25")) * F("0.70") / 15
+    q_doz = 60 * F("1.5") * (F(1) / F("1.25")) * F("0.8") / (F(10,42) + F(10,50) + F(1,4))
     want = {"loader": (expected_unit(q_loader, rates["0302-0095"], wage, 1500), 1000),
-            "exc": (expected_unit(q_exc, rates["0201-0012"], wage, 1500), 500)}
+            "exc": (expected_unit(q_exc, rates["0201-0012"], wage, 1500), 500),
+            "doz": (expected_unit(q_doz, rates["0101-0010"], wage, 1500), 100)}
 
     graph = dialogue.build_dialogue_graph()
     tid = "equipment-e2e"
@@ -110,20 +117,21 @@ def main() -> None:
         items = state["session"]["items"]
         ids = {it["selected_spec_id"]: i for i, it in items.items()}
         loader_id, exc_id = ids[LOADER["id"]], ids[EXC["id"]]
-        for item_id in (loader_id, exc_id):
+        doz_id = ids[DOZ["id"]]
+        for item_id in (loader_id, exc_id, doz_id):
             assert items[item_id]["status"] == "PRICED", (item_id, items[item_id]["status"])
             assert items[item_id]["priced_result"]["status"] == "OK", items[item_id]["priced_result"]["unpriced"]
         # 1. 조건 → Q → 장비시간 (정확한 분수)
-        for item_id, q, name in ((loader_id, q_loader, "로더"), (exc_id, q_exc, "굴착기")):
+        for item_id, q, name in ((loader_id, q_loader, "로더"), (exc_id, q_exc, "굴착기"), (doz_id, q_doz, "불도저")):
             lines = {l["name"]: l["exact"] for l in items[item_id]["computed_result"]["unit_lines"]}
             assert F(lines["시간당 작업량 Q"]) == q and F(lines[name]) == 1 / q, (name, lines, q)
         print("PASS Q and equipment hours match source-table expectation (loader 4104/85 m3/hr, excavator 17.7408 m3/hr)")
 
         # 2. 단가·금액: 1㎥당 일위대가와 물량 곱, 합계
-        def check_amounts(st, qty_loader=1000, qty_exc=500):
+        def check_amounts(st, qty_loader=1000, qty_exc=500, qty_doz=100):
             its = st["session"]["items"]
             total = {"재료비": 0, "노무비": 0, "경비": 0}
-            for item_id, key, qty in ((loader_id, "loader", qty_loader), (exc_id, "exc", qty_exc)):
+            for item_id, key, qty in ((loader_id, "loader", qty_loader), (exc_id, "exc", qty_exc), (doz_id, "doz", qty_doz)):
                 unit = want[key][0]
                 priced = its[item_id]["priced_result"]
                 assert {k: int(v) for k, v in priced["unit_prices"].items()} == unit, (key, priced["unit_prices"], unit)
@@ -142,9 +150,9 @@ def main() -> None:
             resp = dialogue_service.export_response(graph, tid)
             return load_workbook(BytesIO(tables.build_xlsx(resp)), data_only=True)
 
-        def check_excel(book, direct, qty_loader, qty_exc, contract):
+        def check_excel(book, direct, qty_loader, qty_exc, contract, qty_doz=100):
             bill = list(book["내역서"].iter_rows(values_only=True))
-            for item_id, key, qty in ((loader_id, "loader", qty_loader), (exc_id, "exc", qty_exc)):
+            for item_id, key, qty in ((loader_id, "loader", qty_loader), (exc_id, "exc", qty_exc), (doz_id, "doz", qty_doz)):
                 row = next(x for x in bill if x[1] == item_id)
                 unit = want[key][0]
                 assert row[3] == qty and row[2] == "m3", row
@@ -157,7 +165,7 @@ def main() -> None:
             assert cost["도급액"][2] == contract
             unit_rows = {x[0]: x for x in book["일위대가"].iter_rows(values_only=True) if x[0]}
             assert unit_rows["로더 기계손료"][3] == "hr" and unit_rows["굴착기 운전원"][3] == "hr"
-            assert unit_rows["로더 기계손료"][10] == 9711 and unit_rows["굴착기 기계손료"][10] == 9397, unit_rows["로더 기계손료"]
+            assert unit_rows["로더 기계손료"][10] == 9711 and unit_rows["굴착기 기계손료"][10] == 9397 and unit_rows["불도저 기계손료"][10] == rates["0101-0010"]["hourly_depreciation"], unit_rows["로더 기계손료"]
         contract = state["session"]["statement"]["totals"]["contract_amount"]
         check_excel(excel("1"), direct, 1000, 500, contract)
         print("PASS Excel quantity/unit/unit price/amount, direct total, 견적서·원가계산서 contract amount match:", contract)
@@ -170,6 +178,8 @@ def main() -> None:
         # 5. 로더 물량 수정: 장비시간·금액·합계 갱신, 굴착기 보존
         before_exc = json.dumps(items[exc_id]["computed_result"], sort_keys=True)
         before_exc_rev = items[exc_id]["input_revision"]
+        before_doz = json.dumps(items[doz_id]["computed_result"], sort_keys=True)
+        before_doz_rev = items[doz_id]["input_revision"]
         r = dialogue_service.respond(graph, tid, {"message": "로더 상차 2000㎥로 바꿔"})
         r = drive(graph, tid, r)
         state2 = dialogue.load(graph, tid)
@@ -177,11 +187,33 @@ def main() -> None:
         assert its[loader_id]["conditions"]["quantity"] == "2000", its[loader_id]["conditions"].get("quantity")
         assert its[exc_id]["input_revision"] == before_exc_rev
         assert json.dumps(its[exc_id]["computed_result"], sort_keys=True) == before_exc
+        assert its[doz_id]["input_revision"] == before_doz_rev
+        assert json.dumps(its[doz_id]["computed_result"], sort_keys=True) == before_doz
         direct2 = check_amounts(state2, qty_loader=2000)
         contract2 = state2["session"]["statement"]["totals"]["contract_amount"]
         assert contract2 > contract
         check_excel(excel("2"), direct2, 2000, 500, contract2)
-        print("PASS loader quantity 1000->2000 updates amounts, total and Excel; excavator result unchanged:", contract, "->", contract2)
+        print("PASS loader quantity 1000->2000 updates amounts, total and Excel; sibling results preserved:", contract, "->", contract2)
+
+        # 6. 불도저 물량 수정 100→200, 단가 일정·금액 2배·Excel 셀 검증
+        before_loader = json.dumps(its[loader_id]["computed_result"], sort_keys=True)
+        before_exc = json.dumps(its[exc_id]["computed_result"], sort_keys=True)
+        loader_rev, exc_rev = its[loader_id]["input_revision"], its[exc_id]["input_revision"]
+        r = dialogue_service.respond(graph, tid, {"message": "불도저 굴착 200㎥로 바꿔"})
+        r = drive(graph, tid, r)
+        state3 = dialogue.load(graph, tid)
+        its3 = state3["session"]["items"]
+        assert its3[doz_id]["conditions"]["quantity"] == "200", its3[doz_id]["conditions"]
+        assert its3[loader_id]["input_revision"] == loader_rev and its3[exc_id]["input_revision"] == exc_rev
+        assert json.dumps(its3[loader_id]["computed_result"], sort_keys=True) == before_loader
+        assert json.dumps(its3[exc_id]["computed_result"], sort_keys=True) == before_exc
+        direct3 = check_amounts(state3, qty_loader=2000, qty_exc=500, qty_doz=200)
+        contract3 = state3["session"]["statement"]["totals"]["contract_amount"]
+        assert contract3 > contract2
+        check_excel(excel("3"), direct3, 2000, 500, contract3, qty_doz=200)
+        restored3 = dialogue_service.restore(graph, tid)
+        assert restored3["statement"]["totals"]["contract_amount"] == contract3
+        print("PASS bulldozer quantity 100→200 updates amount/total/Excel, unit prices and siblings unchanged; restore:", contract2, "→", contract3)
 
 
 if __name__ == "__main__":

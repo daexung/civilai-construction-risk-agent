@@ -343,7 +343,7 @@
       }
     ]
   },
-  "calc_type": "adjusted_daily_crew",
+  "calc_type": "daily_crew",
   "calc_type_raw": "not_calculable",
   "calc_type_reason": "원문 p.645의 관규격별 작업조·일일 시공량과 p.646의 위치별 가감률 및 고소작업대 보정으로 일당 작업조 계산을 표현한다.",
   "citations": [],
