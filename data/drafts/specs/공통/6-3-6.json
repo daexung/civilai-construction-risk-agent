@@ -133,11 +133,6 @@
     "blocked": [
       {
         "condition": "해체 작업 요청",
-        "blocked_if": {
-          "input": "work_type",
-          "op": "==",
-          "value": "해체"
-        },
         "reason": "파싱 결과에 해체 수량이 누락되어 계산할 수 없습니다.",
         "source": "1. 설치 및 해체",
         "cite": {

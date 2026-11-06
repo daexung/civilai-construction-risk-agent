@@ -154,9 +154,10 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "item": "tooling and light equipment cost",
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
         "rate": "0.03",
-        "basis": "labor amount",
         "source": "설명 | ② 본 품은 먹매김, 패널 절단 및 설치, 충전재 주입 및 마무리 작업을 포함한다. ③ 부속철물 설치는 별도 계상한다. ④ 공구손료 및 경장비(절단기 등)의 기계경비는 인력품의 3%로 계상한다.",
         "cite": {
           "chunk_id": "p640-x7",

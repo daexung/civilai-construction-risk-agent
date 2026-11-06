@@ -101,9 +101,10 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "item": "tooling and light equipment cost",
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
         "rate": "0.03",
-        "basis": "labor amount",
         "source": "설명 | 포함한다. ③ 누수부위에 대한 해체 및 복구, 누수배관 교체 작업은 별도 계상한다. ④ 공구손료 및 경장비(공기압축기, 압력계 등)의 기계경비는 인력품의 3%로 계상한다.",
         "cite": {
           "chunk_id": "p982-x7",

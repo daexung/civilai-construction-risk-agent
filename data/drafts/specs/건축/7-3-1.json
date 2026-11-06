@@ -113,21 +113,18 @@
           "chunk_id": "p671-x4",
           "quote": "③ 장비(고소작업차 등)가 필요할 경우 기계경비는 별도 계상한다."
         }
-      }
-    ],
-    "supply_rules": [],
-    "cost_rules": [
+      },
       {
-        "name": "consumables",
-        "category": "material cost",
-        "base": "material_subtotal",
-        "rate": "0.02",
+        "item": "잡재료 및 소모재료(방수시멘트 등)",
+        "source": "주재료비의 2% 산정은 계산기 기준 미지원",
         "cite": {
           "chunk_id": "p671-x4",
           "quote": "③ 잡재료 및 소모재료(방수시멘트 등)는 주재료비의 2%로 계상한다."
         }
       }
     ],
+    "supply_rules": [],
+    "cost_rules": [],
     "open_questions": [],
     "questions": [
       "Loop drain locations?",

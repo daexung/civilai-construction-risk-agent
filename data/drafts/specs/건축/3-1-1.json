@@ -121,9 +121,10 @@
     "supply_rules": [],
     "cost_rules": [
       {
-        "item": "tooling and light equipment cost",
+        "name": "공구손료 및 경장비 기계경비",
+        "category": "경비",
+        "base": "labor_subtotal",
         "rate": "0.02",
-        "basis": "labor amount",
         "source": "설명 | 경우 ‘[건축부문] 9-1-1 모르타르 배합’을 따른다. ④ 공구손료 및 경장비(비빔기 등)의 기계경비는 인력품의 2%로 계상한다.",
         "cite": {
           "chunk_id": "p641-x2",

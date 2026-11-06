@@ -260,94 +260,7 @@
           }
         },
         "quantity_input": "quantity",
-        "surcharges": [
-          {
-            "when": {
-              "lane_width": "4차로 미만(편도)"
-            },
-            "rate": "0.7",
-            "applies_to": [
-              "MMS자료수집",
-              "MMS 표준자료 제작",
-              "이미지처리 (보안처리)",
-              "객체추출및묘사",
-              "구조화편집"
-            ],
-            "source": "PDF 517쪽 ㉮ 차로폭에 따른 계수",
-            "rate_table": {
-              "id": "p573-t0",
-              "row": "계수",
-              "column": "4차로 미만(편도)"
-            },
-            "application_cite": {
-              "chunk_id": "p573-x0",
-              "quote": "차로폭, 도로복잡도 등에 따라 계수를 적용"
-            }
-          },
-          {
-            "when": {
-              "lane_width": "4차로 이상(편도)"
-            },
-            "rate": "1",
-            "applies_to": [
-              "MMS자료수집",
-              "MMS 표준자료 제작",
-              "이미지처리 (보안처리)",
-              "객체추출및묘사",
-              "구조화편집"
-            ],
-            "source": "PDF 517쪽 ㉮ 차로폭에 따른 계수",
-            "rate_table": {
-              "id": "p573-t0",
-              "row": "계수",
-              "column": "4차로 이상(편도)"
-            },
-            "application_cite": {
-              "chunk_id": "p573-x0",
-              "quote": "차로폭, 도로복잡도 등에 따라 계수를 적용"
-            }
-          },
-          {
-            "when": {
-              "road_complexity": "자동차 전용도로"
-            },
-            "rate": "1",
-            "applies_to": [
-              "객체추출및묘사",
-              "구조화편집"
-            ],
-            "source": "PDF 517쪽 ㉯ 도로복잡도에 따른 계수",
-            "rate_table": {
-              "id": "p573-t1",
-              "row": "계수",
-              "column": "자동차 전용도로"
-            },
-            "application_cite": {
-              "chunk_id": "p573-x0",
-              "quote": "차로폭, 도로복잡도 등에 따라 계수를 적용"
-            }
-          },
-          {
-            "when": {
-              "road_complexity": "시가지 도로"
-            },
-            "rate": "1.6",
-            "applies_to": [
-              "객체추출및묘사",
-              "구조화편집"
-            ],
-            "source": "PDF 517쪽 ㉯ 도로복잡도에 따른 계수",
-            "rate_table": {
-              "id": "p573-t1",
-              "row": "계수",
-              "column": "시가지 도로"
-            },
-            "application_cite": {
-              "chunk_id": "p573-x0",
-              "quote": "차로폭, 도로복잡도 등에 따라 계수를 적용"
-            }
-          }
-        ],
+        "surcharges": [],
         "note_adjustments": []
       },
       "steps": [
@@ -358,7 +271,69 @@
       "source": "PDF 516~517쪽 9-5-9",
       "rounding": "총 투입량은 정확한 유리수로 보존; 단위당 품은 공통 1-2-8·1-2-1 기본 자릿수 적용"
     },
-    "blocked": [],
+    "blocked": [
+      {
+        "condition": "4차로 미만(편도) 차로폭 계수 0.7 적용 공종",
+        "blocked_if_all": [
+          {
+            "input": "lane_width",
+            "op": "==",
+            "value": "4차로 미만(편도)"
+          },
+          {
+            "input": "activity",
+            "op": "in",
+            "value": [
+              "MMS자료수집",
+              "MMS 표준자료 제작",
+              "이미지처리 (보안처리)",
+              "객체추출및묘사",
+              "구조화편집"
+            ]
+          }
+        ],
+        "reason": "원문 계수(차로폭 0.7, 도로복잡도 1.6)를 곱하는 규칙은 아직 자동 계산하지 않음",
+        "source": "PDF 517쪽 ㉮ 차로폭에 따른 계수",
+        "cite": [
+          {
+            "chunk_id": "p573-x0",
+            "quote": "㉮ 차로폭에 따른 계수(MMS 자료수집, MMS 표준자료 제작, 이미지처리, 객체 추출 및 묘사, 구조화 편집 공종에 적용)"
+          },
+          {
+            "table_id": "p573-t0"
+          }
+        ]
+      },
+      {
+        "condition": "시가지 도로 도로복잡도 계수 1.6 적용 공종",
+        "blocked_if_all": [
+          {
+            "input": "road_complexity",
+            "op": "==",
+            "value": "시가지 도로"
+          },
+          {
+            "input": "activity",
+            "op": "in",
+            "value": [
+              "객체추출및묘사",
+              "구조화편집"
+            ]
+          }
+        ],
+        "reason": "원문 계수(차로폭 0.7, 도로복잡도 1.6)를 곱하는 규칙은 아직 자동 계산하지 않음",
+        "source": "PDF 517쪽 ㉯ 도로복잡도에 따른 계수",
+        "cite": [
+          {
+            "chunk_id": "p573-x3",
+            "quote": "㉯ 도로복잡도에 따른 계수(객체 추출 및 묘사, 구조화 편집 공종에 적용)"
+          },
+          {
+            "table_id": "p573-t1"
+          }
+        ]
+      }
+    ],
     "not_calculated": [
       {
         "item": "기계의 상각비·정비비",
