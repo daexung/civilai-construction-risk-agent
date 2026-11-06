@@ -386,7 +386,7 @@
             },
             "cite": {
               "chunk_id": "p232-x2",
-              "quote": "q : 적재함용적×적재계수(K)"
+              "quote": "q : 적재함용적×적재계수(k)"
             }
           },
           {
@@ -474,7 +474,7 @@
             },
             "cite": {
               "chunk_id": "p233-x6",
-              "quote": "cm = L1/V1 + L2/V2 + t"
+              "quote": "cm : 1회 싸이클시간(분)"
             }
           },
           {
@@ -506,8 +506,8 @@
               ]
             },
             "cite": {
-              "chunk_id": "p232-x0",
-              "quote": "Q = 60×q×f×E/cm"
+              "chunk_id": "p232-x2",
+              "quote": "Q : 시간당 작업량(㎥/hr)"
             }
           }
         ],
@@ -524,7 +524,7 @@
             "source": "PDF printed 176쪽 8-2-6",
             "cite": {
               "chunk_id": "p232-x2",
-              "quote": "Q = 60×q×f×E/cm"
+              "quote": "Q : 시간당 작업량(㎥/hr)"
             }
           },
           {
