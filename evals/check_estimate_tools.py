@@ -174,8 +174,11 @@ def check_per_unit_without_quantity(checks):
     import copy
     specs = load_specs()
     excluded = [spec for spec in specs.values() if tools._quantity_dependent(spec)]
-    checks.append(("U1 382개 명세 전수: 물량 의존 13-6-9 한 개 자동 제외",
-                   len(specs) == 382 and len(excluded) == 1 and excluded[0]["section_no"] == "13-6-9"))
+    # 115 = 물량 입력을 선언하지 않은 카드 77개 + 선언했지만 조건·표에서 물량을 참조하는 카드 38개.
+    # 목록형 quantity_input(8-2-27)을 고치기 전과 나머지 카드의 판정은 같다.
+    checks.append(("U1 현행 925개 명세 전수: 물량 의존 카드 115개 분류, 13-6-9 포함",
+                   len(specs) == 925 and len(excluded) == 115
+                   and any(spec["section_no"] == "13-6-9" for spec in excluded)))
     for section in ("6-1-4", "6-1-1", "10-1-7"):
         spec = next(s for s in specs.values() if s["section_no"] == section
                     and (section != "6-1-1" or s["division"] == "공통"))
@@ -204,7 +207,7 @@ def check_per_unit_without_quantity(checks):
         checks.append((f"U4 {section}: 나중의 실제 물량 1은 별도 캐시로 전체 계산",
                        full["status"] == "ok" and not item["computed_result"].get("per_unit_only")
                        and item["labor_key"] != per_key and full["data"]["quantity"] == "1"))
-    spec = excluded[0]
+    spec = next(spec for spec in excluded if spec["section_no"] == "13-6-9")
     session = tools.new_estimate("품 알려줘")
     tools.choose_work(tools._item(session), {"confirmed": True}, spec)
     values = sample_inputs(spec); quantity = tools._quantity_field(spec)["name"]; values.pop(quantity)
@@ -221,6 +224,11 @@ def check_per_unit_without_quantity(checks):
     for key in ("crew_rules", "surcharges", "note_adjustments", "blocked", "tables"):
         dependent = copy.deepcopy(pump); dependent.setdefault(key, []).append({"when": {"volume": "1"}})
         checks.append((f"U6 {key} 물량 참조 감지", tools._quantity_dependent(dependent)))
+    list_input = copy.deepcopy(pump)
+    list_input["quantity_model"]["params"]["quantity_input"] = ["locations", "operating_days"]
+    list_input["blocked"] = [{"blocked_if": {"input": "operating_days", "op": ">", "value": 10}}]
+    checks.append(("U6 목록형 quantity_input의 각 이름을 조건에서 감지",
+                   tools._quantity_dependent(list_input)))
 
 
 def main() -> int:

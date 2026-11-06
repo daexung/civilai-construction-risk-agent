@@ -103,15 +103,19 @@ def _selector_values(item: EstimateItem, spec: dict, incoming: dict | None) -> d
 
 def _quantity_dependent(spec: dict) -> bool:
     """총량 산식의 quantity_input 선언을 제외하고 물량 참조가 있으면 단위당 계산을 보류한다."""
-    name = spec["quantity_model"]["params"].get("quantity_input")
+    names = spec["quantity_model"]["params"].get("quantity_input")
+    names = [names] if isinstance(names, str) else names
+    names = names if isinstance(names, list) and all(isinstance(name, str) for name in names) else []
     def references(value):
         if isinstance(value, dict):
-            return name in value or any(references(child) for child in value.values())
+            return bool(set(names) & value.keys()) or any(references(child) for child in value.values())
         if isinstance(value, list):
             return any(references(child) for child in value)
-        return isinstance(value, str) and bool(re.search(r"(?<![\w])" + re.escape(name) + r"(?![\w])", value))
+        return isinstance(value, str) and any(re.search(r"(?<![\w])" + re.escape(name) + r"(?![\w])", value)
+                                              for name in names)
     params = {key: value for key, value in spec["quantity_model"]["params"].items() if key != "quantity_input"}
-    return not name or references([params, *[spec.get(key, []) for key in
+    # 물량 입력이 선언되지 않은 카드는 예전처럼 물량 의존으로 본다(단위당 답을 내지 않음).
+    return not names or references([params, *[spec.get(key, []) for key in
         ("crew_rules", "surcharges", "note_adjustments", "blocked", "tables")],
         [field.get("when") for field in spec["inputs"]]])
 

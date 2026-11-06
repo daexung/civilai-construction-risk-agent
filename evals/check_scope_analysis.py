@@ -94,8 +94,10 @@ def main() -> int:
                         if span["classification"] == "unconfirmed"}
     user_checked = confirm_analysis(unknown_text, unknown_analysis, _decisions(unknown_analysis, unknown_override))["confirmation"]
     multi = confirmed_result(unknown_text, unknown_analysis, user_checked)
-    add("user explicitly including a previously unknown trade leaves multi-work result not_ready",
-        multi["calculation"]["mode"] == "not_ready" and len(multi["work_items"]) == 2)
+    add("user explicitly including a previously unknown trade creates separate multi-work plan",
+        multi["calculation"]["mode"] == "multi_trade" and len(multi["work_items"]) == 2
+        and len(multi["calculation"]["plan"]["items"]) == 2
+        and multi["calculation"]["plan"]["items"][1]["request_text"] == "전기배선20m")
 
     repeated = analyze_request("내부 도장100㎡와 외부 도장20㎡")
     add("same trade at separate locations stays two tasks with separate quantities",
@@ -154,7 +156,8 @@ def main() -> int:
     add("decimal, zero and negative quantities are preserved without conversion",
         any(c["value"] == "2.5" and c["unit"] == "m2" for c in decimal_result["conditions"])
         and decimal_ready["calculation"]["mode"] == "single_trade"
-        and new_session(decimal_ready["calculation"]["plan"])["items"]["i1"]["quantity"]["value"] == "2.5"
+        and (lambda session: session["items"][session["item_order"][0]]["quantity"]["value"])(
+            new_session(decimal_ready["calculation"]["plan"])) == "2.5"
         and any(c["value"] == "0" for c in zero_result["conditions"])
         and zero_result["unconfirmed_scope"] and any(c["value"] == "-3" for c in negative_result["conditions"])
         and negative_result["unconfirmed_scope"]
