@@ -301,6 +301,10 @@ def _message_out(status: str, state: dict) -> str:
         return state.get("reason") or "아직 견적 계산을 지원하지 않는 공종이에요. 확인한 품셈 근거를 안내해 드릴게요."
     if status == "ERROR":
         return state.get("reason") or "처리 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요."
+    if status == "NO_RESULT":
+        return state.get("reason") or "산정할 수 있는 공종이 없어 견적을 만들지 못했어요."
+    if status in ("UNSUPPORTED", "NOT_FOUND"):
+        return state.get("reason") or "현재 지원하지 않는 공종이에요."
     return state.get("reason") or ""
 
 
@@ -522,6 +526,7 @@ def _build_response(thread_id: str, state: dict) -> dict:
         "basis_date": state.get("basis_date") or date.today().isoformat(),
         "search": _search_out(state),
         "conditions": _conditions_out(state),
+        "applicability_scope": state.get("applicability_scope"),
     }
     response["tables"] = add_tables(response)
     return response

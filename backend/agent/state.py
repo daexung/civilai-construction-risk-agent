@@ -4,7 +4,7 @@ from typing import Literal, TypedDict
 
 
 Status = Literal["RUNNING", "OUT_OF_SCOPE", "MISSING_INFO", "EVIDENCE_ONLY", "BLOCKED", "COMPUTED",
-                 "ERROR", "OK", "PARTIAL", "ANSWERED"]
+                 "ERROR", "OK", "PARTIAL", "ANSWERED", "NO_RESULT", "UNSUPPORTED", "NOT_FOUND"]
 
 
 class AgentState(TypedDict, total=False):

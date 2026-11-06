@@ -185,6 +185,14 @@ export interface BlockedResult {
   citations: Citation[];
 }
 
+export interface ApplicabilityScope {
+  title: string;
+  limits: { condition: string; reason: string; source: string }[];
+  separate: { item: string; source?: string; reason?: string }[];
+  notes?: { condition: string; reason?: string; source?: string }[];
+  note?: string;
+}
+
 export interface ConditionField {
   name: 'work_category' | 'duration' | 'contractor_type' | 'project_scale';
   label: string;
@@ -239,7 +247,7 @@ export interface StatementResult {
   basis_notes?: string[];
 }
 
-export type ChatStatus = 'ANSWERED' | 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR' | 'OK' | 'PARTIAL';
+export type ChatStatus = 'ANSWERED' | 'OUT_OF_SCOPE' | 'EVIDENCE_ONLY' | 'MISSING_INFO' | 'COMPUTED' | 'BLOCKED' | 'ERROR' | 'OK' | 'PARTIAL' | 'NO_RESULT' | 'UNSUPPORTED' | 'NOT_FOUND';
 
 export interface UsageStatus {
   limit: number;
@@ -270,6 +278,7 @@ export interface ChatResponse {
   statement: StatementResult | null;
   conditions: ConditionField[];
   tables: ResultTables;
+  applicability_scope?: ApplicabilityScope | null;
   qa?: { not_found: boolean; not_found_kind?: 'section_not_found' | 'section_found_value_missing'; conclusion: string; explanation: string;
     comparisons: { section: string; summary: string; citation_ids?: string[] }[];
     citations: (Citation & { chunk_id: string; quote_match?: 'normalized' | 'fuzzy' })[] } | null;
@@ -283,7 +292,8 @@ export interface ChatResponse {
     quantity?: { value: string; unit: string } | null; reason?: string;
     result: ComputedResult | BlockedResult | null; priced: PricedResult | null; tables: ResultTables;
     inputs: InputRow[]; evidence: EvidenceItem[];
-    not_calculated_scope: { name: string; reason: string }[] }[];
+    not_calculated_scope: { name: string; reason: string }[];
+    applicability_scope?: ApplicabilityScope | null }[];
 }
 
 export interface ChatTurn {

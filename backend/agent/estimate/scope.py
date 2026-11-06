@@ -28,6 +28,15 @@ _NEGATION = re.compile(r"제외|빼고|하지\s*말|안\s*해|불필요")
 _REPEAT = re.compile(r"(?<![\w.])([+-]?\d[\d,]*(?:\.\d+)?)\s*회")
 _MEASURE = re.compile(r"(?<![\d.])([+-]?\d[\d,]*(?:\.\d+)?)\s*(㎥|m3|㎡|m2|cm|mm|m|개소|개|일)(?![\w])", re.I)
 _METHODS = {"도장": re.compile(r"롤러칠|붓칠|뿜칠")}
+# 같은 단위의 수량이 여럿이어도(높이8m 폭1.5m) 수치 바로 앞 낱말이 서로 다르면 각자 다른 조건으로 본다.
+# 라벨이 없거나 같으면(8m, 1.5m) 여전히 모호해 확인을 요구한다. 명세별 예외는 아니다.
+_QUANTITY_LABEL = re.compile(r"([가-힣]{1,6})\s*$")
+
+
+def _quantity_label(text: str, start: int, scan_back: int = 10) -> str | None:
+    window = text[max(0, start - scan_back):start]
+    match = _QUANTITY_LABEL.search(window)
+    return match.group(1) if match else None
 _EVIDENCE_SCHEMA = {"type": "object", "properties": {"text": {"type": "string"},
                     "start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1}},
                     "required": ["text", "start", "end"]}
@@ -353,7 +362,9 @@ def analyze_request(text: str) -> dict[str, Any]:
     return result
 
 
-_NON_SCOPE_WORDS = re.compile(r"견적|공사비|계산|산출|알려|해주세요|해줘|해\s*줘|부탁|포함|전체|공사|작업|요청|좀|만|현재|기존|새로|신설|시공|해야|하는지|여부|견적서|수성|유성|에다?|에서|으로|의|을|를|은|는|도|내부|외부|실내|실외|바탕|칠해|칠하|칠|다시")
+_NON_SCOPE_WORDS = re.compile(r"견적|공사비|계산|산출|알려|해주세요|해줘|해\s*줘|부탁|포함|전체|공사|작업|요청|좀|만|현재|기존|새로|신설|시공|해야|하는지|여부|견적서|수성|유성|에다?|에서|으로|의|을|를|은|는|도|내부|외부|실내|실외|바탕|칠해|칠하|칠|다시"
+                               # 라벨이 분명한 치수 조건(높이8m, 폭1.5m)은 작업에서 떼어낼 미확정 텍스트가 아니다.
+                               r"|높이|폭|너비|길이|깊이|두께|둘레|지름|직경|규격|수량|개수|면적|부피|용량")
 
 
 def _unclassified_text(phrase: str, start: int, surface_hits: list[tuple[int, int, str]],
@@ -710,7 +721,17 @@ def confirmed_result(text: str, analysis: dict, confirmation: dict,
             invalid_quantity = any(Decimal(q["value"].replace(",", "")) <= 0 for q in quantities)
         except InvalidOperation:
             invalid_quantity = True
-        repeated_same_unit = len({condition.get("unit") for condition in quantities}) < len(quantities)
+        by_unit: dict[str | None, list] = {}
+        for condition in quantities:
+            by_unit.setdefault(condition.get("unit"), []).append(condition)
+        repeated_same_unit = False
+        for unit, group in by_unit.items():
+            if len(group) < 2:
+                continue
+            labels = [_quantity_label(text, condition["evidence"]["start"]) for condition in group]
+            if any(not label for label in labels) or len(set(labels)) != len(labels):
+                repeated_same_unit = True
+                break
         if repeated_same_unit or invalid_quantity:
             return {"status": "confirmed_scope", "work_items": included, "calculation": {"mode": "not_ready",
                     "blocked": True, "reason": "한 작업에 같은 단위의 수량이 둘 이상 있습니다."},

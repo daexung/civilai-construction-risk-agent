@@ -24,7 +24,8 @@ from backend.agent.estimate.state import (COMMON_FIELDS, EstimateItem, EstimateS
                                           new_session, question_version, set_common, set_explicit, set_quantity,
                                           unit_key)
 from backend.agent.nodes.compute import CALCULATORS, calculator_for
-from backend.agent.tools.calc.generated import registered_module_for, check_registered_blocked
+from backend.agent.tools.calc.generated import (registered_module_for, registered_python_module_for,
+                                                 check_registered_blocked)
 from backend.agent.nodes.fill import (_UNIT_ALIASES, _extract_common_inputs, _format_rational, _norm,
                                       _valid_for_field, extract_inputs)
 from backend.agent.nodes.qa_context import build_context
@@ -413,6 +414,33 @@ def set_conditions(session: EstimateSession, user_text: str, *, values: dict | N
                    rejected=rejected)
 
 
+def applicability_scope(spec: dict) -> dict:
+    """선택한 공종의 명칭·등록된 적용 범위(limits)·별도 계상(separate)을 명세 그대로 돌려준다(창작 없음).
+
+    `limits`는 수치/선택 비교식이 있는 구조화 규칙, `notes`는 비교식 없는 설명형 선언이다.
+    설명형 선언을 공식 적용 불가로 단정하지 않는다. 선택적인 표시명(condition)이 없는 기존 명세는
+    원문에 연결된 reason을 표시명으로 재사용한다. 승인 모듈이 해소한(handled_conditions) 제한은
+    "현재 계산 불가"로 다시 보여주지 않는다.
+    """
+    module = registered_module_for(spec) or registered_python_module_for(spec)
+    handled = set((module or {}).get("handled_conditions", []))
+    limits = [{"condition": entry.get("condition") or entry.get("reason", ""),
+               "reason": entry.get("reason", ""), "source": entry.get("source", "")}
+              for entry in spec.get("blocked", []) if entry.get("condition") not in handled
+              and (entry.get("blocked_if") or entry.get("blocked_if_all"))]
+    separate = [{"item": entry.get("name") or entry.get("item"), "source": entry.get("source"),
+                 "reason": entry.get("reason")}
+                for entry in spec.get("not_calculated", []) if isinstance(entry, dict)]
+    # 비교식이 없는 설명형 선언: 적용 제한으로 자동 판정하지 않고 별도 확인사항으로만 전달한다.
+    notes = [{"condition": entry.get("condition") or entry.get("reason", ""),
+              "reason": entry.get("reason", ""), "source": entry.get("source", "")}
+             for entry in spec.get("blocked", [])
+             if entry.get("condition") not in handled and not (entry.get("blocked_if") or entry.get("blocked_if_all"))]
+    return {"title": f"{spec['division']} {spec['section_no']} {spec['title']}",
+            "limits": limits, "separate": separate, "notes": notes,
+            "note": "위 기준은 등록된 수치·선택 조건만 보여줍니다. 명시되지 않은 범위는 별도로 확인해 주세요."}
+
+
 def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> dict:
     """품 산출 모드: 가격 조건 없이 1단위당 품과 물량 기준 작업일수·인일·장비를 계산한다."""
     item = _item(session)
@@ -423,10 +451,17 @@ def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> 
     spec = _spec(item)
     if spec is None:
         return _result("not_found", item, {"reason": f"{item['selection'].get('section_no')} 절의 계산 명세가 없습니다"})
+    # 공종 선택 직후부터, 질문 단계뿐 아니라 최초 요청에 조건을 모두 줘서 즉시 계산·즉시 차단되는
+    # 경우에도 같은 안내를 보인다. 매 호출마다 지금의 spec으로 새로 만들어, 공종 재선택·복원에서
+    # 과거 명세의 낡은 안내가 남지 않는다(캐시하지 않음 — 순수 함수라 비용이 작다).
+    item["applicability_scope"] = applicability_scope(spec)
     conditions, mismatch = _build_conditions(item, spec)
     excluded = price_fields(spec)
     labor_names = {field["name"] for field in spec["inputs"]} - excluded
-    missing_fields = _missing_fields(spec, conditions, labor_names)
+    # 이미 받은 값만으로 적용 범위 초과가 확정되면, 아직 남은 무관한 조건은 더 묻지 않는다.
+    # (아래 check_registered_blocked 재호출이 그대로 BLOCKED를 돌려준다.)
+    partially_blocked = check_registered_blocked(spec, conditions)
+    missing_fields = [] if partially_blocked else _missing_fields(spec, conditions, labor_names)
     if spec.get("quantity_model", {}).get("name") == "lookup_only" and missing_fields:
         # Lookup table axes can be dependent. Ask only the next source-backed
         # axis, so the following question can exclude combinations with no cell.
@@ -445,27 +480,37 @@ def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> 
                                      for _, unit in _quantities(item["request_text"])))
     if per_unit_only:
         missing = [question for question in missing if question["field"] != quantity_field["name"]]
-    if mismatch and quantity_field:
+    if mismatch and quantity_field and not partially_blocked:
+        # 적용 범위 초과가 이미 확정됐으면 물량 단위 불일치 같은 무관한 질문은 더 하지 않는다.
         item["question_reasons"].setdefault(quantity_field["name"], mismatch)
         missing = [question for question in missing if question["field"] != quantity_field["name"]]
         missing.insert(0, _field_question(item, spec, quantity_field, "labor"))
-    missing += [_question(item, raw["name"], raw["ask"], raw["choices"], "labor")
-                for raw in adjustment_questions(spec, conditions)]
+    if not partially_blocked:
+        missing += [_question(item, raw["name"], raw["ask"], raw["choices"], "labor")
+                    for raw in adjustment_questions(spec, conditions)]
     if quantity_field and not mismatch:
         # 아직 말하지 않은 물량만 품 조건·할증 뒤에 묻는다. 단위 불일치는 맨 앞에 둔다.
         missing = ([question for question in missing if question["field"] != quantity_field["name"]]
                    + [question for question in missing if question["field"] == quantity_field["name"]])
     item["conditions"] = conditions
     if missing:
+        # applicability_scope는 위에서 이미 현재 spec 기준으로 채워졌다(질문 단계에 갇히지 않음).
         item.update(status="NEEDS_INPUT", questions=missing)
-        return _result("needs_input", item, missing=missing)
+        return _result("needs_input", item,
+                       {"scope": item["applicability_scope"]} if item.get("applicability_scope") else {},
+                       missing=missing)
     key = _labor_key(spec, conditions)
     if per_unit_only:
         key = _digest(key, "per_unit_only")  # 기준 물량 1의 총량 계산과도 분리한다.
     if item.get("labor_key") != key or not item.get("computed_result"):
         blocked = check_registered_blocked(spec, conditions)
+        if blocked and blocked.get("status") == "unresolvable":
+            # 적용 범위 판정이 아니라 규칙 평가 자체가 안 되는 오류다. BLOCKED(공식 범위 밖)로 보고하지 않는다.
+            item.update(status="ERROR", reason=blocked["reason"], questions=[])
+            return _result("error", item, {"reason": blocked["reason"]})
         if blocked:
-            item.update(status="BLOCKED", reason=blocked["reason"], questions=[])
+            item.update(status="BLOCKED", reason=blocked["reason"], questions=[],
+                        blocked_citations=blocked.get("citations", []), blocked_input=blocked.get("input"))
             return _result("blocked", item, {"reason": blocked["reason"], "citations": blocked.get("citations", [])})
         inputs = {name: value for name, value in conditions.items()
                   if name in {field["name"] for field in spec["inputs"]} or name.startswith("apply_adj_")}
@@ -485,8 +530,9 @@ def compute_labor(session: EstimateSession, *, allow_per_unit: bool = False) -> 
             item.update(status="NEEDS_INPUT", questions=missing)
             return _result("needs_input", item, missing=missing)
         if result.get("status") == "blocked":
-            item.update(status="BLOCKED", reason=result["reason"], questions=[])
-            return _result("blocked", item, {"reason": result["reason"]})
+            item.update(status="BLOCKED", reason=result["reason"], questions=[],
+                        blocked_citations=result.get("citations", []), blocked_input=result.get("input"))
+            return _result("blocked", item, {"reason": result["reason"], "citations": result.get("citations", [])})
         if result.get("status") != "computed":
             item.update(status="ERROR", reason=result.get("reason", ""), questions=[])
             return _result("error", item, {"reason": result.get("reason", "")})

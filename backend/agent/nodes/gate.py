@@ -9,5 +9,8 @@ def gate(state: AgentState) -> dict:
     spec = load_specs()[state["spec_id"]]
     blocked = check_registered_blocked(spec, state.get("inputs", {}))
     if blocked:
+        if blocked.get("status") == "unresolvable":
+            # 적용 범위 판정 자체가 아니라 규칙 평가 오류다. 공식 범위 밖으로 잘못 보고하지 않는다.
+            return {"status": "ERROR", "reason": blocked["reason"], "result": blocked}
         return {"status": "BLOCKED", "reason": blocked["reason"], "result": blocked}
     return {"review_status": spec.get("review", "")}

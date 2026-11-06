@@ -3,7 +3,7 @@ import React, { useId, createContext, useContext, useEffect, useRef, useState, u
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ArrowUp, Check, Copy, Download, Info, MessageSquareText, PanelLeft, Plus, Settings } from 'lucide-react';
-import { AgentQuestion, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult, UsageStatus } from '../types';
+import { AgentQuestion, ApplicabilityScope, BlockedResult, ChatResponse, ChatTurn, ChoiceValue, Citation, ComputedResult, PricedResult, UsageStatus } from '../types';
 import { downloadEstimate } from '../api';
 import { EXAMPLE_QUESTIONS } from '../examples';
 import { showToast } from '../toast';
@@ -59,9 +59,51 @@ interface Props {
   onRetry?: (turn: ChatTurn) => void;
 }
 
-const BLOCKED_HINTS: Record<string, string> = {
-  reset_status: '재셋팅 여부를 "없음"으로 답하면 계산됩니다.',
-};
+const APPLICABILITY_SUMMARY_COUNT = 3;
+
+function limitItem(limit: ApplicabilityScope['limits'][number], key: number) {
+  return <li key={key}>{limit.reason} <span className="applicability-scope-source">({limit.source})</span></li>;
+}
+
+function ApplicabilityScopeCard({ scope }: { scope: ApplicabilityScope }) {
+  const notes = scope.notes ?? [];
+  if (scope.limits.length === 0 && scope.separate.length === 0 && notes.length === 0) {
+    return <p className="applicability-scope-title">{scope.title}</p>;
+  }
+  const summarized = scope.limits.length > APPLICABILITY_SUMMARY_COUNT;
+  const shown = summarized ? scope.limits.slice(0, APPLICABILITY_SUMMARY_COUNT) : scope.limits;
+  const rest = summarized ? scope.limits.slice(APPLICABILITY_SUMMARY_COUNT) : [];
+  return (
+    <div className="applicability-scope">
+      <p className="applicability-scope-title">{scope.title}</p>
+      {scope.limits.length > 0 && (
+        <div className="applicability-scope-limits">
+          <strong>적용 범위{summarized ? ` (핵심 ${shown.length}건)` : ''}</strong>
+          <ul>{shown.map((limit, i) => limitItem(limit, i))}</ul>
+          {summarized && (
+            <details className="applicability-scope-limits-more">
+              <summary>나머지 적용 범위 {rest.length}건 더 보기</summary>
+              <ul>{rest.map((limit, i) => limitItem(limit, i))}</ul>
+            </details>
+          )}
+        </div>
+      )}
+      {scope.separate.length > 0 && (
+        <div className="applicability-scope-separate">
+          <strong>별도 계상</strong>
+          <ul>{scope.separate.map((entry, i) => <li key={i}>{entry.item}{entry.reason ? ` — ${entry.reason}` : ''}</li>)}</ul>
+        </div>
+      )}
+      {notes.length > 0 && (
+        <details className="applicability-scope-notes">
+          <summary>확인사항 {notes.length}건(자동 판정 안 함)</summary>
+          <ul>{notes.map((entry, i) => <li key={i}>{entry.condition}{entry.reason ? ` — ${entry.reason}` : ''}</li>)}</ul>
+        </details>
+      )}
+      {scope.note && <p className="applicability-scope-note">{scope.note}</p>}
+    </div>
+  );
+}
 
 function choiceLabel(value: ChoiceValue): string {
   if (typeof value === 'boolean') return value ? '예' : '아니오';
@@ -474,10 +516,17 @@ function ComputedCard({ work, inputs, result, priced, tables, response }: {
 }
 
 function BlockedCard({ result }: { result: BlockedResult }) {
+  // 사유·기준·근거를 그대로 보여준다. 값을 낮추라고 유도하지 않고, 조건 정정·공종 재선택 중 고르게 한다.
+  // 정정은 별도 버튼이 아니라 채팅창에 "높이를 6m로 정정해줘"처럼 바로 쓰면 적용된다(기존 대화 수정 경로).
   return (
     <div className="blocked-card">
+      <p className="blocked-reason">{result.reason}</p>
+      {result.source && <p className="blocked-source">기준: {result.source}</p>}
       <CitationList citations={result.citations} />
-      <p className="blocked-hint">{BLOCKED_HINTS[result.input] ?? `${result.input} 값을 바꾸면 계산될 수 있습니다.`}</p>
+      <p className="blocked-hint">
+        입력하신 값이 실제와 다르면 정정할 조건 이름과 실제 값을 채팅창에 적어 주세요. 실제로 이
+        기준을 벗어난다면 이 범위는 계산을 지원하지 않으니 다른 공종을 다시 선택해 주세요.
+      </p>
     </div>
   );
 }
@@ -551,8 +600,12 @@ function AssistantCard({
             <header><div><strong>{item.request_text}</strong>
               {item.quantity && <span> · {item.quantity.value}{item.quantity.unit}</span>}</div>
               <small>{item.status === 'PRICED' ? '산정 완료' : item.status === 'PARTIAL' ? '부분 산정' :
-                item.status === 'NEEDS_INPUT' ? '조건 확인 필요' : item.status === 'NEEDS_WORK' ? '검색 대기' : item.status}</small>
+                item.status === 'NEEDS_INPUT' ? '조건 확인 필요' : item.status === 'NEEDS_WORK' ? '검색 대기' :
+                item.status === 'BLOCKED' ? '적용 조건 확인 필요' : item.status === 'ERROR' ? '처리 오류' :
+                item.status === 'UNSUPPORTED' ? '계산 미지원' : item.status === 'NOT_FOUND' ? '공종 확인 필요' :
+                item.status === 'READY' ? '계산 준비' : '상태 확인 필요'}</small>
             </header>
+            {item.applicability_scope && <ApplicabilityScopeCard scope={item.applicability_scope} />}
             {amount != null && <p className="multi-trade-amount">
               항목 직접비 참고액: <strong>{won(String(amount))}원</strong>
               {item.priced?.partial && <span> (미산정 항목 제외)</span>}
@@ -568,6 +621,8 @@ function AssistantCard({
           </article>;
         })}
       </section>}
+
+      {!response.multi_trade_items?.length && response.applicability_scope && <ApplicabilityScopeCard scope={response.applicability_scope} />}
 
       {response.status === 'MISSING_INFO' && (
         <div className="question-list">

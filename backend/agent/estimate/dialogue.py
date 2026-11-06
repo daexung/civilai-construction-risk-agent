@@ -502,8 +502,13 @@ def _rule_actions(state: DialogueState, message: str, answered: bool) -> list[tu
         # must not treat its initial quantity as an edit before finding the work.
         return _start_actions(state, message, "estimate")
     # '32m야'처럼 대기 질문에 값만 답한 문장은 라우터가 범위 밖으로 봐도 답으로 반영한다.
-    if route == "out_of_scope" and not _answers_pending(state, message):  # 진행 중인 견적을 범위 밖 질문으로 바꾸지 않는다
-        return []
+    # '높이를 6m로 정정해줘'처럼 이미 선택된 명세의 칸에 대한 명시적이고 검증된 값 변경도 같게
+    # 취급한다(조회·보존절·다른 공종 요청은 _rule_changes가 grounded 검사로 걸러내 비어 있다).
+    if route == "out_of_scope" and not _answers_pending(state, message):
+        early_changes = (_rule_changes(session, message)
+                         if session and _confirmed(session) and not _is_lookup(state, message) else {})
+        if not early_changes:
+            return []  # 진행 중인 견적을 범위 밖 질문으로 바꾸지 않는다
     # 어느 견적인지 먼저 정한다. 새 공종 문장의 물량·조건('자동문 3개소')을 지금 견적에 반영하지 않기 위해서다.
     # The parent multi-item runner has already selected this child as the edit
     # target. Sibling names in a preservation clause must not reopen the
@@ -1301,9 +1306,15 @@ def _run_multi_turn(working: DialogueState, request: dict, generate, clock, budg
     working["pending_revision"] = working.get("pending_revision", 0) + 1
     # Deduplicate same-item questions and keep their refs stable until answered.
     working["pending"] = list({q["field"]: q for q in new_pending}.values())
-    answer_text = "작업별 진행 상태를 갱신했어요. 확인이 필요한 항목은 아래 카드에서 답하고, 남은 작업은 계속 진행을 눌러 주세요."
-    if stale_fields:
-        answer_text = "오래되었거나 다른 작업의 질문 답은 반영하지 않았어요. " + answer_text
+    aggregate_status = session.get("aggregate_result", {}).get("status")
+    if not working["pending"] and aggregate_status in ("NO_RESULT", "RATE_VERSION_CONFLICT"):
+        # 더 물을 것이 없고 산정도 못했으면, 상태별 차단 사유(message)가 대신 나타나야 한다.
+        # 고정 진행 문구를 answer로 내보내면 화면이 그 문구를 항상 우선해 사유를 가린다.
+        answer_text = ""
+    else:
+        answer_text = "작업별 진행 상태를 갱신했어요. 확인이 필요한 항목은 아래 카드에서 답하고, 남은 작업은 계속 진행을 눌러 주세요."
+        if stale_fields:
+            answer_text = "오래되었거나 다른 작업의 질문 답은 반영하지 않았어요. " + answer_text
     working["turn"] = {"answer": answer_text,
                        "answer_source": "template", "tools": processed, "trace": trace_rows,
                        "llm_info": budget.record(), "last_status": "needs_input" if working["pending"] else
