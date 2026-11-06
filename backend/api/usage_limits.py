@@ -17,6 +17,14 @@ SERVICE_LIMIT = 500
 KST = timezone(timedelta(hours=9))
 
 
+def tier(user_id: str | None):
+    """False=비회원, True=회원, "tester"=TEST_USER_IDS의 테스트 계정(개인 한도 없이 서비스 전체 한도만)."""
+    if not user_id:
+        return False
+    testers = {part.strip() for part in os.getenv("TEST_USER_IDS", "").split(",") if part.strip()}
+    return "tester" if user_id in testers else True
+
+
 def now():
     return datetime.now(KST)
 
@@ -52,7 +60,7 @@ def subject(user_id: str | None, ip: str | None) -> str:
 
 def _summary(current, personal: int, total: int, member: bool):
     reset = datetime.combine(current.date() + timedelta(days=1), datetime.min.time(), KST)
-    limit = MEMBER_LIMIT if member else GUEST_LIMIT
+    limit = SERVICE_LIMIT if member == "tester" else MEMBER_LIMIT if member else GUEST_LIMIT
     return {"limit": limit, "used": personal, "remaining": max(0, limit - personal),
             "service_limit": SERVICE_LIMIT, "service_remaining": max(0, SERVICE_LIMIT - total),
             "resets_at": reset.isoformat(), "timezone": "Asia/Seoul"}
@@ -77,7 +85,7 @@ def processing(user_id: str | None, ip: str | None):
                 raise HTTPException(429, {"code": "REQUEST_IN_PROGRESS", "message": "이전 요청을 처리 중입니다. 완료 후 다시 보내 주세요."},
                                     headers={"Retry-After": "2"})
             try:
-                yield conn, key, bool(user_id)
+                yield conn, key, tier(user_id)
             finally:
                 conn.execute("SELECT pg_advisory_unlock(hashtextextended(%s,0))", (lock,))
     except psycopg.Error:
@@ -145,6 +153,6 @@ def read(user_id: str | None, ip: str | None):
     key = subject(user_id, ip)
     try:
         with chat_storage.connection() as conn:
-            return status(conn, key, bool(user_id))
+            return status(conn, key, tier(user_id))
     except psycopg.Error:
         raise HTTPException(503, "사용량 확인에 실패했습니다. 잠시 후 다시 시도해 주세요.") from None
