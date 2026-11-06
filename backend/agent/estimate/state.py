@@ -58,6 +58,9 @@ class EstimateItem(TypedDict, total=False):
     hits: list | None         # 검색 캐시(request_text 기준)
     status: ItemStatus
     reason: str
+    blocked_citations: list      # status가 BLOCKED일 때 사유의 원문 근거(citations)
+    blocked_input: list | str | None  # status가 BLOCKED일 때 원인이 된 입력 필드명
+    applicability_scope: dict | None  # 공종 선택 직후 보여줄 적용 범위·별도 계상 안내(명세 그대로)
     questions: list           # 이 공종이 지금 기다리는 질문
     question_reasons: dict    # 잘못된 답 등으로 다시 묻는 이유 {field: reason}
     computed_result: dict | None
@@ -188,6 +191,7 @@ def _bump(item: EstimateItem) -> None:
     item["input_revision"] += 1
     item["priced_result"] = None
     item["result_revision"] = None
+    item["applicability_scope"] = None  # 조건·공종이 바뀌면 이전 안내를 들고 다니지 않는다
     if item["status"] in SETTLED:
         item["status"] = "READY"
 

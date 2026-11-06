@@ -109,6 +109,18 @@ def _public_questions(state: dict) -> list[dict]:
     return [_question_out(question) for question in pending]
 
 
+def _restored_scope(item: dict, spec: dict | None = None) -> dict | None:
+    """저장된 적용 범위 안내가 없으면(이 필드가 생기기 전 과거 세션) 확정된 선택 명세로 다시
+    만든다. 응답 변환 경계에서만 쓰는 순수 조회이며 세션·질문·계산 상태는 건드리지 않는다.
+    선택이 확정되지 않았으면(후보만 있는 상태) 만들어내지 않는다.
+    """
+    stored = item.get("applicability_scope")
+    if stored is not None:
+        return stored
+    spec = tools._spec(item) if spec is None else spec
+    return tools.applicability_scope(spec) if spec else None
+
+
 def legacy_state(state: dict) -> dict:
     """대화 상태 → 기존 그래프 상태 모양. 응답·표·Excel 코드를 그대로 쓰기 위한 변환이다."""
     turn = state.get("turn") or {}
@@ -133,7 +145,8 @@ def legacy_state(state: dict) -> dict:
                input_sources={**{name: entry["source"] for name, entry in session["common_conditions"].items()},
                               **{name: "기본값" if name in item.get("defaulted_inputs", {}) else "답변"
                                  for name in item.get("conditions") or {}}},
-               review_status=item.get("review_status") or (spec or {}).get("review", ""))
+               review_status=item.get("review_status") or (spec or {}).get("review", ""),
+               applicability_scope=_restored_scope(item))
     current = tools.current_estimate(session)
     labor_shown = item.get("computed_result") and all(q.get("stage") == "price" for q in pending)
     if pending:
@@ -142,8 +155,25 @@ def legacy_state(state: dict) -> dict:
         partial = current["statement"].get("status") in ("PARTIAL", "UNCALCULATED")
         out.update(status="PARTIAL" if partial else "OK", statement=current["statement"],
                    priced=item.get("priced_result"), reason=current["statement"].get("reason", ""))
-    elif turn.get("last_status") == "blocked":
-        out.update(status="BLOCKED", reason=item.get("reason", ""))
+    elif item.get("status") in ("BLOCKED", "UNSUPPORTED", "NOT_FOUND", "ERROR"):
+        # turn.last_status는 공종이 여러 개일 때 집계 상태("NO_RESULT" 등)로 바뀌어 "blocked"
+        # 문자열과 비교하면 항상 거짓이 된다. 항목 자체의 확정 상태·사유를 그대로 쓴다.
+        out.update(status=item["status"], reason=item.get("reason", ""))
+        if item["status"] == "BLOCKED":
+            blocked_input = item.get("blocked_input")
+            out["result"] = {"reason": item.get("reason", ""), "citations": item.get("blocked_citations", []),
+                             "input": (blocked_input[0] if isinstance(blocked_input, list) and blocked_input
+                                       else blocked_input or ""),
+                             "source": ""}
+    elif (session.get("aggregate_result") or {}).get("status") == "RATE_VERSION_CONFLICT":
+        # 단가 버전 충돌은 명세 적용 범위 판정이 아니라 내부 일관성 오류다. BLOCKED와 섞지 않는다.
+        out.update(status="ERROR", reason=(session.get("aggregate_result") or {}).get("reason")
+                   or "공종별 가격 기준 버전이 달라 통합할 수 없습니다.")
+    elif (session.get("aggregate_result") or {}).get("status") == "NO_RESULT":
+        # 공종이 모두 조회 전용(참조)이거나 산정 대상이 없어도 발생할 수 있다. 적용 범위 차단으로 단정하지 않는다.
+        excluded = (session.get("aggregate_result") or {}).get("excluded") or []
+        reason = "; ".join(f"{e['request_text']}: {e['reason']}" for e in excluded) or "산정할 수 있는 공종이 없어요."
+        out.update(status="NO_RESULT", reason=reason)
     elif labor_shown and turn.get("tools") and set(turn["tools"]) & {"compute_labor", "estimate_cost"}:
         out["status"] = "COMPUTED"
     if labor_shown and out["status"] in ("COMPUTED", "OK", "PARTIAL"):
@@ -186,6 +216,13 @@ def response(thread_id: str, state: dict) -> dict:
             common = {name: entry["value"] for name, entry in session["common_conditions"].items()}
             item_values = {**common, **{name: entry.get("value") if isinstance(entry, dict) else entry
                                         for name, entry in (item.get("conditions") or {}).items()}}
+            item_result = item.get("computed_result")
+            if item_status == "BLOCKED":
+                blocked_input = item.get("blocked_input")
+                item_result = {"reason": item.get("reason", ""), "citations": item.get("blocked_citations", []),
+                               "input": (blocked_input[0] if isinstance(blocked_input, list) and blocked_input
+                                         else blocked_input or ""),
+                               "source": ""}
             raw_item_state = {"route": "estimate", "status": ui_status,
                               "spec_id": item.get("selected_spec_id", ""),
                               "selection": item.get("selection") or {},
@@ -193,7 +230,8 @@ def response(thread_id: str, state: dict) -> dict:
                               "search_info": item.get("search_info") or {},
                               "basis_date": session.get("basis_date"), "inputs": item_values,
                               "input_sources": {}, "review_status": item.get("review_status", ""),
-                              "result": item.get("computed_result"), "priced": item.get("priced_result"),
+                              "result": item_result, "priced": item.get("priced_result"),
+                              "applicability_scope": _restored_scope(item, spec),
                               "questions": [{**question, "name": question.get("name") or question.get("field"),
                                             "ask": question.get("ask", ""), "choices": question.get("choices")}
                                            for question in item.get("questions") or []], "statement": None}
@@ -210,7 +248,8 @@ def response(thread_id: str, state: dict) -> dict:
                       "equipment_rate_version": copy.deepcopy(priced.get("equipment_rate_version")),
                       "input_revision": item.get("input_revision", 0),
                       "questions": copy.deepcopy(item.get("questions", [])),
-                      "not_calculated_scope": missing}
+                      "not_calculated_scope": missing,
+                      "applicability_scope": item_response.get("applicability_scope")}
             public_items.append(public)
             combined_units.extend({**row, "item_id": item_id, "name": f"[{item_id}] {row['name']}"}
                                   for row in [*unit_price_rows(priced), *lookup_reference_rows(item_response.get("result"))])

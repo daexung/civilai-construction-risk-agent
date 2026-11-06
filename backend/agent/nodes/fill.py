@@ -13,6 +13,7 @@ from backend.agent.rules.conditions import field_active
 from backend.agent.rules.quantity_units import resolve_quantity_field
 from backend.agent.state import AgentState
 from backend.agent.tools.calc.adjustments import adjustment_questions
+from backend.agent.tools.calc.generated import check_registered_blocked
 
 _COMMON_INPUTS = Path(__file__).resolve().parents[1] / "rules/cost_statement_inputs.json"
 
@@ -188,6 +189,34 @@ def _quantity(query: str, unit: str) -> tuple[str | None, str | None]:
     return None, None
 
 
+def _field_label(field: dict) -> str | None:
+    """명세의 질문 문구(ask)에서 "~는 몇"/"~은 몇" 앞의 말을 그 칸의 이름으로 뽑는다(새 값 없음)."""
+    match = re.search(r"([가-힣]+)\s*(?:은|는)\s*몇", field.get("ask", ""))
+    return _norm(match.group(1)) if match else None
+
+
+def _labeled_quantity(normalized: str, unit: str, field: dict) -> tuple[str | None, str | None]:
+    """같은 단위를 쓰는 칸이 여럿일 때, 그 칸의 라벨이 수치 바로 앞에 있을 때만 그 칸 값으로 읽는다."""
+    label = _field_label(field)
+    if not label or label not in normalized:
+        return None, None
+    pattern = re.compile(re.escape(label) + r"[^0-9]{0,6}(-?\d[\d,]*(?:\.\d+)?(?:/\d+)?)\s*"
+                         + re.escape(unit) + r"(?![a-z0-9^])", re.I)
+    matches = pattern.findall(normalized)
+    if not matches:
+        return None, None
+    try:
+        values = {Fraction(text.replace(",", "")) for text in matches}
+    except (ValueError, ZeroDivisionError):
+        return None, "물량 숫자를 해석할 수 없습니다"
+    if len(values) > 1:
+        return None, f"{field['name']}이(가) 서로 다른 수치로 여러 번 언급되었습니다"
+    value = values.pop()
+    if value <= 0:
+        return None, f"{field['name']}은 0보다 커야 합니다"
+    return _format_rational(value), None
+
+
 def _ready_mix_price(query: str) -> tuple[str | None, str | None]:
     if query.strip() in ("모름", "몰라요", "모르겠습니다") or re.search(
             r"(?:레미콘(?:단가|가격)?|m3당|루베당).*모름", query):
@@ -268,7 +297,12 @@ def extract_inputs(query: str, spec: dict) -> tuple[dict, dict]:
             elif name != quantity_name and (unit := _norm(field.get("unit") or "")) and unit not in ("m3", "루베", "세제곱미터"):
                 # 높이 같은 조건 값: 같은 단위를 쓰는 수치 칸이 하나뿐일 때만 문장에서 읽는다(7m, 7미터).
                 same_unit = [f for f in spec["inputs"] if f["type"] == "positive_rational" and _norm(f.get("unit") or "") == unit]
-                value, reason = _quantity(normalized, unit) if len(same_unit) == 1 else (None, None)
+                if len(same_unit) == 1:
+                    value, reason = _quantity(normalized, unit)
+                else:
+                    # 같은 단위가 여러 칸이면, 그 칸의 질문(ask)에 쓰인 말(예: "높이")이 문장에 그대로
+                    # 있고 그 말 바로 뒤에 수치가 있을 때만 그 칸 값으로 읽는다. 추측해서 배정하지 않는다.
+                    value, reason = _labeled_quantity(normalized, unit, field)
             elif name == quantity_name or _norm(field.get("unit") or "") in ("m3", "루베", "세제곱미터"):
                 value, reason = _volume(normalized)
             else:  # 단위 없는 무차원 조건(토량변화율 L 등)은 문장의 ㎥ 물량을 읽지 않는다
@@ -506,7 +540,8 @@ def fill(state: AgentState) -> dict:
             work_question["reason"] = work_error
         questions.append(work_question)
     # 공종(타설 방식)이 정해지기 전에는 잠정 공종의 조건을 묻지 않는다.
-    if spec and not work_pending:
+    # 이미 받은 값만으로 적용 범위 초과가 확정되면, 아직 남은 무관한 질문은 더 하지 않는다.
+    if spec and not work_pending and not check_registered_blocked(spec, inputs):
         tables = {table["id"]: table for table in spec["tables"]}
         for field in spec["inputs"]:
             name = field["name"]

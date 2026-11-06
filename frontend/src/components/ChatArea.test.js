@@ -98,6 +98,58 @@ test('missing pump conditions explain the request and preserve only server quest
   expect(container.querySelector('.question-list').textContent).not.toContain('차감되지 않아요');
 });
 
+test('applicability scope summary shows the limit and separately counted work with first question', () => {
+  const questions = [{ name: 'height', ask: '가설 계단의 높이는 몇 m입니까?', unit: 'm', ref: 'height@1@1' }];
+  const applicability_scope = { title: '공통 2-7-7 경사형가설계단설치및해체',
+    limits: [{ condition: '높이가 6m를 초과하는 경우', reason: '본 품은 높이 6m 이하 기준', source: 'p106-x0' }],
+    separate: [], note: '위 기준은 등록된 수치·선택 조건만 보여줍니다. 명시되지 않은 범위는 별도로 확인해 주세요.' };
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null, message: '조건을 확인해 주세요.',
+    result: null, questions, applicability_scope };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response }]} />));
+  const scope = container.querySelector('.applicability-scope');
+  expect(scope.textContent).toContain('경사형가설계단설치및해체');
+  expect(scope.textContent).toContain('높이 6m 이하 기준');
+});
+
+test('long applicability scope limits are summarized with the rest behind an expand toggle', () => {
+  const questions = [{ name: 'height', ask: '가설 계단의 높이는 몇 m입니까?', unit: 'm', ref: 'height@1@1' }];
+  const limits = Array.from({ length: 5 }, (_, i) => ({ condition: `조건 ${i + 1}`, reason: `기준 ${i + 1}`, source: `출처 ${i + 1}` }));
+  const applicability_scope = { title: '검증용 공종', limits, separate: [] };
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null, message: '조건을 확인해 주세요.',
+    result: null, questions, applicability_scope };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response }]} />));
+  const scope = container.querySelector('.applicability-scope');
+  expect(scope.textContent).toContain('기준 1');
+  expect(scope.textContent).toContain('기준 3');
+  const more = scope.querySelector('.applicability-scope-limits-more');
+  expect(more).not.toBeNull();
+  expect(more.querySelector('summary').textContent).toContain('2건');
+  expect(scope.querySelector('.applicability-scope-limits ul').textContent).not.toContain('기준 4');
+  expect(more.textContent).toContain('기준 4');
+  expect(more.textContent).toContain('기준 5');
+});
+
+test('short applicability scope limits show no expand toggle', () => {
+  const applicability_scope = { title: '공통 2-7-7 경사형가설계단설치및해체',
+    limits: [{ condition: '높이가 6m를 초과하는 경우', reason: '본 품은 높이 6m 이하 기준', source: 'p106-x0' }],
+    separate: [] };
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null, message: '조건을 확인해 주세요.',
+    result: null, questions: [], applicability_scope };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response }]} />));
+  expect(container.querySelector('.applicability-scope-limits-more')).toBeNull();
+});
+
+test('blocked card shows the real reason and basis without inducing a lower input value', () => {
+  const result = { reason: '본 품은 높이 6m 이하 기준이며, 초과 시 적용할 기준이 명시되어 있지 않음',
+    source: 'p106-x0 [표] 란', input: 'height', citations: [] };
+  const response = { ...demo.response, status: 'BLOCKED', answer: null, message: result.reason, result, questions: [] };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response }]} />));
+  const card = container.querySelector('.blocked-card');
+  expect(card.textContent).toContain('본 품은 높이 6m 이하 기준');
+  expect(card.textContent).toContain('p106-x0');
+  expect(card.textContent).not.toMatch(/값을 바꾸면 계산될 수 있습니다/);
+});
+
 test('numeric question saved with a text choices description still renders instead of crashing', () => {
   const questions = [
     { name: 'volume', ask: '콘크리트 타설 물량은 몇 ㎥입니까?', choices: '0보다 큰 수' },
@@ -172,6 +224,21 @@ test('height adjustment assumption, source and module version are visible in cal
   expect(text).toContain('PDF p.193 (printed p.137)');
   expect(text).toContain('formwork-adjustments-v1 v1.0.0');
   expect(text).toContain('cc226366b633a4e7d479ee55298318d9959dc988a910875c2ee775d958ee944b');
+});
+
+test('multiple blocked items show each reason once without raw status labels or a duplicate parent scope', () => {
+  const scope = { title: '검증용 공종', limits: [{ condition: '범위', reason: '적용 범위 초과', source: '원문 비고' }], separate: [] };
+  const blocked = { reason: '입력값이 기준을 초과했습니다.', source: '원문 비고', input: 'height', citations: [] };
+  const response = { ...demo.response, status: 'BLOCKED', answer: null, message: blocked.reason,
+    result: null, priced: null, statement: null, questions: [], applicability_scope: scope,
+    multi_trade_items: ['first', 'second'].map(item_id => ({ item_id, request_text: item_id,
+      status: 'BLOCKED', work: demo.response.work, inputs: [], evidence: [], tables: demo.response.tables,
+      result: blocked, priced: null, not_calculated_scope: [], applicability_scope: scope })) };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'multi-blocked', role: 'assistant', response }]} />));
+  expect(container.querySelectorAll('.applicability-scope')).toHaveLength(2);
+  expect(container.querySelectorAll('.blocked-reason')).toHaveLength(2);
+  expect(Array.from(container.querySelectorAll('.multi-trade-item header small'), item => item.textContent))
+    .toEqual(['적용 조건 확인 필요', '적용 조건 확인 필요']);
 });
 
 test('numeric height question shows a number input and submits the typed value with its ref', () => {
