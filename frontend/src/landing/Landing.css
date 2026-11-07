@@ -180,3 +180,6 @@
   .lp-reveal { opacity: 1; transform: none; transition: none; }
   .civil-landing .lp-button, .preview-disclosure > button > svg { transition: none; }
 }
+/* 건셈 심볼 + 워드마크 */
+.civil-landing .lp-wordmark, .lp-footer-brand, .lp-footer > span { display: inline-flex; align-items: center; gap: 8px; }
+.civil-landing .lp-wordmark::before, .lp-footer-brand::before, .lp-footer > span::before { content: ''; width: 1.1em; height: 1.1em; flex-shrink: 0; background: url(../assets/geonsem-symbol.svg) center / contain no-repeat; }
