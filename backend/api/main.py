@@ -15,7 +15,7 @@ from collections import defaultdict
 from contextlib import asynccontextmanager
 from datetime import date
 from time import perf_counter
-from typing import Optional
+from typing import Literal, Optional
 from uuid import uuid4
 from uuid import UUID
 from secrets import token_urlsafe, compare_digest
@@ -179,6 +179,7 @@ class ChatRequest(BaseModel):
     request_id: Optional[UUID] = None
     user_label: Optional[str] = None
     refs: Optional[dict] = None  # AGENT_MODE=tools: 답한 질문의 question_id@version@revision
+    mode: Optional[Literal["quick", "estimate"]] = None  # 화면 탭. quick = 품셈 지식 검색만
 
 
 class GuestImportRequest(BaseModel):
@@ -1073,7 +1074,7 @@ def _dialogue_chat(payload: ChatRequest, graph=None, *, free_card_answer=False) 
     thread_id = payload.thread_id or uuid4().hex
     request = {"message": payload.message, "answers": payload.answers, "refs": payload.refs,
                "conditions": payload.conditions, "restart": payload.restart, "free_card_answer": free_card_answer,
-               "basis_date": payload.basis_date.isoformat() if payload.basis_date else None}
+               "basis_date": payload.basis_date.isoformat() if payload.basis_date else None, "mode": payload.mode}
     try:
         return dialogue_service.respond(dialogue_graph, thread_id, request)
     except (HTTPException, psycopg.Error):
