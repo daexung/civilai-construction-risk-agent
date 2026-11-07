@@ -198,6 +198,7 @@ class DialogueState(TypedDict, total=False):
     target_message: str | None
     aggregate_parent: bool
     notices: list[str]
+    quick_last: dict | None    # 빠른 질문 탭의 직전 질문·답(이어 묻기용)
 
 
 def new_dialogue() -> DialogueState:
@@ -205,7 +206,48 @@ def new_dialogue() -> DialogueState:
             "goal": None, "route": None, "turn": {}, "scope_analysis": None,
             "scope_source": None, "scope_stage": None, "scope_receipt": None,
             "scope_owner_choices": {}, "unified_estimate": False,
-            "target_choices": {}, "target_message": None, "aggregate_parent": False, "notices": []}
+            "target_choices": {}, "target_message": None, "aggregate_parent": False, "notices": [],
+            "quick_last": None}
+
+
+FOLLOWUP_SCHEMA = {"type": "object", "properties": {"question": {"type": "string"}}, "required": ["question"]}
+_NUM = re.compile(r"\d+(?:[.,]\d+)?")
+
+
+def _standalone(last: dict | None, message: str, generate) -> str:
+    """빠른 질문의 이어 묻기("그럼 양단이면?")를 앞 질문을 살린 독립 질문으로 다시 쓴다.
+    모델이 실패하거나 앞 질문·새 메시지에 없는 숫자를 만들면 두 문장을 이어 붙인다."""
+    if not last:
+        return message
+    fallback = f"{last['question']} {message}"
+    try:
+        result = generate(json.dumps({"previous_question": last["question"], "previous_answer": last["answer"][:600],
+                                      "message": message}, ensure_ascii=False),
+                          (PROMPTS / "quick_followup.md").read_text(encoding="utf-8"),
+                          response_schema=FOLLOWUP_SCHEMA, timeout_ms=15000, max_attempts=1)  # 모델 서비스 최소 10초
+        question = (json.loads(result.text).get("question") or "").strip()
+    except Exception:  # noqa: BLE001 - 다시 쓰기 실패는 이어 붙이기로 대신한다
+        return fallback
+    allowed = set(_NUM.findall(last["question"] + " " + message))
+    if not question or not set(_NUM.findall(question)) <= allowed:
+        return fallback
+    return question
+
+
+def _run_quick_turn(working: DialogueState, message: str, budget: Budget, generate) -> DialogueState:
+    """빠른 질문 탭: 견적 상태를 건드리지 않고 항상 품셈 지식 검색으로 답한다."""
+    query = _standalone(working.get("quick_last"), message, generate or client.generate)
+    result = tools.search_standard(query)
+    knowledge = result["data"]["knowledge"]
+    working["route"] = "qa"
+    working["quick_last"] = {"question": query, "answer": knowledge.get("answer") or ""}
+    working["turn"] = {"knowledge": knowledge, "answer": knowledge.get("answer") or "", "answer_source": "knowledge-v1",
+                       "tools": ["search_standard"],
+                       "trace": [{"tool": "search_standard", "args": {"query": query}, "status": result["status"],
+                                  "rejected": None, "reason": None}],
+                       "llm_info": budget.record(), "last_status": result["status"]}
+    working.pop("request", None)
+    return working
 
 
 class Budget:
@@ -767,6 +809,11 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
         working.setdefault(key, value)
     working["request"] = request
     budget, log, notices = request.get("_shared_budget") or Budget(clock), [], []
+    quick_message = (request.get("message") or "").strip()
+    if request.get("mode") == "quick" and quick_message:
+        from backend.knowledge import runtime as knowledge
+        if knowledge.enabled():
+            return _run_quick_turn(working, quick_message, budget, generate)
     if working.get("scope_analysis") and request.get("answers"):
         analysis = working["scope_analysis"]
         current = {q["field"]: q for q in working.get("pending") or [] if q.get("scope") == "intent"}
