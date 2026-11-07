@@ -922,7 +922,7 @@ export default function ChatArea(props: Props) {
         {sidebarOpen && <>
           <button className="chat-sidebar-backdrop" aria-label="메뉴 닫기" onClick={() => setSidebarOpen(false)} />
           <aside id="chat-sidebar" className="chat-sidebar" aria-label="채팅 메뉴">
-            <div className="chat-sidebar-brand"><a href="/" aria-label="품셈이 홈">품셈이</a><button className="chat-icon-button" aria-label="사이드바 닫기" onClick={() => setSidebarOpen(false)}><ChatIcon name="panel" /></button></div>
+            <div className="chat-sidebar-brand"><a href="/" aria-label="건셈 홈">건셈</a><button className="chat-icon-button" aria-label="사이드바 닫기" onClick={() => setSidebarOpen(false)}><ChatIcon name="panel" /></button></div>
             <nav className="chat-nav">
               <button className={!props.activeConversationId && !props.restoring ? 'chat-nav-active' : undefined} aria-current={!props.activeConversationId && !props.restoring ? 'page' : undefined} disabled={navigationBlocked} onClick={newChat}><ChatIcon name="plus" />새 대화</button>
               {sidebarOpen && startupStatus}
@@ -934,7 +934,7 @@ export default function ChatArea(props: Props) {
               <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={props.onFeedback}><ChatIcon name="feedback" />피드백 남기기</button>
               {props.accountLabel ? <AccountMenu adminAccess={props.adminAccess} name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login">
-                <strong>품셈이와 함께 시작하세요</strong>
+                <strong>건셈과 함께 시작하세요</strong>
                 <div className="chat-guest-usage" role="status" aria-live="polite">
                   {props.authLoading ? '로그인 확인 중…' : !props.usage ? '남은 무료 이용 횟수 확인 중…'
                     : props.usage.service_remaining === 0 ? '오늘 서비스 전체 한도에 도달했어요.'
@@ -948,7 +948,7 @@ export default function ChatArea(props: Props) {
           </aside>
         </>}
         <div className="chat-workspace">
-          <header className="chat-header"><div>{!sidebarOpen && <button className="chat-icon-button" aria-label="사이드바 열기" aria-expanded={sidebarOpen} aria-controls="chat-sidebar" onClick={() => setSidebarOpen(true)}><ChatIcon name="panel" /></button>}<span>품셈이</span><span className="chat-header-caption">표준품셈 AI</span></div><button className="chat-icon-button" aria-label="새 대화 시작" title="새 대화" disabled={navigationBlocked} onClick={newChat}><ChatIcon name="plus" /></button></header>
+          <header className="chat-header"><div>{!sidebarOpen && <button className="chat-icon-button" aria-label="사이드바 열기" aria-expanded={sidebarOpen} aria-controls="chat-sidebar" onClick={() => setSidebarOpen(true)}><ChatIcon name="panel" /></button>}<span>건셈</span><span className="chat-header-caption">표준품셈 AI</span></div><button className="chat-icon-button" aria-label="새 대화 시작" title="새 대화" disabled={navigationBlocked} onClick={newChat}><ChatIcon name="plus" /></button></header>
           {!sidebarOpen && startupStatus}
           <ChatAreaView key={`${props.activeConversationId ?? 'new'}:${conversationKey}`} {...props} />
         </div>

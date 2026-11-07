@@ -16,8 +16,8 @@ export default function LoginDialog({ busy, error, onClose, onGoogleLogin }: Pro
     <div className="login-dialog-backdrop" onMouseDown={event => { if (event.target === event.currentTarget && !busy) onClose(); }}>
       <div className="login-dialog" ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} aria-busy={busy}>
         <button className="login-dialog-close" type="button" aria-label="로그인 창 닫기" disabled={busy} onClick={onClose}><X size={19} strokeWidth={1.75} /></button>
-        <h2 id={titleId}>품셈이</h2>
-        <p className="login-dialog-description" id={descriptionId}>공사비 견적부터 품셈 상담까지,<br />품셈이와 함께 쉽고 간편하게.</p>
+        <h2 id={titleId}>건셈</h2>
+        <p className="login-dialog-description" id={descriptionId}>공사비 견적부터 품셈 상담까지,<br />건셈과 함께 쉽고 간편하게.</p>
         <button className="login-dialog-google" type="button" disabled={busy} onClick={onGoogleLogin}>
           <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />

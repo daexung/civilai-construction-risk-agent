@@ -48,7 +48,7 @@ export default function Landing({ onStart, onExample }: Props) {
     <a className="lp-skip" href="#landing-main">본문으로 건너뛰기</a>
     <header className="lp-header">
       <div className="lp-container lp-header-inner">
-        <a className="lp-wordmark" href="#top" aria-label="품셈이 홈">품셈이</a>
+        <a className="lp-wordmark" href="#top" aria-label="건셈 홈">건셈</a>
         <nav aria-label="주 메뉴">
           <a className="lp-button lp-nav-demo" href="/chat" onClick={start}>시작하기</a>
         </nav>
@@ -65,7 +65,7 @@ export default function Landing({ onStart, onExample }: Props) {
         </div>
         <div id="demo" className="lp-demo lp-report">
           <div className="lp-report-toolbar">
-            <span>품셈AI · 견적 예시</span>
+            <span>건셈 · 견적 예시</span>
             <span>{demo.response.status === 'PARTIAL' ? '부분 금액 계산' : '금액 계산 완료'}</span>
           </div>
           <div className="lp-live-preview-grid">
@@ -108,14 +108,14 @@ export default function Landing({ onStart, onExample }: Props) {
           <h2 id="landing-basis-title">금액과 함께,<br />품셈의 근거도.</h2>
           <p className="lp-basis-description">적용 조건과 단가, 산출 과정, 품셈 원문을 함께 확인하세요.</p>
           <div className="lp-final-cta">
-            <p>품셈이에 지금 바로 물어보세요.</p>
+            <p>건셈에 지금 바로 물어보세요.</p>
             <a className="lp-button lp-button-white" href="/chat" onClick={start}>견적·상담 시작하기</a>
           </div>
         </Reveal></div>
       </section>
     </main>
     <footer className="lp-container lp-footer lp-landing-footer">
-      <div className="lp-footer-top"><span className="lp-footer-brand">품셈이</span><div className="lp-footer-links"><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></div></div>
+      <div className="lp-footer-top"><span className="lp-footer-brand">건셈</span><div className="lp-footer-links"><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></div></div>
       <p className="lp-footer-contact">문의: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
     </footer>
   </div>;

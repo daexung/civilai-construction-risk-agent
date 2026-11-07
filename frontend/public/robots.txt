@@ -5,4 +5,4 @@ Disallow: /chat
 Disallow: /auth/
 Disallow: /trial
 
-Sitemap: https://poomsemi.vercel.app/sitemap.xml
+Sitemap: https://www.geonsem.com/sitemap.xml

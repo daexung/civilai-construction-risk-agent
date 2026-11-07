@@ -6,18 +6,18 @@ import './Terms.css';
 export default function Terms() {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = '이용약관 | 품셈이';
+    document.title = '이용약관 | 건셈';
     return () => { document.title = previousTitle; };
   }, []);
 
   return <div className="civil-landing terms-page">
     <a className="lp-skip" href="#terms-main">본문으로 건너뛰기</a>
     <header className="lp-header"><div className="lp-container lp-header-inner">
-      <a className="lp-wordmark" href="/" aria-label="품셈이 홈">품셈이</a>
+      <a className="lp-wordmark" href="/" aria-label="건셈 홈">건셈</a>
       <a className="lp-text-link" href="/">홈으로 돌아가기 <span aria-hidden="true">→</span></a>
     </div></header>
     <main id="terms-main" className="lp-container terms-main">
-      <p className="lp-eyebrow">품셈이 서비스</p>
+      <p className="lp-eyebrow">건셈 서비스</p>
       <h1>이용약관</h1>
       <p className="terms-date">시행일: 2026년 10월 6일 · 버전 1.0</p>
       <aside className="terms-summary" aria-label="핵심 이용 안내">
@@ -26,11 +26,11 @@ export default function Terms() {
       </aside>
       <article className="terms-content" aria-label="이용약관 본문">
         <section><h2>제1조 목적 및 적용 범위</h2>
-          <p>본 약관은 품셈이 서비스를 제공하는 운영자(이하 “운영자”)와 서비스를 이용하는 자(이하 “이용자”) 사이의 서비스 이용 조건, 권리·의무 및 책임 범위를 정합니다. 본 약관은 품셈 상담, 공사비 계산, 산출근거 제공 및 엑셀 출력 등 품셈이에서 제공하는 기능에 적용됩니다.</p>
+          <p>본 약관은 건셈 서비스를 제공하는 운영자(이하 “운영자”)와 서비스를 이용하는 자(이하 “이용자”) 사이의 서비스 이용 조건, 권리·의무 및 책임 범위를 정합니다. 본 약관은 품셈 상담, 공사비 계산, 산출근거 제공 및 엑셀 출력 등 건셈에서 제공하는 기능에 적용됩니다.</p>
         </section>
         <section><h2>제2조 서비스의 성격</h2>
-          <p>품셈이는 표준품셈 등 참고 자료와 이용자가 입력한 조건을 바탕으로 AI 에이전트가 견적과 설명을 작성하는 실무 보조 서비스입니다. 제공되는 금액, 일위대가, 원가계산서, 산출근거, 상담 답변 및 다운로드 파일은 검토를 위한 초안이며, 확정 견적이나 공인된 감정·검증 결과가 아닙니다.</p>
-          <p>품셈이는 국토교통부 등 공공기관의 공식 서비스가 아니며, 전문 기술 검토, 발주기관의 승인 또는 계약 당사자의 판단을 대신하지 않습니다.</p>
+          <p>건셈은 표준품셈 등 참고 자료와 이용자가 입력한 조건을 바탕으로 AI 에이전트가 견적과 설명을 작성하는 실무 보조 서비스입니다. 제공되는 금액, 일위대가, 원가계산서, 산출근거, 상담 답변 및 다운로드 파일은 검토를 위한 초안이며, 확정 견적이나 공인된 감정·검증 결과가 아닙니다.</p>
+          <p>건셈은 국토교통부 등 공공기관의 공식 서비스가 아니며, 전문 기술 검토, 발주기관의 승인 또는 계약 당사자의 판단을 대신하지 않습니다.</p>
         </section>
         <section><h2>제3조 결과의 한계 및 확인 사항</h2>
           <p>AI의 해석이나 계산에는 오류 또는 누락이 발생할 수 있습니다. 품셈의 적용 연도, 공종 분류, 작업 조건, 할증·보정, 노임·재료·장비 단가, 제경비, 세금 및 반올림 방식에 따라 결과가 달라질 수 있으며, 최신 개정이나 실제 현장 조건이 반영되지 않을 수 있습니다.</p>
@@ -67,6 +67,6 @@ export default function Terms() {
       </article>
       <a className="lp-button terms-home" href="/">홈으로 돌아가기</a>
     </main>
-    <footer className="lp-container lp-footer"><span>품셈이</span><div className="lp-footer-links"><a href="/terms" aria-current="page">이용약관</a></div></footer>
+    <footer className="lp-container lp-footer"><span>건셈</span><div className="lp-footer-links"><a href="/terms" aria-current="page">이용약관</a></div></footer>
   </div>;
 }

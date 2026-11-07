@@ -349,7 +349,7 @@ _DOUBLE = Side(style="double", color="595959")
 _BORDER = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
 _MONEY = "#,##0"
 _DECIMAL = "#,##0.0###"
-_FOOTER = "표준품셈 기준 금액 · 검토 전 참고용 · 품셈이"
+_FOOTER = "표준품셈 기준 금액 · 검토 전 참고용 · 건셈"
 
 
 def _work_name(response: dict) -> str:
@@ -371,7 +371,7 @@ def estimate_filename(response: dict) -> str:
     name = re.sub(r'^(?:(?:토목|건축|기계설비)\s+)?\d+-\d+-\d+\s*', '', name)
     name = re.sub(r'\s+', ' ', name)[:60].strip(' .') or '공사비'
     downloaded = datetime.now(timezone(timedelta(hours=9))).strftime('%Y%m%d')
-    return f"품셈이_{name}_견적서_{downloaded}.xlsx"
+    return f"건셈_{name}_견적서_{downloaded}.xlsx"
 
 
 def _metadata(response: dict) -> tuple[str, str]:

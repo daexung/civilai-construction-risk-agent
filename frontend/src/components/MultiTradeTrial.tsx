@@ -188,7 +188,7 @@ export default function MultiTradeTrial() {
 
   return <main className="multi-trial">
     <header className="multi-trial-header">
-      <a href="/chat" className="multi-trial-back">품셈이 채팅으로 돌아가기</a>
+      <a href="/chat" className="multi-trial-back">건셈 채팅으로 돌아가기</a>
       <div><p className="multi-trial-kicker">LOCAL ONLY · DEFAULT OFF</p><h1>복수 공종 견적 시험</h1></div>
       <span className={`multi-trial-health ${healthInfo ? 'is-ready' : ''}`} role="status">
         {healthInfo ? '저장된 v1 자료 확인됨' : '로컬 검색 자료 확인 필요'}

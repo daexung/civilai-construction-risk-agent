@@ -55,7 +55,7 @@ fs.writeFileSync(indexPath,
 
 const html = fs.readFileSync(indexPath, 'utf8');
 const required = [
-  '품셈이', '공사비 견적', '품셈 상담', '엑셀 출력', 'href="/chat"',
+  '건셈', '공사비 견적', '품셈 상담', '엑셀 출력', 'href="/chat"',
   '이용약관', '개인정보 처리방침',
 ];
 for (const text of required) {

@@ -21,7 +21,7 @@ function NoticeDialog({ onClose, onStart, variant = 'landing', onFeedback }: Not
     <div className="beta-notice" ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId}>
       <button className="beta-notice-close" type="button" aria-label="베타 안내 닫기" onClick={close}><X size={20} strokeWidth={1.75} /></button>
       <span className="beta-notice-badge">OPEN BETA</span>
-      <h2 id={titleId} className="beta-notice-title" tabIndex={-1}>{isChat ? <>함께 만드는<br />품셈이 베타 테스트</> : <>품셈이, 지금 무료로<br />경험해 보세요.</>}</h2>
+      <h2 id={titleId} className="beta-notice-title" tabIndex={-1}>{isChat ? <>함께 만드는<br />건셈 베타 테스트</> : <>건셈, 지금 무료로<br />경험해 보세요.</>}</h2>
       <p className="beta-notice-description" id={descriptionId}>현재 베타 테스트 기간으로,<br />공사비 견적과 품셈 상담을 무료로 이용할 수 있어요.</p>
       <p className="beta-notice-scope"><strong>여러 공종의 견적을 함께 계산할 수 있어요</strong><br />공종별 조건과 물량을 확인해 통합 견적을 만들어요. 베타 기간 중 지원 범위는 계속 넓혀가고 있어요.</p>
       <p className="beta-notice-feedback">아직 베타 테스트 중이라 답변이나 견적 결과가 부족하거나 정확하지 않을 수 있어요. 이용해 보시고 불편한 점이나 개선 의견을 남겨 주세요.</p>
