@@ -20,3 +20,8 @@ test('ambiguous numbers show alternatives without values',()=>{
  act(()=>root.render(<KnowledgeAnswer result={{...base,alternatives:[{division:'건축',number:'4-1-1',title:'먹매김'},{division:'토목',number:'4-1-1',title:'다른 절'}]}}/>));
  expect(node.querySelectorAll('li')).toHaveLength(2);expect(node.textContent).toContain('먹매김');
 });
+test('chunks from the same section and page share one card',()=>{
+ const a={id:'a',division:'공통부문',section_no:'6-1-4',section_title:'펌프차 타설',printed_page:130,pdf_page:186,lines:[{n:1,text:'가',display:'가'}]};
+ act(()=>root.render(<KnowledgeAnswer result={{...base,review_material:[a,{...a,id:'b',lines:[{n:2,text:'나',display:'나'}]}]}}/>));
+ expect(node.querySelectorAll('.ka-source')).toHaveLength(1);expect(node.textContent).toContain('나');
+});
