@@ -948,7 +948,7 @@ export default function ChatArea(props: Props) {
           </aside>
         </>}
         <div className="chat-workspace">
-          <header className="chat-header"><div>{!sidebarOpen && <button className="chat-icon-button" aria-label="사이드바 열기" aria-expanded={sidebarOpen} aria-controls="chat-sidebar" onClick={() => setSidebarOpen(true)}><ChatIcon name="panel" /></button>}<span>건셈</span><span className="chat-header-caption">표준품셈 AI</span></div><button className="chat-icon-button" aria-label="새 대화 시작" title="새 대화" disabled={navigationBlocked} onClick={newChat}><ChatIcon name="plus" /></button></header>
+          <header className="chat-header"><div>{!sidebarOpen && <button className="chat-icon-button" aria-label="사이드바 열기" aria-expanded={sidebarOpen} aria-controls="chat-sidebar" onClick={() => setSidebarOpen(true)}><ChatIcon name="panel" /></button>}<span>건셈</span></div><button className="chat-icon-button" aria-label="새 대화 시작" title="새 대화" disabled={navigationBlocked} onClick={newChat}><ChatIcon name="plus" /></button></header>
           {!sidebarOpen && startupStatus}
           <ChatAreaView key={`${props.activeConversationId ?? 'new'}:${conversationKey}`} {...props} />
         </div>
