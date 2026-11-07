@@ -15,7 +15,8 @@
 - no_offer        : 간단 계산에서 견적 안내 없음(T11, 현재 기능 없음)
 - error           : 실행 오류
 
-사용(저장소 루트): .venv/Scripts/python.exe -B experiments/retrieval-v1/eval/junior/run_q2.py [ID ...]
+사용(저장소 루트): .venv/Scripts/python.exe -B experiments/retrieval-v1/eval/junior/run_q2.py [--quick] [ID ...]
+  --quick: 빠른 질문 탭(mode=quick)으로 보낸다
 """
 from __future__ import annotations
 
@@ -54,7 +55,8 @@ def observe(state: dict) -> dict:
              for key in ('sources', 'related') for s in k.get(key) or [] if s}
     return {'answer_source': turn.get('answer_source'), 'tools': turn.get('tools'), 'answer': turn.get('answer') or '',
             'knowledge_status': k.get('answer_status') or k.get('status') if k else None,
-            'cited': sorted([list(c) for c in cited]), 'route': state.get('route')}
+            'cited': sorted([list(c) for c in cited]), 'route': state.get('route'),
+            'query': next((t['args'].get('query') for t in turn.get('trace') or [] if t.get('tool') == 'search_standard' and t.get('args')), None)}
 
 
 def judge(case: dict, obs: dict, need: set) -> str:
@@ -135,7 +137,9 @@ def main() -> int:
         from collections import Counter
         print(dict(Counter(r['verdict'] for r in rows)))
         return 0
-    only = set(sys.argv[1:])
+    args = sys.argv[1:]
+    mode = 'quick' if '--quick' in args else None  # 빠른 질문 탭 요청으로 보낸다
+    only = {a for a in args if not a.startswith('--')}
     rows = []
     for case in cases:
         if only and case['id'] not in only:
@@ -146,7 +150,7 @@ def main() -> int:
             state = dialogue.new_dialogue()
             turns = []
             for message in case['turns']:
-                state = dialogue.run_turn(state, {'message': message})
+                state = dialogue.run_turn(state, {'message': message, 'mode': mode})
                 turns.append(observe(state))
             verdict = judge(case, turns[-1], need)
             if case['type'] == 'T8_followup' and verdict != 'ok':
@@ -158,7 +162,7 @@ def main() -> int:
                      'observed': turns, 'sec': round(time.monotonic() - started, 1)})
         print(case['id'], case['type'], verdict, rows[-1]['sec'], flush=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / f'{datetime.now():%Y%m%d-%H%M%S}.json'
+    path = OUT / f'{datetime.now():%Y%m%d-%H%M%S}{"-quick" if mode else ""}.json'
     path.write_text(json.dumps(rows, ensure_ascii=False, indent=1), encoding='utf-8')
     from collections import Counter
     print(dict(Counter(r['verdict'] for r in rows)), '->', path)

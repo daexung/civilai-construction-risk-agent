@@ -86,3 +86,39 @@ def test_fresh_qa_with_size_runs_verified_tool_before_planner(monkeypatch):
     assert state['turn']['knowledge']['status']=='needs_confirmation'
     assert state['session'] is None and not state['pending']
     generate.assert_not_called()
+
+class _Reply:
+    def __init__(self,question):self.text='{"question": "%s"}'%question
+
+def test_quick_mode_always_uses_knowledge_even_with_quantities(monkeypatch):
+    monkeypatch.setenv('KNOWLEDGE_RETRIEVAL','v1')
+    question='기계터파기 굴착기 1.0㎥로 TypeⅡ 작업하면 하루 시공량 몇 루베야?'
+    generate=MagicMock(side_effect=AssertionError('no rewrite on first turn'))
+    with patch.object(runtime,'ask',return_value=sample()) as ask:
+        state=dialogue.run_turn(dialogue.new_dialogue(),{'message':question,'mode':'quick'},generate=generate)
+    ask.assert_called_once_with(question)
+    assert state['turn']['answer_source']=='knowledge-v1' and state['session'] is None and not state['pending']
+    assert state['quick_last']['question']==question
+
+def test_quick_followup_is_rewritten_with_previous_question(monkeypatch):
+    monkeypatch.setenv('KNOWLEDGE_RETRIEVAL','v1')
+    first='신축이음매 일단 설치하면 궤도공 품은 얼마야?'
+    rewritten='신축이음매 양단 설치하면 궤도공 품은 얼마야?'
+    with patch.object(runtime,'ask',return_value=sample()) as ask:
+        state=dialogue.run_turn(dialogue.new_dialogue(),{'message':first,'mode':'quick'})
+        state=dialogue.run_turn(state,{'message':'그럼 양단이면?','mode':'quick'},generate=MagicMock(return_value=_Reply(rewritten)))
+    assert ask.call_args_list[-1].args==(rewritten,)
+
+def test_quick_followup_rejects_invented_numbers(monkeypatch):
+    monkeypatch.setenv('KNOWLEDGE_RETRIEVAL','v1')
+    last={'question':'신축이음매 일단 궤도공 품은?','answer':'0.25인'}
+    out=dialogue._standalone(last,'그럼 양단이면?',MagicMock(return_value=_Reply('신축이음매 양단 60kg 궤도공 품은?')))
+    assert out=='신축이음매 일단 궤도공 품은? 그럼 양단이면?'
+    broken=dialogue._standalone(last,'그럼 양단이면?',MagicMock(side_effect=RuntimeError('down')))
+    assert broken=='신축이음매 일단 궤도공 품은? 그럼 양단이면?'
+
+def test_estimate_mode_keeps_existing_path(monkeypatch):
+    monkeypatch.setenv('KNOWLEDGE_RETRIEVAL','v1')
+    with patch.object(dialogue,'_run_quick_turn') as quick,patch.object(runtime,'ask',return_value=sample()):
+        dialogue.run_turn(dialogue.new_dialogue(),{'message':'콘크리트 타설 품 알려줘'})
+    quick.assert_not_called()
