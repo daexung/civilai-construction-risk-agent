@@ -7,6 +7,7 @@ on:
       - 'evals/check_spec_lint.py'
       - 'evals/check_spec_source_match.py'
       - 'evals/spec_lint_known.json'
+      - 'data/defaults/**'
       - '.github/workflows/check-specs.yml'
   push:
     branches: [main]
@@ -16,6 +17,7 @@ on:
       - 'evals/check_spec_lint.py'
       - 'evals/check_spec_source_match.py'
       - 'evals/spec_lint_known.json'
+      - 'data/defaults/**'
       - '.github/workflows/check-specs.yml'
 
 permissions:
