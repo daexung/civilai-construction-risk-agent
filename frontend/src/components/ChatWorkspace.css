@@ -160,10 +160,8 @@
 .chat-nav > button:first-child:hover:not(:disabled) { background: var(--brand-strong); color: #fff; }
 .chat-nav > button:first-child:active:not(:disabled) { transform: translateY(1px); }
 .chat-history h2 { margin: 0 14px 8px; color: #9a9a9a; font-size: 12px; font-weight: 600; letter-spacing: .02em; }
-.chat-history-row { position: relative; }
 .chat-history-row:hover { background: #f4f4f5; }
 .chat-history-row.chat-history-active { background: var(--accent-tint); }
-.chat-history-row.chat-history-active::before { content: ''; position: absolute; left: 0; top: 9px; bottom: 9px; width: 3px; border-radius: 3px; background: var(--brand-primary); }
 .chat-history-row.chat-history-active button { color: var(--brand-strong); font-weight: 600; }
 .chat-history-more:hover:not(:disabled) { background: #e9e9eb; }
 .chat-sidebar-bottom { border-top-color: #eeeeee; }
