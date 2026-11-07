@@ -70,7 +70,6 @@
 .chat-header { display: flex; align-items: center; justify-content: space-between; min-height: 60px; padding: 10px 24px; }
 .chat-header > div { display: flex; align-items: center; gap: 12px; font-size: 15px; }
 .chat-header > div > span:first-of-type { color: var(--brand-strong); }
-.chat-header-caption { color: #888; font-size: 11px; border-left: 1px solid #e6e6e6; padding-left: 12px; }
 .chat-workspace .chat-area { height: auto; min-height: 0; width: 100%; flex: 1; }
 .chat-shell .centered-welcome { padding: 24px 32px 100px; }
 .chat-shell .welcome-header { margin-bottom: 38px; }
@@ -113,7 +112,6 @@
   .chat-shell .input-area { padding: 10px 20px 14px; }
 }
 @media (max-width: 480px) {
-  .chat-header-caption { display: none; }
   .chat-shell .centered-welcome { padding: 20px 16px 60px; }
   .chat-shell .welcome-header { margin-bottom: 28px; }
   .chat-shell .welcome-header h2 { font-size: 24px; }
