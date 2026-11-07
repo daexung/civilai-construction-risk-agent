@@ -15,7 +15,7 @@ afterEach(() => { act(() => root.unmount()); container.remove(); });
 
 test('landing describes the current service and preserves its real estimate preview', () => {
   act(() => root.render(<Landing onStart={() => {}} onExample={() => {}} />));
-  expect(container.textContent).toContain('품셈AI');
+  expect(container.textContent).toContain('건셈');
   expect(container.textContent).toContain('공사비 견적');
   expect(container.textContent).toContain('품셈 상담');
   expect(container.textContent).toContain('엑셀 출력');

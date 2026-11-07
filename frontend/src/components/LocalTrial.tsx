@@ -166,7 +166,7 @@ export default function LocalTrial() {
   return (
     <div className="lt-app">
       <header className="lt-header">
-        <h1>품셈이 · 로컬 시험 모드</h1>
+        <h1>건셈 · 로컬 시험 모드</h1>
         <p>현재 근거 검색 정책으로 질문 → 근거 상태 → 설명·출처를 확인하는 시험 화면이에요. 로컬에서만 동작하고 원격 저장·로그인·사용량 차감을 쓰지 않아요.</p>
         <p className="lt-small">연결 상태: {health}. 견적 계산·공사비 합산은 하지 않아요. 질문 표현이 원문과 글자가 달라 정상 근거도 &apos;확인 필요&apos;로 나올 수 있고, 원문에 없는 대상과 비슷한 표가 있으면 검토용으로만 보여 드려요.</p>
       </header>

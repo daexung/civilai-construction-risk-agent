@@ -86,7 +86,7 @@ export async function downloadEstimate(threadId: string): Promise<void> {
   const res = await request(`/api/export/${threadId}.xlsx`, {}, member);
   const href = URL.createObjectURL(await res.blob());
   const anchor = document.createElement('a');
-  let filename = '품셈이_견적서.xlsx';
+  let filename = '건셈_견적서.xlsx';
   const disposition = res.headers?.get('Content-Disposition') ?? '';
   const encoded = /filename\*\s*=\s*UTF-8''([^;]+)/i.exec(disposition);
   const quoted = /filename\s*=\s*"([^"]+)"/i.exec(disposition);

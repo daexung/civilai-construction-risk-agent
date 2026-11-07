@@ -1,4 +1,4 @@
-# 품셈이 로컬 Supabase
+# 건셈 로컬 Supabase
 
 Docker Desktop의 Linux 컨테이너에서 PostgreSQL, Auth, API만 실행한다.
 메모리 사용을 줄이기 위해 현재 사용하지 않는 Studio, 실시간 구독, Storage, 메일 테스트,

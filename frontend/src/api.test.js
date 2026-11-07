@@ -39,7 +39,7 @@ test('missing or rejected member authentication never falls back to guest storag
 });
 
 test('member export authenticates through headers and keeps tokens out of URLs', async () => {
-  const filename = '품셈이_콘크리트 펌프차 타설_견적서_20261006.xlsx';
+  const filename = '건셈_콘크리트 펌프차 타설_견적서_20261006.xlsx';
   fetch.mockResolvedValue({ ok: true, headers: new Headers({ 'Content-Disposition': `attachment; filename="estimate.xlsx"; filename*=UTF-8''${encodeURIComponent(filename)}` }), blob: async () => new Blob(['xlsx']) });
   URL.createObjectURL = jest.fn(() => 'blob:download');
   URL.revokeObjectURL = jest.fn();

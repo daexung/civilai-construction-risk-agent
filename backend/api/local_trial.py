@@ -422,7 +422,7 @@ def trial_page(page: int) -> Response:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-app = FastAPI(title='품셈이 로컬 시험(5단계)')
+app = FastAPI(title='건셈 로컬 시험(5단계)')
 app.add_middleware(CORSMiddleware, allow_origins=['http://127.0.0.1:3010', 'http://localhost:3010'], allow_methods=['GET', 'POST'], allow_headers=['*'])
 app.include_router(router)
 

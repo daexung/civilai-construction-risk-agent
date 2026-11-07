@@ -6,18 +6,18 @@ import './Terms.css';
 export default function Privacy() {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = '개인정보 처리방침 | 품셈이';
+    document.title = '개인정보 처리방침 | 건셈';
     return () => { document.title = previousTitle; };
   }, []);
 
   return <div className="civil-landing terms-page">
     <a className="lp-skip" href="#privacy-main">본문으로 건너뛰기</a>
     <header className="lp-header"><div className="lp-container lp-header-inner">
-      <a className="lp-wordmark" href="/" aria-label="품셈이 홈">품셈이</a>
+      <a className="lp-wordmark" href="/" aria-label="건셈 홈">건셈</a>
       <a className="lp-text-link" href="/">홈으로 돌아가기 <span aria-hidden="true">→</span></a>
     </div></header>
     <main id="privacy-main" className="lp-container terms-main">
-      <p className="lp-eyebrow">품셈이 서비스</p>
+      <p className="lp-eyebrow">건셈 서비스</p>
       <h1>개인정보 처리방침</h1>
       <p className="terms-date">작성일: 2026년 10월 6일 · 운영 공개 전 초안</p>
       <aside className="terms-summary" aria-label="개인정보 처리 안내">
@@ -89,6 +89,6 @@ export default function Privacy() {
       </article>
       <div className="terms-home"><a className="lp-button" href="/">홈으로 돌아가기 <span aria-hidden="true">→</span></a></div>
     </main>
-    <footer className="lp-container lp-footer"><span>품셈이</span><div className="lp-footer-links"><a href="/terms">이용약관</a><a href="/privacy" aria-current="page">개인정보 처리방침</a></div></footer>
+    <footer className="lp-container lp-footer"><span>건셈</span><div className="lp-footer-links"><a href="/terms">이용약관</a><a href="/privacy" aria-current="page">개인정보 처리방침</a></div></footer>
   </div>;
 }
