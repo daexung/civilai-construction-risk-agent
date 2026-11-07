@@ -153,8 +153,7 @@
 /* Sidebar: clean white base, brand green only on the key elements. */
 .chat-sidebar { background: #fff; border-right-color: #eeeeee; }
 .chat-sidebar-brand > a { display: inline-flex; align-items: center; gap: 9px; }
-.chat-sidebar-brand > a::before { content: ''; width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0;
-  background: linear-gradient(135deg, var(--brand-primary), var(--brand-strong)); box-shadow: 0 2px 6px oklch(.393 .091 152.5 / .25); }
+.chat-sidebar-brand > a::before { content: ''; width: 24px; height: 24px; flex-shrink: 0; background: url(../assets/geonsem-symbol.svg) center / contain no-repeat; }
 .chat-nav > button:first-child { justify-content: center; gap: 8px; padding: 11px 14px; border-radius: 12px; background: var(--brand-primary); color: #fff; font-weight: 600;
   box-shadow: 0 1px 2px oklch(.393 .091 152.5 / .2), 0 4px 12px -4px oklch(.537 .106 145.6 / .45); transition: background .15s, transform .15s; }
 .chat-nav > button:first-child:hover:not(:disabled) { background: var(--brand-strong); color: #fff; }
