@@ -4,6 +4,7 @@
 비교: work+estimate→estimate, work+qa만→qa, out_of_scope→out_of_scope. clarify는 따로 센다.
 """
 import json
+import sys
 from collections import Counter
 from pathlib import Path
 
@@ -26,7 +27,7 @@ def to_label(res: dict) -> str:
 
 def main():
     rows = [json.loads(x) for x in (ROOT / "router_testset.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
-    tally, calls, misses = Counter(), 0, []
+    tally, calls, misses, detail = Counter(), 0, [], []
     for row in rows:
         ctx = row.get("context")
         previous = None
@@ -36,10 +37,17 @@ def main():
         res = route_turn(row["q"], previous)
         got = to_label(res)
         calls += res["calls_used"]
+        if res["output"]:
+            tally.update(f"wants:{q['kind']}.{q['wants']}" for q in res["output"]["requests"])
         tally["match" if got == row["label"] else got if got in ("clarify", "output_error", "failed") else "wrong"] += 1
         if got != row["label"]:
             misses.append({"id": row["id"], "q": row["q"], "want": row["label"], "got": got,
                            "errors": res["errors"][:2]})
+        detail.append({"id": row["id"], "q": row["q"], "boundary": row.get("boundary", False),
+                       "has_context": bool(ctx), "want": row["label"], "got": got,
+                       "calls": res["calls_used"], "output": res["output"]})
+    if len(sys.argv) > 1:  # 문항별 결과 저장: python -m evals.run_v2_router_live out.json
+        Path(sys.argv[1]).write_text(json.dumps(detail, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps({"total": len(rows), **tally, "ai_calls": calls}, ensure_ascii=False))
     for m in misses:
         print(json.dumps(m, ensure_ascii=False))

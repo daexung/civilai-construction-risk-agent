@@ -73,6 +73,7 @@ class Request(BaseModel):
     quantity: Quantity | None
     conditions: list[Condition]
     asks: str
+    wants: Literal["explain", "value", "calculate"]  # 사용자가 원하는 결과
     card_answer: CardAnswer | None
 
 
@@ -109,6 +110,7 @@ RESPONSE_SCHEMA = _obj({
         "quantity": _obj({"value": _S, "unit": _S, "evidence": _S}, nullable=True),
         "conditions": {"type": "array", "items": _obj({"text": _S, "evidence": _S})},
         "asks": _S,
+        "wants": {"type": "string", "enum": ["explain", "value", "calculate"]},
         "card_answer": _obj({"question_id": _S, "value": _S, "evidence": _S}, nullable=True),
     })},
     "clarify": _obj({"ask": _S, "options": _SL}, nullable=True),

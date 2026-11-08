@@ -28,7 +28,7 @@ def fake(*outputs):
 def req(**kw):
     base = {"id": "r1", "kind": "estimate", "estimate_mode": "new",
             "target": {"user_text": "타일", "evidence": "타일", "search_terms": ["타일붙이기"]},
-            "quantity": None, "conditions": [], "asks": "공사비", "card_answer": None}
+            "quantity": None, "conditions": [], "asks": "공사비", "wants": "calculate", "card_answer": None}
     base.update(kw)
     return base
 
@@ -44,6 +44,12 @@ def test_examples_follow_rules():
             ex = json.loads(raw)
             out = r.RouterOutput.model_validate(ex["output"])
             assert r.validate(out, r.RouterInput.model_validate(ex["input"])) == [], ex["note"]
+
+
+def test_wants_is_required_enum():
+    bad = work(req(wants="money"))
+    res = r.route_turn("타일 공사비", generate=fake(bad, bad))
+    assert res["status"] == "output_error" and any("wants" in e for e in res["errors"])
 
 
 def test_system_prompt_includes_examples():
