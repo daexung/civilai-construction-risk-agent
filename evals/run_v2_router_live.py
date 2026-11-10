@@ -1,6 +1,7 @@
 """v2 라우터 실제 호출 점검: router_testset.jsonl 46문.
 
-실행: $env:AGENT_LLM='on'; .venv/Scripts/python.exe -m evals.run_v2_router_live
+실행: $env:AGENT_LLM='on'; .venv/Scripts/python.exe -m evals.run_v2_router_live [결과.json] [시험지.jsonl]
+시험지 기본값은 router_testset.jsonl. 시험지에 wants가 적힌 문항은 원하는 결과도 따로 센다.
 비교: work+estimate→estimate, work+qa만→qa, out_of_scope→out_of_scope. clarify는 따로 센다.
 """
 import json
@@ -26,7 +27,8 @@ def to_label(res: dict) -> str:
 
 
 def main():
-    rows = [json.loads(x) for x in (ROOT / "router_testset.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+    testset = sys.argv[2] if len(sys.argv) > 2 else "router_testset.jsonl"
+    rows = [json.loads(x) for x in (ROOT / testset).read_text(encoding="utf-8").splitlines() if x.strip()]
     tally, calls, misses, detail = Counter(), 0, [], []
     for row in rows:
         ctx = row.get("context")
@@ -39,6 +41,9 @@ def main():
         calls += res["calls_used"]
         if res["output"]:
             tally.update(f"wants:{q['kind']}.{q['wants']}" for q in res["output"]["requests"])
+        if row.get("wants") and got == row["label"]:
+            got_wants = [q["wants"] for q in res["output"]["requests"]]
+            tally["wants_ok" if row["wants"] in got_wants else "wants_wrong"] += 1
         tally["match" if got == row["label"] else got if got in ("clarify", "output_error", "failed") else "wrong"] += 1
         if got != row["label"]:
             misses.append({"id": row["id"], "q": row["q"], "want": row["label"], "got": got,
