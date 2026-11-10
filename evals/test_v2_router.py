@@ -148,6 +148,6 @@ def test_504_is_retried_with_per_try_cap(monkeypatch):
         return '{"ok": true}'
 
     res = client._generate("p", "s", request_fn=request_fn, sleep_fn=lambda _: None,
-                           timeout_ms=10000, attempt_timeout_ms=5000, max_attempts=2, retry_delays=[0.3])
+                           timeout_ms=22000, attempt_timeout_ms=5000, max_attempts=2, retry_delays=[0.3])
     assert res.text == '{"ok": true}' and res.attempts == 2
-    assert seen[0] == 5000 and seen[1] <= 5000
+    assert seen[0] == 10000 and seen[1] <= 10000  # Gemini 최소 10초

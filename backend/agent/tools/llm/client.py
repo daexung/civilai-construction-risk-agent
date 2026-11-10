@@ -221,7 +221,9 @@ def _generate(
             break
         attempt = next_attempt
         try:
-            text = request_fn(model, prompt, system, min(remaining_ms, attempt_timeout_ms or remaining_ms))
+            # Gemini rejects deadlines under 10s, so a per-try cap never goes below that.
+            cap = max(attempt_timeout_ms, 10000) if attempt_timeout_ms else remaining_ms
+            text = request_fn(model, prompt, system, min(remaining_ms, cap))
         except Exception as exc:
             last_error = exc
             if not _transient(exc) or attempt == max_attempts:
