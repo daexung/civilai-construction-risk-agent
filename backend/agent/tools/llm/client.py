@@ -99,13 +99,14 @@ def _transient(exc: Exception) -> bool:
     status = status or getattr(response, "status_code", None)
     if status in (400, 401, 403, "400", "401", "403"):
         return False
-    if status in (429, 503, "429", "503"):
+    if status in (429, 503, 504, "429", "503", "504"):
         return True
     if isinstance(exc, (ConnectionError, TimeoutError)):
         return True
     message = f"{type(exc).__name__}: {exc}".upper()
     return any(token in message for token in (
-        "UNAVAILABLE", "RESOURCE_EXHAUSTED", "429", "503", "TIMEOUT", "TIMED OUT",
+        "UNAVAILABLE", "RESOURCE_EXHAUSTED", "DEADLINE_EXCEEDED", "429", "503", "504",
+        "TIMEOUT", "TIMED OUT",
         "CONNECTION RESET", "CONNECTION ERROR", "CONNECTION ABORTED",
         "CONNECTIONERROR", "CONNECTERROR", "CONNECTIONRESET",
     ))
@@ -167,8 +168,12 @@ def _generate(
     timeout_ms: int = TIMEOUT_MS,
     max_attempts: int = MAX_ATTEMPTS,
     retry_delays: list[float] | tuple[float, ...] = RETRY_DELAYS,
+    attempt_timeout_ms: int | None = None,
 ) -> LLMResult:
-    """Call the selected Gemini provider, retrying only transient capacity errors."""
+    """Call the selected Gemini provider, retrying only transient capacity errors.
+
+    attempt_timeout_ms caps one try so a slow first try leaves time for a retry.
+    """
     started = clock_fn()
     if timeout_ms <= 0 or max_attempts < 1 or len(retry_delays) < max_attempts - 1:
         raise ValueError("invalid LLM retry or timeout configuration")
@@ -216,7 +221,9 @@ def _generate(
             break
         attempt = next_attempt
         try:
-            text = request_fn(model, prompt, system, remaining_ms)
+            # Gemini rejects deadlines under 10s, so a per-try cap never goes below that.
+            cap = max(attempt_timeout_ms, 10000) if attempt_timeout_ms else remaining_ms
+            text = request_fn(model, prompt, system, min(remaining_ms, cap))
         except Exception as exc:
             last_error = exc
             if not _transient(exc) or attempt == max_attempts:

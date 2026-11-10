@@ -4,6 +4,7 @@
   - 품셈 지식 DB는 .env의 CHAT_DATABASE_URL을 **읽기 전용 연결로만** 쓴다(runtime.Engine이 read_only로 연다).
   - 대화 저장·사용량 DB는 끈다. 로컬 대화가 운영 DB에 쌓이지 않게 하려는 것이라, 회원 대화 저장은 동작하지 않는다(비회원으로 시험).
   - 사용량은 항상 0회로 보여 준다.
+--router-v2: v2 라우터 켜기(ROUTER_V2=on).
 --offline: 외부 호출 없이(Gemini 끔, BM25 검색) 화면 배치만 볼 때.
 
 사용(저장소 루트): .venv/Scripts/python.exe scripts/dev_server.py [--offline]
@@ -30,6 +31,8 @@ else:
     os.environ.update({"AGENT_LLM": "on", "KNOWLEDGE_RETRIEVAL": "v1", "AGENT_MODE": "tools",
                        "LLM_PROVIDER": os.environ.get("LLM_PROVIDER", "studio")})
     os.environ.setdefault("KNOWLEDGE_DATABASE_URL", os.environ.get("CHAT_DATABASE_URL", ""))
+if "--router-v2" in sys.argv:
+    os.environ["ROUTER_V2"] = "on"
 os.environ["APP_ENV"] = "development"
 os.environ.pop("CHAT_DATABASE_URL", None)  # 대화·사용량 저장을 끈다(운영 DB에 쓰지 않음)
 
