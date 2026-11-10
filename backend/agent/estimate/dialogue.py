@@ -858,14 +858,18 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
         question = next((q for q in state.get("pending") or [] if q.get("field") == CLARIFY_FIELD), None)
         if not question or (request.get("refs") or {}).get(CLARIFY_FIELD) != question.get("ref")                 or answers[CLARIFY_FIELD] not in (question.get("choices") or []):
             return _template_turn(state, "선택 카드가 오래되었어요. 질문을 다시 보내 주세요.", [])
-        message = f"{state.get('clarify_message') or ''} {answers[CLARIFY_FIELD]}".strip()
+        # 고른 값은 갈래 판단에만 쓰고, 이후 흐름(범위·검색)에는 사용자의 원래 질문만 넘긴다.
+        message = state.get("clarify_message") or ""
+        routing_message = f"{message} (원하는 것: {answers[CLARIFY_FIELD]})"
         state = {**state, "pending": [], "clarify_message": None}
         request = {key: value for key, value in request.items() if key not in ("answers", "refs")}
         request["message"] = message
     elif not message or answers:
         return _run_turn(state, request, generate, clock)
+    else:
+        routing_message = message
     from backend.agent.v2 import router as v2router
-    res = v2router.route_turn(message, _v2_previous(state))
+    res = v2router.route_turn(routing_message, _v2_previous(state))
     label = _v2_label(res)
     trace = [{"tool": "router_v2", "status": res["status"], "label": label,
               "calls_used": res.get("calls_used"), "errors": res.get("errors") or []}]
@@ -880,7 +884,7 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
             version = question_version(message, CLARIFY_FIELD, options)
             pending = [{"field": CLARIFY_FIELD, "question_id": CLARIFY_FIELD, "version": version,
                         "scope": "clarify", "item_id": None, "stage": "clarify", "kind": "choice",
-                        "required": True, "ask": ask, "choices": list(options),
+                        "required": True, "ask": "원하는 답을 골라 주세요", "choices": list(options),
                         "ref": _ref({"question_id": CLARIFY_FIELD, "version": version}, revision)}]
         working = _template_turn(state, ask, trace, pending)
         working["pending_revision"], working["clarify_message"] = revision, message
