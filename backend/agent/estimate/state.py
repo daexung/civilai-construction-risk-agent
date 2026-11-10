@@ -47,6 +47,7 @@ class EstimateItem(TypedDict, total=False):
     item_id: str
     request_text: str
     source_spans: list
+    router_request: dict | None  # v2 라우터 요청 전체(search_terms 등). 공종 찾기에서 쓰는 건 다음 단계
     quantity: dict | None     # {value, unit, source}
     explicit: dict            # 사용자가 준 값(계획·답변). {field: {value, source}} — 명세가 바뀌면 호환 값만 남긴다
     conditions: dict          # 확정 명세 기준으로 구성한 조건. {field: {value, source, explicit}}
@@ -168,6 +169,7 @@ def new_session(plan: dict, max_items: int | None = None) -> EstimateSession:
             raise PlanError(f"공종 ID가 중복됩니다: {item_id!r} ({order.index(item_id) + 1}번과 {number}번)")
         session_items[item_id] = EstimateItem(
             item_id=item_id, request_text=text.strip(), source_spans=list(raw.get("source_spans") or []),
+            router_request=raw.get("router_request"),
             quantity=quantity, explicit=explicit, conditions={}, selected_spec_id="", selection=None,
             candidates=[], hits=None, status="NEEDS_WORK", reason="", questions=[], question_reasons={},
             computed_result=None, priced_result=None, input_revision=0, result_revision=None)
