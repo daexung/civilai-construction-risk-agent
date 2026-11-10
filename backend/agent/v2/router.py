@@ -257,7 +257,8 @@ def route_turn(
         calls += 1
         try:
             result = generate(prompt, system, response_schema=RESPONSE_SCHEMA,
-                              timeout_ms=8000, max_attempts=2, retry_delays=[0.5])
+                              timeout_ms=10000, attempt_timeout_ms=5000,
+                              max_attempts=2, retry_delays=[0.3])
         except LLMUnavailable as exc:
             return {"status": "failed", "output": None, "dispatch": [],
                     "errors": [f"AI 호출 실패: {exc}"], "calls_used": calls}

@@ -130,3 +130,24 @@ def test_button_bad_value():
 def test_whitespace_ignored_in_evidence():
     out = r.RouterOutput.model_validate(work(req(target={"user_text": "벽 타일", "evidence": "벽타일", "search_terms": []})))
     assert r.validate(out, r.RouterInput(message="벽 타일 견적")) == []
+
+
+def test_504_is_retried_with_per_try_cap(monkeypatch):
+    """Gemini 504는 잠깐 생긴 문제로 보고 다시 부른다. 한 번에 쓰는 시간은 attempt_timeout_ms로 자른다."""
+    from backend.agent.tools.llm import client
+
+    monkeypatch.setenv("AGENT_LLM", "on")
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.delenv("LLM_PROVIDER", raising=False)
+    seen = []
+
+    def request_fn(model, prompt, system, timeout_ms):
+        seen.append(timeout_ms)
+        if len(seen) == 1:
+            raise RuntimeError("504 DEADLINE_EXCEEDED. Deadline expired before operation could complete.")
+        return '{"ok": true}'
+
+    res = client._generate("p", "s", request_fn=request_fn, sleep_fn=lambda _: None,
+                           timeout_ms=10000, attempt_timeout_ms=5000, max_attempts=2, retry_delays=[0.3])
+    assert res.text == '{"ok": true}' and res.attempts == 2
+    assert seen[0] == 5000 and seen[1] <= 5000
