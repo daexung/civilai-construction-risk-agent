@@ -806,7 +806,7 @@ def _compact(data: dict) -> dict:
 
 # ---- v2 라우터 연결 (ROUTER_V2=on, 기본 꺼짐) ----
 # 한 턴에 AI 판단은 한 번만 한다. 그 턴의 메시지에 대한 판단을 여기 두고, 예전 규칙 대신 쓴다.
-_V2_LABEL: contextvars.ContextVar[tuple[str, str] | None] = contextvars.ContextVar("router_v2_label", default=None)
+_V2_LABEL: contextvars.ContextVar[tuple[str, str, dict | None] | None] = contextvars.ContextVar("router_v2_label", default=None)
 CLARIFY_FIELD = "router_clarify"
 
 
@@ -816,6 +816,30 @@ def _route(message: str, previous_route: str | None = None) -> str:
     if cached and cached[0] == message:
         return cached[1]
     return _rule_route(message, previous_route)
+
+
+def _v2_plan(message: str) -> dict | None:
+    """이번 턴 v2 라우터가 뽑은 새 견적 요청을 그대로 견적 계획으로 옮긴다(낱말 규칙으로 다시 쪼개지 않는다).
+    근거 구절이 문장에 있는지는 라우터가 이미 확인했다."""
+    cached = _V2_LABEL.get()
+    if not cached or cached[0] != message or not cached[2]:
+        return None
+    requests = [r for r in cached[2].get("requests") or [] if r["kind"] == "estimate" and r["estimate_mode"] == "new"]
+    if not requests or any(r.get("target") is None for r in requests):
+        return None
+    items = []
+    for number, req in enumerate(requests, 1):
+        quantity, conditions = req.get("quantity"), req.get("conditions") or []
+        spans = [{"kind": "work", "value": req["target"]["user_text"], "text": req["target"]["evidence"]}]
+        if quantity:
+            spans.append({"kind": "quantity", "value": quantity["value"], "text": quantity["evidence"]})
+        spans += [{"kind": "condition", "value": c["text"], "text": c["evidence"]} for c in conditions]
+        item = {"item_id": f"i{number}", "request_text": " ".join(dict.fromkeys(span["text"] for span in spans)),
+                "source_spans": spans, "router_request": req}
+        if quantity and quantity.get("unit"):
+            item["quantity"] = {"value": quantity["value"].replace(",", ""), "unit": quantity["unit"]}
+        items.append(item)
+    return {"original_request": message, "items": items}
 
 
 def _v2_previous(state: DialogueState) -> dict | None:
@@ -858,14 +882,18 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
         question = next((q for q in state.get("pending") or [] if q.get("field") == CLARIFY_FIELD), None)
         if not question or (request.get("refs") or {}).get(CLARIFY_FIELD) != question.get("ref")                 or answers[CLARIFY_FIELD] not in (question.get("choices") or []):
             return _template_turn(state, "선택 카드가 오래되었어요. 질문을 다시 보내 주세요.", [])
-        message = f"{state.get('clarify_message') or ''} {answers[CLARIFY_FIELD]}".strip()
+        # 고른 값은 갈래 판단에만 쓰고, 이후 흐름(범위·검색)에는 사용자의 원래 질문만 넘긴다.
+        message = state.get("clarify_message") or ""
+        routing_message = f"{message} (원하는 것: {answers[CLARIFY_FIELD]})"
         state = {**state, "pending": [], "clarify_message": None}
         request = {key: value for key, value in request.items() if key not in ("answers", "refs")}
         request["message"] = message
     elif not message or answers:
         return _run_turn(state, request, generate, clock)
+    else:
+        routing_message = message
     from backend.agent.v2 import router as v2router
-    res = v2router.route_turn(message, _v2_previous(state))
+    res = v2router.route_turn(routing_message, _v2_previous(state))
     label = _v2_label(res)
     trace = [{"tool": "router_v2", "status": res["status"], "label": label,
               "calls_used": res.get("calls_used"), "errors": res.get("errors") or []}]
@@ -880,12 +908,12 @@ def run_turn(state: DialogueState, request: dict, generate=None, clock=time.mono
             version = question_version(message, CLARIFY_FIELD, options)
             pending = [{"field": CLARIFY_FIELD, "question_id": CLARIFY_FIELD, "version": version,
                         "scope": "clarify", "item_id": None, "stage": "clarify", "kind": "choice",
-                        "required": True, "ask": ask, "choices": list(options),
+                        "required": True, "ask": "원하는 답을 골라 주세요", "choices": list(options),
                         "ref": _ref({"question_id": CLARIFY_FIELD, "version": version}, revision)}]
         working = _template_turn(state, ask, trace, pending)
         working["pending_revision"], working["clarify_message"] = revision, message
         return working
-    token = _V2_LABEL.set((message, label))
+    token = _V2_LABEL.set((message, label, res.get("output")))
     try:
         result = _run_turn(state, request, generate, clock)
     finally:
@@ -1008,8 +1036,9 @@ def _run_turn(state: DialogueState, request: dict, generate=None, clock=time.mon
         if message_for_scope and request.get("answers") is None and not request.get("restart") \
                 and (not session or explicit_new) \
                 and _route(message_for_scope, working.get("route")) == "estimate":
-            analysis = scope.analyze_request(message_for_scope)
-            questions = _scope_questions(analysis, working.get("pending_revision", 0) + 1)
+            v2_plan = _v2_plan(message_for_scope)
+            analysis = {} if v2_plan else scope.analyze_request(message_for_scope)
+            questions = [] if v2_plan else _scope_questions(analysis, working.get("pending_revision", 0) + 1)
             if questions:
                 working["scope_analysis"], working["scope_source"] = analysis, message_for_scope
                 working["pending"] = questions
@@ -1019,12 +1048,14 @@ def _run_turn(state: DialogueState, request: dict, generate=None, clock=time.mon
                                    "llm_info": budget.record(), "last_status": "needs_input"}
                 working.pop("request", None)
                 return working
-            if analysis.get("work_items"):
+            if v2_plan or analysis.get("work_items"):
                 # A one-item request uses this same scope/session/runner path; no legacy single-estimate fork.
-                decisions = _scope_decisions(analysis, {})
-                receipt = scope.confirm_analysis(message_for_scope, analysis, decisions)["confirmation"]
-                resolved = scope.confirmed_result(message_for_scope, analysis, receipt)
-                plan = (resolved.get("calculation") or {}).get("plan")
+                plan = v2_plan
+                if not plan:
+                    decisions = _scope_decisions(analysis, {})
+                    receipt = scope.confirm_analysis(message_for_scope, analysis, decisions)["confirmation"]
+                    resolved = scope.confirmed_result(message_for_scope, analysis, receipt)
+                    plan = (resolved.get("calculation") or {}).get("plan")
                 if plan:
                     try:
                         working["session"] = new_session({**plan, "basis_date": request.get("basis_date")})
@@ -1069,7 +1100,9 @@ def _run_turn(state: DialogueState, request: dict, generate=None, clock=time.mon
         use_llm = False
     elif message or answers:
         from backend.knowledge import runtime as knowledge
+        # 견적 항목(aggregate_parent)은 이미 견적으로 정해졌다. 항목 문장("방수 200㎡")을 다시 판단해 상담 검색으로 새지 않게 한다.
         knowledge_qa = (knowledge.enabled() and message and not answers and not _confirmed(working['session'])
+                        and not working.get('aggregate_parent')
                         and _route(message, working.get('route')) == 'qa')
         policy = "llm" if use_llm else "rule"
         if knowledge_qa:

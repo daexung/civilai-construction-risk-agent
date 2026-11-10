@@ -651,7 +651,8 @@ function AssistantCard({
                 disabled={loading || Object.keys(draft).length === 0}
                 onClick={onSubmit}
               >
-                이 조건으로 견적 계산하기
+                {response.questions.some(question => question.name === 'router_clarify')
+                  ? '선택해서 보내기' : '이 조건으로 견적 계산하기'}
               </button>
             </>
           )}

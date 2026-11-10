@@ -3,6 +3,7 @@ import { ChatResponse, ComputedResult } from '../types';
 export default function EstimateGuidance({ response }: { response: ChatResponse }) {
   if (response.status === 'MISSING_INFO') {
     const names = response.questions.map(question => question.name);
+    if (names.includes('router_clarify')) return null;  // 되묻기 카드는 견적 조건 설명이 아니다
     const onlyWork = names.length === 1 && names[0] === 'work';
     const pumpConditions = names.some(name => ['pump_size', 'slump_band', 'facility_type', 'site_type'].includes(name));
     return <aside className="estimate-guidance" aria-label="추가 조건 안내">

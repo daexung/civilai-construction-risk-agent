@@ -22,11 +22,12 @@ def env(monkeypatch):
 
     def fake_inner(state, request, generate=None, clock=None):
         seen.append(d._route(request["message"], None))
+        env.messages.append(request["message"])
         return {**(state or d.new_dialogue()), "turn": {"answer": "기존 흐름", "trace": []}}
 
     monkeypatch.setattr(v2router, "route_turn", fake_route)
     monkeypatch.setattr(d, "_run_turn", fake_inner)
-    env.calls, env.seen = calls, seen
+    env.calls, env.seen, env.messages = calls, seen, []
     return env
 
 
@@ -57,7 +58,8 @@ def test_clarify_card_then_button_reroutes(env):
     assert card["kind"] == "choice" and card["choices"] == ["품", "공사비"] and env.seen == []
     env.result = ok("work", "estimate")
     d.run_turn(out, {"answers": {d.CLARIFY_FIELD: "공사비"}, "refs": {d.CLARIFY_FIELD: card["ref"]}})
-    assert env.calls[-1] == "방수 200㎡ 어떻게 생각해? 공사비" and env.seen == ["estimate"]
+    assert env.calls[-1] == "방수 200㎡ 어떻게 생각해? (원하는 것: 공사비)"  # 판단에는 고른 값까지
+    assert env.seen == ["estimate"] and env.messages[-1] == "방수 200㎡ 어떻게 생각해?"  # 흐름에는 원래 질문만
 
 
 def test_stale_clarify_button_rejected(env):
@@ -71,3 +73,23 @@ def test_clarify_without_options_is_text_only(env):
     env.result = ok("clarify", clarify={"ask": "어떤 공사인가요?", "options": []})
     out = d.run_turn(None, {"message": "이거 얼마예요?"})
     assert out["pending"] == [] and out["turn"]["answer"] == "어떤 공사인가요?"
+
+
+def test_router_table_becomes_plan_without_keyword_split():
+    from backend.agent.estimate.state import new_session
+    req = {"id": "r1", "kind": "estimate", "estimate_mode": "new", "wants": "calculate", "asks": "",
+           "target": {"user_text": "방수", "evidence": "방수", "search_terms": ["방수"]},
+           "quantity": {"value": "200", "unit": "㎡", "evidence": "200㎡"},
+           "conditions": [], "card_answer": None}
+    msg = "방수 200㎡ 어떻게 생각해?"
+    token = d._V2_LABEL.set((msg, "estimate", {"route": "work", "requests": [req]}))
+    try:
+        plan = d._v2_plan(msg)
+        assert d._v2_plan("다른 문장") is None
+    finally:
+        d._V2_LABEL.reset(token)
+    item = plan["items"][0]
+    assert item["request_text"] == "방수 200㎡"  # '어떻게 생각해?'가 작업 이름에 들어가지 않는다
+    assert item["quantity"] == {"value": "200", "unit": "㎡"}
+    session = new_session(plan)
+    assert session["items"]["i1"]["router_request"]["target"]["search_terms"] == ["방수"]
