@@ -1,0 +1,48 @@
+{"id": "c01", "label": "qa", "wants": "explain", "q": "방수공사 할증 기준이 어떻게 되나요?"}
+{"id": "c02", "label": "qa", "wants": "explain", "q": "야간작업하면 품을 더 줘야 하나요?"}
+{"id": "c03", "label": "qa", "wants": "explain", "q": "소운반 거리는 품에 포함되어 있는 건가요?"}
+{"id": "c04", "label": "qa", "wants": "explain", "q": "품셈에서 보통인부랑 특별인부 차이가 뭐예요?"}
+{"id": "c05", "label": "qa", "wants": "explain", "q": "철거할 때 잔재 처리는 품에 들어가 있어요?"}
+{"id": "c06", "label": "qa", "wants": "explain", "q": "공구손료랑 잡재료비는 어떻게 다른가요"}
+{"id": "c07", "label": "qa", "wants": "value", "q": "줄눈 넣는 데 타일공 품이 m당 얼마예요?"}
+{"id": "c08", "label": "qa", "wants": "value", "q": "경량철골 천장틀 설치 품 좀 알려주세요"}
+{"id": "c09", "label": "qa", "wants": "calculate", "q": "시멘트 벽돌 1000장 쌓는 데 조적공 몇 인이에요?"}
+{"id": "c10", "label": "qa", "wants": "value", "q": "보도블록 깔기 품셈 기준 보여줘"}
+{"id": "c11", "label": "qa", "wants": "value", "q": "덤프트럭 15톤 시간당 작업량이 얼마죠?"}
+{"id": "c12", "label": "qa", "wants": "explain", "q": "석고보드 2겹 붙이면 품이 2배인가요?"}
+{"id": "c13", "label": "qa", "wants": "value", "q": "외벽 드라이비트 시공 품이 어떻게 되나요?"}
+{"id": "c14", "label": "qa", "wants": "calculate", "q": "인부 3명이서 바닥 미장 300㎡ 하면 며칠 걸려요?"}
+{"id": "c15", "label": "qa", "wants": "calculate", "q": "방수 200㎡ 하려면 방수공 몇 명이 며칠 필요해?"}
+{"id": "c16", "label": "qa", "wants": "calculate", "q": "철근 가공조립 20톤 하는데 철근공 총 몇 인 들어가나요"}
+{"id": "c17", "label": "estimate", "q": "화장실 바닥 방수 50㎡ 공사비 얼마나 나올까요?"}
+{"id": "c18", "label": "estimate", "q": "외부 비계 설치 해체 1,500㎡ 견적 부탁드립니다"}
+{"id": "c19", "label": "estimate", "q": "경량벽체 120㎡ 노무비랑 재료비 계산해 주세요"}
+{"id": "c20", "label": "estimate", "q": "아스팔트 포장 300㎡ 하면 돈 얼마 들어?"}
+{"id": "c21", "label": "estimate", "q": "창호 코킹 400m 원가계산서 만들어 주실 수 있나요?"}
+{"id": "c22", "label": "estimate", "q": "기초 터파기 80㎥ 비용 산출 부탁해요"}
+{"id": "c23", "label": "estimate", "q": "도장 1500제곱미터 엑셀로 견적 뽑아줘"}
+{"id": "c24", "label": "estimate", "q": "보도블럭 교체 200㎡ 직접비가 얼마인가요"}
+{"id": "c25", "label": "estimate", "boundary": true, "note": "품(상담)+공사비(견적) 두 가지. 견적이 하나라도 있으면 견적으로 채점", "q": "타일 100㎡ 붙이는 품이 얼마고 전체 공사비도 알려줘"}
+{"id": "c26", "label": "estimate", "boundary": true, "note": "할증 기준(상담)+견적 두 가지", "q": "벽돌 쌓기 할증 기준 알려주고 60㎡ 견적도 내줘"}
+{"id": "c27", "label": "qa", "boundary": true, "note": "상담 두 가지", "q": "미장 품이 뭐고 겨울에 하면 할증 있어?"}
+{"id": "c28", "label": "clarify", "boundary": true, "note": "원하는 결과(품·기간·공사비)를 알 수 없음", "q": "방수 200㎡ 어떻게 생각해?"}
+{"id": "c29", "label": "clarify", "boundary": true, "q": "외벽 도장 1000㎡ 관련해서요"}
+{"id": "c30", "label": "clarify", "boundary": true, "note": "직전 대화 없음, 대상 모름", "q": "이거 얼마예요?"}
+{"id": "c31", "label": "clarify", "boundary": true, "note": "대상 모름", "q": "견적 좀요"}
+{"id": "c32", "label": "clarify", "boundary": true, "q": "콘크리트 50㎥"}
+{"id": "c33", "label": "clarify", "boundary": true, "note": "직전 대화 없음", "q": "저번에 물어본 거요"}
+{"id": "c34", "label": "out_of_scope", "q": "인테리어 업체 추천해 주세요"}
+{"id": "c35", "label": "out_of_scope", "q": "건설기술인 경력 신고는 어떻게 해요?"}
+{"id": "c36", "label": "out_of_scope", "q": "타일 색깔 뭐가 예뻐요?"}
+{"id": "c37", "label": "out_of_scope", "q": "현장 일용직 4대보험 가입해야 돼?"}
+{"id": "c38", "label": "out_of_scope", "q": "레미콘 회사 전화번호 알려줘"}
+{"id": "c39", "label": "out_of_scope", "q": "고마워요!"}
+{"id": "c40", "label": "out_of_scope", "q": "건축기사 시험 일정 언제야?"}
+{"id": "c41", "label": "out_of_scope", "q": "아파트 하자보수 기간은 몇 년이에요?"}
+{"id": "c42", "label": "estimate", "context": {"previous_route": "estimate", "work": "벽 타일 붙이기", "result": "타일 100㎡ 도급액 6,200,000원"}, "q": "면적 120으로 바꿔서 다시요"}
+{"id": "c43", "label": "estimate", "boundary": true, "note": "진행 중 견적의 결과를 묻는 것", "context": {"previous_route": "estimate", "work": "벽 타일 붙이기", "result": "타일 100㎡ 도급액 6,200,000원"}, "q": "여기서 인건비만 따로 얼마예요?"}
+{"id": "c44", "label": "qa", "boundary": true, "note": "견적 중 새 상담 질문", "context": {"previous_route": "estimate", "work": "벽 타일 붙이기", "result": "타일 100㎡ 도급액 6,200,000원"}, "q": "그럼 미장 품은 얼마야?"}
+{"id": "c45", "label": "estimate", "boundary": true, "note": "상담 뒤 같은 공종 견적 요청", "context": {"previous_route": "qa", "work": "콘크리트 펌프차 타설", "result": "콘크리트공 0.12인/㎥"}, "q": "그걸로 200㎥ 견적 내줘"}
+{"id": "c46", "label": "out_of_scope", "context": {"previous_route": "estimate", "work": "벽 타일 붙이기", "result": "타일 100㎡ 도급액 6,200,000원"}, "q": "고마워요, 근데 오늘 날씨 어때요?"}
+{"id": "c47", "label": "qa", "wants": "value", "note": "줄임말", "q": "펌프카 타설 품 얼마임"}
+{"id": "c48", "label": "estimate", "note": "줄임말", "q": "도배 견적 30평 ㄱㄱ"}
