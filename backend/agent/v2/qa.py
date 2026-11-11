@@ -14,6 +14,9 @@ TOP_K = 8                # Q2에 보여 줄 후보 조각 수
 MAX_LINES = 60           # 조각 하나에서 보여 줄 줄 수
 MAX_CHARS = 14000        # Q2 자료 전체 글자 수
 RRF_K = 60
+# Q4 답 쓰기 모델. flash-lite는 표의 뜻(일당 시공량·작업조 인원)을 틀리게 풀어 썼고, 3.1-pro-preview·3.8-flash보다
+# 3.5-flash가 정확도·안정성이 나았다(2026-11-12 상담 15문 비교, 설계 문서 11절). 옛 상담 길의 qa_model은 그대로다.
+ANSWER_MODEL = "gemini-3.5-flash"
 
 SYSTEM_PICK = """당신은 건설 표준품셈 원문에서 질문에 답이 되는 줄을 고르는 선택기다. 답변 문장은 쓰지 않는다.
 규칙:
@@ -224,12 +227,13 @@ def build_result(engine, question: str, rid: str, checked: dict) -> dict:
     asks = _confirm_asks(checked)
     gen = {"source": "status_template"}
     if status == "supported" and sources:
-        old = engine.prompt  # 호출자가 engine.lock을 잡고 있어 다른 요청과 섞이지 않는다
-        engine.prompt = _qa_prompt()
+        # 지시문·모델을 이 호출에만 바꾼다. 호출자가 engine.lock을 잡고 있어 옛 상담 길 요청과 섞이지 않는다
+        old = engine.prompt, engine.qa_model
+        engine.prompt, engine.qa_model = _qa_prompt(), ANSWER_MODEL
         try:
             gen = engine.generate(question, sources, rid)
         finally:
-            engine.prompt = old
+            engine.prompt, engine.qa_model = old
         cited = {(c["chunk_id"], c["line"]) for c in gen.get("citations", [])}
         for s in sources:
             for ln in s["lines"]:
