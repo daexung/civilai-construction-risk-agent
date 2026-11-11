@@ -182,19 +182,11 @@ def answer_question(req: dict, checked: dict) -> str:
     return text
 
 
-_RULE6 = "6. 질문에서 자료로 확인하지 못한 조건은 unmatched_conditions에 질문에 쓴 표현 그대로 적으세요."
-_RULE6_V2 = ("6. 질문의 대상(작업·공종 이름)은 앞 단계에서 자료와 같은 것으로 확인됐으니 조건으로 보지 마세요. "
-             "말끝·단위 표현(\"m당\", \"얼마\", \"몇 인\")과 물량도 조건이 아닙니다. unmatched_conditions에는 두께·규격·종류처럼 "
-             "표의 행·열을 가르는 조건 중 자료에서 찾지 못한 것만 질문에 쓴 표현 그대로 적으세요. "
-             "질문이 물량 계산(몇 인·며칠)을 원하면 계산하지 말고 단위당 값을 답하세요.")
-
-
 def _qa_prompt() -> str:
-    """답 쓰기(Q4) 지시문: 지금 상담 답 쓰기 지시문에서 6번 규칙만 바꾼다(옛 길은 그대로)."""
+    """답 쓰기(Q4) 지시문. 대상은 Q2·Q3에서 확인됐으니 다시 따지지 않고, 조건이 비면 조건별 값을 나열한다.
+    출력 형식은 옛 답 쓰기와 같아서 Q5 검사(local_trial_answer.validate)를 그대로 쓴다."""
     from pathlib import Path
-    base = (Path(__file__).resolve().parents[2] / "api" / "local_trial_qa.md").read_text(encoding="utf-8")
-    assert _RULE6 in base, "답 쓰기 지시문 6번 규칙이 바뀌었다"
-    return base.replace(_RULE6, _RULE6_V2)
+    return (Path(__file__).parent / "prompts" / "qa_answer.md").read_text(encoding="utf-8")
 
 
 def _confirm_asks(checked: dict) -> list[dict]:

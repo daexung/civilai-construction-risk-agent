@@ -99,6 +99,15 @@ def test_value_question_stays_qa_and_mixed_is_cost():
         d._V2_LABEL.reset(token)
 
 
-def test_answer_prompt_only_changes_rule6():
+def test_answer_prompt_examples_pass_q5_check():
+    """새 Q4 지시문의 예시 출력이 Q5 숫자·위치 검사를 통과하는지(지시문과 검사가 어긋나지 않게)."""
+    import json, re
+    from backend.api import local_trial_answer as ta
     p = qa._qa_prompt()
-    assert qa._RULE6 not in p and "앞 단계에서 자료와 같은 것으로 확인" in p
+    line = {"n": 1, "text": "점검공 | 단위 인 | 소형 0.8 | 대형 1.6", "display": "점검공 | 단위 인 | 소형 0.8 | 대형 1.6", "page": 1, "search_uid": None}
+    provided = {"S1": {"chunk_id": "x", "kind": "표", "frame": ["기준: (개소당)", "머리글: 구분 | 단위 | 소형 | 대형"],
+                       "label": "", "n_total": 1, "lines": {1: line}}}
+    examples = re.findall(r'질문: "([^"]+)"\n출력: (\{.*\})', p)
+    assert len(examples) == 4
+    states = [ta.validate(json.loads(out), q, provided)["state"] for q, out in examples]
+    assert states == ["answered", "answered", "answered", "condition_unconfirmed"], states
