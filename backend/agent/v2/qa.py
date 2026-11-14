@@ -157,6 +157,13 @@ def check_pick(raw: dict, cands: list[dict]) -> dict:
         if not ok:
             dropped.append(f"원문에 없는 용어 {m.get('source_term')}")
     if not answer:
+        # Q2가 대상으로 짚은 후보(원문 용어 확인됨)가 있는데 줄을 비웠으면 그 후보 전체를 답 줄로 쓴다.
+        # 후보를 정한 것은 AI 판단이고, 코드는 그 판단을 버리지 않을 뿐이다.
+        for m in matches:
+            if m["found"] and m["same_thing"] in ("yes", "unsure"):
+                c = next(c for c in cands if c["chunk_id"] == m["chunk_id"])
+                answer.setdefault(c["chunk_id"], list(c["lines"]))
+    if not answer:
         status = "not_found"
     elif (on := [m for m in matches if m["chunk_id"] in answer]) and all(m["same_thing"] == "no" for m in on):
         status, answer = "not_found", {}

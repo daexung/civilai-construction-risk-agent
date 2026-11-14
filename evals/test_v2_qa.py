@@ -25,9 +25,12 @@ def test_supported_when_term_is_in_source():
 
 
 def test_fake_lines_and_candidates_are_dropped():
-    c = pick(picks=[{"candidate": "C9", "lines": ["C9.1"], "role": "answer"},
-                    {"candidate": "C1", "lines": ["C1.7", "C2.1", "1"], "role": "answer"}])
+    fake = [{"candidate": "C9", "lines": ["C9.1"], "role": "answer"},
+            {"candidate": "C1", "lines": ["C1.7", "C2.1", "1"], "role": "answer"}]
+    c = pick(picks=fake, target_match=[])
     assert c["status"] == "not_found" and len(c["dropped"]) == 4
+    c = pick(picks=fake)  # 가짜 줄은 버리지만, Q2가 대상으로 짚은 C1은 남긴다
+    assert len(c["dropped"]) == 4 and c["answer"] == {"t1": [1, 2]}
 
 
 def test_invented_source_term_needs_confirmation_text():
@@ -111,3 +114,11 @@ def test_answer_prompt_examples_pass_q5_check():
     assert len(examples) == 4
     states = [ta.validate(json.loads(out), q, provided)["state"] for q, out in examples]
     assert states == ["answered", "answered", "answered", "condition_unconfirmed"], states
+
+
+def test_named_candidate_is_kept_when_lines_are_empty():
+    c = pick(picks=[], target_match=[{"target": "펌프카", "candidate": "C1", "source_term": "콘크리트 펌프차", "same_thing": "unsure"}])
+    assert c["status"] == "supported" and c["answer"] == {"t1": [1, 2]}
+    assert c["reasons"][0]["rule"] == "target_term_unconfirmed"
+    c = pick(picks=[], target_match=[{"target": "펌프카", "candidate": "C1", "source_term": "없는 말", "same_thing": "yes"}])
+    assert c["status"] == "not_found"  # 원문에 없는 용어로 짚은 후보는 쓰지 않는다
