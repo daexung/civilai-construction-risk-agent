@@ -182,7 +182,8 @@ class ResponseBuilder:
                 asks.append({'code': code, 'text': CONFIRM_ASK[code].format(terms=terms or '질문의 표현')})
         return out, asks
 
-    def generate(self, question: str, sources: list[dict], request_id: str = '') -> dict:
+    def generate(self, question: str, sources: list[dict], request_id: str = '', *,
+                 retry_transient: bool = False) -> dict:
         """모델이 원문 위치를 고르고 코드가 인용문을 가져온다. 반환 dict: state(answered|condition_unconfirmed|failed), code, text, citations, values."""
         ctx, provided, truncated = ta.build_context(sources)
         gen = {'source': 'verified_source', 'model': self.qa_model, 'context_chars': len(ctx), 'truncated': truncated,
@@ -194,11 +195,16 @@ class ResponseBuilder:
         if self.totals()[0] >= CAPS['attempts'] - 2:
             return {**gen, 'state': 'failed', 'code': 'cap_reached'}
         payload = f'질문: {question}\n\n근거 자료:\n{ctx}'
+        call_options = {'timeout_ms': ANSWER_TIMEOUT_MS}
+        if retry_transient:
+            call_options.update(timeout_ms=22_000, attempt_timeout_ms=10_000,
+                                max_attempts=2, retry_delays=(0.3,))
         t = time.perf_counter()
         with self.lock:
             self.caller.usage.clear()
             try:
-                res = self.llm.generate(payload, self.prompt, response_schema=ta.QA_SCHEMA, timeout_ms=ANSWER_TIMEOUT_MS, model=self.qa_model)
+                res = self.llm.generate(payload, self.prompt, response_schema=ta.QA_SCHEMA,
+                                        model=self.qa_model, **call_options)
                 err = None
             except Exception as exc:  # 생성 실패·시간 초과는 원문 표시로 전환한다(모델 답변 성공으로 세지 않는다)
                 res, err = None, type(exc).__name__ + ':' + str(exc)[:80]

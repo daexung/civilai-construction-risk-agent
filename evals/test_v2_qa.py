@@ -122,3 +122,45 @@ def test_named_candidate_is_kept_when_lines_are_empty():
     assert c["reasons"][0]["rule"] == "target_term_unconfirmed"
     c = pick(picks=[], target_match=[{"target": "펌프카", "candidate": "C1", "source_term": "없는 말", "same_thing": "yes"}])
     assert c["status"] == "not_found"  # 원문에 없는 용어로 짚은 후보는 쓰지 않는다
+
+
+def test_answer_retries_transient_model_failure(monkeypatch):
+    from threading import RLock
+    from types import SimpleNamespace
+
+    from backend.agent.tools.llm import client
+    from backend.knowledge.response import ResponseBuilder
+
+    builder = ResponseBuilder()
+    builder.lock = RLock()
+    builder.prompt = "답 쓰기"
+    builder.qa_model = qa.ANSWER_MODEL
+    builder.caller = SimpleNamespace(usage=[])
+    builder.sv = SimpleNamespace(PRICE={"input_per_m": 0, "output_per_m": 0})
+    builder.totals = lambda: (0, 0)
+    builder.ledger_add = lambda *args, **kwargs: None
+    attempts = []
+
+    def request(model, prompt, system, timeout_ms):
+        attempts.append(timeout_ms)
+        if len(attempts) == 1:
+            raise TimeoutError()
+        return '{"status":"not_found","conclusion":"","explanation":"","evidence":[],"unmatched_conditions":[]}'
+
+    def generate(prompt, system, **kwargs):
+        return client._generate(prompt, system, request_fn=request, sleep_fn=lambda _: None, **kwargs)
+
+    monkeypatch.setenv("AGENT_LLM", "on")
+    monkeypatch.setenv("LLM_PROVIDER", "studio")
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    builder.llm = SimpleNamespace(generate=generate)
+    source = {"id": "s", "division": "가상부문", "section_no": "1-1", "section_title": "가상 기준",
+              "kind": "설명", "pdf_page": 1, "frame": [], "lines": [
+        {"n": 1, "text": "시험 원문", "display": "시험 원문", "page": 1, "selected": True},
+    ]}
+
+    result = builder.generate("질문", [source], retry_transient=True)
+
+    assert attempts == [10_000, 10_000]
+    assert result["attempts"] == 2
+    assert result["model_status"] == "not_found"

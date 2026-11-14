@@ -240,7 +240,7 @@ def build_result(engine, question: str, rid: str, checked: dict) -> dict:
         old = engine.prompt, engine.qa_model
         engine.prompt, engine.qa_model = _qa_prompt(), ANSWER_MODEL
         try:
-            gen = engine.generate(question, sources, rid)
+            gen = engine.generate(question, sources, rid, retry_transient=True)
         finally:
             engine.prompt, engine.qa_model = old
         cited = {(c["chunk_id"], c["line"]) for c in gen.get("citations", [])}
