@@ -350,7 +350,8 @@ def _run_tool_impl(state: DialogueState, name: str, args: dict, message: str, bu
         state["session"] = session = tools.new_estimate(message, state["request"].get("basis_date"))
         state["free_card_answers"] = 0
         # 계산 목표는 사용자 요청으로 정한다. 비용 요청이면 LLM이 compute_labor를 골라도 비용 목표를 유지한다.
-        state["goal"] = "cost" if state.get("aggregate_parent") or _route(message, None) == "estimate" else "labor"
+        state["goal"] = ((state.get("goal") or "cost") if state.get("aggregate_parent")
+                         else "cost" if _route(message, None) == "estimate" else "labor")
         state["fresh_session"] = True  # 첫 문장의 물량·조건은 변경이 아니라 시작 값이다
         result = tools.find_work(session)
         # 원래 요청의 물량은 LLM이 set_conditions를 생략해도 서버가 보존한다(서버 파서로 읽은 값·단위·근거).
@@ -544,7 +545,7 @@ def _rule_actions(state: DialogueState, message: str, answered: bool) -> list[tu
             and not tools._item(session).get("hits") and message:
         # A multi-item view already has a session, so the usual change parser
         # must not treat its initial quantity as an edit before finding the work.
-        return _start_actions(state, message, "estimate")
+        return _start_actions(state, message, "qa" if state.get("goal") == "labor" else "estimate")
     # '32m야'처럼 대기 질문에 값만 답한 문장은 라우터가 범위 밖으로 봐도 답으로 반영한다.
     # '높이를 6m로 정정해줘'처럼 이미 선택된 명세의 칸에 대한 명시적이고 검증된 값 변경도 같게
     # 취급한다(조회·보존절·다른 공종 요청은 _rule_changes가 grounded 검사로 걸러내 비어 있다).
@@ -818,13 +819,27 @@ def _route(message: str, previous_route: str | None = None) -> str:
     return _rule_route(message, previous_route)
 
 
+def _v2_is_calc(r: dict) -> bool:
+    """돈은 묻지 않았지만 물량으로 품을 계산해야 하는 질문(설계 11절 정할 것 ①). 라우터 값만 본다."""
+    return r["kind"] == "qa" and r.get("wants") == "calculate" and bool(r.get("quantity")) and r.get("target") is not None
+
+
+def _v2_qa_requests(message: str) -> list[dict]:
+    """이번 턴 v2 라우터의 상담 요청(계산 질문 제외). 없으면 빈 목록(예전 상담 검색을 쓴다)."""
+    cached = _V2_LABEL.get()
+    if not cached or cached[0] != message or not cached[2]:
+        return []
+    return [r for r in cached[2].get("requests") or [] if r["kind"] == "qa" and not _v2_is_calc(r)]
+
+
 def _v2_plan(message: str) -> dict | None:
     """이번 턴 v2 라우터가 뽑은 새 견적 요청을 그대로 견적 계획으로 옮긴다(낱말 규칙으로 다시 쪼개지 않는다).
     근거 구절이 문장에 있는지는 라우터가 이미 확인했다."""
     cached = _V2_LABEL.get()
     if not cached or cached[0] != message or not cached[2]:
         return None
-    requests = [r for r in cached[2].get("requests") or [] if r["kind"] == "estimate" and r["estimate_mode"] == "new"]
+    requests = [r for r in cached[2].get("requests") or []
+                if (r["kind"] == "estimate" and r["estimate_mode"] == "new") or _v2_is_calc(r)]
     if not requests or any(r.get("target") is None for r in requests):
         return None
     items = []
@@ -839,7 +854,9 @@ def _v2_plan(message: str) -> dict | None:
         if quantity and quantity.get("unit"):
             item["quantity"] = {"value": quantity["value"].replace(",", ""), "unit": quantity["unit"]}
         items.append(item)
-    return {"original_request": message, "items": items}
+    # 돈을 묻는 요청이 하나도 없으면 품까지만 계산한다
+    goal = "cost" if any(r["kind"] == "estimate" for r in requests) else "labor"
+    return {"original_request": message, "items": items, "goal": goal}
 
 
 def _v2_previous(state: DialogueState) -> dict | None:
@@ -856,7 +873,7 @@ def _v2_label(res: dict) -> str:
     out = res["output"]
     if out["route"] != "work":
         return out["route"]
-    return "estimate" if any(r["kind"] == "estimate" for r in out["requests"]) else "qa"
+    return "estimate" if any(r["kind"] == "estimate" or _v2_is_calc(r) for r in out["requests"]) else "qa"
 
 
 def _template_turn(state: DialogueState, answer: str, trace: list, pending: list | None = None) -> DialogueState:
@@ -1065,7 +1082,7 @@ def _run_turn(state: DialogueState, request: dict, generate=None, clock=time.mon
                                            "trace": [], "llm_info": budget.record(), "last_status": "needs_input"}
                         working.pop("request", None)
                         return working
-                    working["goal"], working["route"], working["unified_estimate"] = "cost", "estimate", True
+                    working["goal"], working["route"], working["unified_estimate"] = plan.get("goal", "cost"), "estimate", True
                     return _run_multi_turn(working, {**request, "_multi_start": True}, generate, clock, budget)
     before = _inputs_key(working)
     message = (request.get("message") or "").strip()
@@ -1107,7 +1124,14 @@ def _run_turn(state: DialogueState, request: dict, generate=None, clock=time.mon
         policy = "llm" if use_llm else "rule"
         if knowledge_qa:
             working['route'] = 'qa'
-            result = _run_tool(working, 'search_standard', {'query': message}, message, budget)
+            v2_qa = _v2_qa_requests(message)
+            if v2_qa:
+                from backend.agent.v2 import qa as v2qa
+                out = v2qa.ask(message, v2_qa)
+                result = {"status": "ok", "data": {"knowledge": out["knowledge"], "sections": [], "v2_qa": out["trace"]},
+                          "missing": [], "rejected": {}, "revision": None}
+            else:
+                result = _run_tool(working, 'search_standard', {'query': message}, message, budget)
             log.append({'tool':'search_standard','args':{'query':message},'result':result})
             policy = 'verified'
         elif use_llm:
