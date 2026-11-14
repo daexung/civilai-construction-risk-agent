@@ -17,6 +17,7 @@ RRF_K = 60
 # Q4 답 쓰기 모델. flash-lite는 표의 뜻(일당 시공량·작업조 인원)을 틀리게 풀어 썼고, 3.1-pro-preview·3.8-flash보다
 # 3.5-flash가 정확도·안정성이 나았다(2026-11-12 상담 15문 비교, 설계 문서 11절). 옛 상담 길의 qa_model은 그대로다.
 ANSWER_MODEL = "gemini-3.5-flash"
+ANSWER_KINDS = ("table", "rule")  # 근거가 될 수 있는 조각 종류(청킹 묶음의 kind 값)
 
 SYSTEM_PICK = """당신은 건설 표준품셈 원문에서 질문에 답이 되는 줄을 고르는 선택기다. 답변 문장은 쓰지 않는다.
 규칙:
@@ -86,9 +87,9 @@ def merge_hits(results: list[list[str]], k: int = TOP_K) -> list[str]:
 def candidates_of(engine, req: dict) -> list[dict]:
     st, sec = engine.vs.store, engine.vs.sel.sec
     ranked = []
-    for q in queries_of(req):
+    for q in queries_of(req):  # 조각 종류: table(표)·rule(규칙·주석 글)·work(명세 카드, 근거로 쓰지 않음)
         ranked.append([h["chunk_id"] for h in engine.rt.search(q, "hybrid")["fused"]
-                       if st.chunk.get(h["chunk_id"], {}).get("kind") in ("table", "text")])
+                       if st.chunk.get(h["chunk_id"], {}).get("kind") in ANSWER_KINDS])
     out, used = [], 0
     for cid in merge_hits(ranked, TOP_K * 2):
         ch = st.chunk[cid]
