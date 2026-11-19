@@ -22,6 +22,12 @@
 .lp-header-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; }
 .civil-landing .lp-wordmark { color: var(--lp-brand); font-size: 22px; font-weight: 700; letter-spacing: -.025em; }
 .lp-header nav { display: flex; align-items: center; gap: 20px; font-size: 14px; }
+.lp-header nav > a:not(.lp-button) { position: relative; padding-block: 9px; transition: color 160ms ease; }
+.lp-header nav > a:not(.lp-button)::after { content: ''; position: absolute; inset: auto 0 2px; height: 2px; background: var(--lp-primary); border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform 160ms ease; }
+.lp-header nav > a:not(.lp-button):is(:hover, :focus-visible) { color: var(--lp-primary); }
+.lp-header nav > a:not(.lp-button):is(:hover, :focus-visible)::after { transform: scaleX(1); }
+.lp-footer-links a { transition: color 160ms ease; }
+.lp-footer-links a:is(:hover, :focus-visible) { color: var(--lp-primary); text-decoration: underline; text-underline-offset: 4px; }
 @media (max-width: 480px) { .lp-header nav { gap: 10px; font-size: 13px; } .civil-landing .lp-nav-demo { padding: 9px 12px; font-size: 13px; } }
 .civil-landing .lp-button { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 8px; background: var(--lp-primary); color: #fff; font-size: 14px; font-weight: 600; transition: background .2s; }
 .civil-landing .lp-button:hover { background: var(--lp-brand); }
@@ -177,6 +183,7 @@
   .preview-tabs button { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .lp-header nav > a:not(.lp-button), .lp-header nav > a:not(.lp-button)::after, .lp-footer-links a { transition: none; }
   .civil-landing { scroll-behavior: auto; }
   .lp-reveal { opacity: 1; transform: none; transition: none; }
   .civil-landing .lp-button, .preview-disclosure > button > svg { transition: none; }
