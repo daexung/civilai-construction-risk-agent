@@ -74,6 +74,8 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const pendingRequest = useRef(false);
   const [usage, setUsage] = useState<UsageStatus | null>(null);
+  const [usageError, setUsageError] = useState('');
+  const [usageRetry, setUsageRetry] = useState(0);
   const [user, setUser] = useState<User | null>(null);
   const [adminAccountId, setAdminAccountId] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
@@ -123,20 +125,30 @@ export default function App() {
   useEffect(() => {
     if (pathname !== '/chat' || authInitializing) return;
     let active = true;
+    let pending = false;
+    let refreshedAt = 0;
+    const controller = new AbortController();
     setUsage(null);
-    const refresh = () => { getUsage(!!accountId).then(value => { if (active) setUsage(value); }).catch(() => {}); };
+    setUsageError('');
+    const refresh = () => {
+      if (pending || Date.now() - refreshedAt < 30000) return;
+      pending = true;
+      getUsage(!!accountId, controller.signal).then(value => {
+        if (active) { setUsage(value); setUsageError(''); }
+      }).catch(() => {
+        if (active) setUsageError('사용량을 확인하지 못했어요. 다시 시도해 주세요.');
+      }).finally(() => { pending = false; refreshedAt = Date.now(); });
+    };
     refresh();
     window.addEventListener('focus', refresh);
-    return () => { active = false; window.removeEventListener('focus', refresh); };
-  }, [accountId, authInitializing, pathname]);
+    return () => { active = false; controller.abort(); window.removeEventListener('focus', refresh); };
+  }, [accountId, authInitializing, pathname, usageRetry]);
   useEffect(() => {
     if (!usage) return;
-    let active = true;
     const timer = window.setTimeout(() => {
-      getUsage(!!accountId).then(value => { if (active) setUsage(value); })
-        .catch(() => { if (active) setUsage(null); });
+      setUsageRetry(value => value + 1);
     }, Math.max(100, Date.parse(usage.resets_at) - Date.now() + 100));
-    return () => { active = false; window.clearTimeout(timer); };
+    return () => { window.clearTimeout(timer); };
   }, [usage, accountId]);
   const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0];
   const accountName = user ? (typeof displayName === 'string' && displayName.trim() ? displayName.trim() : '내 계정') : null;
@@ -491,6 +503,8 @@ export default function App() {
         onRatingSaved={(answerId, value) => setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => ({ ...chat,
           turns: chat.turns.map(turn => turn.response?.answer_id === answerId ? { ...turn, response: { ...turn.response, answer_rating: value } } : turn) })) }))}
         usage={usage}
+        usageError={usageError}
+        onRetryUsage={() => setUsageRetry(value => value + 1)}
         onLogout={handleLogout}
         logoutBusy={logoutLoading || loading || migrating || authLoading}
         logoutError={logoutError}
@@ -529,7 +543,7 @@ export default function App() {
       {loginOpen && <LoginDialog busy={authLoading} error={loginError} onClose={() => setLoginOpen(false)} onGoogleLogin={handleLogin} />}
       {feedbackOpen && <FeedbackDialog key={accountId ?? 'guest'} userId={accountId ?? undefined} onClose={() => setFeedbackOpen(false)} />}
       {deleteAccountOpen && user && <DeleteAccountDialog key={user.id} userId={user.id} email={user.email ?? ''} onClose={() => setDeleteAccountOpen(false)} onDeleted={handleAccountDeleted} />}
-      {settingsOpen && <SettingsDialog usage={usage} accountName={accountName} accountEmail={user?.email ?? null} busy={logoutLoading || loading || migrating} error={logoutError} onClose={() => setSettingsOpen(false)} onLogout={handleLogout} onDeleteAccount={() => { setSettingsOpen(false); setDeleteAccountOpen(true); }} onLogin={() => { setSettingsOpen(false); setLoginError(''); setLoginOpen(true); }} />}
+      {settingsOpen && <SettingsDialog usage={usage} usageError={usageError} onRetryUsage={() => setUsageRetry(value => value + 1)} accountName={accountName} accountEmail={user?.email ?? null} busy={logoutLoading || loading || migrating} error={logoutError} onClose={() => setSettingsOpen(false)} onLogout={handleLogout} onDeleteAccount={() => { setSettingsOpen(false); setDeleteAccountOpen(true); }} onLogin={() => { setSettingsOpen(false); setLoginError(''); setLoginOpen(true); }} />}
       {deleteTarget && <DeleteConversationDialog title={store.conversations.find(chat => chat.id === deleteTarget)?.title ?? '대화'} busy={deleting} error={deleteError} onClose={() => setDeleteTarget(null)} onDelete={handleDeleteConversation} />}
       {renameTarget && <RenameConversationDialog key={renameTarget} title={store.conversations.find(chat => chat.id === renameTarget)?.title ?? '대화'} busy={renaming} error={renameError} onClose={() => setRenameTarget(null)} onSave={handleRenameConversation} />}
     </div>

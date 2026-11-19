@@ -9,6 +9,8 @@ import { analyticsAllowed, setAnalyticsAllowed } from '../analytics';
 
 interface Props {
   usage?: UsageStatus | null;
+  usageError?: string;
+  onRetryUsage?: () => void;
   accountName: string | null;
   accountEmail: string | null;
   busy: boolean;
@@ -19,7 +21,7 @@ interface Props {
   onDeleteAccount?: () => void;
 }
 
-export default function SettingsDialog({ usage, accountName, accountEmail, busy, error, onClose, onLogin, onLogout, onDeleteAccount }: Props) {
+export default function SettingsDialog({ usage, usageError, onRetryUsage, accountName, accountEmail, busy, error, onClose, onLogin, onLogout, onDeleteAccount }: Props) {
   const [tab, setTab] = useState<'general' | 'account'>(accountName ? 'account' : 'general');
   const id = useId();
   const [analyticsEnabled, setAnalyticsEnabled] = useState(analyticsAllowed);
@@ -44,10 +46,10 @@ export default function SettingsDialog({ usage, accountName, accountEmail, busy,
             </> : accountName ? <>
               <div className="settings-identity"><span className="chat-account-avatar" aria-hidden="true">{accountName.slice(0, 1).toUpperCase()}</span><div><strong>{accountName}</strong><span>{accountEmail}</span></div></div>
               <div className="settings-row"><span>로그인 방식</span><span className="settings-value">Google</span></div>
-              <div className="settings-row settings-usage"><UsageSummary usage={usage} /></div>
+              <div className="settings-row settings-usage"><UsageSummary usage={usage} usageError={usageError} onRetryUsage={onRetryUsage} /></div>
               <div className="settings-row"><div><span>로그아웃</span><p>이 기기에서 로그아웃합니다.</p></div><button className="settings-logout" disabled={busy} onClick={onLogout}><LogOut size={16} strokeWidth={1.75} />{busy ? '로그아웃 중…' : '로그아웃'}</button></div>
               <div className="settings-row"><div><span>회원탈퇴</span><p>계정과 저장된 대화를 삭제합니다.</p></div><button className="settings-logout settings-delete-account" disabled={busy} onClick={onDeleteAccount}>회원탈퇴</button></div>
-            </> : <div className="settings-guest"><p>로그인하지 않은 상태입니다.</p><UsageSummary usage={usage} /><button onClick={onLogin}>로그인</button></div>}
+            </> : <div className="settings-guest"><p>로그인하지 않은 상태입니다.</p><UsageSummary usage={usage} usageError={usageError} onRetryUsage={onRetryUsage} /><button onClick={onLogin}>로그인</button></div>}
             {error && <p className="settings-error" role="alert">{error}</p>}
           </section>
         </div>

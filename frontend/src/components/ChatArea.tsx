@@ -30,6 +30,8 @@ interface Props {
   ratingUserId?: string;
   onRatingSaved?: (answerId: string, value: NonNullable<ChatResponse['answer_rating']>) => void;
   usage?: UsageStatus | null;
+  usageError?: string;
+  onRetryUsage?: () => void;
   inputDisabled?: boolean;
   accountLabel?: string | null;
   adminAccess?: boolean;
@@ -934,14 +936,15 @@ export default function ChatArea(props: Props) {
             <div className="chat-sidebar-bottom">
               <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={props.onFeedback}><ChatIcon name="feedback" />피드백 남기기</button>
-              {props.accountLabel ? <AccountMenu adminAccess={props.adminAccess} name={props.accountLabel} usage={props.usage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login">
+              {props.accountLabel ? <AccountMenu adminAccess={props.adminAccess} name={props.accountLabel} usage={props.usage} usageError={props.usageError} onRetryUsage={props.onRetryUsage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login">
                 <strong>건셈과 함께 시작하세요</strong>
                 <div className="chat-guest-usage" role="status" aria-live="polite">
-                  {props.authLoading ? '로그인 확인 중…' : !props.usage ? '남은 무료 이용 횟수 확인 중…'
+                  {props.authLoading || props.authInitializing ? '로그인 확인 중…' : props.authError ? '로그인 상태를 확인하지 못했어요.' : props.usageError ? props.usageError : !props.usage ? '남은 무료 이용 횟수 확인 중…'
                     : props.usage.service_remaining === 0 ? '오늘 서비스 전체 한도에 도달했어요.'
                     : props.usage.remaining === 0 ? '오늘 무료 이용을 모두 사용했어요.'
                     : <>오늘 남은 무료 이용 · <strong>{props.usage.remaining}회</strong></>}
                 </div>
+                {props.usageError && !props.authInitializing && !props.authError && <button className="usage-retry" onClick={props.onRetryUsage}>사용량 다시 확인</button>}
                 <p>로그인하면 하루 20회까지 이용할 수 있어요.</p>
                 <button disabled={props.authLoading || props.loading || props.authInitializing || !!props.authError} onClick={props.onLogin}>{props.authLoading ? '로그인 확인 중…' : '로그인'}</button>
               </div>}

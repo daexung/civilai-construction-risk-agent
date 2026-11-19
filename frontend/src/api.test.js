@@ -1,12 +1,41 @@
 const mockSession = jest.fn();
 jest.mock('./auth', () => ({ authClient: { auth: { getSession: mockSession } } }));
-const { sendChat, listConversations, downloadEstimate, importGuestConversation, sendFeedback } = require('./api');
+const { sendChat, listConversations, downloadEstimate, importGuestConversation, sendFeedback, getUsage } = require('./api');
 
 beforeEach(() => {
   mockSession.mockReset().mockResolvedValue({ data: { session: { access_token: 'member-token' } } });
   global.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => ({ thread_id: 'saved' }) });
 });
 afterEach(() => jest.restoreAllMocks());
+
+test.each(['session', 'fetch', 'body'])('usage deadline bounds a stalled %s and aborts the request', async stage => {
+  jest.useFakeTimers();
+  try {
+    const stalled = new Promise(() => {});
+    if (stage === 'session') mockSession.mockReturnValue(stalled);
+    if (stage === 'fetch') fetch.mockReturnValue(stalled);
+    if (stage === 'body') fetch.mockResolvedValue({ ok: true, json: () => stalled });
+    const result = expect(getUsage(stage === 'session')).rejects.toThrow('USAGE_TIMEOUT');
+    await Promise.resolve();
+    await Promise.resolve();
+    jest.advanceTimersByTime(10000);
+    await result;
+    if (stage === 'session') expect(fetch).not.toHaveBeenCalled();
+    else expect(fetch.mock.calls[0][1].signal.aborted).toBe(true);
+  } finally { jest.useRealTimers(); }
+});
+
+test('usage cancellation prevents a late session refresh from sending a request', async () => {
+  let resolveSession;
+  mockSession.mockReturnValue(new Promise(resolve => { resolveSession = resolve; }));
+  const controller = new AbortController();
+  const result = expect(getUsage(true, controller.signal)).rejects.toThrow('REQUEST_ABORTED');
+  controller.abort();
+  await result;
+  resolveSession({ data: { session: { access_token: 'old-account' } } });
+  await Promise.resolve();
+  expect(fetch).not.toHaveBeenCalled();
+});
 
 test('member writes send a bearer token while guest threads remain temporary after login', async () => {
   await sendChat({ conversation_id: 'saved', request_id: 'request', message: '질문' });

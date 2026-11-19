@@ -45,6 +45,7 @@ async function request(path: string, init: RequestInit = {}, member = true, expe
   }
   let res: Response;
   try {
+    if (init.signal?.aborted) throw new Error('REQUEST_ABORTED');
     res = await fetch(`${API_BASE}${path}`, { ...init, headers });
   } catch {
     throw new Error('NETWORK_ERROR');
@@ -66,8 +67,26 @@ export async function sendChat(body: ChatRequestBody): Promise<ChatResponse> {
     body: JSON.stringify(body) }, !!body.conversation_id)).json();
 }
 
-export async function getUsage(member: boolean): Promise<UsageStatus> {
-  return (await request('/api/usage', {}, member)).json();
+export async function getUsage(member: boolean, signal?: AbortSignal): Promise<UsageStatus> {
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let cancel = () => {};
+  // Bound session refresh, fetch and reading the body, not only network headers.
+  const deadline = new Promise<never>((_, reject) => {
+    cancel = () => { controller.abort(); reject(new Error('REQUEST_ABORTED')); };
+    signal?.addEventListener('abort', cancel, { once: true });
+    timer = setTimeout(() => { controller.abort(); reject(new Error('USAGE_TIMEOUT')); }, 10000);
+    if (signal?.aborted) cancel();
+  });
+  try {
+    return await Promise.race([
+      request('/api/usage', { signal: controller.signal }, member).then(res => res.json()),
+      deadline,
+    ]);
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener('abort', cancel);
+  }
 }
 
 export async function sendFeedback(body: { request_id: string; category: 'bug' | 'suggestion' | 'other'; message: string }, expectedUserId?: string): Promise<{ id: string }> {

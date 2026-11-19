@@ -172,6 +172,8 @@
 .chat-sidebar-login button { border: 0; border-radius: 10px; background: var(--brand-primary); color: #fff; font-weight: 600; box-shadow: none; }
 .chat-sidebar-login button:hover:not(:disabled) { background: var(--brand-strong); border-color: transparent; }
 .chat-sidebar-login button:disabled { opacity: .6; cursor: default; }
+.chat-sidebar-login .usage-retry, .account-usage .usage-retry { width: auto; min-height: 32px; padding: 4px 8px; border: 0; border-radius: 6px; background: transparent; color: var(--brand-strong); font: inherit; text-decoration: underline; cursor: pointer; box-shadow: none; }
+.chat-sidebar-login .usage-retry:hover, .account-usage .usage-retry:hover { background: var(--accent-tint); color: var(--brand-strong); }
 .chat-account { border-top-color: #eeeeee; }
 .chat-account:hover { background: #f4f4f5; }
 .chat-account-avatar { background: linear-gradient(135deg, var(--brand-primary), var(--brand-strong)); color: #fff; }

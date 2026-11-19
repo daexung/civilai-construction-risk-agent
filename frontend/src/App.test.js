@@ -51,6 +51,36 @@ test('shows remaining usage and disables sending when the server reports a daily
   expect(document.querySelector('.settings-body .account-usage').textContent).toContain('0 / 5회');
 });
 
+test('failed usage displays a retry and recovers without reloading the page', async () => {
+  act(() => root.unmount());
+  getUsage.mockRejectedValueOnce(new Error('NETWORK_ERROR'));
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(container.querySelector('.chat-guest-usage').textContent).toContain('사용량을 확인하지 못했어요');
+  expect(container.querySelector('.chat-guest-usage').textContent).not.toContain('확인 중');
+  await act(async () => Simulate.click(container.querySelector('.usage-retry')));
+  expect(container.querySelector('.usage-retry')).toBeNull();
+  expect(container.querySelector('.chat-guest-usage').textContent).toContain('5회');
+});
+
+test('focus changes share an in-flight usage request and throttle recent refreshes', async () => {
+  jest.useFakeTimers();
+  try {
+    let resolveUsage;
+    getUsage.mockImplementationOnce(() => new Promise(resolve => { resolveUsage = resolve; }));
+    await act(async () => {
+      jest.advanceTimersByTime(30001);
+      window.dispatchEvent(new Event('focus'));
+      window.dispatchEvent(new Event('focus'));
+    });
+    expect(getUsage).toHaveBeenCalledTimes(2);
+    await act(async () => resolveUsage({ limit: 5, remaining: 3, service_remaining: 499, resets_at: new Date(Date.now() + 3600000).toISOString() }));
+    act(() => window.dispatchEvent(new Event('focus')));
+    expect(getUsage).toHaveBeenCalledTimes(2);
+    expect(container.querySelector('.chat-guest-usage').textContent).toContain('3회');
+  } finally { jest.useRealTimers(); }
+});
+
 test('refreshes exhausted usage at midnight and enables sending again', async () => {
   jest.useFakeTimers();
   try {
