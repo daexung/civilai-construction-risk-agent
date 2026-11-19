@@ -301,7 +301,7 @@ export interface ChatTurn {
   role: 'user' | 'assistant' | 'notice';
   text?: string;
   // 답을 받지 못한 질문. 다시 시도는 이 턴을 재사용하고, 같은 thread면 같은 request_id를 보낸다.
-  failed?: { body: { message?: string; answers?: Record<string, ChoiceValue>; restart?: boolean; refs?: Record<string, string> }; thread: string | null; requestId: string };
+  failed?: { body: { message?: string; answers?: Record<string, ChoiceValue>; restart?: boolean; refs?: Record<string, string> }; thread: string | null; requestId: string; message?: string };
   response?: ChatResponse;
   elapsedMs?: number;
   sentAtMs?: number;

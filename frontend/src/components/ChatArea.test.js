@@ -47,17 +47,56 @@ test('composer sends trimmed text, preserves Shift+Enter and Korean IME composit
   expect(input.value).toBe('');
 });
 
-test('examples retain full prompts and new chat clears an unsent draft', () => {
+test('examples fill the composer without sending and new chat preserves an unsent draft', () => {
   act(() => Simulate.click(container.querySelector('.example-btn')));
-  expect(props.onSendExample).toHaveBeenCalledWith(EXAMPLE_QUESTIONS[0].text);
+  expect(props.onSendExample).not.toHaveBeenCalled();
+  expect(props.onSendMessage).not.toHaveBeenCalled();
+  expect(container.querySelector('textarea').value).toBe(EXAMPLE_QUESTIONS[0].text);
+  expect(document.activeElement).toBe(container.querySelector('textarea'));
   act(() => Simulate.change(container.querySelector('textarea'), { target: { value: '임시 질문' } }));
   act(() => Simulate.click(container.querySelector('[aria-label="새 대화 시작"]')));
   expect(props.onNewChat).toHaveBeenCalledTimes(1);
-  expect(container.querySelector('textarea').value).toBe('');
+  expect(container.querySelector('textarea').value).toBe('임시 질문');
   act(() => root.render(<ChatArea {...props} loading />));
   expect(container.querySelector('[aria-label="질문 보내기"]').disabled).toBe(true);
   expect(container.querySelector('[aria-label="새 대화 시작"]').disabled).toBe(true);
   expect(container.querySelector('.example-btn').disabled).toBe(true);
+});
+
+test('drafts are restored per conversation and isolated between accounts', () => {
+  act(() => Simulate.change(container.querySelector('textarea'), { target: { value: '새 대화 초안' } }));
+  act(() => root.render(<ChatArea {...props} activeConversationId="A" />));
+  expect(container.querySelector('textarea').value).toBe('');
+  act(() => Simulate.change(container.querySelector('textarea'), { target: { value: '대화 A 초안' } }));
+  act(() => root.render(<ChatArea {...props} activeConversationId="B" />));
+  act(() => Simulate.change(container.querySelector('textarea'), { target: { value: '대화 B 초안' } }));
+  act(() => root.render(<ChatArea {...props} activeConversationId="A" />));
+  expect(container.querySelector('textarea').value).toBe('대화 A 초안');
+  act(() => root.render(<ChatArea {...props} activeConversationId="A" draftOwnerKey="other-user" />));
+  expect(container.querySelector('textarea').value).toBe('');
+  act(() => root.render(<ChatArea {...props} />));
+  expect(container.querySelector('textarea').value).toBe('새 대화 초안');
+});
+
+test('long generation permits drafting but prevents another send and preserves the draft on completion', () => {
+  jest.useFakeTimers();
+  try {
+    const turns = [{ id: 'pending', role: 'user', text: '첫 질문', sentAtMs: Date.now() }];
+    act(() => root.render(<ChatArea {...props} activeConversationId="A" turns={turns} loading generating />));
+    const input = container.querySelector('[aria-label="질문 입력"]');
+    expect(input.disabled).toBe(false);
+    act(() => Simulate.change(input, { target: { value: '다음 질문 초안' } }));
+    act(() => Simulate.keyDown(input, { key: 'Enter', nativeEvent: {} }));
+    expect(props.onSendMessage).not.toHaveBeenCalled();
+    expect(container.querySelector('[aria-label="질문 보내기"]').disabled).toBe(true);
+    act(() => jest.advanceTimersByTime(31000));
+    expect(container.querySelector('.chat-wait-notice').textContent).toContain('응답이 지연');
+    act(() => root.render(<ChatArea {...props} activeConversationId="A" turns={turns} />));
+    expect(container.querySelector('.chat-wait-notice')).toBeNull();
+    expect(container.querySelector('[aria-label="질문 입력"]').value).toBe('다음 질문 초안');
+    act(() => Simulate.click(container.querySelector('[aria-label="질문 보내기"]')));
+    expect(props.onSendMessage).toHaveBeenCalledWith('다음 질문 초안');
+  } finally { jest.useRealTimers(); }
 });
 
 test('sidebar can close and reopen with settings, feedback and login controls', () => {

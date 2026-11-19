@@ -76,6 +76,7 @@ export default function App() {
   const [usage, setUsage] = useState<UsageStatus | null>(null);
   const [usageError, setUsageError] = useState('');
   const [usageRetry, setUsageRetry] = useState(0);
+  const [exampleDraft, setExampleDraft] = useState<{ id: string; text: string }>();
   const [user, setUser] = useState<User | null>(null);
   const [adminAccountId, setAdminAccountId] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
@@ -279,7 +280,7 @@ export default function App() {
     if (err instanceof UsageError) {
       if (err.usage) setUsage(err.usage);
       showToast(err.message, 'error');
-      return;
+      return err.message;
     }
     const msg = err instanceof Error ? err.message : '';
     const text =
@@ -290,6 +291,7 @@ export default function App() {
       msg === 'GUEST_EXPIRED' ? '임시 대화가 만료되었습니다.' :
                                  'API 서버에 연결할 수 없습니다. 서버가 켜져 있는지 확인해주세요.';
     showToast(text, 'error');
+    return text;
   }, []);
 
   const send = useCallback(async (
@@ -332,10 +334,10 @@ export default function App() {
         ? { ...chat, threadId: response.thread_id, turns: [...chat.turns, assistantTurn] } : chat) }));
     } catch (err) {
       const expired = !saved && err instanceof Error && err.message === 'GUEST_EXPIRED';
+      const message = expired ? '임시 대화가 만료되었습니다. 아래 안내에서 새 대화로 이어가 주세요.' : handleError(err);
       setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => chat.id === conversationId
         ? { ...chat, expired: chat.expired || expired,
-            turns: chat.turns.map(turn => turn.id === userTurn.id ? { ...turn, failed: { body, thread, requestId } } : turn) } : chat) }));
-      if (!expired) handleError(err);  // 만료는 대화 안의 안내로 보여준다
+            turns: chat.turns.map(turn => turn.id === userTurn.id ? { ...turn, failed: { body, thread, requestId, message } } : turn) } : chat) }));
     } finally {
       pendingRequest.current = false;
       setLoading(false);
@@ -403,10 +405,6 @@ export default function App() {
   const handleNewChat = useCallback(() => {
     setStore(prev => ({ ...prev, activeId: null }));
   }, []);
-
-  const handleSendExample = useCallback((text: string) => {
-    return send(text, { message: text }, null, uuidv4());
-  }, [send]);
 
   const handleSelectConversation = async (id: string) => {
     if (loading || !canSendRequest) return;
@@ -480,8 +478,9 @@ export default function App() {
     const query = new URLSearchParams(window.location.search).get('q');
     if (!query) return;
     window.history.replaceState({}, '', '/chat');
-    handleSendExample(query);
-  }, [pathname, handleSendExample, canSendRequest]);
+    setStore(previous => ({ ...previous, activeId: null }));
+    setExampleDraft({ id: uuidv4(), text: query.slice(0, 10000) });
+  }, [pathname, canSendRequest]);
 
   if (process.env.REACT_APP_LOCAL_TRIAL === 'on' && pathname === '/trial') return <LocalTrial />;   // 5단계 로컬 시험(기본 꺼짐)
   if (pathname === '/auth/callback') return <AuthCallback />;
@@ -499,6 +498,9 @@ export default function App() {
       <BetaNotice variant="chat" onStart={() => {}} onFeedback={() => setFeedbackOpen(true)} />
       {user && migrationError && <div className="chat-migration-notice" role="alert"><span>{migrationError}</span><button onClick={() => setMigrationRetry(value => value + 1)}>다시 시도</button></div>}
       <ChatArea
+        key={accountId ?? 'guest'}
+        draftOwnerKey={accountId ?? 'guest'}
+        exampleDraft={exampleDraft}
         ratingUserId={current?.saved ? accountId ?? undefined : undefined}
         onRatingSaved={(answerId, value) => setStore(prev => ({ ...prev, conversations: prev.conversations.map(chat => ({ ...chat,
           turns: chat.turns.map(turn => turn.response?.answer_id === answerId ? { ...turn, response: { ...turn.response, answer_rating: value } } : turn) })) }))}
@@ -538,7 +540,6 @@ export default function App() {
         onSendAnswers={handleSendAnswers}
         onChangeConditions={handleChangeConditions}
         onNewChat={handleNewChat}
-        onSendExample={handleSendExample}
       />
       {loginOpen && <LoginDialog busy={authLoading} error={loginError} onClose={() => setLoginOpen(false)} onGoogleLogin={handleLogin} />}
       {feedbackOpen && <FeedbackDialog key={accountId ?? 'guest'} userId={accountId ?? undefined} onClose={() => setFeedbackOpen(false)} />}

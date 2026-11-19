@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Pencil, RotateCcw } from 'lucide-react';
 
-export default function UserQuestion({ text, disabled, onResend, failed, onRetry }: {
-  text: string; disabled: boolean; onResend?: (text: string) => void; failed?: boolean; onRetry?: () => void;
+export default function UserQuestion({ text, disabled, onResend, failed, failureMessage, onRetry }: {
+  text: string; disabled: boolean; onResend?: (text: string) => void; failed?: boolean; failureMessage?: string; onRetry?: () => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(text);
@@ -28,7 +28,7 @@ export default function UserQuestion({ text, disabled, onResend, failed, onRetry
       </div>
     </div> : <>
       <div className="user-bubble">{text}</div>
-      {failed && <p className="user-question-failed">답변을 받지 못했어요.
+      {failed && <p className="user-question-failed" role="alert">답변을 받지 못했어요. {failureMessage}
         {onRetry && <button type="button" disabled={disabled} onClick={onRetry}>다시 시도</button>}</p>}
       {onResend && <div className="user-question-actions">
         {!failed && <button type="button" disabled={disabled} aria-label="질문 다시 보내기" title="다시 보내기 · 이용 횟수 1회 차감" onClick={() => onResend(text)}><RotateCcw size={16} strokeWidth={1.75} /></button>}

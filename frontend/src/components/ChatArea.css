@@ -289,6 +289,7 @@
 }
 
 .user-question-actions { display: flex; justify-content: flex-end; gap: 4px; margin-top: 5px; }
+.chat-wait-notice { max-width: 560px; margin: 10px 0 0; color: var(--text-secondary); font-size: 13px; line-height: 1.7; }
 .user-question-actions button { display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--text-muted); cursor: pointer; }
 .user-question-actions button:hover:not(:disabled), .user-question-actions button:focus-visible { color: var(--text-primary); background: var(--bg-secondary); }
 .user-question-actions button:disabled { opacity: .4; cursor: default; }

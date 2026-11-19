@@ -63,6 +63,58 @@ test('failed usage displays a retry and recovers without reloading the page', as
   expect(container.querySelector('.chat-guest-usage').textContent).toContain('5회');
 });
 
+test('a chat example is editable and consumes no request until explicitly sent', async () => {
+  act(() => Simulate.click(container.querySelector('.example-btn')));
+  expect(sendChat).not.toHaveBeenCalled();
+  const input = container.querySelector('[aria-label="질문 입력"]');
+  expect(input.value).toContain('자동문');
+  act(() => Simulate.change(input, { target: { value: '자동문 5개소 설치 견적' } }));
+  await act(async () => Simulate.click(container.querySelector('[aria-label="질문 보내기"]')));
+  expect(sendChat).toHaveBeenCalledTimes(1);
+  expect(sendChat.mock.calls[0][0].message).toBe('자동문 5개소 설치 견적');
+});
+
+test('a landing example query prefills the composer without sending', async () => {
+  act(() => root.unmount());
+  window.history.replaceState({}, '', '/chat?q=' + encodeURIComponent('콘크리트 100㎥ 견적'));
+  root = createRoot(container);
+  await act(async () => root.render(<App />));
+  expect(sendChat).not.toHaveBeenCalled();
+  expect(container.querySelector('[aria-label="질문 입력"]').value).toBe('콘크리트 100㎥ 견적');
+  expect(window.location.search).toBe('');
+});
+
+test('drafting during the first request survives its response and sends to the same conversation', async () => {
+  let resolveResponse;
+  sendChat.mockImplementationOnce(() => new Promise(resolve => { resolveResponse = resolve; }));
+  await sendQuestion('첫 번째 질문');
+  const input = container.querySelector('[aria-label="질문 입력"]');
+  expect(input.disabled).toBe(false);
+  act(() => Simulate.change(input, { target: { value: '후속 질문' } }));
+  expect(container.querySelector('[aria-label="질문 보내기"]').disabled).toBe(true);
+  expect(sendChat).toHaveBeenCalledTimes(1);
+  await act(async () => resolveResponse(response('first-thread', '첫 번째 답변')));
+  expect(container.querySelector('[aria-label="질문 입력"]').value).toBe('후속 질문');
+  await act(async () => Simulate.click(container.querySelector('[aria-label="질문 보내기"]')));
+  expect(sendChat.mock.calls[1][0].thread_id).toBe('first-thread');
+  expect(sendChat.mock.calls[1][0].message).toBe('후속 질문');
+});
+
+test('a failed question retains its error after the toast disappears and retries with the same request id', async () => {
+  jest.useFakeTimers();
+  try {
+    sendChat.mockRejectedValueOnce(new Error('NETWORK_ERROR'));
+    await sendQuestion('네트워크 실패 질문');
+    await act(async () => jest.advanceTimersByTime(4000));
+    expect(container.querySelector('.toast')).toBeNull();
+    expect(container.querySelector('.user-question-failed').textContent).toContain('네트워크 연결을 확인');
+    const requestId = sendChat.mock.calls[0][0].request_id;
+    await act(async () => Simulate.click(container.querySelector('.user-question-failed button')));
+    expect(sendChat.mock.calls[1][0].request_id).toBe(requestId);
+    expect(container.querySelector('.user-question-failed')).toBeNull();
+  } finally { jest.useRealTimers(); }
+});
+
 test('focus changes share an in-flight usage request and throttle recent refreshes', async () => {
   jest.useFakeTimers();
   try {
@@ -545,7 +597,7 @@ test('expired guest thread keeps history, stops repeat sends, and recovers into 
   sendChat.mockRejectedValueOnce(new Error('GUEST_EXPIRED'));
   await sendQuestion('이어서 질문');
   expect(sendChat).toHaveBeenCalledTimes(2);
-  expect(container.querySelector('[role="alert"]').textContent).toContain('더 이어갈 수 없어요');
+  expect(container.querySelector('.chat-expired-notice[role="alert"]').textContent).toContain('더 이어갈 수 없어요');
   expect(container.querySelector('textarea').disabled).toBe(true);
   expect(container.textContent).toContain('답변: 첫 질문');
   expect(container.querySelectorAll('.message.user')).toHaveLength(2);

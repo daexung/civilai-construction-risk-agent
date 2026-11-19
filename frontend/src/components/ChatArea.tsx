@@ -55,7 +55,8 @@ interface Props {
   onSendAnswers: (answers: Record<string, ChoiceValue>, summary: string, refs?: Record<string, string>) => void;
   onChangeConditions: (turnId: string, conditions: Record<string, string>) => void;
   onNewChat: () => void;
-  onSendExample: (text: string) => void;
+  draftOwnerKey?: string;
+  exampleDraft?: { id: string; text: string };
   expired?: boolean;
   onRecover?: () => void;
   onRetry?: (turn: ChatTurn) => void;
@@ -691,9 +692,8 @@ function AssistantCard({
   );
 }
 
-function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onSendMessage, onResendMessage, onSendAnswers, onChangeConditions, onSendExample, ratingUserId, onRatingSaved, expired, onRecover, onRetry }: Props) {
+function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onSendMessage, onResendMessage, onSendAnswers, onChangeConditions, ratingUserId, onRatingSaved, expired, onRecover, onRetry, input, setInput }: Props & { input: string; setInput: (text: string) => void }) {
   const blocked = loading || !!inputDisabled;
-  const [input, setInput] = useState('');
   const [draft, setDraft] = useState<Record<string, { value: ChoiceValue; label: string }>>({});
   const [thinkNow, setThinkNow] = useState(Date.now());
   const [loadingSince, setLoadingSince] = useState<number | null>(null);
@@ -770,6 +770,11 @@ function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onS
     if (el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 160) + 'px'; }
   };
 
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 160) + 'px'; }
+  }, [input]);
+
   const renderInputBox = () => (
     <div className="input-box">
       <textarea
@@ -782,7 +787,7 @@ function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onS
         placeholder="무엇이든 물어보세요"
         aria-label="질문 입력"
         rows={1}
-        disabled={blocked}
+        disabled={!!inputDisabled || (loading && !generating)}
       />
       <button className="send-btn" aria-label="질문 보내기" onClick={handleSubmitMessage} disabled={!input.trim() || blocked}>
         <ChatIcon name="arrow" />
@@ -800,12 +805,13 @@ function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onS
           <div className="centered-input-area">{renderInputBox()}</div>
           <div className="example-prompts" role="group" aria-label="예시 질문">
             {EXAMPLE_QUESTIONS.map((ex) => (
-              <button key={ex.text} className="example-btn" disabled={blocked} onClick={() => onSendExample(ex.text)} title={ex.text}>
+              <button key={ex.text} className="example-btn" disabled={blocked} onClick={() => { setInput(ex.text); textareaRef.current?.focus(); }} title="입력창에 예시 채우기">
                 <span className="example-category">{ex.kind === '견적' ? '견적 예시' : '품셈 상담'}</span>
                 <span className="example-question">{ex.text}</span>
               </button>
             ))}
           </div>
+          <p className="example-hint">예시를 누르면 입력창에 채워져요. 수정한 뒤 보내세요.</p>
         </div>
       </main>
     );
@@ -821,7 +827,7 @@ function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onS
                 <p className="chat-thread-notice" role="note">{turn.text}</p>
               ) : turn.role === 'user' ? (
                 <UserQuestion text={turn.text ?? ''} disabled={blocked} onResend={onResendMessage}
-                  failed={!!turn.failed} onRetry={turn.failed && i === turns.length - 1 && onRetry ? () => onRetry(turn) : undefined} />
+                  failed={!!turn.failed} failureMessage={turn.failed?.message} onRetry={turn.failed && i === turns.length - 1 && onRetry ? () => onRetry(turn) : undefined} />
               ) : (
                 <div className="assistant-body">
                   {turn.response && (
@@ -857,6 +863,7 @@ function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onS
                 </svg>
                 <span className="think-label animate">{thinkingSeconds.toFixed(0)}초 동안 생각 중...</span>
               </div>
+              {thinkingSeconds >= 30 && <p className="chat-wait-notice" role="status">응답이 지연되고 있어요. 완료되면 여기에 표시됩니다. 기다리는 동안 다음 질문을 작성할 수 있어요.</p>}
             </div>
           )}
           {expired && (
@@ -869,7 +876,7 @@ function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onS
           <div ref={bottomRef} />
         </div>
       </div>
-      <div className="input-area">{renderInputBox()}<p className="composer-note">견적은 참고용 초안입니다. 사용 전 산출근거를 확인해 주세요.</p></div>
+      <div className="input-area">{renderInputBox()}<p className="composer-note">{generating ? '다음 질문을 미리 작성할 수 있어요. 현재 답변이 완료되면 보내 주세요.' : '견적은 참고용 초안입니다. 사용 전 산출근거를 확인해 주세요.'}</p></div>
     </main>
   );
 }
@@ -881,6 +888,14 @@ function ChatIcon({ name }: { name: 'plus' | 'panel' | 'settings' | 'feedback' |
 }
 
 export default function ChatArea(props: Props) {
+  const [composerDrafts, setComposerDrafts] = useState<Record<string, string>>({});
+  const draftKey = `${props.draftOwnerKey ?? 'guest'}:${props.activeConversationId ?? 'new'}`;
+  const setComposerDraft = (text: string) => setComposerDrafts(previous => ({ ...previous, [draftKey]: text }));
+  useEffect(() => {
+    if (!props.exampleDraft) return;
+    const key = `${props.draftOwnerKey ?? 'guest'}:new`;
+    setComposerDrafts(previous => ({ ...previous, [key]: props.exampleDraft!.text }));
+  }, [props.exampleDraft, props.draftOwnerKey]);
   const [openSource, setOpenSource] = useState<Citation | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 900);
   const [conversationKey, setConversationKey] = useState(0);
@@ -954,7 +969,7 @@ export default function ChatArea(props: Props) {
         <div className="chat-workspace">
           <header className="chat-header"><div>{!sidebarOpen && <button className="chat-icon-button" aria-label="사이드바 열기" aria-expanded={sidebarOpen} aria-controls="chat-sidebar" onClick={() => setSidebarOpen(true)}><ChatIcon name="panel" /></button>}<span>건셈</span></div><button className="chat-icon-button" aria-label="새 대화 시작" title="새 대화" disabled={navigationBlocked} onClick={newChat}><ChatIcon name="plus" /></button></header>
           {!sidebarOpen && startupStatus}
-          <ChatAreaView key={`${props.activeConversationId ?? 'new'}:${conversationKey}`} {...props} />
+          <ChatAreaView key={`${props.draftOwnerKey ?? 'guest'}:${props.activeConversationId ?? 'new'}:${conversationKey}`} {...props} input={composerDrafts[draftKey] ?? ''} setInput={setComposerDraft} />
         </div>
         {openSource?.image_url && <SourceViewer citation={openSource} onClose={() => setOpenSource(null)} />}
       </div>
