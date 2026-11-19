@@ -5,6 +5,7 @@ import './App.css';
 // not run the chat's auth, usage, conversation, or analytics initialization.
 const ChatApp = lazy(() => import('./ChatApp'));
 const MultiTradeTrial = lazy(() => import('./components/MultiTradeTrial'));
+const HelpPage = lazy(() => import('./help/HelpPages'));
 
 export function ChatLoadingSkeleton() {
   return <main className="chat-loading" aria-busy="true" aria-label="채팅 화면을 불러오는 중">
@@ -38,6 +39,12 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
   const localTrial = process.env.REACT_APP_MULTI_TRADE_TRIAL === 'on' && pathname === '/estimate-trial';
+  const publicPage = pathname.replace(/\/$/, '');
+  if (publicPage === '/guide' || publicPage === '/examples') {
+    return <Suspense fallback={<main role="status">안내 페이지를 여는 중입니다</main>}>
+      <HelpPage page={publicPage === '/guide' ? 'guide' : 'examples'} />
+    </Suspense>;
+  }
   return <Suspense fallback={localTrial ? <TrialLoadingFallback /> : <ChatLoadingSkeleton />}>
     {localTrial ? <MultiTradeTrial /> : <ChatApp />}
   </Suspense>;

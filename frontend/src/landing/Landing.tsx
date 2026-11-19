@@ -50,6 +50,8 @@ export default function Landing({ onStart, onExample }: Props) {
       <div className="lp-container lp-header-inner">
         <a className="lp-wordmark" href="#top" aria-label="건셈 홈">건셈</a>
         <nav aria-label="주 메뉴">
+          <a href="/guide">사용 가이드</a>
+          <a href="/examples">질문 예시</a>
           <a className="lp-button lp-nav-demo" href="/chat" onClick={start}>시작하기</a>
         </nav>
       </div>
@@ -115,7 +117,7 @@ export default function Landing({ onStart, onExample }: Props) {
       </section>
     </main>
     <footer className="lp-container lp-footer lp-landing-footer">
-      <div className="lp-footer-top"><span className="lp-footer-brand">건셈</span><div className="lp-footer-links"><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></div></div>
+      <div className="lp-footer-top"><span className="lp-footer-brand">건셈</span><div className="lp-footer-links"><a href="/guide">사용 가이드</a><a href="/examples">질문 예시</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></div></div>
       <p className="lp-footer-contact">문의: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
     </footer>
   </div>;

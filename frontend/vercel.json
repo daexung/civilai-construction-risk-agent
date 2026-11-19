@@ -12,6 +12,8 @@
       "headers": { "X-Robots-Tag": "noindex, follow" },
       "continue": true
     },
+    { "src": "/guide/?", "dest": "/guide/index.html" },
+    { "src": "/examples/?", "dest": "/examples/index.html" },
     { "handle": "filesystem" },
     { "src": "/api/.*", "dest": "/api/[...path]" },
     { "src": "/.*", "dest": "/app-shell.html" }

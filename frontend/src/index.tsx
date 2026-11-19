@@ -3,6 +3,7 @@ import { createRoot, hydrateRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import Landing from './landing/Landing';
+import HelpPage from './help/HelpPages';
 import { trackPage } from './analytics';
 
 const OwnerDashboard = lazy(() => import('./OwnerDashboard'));
@@ -10,7 +11,10 @@ const OwnerDashboard = lazy(() => import('./OwnerDashboard'));
 const container = document.getElementById('root') as HTMLElement;
 const prerenderedHome = container.dataset.prerendered === 'homepage' && window.location.pathname === '/';
 const ownerDashboard = window.location.pathname === '/admin' || window.location.pathname === '/admin/';
-if (prerenderedHome) {
+const publicPage = window.location.pathname.replace(/\/$/, '');
+if ((publicPage === '/guide' || publicPage === '/examples') && container.dataset.prerendered === publicPage.slice(1)) {
+  hydrateRoot(container, <React.StrictMode><HelpPage page={publicPage === '/guide' ? 'guide' : 'examples'} /></React.StrictMode>);
+} else if (prerenderedHome) {
   trackPage('/');
   hydrateRoot(container,
     <React.StrictMode>

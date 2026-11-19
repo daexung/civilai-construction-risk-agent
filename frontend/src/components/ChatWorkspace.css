@@ -87,6 +87,8 @@
 .chat-shell .example-category { color: var(--brand-primary); font-size: 10.5px; font-weight: 500; }
 .chat-shell .example-question { display: block; }
 .example-hint { width: 100%; max-width: 712px; margin: 8px 0 0; color: var(--text-secondary); font-size: 12px; line-height: 1.6; }
+.chat-help-links { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 712px; margin-top: 18px; }
+.chat-help-links a { color: var(--brand-strong); font-size: 13px; text-underline-offset: 4px; }
 .chat-shell .example-btn:hover:not(:disabled) { border-color: #abc3ae; background: #f7faf7; color: var(--accent); }
 .chat-shell .example-btn:disabled { opacity: .5; cursor: default; }
 .chat-shell .messages { padding-top: 28px; overscroll-behavior: contain; }

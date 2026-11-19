@@ -18,3 +18,11 @@ test('opt out drops events and opt in restores collection without identifying th
   setAnalyticsAllowed(true);
   expect(sanitizeAnalyticsEvent({ event: '$pageview', properties: { page: '/' } }).properties.$current_url).toBe(window.location.origin + '/');
 });
+
+test.each(['/guide', '/examples'])('public %s page views retain only the allowed page path', page => {
+  const result = sanitizeAnalyticsEvent({ event: '$pageview', properties: { page, '$referrer': 'private', question: 'private' } });
+  expect(result.properties.$current_url).toBe(window.location.origin + page);
+  expect(result.properties.$pathname).toBe(page);
+  expect(result.properties.$referrer).toBeUndefined();
+  expect(result.properties.question).toBeUndefined();
+});

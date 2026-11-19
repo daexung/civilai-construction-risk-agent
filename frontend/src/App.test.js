@@ -46,7 +46,7 @@ test('shows remaining usage and disables sending when the server reports a daily
   sendChat.mockRejectedValueOnce(new UsageError('오늘 5회를 모두 사용했습니다.', exhausted));
   await sendQuestion('마지막 질문');
   expect(container.querySelector('textarea').disabled).toBe(true);
-  act(() => Simulate.click(container.querySelector('.chat-sidebar-action')));
+  act(() => Simulate.click(container.querySelector('button.chat-sidebar-action')));
   act(() => Simulate.click(document.querySelectorAll('.settings-body nav button')[1]));
   expect(document.querySelector('.settings-body .account-usage').textContent).toContain('0 / 5회');
 });
@@ -182,7 +182,7 @@ test('popup login preserves guest turns and logout clears the account view', asy
   expect(container.querySelector('.chat-account-chevron').classList.contains('is-open')).toBe(true);
   act(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })));
   expect(container.querySelector('.chat-account-menu')).toBeNull();
-  act(() => Simulate.click(container.querySelector('.chat-sidebar-action')));
+  act(() => Simulate.click(container.querySelector('button.chat-sidebar-action')));
   expect(document.querySelector('.settings-identity').textContent).toContain('a@example.com');
   await act(async () => Simulate.click(document.querySelector('.settings-logout')));
   expect(container.querySelectorAll('.chat-history-select')).toHaveLength(0);
@@ -190,7 +190,7 @@ test('popup login preserves guest turns and logout clears the account view', asy
 });
 
 test('guest settings switches sections and opens the login dialog from account', () => {
-  act(() => Simulate.click(container.querySelector('.chat-sidebar-action')));
+  act(() => Simulate.click(container.querySelector('button.chat-sidebar-action')));
   expect(document.querySelector('.settings-body section').getAttribute('aria-label')).toBe('일반 설정');
   expect(document.querySelector('.settings-body section').textContent).toContain('한국어');
   act(() => Simulate.click(document.querySelectorAll('.settings-body nav button')[1]));

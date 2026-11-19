@@ -22,6 +22,7 @@
 .lp-header-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; }
 .civil-landing .lp-wordmark { color: var(--lp-brand); font-size: 22px; font-weight: 700; letter-spacing: -.025em; }
 .lp-header nav { display: flex; align-items: center; gap: 20px; font-size: 14px; }
+@media (max-width: 480px) { .lp-header nav { gap: 10px; font-size: 13px; } .civil-landing .lp-nav-demo { padding: 9px 12px; font-size: 13px; } }
 .civil-landing .lp-button { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 8px; background: var(--lp-primary); color: #fff; font-size: 14px; font-weight: 600; transition: background .2s; }
 .civil-landing .lp-button:hover { background: var(--lp-brand); }
 .civil-landing .lp-nav-demo { padding: 10px 18px; background: var(--lp-primary); color: #fff; font-size: 15px; line-height: 20px; font-weight: 400; letter-spacing: 0; }
@@ -181,5 +182,9 @@
   .civil-landing .lp-button, .preview-disclosure > button > svg { transition: none; }
 }
 /* 건셈 심볼 + 워드마크 */
+@media (max-width: 380px) {
+  .lp-header-inner { height: auto; min-height: 64px; flex-wrap: wrap; gap: 12px; padding-block: 12px; }
+  .lp-header nav { flex-basis: 100%; justify-content: space-between; }
+}
 .civil-landing .lp-wordmark, .lp-footer-brand, .lp-footer > span { display: inline-flex; align-items: center; gap: 8px; }
 .civil-landing .lp-wordmark::before, .lp-footer-brand::before, .lp-footer > span::before { content: ''; width: 1.1em; height: 1.1em; flex-shrink: 0; background: url(../assets/geonsem-symbol.svg) center / contain no-repeat; }

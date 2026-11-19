@@ -16,6 +16,7 @@ REACT_APP_POSTHOG_HOST=https://us.i.posthog.com
 | 이벤트 | 발생 시점 | 추가 항목 |
 |---|---|---|
 | `$pageview` | 랜딩·챗·약관·개인정보 페이지 진입 | 정해진 페이지 경로 |
+| `$pageview` | 사용 가이드(`/guide`)·질문 예시(`/examples`) 진입 | 정해진 페이지 경로 |
 | `question_submitted` | 질문 또는 조건 답변을 전송할 때 | 회원 여부 |
 | `estimate_downloaded` | 엑셀 파일을 받아 다운로드 동작을 실행한 뒤 | 회원 여부 |
 | `feedback_submitted` | 서버가 의견 접수를 완료한 뒤 | 의견 유형·회원 여부 |

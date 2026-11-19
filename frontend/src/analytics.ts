@@ -21,7 +21,7 @@ export function setAnalyticsAllowed(allowed: boolean): void {
 }
 
 function safePage(path: string): string {
-  return ['/', '/chat', '/terms', '/privacy'].includes(path) ? path : '/other';
+  return ['/', '/chat', '/guide', '/examples', '/terms', '/privacy'].includes(path) ? path : '/other';
 }
 
 // A strict allowlist also removes SDK-generated referrers, page titles and query strings.
@@ -65,7 +65,7 @@ export function trackEvent(event: 'question_submitted' | 'estimate_downloaded' |
 }
 
 export function trackPage(path: string): void {
-  if (!['/', '/chat', '/terms', '/privacy'].includes(path) || lastPage === path) return;
+  if (!['/', '/chat', '/guide', '/examples', '/terms', '/privacy'].includes(path) || lastPage === path) return;
   lastPage = path;
   void getClient().then(value => { if (analyticsAllowed()) value?.capture('$pageview', { page: path }); }).catch(() => {});
 }

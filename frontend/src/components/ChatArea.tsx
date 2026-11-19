@@ -828,6 +828,7 @@ function ChatAreaView({ turns, loading, generating = loading, inputDisabled, onS
             ))}
           </div>
           <p className="example-hint">예시를 누르면 입력창에 채워져요. 수정한 뒤 보내세요.</p>
+          <nav className="chat-help-links" aria-label="사용 도움말"><a href="/guide">사용 가이드</a><a href="/examples">질문 예시 모아보기</a></nav>
         </div>
       </main>
     );
@@ -965,6 +966,8 @@ export default function ChatArea(props: Props) {
               onSelect={() => { setOpenSource(null); props.onSelectConversation?.(chat.id); if (window.innerWidth < 900) setSidebarOpen(false); }}
               onDelete={() => props.onDeleteConversation?.(chat.id)} onRename={props.onRenameConversation ? () => props.onRenameConversation?.(chat.id) : undefined} />)}</nav>}
             <div className="chat-sidebar-bottom">
+              <a className="chat-sidebar-action" href="/guide">사용 가이드</a>
+              <a className="chat-sidebar-action" href="/examples">질문 예시</a>
               <button className="chat-sidebar-action" onClick={props.onSettings}><ChatIcon name="settings" />설정</button>
               <button className="chat-sidebar-action" onClick={props.onFeedback}><ChatIcon name="feedback" />피드백 남기기</button>
               {props.accountLabel ? <AccountMenu adminAccess={props.adminAccess} name={props.accountLabel} usage={props.usage} usageError={props.usageError} onRetryUsage={props.onRetryUsage} busy={props.logoutBusy || props.loading} error={props.logoutError} onLogout={props.onLogout} /> : <div className="chat-sidebar-login">

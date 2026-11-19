@@ -33,6 +33,8 @@ for (const extension of ['.css', '.scss']) {
 const React = require('react');
 const { renderToString } = require('react-dom/server');
 const Landing = require('./src/landing/Landing').default;
+const HelpPage = require('./src/help/HelpPages').default;
+const { PUBLIC_PAGE_META } = require('./src/help/publicPageMeta');
 const markup = renderToString(React.createElement(Landing, {
   onStart: () => {},
   onExample: () => {},
@@ -53,6 +55,27 @@ fs.writeFileSync(indexPath,
   template.replace(root, `<div id="root" data-prerendered="homepage">${markup}</div>`),
   'utf8');
 
+const escapeAttribute = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+for (const [page, meta] of Object.entries(PUBLIC_PAGE_META)) {
+  const url = `https://www.geonsem.com/${page}`;
+  let document = template.replace(/<title>[^<]*<\/title>/, `<title>${escapeAttribute(meta.title)}</title>`);
+  for (const [name, value] of [['description', meta.description], ['og:title', meta.title], ['og:description', meta.description], ['og:url', url]]) {
+    const attribute = name.startsWith('og:') ? 'property' : 'name';
+    document = document.replace(new RegExp(`<meta ${attribute}="${name}" content="[^"]*"\\s*\\/?>`),
+      `<meta ${attribute}="${name}" content="${escapeAttribute(value)}" />`);
+  }
+  document = document.replace(/<link rel="canonical" href="[^"]*"\s*\/?>/, `<link rel="canonical" href="${url}" />`);
+  const content = renderToString(React.createElement(HelpPage, { page }));
+  document = document.replace(root, `<div id="root" data-prerendered="${page}">${content}</div>`);
+  const directory = path.join(build, page);
+  fs.mkdirSync(directory, { recursive: true });
+  fs.writeFileSync(path.join(directory, 'index.html'), document, 'utf8');
+  if (!document.includes(meta.title) || !document.includes(`href="${url}"`)
+      || !document.includes('href="/chat') || document.includes('beta-notice-backdrop')) {
+    throw new Error(`Public page ${page} failed prerender verification`);
+  }
+}
+
 const html = fs.readFileSync(indexPath, 'utf8');
 const required = [
   '건셈', '공사비 견적', '품셈 상담', '엑셀 출력', 'href="/chat"',
@@ -72,4 +95,5 @@ console.log(JSON.stringify({
   html_bytes: Buffer.byteLength(html),
   shell_bytes: fs.statSync(shellPath).size,
   required_content_count: required.length,
+  public_pages: Object.keys(PUBLIC_PAGE_META),
 }));
