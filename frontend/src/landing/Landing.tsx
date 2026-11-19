@@ -3,6 +3,7 @@ import LandingPreview from './LandingPreview';
 import BetaNotice from './BetaNotice';
 import { CONTACT_EMAIL } from '../contact';
 import demo from './demo.json';
+import { SERVICE_FAQ } from '../help/publicServiceInfo';
 import './Landing.css';
 
 function Reveal({ children }: { children: React.ReactNode }) {
@@ -104,6 +105,11 @@ export default function Landing({ onStart, onExample }: Props) {
             <div className="lp-feature-sample"><span>{feature.label}</span><p>{feature.sample}</p></div>
           </article></Reveal>)}
         </div>
+      </section>
+      <section className="lp-container lp-service-faq" aria-labelledby="service-faq-title">
+        <p className="lp-eyebrow">서비스 안내</p><h2 id="service-faq-title">건셈이 궁금하다면</h2>
+        {SERVICE_FAQ.map(item => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+        <div className="lp-actions"><a className="lp-text-link" href="/guide">자세한 사용 가이드</a><a className="lp-text-link" href="/examples">견적·상담 질문 예시</a></div>
       </section>
       <section className="lp-basis" aria-labelledby="landing-basis-title">
         <div className="lp-container"><Reveal>

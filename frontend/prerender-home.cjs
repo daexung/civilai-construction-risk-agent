@@ -35,6 +35,11 @@ const { renderToString } = require('react-dom/server');
 const Landing = require('./src/landing/Landing').default;
 const HelpPage = require('./src/help/HelpPages').default;
 const { PUBLIC_PAGE_META } = require('./src/help/publicPageMeta');
+const { publicStructuredData } = require('./src/help/publicServiceInfo');
+const withSearchMetadata = (document, page) => document.replace(
+  /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+  `<script type="application/ld+json">${JSON.stringify(publicStructuredData(page)).replace(/</g, '\\u003c')}</script>`,
+);
 const markup = renderToString(React.createElement(Landing, {
   onStart: () => {},
   onExample: () => {},
@@ -52,7 +57,7 @@ if (template.split(root).length !== 2) {
 // root document with the static landing page.
 fs.writeFileSync(shellPath, template, 'utf8');
 fs.writeFileSync(indexPath,
-  template.replace(root, `<div id="root" data-prerendered="homepage">${markup}</div>`),
+  withSearchMetadata(template.replace(root, `<div id="root" data-prerendered="homepage">${markup}</div>`)),
   'utf8');
 
 const escapeAttribute = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -67,6 +72,7 @@ for (const [page, meta] of Object.entries(PUBLIC_PAGE_META)) {
   document = document.replace(/<link rel="canonical" href="[^"]*"\s*\/?>/, `<link rel="canonical" href="${url}" />`);
   const content = renderToString(React.createElement(HelpPage, { page }));
   document = document.replace(root, `<div id="root" data-prerendered="${page}">${content}</div>`);
+  document = withSearchMetadata(document, page);
   const directory = path.join(build, page);
   fs.mkdirSync(directory, { recursive: true });
   fs.writeFileSync(path.join(directory, 'index.html'), document, 'utf8');

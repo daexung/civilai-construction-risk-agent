@@ -19,7 +19,9 @@ test('landing describes the current service and preserves its real estimate prev
   expect(container.textContent).toContain('공사비 견적');
   expect(container.textContent).toContain('품셈 상담');
   expect(container.textContent).toContain('엑셀 출력');
-  expect(container.textContent).not.toMatch(/기상|대기비|로그인/);
+  expect(container.textContent).not.toMatch(/기상|대기비/);
+  expect(container.querySelectorAll('.lp-service-faq details')).toHaveLength(4);
+  expect(container.querySelector('.lp-service-faq').textContent).toContain('2026 건설공사 표준품셈');
   expect(container.textContent).toContain('도급액');
   expect(container.textContent).toContain('미산정 항목');
   const calculationToggle = container.querySelector('.preview-disclosure > button');
