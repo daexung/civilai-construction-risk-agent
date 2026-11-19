@@ -130,11 +130,40 @@ test('missing pump conditions explain the request and preserve only server quest
   act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response }]} />));
   expect(container.querySelector('[aria-label="추가 조건 안내"]').textContent).toContain('시공량과 비용이 달라져요');
   expect(container.querySelectorAll('.question-card')).toHaveLength(1);
-  expect(container.querySelector('.submit-answers-btn').previousElementSibling.textContent).toBe('선택한 답은 이용 횟수에서 차감되지 않아요.');
+  expect(container.querySelector('.card-usage-notice').textContent).toContain('대화당 30회까지 무료');
+  expect(container.querySelector('.card-usage-notice').textContent).toContain('이후에는 확정 요청마다 1회');
   expect(container.querySelector('.question-list').textContent).not.toContain('물량은');
   const legacy = { ...response, questions: questions.map(({ ref, ...question }) => question) };
   act(() => root.render(<ChatArea {...props} turns={[{ id: 'q1', role: 'assistant', response: legacy }]} />));
-  expect(container.querySelector('.question-list').textContent).not.toContain('차감되지 않아요');
+  expect(container.querySelector('.card-usage-notice').textContent).toContain('확정해서 보내면 이용 횟수 1회');
+  expect(container.querySelector('.card-usage-notice').textContent).not.toContain('30회까지 무료');
+});
+
+test.each([
+  ['계산에 포함', '이 작업 비용 계산'], ['작업에서 제외', '이 작업 제외'],
+  ['조건으로 반영', '시공 조건으로만 사용'], ['바탕면으로 반영', '기존 바탕 상태로만 사용'],
+])('scope choice %s has an explanation and keeps its original server value', (value, label) => {
+  const question = { name: 'scope::s1_2', ask: '작업을 포함할까요?', ref: 'scope@v1@1',
+    choices: ['계산에 포함', '작업에서 제외', '조건으로 반영', '바탕면으로 반영'] };
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null, questions: [question] };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: 'scope', role: 'assistant', response }]} />));
+  const button = [...container.querySelectorAll('.scope-choice')].find(element => element.querySelector('.scope-choice-label').textContent === label);
+  expect(button.querySelector('.scope-choice-description').textContent.length).toBeGreaterThan(10);
+  act(() => Simulate.click(button));
+  expect(button.getAttribute('aria-pressed')).toBe('true');
+  expect(button.querySelector('.choice-selected-icon')).not.toBeNull();
+  expect(container.querySelector('.submit-answers-btn').textContent).toBe('작업 선택 확정하기');
+  act(() => Simulate.click(container.querySelector('.submit-answers-btn')));
+  expect(props.onSendAnswers).toHaveBeenCalledWith({ [question.name]: value }, label, { [question.name]: question.ref });
+});
+
+test.each(['scope::s1_2', 'scope_owner::c1_2', 'item::continue', 'target_item'])('chargeable %s cards warn before confirmation', name => {
+  const response = { ...demo.response, status: 'MISSING_INFO', answer: null,
+    questions: [{ name, ask: '확인해 주세요.', choices: ['예', '아니오'], ref: 'current-ref' }] };
+  act(() => root.render(<ChatArea {...props} turns={[{ id: name, role: 'assistant', response }]} />));
+  const notice = container.querySelector('.card-usage-notice').textContent;
+  expect(notice).toContain('확정해서 보내면 이용 횟수 1회');
+  expect(notice).not.toContain('30회까지 무료');
 });
 
 test('applicability scope summary shows the limit and separately counted work with first question', () => {

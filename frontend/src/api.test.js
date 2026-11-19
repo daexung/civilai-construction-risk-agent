@@ -79,6 +79,20 @@ test('member export authenticates through headers and keeps tokens out of URLs',
   expect(HTMLAnchorElement.prototype.click.mock.instances[0].download).toBe(filename);
 });
 
+test('guest export needs the guest session but does not require member login', async () => {
+  mockSession.mockResolvedValue({ data: { session: null } });
+  fetch.mockResolvedValue({ ok: true, headers: new Headers(), blob: async () => new Blob(['xlsx']) });
+  URL.createObjectURL = jest.fn(() => 'blob:guest-download');
+  URL.revokeObjectURL = jest.fn();
+  jest.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+  await downloadEstimate('guest-thread');
+  const [url, options] = fetch.mock.calls[0];
+  expect(url).toBe('/api/export/guest-thread.xlsx');
+  expect(options.headers.get('Authorization')).toBeNull();
+  expect(options.headers.get('X-Guest-Session')).toHaveLength(72);
+  expect(HTMLAnchorElement.prototype.click).toHaveBeenCalledTimes(1);
+});
+
 test('guest import sends both credentials and does not accept browser transcripts', async () => {
   fetch.mockResolvedValue({ ok: true, json: async () => ({ id: 'member-conversation' }) });
   expect(await importGuestConversation('guest-thread', 'member-conversation')).toBe('member-conversation');

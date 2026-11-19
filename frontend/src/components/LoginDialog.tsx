@@ -20,10 +20,11 @@ export default function LoginDialog({ busy, error, onClose, onGoogleLogin }: Pro
         <h2 id={titleId}>건셈 시작하기</h2>
         <p className="login-dialog-description" id={descriptionId}>공사비 견적부터 품셈 상담까지,<br />질문 한 줄로 쉽고 간편하게.</p>
         <ul className="login-dialog-perks">
-          <li>품셈 원문 근거와 함께 답변</li>
-          <li>견적서 Excel 내려받기</li>
+          <li>하루 20회까지 무료 이용</li>
+          <li>대화를 계정에 저장</li>
           <li>지난 대화 이어서 보기</li>
         </ul>
+        <p className="login-dialog-guest-note">계산이 완료된 견적의 Excel은 로그인 없이도 내려받을 수 있어요. 임시 대화가 만료되기 전에 저장해 주세요.</p>
         <button className="login-dialog-google" type="button" disabled={busy} onClick={onGoogleLogin}>
           <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />

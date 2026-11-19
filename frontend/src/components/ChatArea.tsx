@@ -153,6 +153,21 @@ function DecisionTable({ table }: { table: NonNullable<AgentQuestion['decision_t
   );
 }
 
+const SCOPE_CHOICE_COPY: Record<string, { label: string; description: string }> = {
+  '계산에 포함': { label: '이 작업 비용 계산', description: '이번 견적에 포함해 작업비를 계산해요.' },
+  '작업에서 제외': { label: '이 작업 제외', description: '이번 견적의 계산 대상에서 빼요.' },
+  '조건으로 반영': { label: '시공 조건으로만 사용', description: '별도 작업비 대신 다른 작업의 시공 조건으로 반영해요.' },
+  '바탕면으로 반영': { label: '기존 바탕 상태로만 사용', description: '이미 있는 바탕면 정보로 사용하고, 이 작업비는 계산하지 않아요.' },
+};
+
+function CardUsageNotice({ questions }: { questions: AgentQuestion[] }) {
+  const chargeable = !questions.every(question => question.ref) || questions.some(question =>
+    /^(?:scope|scope_owner)::/.test(question.name) || question.name.endsWith('::continue') || question.name === 'target_item');
+  return <p className="card-usage-notice">{chargeable
+    ? '선택만으로는 차감되지 않아요. 선택 내용을 확정해서 보내면 이용 횟수 1회가 차감돼요.'
+    : '현재 확인 카드의 조건 답변은 대화당 30회까지 무료이며, 이후에는 확정 요청마다 1회가 차감돼요. 새 견적 시작·직접 질문 입력·조건 재계산은 1회가 차감돼요.'}</p>;
+}
+
 function QuestionCard({
   question, selectedLabel, onSelect, disabled,
 }: {
@@ -162,6 +177,7 @@ function QuestionCard({
   disabled: boolean;
 }) {
   const isWork = question.name === 'work';
+  const isScope = question.name.startsWith('scope::');
   const [typed, setTyped] = useState('');
   const numeric = !Array.isArray(question.choices) && !!question.unit;
   const typedValid = /^\d+(?:\.\d+)?$/.test(typed.trim()) && Number(typed) > 0;
@@ -175,9 +191,10 @@ function QuestionCard({
         </div>
       )}
       {Array.isArray(question.choices) && (
-        <div className="question-choices">
+        <div className={`question-choices${isScope ? ' scope-choices' : ''}`}>
           {question.choices.map((choice) => {
-            const label = typeof choice === 'string' ? (question.labels?.[choice] ?? choiceLabel(choice)) : choiceLabel(choice);
+            const scopeCopy = isScope && typeof choice === 'string' ? SCOPE_CHOICE_COPY[choice] : undefined;
+            const label = scopeCopy?.label ?? (typeof choice === 'string' ? (question.labels?.[choice] ?? choiceLabel(choice)) : choiceLabel(choice));
             const value: ChoiceValue = isWork && typeof choice === 'string' ? sectionNoFromTitle(choice) : choice;
             const isDefault = isWork && question.default === value;
             const isSelected = selectedLabel === label;
@@ -185,11 +202,13 @@ function QuestionCard({
               <button
                 key={label}
                 type="button"
-                className={`choice-btn${isSelected ? ' selected' : ''}${isDefault && !selectedLabel ? ' is-default' : ''}`}
+                className={`choice-btn${scopeCopy ? ' scope-choice' : ''}${isSelected ? ' selected' : ''}${isDefault && !selectedLabel ? ' is-default' : ''}`}
+                aria-pressed={isSelected}
                 disabled={disabled}
                 onClick={() => onSelect(value, label)}
               >
-                {label}
+                {isSelected && <Check className="choice-selected-icon" size={15} aria-hidden="true" />}
+                {scopeCopy ? <><span className="scope-choice-label">{label}</span><span className="scope-choice-description">{scopeCopy.description}</span></> : label}
                 {isDefault && <span className="choice-default-tag">기본값</span>}
               </button>
             );
@@ -643,11 +662,7 @@ function AssistantCard({
           ))}
           {interactive && (
             <>
-              {response.questions.every(question => question.ref) &&
-                !response.questions.some(question => /^(?:scope|scope_owner)::/.test(question.name) ||
-                  question.name.endsWith('::continue') || question.name === 'target_item') && (
-                <p>선택한 답은 이용 횟수에서 차감되지 않아요.</p>
-              )}
+              <CardUsageNotice questions={response.questions} />
               <button
                 type="button"
                 className="submit-answers-btn"
@@ -655,7 +670,8 @@ function AssistantCard({
                 onClick={onSubmit}
               >
                 {response.questions.some(question => question.name === 'router_clarify')
-                  ? '선택해서 보내기' : '이 조건으로 견적 계산하기'}
+                  ? '선택해서 보내기' : response.questions.some(question => /^(?:scope|scope_owner)::/.test(question.name))
+                    ? '작업 선택 확정하기' : '선택한 조건 보내기'}
               </button>
             </>
           )}

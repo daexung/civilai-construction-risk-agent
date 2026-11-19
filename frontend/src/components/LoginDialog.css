@@ -18,5 +18,6 @@
 .login-dialog-terms { margin: 20px 0 0; color: #8a8a8a; font-size: 12px; line-height: 1.6; }
 .login-dialog-terms a { color: #555; text-underline-offset: 3px; }
 .login-dialog-error { margin: 14px 0 0; font-size: 13px; line-height: 1.6; color: #a43131; }
+.login-dialog-guest-note { margin: -10px 0 20px; color: #555; font-size: 12px; line-height: 1.7; text-align: left; }
 @media (max-width: 480px) { .login-dialog-backdrop { padding: 16px; } .login-dialog { padding: 44px 22px 24px; border-radius: 22px; } }
 @media (prefers-reduced-motion: reduce) { .login-dialog-google { transition: none; } }

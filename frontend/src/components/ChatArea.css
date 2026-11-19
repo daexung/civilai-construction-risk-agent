@@ -342,10 +342,19 @@
 }
 
 .choice-btn.selected {
-  border-color: var(--logo-accent);
-  background: var(--logo-accent);
+  border-color: var(--brand-strong);
+  background: var(--brand-strong);
   color: #fff;
+  box-shadow: 0 0 0 2px var(--accent-tint);
 }
+
+.choice-selected-icon { display: inline-block; vertical-align: middle; margin-right: 5px; }
+.scope-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.choice-btn.scope-choice { display: flex; flex-wrap: wrap; align-items: center; text-align: left; border-radius: 12px; padding: 12px 14px; line-height: 1.6; }
+.scope-choice-label { font-weight: 600; }
+.scope-choice-description { display: block; flex-basis: 100%; margin-top: 3px; font-size: 12px; }
+.card-usage-notice { font-size: 12px; line-height: 1.7; color: var(--text-secondary); }
+@media (max-width: 600px) { .scope-choices { grid-template-columns: minmax(0, 1fr); } }
 
 .choice-btn.is-default {
   border-style: dashed;

@@ -74,6 +74,16 @@ test('a chat example is editable and consumes no request until explicitly sent',
   expect(sendChat.mock.calls[0][0].message).toBe('자동문 5개소 설치 견적');
 });
 
+test('login separates account benefits from guest Excel availability', async () => {
+  await act(async () => Simulate.click(container.querySelector('.chat-sidebar-login button')));
+  const perks = document.querySelector('.login-dialog-perks').textContent;
+  expect(perks).toContain('하루 20회');
+  expect(perks).toContain('대화를 계정에 저장');
+  expect(perks).not.toContain('Excel');
+  expect(document.querySelector('.login-dialog-guest-note').textContent).toContain('로그인 없이도 내려받을 수 있어요');
+  expect(document.querySelector('.login-dialog-guest-note').textContent).toContain('만료되기 전에');
+});
+
 test('a landing example query prefills the composer without sending', async () => {
   act(() => root.unmount());
   window.history.replaceState({}, '', '/chat?q=' + encodeURIComponent('콘크리트 100㎥ 견적'));
